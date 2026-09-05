@@ -1,147 +1,124 @@
 # Architecture — TopoKampioen
 
-Status: draft, phase 0. Written before any code, per spec §13.
-Last updated: 2026-09-05.
+Status: draft, phase 0. Last updated 2026-09-05.
+Revised after the scope decision of 2026-09-05 (ADR-014): build the app, with no
+commercial model and no class or pupil administration. Anyone can play and
+learn. Accounts, classes, teachers and licensing come later.
 
 The product name is a working title. Everything user-visible reads it from
-`src/config/brand.ts`; no component hardcodes it. White-labelling later is a
-config change, not a refactor.
+`src/config/brand.ts`; no component hardcodes it.
 
-## 1. The one constraint that shapes everything
+## 1. What this scope decision does to the architecture
 
-School networks are slow, school devices are weak, and school IT blocks things.
-Every architectural choice below follows from that, and from a second rule that
-overrides convenience: **no request leaves our own origin while a pupil is using
-the app.** No CDN fonts, no tile server, no analytics, no error reporter that
-sees a pupil's screen. This is not only privacy hygiene — it is the answer we
-give a school's data protection officer, and that officer is the real gatekeeper
-on every deal.
+Removing accounts removes most of the system. There is no sign-in, so there are
+no pupils in a database, so there is no row-level security, no processing
+agreement, and no personal data to protect — because there is none to collect.
+
+That points at one answer, and it is a much better answer than the one the
+original spec implied:
+
+> **v1 is a static single-page app with no backend at all. All progress lives on
+> the device, in IndexedDB. Nothing about a player ever leaves the browser.**
+
+No Supabase, no Edge Functions, no database, no auth. A static bundle and a
+folder of geodata on a CDN. The privacy story stops being a set of controls we
+have to prove and becomes a fact about the architecture: there is no server to
+send anything to.
+
+What we give up is real and worth naming: no progress across devices, no teacher
+reporting, no leaderboards, no duels. All three arrive together with accounts,
+and none of them can be faked convincingly without one.
 
 ## 2. Shape
 
 ```
-                        ┌──────────────────────────────┐
-   Chromebook / iPad    │  SPA (React 18, TS strict)    │
-   Digibord             │  Vite build, self-hosted      │
-                        │  fonts, no third-party JS     │
-                        └──────────────┬───────────────┘
-                                       │ HTTPS, own origin
-                        ┌──────────────┴───────────────┐
-                        │  Supabase (eu-central-1)      │
-                        │  Postgres + RLS               │
-                        │  Auth (teachers/admins only)  │
-                        │  Edge Functions (trusted)     │
-                        │  Realtime (klassenstrijd)     │
-                        └───────────────────────────────┘
+   Chromebook / iPad / laptop / digibord
+   ┌──────────────────────────────────────┐
+   │  SPA — React 18, TS strict, Vite     │
+   │  self-hosted fonts, no third-party   │
+   │  ┌────────────────────────────────┐  │
+   │  │ IndexedDB: profile, Leitner    │  │
+   │  │ state, XP, streak, badges      │  │
+   │  └────────────────────────────────┘  │
+   └──────────────────┬───────────────────┘
+                      │ static assets only
+   ┌──────────────────┴───────────────────┐
+   │  CDN (Cloudflare Pages, EU)          │
+   │  app bundle + content/geo/*.json     │
+   └──────────────────────────────────────┘
 ```
 
-Static assets and geodata ship from the same origin as the app. Database,
-backups and logs stay in the EU (Frankfurt). Every subprocessor is listed in
-`docs/SUBVERWERKERS.md` before it is switched on, not after.
+The only network traffic is fetching the app and the geodata for a region set.
+No analytics, no CDN fonts, no error reporter, no tile provider. This is the
+rule from the original draft, and losing the backend makes it absolute rather
+than aspirational.
 
-## 3. Two places where Supabase's default model does not fit this product
+## 3. Designing now for the accounts that come later
 
-Supabase's normal pattern is: the client holds an anon key and talks to Postgres
-directly, RLS decides what it may see. That is fine for most apps. Here it
-breaks twice, and both breaks have to be designed in phase 0 — retrofitting
-either one is a rewrite.
+The temptation in a local-first v1 is to shape the local store around what is
+convenient today, and then discover that importing it into a real database is a
+rewrite. Two rules prevent that:
 
-### 3.1 Pupils are not Supabase Auth users
+1. **The local store uses the same row shapes as the future server tables.**
+   `item_states`, `attempts`, `sessions` and `streaks` exist in IndexedDB with
+   the columns they will have in Postgres (see `DATAMODEL.md` part A). Adding
+   accounts later means uploading rows, not transforming them.
+2. **Scoring and scheduling live in one pure module**, `packages/game-core`, with
+   no browser dependencies. Today the client calls it. When leaderboards arrive
+   and scores must be server-validated (the original ADR-003, deferred but not
+   abandoned), the server imports the same module. That is the single decision
+   that keeps anti-cheat affordable later instead of impossible.
 
-A pupil signs in with a class code, a name picked from a list, and a 4-digit
-PIN. There is no e-mail, so there is no `auth.users` row, so there is no JWT,
-so there is nothing for RLS to key on.
-
-The design:
-
-1. `POST /auth-student` (Edge Function) receives class code + student id + PIN.
-2. The function verifies the PIN against `students.pincode_hash` (argon2id),
-   rate-limited per class code and per IP hash.
-3. It mints a short-lived JWT signed with the project's JWT secret, carrying
-   `role: 'student'`, `student_id`, `class_id`, `organisation_id`.
-4. RLS policies read those claims via `auth.jwt() ->> 'student_id'`.
-
-A 4-digit PIN is weak by construction — 10 000 combinations. It is the right
-trade-off for eight-year-olds, but it means the rate limiter is a real security
-control, not a nicety: lock a pupil slot after 10 failures, lock a class code
-after 50, and log both to `audit_log`. A leaked class code plus brute force is
-the realistic attack, and it is the one we must make boring.
-
-### 3.2 The client may not write its own score
-
-Spec §4.6 requires server-validated scores. If the client can `insert` into
-`attempts` or `sessions`, it can claim anything, and any child who opens the
-network tab will eventually find that out — in a product built around a
-leaderboard, that is not hypothetical.
-
-So the round is server-authored:
-
-1. `POST /session-start` — the server picks the item set (Leitner mix, §4.2),
-   stores it in `sessions.item_set`, and returns the questions without the
-   answer key wherever the mode allows it.
-2. The client plays and buffers answers locally (also what makes §8's
-   "a dropped connection must not ruin a round" work).
-3. `POST /session-submit` — the server re-checks each answer against its own
-   stored item set, rejects response times below a plausibility floor, computes
-   the score, writes `attempts` + `sessions` + `item_states` in one transaction,
-   and returns the result screen's data.
-
-RLS on `attempts` and `sessions`: pupils get `select` on their own rows, and no
-`insert` or `update` at all. Only the service role writes there.
-
-The cost is honest: one round trip at the start, one at the end, and the game
-logic exists twice (client for feel, server for truth). Sharing the scoring
-module between both sides keeps that from drifting — it lives in
-`packages/game-core`, imported by the SPA and by the Edge Functions.
+A local profile is a name the player types and a generated id. It is stored on
+the device and never transmitted. When accounts arrive, "claim this progress"
+becomes an upload of existing rows.
 
 ## 4. Maps without a tile provider
 
-GeoJSON rendered as SVG, no tiles. That is the spec's call and it is the right
-one: no per-view cost, no external requests, fully themeable, and it works on a
-network that blocks half the internet.
+GeoJSON rendered as SVG, no tiles: no per-view cost, no external requests, fully
+themeable, works on a network that blocks half the internet.
 
-Two refinements to how the spec describes it:
+**Projection happens in the content pipeline, not in the browser** (ADR-004,
+accepted). Region sets ship pre-projected into a 0–1000 view box at three
+mapshaper-simplified detail levels. `d3-geo` is a build dependency and never
+enters the bundle. On a 2018 Chromebook that is the difference between a map
+that appears and one that hitches.
 
-- **Projection happens in the content pipeline, not in the browser.** We ship
-  coordinates already projected into a 0–1000 view box per region set. `d3-geo`
-  stays a build dependency; it never reaches the bundle. On a 2018 Chromebook
-  that is the difference between a map that pops in and one that hitches.
-- **The Netherlands uses a stereographic projection**, not a conic one. The spec
-  says "RD-achtige conische projectie", but RD (Amersfoort / EPSG:28992) is
-  oblique stereographic. We use `geoStereographic` rotated on 5°23′E / 52°09′N.
-  At this scale the visual difference from a conic is under a pixel — the reason
-  to get it right is that these docs will be read by someone who knows.
+Correction to the spec carried into that ADR: the Netherlands uses a
+**stereographic** projection, not a conic one. RD (Amersfoort / EPSG:28992) is
+oblique stereographic; we use `geoStereographic` rotated on 5°23′E / 52°09′N.
 
-Detail levels: every region set is simplified with mapshaper into `overview`,
-`region` and `detail`, committed as versioned files under `content/geo/`. The
-renderer picks a level from viewport size and zoom. Hit testing uses the
-rendered path, with a minimum touch target of 44 px enforced by an invisible
-buffer path for small provinces and island groups — Vlieland must be as tappable
-as Gelderland.
+Hit testing uses the rendered path, with a 44 px minimum touch target enforced
+by an invisible buffer path for small provinces and island groups — Vlieland
+must be as tappable as Gelderland.
 
-Mercator is used only where a global view demands it, and where it is used the
-app says out loud that it distorts area. That sentence is didactic content, not
-a disclaimer: a topography app that quietly teaches children Greenland is the
-size of Africa has failed at its own subject.
+Mercator appears only where a global view demands it, and where it does, the app
+says out loud that it distorts area. That sentence is didactic content, not a
+disclaimer: a topography app that quietly teaches children Greenland is the size
+of Africa has failed at its own subject.
 
 ## 5. Front-end structure
 
 ```
+packages/game-core/       pure: Leitner, scoring, answer matching (no DOM)
 src/
-  config/brand.ts        product name, colours, feature flags
+  config/brand.ts         product name, colours, feature flags
   game/
-    modes/               one file per GameMode plugin (§4.1)
-    core/                scoring, Leitner, answer normalisation (shared)
-    map/                 SVG renderer, hit testing, projection consumer
-  features/
-    student/  teacher/  admin/
-  i18n/                  nl.ts from day one; keys never inline
-  lib/
+    modes/                one file per GameMode plugin
+    map/                  SVG renderer, hit testing
+  store/                  Zustand (live round) + IndexedDB persistence
+  features/player/        profile, progress, passport, avatar
+  i18n/                   nl.ts from day one; keys never inline
+tools/
+  content/                mapshaper + projection pipeline, validator
+content/
+  geo/                    versioned, pre-projected, three detail levels
+  sets/                   items, learning goals
 ```
 
-State: Zustand for the live round (it is a state machine, and it must survive a
-lost connection). TanStack Query for everything server-owned. The two never hold
-the same fact.
+Zustand holds the live round, which is a state machine that must survive a
+reload mid-round. TanStack Query has nothing to query in v1 and is deferred with
+the backend.
 
 Modes implement one interface, registered in a map:
 
@@ -154,49 +131,57 @@ interface GameMode {
 }
 ```
 
-A new mode is a new file plus a registry line. `scoreAnswer` is pure and runs on
-both client and server — that is what makes §3.2 affordable.
+In scope for this phase: wijs aan, hoe heet dit, sleepronde, bliksemronde,
+overleven, ontdekmodus. Deferred with accounts: duel and klassenstrijd — both
+need a second player who exists somewhere other than this device.
 
 ## 6. Accessibility (WCAG 2.2 AA) on a map
 
-The hard part of this product's accessibility is that the primary interface is a
-picture. Colour may never be the only carrier of meaning (§8), which on a map
-means:
+The hard part here is that the primary interface is a picture, and colour may
+never be the only carrier of meaning:
 
 - Every region is reachable by keyboard in a defined order, with a visible focus
   ring drawn outside the shape.
 - Correct and incorrect are signalled by icon and text, not only by fill colour.
-- Each region carries an accessible name, and in "wijs aan" the question is
+- Each region carries an accessible name; in "wijs aan" the question is
   announced through a live region.
-- The read-aloud button uses the browser's own SpeechSynthesis — no cloud TTS,
-  because a cloud TTS receiving question text is a subprocessor.
-- A dyslexia-friendly font and `prefers-reduced-motion` are settings, and the
+- Read-aloud uses the browser's own SpeechSynthesis. A cloud TTS would be an
+  external request and a subprocessor, and this architecture has neither.
+- Dyslexia-friendly font and `prefers-reduced-motion` are settings, and the
   reduced-motion path removes movement, not feedback.
 
-## 7. Offline and flaky networks
+## 7. Offline
 
-Answers buffer in IndexedDB during a round and flush on `session-submit`, with
-retry. A round survives a tunnel. What does not survive is starting a round
-while offline — that needs the server's item set. Accepted for v1; a fully
-offline mode would mean shipping the answer key to the client, which reopens
-§3.2.
+With no backend, offline is nearly free: after the first visit the app and the
+loaded region sets are cached by a service worker, and progress writes to
+IndexedDB. A round survives a tunnel, a reload and a flat network. This is a
+genuine advantage of the scope decision, not a consolation — on a school network
+shared by thirty children it may be the most noticeable quality of the product.
 
 ## 8. Testing
 
-- Vitest for `game-core`: Leitner transitions, answer normalisation, scoring.
-- Playwright for the three flows in the spec, plus the negative RLS tests.
-- pgTAP (or plain SQL assertions in CI) proving that pupil A cannot read pupil
-  B — written so it fails loudly if a policy is ever dropped.
-- k6 for 30 concurrent pupils in a live klassenstrijd.
+- Vitest on `game-core`: Leitner transitions, answer matching, scoring. This is
+  where the learning behaviour is proven, and it needs no browser.
+- Playwright for the flows that exist in this scope: play a round, get a result,
+  reopen the app and find your progress, play offline.
+- `validate:content` in CI on every push. A broken geometry reference must never
+  reach a classroom.
+- Bundle size is measured and reported in CI against the 300 kB budget from spec
+  §8. It reports rather than fails: keeping Framer Motion was a deliberate
+  choice (ADR-010, rejected), and the number should be visible so the trade
+  stays an informed one.
 
-CI runs `validate:content` on every push. A broken geometry reference must never
-reach a classroom.
+The negative RLS tests from the original draft are deferred with the database
+they were protecting.
 
-## 9. Known open questions
+## 9. What returns when accounts arrive
 
-Tracked as ADRs in `DECISIONS.md`, not resolved here:
+Kept intentionally reversible, each with a live ADR:
 
-- The build environment: this machine cannot reach the npm registry (ADR-001).
-- Whether phase 2 ships without divisions until there is a player population.
-- Which curriculum reference set to map against, now that the new kerndoelen
-  entered law in August 2026 and geography sits across two learning areas.
+| Then needed | Deferred ADR |
+|---|---|
+| Pupil sign-in without e-mail (class code + PIN, custom JWT) | ADR-002 |
+| Server-authored rounds and validated scores | ADR-003 |
+| Divisions gated on player population | ADR-009 |
+| Retention anchored on class archival | ADR-012 |
+| Payments behind a provider interface | ADR-013 |

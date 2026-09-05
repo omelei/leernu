@@ -1,10 +1,80 @@
 # Data model — TopoKampioen
 
 Status: draft, phase 0. Last updated 2026-09-05.
-Migrations live in `supabase/migrations/`, numbered and never edited after they
-have run anywhere.
 
-Two rules run through the whole model:
+Revised after ADR-014 and ADR-015. The document has two parts:
+
+- **Part A — what v1 actually stores**, in IndexedDB on the device. This is what
+  gets built now.
+- **Part B — the deferred school model**, kept in full because it is the target
+  shape that part A must be able to grow into without a rewrite.
+
+The rule that binds them: **part A uses the same row shapes as part B.** Adding
+accounts later is an upload of existing rows, not a transformation. Where a
+column exists in B but has no meaning yet in A, it is simply absent — never
+renamed or restructured.
+
+---
+
+# Part A — the local store (v1)
+
+Everything lives in IndexedDB. Nothing is transmitted. There is no server, so
+there is no personal data outside the browser and nothing to secure beyond the
+device itself.
+
+```ts
+// object store: profile  (exactly one record)
+{
+  id: string;               // generated locally, becomes student_id on upload
+  naam: string;             // what the player typed; never leaves the device
+  avatar_config: object;
+  niveau: 1 | 2 | 3;
+  xp: number;
+  munten: number;
+  aangemaakt_op: string;    // ISO
+}
+
+// object store: item_states   keyed by item_id — same shape as part B §4
+{ item_id, leitner_box, laatste_review, volgende_review, goed_count, fout_count }
+
+// object store: sessions      same shape as part B §4, minus organisation_id
+{ id, mode, item_set, score, gestart, geeindigd }
+
+// object store: attempts      append-only, same shape as part B §4
+{ id, session_id, item_id, mode, correct, response_ms, gekozen_antwoord, tijdstip }
+
+// object store: streak        exactly one record
+{ huidige_streak, langste_streak, laatste_actieve_dag, vriezers }
+
+// object store: badges        { badge_id, behaald_op }
+// object store: stamps        { regio_set, behaald_op }
+```
+
+Three notes on what is deliberately different from part B:
+
+- **`sessions.item_set` still holds the answer key**, even though nothing
+  validates it in v1. It is kept because the moment leaderboards arrive, the
+  server needs exactly this column to re-score against (ADR-003), and a store
+  that never had it would have to be redesigned.
+- **No `organisation_id` anywhere.** In part B that column exists on every table
+  to keep RLS policies simple; here there is no tenant and no RLS.
+- **`attempts` grows without bound.** A child practising daily for a year
+  produces a few thousand rows, which IndexedDB handles without complaint. If it
+  ever matters, the fix is to summarise rows older than a school year into
+  `item_states` — but not before it is a measured problem.
+
+The content tables (`items`, `learning_goals`) are not stored in IndexedDB at
+all. They ship as static JSON with the app and are read directly.
+
+---
+
+# Part B — the deferred school model
+
+Everything below is the target state for when accounts, classes and licensing
+return (ADR-014). None of it is built now. Migrations will live in
+`supabase/migrations/`, numbered and never edited after they have run anywhere.
+
+Two rules run through it:
 
 1. **Every table carries `organisation_id`**, even where it is derivable through
    a join. RLS policies get simpler, faster and — the part that matters — much

@@ -1,144 +1,169 @@
 # Architecture decision records — TopoKampioen
 
-One record per decision that would be expensive to reverse. Format: context,
-decision, consequences, status. A record is never edited after it is accepted —
-it is superseded by a new one.
+One record per decision that would be expensive to reverse. A record is never
+edited once accepted — it is superseded by a new one. Records still `proposed`
+may be resolved in place, which is what happened to most of these on 2026-09-05.
 
-Status values: `proposed` (waiting for the product owner), `accepted`,
+Status values: `proposed`, `accepted`, `rejected`, `deferred`,
 `superseded by ADR-nnn`.
+
+**Decisions taken by the product owner on 2026-09-05:** ADR-001 (Codespaces),
+ADR-014 (scope: app only, no commercial model, no classes), ADR-016 (no class
+streak), ADR-004 accepted, and ADR-006, ADR-009 and ADR-010 rejected in favour
+of the original specification.
 
 ---
 
-## ADR-001 — Build environment: this machine cannot install the toolchain
+## ADR-001 — Build environment
 
-**Status:** proposed — needs a decision before phase 0 can start.
+**Status:** accepted — GitHub Codespaces.
+
+### Context
+
+Measured on the drafting machine: `registry.npmjs.org` returns `E403` to npm and
+fails TLS to curl; alternative registries do not respond; `cdn.jsdelivr.net`,
+`esm.sh` and `unpkg.com` return 200. Node 24.18.0 and npm 11.16.0 are installed.
+`npm install` cannot run there, so the toolchain cannot be built locally.
+
+### Decision
+
+Develop in GitHub Codespaces. The stack stays exactly as specified: lockfile,
+`npm audit`, Playwright browsers and CI on GitHub Actions all behave normally.
+The local machine is used for review, content authoring and documentation.
+
+### Consequences
+
+Nothing in the stack has to bend around a network restriction. Content work
+(geodata, item sets, copy) can still happen locally, since none of it needs the
+registry.
+
+---
+
+## ADR-014 — Scope: build the app, with no commercial model and no class administration
+
+**Status:** accepted. **Supersedes the phasing in spec §10 for now.**
 **Date:** 2026-09-05.
 
 ### Context
 
-The chosen stack (Vite, Tailwind, shadcn/ui, Vitest, Playwright, the Supabase
-CLI) is installed from the npm registry. Measured on this machine today:
-
-| Host | Result |
-|---|---|
-| `registry.npmjs.org` (npm client) | `E403 Forbidden` |
-| `registry.npmjs.org` (curl) | TLS failure, no response |
-| `registry.npmmirror.com`, `registry.yarnpkg.com` | no response |
-| `cdn.jsdelivr.net`, `esm.sh`, `unpkg.com` | HTTP 200 |
-
-Node 24.18.0 and npm 11.16.0 are present. The network permits a small set of
-CDN hosts and blocks package registries. Playwright additionally downloads
-browser binaries from its own host, which is almost certainly blocked too.
-
-This is not a preference. `npm install` cannot run here, so phase 0 as written
-in spec §10 — repo, CI, linting, test stack — cannot be completed on this
-machine.
+The specification describes a school product: licences, classes, teachers,
+pupils, reporting, invoicing. The product owner has decided that this phase
+builds the app itself — anyone can play and learn — and that the commercial
+model and all class and pupil logic come later.
 
 ### Decision
 
-Proposed, for the owner to choose between:
+In scope now:
 
-- **A. Build elsewhere (recommended).** GitHub Codespaces, or any machine on a
-  network without the registry block. CI on GitHub Actions installs
-  dependencies normally, so the pipeline is unaffected either way. This keeps
-  the stack in spec §2 exactly as specified.
-- **B. Get the registry unblocked** on this network. Cleanest long-term, but it
-  is an IT request with an unknown lead time, and it blocks phase 0 until then.
-- **C. Vendor dependencies from jsDelivr** into the repo and build without npm.
-  Technically possible — a sibling project in this account does exactly that —
-  but it means no lockfile, no `npm audit`, no Playwright, and a hand-maintained
-  dependency tree for a product that will be sold to schools and eventually
-  needs a penetration test. Not recommended for anything commercial.
+- The content pipeline, Dutch geodata, and the item model.
+- The map renderer.
+- Single-player modes: wijs aan, hoe heet dit, sleepronde, bliksemronde,
+  overleven, ontdekmodus.
+- The Leitner engine and the result screen.
+- XP, coins, levels, badges, travel stamps, avatar.
+- The individual day streak, with freezes and holiday pause.
+- Accessibility and i18n from the first commit.
 
-Documentation and content work (this phase: the three docs, the content schema,
-the validator design, geodata sourcing) proceed regardless — none of it needs
-the registry.
+Out of scope until accounts exist:
+
+- Sign-in of any kind, classes, teachers, reporting, assignments.
+- Duel and klassenstrijd — both need a second player who is not on this device.
+- The weekly ladder and divisions — both need a player population.
+- Licences, seats, trials, invoicing, quotes, renewal reports.
 
 ### Consequences
 
-Under A, the repo is developed remotely and this machine is used for review and
-content authoring only. Under C, spec §11's definition of done ("CI green",
-"unit and e2e tests") cannot be met, so C would also require amending §11.
+The largest consequence is architectural and favourable: with no accounts there
+is no personal data, so there is no database, no RLS, no processing agreement
+and no subprocessor list to defend. See ADR-015.
+
+The risk is that a local-first v1 becomes hard to graft accounts onto. ADR-015
+addresses it directly; it is the thing to get right in this phase.
+
+The business case for the school product is documented separately in
+`docs/BUSINESSPLAN.md` and is deliberately not implemented.
 
 ---
 
-## ADR-002 — Pupils authenticate through a custom JWT, not Supabase Auth
+## ADR-015 — Local-first: no backend in v1
 
-**Status:** accepted (follows directly from the spec's own constraints).
+**Status:** accepted (follows from ADR-014).
 
 ### Context
 
-Spec §1 forbids pupil e-mail addresses; §6 requires RLS on every table. Supabase
-RLS keys on `auth.uid()`, which requires an `auth.users` row, which requires an
-identifier the spec forbids.
+Without accounts there is nothing to authenticate, nothing to authorise, and no
+shared state. A backend would exist only to store what the device can store.
 
 ### Decision
 
-An Edge Function verifies class code + pupil + 4-digit PIN (argon2id) and mints
-a short-lived JWT with `student_id`, `class_id` and `organisation_id` claims.
-RLS policies read those claims. Pupils never receive the service role key.
+v1 is a static SPA with all state in IndexedDB. No Supabase, no Edge Functions,
+no database. Hosting is static, in the EU. Nothing about a player leaves the
+browser.
+
+Two rules keep later accounts affordable:
+
+1. The local store uses the **same row shapes** as the future server tables, so
+   adding accounts means uploading rows rather than transforming them.
+2. Scoring and scheduling live in one pure module, `packages/game-core`, with no
+   browser dependencies, so the server can import the same code when scores must
+   be validated server-side.
 
 ### Consequences
 
-We own token issuance, expiry and revocation, including the rate limiting that a
-4-digit PIN makes load-bearing: 10 failures locks a pupil slot, 50 locks a class
-code, both logged. This must be built in phase 0 — every later table inherits
-these policies, and retrofitting the claim shape means rewriting all of them.
+No cross-device progress, no reporting, no leaderboards — all arrive with
+accounts. Offline support becomes nearly free, which on a school network may be
+the most noticeable quality of the product. Privacy stops being a set of
+controls to prove and becomes a property of the architecture.
 
 ---
 
-## ADR-003 — Rounds are authored and scored on the server
+## ADR-016 — No class streak
+
+**Status:** accepted. **Supersedes ADR-007.**
+
+### Context
+
+Spec §4.3 proposed a class streak that breaks unless ≥80% of the class practises.
+ADR-007 proposed softening it. The product owner has decided to drop it.
+
+### Decision
+
+The class streak does not exist. The individual day streak stays, with automatic
+freezes (one per week, maximum two saved) and the holiday pause.
+
+### Consequences
+
+Removes the mechanic that could make a sick child visibly responsible for the
+group's loss, and removes it entirely rather than mitigating it. It is also
+moot in this phase, since there are no classes. If a group mechanic is wanted
+when classes arrive, it starts from a counter that only rises — never a
+breakable run.
+
+---
+
+## ADR-004 — Geometry is projected in the content pipeline
 
 **Status:** accepted.
 
 ### Context
 
-Spec §4.6 requires server-validated scores. Supabase's default pattern has the
-client writing directly to Postgres, which would make the leaderboard trivially
-forgeable by any child who finds the network tab.
+Spec §2 puts `d3-geo` in the app. Spec §8 sets a 300 kB gzipped budget and 60 fps
+on Chromebooks.
 
 ### Decision
 
-`session-start` composes the question set server-side and stores it with its
-answer key in `sessions.item_set`. The client plays against a copy without the
-key where the mode allows. `session-submit` re-scores every answer server-side,
-rejects implausible response times, and writes `attempts`, `sessions` and
-`item_states` in one transaction. Pupils have no insert or update on those
-tables.
+Project offline. Region sets ship pre-projected into a 0–1000 view box at three
+mapshaper-simplified detail levels. `d3-geo` is a build dependency only.
 
-### Consequences
-
-Scoring logic exists in two places and must not drift, so it lives in one shared
-pure module (`packages/game-core`) imported by both the SPA and the Edge
-Functions. A round costs two round trips. Starting a round requires
-connectivity; finishing one does not.
-
----
-
-## ADR-004 — Geometry is projected in the content pipeline, not in the browser
-
-**Status:** accepted.
-
-### Context
-
-Spec §2 puts `d3-geo` in the app for projection. Spec §8 sets a 300 kB gzipped
-bundle budget and a 60 fps interaction target on Chromebooks.
-
-### Decision
-
-Project offline. Region sets ship as pre-projected coordinates in a 0–1000 view
-box, at three mapshaper-simplified detail levels. `d3-geo` is a build dependency
-and never enters the bundle.
-
-Correction to the spec while we are here: the Netherlands uses a **stereographic**
+Correction carried by this ADR: the Netherlands uses a **stereographic**
 projection, not a conic one. RD (Amersfoort / EPSG:28992) is oblique
 stereographic; we use `geoStereographic` rotated on 5°23′E / 52°09′N.
 
 ### Consequences
 
-Changing a projection means re-running the pipeline and committing new files,
-which is the right friction — a projection change is a content event. Zoom is
-limited to what the shipped detail levels support.
+Changing a projection means re-running the pipeline and committing new files —
+the right friction, because a projection change is a content event. Zoom is
+bounded by the shipped detail levels.
 
 ---
 
@@ -146,169 +171,85 @@ limited to what the shipped detail levels support.
 
 **Status:** accepted (as specified).
 
-### Context
+Boxes 1–5, intervals 1/2/4/8/21 days, wrong answers return to box 1 and reappear
+after three other questions in the same session, rounds mix 70% due / 20% new /
+10% refresh.
 
-Spec §4.2 chooses a 5-box Leitner system over SM-2.
-
-### Decision
-
-Adopt it as written: boxes 1–5, intervals 1/2/4/8/21 days, wrong answers return
-to box 1 and reappear after three other questions in the same session, rounds
-mix 70% due / 20% new / 10% refresh.
-
-### Consequences
-
-The right call for this content size, and it has a property SM-2 lacks: a
-teacher can be told how it works in one sentence. That matters, because the
-mastery percentage derived from box level is the number the teacher will act on.
-If the algorithm is a black box, the report is a black box.
+The right call for this content size, and it has a property SM-2 lacks: it can
+be explained to a teacher in one sentence. That matters, because the mastery
+percentage derived from box level is the number a teacher will eventually act
+on. An algorithm nobody can explain makes a report nobody trusts.
 
 ---
 
-## ADR-006 — Typed answers: normalise first, tolerate one typo only when unambiguous
+## ADR-006 — Typed answers: flat Levenshtein ≤ 1, as specified
 
-**Status:** proposed.
+**Status:** rejected (the proposed alternative was declined; spec §4.1 stands).
 
 ### Context
 
-Spec §4.1 accepts a typed answer within Levenshtein distance ≤ 1. Dutch
-toponyms include real pairs one edit apart: **Ede / Epe**, **Hoorn / Doorn**.
-A flat tolerance of 1 marks a genuinely wrong answer correct — and does it in a
-learning product, where the child is then taught the wrong fact.
+The proposal was to allow a one-edit typo only when no other item in the set was
+also within one edit, because Dutch toponyms include real pairs one edit apart:
+**Ede / Epe** and **Hoorn / Doorn**.
 
 ### Decision
 
-1. Normalise: lowercase, strip diacritics, collapse whitespace and hyphens,
-   drop a leading article. Compare against `naam` and every alias. An exact
-   match after normalisation is correct — this alone handles most of what the
-   tolerance was for.
-2. Only then apply distance ≤ 1, and **only if no other item in the current
-   region set is also within distance 1** of the typed answer. If two candidates
-   compete, treat it as wrong and show both: "Je typte *Epe*. Bedoelde je Ede?"
-
-Rule 2 is where the didactics live. The near-miss is the teachable moment, and a
-silent "correct" throws it away.
+Build it as specified: normalise for case, accents and whitespace, then accept a
+Levenshtein distance of 1.
 
 ### Consequences
 
-The ambiguity check needs a precomputed near-miss map per region set — cheap,
-built once in the content pipeline. `validate:content` reports every pair within
-distance 1 so we can see what the map contains.
+Recorded plainly so it is not a surprise later: a child who answers "Epe" when
+the answer is Ede will be told they are correct, and a child who answers "Doorn"
+for Hoorn likewise. In a learning product that teaches the wrong fact at the
+moment the child is most receptive.
+
+The mitigation is cheap and does not need a decision now: `validate:content` will
+report every pair within distance 1 in each region set, so the size of the
+problem is visible rather than theoretical. If that list is short, an exception
+table is a small change; if it is long, this ADR is worth revisiting.
 
 ---
 
-## ADR-007 — The class streak counts up and never names anyone
+## ADR-009 — Divisions as specified
 
-**Status:** proposed.
+**Status:** rejected as an alternative; **deferred** with accounts.
 
-### Context
+The proposal to gate divisions on player population was declined. Divisions
+require classes and a player base, both out of scope under ADR-014, so nothing
+is built either way in this phase.
 
-Spec §4.3 wants streaks that do not punish, and adds a class streak that breaks
-unless ≥80% of the class practised. The individual protections (freezes, holiday
-pause) are good. The class streak reintroduces exactly the pressure they remove,
-and makes it social: a sick child can break the group's streak, in front of the
-group.
-
-### Decision
-
-Keep the class streak, change what it measures and what it shows.
-
-- No dashboard, screen or export ever shows who did or did not practise as part
-  of a streak view. The teacher can see participation in the reports; the class
-  cannot.
-- Absent pupils are excluded from the denominator when the teacher marks them
-  absent, so illness does not count against the class.
-- The class metric counts up (days achieved this month) rather than presenting a
-  fragile run that resets to zero. A counter that only rises produces the same
-  motivation without the loss aversion.
-
-### Consequences
-
-Slightly weaker hook than a breakable streak. That is the intended trade, and it
-is the version a teacher will defend to a parent.
+The concern is preserved for when it becomes live: with a small pilot
+population, a division of ~15 comparable players will contain four people, and
+cross-school grouping also exposes pupils from different organisations to each
+other, which is an access-control question as much as a game-design one.
 
 ---
 
-## ADR-008 — No free consumer tier in v1
+## ADR-010 — Framer Motion stays
 
-**Status:** proposed.
-
-### Context
-
-Spec §7 proposes free individual pupil/parent access as a marketing channel.
-Spec §6 and §12 forbid collecting pupil personal data beyond first name and
-initial, and forbid unnecessary data "even for later".
-
-Outside a school, there is no school to be the controller and no processing
-agreement to sit under. A self-service account needs an identifier, which for a
-minor means a parent's e-mail and a consent flow, which makes us the controller,
-under a different legal basis, needing our own privacy notice and an age check.
-
-### Decision
-
-Defer. The free tier, if built, comes after phase 6, as a **parent** account
-with a parent's e-mail, on separate infrastructure boundaries from the school
-product, with its own privacy notice.
-
-For the marketing need it was meant to serve, use a demo account with seeded
-fictional data and no registration at all — no personal data, better conversion,
-available in phase 1.
-
-### Consequences
-
-Loses one growth channel in year 1. Keeps the school proposition legally simple,
-which is the proposition that pays.
-
----
-
-## ADR-009 — Divisions are gated on player population
-
-**Status:** proposed.
+**Status:** rejected (the proposed removal was declined; spec §2 stands).
 
 ### Context
 
-Spec §4.4 puts pupils in divisions of ~15 comparable players across classes.
-With three pilot schools, a division may hold four players, and cross-school
-grouping also exposes pupils to pupils from other organisations (see the RLS
-note in `DATAMODEL.md` §8).
+The proposal was to drop Framer Motion and enforce the 300 kB budget in CI,
+because React + Zustand + TanStack Query + Framer Motion + shadcn consumes most
+of the budget before a map is drawn.
 
 ### Decision
 
-Build the grouping as a function of the available population: below a threshold
-(proposed: 40 active pupils at a level), divisions fall back to class or school
-scope, and the UI says which scope is in play. Ship divisions in phase 2 behind
-a flag, off by default until the population supports them.
+Keep Framer Motion, as specified.
+
+Bundle size is still **measured and reported** in CI against the spec's own
+300 kB budget, without failing the build. Measuring a budget the specification
+sets is implementing the spec, not deviating from it, and it keeps the trade
+visible while the app is small enough to change course cheaply.
 
 ### Consequences
 
-The weekly ladder (which is per class, and which is the more important mechanic)
-carries phase 2 on its own. Divisions switch on when they are real.
-
----
-
-## ADR-010 — Drop Framer Motion; keep the bundle budget honest
-
-**Status:** proposed.
-
-### Context
-
-Spec §8 sets ≤300 kB gzipped initial bundle. React + Zustand + TanStack Query +
-Framer Motion + shadcn primitives realistically consumes most of that before a
-map is drawn, and `d3-geo` was budgeted in too (removed by ADR-004).
-
-### Decision
-
-Use CSS transitions and the Web Animations API for the micro-animations the spec
-describes — answer feedback, streak flame, score count-up. None of them need a
-layout-animation engine. Split the budget explicitly: ≤200 kB app shell, geodata
-lazy-loaded per region set and measured separately, and a CI check that fails
-the build when the shell exceeds its budget.
-
-### Consequences
-
-Shared layout transitions become hand-written if we ever want them. In exchange
-the budget stays a real constraint rather than one quietly abandoned in week
-three, which is what happens to budgets nobody enforces in CI.
+TanStack Query is deferred with the backend (ADR-015), which returns part of the
+budget for now. The number to watch is the first build that ships a full region
+set.
 
 ---
 
@@ -319,68 +260,38 @@ three, which is what happens to budgets nobody enforces in CI.
 ### Context
 
 Spec §3.4 requires curriculum tagging and forbids unverifiable claims. Verified
-on 2026-09-05: SLO delivered definitive concept kerndoelen for *mens en
-maatschappij* in November 2025, and the first revised kerndoelen entered law in
-August 2026. Geography spans two learning areas — *mens en natuur* and *mens en
-maatschappij* — so a single kerndoel reference per goal is structurally wrong.
+2026-09-05: SLO delivered definitive concept kerndoelen for *mens en maatschappij*
+in November 2025, and the first revised kerndoelen entered law in August 2026.
+Geography spans two learning areas — *mens en natuur* and *mens en maatschappij* —
+so one kerndoel reference per goal is structurally wrong.
 
 ### Decision
 
-`learning_goals.kerndoel_refs` is a JSON array of
+`learning_goals.kerndoel_refs` is an array of
 `{stelsel, code, versie, bron_url, geraadpleegd_op}`. A new set of kerndoelen is
-a data migration, never a code change. `docs/CURRICULUM.md` records each source
-with its retrieval date and quotes the official wording verbatim.
+a data change, never a code change. `docs/CURRICULUM.md` records each source with
+its retrieval date and quotes the official wording verbatim.
 
-The app and the website say "sluit aan bij" and link to the mapping. We never
-claim approval, endorsement or certification, because we have none.
+The app and any future website say "sluit aan bij" and link to the mapping. We
+never claim approval, endorsement or certification, because we have none.
 
 ### Consequences
 
-Teachers can see the mapping and disagree with it, which is better than an
-unfalsifiable claim. Sales must be briefed that "voldoet aan de kerndoelen" is
-not a sentence we are allowed to say.
+The mapping is visible and therefore contestable, which is better than an
+unfalsifiable claim. "Voldoet aan de kerndoelen" is not a sentence anyone may
+write.
 
 ---
 
-## ADR-012 — Retention hangs on class archival, and deletion is announced
+## Deferred with accounts and commerce (ADR-014)
 
-**Status:** proposed.
+Recorded in full in the 2026-09-05 revision history; summarised here because
+none of them is built in this phase.
 
-### Context
-
-Spec §6 deletes pupil data 12 months after licence end or class archival. Those
-two can disagree: a class archived in July under a licence running to December.
-Anchoring on the licence keeps data alive that nobody expects to exist.
-
-### Decision
-
-Delete on whichever comes first. The job runs monthly, produces a report of what
-it is about to delete, mails it to the school administrator, and only then acts.
-Both the report and the deletion are written to `audit_log`.
-
-### Consequences
-
-One month of extra retention on the announced batch. Worth it: silent deletion
-of a year of pupil work, even when contractually correct, is how a renewal
-conversation turns into a complaint.
-
----
-
-## ADR-013 — Payments behind a provider interface
-
-**Status:** accepted (as specified).
-
-### Context
-
-Spec §2 chooses Mollie and asks for a `PaymentProvider` interface.
-
-### Decision
-
-Adopt as written. Schools pay on invoice with SEPA transfer as the primary path;
-iDEAL is an option, not the default. No card is requested for the trial.
-
-### Consequences
-
-The interface is thin because invoicing is mostly ours, not the provider's:
-quote PDF, invoice, dunning and the seat count all live in our domain. Mollie
-handles the payment event and little else, which is what makes it replaceable.
+| ADR | Decision | Why deferred |
+|---|---|---|
+| ADR-002 | Pupils authenticate through a custom JWT, not Supabase Auth, because the spec forbids pupil e-mail while RLS needs an identity | No sign-in exists |
+| ADR-003 | Rounds are authored and scored on the server, because a client-written score is forgeable | No leaderboard to forge; `game-core` stays pure so this stays affordable |
+| ADR-008 | No free consumer tier, because a self-service account for a minor makes us the controller under a different legal regime | Moot: everyone plays free, and no account exists |
+| ADR-012 | Retention hangs on class archival, and deletion is announced before it runs | No stored pupil data |
+| ADR-013 | Payments behind a `PaymentProvider` interface; schools pay on invoice with SEPA | No commercial model |
