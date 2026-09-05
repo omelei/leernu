@@ -9,6 +9,17 @@ export default tseslint.config(
   js.configs.recommended,
   ...tseslint.configs.recommended,
 
+  // Build tooling runs in Node, not in a browser, so it gets Node's globals.
+  // Without this, `process` and `console` read as undefined variables.
+  {
+    files: ['**/*.{js,mjs,cjs}', 'tools/**/*'],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: 'module',
+      globals: globals.node,
+    },
+  },
+
   {
     files: ['**/*.{ts,tsx}'],
     languageOptions: {

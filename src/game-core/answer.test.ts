@@ -72,9 +72,20 @@ describe('matchAnswer', () => {
   });
 
   it('accepts one typo, and says it was not exact', () => {
-    const result = matchAnswer('Utrehct', item('Utrecht'));
+    const result = matchAnswer('Utrech', item('Utrecht'));
     expect(result.correct).toBe(true);
     expect(result.exact).toBe(false);
+  });
+
+  /**
+   * Worth knowing rather than discovering: plain Levenshtein counts a swapped
+   * pair of letters as two edits, so the tolerance in spec section 4.1 does not
+   * cover it — and transposition is one of the most common typing mistakes a
+   * ten-year-old makes. Accepting it would need Damerau-Levenshtein, which also
+   * widens the Ede/Epe problem in ADR-006, so it is a decision and not a fix.
+   */
+  it('does not accept two swapped letters, which is two edits and not one', () => {
+    expect(matchAnswer('Utrehct', item('Utrecht')).correct).toBe(false);
   });
 
   it('rejects an empty answer', () => {

@@ -79,9 +79,14 @@
     /* The action colour is warm, deliberately. Blue belongs to water on every
      * map in this product, and a blue button next to a blue sea teaches the
      * child that blue means two different things. */
-    --primary: #c2410c; /* white text 5.18:1 */
-    --primary-hover: #9a330a; /* white text 7.36:1 */
+    --primary: #c2410c; /* with --on-primary, 5.18:1 */
+    --primary-hover: #9a330a; /* with --on-primary, 7.36:1 */
     --primary-tint: #fdede4;
+
+    /* The ink that sits on a filled button. A token rather than Tailwind's
+     * `text-white`, so the contrast test can read it and so a future dark
+     * variant has one place to change. */
+    --on-primary: #ffffff;
 
     --good: #15803d; /* white text 5.02:1 — always paired with a check and a word */
     --bad: #b91c1c; /* white text 6.47:1 — always paired with a cross and a word */
@@ -167,7 +172,7 @@
   .tk-button-primary {
     @apply inline-flex min-h-touch items-center justify-center gap-2 rounded-control px-6 py-3
       text-lg font-bold transition-colors;
-    @apply bg-primary text-white hover:bg-primary-hover;
+    @apply bg-primary text-on-primary hover:bg-primary-hover;
   }
 
   .tk-button-quiet {

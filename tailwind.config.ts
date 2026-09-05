@@ -21,6 +21,7 @@ export default {
           hover: 'var(--primary-hover)',
           tint: 'var(--primary-tint)',
         },
+        'on-primary': 'var(--on-primary)',
         good: 'var(--good)',
         bad: 'var(--bad)',
         focus: 'var(--focus)',

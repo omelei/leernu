@@ -209,6 +209,18 @@ report every pair within distance 1 in each region set, so the size of the
 problem is visible rather than theoretical. If that list is short, an exception
 table is a small change; if it is long, this ADR is worth revisiting.
 
+**Found while building, 2026-09-05.** Plain Levenshtein counts a swapped pair of
+letters as two edits, so "Utrehct" for Utrecht is *rejected* — and transposition
+is one of the most common mistakes a ten-year-old makes at a keyboard. The
+tolerance therefore forgives the error that teaches a wrong fact (Epe for Ede)
+and refuses the error that teaches nothing (Utrehct for Utrecht), which is
+exactly backwards from what the tolerance was for.
+
+Accepting transpositions needs Damerau-Levenshtein. That is a real option, but it
+is a decision rather than a fix: it widens the collision problem above at the
+same time. Both behaviours are pinned as tests, so whichever way this goes, the
+test names the decision instead of leaving a mystery.
+
 ---
 
 ## ADR-009 — Divisions as specified
