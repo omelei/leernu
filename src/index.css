@@ -1,0 +1,196 @@
+/*
+ * The design system, and the one file that is allowed to name a colour.
+ *
+ * Two rules shape everything below. The first is that this product is read by
+ * ten-year-olds on shared school hardware, so the type scale starts one step
+ * larger than an adult product would and the touch targets are 48px rather than
+ * the 44px minimum. The second is that colour never carries meaning on its own:
+ * every correct/incorrect state pairs its colour with an icon and a word, which
+ * matters most on a map, where colour is otherwise the only thing there is.
+ *
+ * Fonts are served from /public/fonts. Nothing is fetched from a CDN at runtime:
+ * a font request to Google is a third-party request from a child's browser, and
+ * that is the thing this product is meant not to do.
+ */
+
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/nunito-latin-400-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/nunito-latin-600-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/nunito-latin-700-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('/fonts/nunito-latin-800-normal.woff2') format('woff2');
+}
+
+/* Offered as a setting, never as the default. OpenDyslexic helps some readers
+ * and slows others down, so it is the reader's call and not ours. */
+@font-face {
+  font-family: 'OpenDyslexic';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/opendyslexic-latin-400-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'OpenDyslexic';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/opendyslexic-latin-700-normal.woff2') format('woff2');
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Paper and ink. Warm rather than blue-grey, because the map itself brings
+     * a lot of blue and the page around it should not compete with it. */
+    --paper: #fbf9f5;
+    --surface: #ffffff;
+    /* Contrast ratios below are measured, not estimated, and every one of them
+     * clears WCAG AA. Re-run the check in tools/ if you change a value here. */
+    --ink-900: #16212b; /* headings    15.52:1 on paper */
+    --ink-700: #33434f; /* body         9.71:1 */
+    --ink-500: #5c6b77; /* secondary    5.22:1 — the lightest ink allowed on text */
+    --line: #e2ddd4;
+
+    /* The action colour is warm, deliberately. Blue belongs to water on every
+     * map in this product, and a blue button next to a blue sea teaches the
+     * child that blue means two different things. */
+    --primary: #c2410c; /* white text 5.18:1 */
+    --primary-hover: #9a330a; /* white text 7.36:1 */
+    --primary-tint: #fdede4;
+
+    --good: #15803d; /* white text 5.02:1 — always paired with a check and a word */
+    --bad: #b91c1c; /* white text 6.47:1 — always paired with a cross and a word */
+
+    --focus: #1d4ed8; /* 6.37:1 on paper, so the ring is visible on every surface */
+
+    /* Map palette. Kept here so a colour-blind-safe variant is one edit away. */
+    --water: #a8cbe0;
+    --land: #ede6da;
+    --land-active: #f6c89a;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--paper);
+    color: var(--ink-700);
+    font-family: 'Nunito', system-ui, sans-serif;
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Set by the accessibility setting, not by a media query: dyslexia is not
+   * something the operating system knows about. */
+  html[data-font='dyslexic'] body {
+    font-family: 'OpenDyslexic', 'Nunito', system-ui, sans-serif;
+    letter-spacing: 0.01em;
+    line-height: 1.75;
+  }
+
+  h1,
+  h2,
+  h3 {
+    color: var(--ink-900);
+    font-weight: 800;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  /* One focus style everywhere, drawn outside the element so it stays visible
+   * on a map region whose own fill is about to change colour. */
+  :focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* Reduced motion removes movement, never feedback. An answer still turns
+   * green and still says "goed"; it just stops travelling to get there. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .tk-card {
+    @apply rounded-card border border-line bg-surface p-6;
+  }
+
+  /* Minimum height rather than fixed, so a long Dutch label wraps instead of
+   * being clipped. Dutch is reliably longer than the English it is translated
+   * from, and buttons are where that shows up first.
+   *
+   * The shared base is repeated in each variant rather than @apply'd from
+   * .tk-button, because applying one component class inside another depends on
+   * layer ordering in ways that are hard to see when it goes wrong. */
+  .tk-button {
+    @apply inline-flex min-h-touch items-center justify-center gap-2 rounded-control px-6 py-3
+      text-lg font-bold transition-colors;
+  }
+
+  .tk-button-primary {
+    @apply inline-flex min-h-touch items-center justify-center gap-2 rounded-control px-6 py-3
+      text-lg font-bold transition-colors;
+    @apply bg-primary text-white hover:bg-primary-hover;
+  }
+
+  .tk-button-quiet {
+    @apply inline-flex min-h-touch items-center justify-center gap-2 rounded-control px-6 py-3
+      text-lg font-bold transition-colors;
+    @apply border-2 border-line bg-surface text-ink-700 hover:border-ink-500;
+  }
+
+  .tk-input {
+    @apply min-h-touch w-full rounded-control border-2 border-line bg-surface px-4 py-3
+      text-lg text-ink-900 placeholder:text-ink-500;
+  }
+
+  /* Screen-reader-only, used for the live region that announces a question. */
+  .tk-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+}

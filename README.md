@@ -16,14 +16,57 @@ That makes v1 a static single-page app with **no backend at all** — all progre
 lives in IndexedDB on the device ([ADR-015](docs/DECISIONS.md)). Nothing about a
 player leaves the browser.
 
-**In scope:** content pipeline and Dutch geodata · map renderer · the six
-single-player modes (wijs aan, hoe heet dit, sleepronde, bliksemronde, overleven,
-ontdekmodus) · Leitner engine · result screen · XP, coins, levels, badges, travel
-stamps, avatar · individual day streak with freezes and holiday pause ·
-accessibility and i18n from the first commit.
+## Getting started
 
-**Deferred until accounts exist:** sign-in, classes, teachers, reporting,
-assignments, duel, klassenstrijd, weekly ladder, divisions, licences, payments.
+Development happens in **GitHub Codespaces** ([ADR-001](docs/DECISIONS.md)): the
+npm registry is unreachable from the machine this was drafted on. The
+`.devcontainer` installs dependencies and the Playwright browser on create.
+
+```bash
+npm install          # first run only; commit the package-lock.json it produces
+npm run dev          # http://localhost:5173
+```
+
+Then, in this order, because that is the order CI runs them in:
+
+```bash
+npm run lint && npm run typecheck && npm test && npm run build
+```
+
+> **Nothing in this repository has been executed yet.** It was written on a
+> machine where `npm install` cannot run, so the first Codespace session is also
+> the first time the toolchain sees any of it. Expect to fix dependency versions:
+> they were pinned conservatively (Vite 5 / Vitest 2 / Tailwind 3) precisely
+> because they could not be verified, and moving to current majors is a sensible
+> first task once CI is green.
+>
+> What *has* been verified: the six self-hosted fonts render in a browser, and
+> every colour pair in the palette clears WCAG AA — measured, not estimated, and
+> now pinned by `src/design/contrast.test.ts`, which reads the real stylesheet.
+
+## What phase 0 delivers
+
+| | |
+|---|---|
+| Toolchain | Vite, TypeScript strict (`noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`), Tailwind, ESLint flat config, Prettier |
+| CI | lint, typecheck, format, content validation, unit tests, build, Playwright on Chromebook and iPad viewports |
+| Design system | `src/index.css` — the only file allowed to name a colour, enforced by lint. Self-hosted Nunito and OpenDyslexic |
+| i18n | Every user-visible string in `src/i18n/nl.ts`; nothing inline |
+| `game-core` | Leitner scheduler and answer matching, pure and fully tested. No DOM imports, enforced by lint |
+| Local store | The IndexedDB schema from DATAMODEL part A |
+| App | Name entry, a start screen, and a working reading-font setting that survives a reload |
+
+The app is deliberately honest about being empty: it says the maps are still
+coming rather than showing a mock-up of them.
+
+## Conventions
+
+- Code, identifiers, commits and documentation in English.
+- UI text and content in Dutch, only through i18n keys. Language for children at
+  roughly AVI-M6.
+- Content lives in versioned files under `content/`, not in components.
+- No colour literal outside `src/index.css`; no browser import inside
+  `src/game-core`. Both are lint errors, not conventions.
 
 ## Documents
 
@@ -33,27 +76,6 @@ assignments, duel, klassenstrijd, weekly ladder, divisions, licences, payments.
 | [DATAMODEL.md](docs/DATAMODEL.md) | Part A: the local store. Part B: the deferred school model |
 | [DECISIONS.md](docs/DECISIONS.md) | 16 ADRs, including what was rejected and why |
 | [BUSINESSPLAN.md](docs/BUSINESSPLAN.md) | Market, competition, pricing. Planning only — not built |
-
-## Conventions
-
-- Code, identifiers, commits and documentation in English.
-- UI text and content in Dutch, only through i18n keys — never inline. Language
-  for children at roughly AVI-M6.
-- Content lives in versioned files under `content/`, not in components.
-- Development happens in GitHub Codespaces ([ADR-001](docs/DECISIONS.md)): the
-  npm registry is unreachable from the machine this was drafted on.
-
-## Planned commands
-
-None of these run yet; this is the shape phase 0 will deliver.
-
-```bash
-npm run dev               # Vite dev server
-npm run build             # production build, reports bundle size against the 300 kB budget
-npm run test              # Vitest (game-core)
-npm run test:e2e          # Playwright (play a round, keep progress, play offline)
-npm run validate:content  # content and geometry integrity — runs in CI
-```
 
 ## Still to come
 

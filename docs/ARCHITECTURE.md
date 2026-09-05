@@ -63,11 +63,18 @@ rewrite. Two rules prevent that:
    `item_states`, `attempts`, `sessions` and `streaks` exist in IndexedDB with
    the columns they will have in Postgres (see `DATAMODEL.md` part A). Adding
    accounts later means uploading rows, not transforming them.
-2. **Scoring and scheduling live in one pure module**, `packages/game-core`, with
-   no browser dependencies. Today the client calls it. When leaderboards arrive
-   and scores must be server-validated (the original ADR-003, deferred but not
+2. **Scoring and scheduling live in one pure module**, `src/game-core`, with no
+   browser dependencies. Today the client calls it. When leaderboards arrive and
+   scores must be server-validated (the original ADR-003, deferred but not
    abandoned), the server imports the same module. That is the single decision
    that keeps anti-cheat affordable later instead of impossible.
+
+   It is a directory rather than a separate npm workspace, and the purity is
+   enforced by an ESLint rule that forbids importing `react`, `idb`, the store or
+   any browser global from inside it. A workspace would enforce the same thing
+   through packaging, at the cost of a build graph that has to be maintained for
+   a boundary a lint rule already holds. Promoting it to a package later is a
+   folder move.
 
 A local profile is a name the player types and a generated id. It is stored on
 the device and never transmitted. When accounts arrive, "claim this progress"
@@ -100,20 +107,23 @@ of Africa has failed at its own subject.
 ## 5. Front-end structure
 
 ```
-packages/game-core/       pure: Leitner, scoring, answer matching (no DOM)
 src/
-  config/brand.ts         product name, colours, feature flags
+  game-core/              pure: Leitner, answer matching, scoring (no DOM, no React)
+  config/brand.ts         product name and feature flags
+  design/                 palette checks that read the real stylesheet
+  content/                loads content/sets, and the validator that gates CI
   game/
-    modes/                one file per GameMode plugin
-    map/                  SVG renderer, hit testing
-  store/                  Zustand (live round) + IndexedDB persistence
+    modes/                one file per GameMode plugin        (phase 1)
+    map/                  SVG renderer, hit testing            (phase 1)
+  store/                  IndexedDB schema and access
   features/player/        profile, progress, passport, avatar
   i18n/                   nl.ts from day one; keys never inline
-tools/
-  content/                mapshaper + projection pipeline, validator
+  index.css               the design system, and the only file that names a colour
+tools/                    bundle-size report; content pipeline follows in phase 1
 content/
   geo/                    versioned, pre-projected, three detail levels
-  sets/                   items, learning goals
+  sets/                   items and learning goals
+public/fonts/             self-hosted woff2 — nothing is fetched from a CDN
 ```
 
 Zustand holds the live round, which is a state machine that must survive a

@@ -34,21 +34,28 @@ device itself.
   aangemaakt_op: string;    // ISO
 }
 
-// object store: item_states   keyed by item_id — same shape as part B §4
-{ item_id, leitner_box, laatste_review, volgende_review, goed_count, fout_count }
+// object store: itemStates    keyed by itemId — same shape as part B §4
+{ itemId, box, laatsteReview, volgendeReview, goedCount, foutCount }
 
-// object store: sessions      same shape as part B §4, minus organisation_id
-{ id, mode, item_set, score, gestart, geeindigd }
+// object store: sessions      same shape as part B §4, minus organisationId
+{ id, mode, itemSet, score, gestart, geeindigd }
 
-// object store: attempts      append-only, same shape as part B §4
-{ id, session_id, item_id, mode, correct, response_ms, gekozen_antwoord, tijdstip }
+// object store: attempts      append-only, autoIncrement key
+//   indexed by sessionId (what happened in one round) and itemId (one item over time)
+{ id, sessionId, itemId, mode, correct, responseMs, gekozenAntwoord, tijdstip }
 
-// object store: streak        exactly one record
-{ huidige_streak, langste_streak, laatste_actieve_dag, vriezers }
+// object store: streak        exactly one record, key 'me'
+{ id, huidigeStreak, langsteStreak, laatsteActieveDag, vriezers }
 
-// object store: badges        { badge_id, behaald_op }
-// object store: stamps        { regio_set, behaald_op }
+// object store: badges        { badgeId, behaaldOp }
+// object store: stamps        { regioSet, behaaldOp }
+// object store: settings      { key, value } — device preferences, not player data
 ```
+
+Field names are camelCase here and snake_case in Postgres. That single renaming is
+the only translation between part A and part B, and it belongs in one mapping
+function written on the day accounts arrive — not spread through the code now, in
+anticipation of a shape nobody has needed yet.
 
 Three notes on what is deliberately different from part B:
 
