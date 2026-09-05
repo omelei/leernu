@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<title>Geo preview</title>
+<style>
+  :root { --paper:#fbf9f5; --ink:#16212b; --line:#e2ddd4; --water:#a8cbe0; --land:#ede6da; --active:#f6c89a; }
+  body { margin:0; padding:24px; background:var(--paper); color:var(--ink);
+         font-family:system-ui,sans-serif; }
+  h1 { font-size:20px; margin:0 0 4px; }
+  p.sub { margin:0 0 20px; color:#5c6b77; font-size:14px; }
+  .grid { display:flex; gap:20px; flex-wrap:wrap; }
+  .panel { background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px; }
+  .panel h2 { font-size:14px; margin:0 0 8px; font-weight:600; }
+  .panel .meta { font-size:12px; color:#5c6b77; margin:6px 0 0; }
+  svg { display:block; background:var(--water); border-radius:8px; }
+  path { fill:var(--land); stroke:var(--ink); stroke-width:1.2; stroke-linejoin:round; }
+  path:hover { fill:var(--active); }
+  text { font-size:15px; font-family:system-ui,sans-serif; fill:var(--ink); text-anchor:middle;
+         paint-order:stroke; stroke:#fff; stroke-width:3px; }
+</style>
+</head>
+<body>
+<h1>Geo preview — provincies</h1>
+<p class="sub">Bouw opnieuw met <code>node tools/content/build-geo.mjs</code> en ververs deze pagina.</p>
+<div class="grid" id="grid"></div>
+
+<script type="module">
+const LEVELS = ['overview', 'region', 'detail'];
+const SIZES = { overview: 320, region: 320, detail: 320 };
+const grid = document.getElementById('grid');
+
+for (const level of LEVELS) {
+  const res = await fetch(`/content/geo/nl/provincies.${level}.json`);
+  if (!res.ok) { grid.insertAdjacentHTML('beforeend', `<p>Kon ${level} niet laden (${res.status})</p>`); continue; }
+  const data = await res.json();
+
+  const size = SIZES[level];
+  const paths = data.vormen.map(v => `<path d="${v.d}"><title>${v.bronnaam}</title></path>`).join('');
+  const labels = data.vormen.map(v => v.punt ? `<text x="${v.punt[0]}" y="${v.punt[1]}">${v.bronnaam}</text>` : '').join('');
+  const points = data.vormen.reduce((n, v) => n + (v.d.match(/[ML]/g) || []).length, 0);
+
+  grid.insertAdjacentHTML('beforeend', `
+    <div class="panel">
+      <h2>${level}</h2>
+      <svg viewBox="${data.viewBox.join(' ')}" width="${size}" height="${size}">${paths}${labels}</svg>
+      <p class="meta">${data.vormen.length} vormen &middot; ${points} punten</p>
+    </div>
+  `);
+}
+</script>
+</body>
+</html>

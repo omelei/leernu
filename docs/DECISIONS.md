@@ -182,6 +182,90 @@ on. An algorithm nobody can explain makes a report nobody trusts.
 
 ---
 
+## ADR-019 — Province boundaries come from CBS, not Bestuurlijke Gebieden
+
+**Status:** accepted 2026-09-05.
+
+### Context
+
+The obvious source for Dutch province outlines is PDOK Bestuurlijke Gebieden.
+Point-in-polygon tests on the raw data showed its `provinciegebied` polygons
+include the water assigned to each province: the IJsselmeer falls inside
+Noord-Holland, the Markermeer inside Flevoland, the Waddenzee inside Fryslân.
+
+That is two problems, and the second is the serious one. The map draws the
+IJsselmeer as land; and in "wijs Noord-Holland aan", a child clicking the middle
+of the IJsselmeer is told they found the province correctly. The IJsselmeer is
+itself something spec §3.1 says they must learn.
+
+It is the same failure as accepting Epe for Ede (ADR-017): the system rewards an
+answer that is geographically wrong, at the moment the child is most receptive.
+
+### Decision
+
+Use CBS Gebiedsindelingen (`provincie_gegeneraliseerd`), delivered through PDOK.
+Land only, verified by the same point tests. CC-BY-4.0, declared by the service's
+own GetCapabilities, attribution "Bron: CBS, Kadaster".
+
+Label placement uses CBS `provincie_labelpoint` rather than a computed centroid,
+because a centroid falls in the water for a concave province like Zeeland.
+
+### Consequences
+
+More rings survive — 104 against 42 — because islands are no longer swallowed by
+the water around them, so the Wadden islands and the Zeeland delta are real
+shapes a child can point at. Output grew to 18/45/110 kB across the three detail
+levels, which is geodata loaded per region set and not part of the app shell.
+
+Bestuurlijke Gebieden stays useful for a different question: if there is ever an
+exercise about administrative division rather than geography, "which province
+manages this stretch of water" is exactly what it answers.
+
+Recorded in full in `docs/DATA_SOURCES.md`, with the test results.
+
+---
+
+## ADR-018 — The content pipeline owns its projection and simplification
+
+**Status:** accepted 2026-09-05. **Amends ADR-004.**
+
+### Context
+
+ADR-004 put `d3-geo` in the pipeline as a build dependency. That works, but the
+pipeline then only runs where npm can install — which in this project means a
+Codespace, so every iteration costs a round trip through the product owner.
+
+The reason that matters more here than for most code: **a subtly wrong projection
+produces a map that looks entirely plausible and is wrong.** It is the failure
+nobody catches in review, and a child learns it anyway.
+
+### Decision
+
+Write the projection and simplification in `tools/content/`, with no
+dependencies:
+
+- `projection.mjs` — spherical oblique stereographic on the RD centre
+  (52.15616055 N, 5.38763889 E), plus aspect-preserving fitting into a 0–1000
+  view box. This is RD's *shape*, not RD: no ellipsoid, no false origin, no
+  metre scale, which is all a map for children needs.
+- `simplify.mjs` — iterative Ramer-Douglas-Peucker plus a minimum-area filter,
+  run **after** projection so a tolerance means the same thing everywhere.
+  Simplifying in degrees would make the north coarser than the south.
+- `preview.html` — renders the built output so the result can be looked at.
+
+Output is SVG path data rather than coordinate arrays: about half the size, the
+renderer hands it straight to a `<path>`, and hit testing comes free from the
+browser's own `isPointInFill`.
+
+### Consequences
+
+Roughly seventy lines we now own instead of a library thousands of people use.
+Bought with it: the pipeline runs anywhere, and the output was verified before
+anyone else saw it — positions checked against the four compass extremes, then
+rendered and looked at. That check is what found ADR-019.
+
+---
+
 ## ADR-017 — Typed answers: never accept another real place
 
 **Status:** accepted 2026-09-05. **Supersedes ADR-006.**
