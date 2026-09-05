@@ -12,7 +12,14 @@ import type { ItemState, ModeId, Niveau } from '@/game-core';
  * the time comes.
  */
 
-export const DB_NAME = 'topokampioen';
+/**
+ * Never change this after the app has shipped. IndexedDB is keyed by database
+ * name, so a rename does not migrate anything — it silently starts an empty
+ * database and every child's progress becomes unreachable, with no error. It was
+ * safe to change during phase 0 because nobody had data yet. A rebrand later
+ * keeps this string and changes only `brand.name`.
+ */
+export const DB_NAME = 'leernu';
 export const DB_VERSION = 1;
 
 /** Both singleton stores use this key, so there is never a "which row" question. */

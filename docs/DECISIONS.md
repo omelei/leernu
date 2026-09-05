@@ -1,4 +1,4 @@
-# Architecture decision records — TopoKampioen
+# Architecture decision records — Leernu
 
 One record per decision that would be expensive to reverse. A record is never
 edited once accepted — it is superseded by a new one. Records still `proposed`
@@ -182,9 +182,81 @@ on. An algorithm nobody can explain makes a report nobody trusts.
 
 ---
 
+## ADR-017 — Typed answers: never accept another real place
+
+**Status:** accepted 2026-09-05. **Supersedes ADR-006.**
+
+### Context
+
+ADR-006 kept spec §4.1's flat Levenshtein tolerance of one. Building it exposed
+that the tolerance behaves exactly backwards from its purpose:
+
+- It **accepts** `Epe` for Ede and `Doorn` for Hoorn — different real places, one
+  edit apart. The child is told they were right and learns a false fact at the
+  moment they are most receptive.
+- It **rejects** `Utrehct` for Utrecht, because plain Levenshtein counts a
+  swapped pair of letters as two edits — and transposition is one of the most
+  common mistakes a ten-year-old makes at a keyboard.
+
+The product owner has ruled the first of these unacceptable.
+
+The insight that resolves both at once: **a collision guard is what makes it safe
+to be more generous about genuine typos.** Without a guard, widening the
+tolerance widens the damage. With one, the only answers that can be accepted are
+those that cannot be confused with something else we teach.
+
+### Decision
+
+Answer judging returns three outcomes, not two. In order:
+
+1. **Normalise** — case, accents, punctuation, spacing, leading article.
+2. **Exact match on the target** (name or alias) → **correct**, exact.
+3. **Exact match on any other item in the region set** → **near-miss**. A child
+   who writes the name of a different real place has given an answer, not made a
+   typo. This is checked before any fuzzy matching, and it is never correct.
+4. **Distance to the target > 1** → **wrong**.
+5. **Distance ≤ 1, but some other item in the region set is also within 1** →
+   **near-miss**, naming the item it collides with.
+6. **Distance ≤ 1 and unambiguous** → **correct**, not exact.
+
+Two supporting rules:
+
+- **Distance is Damerau (optimal string alignment)**, so an adjacent swap costs
+  one edit and `Utrehct` is accepted. This is only safe because of steps 3 and 5.
+- **The comparison set is the whole region set, not the current round.** An
+  answer must not be correct or incorrect depending on which questions happened
+  to come up; a child cannot see that distinction and would be right to call it
+  unfair.
+
+A near-miss is scored as wrong — Leitner sends the item back to box one — but it
+is *shown* differently: "Je schreef Epe. Dat bestaat ook! Maar wij zochten Ede."
+That sentence is the entire point of the change. The near-miss is the teachable
+moment, and the old behaviour threw it away by calling it correct.
+
+### Consequences
+
+`judgeAnswer` needs the region set, not just the item, so every calling mode has
+to pass it. That is a slightly wider signature in exchange for a guarantee that
+cannot be expressed any other way.
+
+One residual risk, stated rather than hidden: the guard protects against places
+**we teach**. If a child types a real place that is not in any of our content,
+nothing knows it is a real place, and it may still be accepted as a typo. The
+escape hatch is a per-item list of spellings never to accept, which is a content
+change and needs no code. It is not built now, because there is no evidence yet
+about which pairs actually occur.
+
+`validate:content` reports every pair within one edit in a set. Under ADR-006
+that list was a warning; now it is a list of pairs the guard is actively
+protecting, which is worth seeing for a different reason: those items will never
+accept a typo, because any typo of one is ambiguous with the other.
+
+---
+
 ## ADR-006 — Typed answers: flat Levenshtein ≤ 1, as specified
 
-**Status:** rejected (the proposed alternative was declined; spec §4.1 stands).
+**Status:** superseded by ADR-017 (2026-09-05). Kept because the reasoning that
+led to it, and the evidence that overturned it, both matter.
 
 ### Context
 

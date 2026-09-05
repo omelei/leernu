@@ -7,9 +7,9 @@
  * the product name as a string literal.
  */
 export const brand = {
-  name: 'TopoKampioen',
+  name: 'Leernu',
   /** Used in the document title and any place that needs a short form. */
-  shortName: 'TopoKampioen',
+  shortName: 'Leernu',
   /** Shown under the name on the start screen. Kept factual, not a slogan. */
   tagline: 'Leer waar alles ligt',
   locale: 'nl-NL',

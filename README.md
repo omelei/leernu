@@ -1,11 +1,11 @@
-# TopoKampioen
+# Leernu
 
 Topography for Dutch primary and lower-secondary education. Short rounds, a map
 that fills the screen, and progress a child can feel. No advertising, no
 tracking, no account required.
 
-Working title. The product name lives in `src/config/brand.ts` and is never
-hardcoded.
+The product name lives in `src/config/brand.ts` and is never hardcoded, so
+renaming or white-labelling stays a one-file change.
 
 ## Scope of this phase
 

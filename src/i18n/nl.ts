@@ -26,6 +26,13 @@ export const nl = {
 
   'privacy.line': 'Geen advertenties. Alles wat je doet blijft op dit apparaat.',
 
+  // The three outcomes of a typed answer (ADR-017). The middle one is the whole
+  // reason that decision exists: a child who names a different real place has
+  // not made a mistake worth a red cross, but must not be told they were right.
+  'feedback.correct': 'Goed!',
+  'feedback.almost': 'Je schreef {getypt}. Dat bestaat ook! Maar wij zochten {gezocht}.',
+  'feedback.wrong': 'Dit was {gezocht}.',
+
   'settings.title': 'Instellingen',
   'settings.font': 'Makkelijker lezen',
   'settings.fontHelp': 'Een letter die voor sommige kinderen prettiger leest.',

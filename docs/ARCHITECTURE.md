@@ -1,4 +1,4 @@
-# Architecture — TopoKampioen
+# Architecture — Leernu
 
 Status: draft, phase 0. Last updated 2026-09-05.
 Revised after the scope decision of 2026-09-05 (ADR-014): build the app, with no

@@ -1,4 +1,4 @@
-# Data model — TopoKampioen
+# Data model — Leernu
 
 Status: draft, phase 0. Last updated 2026-09-05.
 
@@ -27,11 +27,11 @@ device itself.
 {
   id: string;               // generated locally, becomes student_id on upload
   naam: string;             // what the player typed; never leaves the device
-  avatar_config: object;
+  avatarConfig: object;
   niveau: 1 | 2 | 3;
   xp: number;
   munten: number;
-  aangemaakt_op: string;    // ISO
+  aangemaaktOp: string;     // ISO
 }
 
 // object store: itemStates    keyed by itemId — same shape as part B §4

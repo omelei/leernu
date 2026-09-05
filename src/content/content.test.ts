@@ -67,17 +67,19 @@ describe('content sets', () => {
 
 describe('typo tolerance collisions', () => {
   /**
-   * ADR-006 keeps the flat Levenshtein tolerance of one, which means a child can
-   * type Epe for Ede and be told they are right. This test does not fail on a
-   * collision — that decision has been taken — it prints them, so the size of
-   * the problem is a number somebody can look at rather than an argument.
+   * Under ADR-017 these pairs are safe — the collision guard refuses to accept
+   * either one as a typo of the other. They are still worth printing, because
+   * they are the items for which the typo tolerance is switched off entirely: a
+   * child spelling one of them has to spell it exactly right.
    */
-  it('reports name pairs that are one edit apart', () => {
+  it('reports name pairs that the collision guard is protecting', () => {
     for (const set of sets) {
       const misses = findNearMisses(set.items);
       if (misses.length > 0) {
         const pairs = misses.map((m) => `${m.a} / ${m.b}`).join(', ');
-        console.warn(`[content] ${set.id}: ${misses.length} pair(s) within one edit — ${pairs}`);
+        console.warn(
+          `[content] ${set.id}: ${misses.length} guarded pair(s), no typo tolerance — ${pairs}`,
+        );
       }
     }
 
