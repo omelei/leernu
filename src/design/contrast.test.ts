@@ -13,9 +13,9 @@ import { describe, expect, it } from 'vitest';
  * Vitest stubs CSS imports by default and the stub wins. Reading from the
  * project root is the boring option that actually works, in CI as well.
  *
- * That this matters more here than in most products is the point. The primary
- * interface is a map, where colour does most of the work, and a palette that
- * slips below AA is invisible to everyone who can already read it.
+ * That this matters more here than in most products is the point. The interface
+ * is a map, where colour does nearly all the work, and a palette that slips
+ * below AA is invisible to everyone who can already read it.
  */
 
 const CSS_PATH = join(process.cwd(), 'src', 'index.css');
@@ -49,36 +49,39 @@ export function contrastRatio(a: string, b: string): number {
 
 describe('palette contrast', () => {
   const paper = token('paper');
-  const surface = token('surface');
-  const onPrimary = token('on-primary');
 
   it.each([
-    ['ink-900 on paper', token('ink-900'), paper],
-    ['ink-700 on paper', token('ink-700'), paper],
-    ['ink-500 on paper', token('ink-500'), paper],
-    ['ink-500 on surface', token('ink-500'), surface],
-    ['button ink on primary', onPrimary, token('primary')],
-    ['button ink on primary-hover', onPrimary, token('primary-hover')],
-    ['button ink on good', onPrimary, token('good')],
-    ['button ink on bad', onPrimary, token('bad')],
+    ['ink on paper', token('ink'), paper],
+    ['ink-2 on paper', token('ink-2'), paper],
+    ['ink-2 on surface', token('ink-2'), token('surface')],
+    ['paper on ink (button)', paper, token('ink')],
+    ['paper on good', paper, token('good')],
+    ['paper on bad', paper, token('bad')],
+    ['topo-text on paper', token('topo-text'), paper],
+    ['a label on the map', token('ink'), token('map-land')],
   ])('%s clears 4.5:1 for body text', (_name, foreground, background) => {
     expect(contrastRatio(foreground, background)).toBeGreaterThanOrEqual(4.5);
   });
 
-  // Non-text contrast: a focus ring only has to be distinguishable, not readable.
-  it.each([['focus ring on paper', token('focus'), paper]])(
-    '%s clears 3:1 for a non-text indicator',
-    (_name, foreground, background) => {
-      expect(contrastRatio(foreground, background)).toBeGreaterThanOrEqual(3);
-    },
-  );
-
-  // A label sits on top of every map fill, so each fill has to carry dark ink.
+  // Non-text contrast: an outline or a rail only has to be distinguishable.
   it.each([
-    ['water', token('water')],
-    ['land', token('land')],
-    ['land-active', token('land-active')],
-  ])('a label on %s is readable', (_name, fill) => {
-    expect(contrastRatio(token('ink-900'), fill)).toBeGreaterThanOrEqual(4.5);
+    ['the green outline of a correct answer', token('good'), paper],
+    ['the red outline of a wrong answer', token('bad'), paper],
+    ['the progress rail', token('topo'), paper],
+  ])('%s clears 3:1 as a non-text indicator', (_name, foreground, background) => {
+    expect(contrastRatio(foreground, background)).toBeGreaterThanOrEqual(3);
+  });
+
+  /**
+   * --ink-3 comes from the design, where it labels inactive tabs. At 3.75:1 it
+   * is below AA for text, so it is not exposed as a Tailwind colour and nothing
+   * may set type in it. The token stays for borders and device chrome.
+   *
+   * This test pins the fact rather than the intention: if the value is ever
+   * darkened past 4.5:1 it fails, and that failure is the prompt to make it a
+   * text colour properly. #70756e is the nearest shade that would qualify.
+   */
+  it('keeps ink-3 out of text, and says so when that changes', () => {
+    expect(contrastRatio(token('ink-3'), paper)).toBeLessThan(4.5);
   });
 });

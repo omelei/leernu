@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: #C9C9C2; -webkit-font-smoothing: antialiased; }
+  a { color: #005A9D; text-decoration: underline; text-underline-offset: 2px; }
+  a:hover { color: #1D221C; }
+</style>
+</helmet>
+
+<section style="display: flex; flex-direction: column; gap: 72px; padding: 72px; font-family: 'Source Sans 3', system-ui, sans-serif; color: #1D221C;">
+  <div id="3a" style="display: flex; flex-direction: column; gap: 72px;">
+
+    <div style="display: flex; align-items: flex-end; gap: 24px; width: 1440px;">
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #5A5F59;">Webapp · iOS · Android — modules topografie en rekenen</div>
+        <div style="display: flex; align-items: baseline; gap: 2px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 64px; letter-spacing: -0.03em; line-height: 1;">
+          <span>leer</span>
+          <span style="display: inline-block; width: 26px; height: 26px; border-radius: 999px; border: 2px solid #1D221C; overflow: hidden; position: relative; margin: 0 3px;">
+            <span style="position: absolute; left: 0; right: 0; bottom: 0; height: 62%; background: #1D221C;"></span>
+          </span>
+          <span>nu</span>
+        </div>
+        <div style="font-size: 19px; line-height: 28px; color: #5A5F59; max-width: 700px;">Schermen op het fundament uit stap 1. Zonder account, zonder klassen, zonder advertenties — conform ADR-014 uit het businessplan. De kaart is de interface, één handeling per scherm, en de grootste knop is de knop die je nu moet indrukken.</div>
+      </div>
+      <div style="margin-left: auto; display: flex; gap: 8px; align-items: center;">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 6px 10px; border: 1px solid #1D221C; border-radius: 999px;">3a</span>
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 6px 10px; background: #1D221C; color: #FAFAF7; border-radius: 999px;">ontwerp, geen code</span>
+      </div>
+    </div>
+
+    <div style="width: 1440px; box-sizing: border-box; background: #FAFAF7; border: 1px solid #B7B8B0; padding: 24px 32px; display: flex; gap: 40px;">
+      <div style="flex: 1;"><div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #5A5F59; margin-bottom: 8px;">Wat het businessplan schrapt</div><div style="font-size: 15px; line-height: 23px; color: #5A5F59;">Geen inlog, geen klasoverzicht, geen licentiescherm, geen ladder met klasgenoten. Voortgang staat op het apparaat. Dat maakt het thuisscherm eenvoudiger dan in de styleguide: één ding om te doen, twee modules om uit te kiezen.</div></div>
+      <div style="flex: 1;"><div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #5A5F59; margin-bottom: 8px;">Wat het toevoegt</div><div style="font-size: 15px; line-height: 23px; color: #5A5F59;">De verklarende beweging bij een fout antwoord (§4.5) is hier een ontworpen scherm, niet een animatienoot: de aanwijzing reist van de aangewezen plek naar de juiste plek. Advertentievrij staat als tekst in het product, niet alleen op de website.</div></div>
+      <div style="flex: 1;"><div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #5A5F59; margin-bottom: 8px;">Twee modules</div><div style="font-size: 15px; line-height: 23px; color: #5A5F59;">Topografie (accent #2E75B7) en rekenen (accent #008863). Rekenen gebruikt hetzelfde oefencanvas, maar met een getallenveld in plaats van trefzones — het bewijst dat het systeem niet aan kaarten vastzit.</div></div>
+    </div>
+
+    <!-- ============ WEBAPP 1 — THUISSCHERM ============ -->
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <div style="display: flex; align-items: baseline; gap: 16px; width: 1366px;">
+        <span style="font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.14em; padding: 4px 8px; background: #1D221C; color: #FAFAF7;">W1</span>
+        <span style="font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600; letter-spacing: -0.01em;">Webapp — thuisscherm</span>
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #5A5F59;">Chromebook 1366 × 768 · PO-gedaante · geen scrollen</span>
+      </div>
+      <div style="width: 1366px; height: 768px; box-sizing: border-box; background: #FAFAF7; border: 1px solid #B7B8B0; display: flex; overflow: hidden;">
+        <div style="width: 88px; border-right: 1px solid #D6D6CF; display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 0;">
+          <div style="width: 40px; height: 40px; border-radius: 999px; border: 3px solid #1D221C; overflow: hidden; position: relative; margin-bottom: 12px;"><div style="position: absolute; left: 0; right: 0; bottom: 0; height: 62%; background: #1D221C;"></div></div>
+          <div style="width: 68px; height: 68px; background: #D7EAFF; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;"><div style="width: 24px; height: 24px; border: 2.5px solid #005A9D; transform: rotate(45deg);"></div><span style="font-size: 13px; font-weight: 600; color: #005A9D;">topo</span></div>
+          <div style="width: 68px; height: 68px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;"><div style="width: 24px; height: 24px; position: relative;"><div style="position: absolute; top: 11px; left: 0; width: 24px; height: 2.5px; background: #5A5F59; transform: rotate(45deg);"></div><div style="position: absolute; top: 11px; left: 0; width: 24px; height: 2.5px; background: #5A5F59; transform: rotate(-45deg);"></div></div><span style="font-size: 13px; color: #5A5F59;">rekenen</span></div>
+          <div style="margin-top: auto; display: flex; flex-direction: column; align-items: center; gap: 6px;">
+            <div style="width: 44px; height: 44px; border-radius: 12px; border: 1px solid #D6D6CF; display: flex; align-items: center; justify-content: center;"><div style="width: 22px; height: 22px; position: relative;"><div style="position: absolute; left: 2px; top: 7px; width: 6px; height: 8px; background: #5A5F59;"></div><div style="position: absolute; left: 7px; top: 3px; width: 0; height: 0; border-top: 8px solid transparent; border-bottom: 8px solid transparent; border-left: 7px solid #5A5F59;"></div></div></div>
+            <span style="font-size: 11px; color: #5A5F59; font-family: 'IBM Plex Mono', monospace;">voorlezen</span>
+          </div>
+        </div>
+
+        <div style="flex: 1; display: flex; flex-direction: column;">
+          <div style="height: 64px; border-bottom: 1px solid #D6D6CF; display: flex; align-items: center; padding: 0 32px; gap: 20px;">
+            <div style="display: flex; align-items: baseline; gap: 1px; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 20px; letter-spacing: -0.03em;"><span>leer</span><span style="display: inline-block; width: 9px; height: 9px; border-radius: 999px; border: 2px solid #2E75B7; overflow: hidden; position: relative; margin: 0 2px;"><span style="position: absolute; left: 0; right: 0; bottom: 0; height: 62%; background: #2E75B7;"></span></span><span>nu</span><span style="color: #7D827B; font-weight: 400;">/topo</span></div>
+            <div style="margin-left: auto; display: flex; align-items: center; gap: 16px;">
+              <div style="display: flex; align-items: center; gap: 8px; padding: 8px 14px; background: #F0F0EC; border-radius: 999px;">
+                <div style="width: 18px; height: 18px; display: flex; align-items: center; justify-content: center;"><div style="width: 12px; height: 12px; border: 2px solid #855A00; border-radius: 0 999px 999px 999px; transform: rotate(-45deg);"></div></div>
+                <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 16px; font-variant-numeric: tabular-nums;">5 dagen op rij</span>
+              </div>
+              <span style="font-size: 15px; color: #5A5F59;">Geen advertenties. Geen account nodig.</span>
+              <div style="width: 44px; height: 44px; border-radius: 12px; border: 1px solid #D6D6CF; display: flex; align-items: center; justify-content: center;"><div style="width: 22px; height: 22px; position: relative;"><div style="position: absolute; left: 7px; top: 1px; width: 8px; height: 8px; border: 2px solid #5A5F59; border-radius: 999px; box-sizing: border-box;"></div><div style="position: absolute; left: 2px; top: 12px; width: 18px; height: 9px; border: 2px solid #5A5F59; border-bottom: 0; border-radius: 999px 999px 0 0; box-sizing: border-box;"></div></div></div>
+            </div>
+          </div>
+
+          <div style="flex: 1; padding: 40px 48px; display: flex; gap: 40px;">
+            <div style="flex: 1.35; display: flex; flex-direction: column; gap: 24px;">
+              <div style="display: flex; flex-direction: column; gap: 10px;">
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #5A5F59;">Verder waar je was</span>
+                <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 40px; line-height: 48px; letter-spacing: -0.02em;">Provincies van Nederland</span>
+                <span style="font-size: 20px; line-height: 32px; color: #5A5F59;">Je hebt 12 van de 12 provincies gehad. Acht zitten vast, vier nog niet.</span>
+              </div>
+
+              <div style="background: #D7EAFF; border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 16px;">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                  <div style="width: 56px; height: 56px; border-radius: 999px; border: 4px solid #005A9D; overflow: hidden; position: relative; flex: 0 0 56px;"><div style="position: absolute; left: 0; right: 0; bottom: 0; height: 67%; background: #005A9D;"></div></div>
+                  <div style="flex: 1;">
+                    <div style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 34px; line-height: 38px; letter-spacing: -0.02em; color: #1D221C; font-variant-numeric: tabular-nums;">67%</div>
+                    <div style="font-size: 18px; line-height: 26px; color: #1D221C;">weet je hier over drie weken nog van</div>
+                  </div>
+                </div>
+                <div style="height: 16px; background: #FAFAF7; border-radius: 999px; overflow: hidden; display: flex;"><div style="width: 45%; height: 100%; background: #2E75B7;"></div><div style="width: 22%; height: 100%; background: repeating-linear-gradient(-45deg, #2E75B7 0 4px, #D7EAFF 4px 8px);"></div></div>
+                <div style="font-size: 18px; line-height: 26px; color: #005A9D; font-weight: 600;">Eén ronde vandaag houdt het op 80%.</div>
+              </div>
+
+              <div style="display: flex; gap: 16px; margin-top: auto;">
+                <div style="flex: 1; height: 72px; background: #1D221C; color: #FAFAF7; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 12px; font-weight: 600; font-size: 24px;">
+                  <span>Ga verder — 10 vragen</span>
+                  <div style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center;"><div style="width: 11px; height: 11px; border-top: 2.5px solid #FAFAF7; border-right: 2.5px solid #FAFAF7; transform: rotate(45deg); margin-left: -4px;"></div></div>
+                </div>
+                <div style="height: 72px; padding: 0 24px; border: 2px solid #1D221C; border-radius: 12px; display: flex; align-items: center; font-weight: 600; font-size: 20px;">Bliksemronde · 60 sec</div>
+              </div>
+            </div>
+
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 16px;">
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #5A5F59;">Of kies iets anders</span>
+              <div style="border: 1px solid #D6D6CF; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <div style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;"><div style="width: 20px; height: 20px; border: 2.5px solid #005A9D; transform: rotate(45deg);"></div></div>
+                  <span style="font-weight: 600; font-size: 22px;">Topografie</span>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px; background: #F0F0EC; border-radius: 6px;"><span style="font-size: 18px; font-weight: 600;">Provincies</span><span style="font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums;">8/12 vast</span></div>
+                  <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px; border-radius: 6px;"><span style="font-size: 18px;">Hoofdsteden</span><span style="font-size: 16px; color: #5A5F59;">nog niet geoefend</span></div>
+                  <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px; border-radius: 6px;"><span style="font-size: 18px;">Waterwegen</span><span style="font-size: 16px; color: #5A5F59;">nog niet geoefend</span></div>
+                </div>
+              </div>
+              <div style="border: 1px solid #D6D6CF; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <div style="width: 32px; height: 32px; position: relative;"><div style="position: absolute; top: 15px; left: 2px; width: 28px; height: 2.5px; background: #006E4A; transform: rotate(45deg);"></div><div style="position: absolute; top: 15px; left: 2px; width: 28px; height: 2.5px; background: #006E4A; transform: rotate(-45deg);"></div></div>
+                  <span style="font-weight: 600; font-size: 22px;">Rekenen</span>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px; background: #F0F0EC; border-radius: 6px;"><span style="font-size: 18px; font-weight: 600;">Tafels 1 t/m 10</span><span style="font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums;">6/10 vast</span></div>
+                  <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px; border-radius: 6px;"><span style="font-size: 18px;">Klokkijken</span><span style="font-size: 16px; color: #5A5F59;">nog niet geoefend</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="width: 1366px; font-size: 15px; line-height: 23px; color: #5A5F59;">Één handeling: <strong>Ga verder</strong> is 72 px hoog en het enige gevulde vlak op het scherm. De retentie-indicator staat linksboven, want dat is wat dit product belooft; de modulekeuze staat rechts en is een lijst, geen tegelwand. Geen advertentieruimte, geen tientallen links.</div>
+    </div>
+
+
+    <!-- ============ WEBAPP 2 — TOPO VRAAGSCHERM ============ -->
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <div style="display: flex; align-items: baseline; gap: 16px; width: 1366px;">
+        <span style="font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.14em; padding: 4px 8px; background: #1D221C; color: #FAFAF7;">W2</span>
+        <span style="font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600; letter-spacing: -0.01em;">Webapp — topografie, "wijs aan"</span>
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #5A5F59;">1366 × 768 · vraagbalk- en trefzoneontwerp · de wérkende kaart met echte geodata staat in <strong>leer.nu oefenkaart.html</strong></span>
+      </div>
+      <div style="width: 1366px; height: 768px; box-sizing: border-box; background: #FAFAF7; border: 1px solid #B7B8B0; position: relative; overflow: hidden;">
+
+        <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 96px 32px 32px;">
+          <div style="width: 520px; height: 620px; display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(6, 1fr); gap: 3px;">
+            <div style="grid-column: 1 / 3; grid-row: 1; border: 1.5px solid #1D221C; background: #F0F0EC; display: flex; align-items: center; justify-content: center; font-size: 15px; color: #5A5F59;">Fryslân</div>
+            <div style="grid-column: 3 / 5; grid-row: 1; border: 1.5px solid #1D221C; background: #F0F0EC; display: flex; align-items: center; justify-content: center; font-size: 15px; color: #5A5F59;">Groningen</div>
+            <div style="grid-column: 1; grid-row: 2 / 4; border: 1.5px solid #1D221C; background: #F0F0EC; display: flex; align-items: center; justify-content: center; font-size: 15px; color: #5A5F59; text-align: center;">Noord-<br>Holland</div>
+            <div style="grid-column: 2; grid-row: 2; border: 1.5px solid #1D221C; background: #F0F0EC; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #5A5F59;">Flevoland</div>
+            <div style="grid-column: 3 / 5; grid-row: 2; border: 1.5px solid #1D221C; background: #F0F0EC;"></div>
+            <div style="grid-column: 2 / 5; grid-row: 3; border: 1.5px solid #1D221C; background: #F0F0EC; display: flex; align-items: center; justify-content: center; font-size: 15px; color: #5A5F59;">Overijssel</div>
+            <div style="grid-column: 1; grid-row: 4; border: 1.5px solid #1D221C; background: #F0F0EC; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #5A5F59; text-align: center;">Zuid-<br>Holland</div>
+            <div style="grid-column: 2; grid-row: 4; border: 1.5px solid #1D221C; background: #F0F0EC; box-shadow: 0 0 0 2px #FAFAF7, 0 0 0 5px #1D221C; z-index: 2; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #1D221C; font-weight: 600;">Utrecht</div>
+            <div style="grid-column: 3 / 5; grid-row: 4; border: 1.5px solid #1D221C; background: #E5E5DF; display: flex; align-items: center; justify-content: center; font-size: 15px; color: #1D221C;">Gelderland</div>
+            <div style="grid-column: 1; grid-row: 5; border: 1.5px solid #1D221C; background: #F0F0EC; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #5A5F59;">Zeeland</div>
+            <div style="grid-column: 2 / 4; grid-row: 5; border: 1.5px solid #1D221C; background: #F0F0EC; display: flex; align-items: center; justify-content: center; font-size: 15px; color: #5A5F59;">Noord-Brabant</div>
+            <div style="grid-column: 4; grid-row: 5 / 7; border: 1.5px solid #1D221C; background: #F0F0EC; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #5A5F59;">Limburg</div>
+          </div>
+        </div>
+
+        <div style="position: absolute; left: 32px; bottom: 24px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #5A5F59; background: rgba(250,250,247,0.9); padding: 4px 8px;">schematische weergave — de kaartvorm komt uit de topografiebron; stijlregels uit 7E gelden onveranderd</div>
+
+        <div style="position: absolute; left: 0; right: 0; top: 0; height: 96px; padding: 0 32px; display: flex; align-items: center; gap: 24px; background: rgba(250,250,247,0.94); border-bottom: 1px solid #D6D6CF;">
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #5A5F59;">Wijs aan op de kaart</span>
+            <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 40px; line-height: 46px; letter-spacing: -0.02em;">Waar ligt Drenthe?</span>
+          </div>
+          <div style="width: 56px; height: 56px; border-radius: 12px; border: 2px solid #1D221C; display: flex; align-items: center; justify-content: center; flex: 0 0 56px;">
+            <div style="width: 26px; height: 26px; position: relative;"><div style="position: absolute; left: 2px; top: 8px; width: 7px; height: 10px; background: #1D221C;"></div><div style="position: absolute; left: 8px; top: 3px; width: 0; height: 0; border-top: 10px solid transparent; border-bottom: 10px solid transparent; border-left: 9px solid #1D221C;"></div><div style="position: absolute; left: 19px; top: 8px; width: 5px; height: 11px; border: 2px solid #1D221C; border-left: 0; border-radius: 0 999px 999px 0; box-sizing: border-box;"></div></div>
+          </div>
+          <div style="margin-left: auto; display: flex; align-items: center; gap: 20px;">
+            <div style="display: flex; flex-direction: column; align-items: flex-end;">
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: #5A5F59;">vraag</span>
+              <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 28px; letter-spacing: -0.02em; font-variant-numeric: tabular-nums;">3/10</span>
+            </div>
+            <div style="width: 1px; height: 44px; background: #D6D6CF;"></div>
+            <div style="display: flex; flex-direction: column; align-items: flex-end;">
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: #5A5F59;">goed op rij</span>
+              <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 28px; letter-spacing: -0.02em; font-variant-numeric: tabular-nums;">×2</span>
+            </div>
+            <div style="width: 44px; height: 44px; border-radius: 12px; border: 1px solid #D6D6CF; display: flex; align-items: center; justify-content: center;"><div style="position: relative; width: 16px; height: 16px;"><div style="position: absolute; top: 7px; left: 0; width: 16px; height: 2px; background: #5A5F59; transform: rotate(45deg);"></div><div style="position: absolute; top: 7px; left: 0; width: 16px; height: 2px; background: #5A5F59; transform: rotate(-45deg);"></div></div></div>
+          </div>
+        </div>
+
+        <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 8px; background: #E5E5DF;"><div style="width: 30%; height: 100%; background: #2E75B7;"></div></div>
+
+        <div style="position: absolute; right: 32px; bottom: 32px; width: 280px; padding: 16px; background: #FAFAF7; border: 1px solid #D6D6CF; border-radius: 12px; display: flex; flex-direction: column; gap: 8px;">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: #5A5F59;">Trefzone</span>
+          <span style="font-size: 15px; line-height: 22px; color: #5A5F59;">Utrecht heeft focus via de tabtoets: dezelfde ring als elke knop. Met de pijltjestoetsen loopt de leerling van provincie naar provincie, met de spatiebalk antwoordt hij.</span>
+        </div>
+      </div>
+      <div style="width: 1366px; font-size: 15px; line-height: 23px; color: #5A5F59;">De kaart vult het beeld; de vraagbalk ligt eróp met een papiervlak van 94% zodat de tekst 15,47:1 houdt. Voorleesknop staat direct naast de vraag — voor groep 3 tot 5 is dat de enige route naar de opgave. De voortgangsbalk is de onderrand van het scherm, 8 px, zonder cijfer: tijdens een ronde is het aantal resterende vragen geen beslisinformatie.</div>
+    </div>
+
+    <!-- ============ WEBAPP 3 — FOUT ANTWOORD MET VERKLARENDE BEWEGING ============ -->
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <div style="display: flex; align-items: baseline; gap: 16px; width: 1366px;">
+        <span style="font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.14em; padding: 4px 8px; background: #1D221C; color: #FAFAF7;">W3</span>
+        <span style="font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600; letter-spacing: -0.01em;">Webapp — fout antwoord, de verklarende beweging</span>
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #5A5F59;">§4.5 businessplan · 320 ms · nooit in een bliksemronde</span>
+      </div>
+      <div style="width: 1366px; height: 768px; box-sizing: border-box; background: #FAFAF7; border: 1px solid #B7B8B0; position: relative; overflow: hidden;">
+
+        <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 96px 32px 168px;">
+          <div style="position: relative; width: 520px; height: 560px; display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(6, 1fr); gap: 3px;">
+            <div style="grid-column: 1 / 3; grid-row: 1; border: 1.5px solid #1D221C; background: #F0F0EC;"></div>
+            <div style="grid-column: 3 / 5; grid-row: 1; border: 1.5px solid #1D221C; background: #F0F0EC;"></div>
+            <div style="grid-column: 1; grid-row: 2 / 4; border: 1.5px solid #1D221C; background: #F0F0EC;"></div>
+            <div style="grid-column: 2; grid-row: 2; border: 1.5px solid #1D221C; background: #F0F0EC;"></div>
+            <div style="grid-column: 3 / 5; grid-row: 2; border: 3px solid #287C42; background: #FAFAF7; display: flex; align-items: center; justify-content: center; gap: 10px; z-index: 2;">
+              <div style="width: 16px; height: 16px; border-radius: 999px; background: #287C42;"></div>
+              <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 22px; color: #1D221C;">Drenthe</span>
+            </div>
+            <div style="grid-column: 2 / 5; grid-row: 3; border: 3px solid #B02A2D; background: repeating-linear-gradient(-45deg, rgba(176,42,45,0.16) 0 4px, rgba(0,0,0,0) 4px 12px), #FAFAF7; display: flex; align-items: center; justify-content: center; gap: 10px;">
+              <div style="position: relative; width: 20px; height: 20px;"><div style="position: absolute; top: 9px; left: 0; width: 20px; height: 3px; background: #B02A2D; transform: rotate(45deg);"></div><div style="position: absolute; top: 9px; left: 0; width: 20px; height: 3px; background: #B02A2D; transform: rotate(-45deg);"></div></div>
+              <span style="font-size: 20px; color: #1D221C;">Overijssel</span>
+            </div>
+            <div style="grid-column: 1; grid-row: 4; border: 1.5px solid #1D221C; background: #F0F0EC;"></div>
+            <div style="grid-column: 2; grid-row: 4; border: 1.5px solid #1D221C; background: #F0F0EC;"></div>
+            <div style="grid-column: 3 / 5; grid-row: 4; border: 1.5px solid #1D221C; background: #F0F0EC;"></div>
+            <div style="grid-column: 1; grid-row: 5; border: 1.5px solid #1D221C; background: #F0F0EC;"></div>
+            <div style="grid-column: 2 / 4; grid-row: 5; border: 1.5px solid #1D221C; background: #F0F0EC;"></div>
+            <div style="grid-column: 4; grid-row: 5 / 7; border: 1.5px solid #1D221C; background: #F0F0EC;"></div>
+
+            <div style="position: absolute; left: 300px; top: 218px; width: 3px; height: 96px; background: repeating-linear-gradient(#1D221C 0 6px, rgba(0,0,0,0) 6px 12px); z-index: 3;"></div>
+            <div style="position: absolute; left: 288px; top: 200px; width: 26px; height: 26px; border-radius: 999px; background: #1D221C; z-index: 4; display: flex; align-items: center; justify-content: center;"><div style="width: 10px; height: 10px; border-radius: 999px; background: #FAFAF7;"></div></div>
+            <div style="position: absolute; left: 296px; top: 300px; width: 11px; height: 11px; border-radius: 999px; background: #1D221C; opacity: 0.45; z-index: 3;"></div>
+            <div style="position: absolute; left: 298px; top: 322px; width: 7px; height: 7px; border-radius: 999px; background: #1D221C; opacity: 0.2; z-index: 3;"></div>
+          </div>
+        </div>
+
+        <div style="position: absolute; left: 0; right: 0; top: 0; height: 96px; padding: 0 32px; display: flex; align-items: center; gap: 24px; background: rgba(250,250,247,0.94); border-bottom: 1px solid #D6D6CF;">
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #5A5F59;">Wijs aan op de kaart</span>
+            <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 40px; line-height: 46px; letter-spacing: -0.02em;">Waar ligt Drenthe?</span>
+          </div>
+          <div style="margin-left: auto; display: flex; align-items: center; gap: 20px;">
+            <div style="display: flex; flex-direction: column; align-items: flex-end;">
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: #5A5F59;">vraag</span>
+              <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 28px; letter-spacing: -0.02em; font-variant-numeric: tabular-nums;">3/10</span>
+            </div>
+            <div style="width: 1px; height: 44px; background: #D6D6CF;"></div>
+            <div style="display: flex; flex-direction: column; align-items: flex-end;">
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: #5A5F59;">goed op rij</span>
+              <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 28px; letter-spacing: -0.02em; color: #5A5F59; font-variant-numeric: tabular-nums;">×0</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="position: absolute; left: 0; right: 0; bottom: 0; padding: 24px 32px 32px; background: #FAFAF7; border-top: 1px solid #D6D6CF; display: flex; align-items: flex-end; gap: 32px;">
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 32px; height: 32px; background: repeating-linear-gradient(-45deg, rgba(250,250,247,0.30) 0 3px, rgba(0,0,0,0) 3px 9px), #B02A2D; display: flex; align-items: center; justify-content: center;"><div style="position: relative; width: 18px; height: 18px;"><div style="position: absolute; top: 8px; left: 0; width: 18px; height: 3px; background: #FAFAF7; transform: rotate(45deg);"></div><div style="position: absolute; top: 8px; left: 0; width: 18px; height: 3px; background: #FAFAF7; transform: rotate(-45deg);"></div></div></div>
+              <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 30px; line-height: 36px; letter-spacing: -0.015em;">Drenthe ligt hierboven, tussen Groningen en Overijssel.</span>
+            </div>
+            <span style="font-size: 20px; line-height: 30px; color: #5A5F59;">Je wees Overijssel aan. De hoofdstad van Drenthe is Assen.</span>
+          </div>
+          <div style="height: 72px; padding: 0 32px; background: #1D221C; color: #FAFAF7; border-radius: 12px; display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 24px;">
+            <span>Volgende vraag</span>
+            <div style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center;"><div style="width: 11px; height: 11px; border-top: 2.5px solid #FAFAF7; border-right: 2.5px solid #FAFAF7; transform: rotate(45deg); margin-left: -4px;"></div></div>
+          </div>
+        </div>
+      </div>
+      <div style="width: 1366px; display: flex; gap: 32px;">
+        <div style="flex: 1; font-size: 15px; line-height: 23px; color: #5A5F59;"><strong style="color: #1D221C;">De beweging.</strong> De aanwijzer verschijnt op de aangewezen plek en reist in 320 ms met een ease-out-curve naar het juiste gebied, met een spoor van twee vervagende punten. Dat is het enige moment in het product waarop animatie langer dan 150 ms mag duren, want hier ís de beweging de uitleg. In een bliksemronde en bij "verminderde beweging" verschijnt de aanwijzer direct op de juiste plek, zonder reis.</div>
+        <div style="flex: 1; font-size: 15px; line-height: 23px; color: #5A5F59;"><strong style="color: #1D221C;">De feedbackregel.</strong> Eerst het goede antwoord, dan één aanknopingspunt, verder niets. Geen "helaas", geen "probeer het nog eens", geen uitroepteken. Fout is arcering plus kruis, goed is dubbele rand plus punt — op een kaart met twaalf gebieden is dat geen detail maar de kern.</div>
+      </div>
+    </div>
+
+    <!-- ============ WEBAPP 4 — REKENEN ============ -->
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <div style="display: flex; align-items: baseline; gap: 16px; width: 1366px;">
+        <span style="font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.14em; padding: 4px 8px; background: #1D221C; color: #FAFAF7;">W4</span>
+        <span style="font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600; letter-spacing: -0.01em;">Webapp — rekenen, tafels</span>
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #5A5F59;">1366 × 768 · accent #008863 · hetzelfde canvas, ander antwoordveld</span>
+      </div>
+      <div style="width: 1366px; height: 768px; box-sizing: border-box; background: #FAFAF7; border: 1px solid #B7B8B0; display: flex; flex-direction: column; overflow: hidden;">
+        <div style="height: 96px; padding: 0 32px; display: flex; align-items: center; gap: 20px; border-bottom: 1px solid #D6D6CF;">
+          <div style="display: flex; align-items: baseline; gap: 1px; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 20px; letter-spacing: -0.03em;"><span>leer</span><span style="display: inline-block; width: 9px; height: 9px; border-radius: 999px; border: 2px solid #008863; overflow: hidden; position: relative; margin: 0 2px;"><span style="position: absolute; left: 0; right: 0; bottom: 0; height: 62%; background: #008863;"></span></span><span>nu</span><span style="color: #7D827B; font-weight: 400;">/rekenen</span></div>
+          <div style="padding: 6px 12px; background: #D3F0E3; color: #006E4A; font-size: 15px; font-weight: 600;">tafel van 7</div>
+          <div style="margin-left: auto; display: flex; align-items: center; gap: 20px;">
+            <div style="display: flex; flex-direction: column; align-items: flex-end;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: #5A5F59;">vraag</span><span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 28px; letter-spacing: -0.02em; font-variant-numeric: tabular-nums;">6/10</span></div>
+            <div style="width: 1px; height: 44px; background: #D6D6CF;"></div>
+            <div style="display: flex; flex-direction: column; align-items: flex-end;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: #5A5F59;">goed op rij</span><span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 28px; letter-spacing: -0.02em; font-variant-numeric: tabular-nums;">×4</span></div>
+          </div>
+        </div>
+        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 44px; padding: 32px;">
+          <div style="display: flex; align-items: center; gap: 24px;">
+            <div style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 132px; line-height: 1; letter-spacing: -0.04em; font-variant-numeric: tabular-nums;">7 × 8</div>
+            <div style="width: 64px; height: 64px; border-radius: 12px; border: 2px solid #1D221C; display: flex; align-items: center; justify-content: center;"><div style="width: 0; height: 0; border-top: 11px solid transparent; border-bottom: 11px solid transparent; border-left: 17px solid #1D221C; margin-left: 4px;"></div></div>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(4, 200px); gap: 20px;">
+            <div style="height: 96px; border: 2px solid #1D221C; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 44px; font-variant-numeric: tabular-nums;">54</div>
+            <div style="height: 96px; border: 2px solid #1D221C; border-radius: 12px; background: #F0F0EC; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 44px; font-variant-numeric: tabular-nums;">56</div>
+            <div style="height: 96px; border: 2px solid #1D221C; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 44px; font-variant-numeric: tabular-nums; box-shadow: 0 0 0 2px #FAFAF7, 0 0 0 5px #1D221C;">63</div>
+            <div style="height: 96px; border: 2px solid #1D221C; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 44px; font-variant-numeric: tabular-nums;">48</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 16px;">
+            <span style="font-size: 18px; color: #5A5F59;">Of typ je antwoord:</span>
+            <div style="width: 150px; height: 56px; border: 1px solid #B7B8B0; border-radius: 6px; display: flex; align-items: center; padding: 0 16px; font-family: 'Space Grotesk', sans-serif; font-size: 28px; color: #7D827B; font-variant-numeric: tabular-nums;">56</div>
+            <div style="height: 56px; padding: 0 24px; background: #1D221C; color: #FAFAF7; border-radius: 12px; display: flex; align-items: center; font-weight: 600; font-size: 20px;">Nakijken</div>
+          </div>
+        </div>
+        <div style="padding: 0 32px 20px; display: flex; align-items: center; justify-content: space-between; font-size: 16px; color: #5A5F59;">
+          <span>7 × 8 kwam gisteren ook langs. Je had hem toen goed.</span>
+          <span>Geen advertenties. Je voortgang blijft op dit apparaat.</span>
+        </div>
+        <div style="height: 8px; background: #E5E5DF;"><div style="width: 60%; height: 100%; background: #008863;"></div></div>
+      </div>
+      <div style="width: 1366px; font-size: 15px; line-height: 23px; color: #5A5F59;">De opgave is het grootste element op het scherm: 132 px met vaste cijferbreedte, zodat 7 × 8 en 7 × 10 dezelfde plek innemen. Vier knoppen van 96 px hoog; de afleiders zijn altijd buurtafels (54, 63, 48) en nooit willekeurige getallen. Wie liever typt, typt — dat veld is de tweede route, niet de eerste. Rekenen erft de vraagbalk, de teller, de combo, de feedbackregel en de retentie-indicator ongewijzigd van topografie: het systeem zit niet aan kaarten vast.</div>
+    </div>
+
+    <!-- ============ MOBIEL ============ -->
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <div style="display: flex; align-items: baseline; gap: 16px; width: 1440px;">
+        <span style="font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.14em; padding: 4px 8px; background: #1D221C; color: #FAFAF7;">M</span>
+        <span style="font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600; letter-spacing: -0.01em;">Native — iOS 393 × 852 en Android 412 × 915</span>
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #5A5F59;">zelfde systeem, andere navigatie · trefzones 56 pt</span>
+      </div>
+      <div style="display: flex; gap: 48px; align-items: flex-start;">
+
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #5A5F59;">iOS — thuisscherm</span>
+          <div style="width: 393px; height: 852px; box-sizing: border-box; background: #FAFAF7; border: 1px solid #B7B8B0; border-radius: 24px; overflow: hidden; display: flex; flex-direction: column;">
+            <div style="height: 59px; flex: 0 0 59px; display: flex; align-items: flex-end; justify-content: space-between; padding: 0 24px 8px; font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 600;"><span>9:41</span><span style="letter-spacing: 0.1em;">▮▮▮</span></div>
+            <div style="flex: 1; padding: 8px 20px 0; display: flex; flex-direction: column; gap: 20px; overflow: hidden;">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: baseline; gap: 1px; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 20px; letter-spacing: -0.03em;"><span>leer</span><span style="display: inline-block; width: 9px; height: 9px; border-radius: 999px; border: 2px solid #1D221C; overflow: hidden; position: relative; margin: 0 2px;"><span style="position: absolute; left: 0; right: 0; bottom: 0; height: 62%; background: #1D221C;"></span></span><span>nu</span></div>
+                <div style="display: flex; align-items: center; gap: 6px; padding: 8px 12px; background: #F0F0EC; border-radius: 999px;"><div style="width: 14px; height: 14px; border: 2px solid #855A00; border-radius: 0 999px 999px 999px; transform: rotate(-45deg);"></div><span style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 15px; font-variant-numeric: tabular-nums;">5</span></div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #5A5F59;">Verder waar je was</span>
+                <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 30px; line-height: 36px; letter-spacing: -0.02em;">Provincies van Nederland</span>
+              </div>
+              <div style="background: #D7EAFF; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 12px;">
+                <div style="display: flex; align-items: center; gap: 14px;">
+                  <div style="width: 56px; height: 56px; border-radius: 999px; border: 5px solid #005A9D; overflow: hidden; position: relative; flex: 0 0 56px;"><div style="position: absolute; left: 0; right: 0; bottom: 0; height: 67%; background: #005A9D;"></div></div>
+                  <div><div style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 30px; line-height: 32px; letter-spacing: -0.02em; font-variant-numeric: tabular-nums;">67%</div><div style="font-size: 16px; line-height: 22px;">weet je over drie weken nog</div></div>
+                </div>
+                <div style="height: 12px; background: #FAFAF7; border-radius: 999px; overflow: hidden; display: flex;"><div style="width: 45%; height: 100%; background: #2E75B7;"></div><div style="width: 22%; height: 100%; background: repeating-linear-gradient(-45deg, #2E75B7 0 4px, #D7EAFF 4px 8px);"></div></div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 10px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px; border: 1px solid #D6D6CF; border-radius: 12px;"><div style="display: flex; align-items: center; gap: 12px;"><div style="width: 22px; height: 22px; border: 2.5px solid #005A9D; transform: rotate(45deg);"></div><span style="font-size: 18px; font-weight: 600;">Topografie</span></div><span style="font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums;">8/12</span></div>
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px; border: 1px solid #D6D6CF; border-radius: 12px;"><div style="display: flex; align-items: center; gap: 12px;"><div style="width: 24px; height: 24px; position: relative;"><div style="position: absolute; top: 11px; left: 0; width: 24px; height: 2.5px; background: #006E4A; transform: rotate(45deg);"></div><div style="position: absolute; top: 11px; left: 0; width: 24px; height: 2.5px; background: #006E4A; transform: rotate(-45deg);"></div></div><span style="font-size: 18px; font-weight: 600;">Rekenen</span></div><span style="font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums;">6/10</span></div>
+              </div>
+              <div style="margin-top: auto; padding-bottom: 12px;">
+                <div style="height: 64px; background: #1D221C; color: #FAFAF7; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 600; font-size: 20px;"><span>Ga verder — 10 vragen</span><div style="width: 10px; height: 10px; border-top: 2.5px solid #FAFAF7; border-right: 2.5px solid #FAFAF7; transform: rotate(45deg);"></div></div>
+              </div>
+            </div>
+            <div style="height: 64px; flex: 0 0 64px; border-top: 1px solid #D6D6CF; display: grid; grid-template-columns: repeat(4, 1fr);">
+              <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;"><div style="width: 16px; height: 16px; border: 2px solid #1D221C; transform: rotate(45deg);"></div><span style="font-size: 12px; font-weight: 600;">Oefenen</span></div>
+              <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;"><div style="width: 14px; height: 14px; border: 2px solid #5A5F59; border-radius: 0 999px 999px 999px; transform: rotate(-45deg);"></div><span style="font-size: 12px; color: #5A5F59;">Streak</span></div>
+              <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;"><div style="display: flex; align-items: flex-end; gap: 2px;"><div style="width: 3px; height: 8px; background: #5A5F59;"></div><div style="width: 3px; height: 12px; background: #5A5F59;"></div><div style="width: 3px; height: 16px; background: #5A5F59;"></div></div><span style="font-size: 12px; color: #5A5F59;">Voortgang</span></div>
+              <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;"><div style="width: 16px; height: 16px; border: 2px solid #5A5F59; border-radius: 999px;"></div><span style="font-size: 12px; color: #5A5F59;">Jij</span></div>
+            </div>
+            <div style="height: 34px; flex: 0 0 34px; display: flex; align-items: center; justify-content: center;"><div style="width: 134px; height: 5px; border-radius: 999px; background: #1D221C;"></div></div>
+          </div>
+          <div style="width: 393px; font-size: 14px; line-height: 21px; color: #5A5F59;">Veilige zones: 59 px boven, 34 px onder. Geen terugknop linksboven — de terugveeg doet het werk. De grote knop staat binnen duimbereik, niet bovenaan.</div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #5A5F59;">Android — rekenen met getallenpaneel</span>
+          <div style="width: 412px; height: 915px; box-sizing: border-box; background: #FAFAF7; border: 1px solid #B7B8B0; overflow: hidden; display: flex; flex-direction: column;">
+            <div style="height: 32px; flex: 0 0 32px; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 600;"><span>9:41</span><span style="letter-spacing: 0.1em;">▲ ▮</span></div>
+            <div style="padding: 8px 16px 16px; border-bottom: 1px solid #D6D6CF; display: flex; align-items: center; gap: 12px;">
+              <div>
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #5A5F59;">tafel van 7 · vraag 6/10</div>
+                <div style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 24px; line-height: 30px; letter-spacing: -0.02em;">Wat is 7 × 8?</div>
+              </div>
+              <div style="margin-left: auto; width: 44px; height: 44px; flex: 0 0 44px; border-radius: 10px; border: 2px solid #1D221C; display: flex; align-items: center; justify-content: center;"><div style="width: 0; height: 0; border-top: 8px solid transparent; border-bottom: 8px solid transparent; border-left: 12px solid #1D221C; margin-left: 3px;"></div></div>
+            </div>
+            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; padding: 16px;">
+              <div style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 88px; line-height: 1; letter-spacing: -0.04em; font-variant-numeric: tabular-nums;">7 × 8</div>
+              <div style="width: 100%; height: 72px; border: 2px solid #1D221C; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-size: 40px; font-weight: 700; font-variant-numeric: tabular-nums;">56<span style="width: 2px; height: 36px; background: #1D221C; margin-left: 4px;"></span></div>
+              <span style="font-size: 15px; color: #5A5F59;">7 × 8 kwam gisteren ook langs.</span>
+            </div>
+            <div style="padding: 12px 16px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+              <div style="height: 64px; border: 1px solid #B7B8B0; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 600;">1</div>
+              <div style="height: 64px; border: 1px solid #B7B8B0; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 600;">2</div>
+              <div style="height: 64px; border: 1px solid #B7B8B0; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 600;">3</div>
+              <div style="height: 64px; border: 1px solid #B7B8B0; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 600;">4</div>
+              <div style="height: 64px; border: 1px solid #B7B8B0; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 600;">5</div>
+              <div style="height: 64px; border: 1px solid #1D221C; border-radius: 6px; background: #F0F0EC; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 600;">6</div>
+              <div style="height: 64px; border: 1px solid #B7B8B0; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 600;">7</div>
+              <div style="height: 64px; border: 1px solid #B7B8B0; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 600;">8</div>
+              <div style="height: 64px; border: 1px solid #B7B8B0; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 600;">9</div>
+              <div style="height: 64px; border: 1px solid #B7B8B0; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600; color: #5A5F59;">wis</div>
+              <div style="height: 64px; border: 1px solid #B7B8B0; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 600;">0</div>
+              <div style="height: 64px; border-radius: 6px; background: #1D221C; color: #FAFAF7; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600;">Nakijken</div>
+            </div>
+            <div style="height: 8px; background: #E5E5DF;"><div style="width: 60%; height: 100%; background: #008863;"></div></div>
+            <div style="height: 48px; flex: 0 0 48px; display: flex; align-items: center; justify-content: center; gap: 44px;">
+              <div style="width: 16px; height: 16px; border-left: 2px solid #7D827B; border-bottom: 2px solid #7D827B; transform: rotate(45deg);"></div>
+              <div style="width: 14px; height: 14px; border-radius: 999px; border: 2px solid #7D827B;"></div>
+              <div style="width: 12px; height: 12px; border: 2px solid #7D827B;"></div>
+            </div>
+          </div>
+          <div style="width: 412px; font-size: 14px; line-height: 21px; color: #5A5F59;">Rand-tot-rand: de achtergrond loopt door onder de systeembalken, de navigatiebalk van 48 px blijft vrij. Het getallenpaneel is eigen UI en geen systeemtoetsenbord — 64 px hoge toetsen, "Nakijken" op de plek van de enter-toets.</div>
+        </div>
+
+        <div style="flex: 1; min-width: 320px; display: flex; flex-direction: column; gap: 16px; padding: 24px; background: #FAFAF7; border: 1px solid #B7B8B0;">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #5A5F59;">Kaartvragen op alle vier de maten</span>
+          <div style="font-size: 16px; line-height: 25px; color: #1D221C;">De kaartschermen staan in het werkende bestand <strong>leer.nu oefenkaart.html</strong>, met echte geometrie en een schakelaar voor Chromebook 1366, iPad 1024, iOS 393 en Android 412. Vier vraagsoorten werken daar: provincies (gebied), hoofdsteden (punt), Waddeneilanden (klein gebied met opgeblazen trefzone) en landen van Europa.</div>
+          <div style="font-size: 15px; line-height: 23px; color: #5A5F59;"><strong style="color: #1D221C;">Databronnen.</strong> Provincies en gemeenten van CBS via PDOK (gegeneraliseerd, WGS84); landsgrenzen uit Natural Earth. Hoofdsteden zijn echte coördinaten. Niets is met de hand getekend — een kaart die niet klopt, leert een kind iets verkeerds.</div>
+          <div style="font-size: 15px; line-height: 23px; color: #5A5F59;"><strong style="color: #1D221C;">Rivieren.</strong> Het lijnpatroon uit 7E is ontworpen, maar de geometrie van de grote rivieren zit nog niet in het project: die komt uit de PDOK-waterlichamenset. Zodra die er is, is een riviervraag dezelfde bouwsteen met een trefzone van 44 pt om de lijn.</div>
+          <div style="padding: 12px; background: #D3F0E3; color: #006E4A; font-size: 15px; line-height: 22px; font-weight: 600;">Steden, landen, provincies en eilanden werken nu. Rivieren wachten op één databestand, niet op ontwerp.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+</x-dc>
+</body>
+</html>

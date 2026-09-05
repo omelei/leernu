@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { BrandLockup } from '@/components/Brand';
+import { brand } from '@/config/brand';
 import { t } from '@/i18n';
 import { createProfile } from '@/store/profile';
 import type { ProfileRecord } from '@/store/db';
@@ -10,7 +10,7 @@ import type { ProfileRecord } from '@/store/db';
  * copy says exactly that, because a child who is asked for their name deserves
  * to be told where it goes.
  */
-export function ProfileGate({ onReady }: { onReady: (profile: ProfileRecord) => void }) {
+export function ProfileGate({ onReady }: { readonly onReady: (profile: ProfileRecord) => void }) {
   const [naam, setNaam] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -21,27 +21,31 @@ export function ProfileGate({ onReady }: { onReady: (profile: ProfileRecord) => 
       setError(t('profile.nameTooShort'));
       return;
     }
-
     setBusy(true);
-    const profile = await createProfile(naam);
-    onReady(profile);
+    onReady(await createProfile(naam));
   }
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-xl flex-col justify-center gap-8 px-6 py-12">
-      <BrandLockup />
+    <main className="mx-auto flex min-h-screen max-w-xl flex-col justify-center gap-8 p-6">
+      <div>
+        <p className="tk-display text-2xl font-bold">{brand.name}</p>
+        <p className="text-ink-2">{brand.tagline}</p>
+      </div>
 
-      <form onSubmit={(e) => void handleSubmit(e)} className="tk-card flex flex-col gap-4">
-        <h1 className="text-2xl">{t('profile.title')}</h1>
-        <label htmlFor="naam" className="text-base text-ink-700">
+      <form
+        onSubmit={(event) => void handleSubmit(event)}
+        className="tk-card flex flex-col gap-4 rounded-control p-6"
+      >
+        <h1 className="tk-display text-2xl font-semibold">{t('profile.title')}</h1>
+        <label htmlFor="naam" className="text-ink-2">
           {t('profile.help')}
         </label>
         <input
           id="naam"
           className="tk-input"
           value={naam}
-          onChange={(e) => {
-            setNaam(e.target.value);
+          onChange={(event) => {
+            setNaam(event.target.value);
             setError(null);
           }}
           placeholder={t('profile.placeholder')}
@@ -50,17 +54,17 @@ export function ProfileGate({ onReady }: { onReady: (profile: ProfileRecord) => 
           aria-describedby={error ? 'naam-error' : undefined}
           aria-invalid={error !== null}
         />
-        {error && (
-          <p id="naam-error" role="alert" className="text-base font-bold text-bad">
+        {error !== null && (
+          <p id="naam-error" role="alert" className="font-semibold text-bad">
             {error}
           </p>
         )}
-        <button type="submit" className="tk-button-primary" disabled={busy}>
+        <button type="submit" className="tk-button" disabled={busy}>
           {t('profile.submit')}
         </button>
       </form>
 
-      <p className="text-center text-base text-ink-500">{t('privacy.line')}</p>
+      <p className="text-center text-ink-2">{t('home.privacy')}</p>
     </main>
   );
 }

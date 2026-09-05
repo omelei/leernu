@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<title>leer.nu — oefenkaart</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Sans+3:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/d3@7.9.0/dist/d3.min.js" integrity="sha384-CjloA8y00+1SDAUkjs099PVfnY2KmDC2BZnws9kh8D/lX1s46w6EPhpXdqMfjK6i" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/topojson-client@3.1.0/dist/topojson-client.min.js" integrity="sha384-Ukv1p/xTma6P4/2bY5KzWBw+ydSpXmhCMtyciIQVDJ1RmOxtCYNMF1uXT9T63H67" crossorigin="anonymous"></script>
+<style>
+  :root{
+    --papier:#FAFAF7; --oppervlak:#F0F0EC; --diep:#E5E5DF; --lijn:#D6D6CF; --lijnsterk:#B7B8B0;
+    --tekst:#1D221C; --tekst2:#5A5F59; --tekst3:#7D827B;
+    --goed:#287C42; --fout:#B02A2D; --topo:#2E75B7; --topoTekst:#005A9D; --topoTint:#D7EAFF;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#C9C9C2;font-family:'Source Sans 3',system-ui,sans-serif;color:var(--tekst)}
+  .wrap{padding:40px;display:flex;flex-direction:column;gap:20px;align-items:flex-start}
+  .bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--papier);border:1px solid var(--lijnsterk);padding:14px 16px}
+  .bar h1{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:600;letter-spacing:-.01em;margin:0 16px 0 0}
+  .seg{display:flex;gap:6px}
+  button{font:inherit;cursor:pointer}
+  .pill{height:40px;padding:0 14px;border-radius:999px;border:1px solid var(--lijnsterk);background:var(--papier);font-size:15px;font-weight:600;color:var(--tekst)}
+  .pill[aria-pressed="true"]{background:var(--tekst);color:var(--papier);border-color:var(--tekst)}
+  .pill:focus-visible,.hit:focus-visible,.big:focus-visible{outline:2px solid var(--tekst);outline-offset:2px}
+  .mono{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--tekst2)}
+  .note{font-size:14px;line-height:21px;color:#3c403b;max-width:1366px}
+
+  #frame{background:var(--papier);border:1px solid var(--lijnsterk);position:relative;overflow:hidden;display:flex;flex-direction:column}
+  .statusbar{display:none;height:44px;flex:0 0 44px;align-items:center;justify-content:space-between;padding:0 22px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600}
+  .phone .statusbar{display:flex}
+  .android .statusbar{height:32px;flex:0 0 32px;font-size:13px}
+
+  .qbar{flex:0 0 auto;display:flex;align-items:center;gap:20px;padding:16px 24px;border-bottom:1px solid var(--lijn);background:rgba(250,250,247,.96);z-index:5}
+  .qlabel{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--tekst2)}
+  .qtext{font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:-.02em;font-size:38px;line-height:44px}
+  .phone .qtext{font-size:26px;line-height:32px}
+  .counters{margin-left:auto;display:flex;align-items:center;gap:18px}
+  .counter{display:flex;flex-direction:column;align-items:flex-end}
+  .counter b{font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .phone .counters{gap:12px}.phone .counter b{font-size:20px}
+  .qlabel{white-space:nowrap}
+  .phone .qlabel{font-size:10px;letter-spacing:.04em}
+  .phone .qbar{padding:12px 16px;gap:12px}
+  .speak{width:56px;height:56px;flex:0 0 56px;border-radius:12px;border:2px solid var(--tekst);background:var(--papier);display:flex;align-items:center;justify-content:center}
+  .phone .speak{width:44px;height:44px;flex:0 0 44px;border-radius:10px}
+  .speak span{display:block;width:0;height:0;border-top:9px solid transparent;border-bottom:9px solid transparent;border-left:14px solid var(--tekst);margin-left:3px}
+
+  #stage{flex:1;position:relative;min-height:0}
+  #map{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .hit{position:absolute;border:0;background:transparent;padding:0;border-radius:999px}
+
+  .feedback{flex:0 0 auto;display:none;gap:20px;align-items:flex-end;padding:20px 24px;border-top:1px solid var(--lijn);background:var(--papier)}
+  .feedback.on{display:flex}
+  .phone .feedback{flex-direction:column;align-items:stretch;gap:14px;padding:16px 20px}
+  .fbicon{width:32px;height:32px;flex:0 0 32px;display:flex;align-items:center;justify-content:center}
+  .fbmain{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:26px;line-height:32px;letter-spacing:-.015em}
+  .phone .fbmain{font-size:20px;line-height:26px}
+  .fbsub{font-size:18px;line-height:26px;color:var(--tekst2)}
+  .phone .fbsub{font-size:16px;line-height:22px}
+  .big{margin-left:auto;height:64px;padding:0 28px;border:0;border-radius:12px;background:var(--tekst);color:var(--papier);font-size:20px;font-weight:600;display:flex;align-items:center;gap:10px}
+  .phone .big{margin-left:0;width:100%;justify-content:center;height:56px;font-size:18px}
+  .big i{display:block;width:10px;height:10px;border-top:2.5px solid var(--papier);border-right:2.5px solid var(--papier);transform:rotate(45deg);margin-left:-3px}
+
+  .track{flex:0 0 8px;background:var(--diep)}
+  .track div{height:100%;background:var(--topo);transition:width .25s ease-out}
+  .tabbar{display:none;flex:0 0 64px;border-top:1px solid var(--lijn);background:var(--papier)}
+  .phone .tabbar{display:grid;grid-template-columns:repeat(4,1fr)}
+  .tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:12px;color:var(--tekst2)}
+  .tab.act{color:var(--tekst);font-weight:600}
+  .tab i{display:block;width:16px;height:16px;border:2px solid currentColor}
+  .tab.d i{transform:rotate(45deg)}
+  .tab.c i{border-radius:999px}
+  .navbar{display:none;flex:0 0 24px;align-items:center;justify-content:center;gap:36px;background:var(--papier)}
+  .android .navbar{display:flex}
+  .navbar s{display:block;width:16px;height:2px;background:var(--tekst3);text-decoration:none}
+  .homebar{display:none;flex:0 0 22px;align-items:center;justify-content:center}
+  .ios .homebar{display:flex}
+  .homebar s{display:block;width:130px;height:5px;border-radius:999px;background:var(--tekst);text-decoration:none}
+
+  .prov{fill:var(--oppervlak);stroke:var(--tekst);stroke-width:1.5;cursor:pointer}
+  path.prov:focus{outline:none;stroke:var(--tekst);stroke-width:4}
+  path.prov.kbfocus{stroke:var(--tekst);stroke-width:4}
+  path.prov:focus-visible{outline:2px solid var(--tekst);outline-offset:2px;stroke-width:4}
+  .prov.dim{fill:var(--papier);stroke:var(--lijnsterk);stroke-width:1;cursor:default}
+  .prov.hover{fill:var(--diep)}
+  .prov.good{fill:var(--papier);stroke:var(--goed);stroke-width:3}
+  .prov.bad{fill:url(#hatch);stroke:var(--fout);stroke-width:3}
+  .prov.target{stroke:var(--goed);stroke-width:3;fill:var(--papier)}
+  .lbl{font-family:'Source Sans 3',sans-serif;font-size:13px;fill:var(--tekst2);pointer-events:none}
+  .lbl.on{font-weight:700;fill:var(--tekst);font-size:15px}
+  .city{fill:var(--papier);stroke:var(--tekst);stroke-width:2;cursor:pointer}
+  .city.good{fill:var(--goed);stroke:var(--goed)}
+  .city.bad{fill:var(--fout);stroke:var(--fout)}
+  .ring{fill:none;stroke:var(--tekst);stroke-width:2;stroke-dasharray:4 4;opacity:.35;pointer-events:none}
+  #travel circle{fill:var(--tekst)}
+  #travel line{stroke:var(--tekst);stroke-width:3;stroke-dasharray:6 6}
+  @keyframes reis{from{transform:translate(var(--dx),var(--dy))}to{transform:translate(0,0)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="bar" style="width:100%;max-width:1366px">
+    <h1>leer.nu — oefenkaart</h1>
+    <div class="seg" id="setpicker">
+      <button class="pill" data-set="provincie" aria-pressed="true">Provincies</button>
+      <button class="pill" data-set="hoofdstad" aria-pressed="false">Hoofdsteden</button>
+      <button class="pill" data-set="eiland" aria-pressed="false">Waddeneilanden</button>
+      <button class="pill" data-set="land" aria-pressed="false">Landen van Europa</button>
+    </div>
+    <div class="seg" id="devpicker" style="margin-left:auto">
+      <button class="pill" data-dev="chromebook" aria-pressed="true">Chromebook 1366</button>
+      <button class="pill" data-dev="ipad" aria-pressed="false">iPad 1024</button>
+      <button class="pill" data-dev="ios" aria-pressed="false">iOS 393</button>
+      <button class="pill" data-dev="android" aria-pressed="false">Android 412</button>
+    </div>
+  </div>
+
+  <div id="frame" class="chromebook" style="width:1366px;height:768px">
+    <div class="statusbar"><span id="clock">9:41</span><span id="sysright">▮▮▮</span></div>
+
+    <div class="qbar">
+      <div>
+        <div class="qlabel" id="qkind">Wijs aan op de kaart</div>
+        <div class="qtext" id="qtext">Waar ligt Drenthe?</div>
+      </div>
+      <button class="speak" aria-label="Lees de vraag voor"><span></span></button>
+      <div class="counters">
+        <div class="counter"><span class="qlabel">vraag</span><b id="cnt">1/10</b></div>
+        <div class="counter"><span class="qlabel">goed op rij</span><b id="combo">×0</b></div>
+      </div>
+    </div>
+
+    <div id="stage">
+      <svg id="map"></svg>
+      <button class="hit" id="hitzone" hidden></button>
+    </div>
+
+    <div class="feedback" id="fb">
+      <div class="fbicon" id="fbicon"></div>
+      <div style="flex:1">
+        <div class="fbmain" id="fbmain"></div>
+        <div class="fbsub" id="fbsub"></div>
+      </div>
+      <button class="big" id="next">Volgende vraag <i></i></button>
+    </div>
+
+    <div class="track"><div id="prog" style="width:0%"></div></div>
+    <div class="tabbar">
+      <div class="tab d act"><i></i>Oefenen</div>
+      <div class="tab"><i></i>Streak</div>
+      <div class="tab"><i></i>Ladder</div>
+      <div class="tab c"><i></i>Jij</div>
+    </div>
+    <div class="navbar"><s></s><s></s><s></s></div>
+    <div class="homebar"><s></s></div>
+  </div>
+
+  <div class="note" id="srcnote"></div>
+</div>
+
+<script>
+const state = { set:'provincie', dev:'chromebook', i:0, combo:0, answered:false, target:null, wrong:null, order:[] };
+const data = {};
+const svg = d3.select('#map');
+
+const SETS = {
+  provincie: { kind:'Wijs aan op de kaart', vraag:n=>`Waar ligt ${n}?`, type:'gebied' },
+  hoofdstad: { kind:'Wijs de stad aan', vraag:n=>`Waar ligt ${n}?`, type:'punt' },
+  eiland:    { kind:'Wijs het eiland aan', vraag:n=>`Waar ligt ${n}?`, type:'gebied' },
+  land:      { kind:'Wijs het land aan', vraag:n=>`Waar ligt ${n}?`, type:'gebied' }
+};
+
+// Hoofdsteden: WGS84-coördinaten van de provinciehoofdsteden.
+const STEDEN = [
+  {naam:'Groningen',lon:6.5665,lat:53.2194,prov:'Groningen'},
+  {naam:'Leeuwarden',lon:5.7993,lat:53.2012,prov:'Fryslân'},
+  {naam:'Assen',lon:6.5608,lat:52.9954,prov:'Drenthe'},
+  {naam:'Zwolle',lon:6.0929,lat:52.5124,prov:'Overijssel'},
+  {naam:'Lelystad',lon:5.4714,lat:52.5185,prov:'Flevoland'},
+  {naam:'Arnhem',lon:5.8987,lat:51.9851,prov:'Gelderland'},
+  {naam:'Utrecht',lon:5.1214,lat:52.0907,prov:'Utrecht'},
+  {naam:'Haarlem',lon:4.6462,lat:52.3874,prov:'Noord-Holland'},
+  {naam:'Den Haag',lon:4.3007,lat:52.0705,prov:'Zuid-Holland'},
+  {naam:'Middelburg',lon:3.6109,lat:51.4988,prov:'Zeeland'},
+  {naam:"'s-Hertogenbosch",lon:5.3037,lat:51.6978,prov:'Noord-Brabant'},
+  {naam:'Maastricht',lon:5.6909,lat:50.8514,prov:'Limburg'}
+];
+const EILANDEN = ['Texel','Vlieland','Terschelling','Ameland','Schiermonnikoog'];
+const EU_LANDEN = ['Netherlands','Belgium','Germany','France','Spain','Italy','Poland','Denmark','Norway','Sweden','Austria','Portugal','Ireland','Greece','Switzerland','Czechia','Hungary','Romania','Finland'];
+const NL_NAAM = {Netherlands:'Nederland',Belgium:'België',Germany:'Duitsland',France:'Frankrijk',Spain:'Spanje',Italy:'Italië',Poland:'Polen',Denmark:'Denemarken',Norway:'Noorwegen',Sweden:'Zweden',Austria:'Oostenrijk',Portugal:'Portugal',Ireland:'Ierland',Greece:'Griekenland',Switzerland:'Zwitserland',Czechia:'Tsjechië',Hungary:'Hongarije',Romania:'Roemenië',Finland:'Finland'};
+
+const FEIT = {
+  'Groningen':'De hoofdstad heet ook Groningen.','Fryslân':'De hoofdstad is Leeuwarden.','Drenthe':'De hoofdstad is Assen.',
+  'Overijssel':'De hoofdstad is Zwolle.','Flevoland':'De jongste provincie, ingepolderd in 1986.','Gelderland':'De grootste provincie van Nederland.',
+  'Utrecht':'De kleinste provincie op het vasteland.','Noord-Holland':'De hoofdstad is Haarlem, niet Amsterdam.','Zuid-Holland':'De hoofdstad is Den Haag.',
+  'Zeeland':'Bestaat uit eilanden en schiereilanden.','Noord-Brabant':"De hoofdstad is 's-Hertogenbosch.",'Limburg':'De hoofdstad is Maastricht.'
+};
+
+function shuffle(a){ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+// Elk aanwijsbaar gebied is ook een toetsenbordelement: tab loopt van gebied naar gebied,
+// enter of spatie antwoordt, en de focusring uit 7F staat om de gebiedsvorm.
+function interactief(sel, naamVan){
+  sel.attr('tabindex', 0).attr('role','button')
+    .attr('aria-label', f=>naamVan(f))
+    .on('mouseenter', function(){ if(!state.answered) this.classList.add('hover'); })
+    .on('mouseleave', function(){ this.classList.remove('hover'); })
+    .on('focus', function(){ this.classList.add('kbfocus'); if(!state.answered) this.classList.add('hover'); })
+    .on('blur', function(){ this.classList.remove('kbfocus'); this.classList.remove('hover'); })
+    .on('click', (e,f)=>answer(naamVan(f)))
+    .on('keydown', (e,f)=>{ if(e.key==='Enter' || e.key===' ' || e.key==='Spacebar'){ e.preventDefault(); answer(naamVan(f)); } });
+  return sel;
+}
+
+async function load(){
+  const [prov, gem, world] = await Promise.all([
+    d3.json('wgs84/provincie_2023.topojson'),
+    d3.json('wgs84/gemeente_2023.topojson'),
+    d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json')
+  ]);
+  data.prov = topojson.feature(prov, prov.objects.provincie_2023).features;
+  const gemF = topojson.feature(gem, gem.objects.gemeente_2023).features;
+  data.eilanden = gemF.filter(f=>EILANDEN.includes(f.properties.statnaam));
+  data.landen = topojson.feature(world, world.objects.countries).features;
+  document.getElementById('srcnote').innerHTML =
+    'Geometrie: provincies en gemeenten van CBS/PDOK via cartomap (gegeneraliseerd, WGS84), landsgrenzen uit Natural Earth (world-atlas 110m). ' +
+    'Hoofdsteden zijn echte coördinaten. Alle trefzones zijn minimaal 44 px; kleine gebieden krijgen een opgeblazen, onzichtbare trefzone. ' +
+    'Rivieren en waterwegen volgen hetzelfde lijnpatroon zodra de PDOK-waterlichamenset is toegevoegd — die staat nog niet in dit project.';
+  start();
+}
+
+function start(){
+  if(state.set==='provincie') state.order = shuffle(data.prov.map(f=>f.properties.statnaam));
+  else if(state.set==='hoofdstad') state.order = shuffle(STEDEN.map(s=>s.naam));
+  else if(state.set==='eiland') state.order = shuffle(EILANDEN.slice());
+  else state.order = shuffle(EU_LANDEN.slice()).slice(0,10);
+  state.order = state.order.slice(0,10);
+  state.i = 0; state.combo = 0; state.answered = false; state.wrong = null;
+  nextQuestion(true);
+}
+
+function nextQuestion(first){
+  state.answered = false; state.wrong = null; state.travel = null;
+  if(state.i >= state.order.length){ state.i = 0; state.order = shuffle(state.order); }
+  state.target = state.order[state.i];
+  document.getElementById('qkind').textContent = SETS[state.set].kind;
+  const naam = state.set==='land' ? NL_NAAM[state.target] : state.target;
+  document.getElementById('qtext').textContent = SETS[state.set].vraag(naam);
+  document.getElementById('cnt').textContent = (state.i+1)+'/'+state.order.length;
+  document.getElementById('combo').textContent = '×'+state.combo;
+  document.getElementById('prog').style.width = (state.i/state.order.length*100)+'%';
+  document.getElementById('fb').classList.remove('on');
+  draw();
+}
+
+function answer(name, nodeSel){
+  if(state.answered) return;
+  state.answered = true;
+  state.travel = null;
+  const goed = name === state.target;
+  state.combo = goed ? state.combo+1 : 0;
+  document.getElementById('combo').textContent = '×'+state.combo;
+  const naam = state.set==='land' ? NL_NAAM[state.target] : state.target;
+  const gekozen = state.set==='land' ? (NL_NAAM[name]||name) : name;
+  const fb = document.getElementById('fb');
+  const icon = document.getElementById('fbicon');
+  if(goed){
+    icon.innerHTML = '<div style="width:32px;height:32px;background:#287C42;display:flex;align-items:center;justify-content:center"><div style="width:13px;height:7px;border-left:2.5px solid #FAFAF7;border-bottom:2.5px solid #FAFAF7;transform:rotate(-45deg)"></div></div>';
+    document.getElementById('fbmain').textContent = naam + ' — goed.';
+    document.getElementById('fbsub').textContent = FEIT[state.target] || '';
+  } else {
+    icon.innerHTML = '<div style="width:32px;height:32px;background:repeating-linear-gradient(-45deg,rgba(250,250,247,.3) 0 3px,rgba(0,0,0,0) 3px 9px),#B02A2D;position:relative"><div style="position:absolute;top:15px;left:7px;width:18px;height:3px;background:#FAFAF7;transform:rotate(45deg)"></div><div style="position:absolute;top:15px;left:7px;width:18px;height:3px;background:#FAFAF7;transform:rotate(-45deg)"></div></div>';
+    document.getElementById('fbmain').textContent = naam + ' ligt hier.';
+    document.getElementById('fbsub').textContent = 'Je wees ' + gekozen + ' aan. ' + (FEIT[state.target] || '');
+    state.wrong = name;
+  }
+  fb.classList.add('on');
+  draw(true);
+}
+
+function frameSize(){
+  const f = document.getElementById('frame');
+  const st = document.getElementById('stage');
+  return [st.clientWidth, st.clientHeight, f];
+}
+
+function draw(reveal){
+  const [w,h] = frameSize();
+  if(!w || !h) return;
+  svg.attr('viewBox', `0 0 ${w} ${h}`).selectAll('*').remove();
+  svg.append('defs').html('<pattern id="hatch" width="8" height="8" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><rect width="8" height="8" fill="#FAFAF7"/><rect width="3" height="8" fill="rgba(176,42,45,.25)"/></pattern>');
+  const pad = Math.min(w,h) * 0.06;
+  const g = svg.append('g');
+  const stage = document.getElementById('stage');
+  stage.querySelectorAll('.hit').forEach(n=>n.remove());
+
+  if(state.set==='land'){
+    const eu = { type:'FeatureCollection', features: data.landen.filter(f=>f.geometry) };
+    const proj = d3.geoConicConformal().rotate([-10,0]).center([0,52])
+      .fitExtent([[pad,pad],[w-pad,h-pad]], {type:'FeatureCollection', features: data.landen.filter(f=>EU_LANDEN.includes(f.properties.name))});
+    const path = d3.geoPath(proj);
+    g.selectAll('path.bg').data(eu.features).join('path').attr('class','prov dim').attr('d',path).attr('aria-hidden','true');
+    interactief(g.selectAll('path.act').data(data.landen.filter(f=>EU_LANDEN.includes(f.properties.name)))
+      .join('path')
+      .attr('class', f=> 'prov' + (reveal && f.properties.name===state.target ? ' target' : '') + (reveal && f.properties.name===state.wrong ? ' bad' : ''))
+      .attr('d', path), f=>f.properties.name)
+      .attr('aria-label', f=>NL_NAAM[f.properties.name] || f.properties.name);
+    if(reveal && state.wrong) travel(g, path.centroid(data.landen.find(f=>f.properties.name===state.wrong)), path.centroid(data.landen.find(f=>f.properties.name===state.target)));
+    return;
+  }
+
+  const nl = { type:'FeatureCollection', features: data.prov };
+  const fitTo = state.set==='eiland'
+    ? { type:'FeatureCollection', features: data.eilanden.concat(data.prov.filter(f=>['Fryslân','Groningen','Noord-Holland'].includes(f.properties.statnaam))) }
+    : nl;
+  const proj = d3.geoMercator().fitExtent([[pad,pad],[w-pad,h-pad]], fitTo);
+  const path = d3.geoPath(proj);
+
+  const provSel = g.selectAll('path.p').data(data.prov).join('path')
+    .attr('d', path)
+    .attr('class', f=>{
+      const n = f.properties.statnaam;
+    if(state.set!=='provincie') return 'prov dim';
+      let c = 'prov';
+      if(reveal && n===state.target) c += ' target';
+      if(reveal && n===state.wrong) c += ' bad';
+      return c;
+    });
+  if(state.set==='provincie'){
+    interactief(provSel, f=>f.properties.statnaam);
+    if(reveal){
+      const c = path.centroid(data.prov.find(f=>f.properties.statnaam===state.target));
+      const label = state.target;
+      const wide = label.length * 8 + 16;
+      g.append('rect').attr('x', c[0]-wide/2).attr('y', c[1]-13).attr('width', wide).attr('height', 24)
+        .attr('fill','rgba(250,250,247,.92)');
+      g.append('text').attr('class','lbl on').attr('x', c[0]).attr('y', c[1]+5)
+        .attr('text-anchor','middle').text(label);
+    }
+    if(reveal && state.wrong) travel(g, path.centroid(data.prov.find(f=>f.properties.statnaam===state.wrong)), path.centroid(data.prov.find(f=>f.properties.statnaam===state.target)));
+  }
+
+  if(state.set==='eiland'){
+    interactief(g.selectAll('path.e').data(data.eilanden).join('path')
+      .attr('d', path)
+      .attr('class', f=>{
+        const n = f.properties.statnaam; let c='prov';
+        if(reveal && n===state.target) c+=' target';
+        if(reveal && n===state.wrong) c+=' bad';
+        return c;
+      }), f=>f.properties.statnaam);
+    // opgeblazen trefzones: elk eiland krijgt minimaal 44 px
+    data.eilanden.forEach(f=>{
+      const c = path.centroid(f); const b = path.bounds(f);
+      const size = Math.max(44, b[1][0]-b[0][0], b[1][1]-b[0][1]);
+      addHit(c, size, f.properties.statnaam);
+      g.append('circle').attr('class','ring').attr('cx',c[0]).attr('cy',c[1]).attr('r',size/2);
+    });
+    if(reveal && state.wrong) travel(g, path.centroid(data.eilanden.find(f=>f.properties.statnaam===state.wrong)), path.centroid(data.eilanden.find(f=>f.properties.statnaam===state.target)));
+  }
+
+  if(state.set==='hoofdstad'){
+    STEDEN.forEach(s=>{
+      const p = proj([s.lon, s.lat]);
+      const cls = 'city' + (reveal && s.naam===state.target ? ' good' : '') + (reveal && s.naam===state.wrong ? ' bad' : '');
+      g.append('circle').attr('class',cls).attr('cx',p[0]).attr('cy',p[1]).attr('r',7);
+      g.append('circle').attr('class','ring').attr('cx',p[0]).attr('cy',p[1]).attr('r',22);
+      addHit(p, 44, s.naam);
+      if(reveal && (s.naam===state.target)){
+        const wide = s.naam.length * 8 + 16;
+        g.append('rect').attr('x',p[0]+12).attr('y',p[1]-13).attr('width',wide).attr('height',24).attr('fill','rgba(250,250,247,.92)');
+        g.append('text').attr('class','lbl on').attr('x',p[0]+20).attr('y',p[1]+5).text(s.naam);
+      }
+    });
+    if(reveal && state.wrong){
+      const a = STEDEN.find(s=>s.naam===state.wrong), b = STEDEN.find(s=>s.naam===state.target);
+      travel(g, proj([a.lon,a.lat]), proj([b.lon,b.lat]));
+    }
+  }
+}
+
+function addHit(center, size, naam){
+  const stage = document.getElementById('stage');
+  const b = document.createElement('button');
+  b.className = 'hit';
+  b.style.left = (center[0]-size/2)+'px'; b.style.top = (center[1]-size/2)+'px';
+  b.style.width = size+'px'; b.style.height = size+'px';
+  b.setAttribute('aria-label', naam);
+  b.addEventListener('click', ()=>answer(naam));
+  stage.appendChild(b);
+}
+
+function travel(g, from, to){
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const dx = to[0]-from[0], dy = to[1]-from[1];
+  g.append('line').attr('x1',from[0]).attr('y1',from[1]).attr('x2',to[0]).attr('y2',to[1])
+    .attr('stroke','#1D221C').attr('stroke-width',3).attr('stroke-dasharray','6 6');
+  [[0.33,5,0.18],[0.66,8,0.3]].forEach(([t,r,o])=>{
+    g.append('circle').attr('cx',from[0]+dx*t).attr('cy',from[1]+dy*t).attr('r',r).attr('fill','#1D221C').attr('opacity',o);
+  });
+  const dot = g.append('circle').attr('cx',to[0]).attr('cy',to[1]).attr('r',13).attr('fill','#1D221C');
+  dot.append('title').text('van je antwoord naar de juiste plek');
+  if(!reduce) dot.style('animation', 'reis .32s cubic-bezier(.2,.7,.3,1) 1').style('--dx', (-dx)+'px').style('--dy', (-dy)+'px');
+}
+
+const DEV = {
+  chromebook:{w:1366,h:768,cls:'chromebook'},
+  ipad:{w:1024,h:768,cls:'ipad'},
+  ios:{w:393,h:852,cls:'phone ios'},
+  android:{w:412,h:915,cls:'phone android'}
+};
+function setDevice(key){
+  state.dev = key; const d = DEV[key]; const f = document.getElementById('frame');
+  f.className = d.cls; f.style.width = d.w+'px'; f.style.height = d.h+'px';
+  document.getElementById('sysright').textContent = key==='android' ? '▲ ▮' : '▮▮▮';
+  document.querySelectorAll('#devpicker .pill').forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.dev===key)));
+  if(data.prov){
+    draw(state.answered);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>draw(state.answered)));
+  }
+}
+document.getElementById('devpicker').addEventListener('click', e=>{ const b=e.target.closest('button'); if(b) setDevice(b.dataset.dev); });
+document.getElementById('setpicker').addEventListener('click', e=>{
+  const b = e.target.closest('button'); if(!b) return;
+  state.set = b.dataset.set;
+  document.querySelectorAll('#setpicker .pill').forEach(x=>x.setAttribute('aria-pressed', String(x.dataset.set===state.set)));
+  start();
+});
+document.getElementById('next').addEventListener('click', ()=>{ state.i++; nextQuestion(); });
+let lastW = 0, lastH = 0;
+new ResizeObserver(()=>{
+  const st = document.getElementById('stage');
+  const w = st.clientWidth, h = st.clientHeight;
+  if(!w || !h || (w===lastW && h===lastH)) return;
+  lastW = w; lastH = h;
+  if(data.prov) draw(state.answered);
+}).observe(document.getElementById('stage'));
+window.addEventListener('resize', ()=>draw(state.answered));
+load();
+</script>
+</body>
+</html>

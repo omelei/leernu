@@ -22,6 +22,8 @@ export interface Vorm {
   readonly d: string;
   /** Where a label sits, or null when the source had no label point. */
   readonly punt: readonly [number, number] | null;
+  /** [minX, minY, maxX, maxY]. Drives reading order and touch-target sizing. */
+  readonly bbox: readonly [number, number, number, number];
 }
 
 export interface GeoSet {
