@@ -1,22 +1,29 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import css from '../index.css?raw';
 
 /**
- * Contrast, checked against the real stylesheet rather than a copy of it.
+ * Contrast, checked against the real stylesheet rather than a copy of it, so
+ * this test cannot drift away from the tokens it is checking — change a colour
+ * and the check follows it.
  *
- * The palette is parsed out of src/index.css with Vite's `?raw` import, so this
- * test cannot drift away from the tokens it is checking — change a colour and
- * the check follows it. Reading the file from disk was the obvious approach and
- * the wrong one: under Vitest `import.meta.url` is an http URL, not a file one.
+ * Getting the file took two attempts, both worth recording. `import.meta.url`
+ * is not a file URL under Vitest, so `fileURLToPath` throws. Vite's `?raw`
+ * import looks like the idiomatic answer but returns an empty string, because
+ * Vitest stubs CSS imports by default and the stub wins. Reading from the
+ * project root is the boring option that actually works, in CI as well.
  *
  * That this matters more here than in most products is the point. The primary
  * interface is a map, where colour does most of the work, and a palette that
  * slips below AA is invisible to everyone who can already read it.
  */
 
+const CSS_PATH = join(process.cwd(), 'src', 'index.css');
+const css = readFileSync(CSS_PATH, 'utf8');
+
 function token(name: string): string {
   const match = new RegExp(`--${name}:\\s*(#[0-9a-fA-F]{6})`).exec(css);
-  if (!match?.[1]) throw new Error(`Token --${name} not found in src/index.css`);
+  if (!match?.[1]) throw new Error(`Token --${name} not found in ${CSS_PATH}`);
   return match[1];
 }
 
