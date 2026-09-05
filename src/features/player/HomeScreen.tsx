@@ -59,15 +59,25 @@ function FontSetting() {
       <h2 className="mb-2 text-xl">{t('settings.title')}</h2>
       <div className="flex items-center justify-between gap-4">
         <div>
-          <p className="font-bold text-ink-900">{t('settings.font')}</p>
-          <p className="text-base text-ink-500">{t('settings.fontHelp')}</p>
+          <p id="font-setting-label" className="font-bold text-ink-900">
+            {t('settings.font')}
+          </p>
+          <p id="font-setting-help" className="text-base text-ink-500">
+            {t('settings.fontHelp')}
+          </p>
         </div>
         {/* A switch rather than a checkbox, so the state is announced as on/off
-            and the whole control is a 48px target. */}
+            and the whole control is a 48px target.
+
+            The label has to be wired up explicitly: the button's own text is
+            "Aan" or "Uit", so without this a screen reader announces "Uit,
+            schakelaar" and never says what is off. */}
         <button
           type="button"
           role="switch"
           aria-checked={dyslexic}
+          aria-labelledby="font-setting-label"
+          aria-describedby="font-setting-help"
           onClick={() => void toggle()}
           className="tk-button-quiet min-w-[6rem]"
         >

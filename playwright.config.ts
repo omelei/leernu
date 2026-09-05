@@ -8,7 +8,11 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  reporter: process.env.CI ? 'github' : 'html',
+  // `open: 'never'` because the HTML reporter otherwise starts a server and
+  // waits after a failure, which in a Codespace looks exactly like a hung test
+  // run. The report is still written; open it yourself with `npx playwright
+  // show-report`.
+  reporter: process.env.CI ? 'github' : [['html', { open: 'never' }]],
   use: {
     baseURL: 'http://localhost:4173',
     trace: 'on-first-retry',
