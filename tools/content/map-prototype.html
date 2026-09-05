@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kaart-prototype — wijs aan</title>
+<style>
+  /* The design tokens, copied. This is a workbench, not the product: it exists
+     so the interaction can be looked at on a machine that cannot run Vite. The
+     React component reads the same values from src/index.css. */
+  :root {
+    --paper:#fbf9f5; --surface:#ffffff;
+    --ink-900:#16212b; --ink-700:#33434f; --ink-500:#5c6b77;
+    --line:#e2ddd4;
+    --primary:#c2410c; --on-primary:#ffffff;
+    --good:#15803d; --bad:#b91c1c; --focus:#1d4ed8;
+    --water:#a8cbe0; --land:#ede6da; --land-active:#f6c89a;
+  }
+  * { box-sizing:border-box; }
+  html, body { height:100%; }
+  body { margin:0; background:var(--paper); color:var(--ink-700);
+         font-family:'Nunito',system-ui,sans-serif; font-size:17px; }
+
+  /* Portrait: question above the map. Landscape: beside it.
+     The Netherlands is tall and narrow, so on a Chromebook a column layout
+     leaves a third of the screen empty either side of the map. Putting the
+     question in that space makes the map bigger and the reading distance
+     shorter at the same time. */
+  .app { height:100%; display:flex; flex-direction:column; }
+  main { flex:1; min-height:0; display:flex; justify-content:center;
+         align-items:center; padding:12px; }
+  /* order:-1 puts the question above the map in portrait. A child reads the
+     question and then goes looking; below the map it arrives after the search
+     has already started. In landscape the panel sits beside the map, where
+     source order is already right. */
+  aside { order:-1; border-bottom:1px solid var(--line); background:var(--surface);
+          padding:16px 20px; display:flex; flex-direction:column; gap:12px; }
+
+  @media (min-aspect-ratio: 1/1) {
+    .app { flex-direction:row; }
+    aside { order:0; border-bottom:none; border-left:1px solid var(--line);
+            width:min(38vw, 420px); justify-content:center; padding:24px 28px; }
+  }
+
+  svg { height:100%; width:auto; max-width:100%; background:var(--water);
+        border-radius:12px; touch-action:manipulation; }
+
+  path.provincie { fill:var(--land); stroke:var(--ink-900); stroke-width:1.2;
+                   stroke-linejoin:round; cursor:pointer; transition:fill .12s ease-out; }
+  /* Hover only applies while the answer is still open. Without the :not() guard
+     hover outranks .fout on specificity and the wrong answer never turns red —
+     the pointer is still sitting on the province the child just clicked. */
+  path.provincie:not(.goed):not(.fout):not(.antwoord):hover { fill:var(--land-active); }
+  /* Drawn as a thick stroke rather than an outline, because an outline on an
+     SVG path follows the bounding box and not the shape — on a province that
+     means a rectangle in the sea. */
+  path.provincie:focus { outline:none; stroke:var(--focus); stroke-width:6; }
+  path.provincie.goed, path.provincie.antwoord { fill:var(--good); }
+  path.provincie.fout { fill:var(--bad); }
+
+  .vraag { font-size:clamp(21px, 2.4vw, 28px); font-weight:800; color:var(--ink-900); margin:0; }
+  .teller { font-size:15px; color:var(--ink-500); margin:0; }
+  .uitslag { display:flex; align-items:flex-start; gap:10px; font-size:19px;
+             font-weight:700; min-height:56px; }
+  .teken { font-size:26px; line-height:1.2; }
+  .goed-tekst { color:var(--good); }
+  .fout-tekst { color:var(--bad); }
+  .hint { display:block; color:var(--ink-700); font-weight:400; font-size:16px; margin-top:2px; }
+  button { min-height:48px; border:none; border-radius:12px; padding:12px 24px;
+           font:inherit; font-weight:700; font-size:19px;
+           background:var(--primary); color:var(--on-primary); cursor:pointer; }
+  button:focus-visible { outline:3px solid var(--focus); outline-offset:3px; }
+  .toets { font-size:14px; color:var(--ink-500); }
+  .sr { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
+</style>
+</head>
+<body>
+<div class="app">
+  <main>
+    <svg id="kaart" role="group" aria-labelledby="vraag"></svg>
+  </main>
+  <aside>
+    <p class="teller" id="teller"></p>
+    <p class="vraag" id="vraag">Laden…</p>
+    <div id="uitslag" class="uitslag"></div>
+    <button id="volgende" hidden>Volgende</button>
+    <p class="toets">Tab om te lopen, Enter om te kiezen</p>
+  </aside>
+</div>
+
+<p class="sr" id="live" role="status" aria-live="polite"></p>
+
+<script type="module">
+// Reading order, north to south then west to east. The real component imports
+// keyboardOrder from @/game-core/map, which is unit-tested; repeated here
+// because a browser cannot import TypeScript.
+function leesvolgorde(vormen) {
+  return [...vormen].sort((a, b) => {
+    const ay = (a.bbox[1] + a.bbox[3]) / 2, by = (b.bbox[1] + b.bbox[3]) / 2;
+    const ax = (a.bbox[0] + a.bbox[2]) / 2, bx = (b.bbox[0] + b.bbox[2]) / 2;
+    if (Math.abs(ay - by) > 60) return ay - by;
+    return ax - bx;
+  });
+}
+
+async function load(level) {
+  for (const base of ['/public/geo/nl', '/geo/nl']) {
+    const res = await fetch(`${base}/provincies.${level}.json`);
+    if (res.ok) return res.json();
+  }
+  throw new Error('kaart niet gevonden');
+}
+
+const set = await (await fetch('/content/sets/nl-provincies.json')).json();
+const naamVoorVorm = new Map(set.items.map((i) => [i.geometrieRef, i.naam]));
+
+const geo = await load('region');
+const vormen = leesvolgorde(geo.vormen);
+
+const svg = document.getElementById('kaart');
+svg.setAttribute('viewBox', geo.viewBox.join(' '));
+// The region decides its own shape. A square would waste a third of the width
+// on the Netherlands and turn a full-screen map into a stamp.
+svg.style.aspectRatio = `${geo.viewBox[2]} / ${geo.viewBox[3]}`;
+
+for (const v of vormen) {
+  const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  p.setAttribute('d', v.d);
+  p.setAttribute('class', 'provincie');
+  p.setAttribute('tabindex', '0');
+  p.setAttribute('role', 'button');
+  // The accessible name is the name a child is taught, not the one the data
+  // provider spells: a screen reader should say Friesland, not Fryslan.
+  p.setAttribute('aria-label', naamVoorVorm.get(v.id) ?? v.bronnaam);
+  p.dataset.id = v.id;
+  svg.appendChild(p);
+}
+
+const vraagEl = document.getElementById('vraag');
+const uitslagEl = document.getElementById('uitslag');
+const tellerEl = document.getElementById('teller');
+const liveEl = document.getElementById('live');
+const volgendeBtn = document.getElementById('volgende');
+
+const vragen = [...geo.vormen].map((v) => v.id).sort(() => Math.random() - 0.5).slice(0, 6);
+let ronde = 0, goed = 0, doel = null, beantwoord = false;
+
+function toon() {
+  beantwoord = false;
+  doel = vragen[ronde];
+  const naam = naamVoorVorm.get(doel);
+  vraagEl.textContent = `Waar ligt ${naam}?`;
+  tellerEl.textContent = `Vraag ${ronde + 1} van ${vragen.length} · ${goed} goed`;
+  uitslagEl.innerHTML = '';
+  volgendeBtn.hidden = true;
+  for (const p of svg.querySelectorAll('path')) p.setAttribute('class', 'provincie');
+  liveEl.textContent = `Waar ligt ${naam}?`;
+}
+
+function beoordeel(gekozenId) {
+  if (beantwoord) return;
+  beantwoord = true;
+  const juist = gekozenId === doel;
+  if (juist) goed++;
+
+  const gekozen = svg.querySelector(`[data-id="${gekozenId}"]`);
+  const doelNaam = naamVoorVorm.get(doel);
+
+  if (juist) {
+    gekozen.setAttribute('class', 'provincie goed');
+    // Colour is never the only signal: an icon and a word carry it too.
+    uitslagEl.innerHTML = `<span class="teken goed-tekst">✓</span><span class="goed-tekst">Goed!</span>`;
+    liveEl.textContent = `Goed. Dat is ${doelNaam}.`;
+  } else {
+    gekozen.setAttribute('class', 'provincie fout');
+    svg.querySelector(`[data-id="${doel}"]`).setAttribute('class', 'provincie antwoord');
+    const gekozenNaam = naamVoorVorm.get(gekozenId);
+    uitslagEl.innerHTML =
+      `<span class="teken fout-tekst">✕</span>` +
+      `<span class="fout-tekst">Dat is ${gekozenNaam}.` +
+      `<span class="hint">${doelNaam} licht groen op.</span></span>`;
+    liveEl.textContent = `Fout. Je koos ${gekozenNaam}. ${doelNaam} licht groen op.`;
+  }
+
+  const laatste = ronde >= vragen.length - 1;
+  volgendeBtn.hidden = laatste;
+  if (laatste) {
+    uitslagEl.insertAdjacentHTML('beforeend', `<span class="hint">Klaar: ${goed} van ${vragen.length} goed.</span>`);
+  }
+}
+
+svg.addEventListener('click', (e) => {
+  const p = e.target.closest('path');
+  if (p) beoordeel(p.dataset.id);
+});
+svg.addEventListener('keydown', (e) => {
+  if (e.key !== 'Enter' && e.key !== ' ') return;
+  const p = e.target.closest('path');
+  if (!p) return;
+  e.preventDefault();
+  beoordeel(p.dataset.id);
+});
+volgendeBtn.addEventListener('click', () => {
+  ronde++;
+  toon();
+  svg.querySelector('path').focus();
+});
+
+toon();
+</script>
+</body>
+</html>

@@ -43,8 +43,14 @@ export function stereographic(lon, lat, centre = RD_CENTRE) {
 }
 
 /**
- * Builds a transform that maps projected coordinates into a `size` square,
- * preserving aspect ratio and flipping y for screen space.
+ * Builds a transform that maps projected coordinates into a view box whose
+ * shape follows the region, flipping y for screen space.
+ *
+ * The long axis gets `size`; the short axis gets whatever it needs. Emitting a
+ * square would waste a third of the width on the Netherlands, which is far
+ * taller than it is wide — and that waste is not free. A square view box turns
+ * a full-screen map into a small one with empty water either side, which is
+ * precisely the failure this product is meant to beat.
  *
  * Uniform scale on both axes, deliberately: stretching a country to fill a box
  * is the same lie as a bad projection, just more obvious.
@@ -64,19 +70,16 @@ export function fitToViewBox(projectedPoints, size = 1000, padding = 10) {
 
   const spanX = maxX - minX;
   const spanY = maxY - minY;
-  const usable = size - padding * 2;
-  const scale = Math.min(usable / spanX, usable / spanY);
-
-  // Centre whichever axis has room left over.
-  const offsetX = padding + (usable - spanX * scale) / 2;
-  const offsetY = padding + (usable - spanY * scale) / 2;
+  const scale = (size - padding * 2) / Math.max(spanX, spanY);
 
   return {
     scale,
     bounds: { minX, minY, maxX, maxY },
+    width: spanX * scale + padding * 2,
+    height: spanY * scale + padding * 2,
     /** Projected coordinate to view-box coordinate. y is flipped: north is up. */
     toViewBox([x, y]) {
-      return [(x - minX) * scale + offsetX, (maxY - y) * scale + offsetY];
+      return [(x - minX) * scale + padding, (maxY - y) * scale + padding];
     },
   };
 }

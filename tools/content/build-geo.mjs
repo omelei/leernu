@@ -95,6 +95,32 @@ function centroidOfLargestRing(rings) {
   ];
 }
 
+/**
+ * Bounding box of a shape, in view-box units.
+ *
+ * The renderer needs it to answer one question: is this shape too small to hit?
+ * Vlieland is about a thousandth of the map. Without a bounding box the only way
+ * to find out is to render and measure, and by then the child has already missed.
+ */
+function boundingBox(rings) {
+  let minX = Infinity;
+  let minY = Infinity;
+  let maxX = -Infinity;
+  let maxY = -Infinity;
+
+  for (const ring of rings) {
+    for (const [x, y] of ring) {
+      if (x < minX) minX = x;
+      if (x > maxX) maxX = x;
+      if (y < minY) minY = y;
+      if (y > maxY) maxY = y;
+    }
+  }
+
+  const round = (n) => Number(n.toFixed(1));
+  return [round(minX), round(minY), round(maxX), round(maxY)];
+}
+
 // ---------------------------------------------------------------------------
 
 let source;
@@ -164,6 +190,7 @@ for (const level of LEVELS) {
       code: feature.code,
       d: toPath(rings),
       punt: punt ? [Number(punt[0].toFixed(1)), Number(punt[1].toFixed(1))] : null,
+      bbox: boundingBox(rings),
     });
   }
 
@@ -171,7 +198,7 @@ for (const level of LEVELS) {
     regioSet: 'nederland',
     onderwerp: 'provincies',
     detailniveau: level.naam,
-    viewBox: [0, 0, SIZE, SIZE],
+    viewBox: [0, 0, Number(projector.width.toFixed(1)), Number(projector.height.toFixed(1))],
     projectie: {
       type: 'oblique-stereographic',
       centrum: RD_CENTRE,
