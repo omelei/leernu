@@ -1,6 +1,9 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { findNearMisses } from '@/game-core';
 import { loadAllItems, loadItemSets } from './loadSets';
+import type { Detailniveau, GeoSet } from './loadGeo';
 
 /**
  * The content gate. This is what `npm run validate:content` runs, and it is in
@@ -8,17 +11,33 @@ import { loadAllItems, loadItemSets } from './loadSets';
  * failure mode is a child looking at a blank map during a lesson, which is the
  * one bug that costs a school's trust outright.
  *
- * There are no sets yet, so most of this passes vacuously today. It is written
- * now rather than with the first set, because a validator added afterwards gets
- * shaped around whatever the content already does, mistakes included.
+ * Geometry is read from disk rather than imported: it lives in public/ and is
+ * fetched at runtime (see loadGeo.ts), so there is nothing for a bundler to
+ * resolve. Reading from the project root is what the contrast test learned to
+ * do, for the same reason.
  */
+
+const NIVEAUS: Detailniveau[] = ['overview', 'region', 'detail'];
+
+function loadGeoFromDisk(onderwerp: string, niveau: Detailniveau): GeoSet {
+  const path = join(process.cwd(), 'public', 'geo', 'nl', `${onderwerp}.${niveau}.json`);
+  return JSON.parse(readFileSync(path, 'utf8')) as GeoSet;
+}
+
+interface Leerdoelen {
+  leerdoelen: { id: string }[];
+}
+
+const leerdoelen = JSON.parse(
+  readFileSync(join(process.cwd(), 'content', 'leerdoelen.json'), 'utf8'),
+) as Leerdoelen;
 
 const sets = loadItemSets();
 const items = loadAllItems();
 
 describe('content sets', () => {
-  it('loads without throwing', () => {
-    expect(Array.isArray(sets)).toBe(true);
+  it('has at least one set', () => {
+    expect(sets.length).toBeGreaterThan(0);
   });
 
   it('has a unique id for every item, across all sets', () => {
@@ -46,10 +65,18 @@ describe('content sets', () => {
     expect(broken).toEqual([]);
   });
 
-  it('tags every item with at least one learning goal', () => {
-    const untagged = items.filter((item) => item.leerdoelen.length === 0).map((item) => item.id);
+  it('tags every item with a learning goal that exists', () => {
+    const known = new Set(leerdoelen.leerdoelen.map((goal) => goal.id));
+    const problems: string[] = [];
 
-    expect(untagged).toEqual([]);
+    for (const item of items) {
+      if (item.leerdoelen.length === 0) problems.push(`${item.id}: no learning goal`);
+      for (const goal of item.leerdoelen) {
+        if (!known.has(goal)) problems.push(`${item.id}: unknown learning goal ${goal}`);
+      }
+    }
+
+    expect(problems).toEqual([]);
   });
 
   it('keeps pre-projected points inside the 0-1000 view box', () => {
@@ -62,6 +89,58 @@ describe('content sets', () => {
       .map((item) => item.id);
 
     expect(outside).toEqual([]);
+  });
+});
+
+describe('geometry references', () => {
+  // The promise from ARCHITECTURE section 8, made into a test: an item that
+  // points at a shape which does not exist is a hole in a map, and a hole in a
+  // map is only discovered by the child looking at it.
+  it.each(NIVEAUS)('resolves every geometrieRef at detail level %s', (niveau) => {
+    const geo = loadGeoFromDisk('provincies', niveau);
+    const shapes = new Set(geo.vormen.map((vorm) => vorm.id));
+
+    const dangling = items
+      .filter((item) => item.geometrieRef !== undefined)
+      .filter((item) => !shapes.has(item.geometrieRef as string))
+      .map((item) => `${item.id} -> ${item.geometrieRef ?? ''}`);
+
+    expect(dangling).toEqual([]);
+  });
+
+  // The other direction. A shape nobody can be asked about is dead weight in a
+  // file every device downloads.
+  it.each(NIVEAUS)('has an item for every shape at detail level %s', (niveau) => {
+    const geo = loadGeoFromDisk('provincies', niveau);
+    const refs = new Set(items.map((item) => item.geometrieRef).filter(Boolean));
+
+    const orphans = geo.vormen.filter((vorm) => !refs.has(vorm.id)).map((vorm) => vorm.id);
+
+    expect(orphans).toEqual([]);
+  });
+
+  it.each(NIVEAUS)('gives every shape a label point inside the view box at %s', (niveau) => {
+    const geo = loadGeoFromDisk('provincies', niveau);
+
+    const problems = geo.vormen
+      .filter((vorm) => {
+        if (!vorm.punt) return true;
+        const [x, y] = vorm.punt;
+        return x < 0 || x > 1000 || y < 0 || y > 1000;
+      })
+      .map((vorm) => vorm.id);
+
+    expect(problems).toEqual([]);
+  });
+
+  it('records the source and licence of every geometry file', () => {
+    for (const niveau of NIVEAUS) {
+      const geo = loadGeoFromDisk('provincies', niveau);
+      // Spec section 12: no map material whose licence is not recorded.
+      expect(geo.bron.naam).toBeTruthy();
+      expect(geo.bron.licentie).toBeTruthy();
+      expect(geo.bron.opgehaald).toBeTruthy();
+    }
   });
 });
 

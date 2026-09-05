@@ -4,8 +4,21 @@ Elke bron met licentie, URL en raadpleegdatum. Spec §3.2 en §12: geen
 kaartmateriaal waarvan de licentie niet is vastgelegd.
 
 Bijwerken doe je met `node tools/content/fetch-source.mjs`, daarna
-`node tools/content/build-geo.mjs`. De ruwe bron staat in `content/geo/_source/`
-en is **niet** ingecheckt; de bewerkte uitvoer in `content/geo/nl/` wél.
+`node tools/content/build-geo.mjs`. Allebei draaien zonder npm (ADR-018).
+
+De ruwe bron staat in `content/geo/_source/` en is **niet** ingecheckt. De
+bewerkte uitvoer staat in **`public/geo/nl/`** en wél — daar staat hij omdat de
+app hem tijdens het gebruik ophaalt in plaats van meebundelt: geodata is een orde
+van grootte groter dan de rest van het product, en spec §8 begrenst de app-shell
+op 300 kB.
+
+Kijken naar het resultaat kan zonder npm:
+
+```
+python -m http.server 8942
+```
+
+Daarna `http://localhost:8942/tools/content/preview.html`.
 
 ---
 

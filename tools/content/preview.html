@@ -30,10 +30,24 @@ const LEVELS = ['overview', 'region', 'detail'];
 const SIZES = { overview: 320, region: 320, detail: 320 };
 const grid = document.getElementById('grid');
 
+// Two paths on purpose: under Vite the public/ folder is the root, and under a
+// plain `python -m http.server` from the project root it is not. This page has
+// to work in both, because it is the only way to look at the output on a
+// machine that cannot run Vite.
+// /public first: the common case is `python -m http.server` from the project
+// root, which is the one that works on a machine without npm. Under Vite the
+// public folder is the root, so /geo is the fallback there.
+async function loadLevel(level) {
+  for (const base of ['/public/geo/nl', '/geo/nl']) {
+    const res = await fetch(`${base}/provincies.${level}.json`);
+    if (res.ok) return res.json();
+  }
+  return null;
+}
+
 for (const level of LEVELS) {
-  const res = await fetch(`/content/geo/nl/provincies.${level}.json`);
-  if (!res.ok) { grid.insertAdjacentHTML('beforeend', `<p>Kon ${level} niet laden (${res.status})</p>`); continue; }
-  const data = await res.json();
+  const data = await loadLevel(level);
+  if (!data) { grid.insertAdjacentHTML('beforeend', `<p>Kon ${level} niet laden</p>`); continue; }
 
   const size = SIZES[level];
   const paths = data.vormen.map(v => `<path d="${v.d}"><title>${v.bronnaam}</title></path>`).join('');

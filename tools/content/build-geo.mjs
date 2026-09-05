@@ -32,7 +32,7 @@ const LEVELS = [
 
 const SOURCE = join(process.cwd(), 'content', 'geo', '_source', 'nl-provincies.json');
 const LABELS = join(process.cwd(), 'content', 'geo', '_source', 'nl-provincies-labelpunten.json');
-const OUT_DIR = join(process.cwd(), 'content', 'geo', 'nl');
+const OUT_DIR = join(process.cwd(), 'public', 'geo', 'nl');
 
 function slug(naam) {
   return naam

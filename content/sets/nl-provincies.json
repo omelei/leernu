@@ -1,0 +1,142 @@
+{
+  "id": "nl-provincies",
+  "naam": "De provincies van Nederland",
+  "regioSet": "nederland",
+  "contentVersie": "2026-09-05",
+  "_geometrie": "geometrieRef verwijst naar een vorm-id in content/geo/nl/provincies.*.json. Die bestanden komen uit tools/content/build-geo.mjs; bron en licentie staan in docs/DATA_SOURCES.md.",
+  "_weetjes": "De weetjes zijn kort gehouden en op AVI-M6-niveau geschreven. Ze moeten nog een feitelijke redactieronde krijgen voordat er kinderen naar kijken.",
+  "items": [
+    {
+      "id": "nl-prov-groningen",
+      "type": "provincie",
+      "naam": "Groningen",
+      "aliassen": [],
+      "regioSet": "nederland",
+      "geometrieRef": "nl-prov-groningen",
+      "niveau": 1,
+      "leerdoelen": ["ak-nl-provincies-aanwijzen", "ak-nl-provincies-benoemen"],
+      "weetje": "Groningen ligt het verst naar het noorden. Uit de bodem werd hier jarenlang aardgas gehaald."
+    },
+    {
+      "id": "nl-prov-fryslan",
+      "type": "provincie",
+      "naam": "Friesland",
+      "aliassen": ["Fryslân"],
+      "regioSet": "nederland",
+      "geometrieRef": "nl-prov-fryslan",
+      "niveau": 1,
+      "leerdoelen": ["ak-nl-provincies-aanwijzen", "ak-nl-provincies-benoemen"],
+      "weetje": "Friesland heet in het Fries Fryslân. Fries is naast Nederlands een officiële taal."
+    },
+    {
+      "id": "nl-prov-drenthe",
+      "type": "provincie",
+      "naam": "Drenthe",
+      "aliassen": [],
+      "regioSet": "nederland",
+      "geometrieRef": "nl-prov-drenthe",
+      "niveau": 1,
+      "leerdoelen": ["ak-nl-provincies-aanwijzen", "ak-nl-provincies-benoemen"],
+      "weetje": "In Drenthe liggen de hunebedden. Die zijn meer dan vijfduizend jaar oud."
+    },
+    {
+      "id": "nl-prov-overijssel",
+      "type": "provincie",
+      "naam": "Overijssel",
+      "aliassen": [],
+      "regioSet": "nederland",
+      "geometrieRef": "nl-prov-overijssel",
+      "niveau": 1,
+      "leerdoelen": ["ak-nl-provincies-aanwijzen", "ak-nl-provincies-benoemen"],
+      "weetje": "Door Overijssel stroomt de IJssel. De provincie is naar die rivier genoemd."
+    },
+    {
+      "id": "nl-prov-flevoland",
+      "type": "provincie",
+      "naam": "Flevoland",
+      "aliassen": [],
+      "regioSet": "nederland",
+      "geometrieRef": "nl-prov-flevoland",
+      "niveau": 1,
+      "leerdoelen": ["ak-nl-provincies-aanwijzen", "ak-nl-provincies-benoemen"],
+      "weetje": "Flevoland is de jongste provincie. Het land lag eerst onder water."
+    },
+    {
+      "id": "nl-prov-gelderland",
+      "type": "provincie",
+      "naam": "Gelderland",
+      "aliassen": [],
+      "regioSet": "nederland",
+      "geometrieRef": "nl-prov-gelderland",
+      "niveau": 1,
+      "leerdoelen": ["ak-nl-provincies-aanwijzen", "ak-nl-provincies-benoemen"],
+      "weetje": "Kijk je alleen naar het land, dan is Gelderland de grootste provincie."
+    },
+    {
+      "id": "nl-prov-utrecht",
+      "type": "provincie",
+      "naam": "Utrecht",
+      "aliassen": [],
+      "regioSet": "nederland",
+      "geometrieRef": "nl-prov-utrecht",
+      "niveau": 1,
+      "leerdoelen": ["ak-nl-provincies-aanwijzen", "ak-nl-provincies-benoemen"],
+      "weetje": "De provincie Utrecht en de stad Utrecht hebben dezelfde naam. In de stad staat de Domtoren."
+    },
+    {
+      "id": "nl-prov-noord-holland",
+      "type": "provincie",
+      "naam": "Noord-Holland",
+      "aliassen": [],
+      "regioSet": "nederland",
+      "geometrieRef": "nl-prov-noord-holland",
+      "niveau": 1,
+      "leerdoelen": ["ak-nl-provincies-aanwijzen", "ak-nl-provincies-benoemen"],
+      "weetje": "Amsterdam ligt in Noord-Holland. Toch is Haarlem de hoofdstad van deze provincie."
+    },
+    {
+      "id": "nl-prov-zuid-holland",
+      "type": "provincie",
+      "naam": "Zuid-Holland",
+      "aliassen": [],
+      "regioSet": "nederland",
+      "geometrieRef": "nl-prov-zuid-holland",
+      "niveau": 1,
+      "leerdoelen": ["ak-nl-provincies-aanwijzen", "ak-nl-provincies-benoemen"],
+      "weetje": "In Zuid-Holland wonen de meeste mensen van alle provincies."
+    },
+    {
+      "id": "nl-prov-zeeland",
+      "type": "provincie",
+      "naam": "Zeeland",
+      "aliassen": [],
+      "regioSet": "nederland",
+      "geometrieRef": "nl-prov-zeeland",
+      "niveau": 1,
+      "leerdoelen": ["ak-nl-provincies-aanwijzen", "ak-nl-provincies-benoemen"],
+      "weetje": "Zeeland bestaat uit eilanden en schiereilanden. Dijken en dammen houden het water tegen."
+    },
+    {
+      "id": "nl-prov-noord-brabant",
+      "type": "provincie",
+      "naam": "Noord-Brabant",
+      "aliassen": ["Brabant"],
+      "regioSet": "nederland",
+      "geometrieRef": "nl-prov-noord-brabant",
+      "niveau": 1,
+      "leerdoelen": ["ak-nl-provincies-aanwijzen", "ak-nl-provincies-benoemen"],
+      "weetje": "Noord-Brabant grenst in het zuiden aan België."
+    },
+    {
+      "id": "nl-prov-limburg",
+      "type": "provincie",
+      "naam": "Limburg",
+      "aliassen": [],
+      "regioSet": "nederland",
+      "geometrieRef": "nl-prov-limburg",
+      "niveau": 1,
+      "leerdoelen": ["ak-nl-provincies-aanwijzen", "ak-nl-provincies-benoemen"],
+      "weetje": "In Limburg ligt de Vaalserberg. Dat is het hoogste punt van Nederland in Europa."
+    }
+  ]
+}
