@@ -18,13 +18,13 @@ renaming or white-labelling stays a one-file change.
 A child types a name — kept on the device, never sent anywhere — and then
 practises one of five sets:
 
-| Set                               | Items | What it teaches                       |
-| --------------------------------- | ----- | ------------------------------------- |
-| **Provincies van Nederland**      | 12    | the twelve provinces as shapes        |
-| **Hoofdsteden van de provincies** | 12    | each capital as a point               |
-| **De Waddeneilanden**             | 5     | five islands, west to east            |
-| **Zeeën en meren**                | 6     | the large bodies of water             |
-| **Steden van Nederland**          | 80    | cities, and the province each is in   |
+| Set                               | Items | What it teaches                     |
+| --------------------------------- | ----- | ----------------------------------- |
+| **Provincies van Nederland**      | 12    | the twelve provinces as shapes      |
+| **Hoofdsteden van de provincies** | 12    | each capital as a point             |
+| **De Waddeneilanden**             | 5     | five islands, west to east          |
+| **Zeeën en meren**                | 6     | the large bodies of water           |
+| **Steden van Nederland**          | 80    | cities, and the province each is in |
 
 In five ways. **Wijs aan** points at the map; **typ de naam** names what is
 highlighted; **ontdekken** asks nothing at all and exists so a child's first
