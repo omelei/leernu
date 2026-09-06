@@ -22,17 +22,25 @@ export const COINS_PER_CORRECT = 1;
 export const COINS_PERFECT_ROUND = 5;
 
 /**
- * Each level costs 100 XP more than the last: 100, then 200, then 300.
+ * The first level costs 150 XP; every one after that costs 100 more than the
+ * one before. So 150, 250, 350, and the totals run 150, 400, 750.
+ *
+ * The first step used to be 100, which a good round passed halfway through — a
+ * level you reach while still working is a level that arrives for free. 150 is
+ * a whole round for a child answering well and early in the second for a child
+ * still finding their feet, which is where the first one belongs.
  *
  * A curve rather than a constant, so early levels arrive fast and later ones
- * mean something — and simple enough that a child can be told the rule and work
+ * mean something, and simple enough that a child can be told the rule and work
  * out the next one themselves.
  */
+export const XP_FIRST_LEVEL = 150;
 export const XP_STEP = 100;
 
 export function xpForLevel(level: number): number {
   if (level <= 1) return 0;
-  return (XP_STEP * (level - 1) * level) / 2;
+  const climbed = level - 1;
+  return XP_FIRST_LEVEL * climbed + (XP_STEP * (climbed - 1) * climbed) / 2;
 }
 
 export function levelFor(xp: number): number {
@@ -83,7 +91,11 @@ export type BadgeId =
   | 'hoofdsteden-foutloos'
   | 'eilanden-foutloos'
   | 'week-op-rij'
-  | 'set-vast';
+  | 'set-vast'
+  | 'wateren-foutloos'
+  | 'steden-foutloos'
+  | 'bliksem-tien'
+  | 'overleven-vijftien';
 
 /** What the badge rules get to look at. Nothing else is in scope. */
 export interface RewardSnapshot {
@@ -97,6 +109,10 @@ export interface RewardSnapshot {
   readonly mastered: number;
   readonly setSize: number;
   readonly roundsFinished: number;
+  /** Which mode was played. A timed round and a survival round earn their own. */
+  readonly mode: string;
+  /** Correct answers in the round. The endless modes have no "complete" to hit. */
+  readonly correct: number;
 }
 
 export interface BadgeDefinition {
@@ -128,6 +144,30 @@ export const BADGES: readonly BadgeDefinition[] = [
   {
     id: 'eilanden-foutloos',
     criterion: (s) => s.setId === 'nl-waddeneilanden' && s.perfectRound && s.completeRound,
+  },
+  {
+    id: 'wateren-foutloos',
+    criterion: (s) => s.setId === 'nl-wateren' && s.perfectRound && s.completeRound,
+  },
+  {
+    // Eighty cities are never one round, so "complete" cannot mean the set here.
+    // A flawless round of fifteen out of eighty is the hardest thing the app
+    // asks, and it should be worth something.
+    id: 'steden-foutloos',
+    criterion: (s) => s.setId === 'nl-steden' && s.perfectRound && s.completeRound,
+  },
+  {
+    // Ten right inside a minute. Reachable on any set, so a child who loves the
+    // islands is not shut out of it by having picked a small set.
+    id: 'bliksem-tien',
+    criterion: (s) => s.mode === 'bliksemronde' && s.correct >= 10,
+  },
+  {
+    // Fifteen right on three lives. Not "never wrong" — two mistakes are
+    // allowed, because a badge you lose to one slip teaches caution, not
+    // knowledge.
+    id: 'overleven-vijftien',
+    criterion: (s) => s.mode === 'overleven' && s.correct >= 15,
   },
   {
     id: 'week-op-rij',

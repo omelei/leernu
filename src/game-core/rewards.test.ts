@@ -20,7 +20,30 @@ const snapshot = (over: Partial<RewardSnapshot> = {}): RewardSnapshot => ({
   mastered: 0,
   setSize: 12,
   roundsFinished: 1,
+  mode: 'wijs-aan',
+  correct: 0,
   ...over,
+});
+
+describe('the badges the challenge modes earn', () => {
+  it('gives bliksem-tien for ten right inside the minute, in that mode only', () => {
+    expect(newBadges(snapshot({ mode: 'bliksemronde', correct: 10 }), new Set())).toContain(
+      'bliksem-tien',
+    );
+    expect(newBadges(snapshot({ mode: 'bliksemronde', correct: 9 }), new Set())).not.toContain(
+      'bliksem-tien',
+    );
+    // The same ten right in an untimed round is not the same achievement.
+    expect(newBadges(snapshot({ mode: 'wijs-aan', correct: 40 }), new Set())).not.toContain(
+      'bliksem-tien',
+    );
+  });
+
+  it('allows two mistakes on the way to overleven-vijftien', () => {
+    // Fifteen right on three lives: not a perfect round, and deliberately not.
+    const survived = snapshot({ mode: 'overleven', correct: 15, perfectRound: false });
+    expect(newBadges(survived, new Set())).toContain('overleven-vijftien');
+  });
 });
 
 describe('levels', () => {

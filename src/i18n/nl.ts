@@ -96,7 +96,7 @@ export const nl = {
   'result.streakGrewOne': 'Dat is je eerste dag.',
   'result.streakSaved': 'Je vriezer heeft je streak gered.',
   'result.freezeEarned': 'Je hebt er een vriezer bij verdiend.',
-  'result.earned': 'Je verdiende {xp} punten en {munten} munten.',
+  'result.earned': 'Je verdiende {xp} punten.',
   'result.newBadge': 'Nieuwe badge: {naam}',
 
   // Badges. Elk criterium staat erbij, want een badge die je niet kunt
@@ -107,6 +107,10 @@ export const nl = {
   'badge.eilanden-foutloos': 'Alle Waddeneilanden foutloos',
   'badge.week-op-rij': 'Zeven dagen op rij',
   'badge.set-vast': 'Alles vast',
+  'badge.wateren-foutloos': 'Alle wateren foutloos',
+  'badge.steden-foutloos': 'Alle steden foutloos',
+  'badge.bliksem-tien': 'Tien in een minuut',
+  'badge.overleven-vijftien': 'Vijftien levens lang',
 
   'home.level': 'Level {level}',
 

@@ -443,10 +443,22 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
           mastered: countMastered(states, ids),
           setSize: ids.length,
           roundsFinished: 1,
+          mode: practiceMode,
+          correct: correctCount,
         },
       }).then(setReward);
     });
-  }, [phase, correctCount, answeredCount, comboAnswers, items, questions.length, setId, states]);
+  }, [
+    phase,
+    correctCount,
+    answeredCount,
+    comboAnswers,
+    items,
+    questions.length,
+    setId,
+    states,
+    practiceMode,
+  ]);
 
   const next = useCallback(() => {
     if (phase !== 'revealed') return;

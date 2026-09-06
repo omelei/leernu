@@ -189,19 +189,30 @@ const BADGE_NAME: Record<BadgeId, TranslationKey> = {
   'eilanden-foutloos': 'badge.eilanden-foutloos',
   'week-op-rij': 'badge.week-op-rij',
   'set-vast': 'badge.set-vast',
+  'wateren-foutloos': 'badge.wateren-foutloos',
+  'steden-foutloos': 'badge.steden-foutloos',
+  'bliksem-tien': 'badge.bliksem-tien',
+  'overleven-vijftien': 'badge.overleven-vijftien',
 };
 
+/**
+ * Coins are earned and stored on every round, and deliberately not shown.
+ *
+ * There is nothing to spend them on yet. A currency with no shop is a promise
+ * the product does not keep, and with children that is the edge where dark
+ * patterns start — a number that only goes up, implying something that never
+ * arrives. They keep accruing, so the day a shop exists nobody has lost
+ * anything they earned.
+ */
 function RewardLine({ state }: { readonly state: RoundState }) {
   const reward = state.reward;
-  if (reward === null || (reward.xp === 0 && reward.coins === 0 && reward.badges.length === 0)) {
+  if (reward === null || (reward.xp === 0 && reward.badges.length === 0)) {
     return null;
   }
 
   return (
     <>
-      <p className="mt-1 text-ink-2">
-        {t('result.earned', { xp: reward.xp, munten: reward.coins })}
-      </p>
+      <p className="mt-1 text-ink-2">{t('result.earned', { xp: reward.xp })}</p>
       {reward.badges.map((badge) => (
         <p key={badge} className="tk-display mt-1 font-semibold text-topo-text">
           {t('result.newBadge', { naam: t(BADGE_NAME[badge]) })}
