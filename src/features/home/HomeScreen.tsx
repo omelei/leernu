@@ -41,6 +41,7 @@ const SET_NAME_KEY: Record<SetId, TranslationKey> = {
   'nl-hoofdsteden': 'set.nl-hoofdsteden',
   'nl-waddeneilanden': 'set.nl-waddeneilanden',
   'nl-wateren': 'set.nl-wateren',
+  'nl-steden': 'set.nl-steden',
 };
 
 const MODE_NAME_KEY: Record<PracticeMode, TranslationKey> = {

@@ -11,7 +11,7 @@ import {
   type ItemState,
   type StreakChange,
 } from '@/game-core';
-import { loadGeoSet, loadPointSet, type GeoSet } from '@/content/loadGeo';
+import { loadGeoSet, loadPointSet, type Detailniveau, type GeoSet } from '@/content/loadGeo';
 import { loadAllItems, loadItemSets } from '@/content/loadSets';
 import { finishSession, loadItemStates, saveAnswer, startSession } from '@/store/progress';
 import { recordRoundFinished } from '@/store/streakStore';
@@ -21,21 +21,35 @@ import type { AnswerLayer } from './MapCanvas';
 /**
  * One round of "wijs aan".
  *
- * A round covers the **whole set** — all twelve provinces, all twelve capitals
- * — rather than a sample. For a set this size that is the honest thing to do:
- * a child asked ten of twelve cannot tell which two they were let off, and
- * "ik ken ze allemaal" is the thing they are actually working towards.
+ * A round covers the **whole set** where the set is small enough to be covered:
+ * all twelve provinces, all twelve capitals, all five islands. For a set that
+ * size it is the honest thing to do — a child asked ten of twelve cannot tell
+ * which two they were let off, and "ik ken ze allemaal" is what they are
+ * working towards.
  *
- * The order still comes from the Leitner scheduler, so the items a child keeps
- * missing come round first. Everything is written to the device as it happens: a
- * child who closes the tab halfway keeps what they answered.
+ * Eighty cities cannot be one round. Twenty minutes without a stopping point is
+ * not practice, it is endurance, and the child who quits halfway has learned
+ * that the exercise is unfinishable. So a large set is sampled to
+ * MAX_ROUND questions and met again next round, which is what spaced repetition
+ * is for in the first place.
+ *
+ * The order comes from the Leitner scheduler either way, so the items a child
+ * keeps missing come round first. Everything is written to the device as it
+ * happens: a child who closes the tab halfway keeps what they answered.
  */
+
+/**
+ * Long enough to be worth doing, short enough to finish. Matched to the twelve
+ * provinces, which is the round length the design was drawn around.
+ */
+const MAX_ROUND = 15;
 
 export type SetId =
   | 'nl-provincies'
   | 'nl-hoofdsteden'
   | 'nl-waddeneilanden'
-  | 'nl-wateren';
+  | 'nl-wateren'
+  | 'nl-steden';
 
 /**
  * How a child answers. Pointing tests where something is; typing tests whether
@@ -45,19 +59,66 @@ export type PracticeMode = 'wijs-aan' | 'hoe-heet-dit';
 
 export const PRACTICE_MODES: readonly PracticeMode[] = ['wijs-aan', 'hoe-heet-dit'];
 
-export const SET_IDS: readonly SetId[] = ['nl-provincies', 'nl-hoofdsteden', 'nl-waddeneilanden'];
+export const SET_IDS: readonly SetId[] = [
+  'nl-provincies',
+  'nl-hoofdsteden',
+  'nl-waddeneilanden',
+  'nl-wateren',
+  'nl-steden',
+];
+
+/**
+ * What the child is being asked to find. It does not follow from `answers`:
+ * capitals and seas are both points, but "wijs de stad aan" and "wijs het water
+ * aan" are different sentences. Naming it per set beats inferring it, which is
+ * how the water case ended up as a special case in the screen.
+ */
+export type Noemer = 'gebied' | 'stad' | 'eiland' | 'water';
+
+/**
+ * Written out per member rather than as `{ noemer } & (…)`, so narrowing on
+ * `answers` needs nothing clever from the compiler.
+ */
+export type SetShape =
+  | { readonly answers: 'background'; readonly noemer: Noemer }
+  | { readonly answers: 'points'; readonly bestand: string; readonly noemer: Noemer }
+  | {
+      readonly answers: 'shapes';
+      readonly bestand: string;
+      readonly niveau: Detailniveau;
+      readonly noemer: Noemer;
+    };
 
 /**
  * Names live in i18n; only the map behaviour belongs here. `answers` says what
  * the child is choosing between — the country itself, a layer of shapes on top
- * of it, or a layer of points.
+ * of it, or a layer of points — and carries the file that layer comes from, so
+ * adding a set is one entry here rather than a branch at the load site.
  */
-export const SETS: Record<SetId, { readonly answers: 'background' | 'shapes' | 'points' }> = {
-  'nl-provincies': { answers: 'background' },
-  'nl-hoofdsteden': { answers: 'points' },
-  'nl-waddeneilanden': { answers: 'shapes' },
-  'nl-wateren': { answers: 'points' },
+export const SETS: Record<SetId, SetShape> = {
+  'nl-provincies': { answers: 'background', noemer: 'gebied' },
+  'nl-hoofdsteden': { answers: 'points', bestand: 'hoofdsteden', noemer: 'stad' },
+  'nl-waddeneilanden': {
+    answers: 'shapes',
+    bestand: 'waddeneilanden',
+    niveau: 'detail',
+    noemer: 'eiland',
+  },
+  'nl-wateren': { answers: 'points', bestand: 'wateren', noemer: 'water' },
+  'nl-steden': { answers: 'points', bestand: 'steden', noemer: 'stad' },
 };
+
+/** One switch, so a new set cannot forget to load its own layer. */
+async function loadAnswerLayer(shape: SetShape): Promise<AnswerLayer> {
+  switch (shape.answers) {
+    case 'background':
+      return { kind: 'background' };
+    case 'points':
+      return { kind: 'points', set: await loadPointSet(shape.bestand) };
+    case 'shapes':
+      return { kind: 'shapes', set: await loadGeoSet(shape.bestand, shape.niveau) };
+  }
+}
 
 export interface RoundQuestion {
   readonly item: Item;
@@ -125,7 +186,7 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
 
   const sessionId = useRef<string | null>(null);
   const askedAt = useRef<number>(0);
-  const layer = SETS[setId].answers;
+  const shape = SETS[setId];
 
   useEffect(() => {
     let cancelled = false;
@@ -137,15 +198,7 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
 
         const [loadedGeo, loadedAnswers, loadedStates] = await Promise.all([
           loadGeoSet('provincies', 'region'),
-          layer === 'points'
-            ? loadPointSet(setId === 'nl-wateren' ? 'wateren' : 'hoofdsteden').then(
-                (set) => ({ kind: 'points', set }) as AnswerLayer,
-              )
-            : layer === 'shapes'
-              ? loadGeoSet('waddeneilanden', 'detail').then(
-                  (set) => ({ kind: 'shapes', set }) as AnswerLayer,
-                )
-              : Promise.resolve({ kind: 'background' } as AnswerLayer),
+          loadAnswerLayer(shape),
           loadItemStates(),
         ]);
         if (cancelled) return;
@@ -154,7 +207,7 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
         const picked = composeRound({
           items: all,
           states: loadedStates,
-          size: all.length,
+          size: Math.min(all.length, MAX_ROUND),
           now: new Date(),
         });
 
@@ -186,7 +239,7 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
     return () => {
       cancelled = true;
     };
-  }, [setId, layer]);
+  }, [setId, shape]);
 
   const namesById = useMemo(() => {
     const map = new Map<string, string>();

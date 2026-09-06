@@ -31,6 +31,7 @@ export const nl = {
   'set.nl-hoofdsteden': 'Hoofdsteden van de provincies',
   'set.nl-waddeneilanden': 'De Waddeneilanden',
   'set.nl-wateren': 'Zeeën en meren',
+  'set.nl-steden': 'Steden van Nederland',
 
   // Modes
   'mode.wijs-aan': 'Wijs aan',

@@ -128,3 +128,54 @@ export function detailFor(renderedPx: number): 'overview' | 'region' | 'detail' 
   if (renderedPx < 900) return 'region';
   return 'detail';
 }
+
+/**
+ * Which answer points may be drawn at once, so every one of them is reachable.
+ *
+ * Eighty cities on a map of the Netherlands is not a map, it is a smear.
+ * Beverwijk and Heemskerk land six pixels apart on a phone; measured over the
+ * whole set, 77 of the 80 have a neighbour closer than a fingertip, and a round
+ * of fifteen drawn at random contains an unhittable pair 99.9% of the time. A
+ * child who taps the right place and is told they are wrong has been failed by
+ * the interface, not by their knowledge.
+ *
+ * So the rule that already governs shapes governs points too: nothing that can
+ * be answered is drawn closer to another answer than {@link MIN_TOUCH_PX}. The
+ * target is always kept — it must be answerable — and the rest are taken in
+ * input order, which for the cities is descending population. That gives the
+ * pleasant side effect that the neighbour who survives is the better-known one:
+ * a child choosing near Rotterdam is offered Rotterdam, not Schiedam.
+ *
+ * For the twelve capitals and the six bodies of water this changes nothing —
+ * they already clear the threshold — which is the point: one rule, no set-specific
+ * branch, and the sparse sets keep showing every option.
+ *
+ * The result comes back in **input order**, not target-first. Which point is the
+ * answer must not be visible in the order they are drawn: a renderer that puts
+ * the target first hands it to the first child who presses Tab.
+ */
+export function reachablePoints<
+  T extends { readonly id: string; readonly punt: readonly [number, number] },
+>(
+  points: readonly T[],
+  fit: ViewFit,
+  targetId: string | null,
+  minPx: number = MIN_TOUCH_PX,
+): T[] {
+  const minUnits = minPx * fit.unitsPerPixel;
+  const target = points.find((point) => point.id === targetId);
+  const rest = points.filter((point) => point.id !== targetId);
+  const kept: T[] = target ? [target] : [];
+
+  for (const point of rest) {
+    const clashes = kept.some((other) => {
+      const dx = point.punt[0] - other.punt[0];
+      const dy = point.punt[1] - other.punt[1];
+      return Math.hypot(dx, dy) < minUnits;
+    });
+    if (!clashes) kept.push(point);
+  }
+
+  const order = new Map(points.map((point, index) => [point.id, index]));
+  return kept.sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
+}

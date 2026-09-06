@@ -5,6 +5,7 @@ import {
   fitView,
   helpTargetFor,
   keyboardOrder,
+  reachablePoints,
   MIN_TOUCH_PX,
   needsHelpTarget,
   smallestSidePx,
@@ -142,5 +143,44 @@ describe('detailFor', () => {
     expect(detailFor(360)).toBe('overview');
     expect(detailFor(640)).toBe('region');
     expect(detailFor(1080)).toBe('detail');
+  });
+});
+
+describe('reachablePoints', () => {
+  const fit = fitView(1000, 640);
+  const punt = (id: string, x: number, y: number) => ({ id, punt: [x, y] as const });
+
+  it('leaves a sparse set alone', () => {
+    // 200 units is 128 px at this fit: comfortably apart.
+    const points = [punt('a', 0, 0), punt('b', 200, 0), punt('c', 400, 0)];
+
+    expect(reachablePoints(points, fit, 'a').map((p) => p.id)).toEqual(['a', 'b', 'c']);
+  });
+
+  it('drops a point that would sit under its neighbour', () => {
+    const points = [punt('a', 0, 0), punt('b', 10, 0), punt('c', 400, 0)];
+
+    expect(reachablePoints(points, fit, 'a').map((p) => p.id)).toEqual(['a', 'c']);
+  });
+
+  /** The child must be able to answer, so the answer is never the one dropped. */
+  it('keeps the target even when it is the crowded one', () => {
+    const points = [punt('a', 0, 0), punt('b', 10, 0)];
+
+    expect(reachablePoints(points, fit, 'b').map((p) => p.id)).toEqual(['b']);
+  });
+
+  /** Target-first selection must not become target-first rendering. */
+  it('returns points in input order, so tab order does not reveal the answer', () => {
+    const points = [punt('a', 0, 0), punt('b', 400, 0), punt('c', 800, 0)];
+
+    expect(reachablePoints(points, fit, 'c').map((p) => p.id)).toEqual(['a', 'b', 'c']);
+  });
+
+  it('measures in pixels, so a smaller map shows fewer points', () => {
+    const points = [punt('a', 0, 0), punt('b', 80, 0)];
+
+    expect(reachablePoints(points, fitView(1000, 1200), 'a')).toHaveLength(2);
+    expect(reachablePoints(points, fitView(1000, 400), 'a')).toHaveLength(1);
   });
 });

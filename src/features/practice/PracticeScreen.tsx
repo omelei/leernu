@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
-import { t } from '@/i18n';
+import { t, type TranslationKey } from '@/i18n';
 import { MapCanvas } from './MapCanvas';
 import { ResultScreen } from './ResultScreen';
-import { SETS, useRound, type PracticeMode, type SetId } from './useRound';
+import { SETS, useRound, type Noemer, type PracticeMode, type SetId } from './useRound';
 
 /**
  * The practice screen, following docs/leer.nu oefenkaart.html.
@@ -19,6 +19,25 @@ import { SETS, useRound, type PracticeMode, type SetId } from './useRound';
  * child who writes the name of a different real place is not told they were
  * right, and is not simply told they were wrong either.
  */
+/**
+ * An area, a city, an island and a stretch of water are looked for in different
+ * ways, and a child reads the difference. Complete records, so a new set has to
+ * say which of the four it is instead of quietly borrowing another one's words.
+ */
+const PICK_LABEL: Record<Noemer, TranslationKey> = {
+  gebied: 'practice.kind',
+  stad: 'practice.kindCity',
+  eiland: 'practice.kindIsland',
+  water: 'practice.kindWater',
+};
+
+const TYPE_LABEL: Record<Noemer, TranslationKey> = {
+  gebied: 'practice.kindTypeArea',
+  stad: 'practice.kindTypeCity',
+  eiland: 'practice.kindTypeIsland',
+  water: 'practice.kindTypeWater',
+};
+
 export function PracticeScreen({
   setId,
   practiceMode,
@@ -61,28 +80,10 @@ export function PracticeScreen({
   const naam = state.question.item.naam;
   const revealed = state.phase === 'revealed';
   const typing = practiceMode === 'hoe-heet-dit';
-  const answers = SETS[setId].answers;
+  const { noemer } = SETS[setId];
 
-  // The label names what a child is looking for, which is not the same in every
-  // exercise: an area, a city and an island are found in different ways.
-  const water = setId === 'nl-wateren';
-  const pickLabel = water
-    ? 'practice.kindWater'
-    : answers === 'points'
-      ? 'practice.kindCity'
-      : answers === 'shapes'
-        ? 'practice.kindIsland'
-        : 'practice.kind';
-  const typeLabel = water
-    ? 'practice.kindTypeWater'
-    : answers === 'points'
-      ? 'practice.kindTypeCity'
-      : answers === 'shapes'
-        ? 'practice.kindTypeIsland'
-        : 'practice.kindTypeArea';
-
-  const label = typing ? t('practice.typeQuestion') : t(pickLabel);
-  const vraag = typing ? t(typeLabel) : t('practice.question', { naam });
+  const label = typing ? t('practice.typeQuestion') : t(PICK_LABEL[noemer]);
+  const vraag = typing ? t(TYPE_LABEL[noemer]) : t('practice.question', { naam });
 
   const chosenName = state.chosenId === null ? '' : (state.namesById.get(state.chosenId) ?? '');
   const nearMiss = state.verdict?.kind === 'near-miss';

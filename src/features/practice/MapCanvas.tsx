@@ -1,5 +1,12 @@
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
-import { fitView, helpTargetFor, keyboardOrder, MIN_TOUCH_PX, type ViewFit } from '@/game-core';
+import {
+  fitView,
+  helpTargetFor,
+  keyboardOrder,
+  MIN_TOUCH_PX,
+  reachablePoints,
+  type ViewFit,
+} from '@/game-core';
 import type { GeoSet, PointSet, Punt, Vorm } from '@/content/loadGeo';
 
 /**
@@ -102,7 +109,9 @@ export function MapCanvas({
   const renderedHeight = useRenderedHeight(svgRef);
 
   const [, , viewWidth, viewHeight] = background.viewBox;
-  const fit = fitView(viewHeight, renderedHeight);
+  // Memoised because reachablePoints keys off it: a fresh object every render
+  // would recompute the whole layer on every keystroke.
+  const fit = useMemo(() => fitView(viewHeight, renderedHeight), [viewHeight, renderedHeight]);
 
   const answerShapes = useMemo(() => {
     if (answers.kind === 'background') return keyboardOrder(background.vormen as Vorm[]);
@@ -110,8 +119,15 @@ export function MapCanvas({
     return [] as Vorm[];
   }, [answers, background]);
 
-  const answerPoints = answers.kind === 'points' ? answers.set.punten : [];
   const clickable = interaction === 'pick' && !revealed;
+
+  // Every point that is drawn must be hittable, including the ones the child
+  // does not want. See reachablePoints: with eighty cities in the set, drawing
+  // them all would put answers six pixels apart.
+  const answerPoints = useMemo(
+    () => (answers.kind === 'points' ? reachablePoints(answers.set.punten, fit, targetId) : []),
+    [answers, fit, targetId],
+  );
 
   function positionOf(id: string): readonly [number, number] | null {
     const shape = answerShapes.find((candidate) => candidate.id === id);

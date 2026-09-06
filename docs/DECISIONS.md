@@ -219,6 +219,59 @@ record is the reason it was not there.
 
 ---
 
+## ADR-022 — A set may be larger than a round, and larger than the map
+
+**Status:** accepted 2026-09-06.
+
+### Context
+
+The first four sets have between five and twelve items. Everything in the app
+quietly assumed that: a round asks the whole set, and the map draws every answer
+at once. Both assumptions were reasonable and both are wrong for the eighty
+cities.
+
+Measured, on a map 640 px tall:
+
+- 77 of the 80 cities have another city closer than the 48 px touch target.
+  Beverwijk and Heemskerk land 6 px apart. A round of fifteen drawn at random
+  contains an unhittable pair 99.9% of the time, so sampling does not rescue it.
+- Eighty questions is roughly twenty minutes with no stopping point.
+
+Neither is a content problem. The cities are the cities; the population ranking
+is reproducible and the set is right. It is the two assumptions that have to go.
+
+### Decision
+
+**A round is capped at fifteen questions.** Sets of twelve or fewer are still
+asked in full — "ik ken ze allemaal" stays true where it can be true — and a
+larger set is sampled by the Leitner scheduler and met again next round, which
+is what spaced repetition is for.
+
+**Nothing answerable is drawn closer to another answer than `MIN_TOUCH_PX`.**
+`reachablePoints` in `game-core/map.ts` keeps the target, then takes the rest in
+input order and drops any that would crowd one already kept. For the cities that
+is around 26 of 80 on a phone and more on a Chromebook, because the rule is in
+pixels and therefore scales with the device.
+
+Input order is descending population, so the neighbour that survives is the
+better-known one: a child answering near Rotterdam is offered Rotterdam, not
+Schiedam. The result is returned in input order, never target-first — a renderer
+that draws the answer first hands it to the first child who presses Tab.
+
+### Consequences
+
+For the twelve capitals and six bodies of water nothing changes; they already
+clear the threshold, by 1 px and 5 px respectively. That margin is luck, and the
+rule now protects them from a future reprojection quietly eating it.
+
+The cost is real and worth naming: a child asked about Heemskerk does not see
+Amsterdam on the map that round. We accept an incomplete map over an
+unanswerable one. The alternative that would show everything is pan and zoom,
+which is a larger change to the central interaction than this set justifies on
+its own — when a second dense set arrives, that is the decision to revisit.
+
+---
+
 ## ADR-020 — No dyslexia font setting
 
 **Status:** accepted 2026-09-06, by the product owner.

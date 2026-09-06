@@ -128,3 +128,47 @@ test('typing a name: a real place from elsewhere is a near miss, not a cross', a
   await expect(feedback).toContainText(/Bijna|goed\./);
   await expect(page.getByRole('button', { name: 'Volgende vraag' })).toBeVisible();
 });
+
+/**
+ * The cities set is the first one where the map cannot show everything it
+ * knows. Eighty points on the Netherlands puts Beverwijk six pixels from
+ * Heemskerk, so reachablePoints draws only the ones a finger can separate. This
+ * is the test that would catch that rule being removed: a screen that renders
+ * all eighty is not a harmless regression, it is a map a child cannot answer.
+ */
+test('cities: draws only points that are far enough apart to hit', async ({ page }) => {
+  await signIn(page, 'Bram');
+  await setCard(page, 'Steden van Nederland').getByRole('button', { name: 'Wijs aan' }).click();
+
+  await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
+
+  const markers = page.locator('svg [role="button"]');
+  const count = await markers.count();
+  expect(count).toBeGreaterThan(5);
+  expect(count).toBeLessThan(60);
+
+  const boxes = await markers.evaluateAll((nodes) =>
+    nodes.map((node) => {
+      const { x, y, width, height } = node.getBoundingClientRect();
+      return { cx: x + width / 2, cy: y + height / 2 };
+    }),
+  );
+
+  for (let i = 0; i < boxes.length; i++) {
+    for (let j = i + 1; j < boxes.length; j++) {
+      const a = boxes[i]!;
+      const b = boxes[j]!;
+      const gap = Math.hypot(a.cx - b.cx, a.cy - b.cy);
+      expect(gap, `twee steden op ${gap.toFixed(0)} px van elkaar`).toBeGreaterThanOrEqual(40);
+    }
+  }
+});
+
+/** A round of eighty would be twenty minutes. It is capped, and the counter says so. */
+test('cities: asks a round a child can finish', async ({ page }) => {
+  await signIn(page, 'Fenna');
+  await setCard(page, 'Steden van Nederland').getByRole('button', { name: 'Wijs aan' }).click();
+
+  // The counter reads "vraag 1/15": fifteen, not eighty.
+  await expect(page.getByText('1/15')).toBeVisible();
+});

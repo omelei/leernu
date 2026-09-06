@@ -58,6 +58,49 @@ omtrekken uit dezelfde geverifieerde bron. Ze worden door dezelfde projectie
 gehaald als de provincies, zodat een eiland op zijn eigen kust ligt in plaats
 van er een paar eenheden naast.
 
+## Nederland — labelpunten gemeenten (voor de steden)
+
+|        |                                              |
+| ------ | -------------------------------------------- |
+| Laag   | `gebiedsindelingen:gemeente_labelpoint`      |
+| Overig | Zelfde service, licentie en datum als hierboven |
+
+Eén punt per gemeente, door CBS geplaatst waar het label hoort te staan — in de
+praktijk in de kern, niet op het zwaartepunt van het grondgebied. Dat is precies
+wat een stadspunt moet zijn.
+
+CBS levert **twee** punten voor Amsterdam. Dat is geen fout in de bron: de
+gemeente is niet aaneengesloten, Zuidoost ligt los van de rest achter
+Ouder-Amstel, en elk deel krijgt een eigen label. `build-steden.mjs`
+dedupliceert op `statcode` en houdt het punt dat binnen het grootste deel van de
+gemeente valt, zodat de keuze niet afhangt van de volgorde in het bestand.
+
+## Nederland — inwonertal per gemeente
+
+|            |                                                                    |
+| ---------- | ------------------------------------------------------------------ |
+| Bron       | CBS StatLine, tabel `70072ned` (Regionale kerncijfers Nederland)    |
+| Veld       | `TotaleBevolking_1`, per `RegioS` (gemeentecode)                    |
+| Licentie   | CC BY 4.0                                                          |
+| URL        | https://opendata.cbs.nl/ODataApi/odata/70072ned                    |
+| Opgehaald  | 2026-09-06                                                         |
+
+Bepaalt welke tachtig steden in de set komen en in welke laag: 25 basis, 30
+gevorderd, 25 expert, aflopend op inwonertal. Dat is een reproduceerbare
+rangschikking uit een genoemde bron in plaats van een lijst die iemand
+opgeschreven heeft.
+
+Eén ding is wél redactioneel, en dat staat bewust op één plek: `GEEN_STAD` in
+`tools/content/build-steden.mjs`. CBS publiceert gemeenten, en er is geen
+gelicentieerde bron die zegt welke gemeenten ook plaatsen zijn. "Utrechtse
+Heuvelrug" en "Oude IJsselstreek" zijn streken, geen steden — die keuze moet
+iemand maken, en die staat daar met de regel erbij (de naam blijft als een
+plaats zo heet; hij vervalt als alleen de gemeente zo heet).
+
+De provincie waarin een stad ligt wordt niet overgeschreven maar berekend: het
+labelpunt wordt tegen de CBS-provinciegeometrie gelegd. Valt een stad in geen
+enkele provincie, dan faalt de build.
+
 ## Nederland — zeeën en meren
 
 | | |

@@ -178,6 +178,51 @@ describe('geometry references', () => {
     expect(dangling).toEqual([]);
   });
 
+  it('resolves every city to a projected point', () => {
+    const points = new Set(loadPointsFromDisk('steden').punten.map((punt) => punt.id));
+
+    const dangling = itemsOfSet('nl-steden')
+      .filter((item) => !points.has(item.geometrieRef ?? ''))
+      .map((item) => item.id);
+
+    expect(dangling).toEqual([]);
+  });
+
+  /**
+   * A city is taught together with the province it sits in — that is the fact
+   * the weetje states and the relation the item carries. The builder computes it
+   * from geometry rather than taking it on trust, so the thing worth checking
+   * here is that the province it names is one we actually teach.
+   */
+  it('places every city in a province the app knows', () => {
+    const provincies = new Set(itemsOfSet('nl-provincies').map((item) => item.id));
+
+    const onbekend = itemsOfSet('nl-steden')
+      .map((item) => item.relaties?.ligtIn)
+      .filter((id) => id !== undefined && !provincies.has(id));
+
+    expect(onbekend).toEqual([]);
+  });
+
+  /**
+   * No city may share a name with a province or a capital. A child typing
+   * "Groningen" must not be told they meant the other one, and ADR-017 only
+   * holds if the catalogue it consults has no collisions of its own.
+   */
+  it('gives every city a name no other item already uses', () => {
+    const elders = new Set(
+      ['nl-provincies', 'nl-hoofdsteden', 'nl-waddeneilanden', 'nl-wateren'].flatMap((set) =>
+        itemsOfSet(set).map((item) => item.naam),
+      ),
+    );
+
+    const botsingen = itemsOfSet('nl-steden')
+      .map((item) => item.naam)
+      .filter((naam) => elders.has(naam));
+
+    expect(botsingen).toEqual([]);
+  });
+
   /**
    * The water points are chosen rather than sourced, so the build verifies them
    * against province geometry that is: CBS provinces contain no water, so a

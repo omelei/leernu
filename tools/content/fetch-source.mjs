@@ -77,6 +77,24 @@ const SOURCES = [
   },
 ];
 
+/**
+ * Population per municipality, from CBS StatLine. Not geometry, but the thing
+ * that turns "which eighty cities" from an opinion into a ranking anyone can
+ * check and disagree with on the evidence.
+ */
+const CBS_BEVOLKING =
+  'https://opendata.cbs.nl/ODataApi/odata/70072ned/TypedDataSet' +
+  "?$filter=startswith(RegioS,'GM') and Perioden eq '2023JJ00'" +
+  '&$select=RegioS,TotaleBevolking_1';
+
+SOURCES.push({
+  id: 'nl-bevolking',
+  url: CBS_BEVOLKING,
+  bron: 'CBS StatLine 70072ned, Regionale kerncijfers Nederland, 2023',
+  licentie: 'CC-BY-4.0',
+  attributie: 'Bron: CBS',
+});
+
 const OUT_DIR = join(process.cwd(), 'content', 'geo', '_source');
 mkdirSync(OUT_DIR, { recursive: true });
 

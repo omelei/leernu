@@ -45,6 +45,13 @@
       "kerndoelRefs": []
     },
     {
+      "id": "ak-nl-steden",
+      "code": "AK.NL.S1",
+      "omschrijving": "De leerling wijst tachtig Nederlandse steden aan en noemt de provincie waarin een stad ligt.",
+      "leerjaar": ["groep7", "groep8"],
+      "kerndoelRefs": []
+    },
+    {
       "id": "ak-nl-ligging",
       "code": "AK.NL.L1",
       "omschrijving": "De leerling beschrijft waar een provincie ligt ten opzichte van andere provincies, de zee en de buurlanden.",
