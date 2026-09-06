@@ -1,0 +1,71 @@
+{
+  "id": "nl-waddeneilanden",
+  "naam": "De Waddeneilanden",
+  "regioSet": "nederland",
+  "contentVersie": "2026-09-06",
+  "_geometrie": "geometrieRef verwijst naar een vorm-id in public/geo/nl/waddeneilanden.json, gebouwd door tools/content/build-islands.mjs uit CBS gemeentegrenzen. Elk eiland is een eigen gemeente. Bron en licentie: docs/DATA_SOURCES.md.",
+  "_volgorde": "West naar oost, zoals een kind ze leert opzeggen.",
+  "_niveau": "Niveau 2: de eilanden komen na de provincies, en ze zijn op een kaart aanzienlijk lastiger aan te wijzen.",
+  "items": [
+    {
+      "id": "nl-eiland-texel",
+      "type": "eiland",
+      "naam": "Texel",
+      "aliassen": [],
+      "regioSet": "nederland",
+      "geometrieRef": "nl-eiland-texel",
+      "niveau": 2,
+      "leerdoelen": ["ak-nl-waddeneilanden"],
+      "relaties": { "ligtIn": "nl-prov-noord-holland" },
+      "weetje": "Het grootste Waddeneiland. Het hoort bij Noord-Holland."
+    },
+    {
+      "id": "nl-eiland-vlieland",
+      "type": "eiland",
+      "naam": "Vlieland",
+      "aliassen": [],
+      "regioSet": "nederland",
+      "geometrieRef": "nl-eiland-vlieland",
+      "niveau": 2,
+      "leerdoelen": ["ak-nl-waddeneilanden"],
+      "relaties": { "ligtIn": "nl-prov-fryslan" },
+      "weetje": "Op Vlieland mogen bezoekers geen auto meenemen."
+    },
+    {
+      "id": "nl-eiland-terschelling",
+      "type": "eiland",
+      "naam": "Terschelling",
+      "aliassen": ["Skylge"],
+      "regioSet": "nederland",
+      "geometrieRef": "nl-eiland-terschelling",
+      "niveau": 2,
+      "leerdoelen": ["ak-nl-waddeneilanden"],
+      "relaties": { "ligtIn": "nl-prov-fryslan" },
+      "weetje": "Terschelling ligt tussen Vlieland en Ameland."
+    },
+    {
+      "id": "nl-eiland-ameland",
+      "type": "eiland",
+      "naam": "Ameland",
+      "aliassen": [],
+      "regioSet": "nederland",
+      "geometrieRef": "nl-eiland-ameland",
+      "niveau": 2,
+      "leerdoelen": ["ak-nl-waddeneilanden"],
+      "relaties": { "ligtIn": "nl-prov-fryslan" },
+      "weetje": "Een lang, smal eiland met vier dorpen."
+    },
+    {
+      "id": "nl-eiland-schiermonnikoog",
+      "type": "eiland",
+      "naam": "Schiermonnikoog",
+      "aliassen": ["Skiermûntseach"],
+      "regioSet": "nederland",
+      "geometrieRef": "nl-eiland-schiermonnikoog",
+      "niveau": 2,
+      "leerdoelen": ["ak-nl-waddeneilanden"],
+      "relaties": { "ligtIn": "nl-prov-fryslan" },
+      "weetje": "Het meest oostelijke Waddeneiland, en een nationaal park."
+    }
+  ]
+}

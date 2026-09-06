@@ -1,5 +1,6 @@
 import { t } from '@/i18n';
-import type { GeoSet, PointSet } from '@/content/loadGeo';
+import type { GeoSet } from '@/content/loadGeo';
+import type { AnswerLayer } from './MapCanvas';
 import type { RoundState } from './useRound';
 
 /**
@@ -57,9 +58,8 @@ export function ResultScreen({
             <section className="md:w-1/2" aria-label={t('result.mapLabel')}>
               <div className="tk-card flex justify-center rounded-control p-3">
                 <ReviewMap
-                  geo={state.geo}
-                  points={state.points}
-                  mode={state.mode}
+                  background={state.geo}
+                  answers={state.answers}
                   highlighted={missedIds}
                 />
               </div>
@@ -84,42 +84,56 @@ export function ResultScreen({
  * the list beside it, and a second reading of twelve province names is noise.
  */
 function ReviewMap({
-  geo,
-  points,
-  mode,
+  background,
+  answers,
   highlighted,
 }: {
-  readonly geo: GeoSet;
-  readonly points: PointSet | null;
-  readonly mode: RoundState['mode'];
+  readonly background: GeoSet;
+  readonly answers: AnswerLayer | null;
   readonly highlighted: ReadonlySet<string>;
 }) {
-  const [, , viewWidth, viewHeight] = geo.viewBox;
+  const [, , viewWidth, viewHeight] = background.viewBox;
+  const litShapes =
+    answers?.kind === 'background'
+      ? background.vormen
+      : answers?.kind === 'shapes'
+        ? answers.set.vormen
+        : [];
 
   return (
     <svg
-      viewBox={geo.viewBox.join(' ')}
+      viewBox={background.viewBox.join(' ')}
       className="h-auto w-full max-w-sm"
       style={{ aspectRatio: `${viewWidth} / ${viewHeight}` }}
       role="img"
       aria-hidden="true"
     >
-      {geo.vormen.map((vorm) => {
-        const lit = mode === 'shapes' && highlighted.has(vorm.id);
-        return (
+      {background.vormen.map((vorm) => (
+        <path
+          key={vorm.id}
+          d={vorm.d}
+          fill="var(--paper)"
+          stroke="var(--ink-3)"
+          strokeWidth={1}
+          strokeLinejoin="round"
+        />
+      ))}
+
+      {litShapes
+        .filter((vorm) => highlighted.has(vorm.id))
+        .map((vorm) => (
           <path
             key={vorm.id}
             d={vorm.d}
-            fill={lit ? 'var(--topo-tint)' : 'var(--paper)'}
-            stroke={lit ? 'var(--topo)' : 'var(--line-strong)'}
-            strokeWidth={lit ? 3 : 1}
+            fill="var(--topo-tint)"
+            stroke="var(--topo)"
+            strokeWidth={3}
             strokeLinejoin="round"
           />
-        );
-      })}
+        ))}
 
-      {mode === 'points' &&
-        points?.punten
+      {answers?.kind === 'points' &&
+        answers.set.punten
           .filter((point) => highlighted.has(point.id))
           .map((point) => (
             <circle

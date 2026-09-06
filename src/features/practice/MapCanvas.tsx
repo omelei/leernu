@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
-import { fitView, helpTargetFor, keyboardOrder, MIN_TOUCH_PX } from '@/game-core';
-import type { GeoSet, PointSet, Vorm } from '@/content/loadGeo';
+import { fitView, helpTargetFor, keyboardOrder, MIN_TOUCH_PX, type ViewFit } from '@/game-core';
+import type { GeoSet, PointSet, Punt, Vorm } from '@/content/loadGeo';
 
 /**
  * The map, and the only place the answer is shown.
@@ -14,27 +14,37 @@ import type { GeoSet, PointSet, Vorm } from '@/content/loadGeo';
  * - After a wrong answer a dot **travels** from the place the child pointed at
  *   to the right one. The one moment in this product where movement teaches
  *   instead of decorates: the child sees the distance they were out by.
- * - A city is a point, and a point has no size. Each one gets an invisible
- *   circle exactly 48 CSS pixels across, whatever the map is scaled to — which
- *   is why the canvas measures itself rather than assuming a size.
+ * - Anything too small to hit gets an invisible circle exactly 48 CSS pixels
+ *   across, whatever the map is scaled to — which is why the canvas measures
+ *   itself rather than assuming a size.
+ *
+ * Three exercises share one canvas, and the only difference between them is
+ * *what answers*: the provinces themselves, the islands laid over them, or the
+ * capitals as points. Saying that in the types is what keeps a fourth
+ * arrangement from becoming a fourth branch inside every function here.
  */
 
-export type MapMode = 'shapes' | 'points';
+export type AnswerLayer =
+  /** The background provinces are themselves the answers. */
+  | { readonly kind: 'background' }
+  /** Separate shapes over dimmed provinces: the Wadden islands. */
+  | { readonly kind: 'shapes'; readonly set: GeoSet }
+  /** Points over dimmed provinces: the provincial capitals. */
+  | { readonly kind: 'points'; readonly set: PointSet };
 
 /**
- * `pick` — the child answers by pointing, so every shape is a control.
+ * `pick` — the child answers by pointing, so every answer is a control.
  * `show` — the child answers by typing, so the map only highlights what is
  * being asked about and nothing is clickable.
  */
 export type MapInteraction = 'pick' | 'show';
 
 export interface MapCanvasProps {
-  readonly geo: GeoSet;
-  /** Present in points mode: the cities laid over the dimmed provinces. */
-  readonly points: PointSet | null;
-  readonly mode: MapMode;
+  /** Always the provinces: the country a child orients by. */
+  readonly background: GeoSet;
+  readonly answers: AnswerLayer;
   readonly interaction: MapInteraction;
-  /** Display name per shape or point id — what a child is taught. */
+  /** Display name per answer id — what a child is taught, not what the source spells. */
   readonly namesById: ReadonlyMap<string, string>;
   readonly targetId: string;
   readonly chosenId: string | null;
@@ -61,29 +71,62 @@ function useRenderedHeight(ref: React.RefObject<SVGSVGElement | null>): number {
   return height;
 }
 
-export function MapCanvas(props: MapCanvasProps) {
-  const { geo, points, mode, interaction, namesById, targetId, chosenId, revealed, onPick } = props;
+type AnswerState = 'open' | 'asked' | 'target' | 'wrong';
+
+function stateOf(
+  id: string,
+  targetId: string,
+  chosenId: string | null,
+  revealed: boolean,
+  interaction: MapInteraction,
+): AnswerState {
+  if (revealed) {
+    if (id === targetId) return 'target';
+    if (id === chosenId) return 'wrong';
+    return 'open';
+  }
+  return interaction === 'show' && id === targetId ? 'asked' : 'open';
+}
+
+export function MapCanvas({
+  background,
+  answers,
+  interaction,
+  namesById,
+  targetId,
+  chosenId,
+  revealed,
+  onPick,
+}: MapCanvasProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const renderedHeight = useRenderedHeight(svgRef);
 
-  const shapes = useMemo(() => keyboardOrder(geo.vormen as Vorm[]), [geo]);
-  const [, , viewWidth, viewHeight] = geo.viewBox;
+  const [, , viewWidth, viewHeight] = background.viewBox;
   const fit = fitView(viewHeight, renderedHeight);
 
-  // In points mode the provinces are background: visible, but not answers. In
-  // typing mode nothing is an answer, because the answer is typed.
-  const shapesAreAnswers = mode === 'shapes' && interaction === 'pick';
-  const pointsAreAnswers = mode === 'points' && interaction === 'pick';
+  const answerShapes = useMemo(() => {
+    if (answers.kind === 'background') return keyboardOrder(background.vormen as Vorm[]);
+    if (answers.kind === 'shapes') return keyboardOrder(answers.set.vormen as Vorm[]);
+    return [] as Vorm[];
+  }, [answers, background]);
 
-  const positionOf = (id: string): readonly [number, number] | null => {
-    if (mode === 'points') return points?.punten.find((p) => p.id === id)?.punt ?? null;
-    return shapes.find((s) => s.id === id)?.punt ?? null;
-  };
+  const answerPoints = answers.kind === 'points' ? answers.set.punten : [];
+  const clickable = interaction === 'pick' && !revealed;
+
+  function positionOf(id: string): readonly [number, number] | null {
+    const shape = answerShapes.find((candidate) => candidate.id === id);
+    if (shape) return shape.punt;
+    return answerPoints.find((point) => point.id === id)?.punt ?? null;
+  }
 
   const targetPos = positionOf(targetId);
   const chosenPos = chosenId === null ? null : positionOf(chosenId);
   const showTravel =
-    revealed && chosenId !== null && chosenId !== targetId && chosenPos !== null && targetPos !== null;
+    revealed &&
+    chosenId !== null &&
+    chosenId !== targetId &&
+    chosenPos !== null &&
+    targetPos !== null;
 
   function handleKey(event: KeyboardEvent<Element>, id: string) {
     if (event.key !== 'Enter' && event.key !== ' ') return;
@@ -91,26 +134,10 @@ export function MapCanvas(props: MapCanvasProps) {
     onPick(id);
   }
 
-  function shapeClass(shape: Vorm): string {
-    if (mode !== 'shapes') return 'tk-shape-dim';
-
-    if (revealed) {
-      if (shape.id === targetId) return 'tk-shape tk-shape-target';
-      if (shape.id === chosenId) return 'tk-shape tk-shape-wrong';
-      return interaction === 'pick' ? 'tk-shape' : 'tk-shape-dim';
-    }
-
-    // While a child is typing, the shape in question is lit and the rest recede.
-    if (interaction === 'show') {
-      return shape.id === targetId ? 'tk-shape tk-shape-asked' : 'tk-shape-dim';
-    }
-    return 'tk-shape';
-  }
-
   return (
     <svg
       ref={svgRef}
-      viewBox={geo.viewBox.join(' ')}
+      viewBox={background.viewBox.join(' ')}
       className="h-full w-auto max-w-full"
       style={{ aspectRatio: `${viewWidth} / ${viewHeight}` }}
       role="group"
@@ -118,57 +145,51 @@ export function MapCanvas(props: MapCanvasProps) {
       <defs>
         {/* The wrong-answer texture: white ground with narrow red stripes at 45
             degrees, faint enough that the shape underneath stays readable. */}
-        <pattern id="tk-hatch" width="8" height="8" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+        <pattern
+          id="tk-hatch"
+          width="8"
+          height="8"
+          patternTransform="rotate(45)"
+          patternUnits="userSpaceOnUse"
+        >
           <rect width="8" height="8" fill="var(--paper)" />
           <rect width="3" height="8" fill="var(--bad)" opacity="0.25" />
         </pattern>
       </defs>
 
-      {shapes.map((shape) => (
-        <path
+      {/* The country, always drawn. When it is not the answer it recedes, but it
+          is never decoration: it is how a child knows where on the map they are. */}
+      {answers.kind !== 'background' &&
+        background.vormen.map((vorm) => (
+          <path key={vorm.id} d={vorm.d} className="tk-shape-dim" aria-hidden="true" />
+        ))}
+
+      {answerShapes.map((shape) => (
+        <AnswerShape
           key={shape.id}
-          d={shape.d}
-          className={shapeClass(shape)}
-          {...(shapesAreAnswers
-            ? {
-                tabIndex: revealed ? -1 : 0,
-                role: 'button',
-                'aria-label': namesById.get(shape.id) ?? shape.bronnaam,
-                'aria-disabled': revealed,
-                onClick: () => !revealed && onPick(shape.id),
-                onKeyDown: (event: KeyboardEvent<SVGPathElement>) =>
-                  !revealed && handleKey(event, shape.id),
-              }
-            : { 'aria-hidden': true })}
+          shape={shape}
+          name={namesById.get(shape.id) ?? shape.bronnaam}
+          state={stateOf(shape.id, targetId, chosenId, revealed, interaction)}
+          dimmedWhenOpen={interaction === 'show'}
+          clickable={clickable}
+          fit={fit}
+          onPick={() => clickable && onPick(shape.id)}
+          onKeyDown={(event) => clickable && handleKey(event, shape.id)}
         />
       ))}
 
-      {mode === 'points' &&
-        points?.punten
-          .filter((point) => interaction === 'pick' || revealed || point.id === targetId)
-          .map((point) => (
+      {answerPoints
+        .filter((point) => clickable || revealed || point.id === targetId)
+        .map((point) => (
           <CityMarker
             key={point.id}
             point={point}
             name={namesById.get(point.id) ?? point.bronnaam}
-            state={
-              revealed
-                ? point.id === targetId
-                  ? 'target'
-                  : point.id === chosenId
-                    ? 'wrong'
-                    : 'open'
-                : interaction === 'show' && point.id === targetId
-                  ? 'asked'
-                  : 'open'
-            }
-            interactive={pointsAreAnswers && !revealed}
-            hitRadius={
-              helpTargetFor([point.punt[0], point.punt[1], point.punt[0], point.punt[1]], fit)?.r ??
-              MIN_TOUCH_PX / 2
-            }
-            onPick={() => pointsAreAnswers && !revealed && onPick(point.id)}
-            onKeyDown={(event) => pointsAreAnswers && !revealed && handleKey(event, point.id)}
+            state={stateOf(point.id, targetId, chosenId, revealed, interaction)}
+            clickable={clickable}
+            fit={fit}
+            onPick={() => clickable && onPick(point.id)}
+            onKeyDown={(event) => clickable && handleKey(event, point.id)}
           />
         ))}
 
@@ -182,12 +203,93 @@ export function MapCanvas(props: MapCanvasProps) {
           x={targetPos[0]}
           y={targetPos[1]}
           text={namesById.get(targetId) ?? ''}
-          /* Below the point, never on it: a name printed over a city dot hides
-             the very thing the child is being asked to look at. */
-          offsetY={mode === 'points' ? 30 : 26}
+          /* Below the point, never on it: a name printed over what the child was
+             asked to find hides the very thing they should be looking at. */
+          offsetY={answers.kind === 'points' ? 30 : 26}
         />
       )}
     </svg>
+  );
+}
+
+function shapeClass(state: AnswerState, dimmedWhenOpen: boolean): string {
+  switch (state) {
+    case 'target':
+      return 'tk-shape tk-shape-target';
+    case 'wrong':
+      return 'tk-shape tk-shape-wrong';
+    case 'asked':
+      return 'tk-shape tk-shape-asked';
+    default:
+      return dimmedWhenOpen ? 'tk-shape-dim' : 'tk-shape';
+  }
+}
+
+function AnswerShape({
+  shape,
+  name,
+  state,
+  dimmedWhenOpen,
+  clickable,
+  fit,
+  onPick,
+  onKeyDown,
+}: {
+  readonly shape: Vorm;
+  readonly name: string;
+  readonly state: AnswerState;
+  readonly dimmedWhenOpen: boolean;
+  readonly clickable: boolean;
+  readonly fit: ViewFit;
+  readonly onPick: () => void;
+  readonly onKeyDown: (event: KeyboardEvent<Element>) => void;
+}) {
+  // Ameland is 72 units long and 16 wide: judged on its long side it looks like
+  // a comfortable target, and a finger disagrees. Anything too narrow to land on
+  // gets a circle it can actually be hit with.
+  const help = clickable ? helpTargetFor(shape.bbox, fit, shape.punt) : null;
+  const pathIsTheTarget = clickable && help === null;
+
+  return (
+    <g>
+      <path
+        d={shape.d}
+        className={shapeClass(state, dimmedWhenOpen)}
+        {...(pathIsTheTarget
+          ? { tabIndex: 0, role: 'button', 'aria-label': name, onClick: onPick, onKeyDown }
+          : { 'aria-hidden': true, pointerEvents: 'none' as const })}
+      />
+      {help !== null && (
+        <>
+          {/* Shown, not just felt: the ring tells a child there is more room
+              than the coastline suggests, which is the difference between a
+              target that works and one that only technically works. */}
+          <circle
+            cx={help.cx}
+            cy={help.cy}
+            r={help.r * 0.75}
+            fill="none"
+            stroke="var(--ink)"
+            strokeWidth={1.5}
+            strokeDasharray="4 4"
+            opacity={0.3}
+            pointerEvents="none"
+          />
+          <circle
+            cx={help.cx}
+            cy={help.cy}
+            r={help.r}
+            fill="transparent"
+            className="cursor-pointer"
+            tabIndex={0}
+            role="button"
+            aria-label={name}
+            onClick={onPick}
+            onKeyDown={onKeyDown}
+          />
+        </>
+      )}
+    </g>
   );
 }
 
@@ -195,20 +297,22 @@ function CityMarker({
   point,
   name,
   state,
-  interactive,
-  hitRadius,
+  clickable,
+  fit,
   onPick,
   onKeyDown,
 }: {
-  readonly point: { readonly id: string; readonly punt: readonly [number, number] };
+  readonly point: Punt;
   readonly name: string;
-  readonly state: 'open' | 'target' | 'wrong' | 'asked';
-  readonly interactive: boolean;
-  readonly hitRadius: number;
+  readonly state: AnswerState;
+  readonly clickable: boolean;
+  readonly fit: ViewFit;
   readonly onPick: () => void;
   readonly onKeyDown: (event: KeyboardEvent<Element>) => void;
 }) {
   const [x, y] = point.punt;
+  const radius = helpTargetFor([x, y, x, y], fit)?.r ?? MIN_TOUCH_PX / 2;
+
   const fill =
     state === 'target'
       ? 'var(--good)'
@@ -228,28 +332,25 @@ function CityMarker({
 
   return (
     <g>
-      {/* The ring shows how big the target really is, so a child aiming with a
-          finger knows there is more room than the dot suggests. */}
-      {interactive && (
-      <circle
-        cx={x}
-        cy={y}
-        r={hitRadius * 0.6}
-        fill="none"
-        stroke="var(--ink)"
-        strokeWidth={2}
-        strokeDasharray="4 4"
-        opacity={0.35}
-        pointerEvents="none"
-      />
-      )}
-      <circle cx={x} cy={y} r={7} fill={fill} stroke={stroke} strokeWidth={2} pointerEvents="none" />
-      {/* The real target: invisible, 48 CSS pixels across at any scale. */}
-      {interactive && (
+      {clickable && (
         <circle
           cx={x}
           cy={y}
-          r={hitRadius}
+          r={radius * 0.6}
+          fill="none"
+          stroke="var(--ink)"
+          strokeWidth={2}
+          strokeDasharray="4 4"
+          opacity={0.35}
+          pointerEvents="none"
+        />
+      )}
+      <circle cx={x} cy={y} r={7} fill={fill} stroke={stroke} strokeWidth={2} pointerEvents="none" />
+      {clickable && (
+        <circle
+          cx={x}
+          cy={y}
+          r={radius}
           fill="transparent"
           className="cursor-pointer"
           tabIndex={0}
@@ -275,7 +376,15 @@ function TravelPath({
 
   return (
     <g aria-hidden="true" pointerEvents="none">
-      <line x1={from[0]} y1={from[1]} x2={to[0]} y2={to[1]} stroke="var(--ink)" strokeWidth={3} strokeDasharray="6 6" />
+      <line
+        x1={from[0]}
+        y1={from[1]}
+        x2={to[0]}
+        y2={to[1]}
+        stroke="var(--ink)"
+        strokeWidth={3}
+        strokeDasharray="6 6"
+      />
       {/* Two fading stepping stones, so the direction of travel is readable
           even when the animation is switched off. */}
       {[
@@ -326,7 +435,15 @@ function MapLabel({
 
   return (
     <g aria-hidden="true" pointerEvents="none">
-      <rect x={x - width / 2} y={top - 14} width={width} height={26} rx={4} fill="var(--paper)" opacity={0.94} />
+      <rect
+        x={x - width / 2}
+        y={top - 14}
+        width={width}
+        height={26}
+        rx={4}
+        fill="var(--paper)"
+        opacity={0.94}
+      />
       <text x={x} y={top + 5} textAnchor="middle" fill="var(--ink)" fontSize={15} fontWeight={700}>
         {text}
       </text>

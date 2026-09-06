@@ -51,13 +51,21 @@ for (const level of LEVELS) {
 
   const size = SIZES[level];
   const paths = data.vormen.map(v => `<path d="${v.d}"><title>${v.bronnaam}</title></path>`).join('');
+  // De lagen die op de provincies liggen: eilanden en hoofdsteden.
+  let overlay = '';
+  if (level === 'detail') {
+    const eil = await (await fetch('/public/geo/nl/waddeneilanden.json')).json().catch(() => null);
+    if (eil) overlay += eil.vormen.map(v => `<path d="${v.d}" fill="#f6c89a" stroke="#1d221c" stroke-width="1.2"><title>${v.bronnaam}</title></path>`).join('');
+    const st = await (await fetch('/public/geo/nl/hoofdsteden.json')).json().catch(() => null);
+    if (st) overlay += st.punten.map(p => `<circle cx="${p.punt[0]}" cy="${p.punt[1]}" r="6" fill="#fff" stroke="#b02a2d" stroke-width="2"><title>${p.bronnaam}</title></circle>`).join('');
+  }
   const labels = data.vormen.map(v => v.punt ? `<text x="${v.punt[0]}" y="${v.punt[1]}">${v.bronnaam}</text>` : '').join('');
   const points = data.vormen.reduce((n, v) => n + (v.d.match(/[ML]/g) || []).length, 0);
 
   grid.insertAdjacentHTML('beforeend', `
     <div class="panel">
       <h2>${level}</h2>
-      <svg viewBox="${data.viewBox.join(' ')}" width="${size}" height="${size}">${paths}${labels}</svg>
+      <svg viewBox="${data.viewBox.join(' ')}" width="${size}" height="${size}">${paths}${overlay}${labels}</svg>
       <p class="meta">${data.vormen.length} vormen &middot; ${points} punten</p>
     </div>
   `);

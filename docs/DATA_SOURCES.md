@@ -46,6 +46,18 @@ Officiële labelpunten van CBS, gebruikt om de provincienaam op de kaart te
 plaatsen. Beter dan een berekende zwaartepunt: bij een holle vorm als Zeeland
 valt het zwaartepunt in het water.
 
+## Nederland — gemeentegrenzen (voor de Waddeneilanden)
+
+| | |
+|---|---|
+| Laag | `gebiedsindelingen:gemeente_gegeneraliseerd` |
+| Overig | Zelfde service, licentie en datum als hierboven |
+
+Elk Waddeneiland is een eigen gemeente, dus de gemeentelaag levert hun
+omtrekken uit dezelfde geverifieerde bron. Ze worden door dezelfde projectie
+gehaald als de provincies, zodat een eiland op zijn eigen kust ligt in plaats
+van er een paar eenheden naast.
+
 ---
 
 ## Waarom niet PDOK Bestuurlijke Gebieden

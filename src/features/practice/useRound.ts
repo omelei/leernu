@@ -13,7 +13,7 @@ import { loadAllItems, loadItemSets } from '@/content/loadSets';
 import { finishSession, loadItemStates, saveAnswer, startSession } from '@/store/progress';
 import { recordRoundFinished } from '@/store/streakStore';
 import type { StreakChange } from '@/game-core';
-import type { MapMode } from './MapCanvas';
+import type { AnswerLayer } from './MapCanvas';
 
 /**
  * One round of "wijs aan".
@@ -28,7 +28,7 @@ import type { MapMode } from './MapCanvas';
  * child who closes the tab halfway keeps what they answered.
  */
 
-export type SetId = 'nl-provincies' | 'nl-hoofdsteden';
+export type SetId = 'nl-provincies' | 'nl-hoofdsteden' | 'nl-waddeneilanden';
 
 /**
  * How a child answers. Pointing tests where something is; typing tests whether
@@ -38,12 +38,21 @@ export type PracticeMode = 'wijs-aan' | 'hoe-heet-dit';
 
 export const PRACTICE_MODES: readonly PracticeMode[] = ['wijs-aan', 'hoe-heet-dit'];
 
-export const SET_IDS: readonly SetId[] = ['nl-provincies', 'nl-hoofdsteden'];
+export const SET_IDS: readonly SetId[] = [
+  'nl-provincies',
+  'nl-hoofdsteden',
+  'nl-waddeneilanden',
+];
 
-/** Names live in i18n; only the map behaviour belongs here. */
-export const SETS: Record<SetId, { readonly mode: MapMode }> = {
-  'nl-provincies': { mode: 'shapes' },
-  'nl-hoofdsteden': { mode: 'points' },
+/**
+ * Names live in i18n; only the map behaviour belongs here. `answers` says what
+ * the child is choosing between — the country itself, a layer of shapes on top
+ * of it, or a layer of points.
+ */
+export const SETS: Record<SetId, { readonly answers: 'background' | 'shapes' | 'points' }> = {
+  'nl-provincies': { answers: 'background' },
+  'nl-hoofdsteden': { answers: 'points' },
+  'nl-waddeneilanden': { answers: 'shapes' },
 };
 
 export interface RoundQuestion {
@@ -58,9 +67,10 @@ export interface RoundState {
   readonly phase: RoundPhase;
   readonly setId: SetId;
   readonly practiceMode: PracticeMode;
-  readonly mode: MapMode;
+  /** The provinces, always: the country a child orients by. */
   readonly geo: GeoSet | null;
-  readonly points: PointSet | null;
+  /** What is being answered, ready for the canvas. */
+  readonly answers: AnswerLayer | null;
   readonly namesById: ReadonlyMap<string, string>;
   readonly question: RoundQuestion | null;
   readonly index: number;
@@ -81,7 +91,7 @@ export interface RoundState {
 
 export function useRound(setId: SetId, practiceMode: PracticeMode) {
   const [geo, setGeo] = useState<GeoSet | null>(null);
-  const [points, setPoints] = useState<PointSet | null>(null);
+  const [answers, setAnswers] = useState<AnswerLayer | null>(null);
   const [items, setItems] = useState<Item[]>([]);
   /**
    * Everything in the same region, not just this round's set. ADR-017 is
@@ -106,7 +116,7 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
 
   const sessionId = useRef<string | null>(null);
   const askedAt = useRef<number>(0);
-  const mode = SETS[setId].mode;
+  const layer = SETS[setId].answers;
 
   useEffect(() => {
     let cancelled = false;
@@ -116,9 +126,15 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
         const set = loadItemSets().find((candidate) => candidate.id === setId);
         if (!set) throw new Error(`Onbekende set: ${setId}`);
 
-        const [loadedGeo, loadedPoints, loadedStates] = await Promise.all([
+        const [loadedGeo, loadedAnswers, loadedStates] = await Promise.all([
           loadGeoSet('provincies', 'region'),
-          mode === 'points' ? loadPointSet('hoofdsteden') : Promise.resolve(null),
+          layer === 'points'
+            ? loadPointSet('hoofdsteden').then((set) => ({ kind: 'points', set }) as AnswerLayer)
+            : layer === 'shapes'
+              ? loadGeoSet('waddeneilanden', 'detail').then(
+                  (set) => ({ kind: 'shapes', set }) as AnswerLayer,
+                )
+              : Promise.resolve({ kind: 'background' } as AnswerLayer),
           loadItemStates(),
         ]);
         if (cancelled) return;
@@ -143,7 +159,7 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
         if (cancelled) return;
 
         setGeo(loadedGeo);
-        setPoints(loadedPoints);
+        setAnswers(loadedAnswers);
         setItems([...all]);
         setCatalogue(loadAllItems().filter((item) => item.regioSet === set.regioSet));
         setStates(loadedStates);
@@ -159,7 +175,7 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
     return () => {
       cancelled = true;
     };
-  }, [setId, mode]);
+  }, [setId, layer]);
 
   const namesById = useMemo(() => {
     const map = new Map<string, string>();
@@ -291,9 +307,8 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
     phase,
     setId,
     practiceMode,
-    mode,
     geo,
-    points,
+    answers,
     namesById,
     question,
     index,

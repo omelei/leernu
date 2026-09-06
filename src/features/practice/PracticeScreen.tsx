@@ -50,7 +50,7 @@ export function PracticeScreen({
 
   if (state.phase === 'finished') return <ResultScreen state={state} onHome={onHome} />;
 
-  if (state.phase === 'loading' || !state.geo || !state.question) {
+  if (state.phase === 'loading' || !state.geo || !state.answers || !state.question) {
     return (
       <main className="flex min-h-screen items-center justify-center p-6" aria-busy="true">
         <p className="text-ink-2">{t('practice.loading')}</p>
@@ -61,14 +61,25 @@ export function PracticeScreen({
   const naam = state.question.item.naam;
   const revealed = state.phase === 'revealed';
   const typing = practiceMode === 'hoe-heet-dit';
-  const isCity = SETS[setId].mode === 'points';
+  const answers = SETS[setId].answers;
 
-  const label = typing
-    ? t('practice.typeQuestion')
-    : t(isCity ? 'practice.kindCity' : 'practice.kind');
-  const vraag = typing
-    ? t(isCity ? 'practice.kindTypeCity' : 'practice.kindTypeArea')
-    : t('practice.question', { naam });
+  // The label names what a child is looking for, which is not the same in every
+  // exercise: an area, a city and an island are found in different ways.
+  const pickLabel =
+    answers === 'points'
+      ? 'practice.kindCity'
+      : answers === 'shapes'
+        ? 'practice.kindIsland'
+        : 'practice.kind';
+  const typeLabel =
+    answers === 'points'
+      ? 'practice.kindTypeCity'
+      : answers === 'shapes'
+        ? 'practice.kindTypeIsland'
+        : 'practice.kindTypeArea';
+
+  const label = typing ? t('practice.typeQuestion') : t(pickLabel);
+  const vraag = typing ? t(typeLabel) : t('practice.question', { naam });
 
   const chosenName = state.chosenId === null ? '' : (state.namesById.get(state.chosenId) ?? '');
   const nearMiss = state.verdict?.kind === 'near-miss';
@@ -100,9 +111,8 @@ export function PracticeScreen({
 
       <main className="flex min-h-0 flex-1 items-center justify-center p-3">
         <MapCanvas
-          geo={state.geo}
-          points={state.points}
-          mode={state.mode}
+          background={state.geo}
+          answers={state.answers}
           interaction={typing ? 'show' : 'pick'}
           namesById={state.namesById}
           targetId={state.question.answerId}

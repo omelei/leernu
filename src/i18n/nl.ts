@@ -30,6 +30,7 @@ export const nl = {
   // Set names
   'set.nl-provincies': 'Provincies van Nederland',
   'set.nl-hoofdsteden': 'Hoofdsteden van de provincies',
+  'set.nl-waddeneilanden': 'De Waddeneilanden',
 
   // Modes
   'mode.wijs-aan': 'Wijs aan',
@@ -52,6 +53,8 @@ export const nl = {
   'practice.next': 'Volgende vraag',
   'practice.stop': 'Stoppen',
   'practice.kindCity': 'Wijs de stad aan',
+  'practice.kindIsland': 'Wijs het eiland aan',
+  'practice.kindTypeIsland': 'Hoe heet dit eiland?',
   'practice.kindTypeArea': 'Hoe heet dit gebied?',
   'practice.kindTypeCity': 'Hoe heet deze stad?',
   'practice.typeQuestion': 'Typ de naam',

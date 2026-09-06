@@ -52,13 +52,21 @@ export function boxCentre(box: BoundingBox): readonly [number, number] {
   return [(box[0] + box[2]) / 2, (box[1] + box[3]) / 2];
 }
 
-/** The shape's largest on-screen dimension, in CSS pixels. */
-export function renderedSizePx(box: BoundingBox, fit: ViewFit): number {
-  return Math.max(boxWidth(box), boxHeight(box)) * fit.pixelsPerUnit;
+/**
+ * The shape's **smallest** on-screen dimension, in CSS pixels.
+ *
+ * The smallest, not the largest, and the difference is not academic: Ameland is
+ * 72 units long and 16 wide, so on a school laptop it is a 50-pixel streak of
+ * land that is 11 pixels tall. Measuring the long side calls that comfortable.
+ * A finger aiming at it disagrees, and so does WCAG 2.5.8, which asks for a
+ * minimum in both directions.
+ */
+export function smallestSidePx(box: BoundingBox, fit: ViewFit): number {
+  return Math.min(boxWidth(box), boxHeight(box)) * fit.pixelsPerUnit;
 }
 
 export function needsHelpTarget(box: BoundingBox, fit: ViewFit, minPx = MIN_TOUCH_PX): boolean {
-  return renderedSizePx(box, fit) < minPx;
+  return smallestSidePx(box, fit) < minPx;
 }
 
 export interface HelpTarget {

@@ -53,6 +53,17 @@ const SOURCES = [
     attributie: 'Bron: CBS, Kadaster',
   },
   {
+    // The Wadden islands are each their own municipality, so the same licensed
+    // layer that gives the capitals their coordinates gives the islands their
+    // outlines. They are the smallest shapes in the content by a wide margin,
+    // which is what makes them the real test of the touch target.
+    id: 'nl-gemeenten',
+    url: wfsUrl('gemeente_gegeneraliseerd'),
+    bron: 'CBS Gebiedsindelingen 2023, via PDOK',
+    licentie: 'CC-BY-4.0',
+    attributie: 'Bron: CBS, Kadaster',
+  },
+  {
     // Every provincial capital is a municipality, so its label point is a
     // sourced coordinate from the same licensed dataset. It is the centre of the
     // municipality rather than of the town, which at national scale is a

@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { findNearMisses, judgeAnswer } from '@/game-core';
+import { fitView, findNearMisses, helpTargetFor, judgeAnswer, needsHelpTarget } from '@/game-core';
 import { loadAllItems, loadItemSets } from './loadSets';
 import type { Detailniveau, GeoSet } from './loadGeo';
 
@@ -125,6 +125,37 @@ describe('geometry references', () => {
       .map((vorm) => vorm.id);
 
     expect(orphans).toEqual([]);
+  });
+
+  it('resolves every island to a shape', () => {
+    const path = join(process.cwd(), 'public', 'geo', 'nl', 'waddeneilanden.json');
+    const geo = JSON.parse(readFileSync(path, 'utf8')) as GeoSet;
+    const shapes = new Set(geo.vormen.map((vorm) => vorm.id));
+
+    const dangling = itemsOfSet('nl-waddeneilanden')
+      .filter((item) => !shapes.has(item.geometrieRef ?? ''))
+      .map((item) => item.id);
+
+    expect(dangling).toEqual([]);
+  });
+
+  /**
+   * The islands are the smallest shapes in the product, and the reason the
+   * touch-target arithmetic exists. This is the test that would have caught the
+   * mistake real content found: judged on its longest side Ameland looks like a
+   * comfortable target, and it is eleven pixels tall.
+   */
+  it('gives every island a target a finger can land on', () => {
+    const path = join(process.cwd(), 'public', 'geo', 'nl', 'waddeneilanden.json');
+    const geo = JSON.parse(readFileSync(path, 'utf8')) as GeoSet;
+    // A Chromebook, which is the smallest map in spec section 8.
+    const fit = fitView(geo.viewBox[3], 700);
+
+    for (const vorm of geo.vormen) {
+      const help = helpTargetFor(vorm.bbox, fit, vorm.punt);
+      const reachable = help !== null || !needsHelpTarget(vorm.bbox, fit);
+      expect(reachable, vorm.bronnaam).toBe(true);
+    }
   });
 
   it('resolves every capital to a projected point', () => {

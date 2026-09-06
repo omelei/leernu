@@ -31,6 +31,13 @@
       "kerndoelRefs": []
     },
     {
+      "id": "ak-nl-waddeneilanden",
+      "code": "AK.NL.W1",
+      "omschrijving": "De leerling wijst de vijf Waddeneilanden aan en noemt ze van west naar oost.",
+      "leerjaar": ["groep7", "groep8"],
+      "kerndoelRefs": []
+    },
+    {
       "id": "ak-nl-ligging",
       "code": "AK.NL.L1",
       "omschrijving": "De leerling beschrijft waar een provincie ligt ten opzichte van andere provincies, de zee en de buurlanden.",

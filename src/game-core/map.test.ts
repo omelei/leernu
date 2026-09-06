@@ -7,7 +7,7 @@ import {
   keyboardOrder,
   MIN_TOUCH_PX,
   needsHelpTarget,
-  renderedSizePx,
+  smallestSidePx,
   type BoundingBox,
 } from './map';
 
@@ -21,11 +21,12 @@ describe('fitView', () => {
   });
 });
 
-describe('renderedSizePx', () => {
-  it('measures the larger dimension, because that is what a finger meets', () => {
+describe('smallestSidePx', () => {
+  it('measures the narrow side, because that is what limits a finger', () => {
     const fit = fitView(VIEW, 500);
-    // 200 units wide, 40 tall, at half a pixel per unit.
-    expect(renderedSizePx([0, 0, 200, 40], fit)).toBe(100);
+    // 200 units wide and 40 tall, at half a pixel per unit: a long thin strip
+    // that is 20 pixels across however far it stretches.
+    expect(smallestSidePx([0, 0, 200, 40], fit)).toBe(20);
   });
 });
 
@@ -38,8 +39,17 @@ describe('needsHelpTarget', () => {
   });
 
   it('helps an island', () => {
-    // Vlieland is roughly this size once it is an item of its own.
-    expect(needsHelpTarget([0, 0, 12, 4], fit)).toBe(true);
+    // Vlieland, measured from the built content: 66 by 36 units.
+    expect(needsHelpTarget([0, 0, 66, 36], fit)).toBe(true);
+  });
+
+  /**
+   * Ameland is 72 units long and 16 wide. Judged on its longest side it looks
+   * like a comfortable 50-pixel target; judged on the side a finger actually
+   * has to land within, it is 11. Real content found this, not a unit test.
+   */
+  it('helps a long thin island that looks big enough', () => {
+    expect(needsHelpTarget([0, 0, 72, 16], fit)).toBe(true);
   });
 
   it('helps a point, which has no size at all', () => {
