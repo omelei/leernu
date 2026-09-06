@@ -4,7 +4,7 @@ import { loadItemSets } from '@/content/loadSets';
 import { t } from '@/i18n';
 import { brand } from '@/config/brand';
 import { loadItemStates } from '@/store/progress';
-import { SET_IDS, type SetId } from '@/features/practice/useRound';
+import { PRACTICE_MODES, SET_IDS, type PracticeMode, type SetId } from '@/features/practice/useRound';
 import type { ProfileRecord } from '@/store/db';
 
 const THREE_WEEKS_DAYS = 21;
@@ -29,12 +29,17 @@ const SET_NAME_KEY = {
   'nl-hoofdsteden': 'set.nl-hoofdsteden',
 } as const;
 
+const MODE_NAME_KEY = {
+  'wijs-aan': 'mode.wijs-aan',
+  'hoe-heet-dit': 'mode.hoe-heet-dit',
+} as const;
+
 export function HomeScreen({
   profile,
   onStart,
 }: {
   readonly profile: ProfileRecord;
-  readonly onStart: (setId: SetId) => void;
+  readonly onStart: (setId: SetId, practiceMode: PracticeMode) => void;
 }) {
   const [states, setStates] = useState<Map<string, ItemState> | null>(null);
 
@@ -101,13 +106,26 @@ export function HomeScreen({
                 </div>
               )}
 
-              <button
-                type="button"
-                className="tk-button tk-button-big"
-                onClick={() => onStart(setId)}
-              >
-                {t('home.continueAction', { aantal: ids.length })}
-              </button>
+              {/* Two ways into the same content. Pointing asks where something
+                  is, typing asks whether you can name it — different skills,
+                  and a child who has one is not done with the other. */}
+              <div className="flex flex-wrap gap-3">
+                {PRACTICE_MODES.map((practiceMode) => (
+                  <button
+                    key={practiceMode}
+                    type="button"
+                    className={
+                      practiceMode === 'wijs-aan'
+                        ? 'tk-button tk-button-big'
+                        : 'tk-button tk-button-big tk-button-quiet'
+                    }
+                    onClick={() => onStart(setId, practiceMode)}
+                  >
+                    {t(MODE_NAME_KEY[practiceMode])}
+                  </button>
+                ))}
+              </div>
+              <p className="mt-2 text-ink-2">{t('home.continueAction', { aantal: ids.length })}</p>
             </article>
           );
         })}

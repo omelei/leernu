@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { t } from '@/i18n';
 import { MapCanvas } from './MapCanvas';
 import { ResultScreen } from './ResultScreen';
-import { SETS, useRound, type SetId } from './useRound';
+import { SETS, useRound, type PracticeMode, type SetId } from './useRound';
 
 /**
  * The practice screen, following docs/leer.nu oefenkaart.html.
@@ -12,15 +12,23 @@ import { SETS, useRound, type SetId } from './useRound';
  * and a progress rail at the very bottom. The map is the interface — it gets
  * the whole stage rather than a panel in a page, which is the single biggest
  * difference from what a child meets on the free alternatives.
+ *
+ * Two ways of answering share this screen. Pointing asks where something is;
+ * typing asks whether the child can name it, which is a different skill and
+ * usually the harder one. Typing is also where ADR-017 finally shows up: a
+ * child who writes the name of a different real place is not told they were
+ * right, and is not simply told they were wrong either.
  */
 export function PracticeScreen({
   setId,
+  practiceMode,
   onHome,
 }: {
   readonly setId: SetId;
+  readonly practiceMode: PracticeMode;
   readonly onHome: () => void;
 }) {
-  const { state, pick, next, stop } = useRound(setId);
+  const { state, pick, submit, next, stop } = useRound(setId, practiceMode);
   const nextButton = useRef<HTMLButtonElement>(null);
 
   // Focus moves to "volgende vraag" the moment an answer lands, so a child on a
@@ -40,9 +48,7 @@ export function PracticeScreen({
     );
   }
 
-  if (state.phase === 'finished') {
-    return <ResultScreen state={state} onHome={onHome} />;
-  }
+  if (state.phase === 'finished') return <ResultScreen state={state} onHome={onHome} />;
 
   if (state.phase === 'loading' || !state.geo || !state.question) {
     return (
@@ -54,14 +60,24 @@ export function PracticeScreen({
 
   const naam = state.question.item.naam;
   const revealed = state.phase === 'revealed';
+  const typing = practiceMode === 'hoe-heet-dit';
+  const isCity = SETS[setId].mode === 'points';
+
+  const label = typing
+    ? t('practice.typeQuestion')
+    : t(isCity ? 'practice.kindCity' : 'practice.kind');
+  const vraag = typing
+    ? t(isCity ? 'practice.kindTypeCity' : 'practice.kindTypeArea')
+    : t('practice.question', { naam });
+
   const chosenName = state.chosenId === null ? '' : (state.namesById.get(state.chosenId) ?? '');
-  const vraag = t('practice.question', { naam });
+  const nearMiss = state.verdict?.kind === 'near-miss';
 
   return (
     <div className="flex h-screen flex-col bg-paper">
       <header className="flex flex-none items-center gap-5 border-b border-line px-6 py-4">
         <div className="min-w-0">
-          <p className="tk-label">{t(SETS[setId].mode === 'points' ? 'practice.kindCity' : 'practice.kind')}</p>
+          <p className="tk-label">{label}</p>
           <h1 className="tk-display truncate text-3xl font-semibold">{vraag}</h1>
         </div>
 
@@ -79,11 +95,7 @@ export function PracticeScreen({
       {/* Announced separately from the heading so a screen reader hears the new
           question on every turn, not only on the first. */}
       <p className="tk-sr-only" role="status" aria-live="polite">
-        {revealed
-          ? state.lastCorrect
-            ? t('practice.correct', { naam })
-            : `${t('practice.wrong', { naam })} ${t('practice.wrongSub', { gekozen: chosenName })}`
-          : vraag}
+        {revealed ? feedbackSentence(state, naam, chosenName) : vraag}
       </p>
 
       <main className="flex min-h-0 flex-1 items-center justify-center p-3">
@@ -91,6 +103,7 @@ export function PracticeScreen({
           geo={state.geo}
           points={state.points}
           mode={state.mode}
+          interaction={typing ? 'show' : 'pick'}
           namesById={state.namesById}
           targetId={state.question.answerId}
           chosenId={state.chosenId}
@@ -99,18 +112,20 @@ export function PracticeScreen({
         />
       </main>
 
+      {typing && !revealed && <AnswerField key={state.index} onSubmit={submit} />}
+
       {revealed && (
         <section className="flex flex-none items-end gap-5 border-t border-line bg-paper px-6 py-5">
-          <FeedbackIcon correct={state.lastCorrect} />
+          <FeedbackIcon kind={state.lastCorrect ? 'good' : nearMiss ? 'near' : 'bad'} />
           <div className="flex-1">
             <p className="tk-display text-2xl font-semibold">
-              {state.lastCorrect ? t('practice.correct', { naam }) : t('practice.wrong', { naam })}
-            </p>
-            <p className="text-lg text-ink-2">
               {state.lastCorrect
-                ? (state.question.item.weetje ?? '')
-                : `${t('practice.wrongSub', { gekozen: chosenName })} ${state.question.item.weetje ?? ''}`}
+                ? t('practice.correct', { naam })
+                : nearMiss
+                  ? t('practice.almost')
+                  : t('practice.wrong', { naam })}
             </p>
+            <p className="text-lg text-ink-2">{feedbackDetail(state, naam, chosenName)}</p>
           </div>
           <button ref={nextButton} type="button" className="tk-button tk-button-big" onClick={next}>
             {t('practice.next')}
@@ -135,6 +150,74 @@ export function PracticeScreen({
   );
 }
 
+type State = ReturnType<typeof useRound>['state'];
+
+/** What a screen reader hears. Same three cases as the panel below the map. */
+function feedbackSentence(state: State, naam: string, chosen: string): string {
+  if (state.lastCorrect) return t('practice.correct', { naam });
+  if (state.verdict?.kind === 'near-miss') {
+    return `${t('practice.almost')} ${t('practice.almostSub', { gekozen: state.verdict.confusedWith.naam, naam })}`;
+  }
+  return `${t('practice.wrong', { naam })} ${chosen ? t('practice.wrongSub', { gekozen: chosen }) : ''}`;
+}
+
+function feedbackDetail(state: State, naam: string, chosen: string): string {
+  const weetje = state.question?.item.weetje ?? '';
+  if (state.lastCorrect) return weetje;
+
+  if (state.verdict?.kind === 'near-miss') {
+    return t('practice.almostSub', { gekozen: state.verdict.confusedWith.naam, naam });
+  }
+  // Pointing names what was pointed at; typing has nothing sensible to quote
+  // back, because whatever was typed was not a place we teach.
+  return chosen ? `${t('practice.wrongSub', { gekozen: chosen })} ${weetje}` : weetje;
+}
+
+/**
+ * The answer box. Cleared between questions by being keyed on the question
+ * index, which is simpler and harder to get wrong than resetting it by hand.
+ */
+function AnswerField({ onSubmit }: { readonly onSubmit: (value: string) => void }) {
+  const [value, setValue] = useState('');
+  const input = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    input.current?.focus();
+  }, []);
+
+  function handle(event: FormEvent) {
+    event.preventDefault();
+    if (value.trim().length === 0) return;
+    onSubmit(value);
+  }
+
+  return (
+    <form
+      onSubmit={handle}
+      className="flex flex-none items-center gap-3 border-t border-line bg-paper px-6 py-4"
+    >
+      <label htmlFor="antwoord" className="tk-sr-only">
+        {t('practice.typeQuestion')}
+      </label>
+      <input
+        ref={input}
+        id="antwoord"
+        className="tk-input max-w-md"
+        value={value}
+        onChange={(event) => setValue(event.target.value)}
+        placeholder={t('practice.typePlaceholder')}
+        autoComplete="off"
+        autoCorrect="off"
+        spellCheck={false}
+        maxLength={40}
+      />
+      <button type="submit" className="tk-button" disabled={value.trim().length === 0}>
+        {t('practice.check')}
+      </button>
+    </form>
+  );
+}
+
 function Counter({ label, value }: { readonly label: string; readonly value: string }) {
   return (
     <div className="flex flex-col items-end">
@@ -144,17 +227,22 @@ function Counter({ label, value }: { readonly label: string; readonly value: str
   );
 }
 
-function FeedbackIcon({ correct }: { readonly correct: boolean }) {
-  // A shape, not only a colour: a tick on green, a cross on red. The same rule
-  // as the map, for the same reason.
+function FeedbackIcon({ kind }: { readonly kind: 'good' | 'near' | 'bad' }) {
+  // A shape, not only a colour. The near miss gets its own mark — neither a
+  // tick nor a cross — because it is genuinely a third outcome and dressing it
+  // as either would undo the point of ADR-017.
+  const background = kind === 'good' ? 'var(--good)' : kind === 'near' ? 'var(--topo)' : 'var(--bad)';
+
   return (
     <span
       aria-hidden="true"
       className="flex h-8 w-8 flex-none items-center justify-center"
-      style={{ background: correct ? 'var(--good)' : 'var(--bad)' }}
+      style={{ background }}
     >
       <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--paper)" strokeWidth={3}>
-        {correct ? <path d="M4 12l5 5L20 6" /> : <path d="M6 6l12 12M18 6L6 18" />}
+        {kind === 'good' && <path d="M4 12l5 5L20 6" />}
+        {kind === 'bad' && <path d="M6 6l12 12M18 6L6 18" />}
+        {kind === 'near' && <path d="M5 12h14M13 6l6 6-6 6" />}
       </svg>
     </span>
   );
@@ -166,14 +254,10 @@ function FeedbackIcon({ correct }: { readonly correct: boolean }) {
  * of a lesson, and this product has none.
  *
  * Three things this has to survive, all of which make a naive version look
- * broken rather than absent:
- *
- * - `getVoices()` is empty on first call in Chrome and fills in later, so the
- *   button waits for `voiceschanged` before deciding it has nothing to say.
- * - A machine with no Dutch voice would silently say nothing. We fall back to
- *   any voice rather than insisting on nl-NL.
- * - With no voices at all the button hides itself. A control that does nothing
- *   is worse than a control that is not there.
+ * broken rather than absent: `getVoices()` is empty on Chrome's first call and
+ * fills in later; a machine with no Dutch voice would say nothing at all; and
+ * with no voices the button hides itself, because a control that does nothing is
+ * worse than a control that is not there.
  */
 function SpeakButton({ text }: { readonly text: string }) {
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);

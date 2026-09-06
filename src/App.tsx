@@ -3,10 +3,10 @@ import { HomeScreen } from '@/features/home/HomeScreen';
 import { PracticeScreen } from '@/features/practice/PracticeScreen';
 import { ProfileGate } from '@/features/player/ProfileGate';
 import { getProfile } from '@/store/profile';
-import type { SetId } from '@/features/practice/useRound';
+import type { PracticeMode, SetId } from '@/features/practice/useRound';
 import type { ProfileRecord } from '@/store/db';
 
-type Screen = { name: 'home' } | { name: 'practice'; setId: SetId };
+type Screen = { name: 'home' } | { name: 'practice'; setId: SetId; practiceMode: PracticeMode };
 type Boot = { status: 'loading' } | { status: 'ready'; profile: ProfileRecord | null };
 
 /**
@@ -39,8 +39,9 @@ export default function App() {
   if (screen.name === 'practice') {
     return (
       <PracticeScreen
-        key={`${screen.setId}-${visit}`}
+        key={`${screen.setId}-${screen.practiceMode}-${visit}`}
         setId={screen.setId}
+        practiceMode={screen.practiceMode}
         onHome={() => setScreen({ name: 'home' })}
       />
     );
@@ -49,9 +50,9 @@ export default function App() {
   return (
     <HomeScreen
       profile={boot.profile}
-      onStart={(setId) => {
+      onStart={(setId, practiceMode) => {
         setVisit(visit + 1);
-        setScreen({ name: 'practice', setId });
+        setScreen({ name: 'practice', setId, practiceMode });
       }}
     />
   );

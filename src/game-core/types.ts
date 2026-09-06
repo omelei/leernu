@@ -36,6 +36,14 @@ export interface Item {
   readonly niveau: Niveau;
   readonly leerdoelen: readonly string[];
   readonly weetje?: string;
+  /**
+   * Links to other items, keyed by the kind of link: `hoofdstadVan` on a
+   * capital, and whatever the next content type needs. Deliberately open rather
+   * than a fixed set of fields — a river runs through provinces, an island
+   * belongs to one, and inventing a column per relationship is how a content
+   * model becomes unusable by the people who write content.
+   */
+  readonly relaties?: Readonly<Record<string, string>>;
 }
 
 /** Leitner boxes, one through five. Box 5 means "known". */

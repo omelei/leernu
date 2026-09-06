@@ -1,7 +1,15 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { composeRound, emptyState, review, type Item, type ItemState } from '@/game-core';
+import {
+  composeRound,
+  emptyState,
+  judgeAnswer,
+  review,
+  type AnswerVerdict,
+  type Item,
+  type ItemState,
+} from '@/game-core';
 import { loadGeoSet, loadPointSet, type GeoSet, type PointSet } from '@/content/loadGeo';
-import { loadItemSets } from '@/content/loadSets';
+import { loadAllItems, loadItemSets } from '@/content/loadSets';
 import { finishSession, loadItemStates, saveAnswer, startSession } from '@/store/progress';
 import type { MapMode } from './MapCanvas';
 
@@ -19,6 +27,14 @@ import type { MapMode } from './MapCanvas';
  */
 
 export type SetId = 'nl-provincies' | 'nl-hoofdsteden';
+
+/**
+ * How a child answers. Pointing tests where something is; typing tests whether
+ * they can name it, which is a different thing and often the harder one.
+ */
+export type PracticeMode = 'wijs-aan' | 'hoe-heet-dit';
+
+export const PRACTICE_MODES: readonly PracticeMode[] = ['wijs-aan', 'hoe-heet-dit'];
 
 export const SET_IDS: readonly SetId[] = ['nl-provincies', 'nl-hoofdsteden'];
 
@@ -39,6 +55,7 @@ export type RoundPhase = 'loading' | 'asking' | 'revealed' | 'finished';
 export interface RoundState {
   readonly phase: RoundPhase;
   readonly setId: SetId;
+  readonly practiceMode: PracticeMode;
   readonly mode: MapMode;
   readonly geo: GeoSet | null;
   readonly points: PointSet | null;
@@ -50,16 +67,25 @@ export interface RoundState {
   readonly combo: number;
   readonly chosenId: string | null;
   readonly lastCorrect: boolean;
+  /** Present after a typed answer: how it was judged (ADR-017). */
+  readonly verdict: AnswerVerdict | null;
   /** Items answered wrongly, for the result screen. */
   readonly missed: readonly Item[];
   readonly answeredCount: number;
   readonly error: string | null;
 }
 
-export function useRound(setId: SetId) {
+export function useRound(setId: SetId, practiceMode: PracticeMode) {
   const [geo, setGeo] = useState<GeoSet | null>(null);
   const [points, setPoints] = useState<PointSet | null>(null);
   const [items, setItems] = useState<Item[]>([]);
+  /**
+   * Everything in the same region, not just this round's set. ADR-017 is
+   * explicit that an answer must not be right or wrong depending on which
+   * exercise a child happens to be doing: writing "Drenthe" when asked for a
+   * capital is naming a real place, and deserves "bijna" rather than a cross.
+   */
+  const [catalogue, setCatalogue] = useState<Item[]>([]);
   const [states, setStates] = useState<Map<string, ItemState>>(new Map());
   const [questions, setQuestions] = useState<RoundQuestion[]>([]);
   const [index, setIndex] = useState(0);
@@ -70,6 +96,7 @@ export function useRound(setId: SetId) {
   const [answeredCount, setAnswered] = useState(0);
   const [combo, setCombo] = useState(0);
   const [missed, setMissed] = useState<Item[]>([]);
+  const [verdict, setVerdict] = useState<AnswerVerdict | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const sessionId = useRef<string | null>(null);
@@ -113,6 +140,7 @@ export function useRound(setId: SetId) {
         setGeo(loadedGeo);
         setPoints(loadedPoints);
         setItems([...all]);
+        setCatalogue(loadAllItems().filter((item) => item.regioSet === set.regioSet));
         setStates(loadedStates);
         setQuestions(round);
         setPhase(round.length > 0 ? 'asking' : 'finished');
@@ -141,16 +169,25 @@ export function useRound(setId: SetId) {
 
   const question = questions[index] ?? null;
 
-  const pick = useCallback(
-    (answerId: string) => {
+  /** One answer, however it was given: pointed at or typed. */
+  const settle = useCallback(
+    (params: {
+      readonly correct: boolean;
+      /** What to light up as the child's answer, if anything. */
+      readonly chosenForMap: string | null;
+      /** Stored on the attempt for later item analysis. */
+      readonly recorded: string | null;
+      readonly judged: AnswerVerdict | null;
+    }) => {
       if (phase !== 'asking' || !question || !sessionId.current) return;
 
-      const correct = answerId === question.answerId;
+      const { correct } = params;
       const responseMs = Math.round(performance.now() - askedAt.current);
       const previous = states.get(question.item.id) ?? emptyState(question.item.id);
       const nextState = review(previous, correct, new Date());
 
-      setChosen(answerId);
+      setChosen(params.chosenForMap);
+      setVerdict(params.judged);
       setLastCorrect(correct);
       setPhase('revealed');
       setCombo(correct ? combo + 1 : 0);
@@ -166,11 +203,54 @@ export function useRound(setId: SetId) {
         itemId: question.item.id,
         correct,
         responseMs,
-        chosen: correct ? null : answerId,
+        chosen: params.recorded,
         nextState,
       });
     },
     [phase, question, states, combo, correctCount, answeredCount, missed],
+  );
+
+  /** "Wijs aan": the child pointed at a shape or a city. */
+  const pick = useCallback(
+    (answerId: string) => {
+      if (!question) return;
+      const correct = answerId === question.answerId;
+      settle({
+        correct,
+        chosenForMap: answerId,
+        recorded: correct ? null : answerId,
+        judged: null,
+      });
+    },
+    [question, settle],
+  );
+
+  /**
+   * "Hoe heet dit": the child typed a name. ADR-017 decides, and a near miss —
+   * naming a different real place — is scored wrong but shown as its own thing.
+   */
+  const submit = useCallback(
+    (typed: string) => {
+      if (!question) return;
+
+      const judged = judgeAnswer(typed, question.item, catalogue);
+      const correct = judged.kind === 'correct';
+
+      // On a near miss the map travels from the place they named to the right
+      // one, which is the same lesson the pointing mode gives for free.
+      const confused =
+        judged.kind === 'near-miss' ? (judged.confusedWith.geometrieRef ?? null) : null;
+
+      settle({
+        correct,
+        chosenForMap: confused,
+        // The normalised text, never raw input: an attempt row is data, and a
+        // free-text column is how a data model quietly grows one.
+        recorded: correct ? null : (judged.kind === 'near-miss' ? judged.confusedWith.id : 'onbekend'),
+        judged,
+      });
+    },
+    [question, catalogue, settle],
   );
 
   const finish = useCallback(() => {
@@ -188,6 +268,7 @@ export function useRound(setId: SetId) {
 
     setIndex(index + 1);
     setChosen(null);
+    setVerdict(null);
     setPhase('asking');
     askedAt.current = performance.now();
   }, [phase, index, questions.length, finish]);
@@ -201,6 +282,7 @@ export function useRound(setId: SetId) {
   const state: RoundState = {
     phase,
     setId,
+    practiceMode,
     mode,
     geo,
     points,
@@ -212,10 +294,11 @@ export function useRound(setId: SetId) {
     combo,
     chosenId,
     lastCorrect,
+    verdict,
     missed,
     answeredCount,
     error,
   };
 
-  return { state, pick, next, stop };
+  return { state, pick, submit, next, stop };
 }

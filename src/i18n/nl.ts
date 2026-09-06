@@ -25,6 +25,10 @@ export const nl = {
   'set.nl-provincies': 'Provincies van Nederland',
   'set.nl-hoofdsteden': 'Hoofdsteden van de provincies',
 
+  // Modes
+  'mode.wijs-aan': 'Wijs aan',
+  'mode.hoe-heet-dit': 'Typ de naam',
+
   // Practice
   'practice.kind': 'Wijs aan op de kaart',
   'practice.question': 'Waar ligt {naam}?',
@@ -34,9 +38,20 @@ export const nl = {
   'practice.correct': '{naam} — goed.',
   'practice.wrong': '{naam} ligt hier.',
   'practice.wrongSub': 'Je wees {gekozen} aan.',
+  'practice.wrongTyped': 'Je schreef {gekozen}.',
+  // The near miss from ADR-017: naming another real place is not a typo, and
+  // saying so is the whole reason that decision exists.
+  'practice.almost': 'Bijna!',
+  'practice.almostSub': 'Je schreef {gekozen}. Dat bestaat ook, maar het ligt ergens anders. Wij zochten {naam}.',
   'practice.next': 'Volgende vraag',
   'practice.stop': 'Stoppen',
   'practice.kindCity': 'Wijs de stad aan',
+  'practice.kindTypeArea': 'Hoe heet dit gebied?',
+  'practice.kindTypeCity': 'Hoe heet deze stad?',
+  'practice.typeQuestion': 'Typ de naam',
+  'practice.typePlaceholder': 'Naam',
+  'practice.check': 'Kijk na',
+  'practice.emptyAnswer': 'Typ eerst een naam.',
   'practice.loading': 'Kaart wordt geladen…',
   'practice.mapFailed': 'De kaart kon niet geladen worden.',
 

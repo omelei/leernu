@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { findNearMisses } from '@/game-core';
+import { findNearMisses, judgeAnswer } from '@/game-core';
 import { loadAllItems, loadItemSets } from './loadSets';
 import type { Detailniveau, GeoSet } from './loadGeo';
 
@@ -171,6 +171,62 @@ describe('geometry references', () => {
       expect(geo.bron.licentie).toBeTruthy();
       expect(geo.bron.opgehaald).toBeTruthy();
     }
+  });
+});
+
+describe('typed answers against the real content', () => {
+  // Everything in the region, which is what the app passes (ADR-017): an answer
+  // must not be right or wrong depending on which exercise a child is doing.
+  const catalogue = items.filter((item) => item.regioSet === 'nederland');
+  const byId = (id: string) => catalogue.find((item) => item.id === id);
+
+  it('lets every item win its own question, and every alias too', () => {
+    const failures: string[] = [];
+
+    for (const item of catalogue) {
+      if (judgeAnswer(item.naam, item, catalogue).kind !== 'correct') {
+        failures.push(`${item.naam} does not win its own question`);
+      }
+      for (const alias of item.aliassen) {
+        if (judgeAnswer(alias, item, catalogue).kind !== 'correct') {
+          failures.push(`alias ${alias} of ${item.naam} is rejected`);
+        }
+      }
+    }
+
+    expect(failures).toEqual([]);
+  });
+
+  /**
+   * Utrecht and Groningen each exist twice — as a province and as its capital.
+   * A wider catalogue is what makes "bijna" possible, and this is where it
+   * could have backfired: an exact name shared by two items must still be
+   * correct for whichever of them was asked.
+   */
+  it('handles the names that belong to two different items', () => {
+    for (const id of ['nl-prov-utrecht', 'nl-stad-utrecht', 'nl-prov-groningen', 'nl-stad-groningen']) {
+      const item = byId(id);
+      expect(item, id).toBeDefined();
+      expect(judgeAnswer(item?.naam ?? '', item as never, catalogue).kind, id).toBe('correct');
+    }
+  });
+
+  it('calls a real place from the other set a near miss, not a mistake', () => {
+    const assen = byId('nl-stad-assen');
+    const gelderland = byId('nl-prov-gelderland');
+    expect(assen).toBeDefined();
+    expect(gelderland).toBeDefined();
+
+    // A child asked for a capital who writes a province name has named
+    // something real. That is worth a different sentence from a cross.
+    expect(judgeAnswer('Drenthe', assen as never, catalogue).kind).toBe('near-miss');
+    expect(judgeAnswer('Limburg', gelderland as never, catalogue).kind).toBe('near-miss');
+  });
+
+  it('still forgives an ordinary typo', () => {
+    const gelderland = byId('nl-prov-gelderland');
+    // A swapped pair of letters, which plain Levenshtein would have refused.
+    expect(judgeAnswer('Gelderlnad', gelderland as never, catalogue).kind).toBe('correct');
   });
 });
 

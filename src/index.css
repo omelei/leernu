@@ -150,6 +150,11 @@
   .tk-shape { fill: var(--map-land); stroke: var(--ink); stroke-width: 1.5; cursor: pointer; }
   .tk-shape:hover { fill: var(--sunken); }
   .tk-shape:focus { outline: none; stroke-width: 4; }
+  /* The shape being asked about while a child types its name. The module accent
+   * rather than green or red: it is a question, not a verdict, and reusing the
+   * answer colours here would teach the child that blue-ish means "so far so
+   * good" before they have answered anything. */
+  .tk-shape-asked { fill: var(--topo-tint); stroke: var(--topo); stroke-width: 3; cursor: default; }
   .tk-shape-target { fill: var(--paper); stroke: var(--good); stroke-width: 3; }
   .tk-shape-wrong { fill: url(#tk-hatch); stroke: var(--bad); stroke-width: 3; }
   .tk-shape-dim { fill: var(--paper); stroke: var(--line-strong); stroke-width: 1; cursor: default; }

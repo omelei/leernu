@@ -45,7 +45,7 @@ test('keeps the profile across a reload, with no sign-in', async ({ page }) => {
 
 test('plays a round: question, map, answer, feedback', async ({ page }) => {
   await signIn(page, 'Noor');
-  await setCard(page, 'Provincies van Nederland').getByRole('button').click();
+  await setCard(page, 'Provincies van Nederland').getByRole('button', { name: 'Wijs aan' }).click();
 
   // The question arrives with the map, not before it.
   await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
@@ -65,7 +65,7 @@ test('plays a round: question, map, answer, feedback', async ({ page }) => {
 
 test('announces the question and the outcome to a screen reader', async ({ page }) => {
   await signIn(page, 'Fatima');
-  await setCard(page, 'Provincies van Nederland').getByRole('button').click();
+  await setCard(page, 'Provincies van Nederland').getByRole('button', { name: 'Wijs aan' }).click();
 
   const live = page.getByRole('status');
   await expect(live).toContainText('Waar ligt');
@@ -86,7 +86,7 @@ test('every button meets the 48px touch target', async ({ page }) => {
 
 test('asks about every province, and lets a child stop early', async ({ page }) => {
   await signIn(page, 'Jesse');
-  await setCard(page, 'Provincies van Nederland').getByRole('button').click();
+  await setCard(page, 'Provincies van Nederland').getByRole('button', { name: 'Wijs aan' }).click();
 
   // Twelve provinces means twelve questions, not a sample of ten.
   await expect(page.getByText('1/12')).toBeVisible();
@@ -98,10 +98,29 @@ test('asks about every province, and lets a child stop early', async ({ page }) 
 
 test('practises the capitals as points on the map', async ({ page }) => {
   await signIn(page, 'Amir');
-  await setCard(page, 'Hoofdsteden van de provincies').getByRole('button').click();
+  await setCard(page, 'Hoofdsteden van de provincies').getByRole('button', { name: 'Wijs aan' }).click();
 
   await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
   // Cities are points, and each one carries a 48px target of its own.
   await expect(page.getByRole('button', { name: 'Maastricht' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Leeuwarden' })).toBeVisible();
+});
+
+test('typing a name: a real place from elsewhere is a near miss, not a cross', async ({ page }) => {
+  await signIn(page, 'Roos');
+  await setCard(page, 'Provincies van Nederland').getByRole('button', { name: 'Typ de naam' }).click();
+
+  // The map shows which area is meant; it does not say its name.
+  await expect(page.getByRole('heading', { name: 'Hoe heet dit gebied?' })).toBeVisible();
+
+  const answer = page.getByPlaceholder('Naam');
+  await expect(answer).toBeFocused();
+
+  // A different real province: wrong, but named as something that exists.
+  await answer.fill('Zeeland');
+  await page.getByRole('button', { name: 'Kijk na' }).click();
+
+  const feedback = page.getByRole('status');
+  await expect(feedback).toContainText(/Bijna|goed\./);
+  await expect(page.getByRole('button', { name: 'Volgende vraag' })).toBeVisible();
 });
