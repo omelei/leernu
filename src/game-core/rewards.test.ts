@@ -52,23 +52,30 @@ describe('levels', () => {
     expect(xpForLevel(1)).toBe(0);
   });
 
-  it('costs a hundred more each time', () => {
-    expect(xpForLevel(2)).toBe(100);
-    expect(xpForLevel(3)).toBe(300);
-    expect(xpForLevel(4)).toBe(600);
+  /**
+   * The first level costs 150 and every one after it a hundred more than the
+   * last, so the totals run 150, 400, 750. A perfect round of fifteen is 205 XP:
+   * the first level lands at the end of a good round rather than halfway
+   * through one, which is the whole reason the first step is not 100.
+   */
+  it('asks a whole round for the first level, then a hundred more each time', () => {
+    expect(xpForLevel(2)).toBe(150);
+    expect(xpForLevel(3)).toBe(400);
+    expect(xpForLevel(4)).toBe(750);
   });
 
   it('levels up exactly on the threshold, not a point later', () => {
-    expect(levelFor(99)).toBe(1);
-    expect(levelFor(100)).toBe(2);
-    expect(levelFor(299)).toBe(2);
-    expect(levelFor(300)).toBe(3);
+    expect(levelFor(149)).toBe(1);
+    expect(levelFor(150)).toBe(2);
+    expect(levelFor(399)).toBe(2);
+    expect(levelFor(400)).toBe(3);
   });
 
   it('reports progress through the current level', () => {
-    expect(levelProgress(100)).toBe(0);
-    expect(levelProgress(200)).toBeCloseTo(0.5, 6);
-    expect(levelProgress(299)).toBeCloseTo(0.995, 3);
+    expect(levelProgress(150)).toBe(0);
+    // Level two spans 150 to 400, so halfway is 275.
+    expect(levelProgress(275)).toBeCloseTo(0.5, 6);
+    expect(levelProgress(399)).toBeCloseTo(0.996, 3);
   });
 
   it('never goes backwards as xp rises', () => {
