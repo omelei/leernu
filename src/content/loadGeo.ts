@@ -67,8 +67,19 @@ export interface PointSet {
 const cache = new Map<string, Promise<GeoSet>>();
 const pointCache = new Map<string, Promise<PointSet>>();
 
+/**
+ * Vite's base path, always ending in a slash. Hard-coding a leading `/` works
+ * on a domain of our own and breaks silently on any subpath — a blank map, and
+ * the only clue a 404 in a console nobody in a classroom is reading.
+ */
+const BASE = import.meta.env.BASE_URL;
+
 export function geoUrl(onderwerp: string, niveau: Detailniveau, regio = 'nl'): string {
-  return `/geo/${regio}/${onderwerp}.${niveau}.json`;
+  return `${BASE}geo/${regio}/${onderwerp}.${niveau}.json`;
+}
+
+export function pointUrl(onderwerp: string, regio = 'nl'): string {
+  return `${BASE}geo/${regio}/${onderwerp}.json`;
 }
 
 /**
@@ -100,7 +111,7 @@ export function loadGeoSet(onderwerp: string, niveau: Detailniveau, regio = 'nl'
  * shapes, so a dot and an outline line up exactly.
  */
 export function loadPointSet(onderwerp: string, regio = 'nl'): Promise<PointSet> {
-  const url = `/geo/${regio}/${onderwerp}.json`;
+  const url = pointUrl(onderwerp, regio);
   const existing = pointCache.get(url);
   if (existing) return existing;
 

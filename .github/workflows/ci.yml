@@ -68,3 +68,39 @@ jobs:
           name: lighthouse-report
           path: lighthouse-report/
           retention-days: 7
+
+  # Publishing is gated on the two jobs above. This is a product for children on
+  # a real domain; a build that fails its own tests must not be the one that
+  # reaches it, and "we forgot to check" is not a thing CI should allow.
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: [check, e2e]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+        env:
+          # Repository variable. Leave it unset for a project page at
+          # /<repo>/; set it to / once a custom domain is pointed here.
+          BASE_PATH: ${{ vars.BASE_PATH || format('/{0}/', github.event.repository.name) }}
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - id: deployment
+        uses: actions/deploy-pages@v4

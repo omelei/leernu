@@ -8,6 +8,10 @@ import { fileURLToPath, URL } from 'node:url';
 // shell, so the shell's size can be judged on its own (see ADR-010 and
 // tools/report-bundle-size.mjs).
 export default defineConfig({
+  // A domain of our own serves from the root; GitHub Pages without one serves
+  // from /<repo>/. Set by the deploy workflow so the same build works either
+  // way, and so nobody has to remember to change it by hand.
+  base: process.env.BASE_PATH ?? '/',
   plugins: [react()],
   resolve: {
     alias: {
