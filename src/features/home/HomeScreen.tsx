@@ -6,7 +6,12 @@ import { brand } from '@/config/brand';
 import { loadItemStates } from '@/store/progress';
 import { loadStreak, HOLIDAYS } from '@/store/streakStore';
 import { currentStreak, levelFor, levelProgress, type StreakState } from '@/game-core';
-import { PRACTICE_MODES, SET_IDS, type PracticeMode, type SetId } from '@/features/practice/useRound';
+import {
+  PRACTICE_MODES,
+  SET_IDS,
+  type PracticeMode,
+  type SetId,
+} from '@/features/practice/useRound';
 import type { ProfileRecord } from '@/store/db';
 
 const THREE_WEEKS_DAYS = 21;

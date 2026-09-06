@@ -89,10 +89,7 @@ function centroidOfLargestRing(rings) {
     x += px;
     y += py;
   }
-  return [
-    Number((x / largest.length).toFixed(1)),
-    Number((y / largest.length).toFixed(1)),
-  ];
+  return [Number((x / largest.length).toFixed(1)), Number((y / largest.length).toFixed(1))];
 }
 
 /**

@@ -25,27 +25,35 @@ device itself.
 ```ts
 // object store: profile  (exactly one record)
 {
-  id: string;               // generated locally, becomes student_id on upload
-  naam: string;             // what the player typed; never leaves the device
+  id: string; // generated locally, becomes student_id on upload
+  naam: string; // what the player typed; never leaves the device
   avatarConfig: object;
   niveau: 1 | 2 | 3;
   xp: number;
   munten: number;
-  aangemaaktOp: string;     // ISO
+  aangemaaktOp: string; // ISO
 }
 
 // object store: itemStates    keyed by itemId — same shape as part B §4
-{ itemId, box, laatsteReview, volgendeReview, goedCount, foutCount }
+{
+  (itemId, box, laatsteReview, volgendeReview, goedCount, foutCount);
+}
 
 // object store: sessions      same shape as part B §4, minus organisationId
-{ id, mode, itemSet, score, gestart, geeindigd }
+{
+  (id, mode, itemSet, score, gestart, geeindigd);
+}
 
 // object store: attempts      append-only, autoIncrement key
 //   indexed by sessionId (what happened in one round) and itemId (one item over time)
-{ id, sessionId, itemId, mode, correct, responseMs, gekozenAntwoord, tijdstip }
+{
+  (id, sessionId, itemId, mode, correct, responseMs, gekozenAntwoord, tijdstip);
+}
 
 // object store: streak        exactly one record, key 'me'
-{ id, huidigeStreak, langsteStreak, laatsteActieveDag, vriezers, vriezerWeek }
+{
+  (id, huidigeStreak, langsteStreak, laatsteActieveDag, vriezers, vriezerWeek);
+}
 
 // object store: badges        { badgeId, behaaldOp }
 // object store: stamps        { regioSet, behaaldOp }
@@ -271,8 +279,8 @@ create table item_learning_goals (
 `kerndoel_refs` is a JSON array of `{stelsel, code, versie, bron_url, geraadpleegd_op}`
 rather than a single foreign key. Two reasons, and the second one is the real
 one: the kerndoelen were revised and the first sets entered law in August 2026,
-and geography does not sit in one learning area — it spans *mens en natuur* and
-*mens en maatschappij*. A one-to-one `kerndoel_ref` column would have been wrong
+and geography does not sit in one learning area — it spans _mens en natuur_ and
+_mens en maatschappij_. A one-to-one `kerndoel_ref` column would have been wrong
 within a month of writing it. Swapping in a new set of references is a data
 change; see `docs/CURRICULUM.md` (phase 1) for the sources and their retrieval
 dates.
@@ -337,7 +345,7 @@ RLS returns sessions to a pupil through a view that omits `item_set`.
 
 `attempts.gekozen_antwoord` is the column the spec calls gold, and it is: the
 item analysis ("many pupils confuse Assen and Zwolle") is a group-by on it. It
-stores an item id where the mode offers choices, and a *normalised* string where
+stores an item id where the mode offers choices, and a _normalised_ string where
 the pupil typed — normalised, so that it is bounded content and not a free-text
 field wearing a disguise.
 
@@ -466,7 +474,7 @@ December — and hanging deletion on the licence would keep data alive that nobo
 expects to exist. `subscriptions.data_bewaren_tot` still exists for the
 end-of-licence case, and the job deletes on whichever comes first.
 
-The deletion job produces a report *before* it runs and mails it to the school
+The deletion job produces a report _before_ it runs and mails it to the school
 admin. Silent deletion of a year of pupil work, even correct deletion, is the
 kind of correctness that ends a contract.
 
@@ -475,19 +483,19 @@ kind of correctness that ends a contract.
 Every table has RLS enabled and no permissive default. Read this as the summary;
 the policies themselves are in the migrations, and each has a negative test.
 
-| Table | Pupil | Teacher | Admin |
-|---|---|---|---|
-| `students` | own row; classmates' first names only, through a view | own classes | own organisation |
-| `item_states` | own rows | own classes | own organisation |
-| `attempts` | own rows, select only | own classes | own organisation |
-| `sessions` | own rows via view without `item_set` | own classes, aggregated | own organisation |
-| `league_entries` | own class, and own division across classes | own classes | own organisation |
-| `duels` | duels they are in | own classes | own organisation |
-| `assignments` | own class, read only | own classes, write | own organisation |
-| `classes` | own class, name only | own classes | own organisation |
-| `subscriptions` | none | none | own organisation |
-| `audit_log` | none | none | own organisation, read only |
-| `items`, `learning_goals`, `badges` | read all | read all | read all |
+| Table                               | Pupil                                                 | Teacher                 | Admin                       |
+| ----------------------------------- | ----------------------------------------------------- | ----------------------- | --------------------------- |
+| `students`                          | own row; classmates' first names only, through a view | own classes             | own organisation            |
+| `item_states`                       | own rows                                              | own classes             | own organisation            |
+| `attempts`                          | own rows, select only                                 | own classes             | own organisation            |
+| `sessions`                          | own rows via view without `item_set`                  | own classes, aggregated | own organisation            |
+| `league_entries`                    | own class, and own division across classes            | own classes             | own organisation            |
+| `duels`                             | duels they are in                                     | own classes             | own organisation            |
+| `assignments`                       | own class, read only                                  | own classes, write      | own organisation            |
+| `classes`                           | own class, name only                                  | own classes             | own organisation            |
+| `subscriptions`                     | none                                                  | none                    | own organisation            |
+| `audit_log`                         | none                                                  | none                    | own organisation, read only |
+| `items`, `learning_goals`, `badges` | read all                                              | read all                | read all                    |
 
 The cross-class case is the one to watch: divisions (§4.4) put a pupil in a
 group with pupils from other schools. The policy exposes only

@@ -39,4 +39,3 @@ export async function setSetting(key: string, value: string): Promise<void> {
   const db = await getDb();
   await db.put('settings', { key, value });
 }
-

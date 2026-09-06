@@ -314,7 +314,7 @@ dependencies:
 
 - `projection.mjs` — spherical oblique stereographic on the RD centre
   (52.15616055 N, 5.38763889 E), plus aspect-preserving fitting into a 0–1000
-  view box. This is RD's *shape*, not RD: no ellipsoid, no false origin, no
+  view box. This is RD's _shape_, not RD: no ellipsoid, no false origin, no
   metre scale, which is all a map for children needs.
 - `simplify.mjs` — iterative Ramer-Douglas-Peucker plus a minimum-area filter,
   run **after** projection so a tolerance means the same thing everywhere.
@@ -381,7 +381,7 @@ Two supporting rules:
   unfair.
 
 A near-miss is scored as wrong — Leitner sends the item back to box one — but it
-is *shown* differently: "Je schreef Epe. Dat bestaat ook! Maar wij zochten Ede."
+is _shown_ differently: "Je schreef Epe. Dat bestaat ook! Maar wij zochten Ede."
 That sentence is the entire point of the change. The near-miss is the teachable
 moment, and the old behaviour threw it away by calling it correct.
 
@@ -434,7 +434,7 @@ problem is visible rather than theoretical. If that list is short, an exception
 table is a small change; if it is long, this ADR is worth revisiting.
 
 **Found while building, 2026-09-05.** Plain Levenshtein counts a swapped pair of
-letters as two edits, so "Utrehct" for Utrecht is *rejected* — and transposition
+letters as two edits, so "Utrehct" for Utrecht is _rejected_ — and transposition
 is one of the most common mistakes a ten-year-old makes at a keyboard. The
 tolerance therefore forgives the error that teaches a wrong fact (Epe for Ede)
 and refuses the error that teaches nothing (Utrehct for Utrecht), which is
@@ -498,9 +498,9 @@ set.
 ### Context
 
 Spec §3.4 requires curriculum tagging and forbids unverifiable claims. Verified
-2026-09-05: SLO delivered definitive concept kerndoelen for *mens en maatschappij*
+2026-09-05: SLO delivered definitive concept kerndoelen for _mens en maatschappij_
 in November 2025, and the first revised kerndoelen entered law in August 2026.
-Geography spans two learning areas — *mens en natuur* and *mens en maatschappij* —
+Geography spans two learning areas — _mens en natuur_ and _mens en maatschappij_ —
 so one kerndoel reference per goal is structurally wrong.
 
 ### Decision
@@ -526,10 +526,10 @@ write.
 Recorded in full in the 2026-09-05 revision history; summarised here because
 none of them is built in this phase.
 
-| ADR | Decision | Why deferred |
-|---|---|---|
-| ADR-002 | Pupils authenticate through a custom JWT, not Supabase Auth, because the spec forbids pupil e-mail while RLS needs an identity | No sign-in exists |
-| ADR-003 | Rounds are authored and scored on the server, because a client-written score is forgeable | No leaderboard to forge; `game-core` stays pure so this stays affordable |
-| ADR-008 | No free consumer tier, because a self-service account for a minor makes us the controller under a different legal regime | Moot: everyone plays free, and no account exists |
-| ADR-012 | Retention hangs on class archival, and deletion is announced before it runs | No stored pupil data |
-| ADR-013 | Payments behind a `PaymentProvider` interface; schools pay on invoice with SEPA | No commercial model |
+| ADR     | Decision                                                                                                                       | Why deferred                                                             |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
+| ADR-002 | Pupils authenticate through a custom JWT, not Supabase Auth, because the spec forbids pupil e-mail while RLS needs an identity | No sign-in exists                                                        |
+| ADR-003 | Rounds are authored and scored on the server, because a client-written score is forgeable                                      | No leaderboard to forge; `game-core` stays pure so this stays affordable |
+| ADR-008 | No free consumer tier, because a self-service account for a minor makes us the controller under a different legal regime       | Moot: everyone plays free, and no account exists                         |
+| ADR-012 | Retention hangs on class archival, and deletion is announced before it runs                                                    | No stored pupil data                                                     |
+| ADR-013 | Payments behind a `PaymentProvider` interface; schools pay on invoice with SEPA                                                | No commercial model                                                      |

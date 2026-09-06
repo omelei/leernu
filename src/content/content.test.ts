@@ -235,7 +235,12 @@ describe('typed answers against the real content', () => {
    * correct for whichever of them was asked.
    */
   it('handles the names that belong to two different items', () => {
-    for (const id of ['nl-prov-utrecht', 'nl-stad-utrecht', 'nl-prov-groningen', 'nl-stad-groningen']) {
+    for (const id of [
+      'nl-prov-utrecht',
+      'nl-stad-utrecht',
+      'nl-prov-groningen',
+      'nl-stad-groningen',
+    ]) {
       const item = byId(id);
       expect(item, id).toBeDefined();
       expect(judgeAnswer(item?.naam ?? '', item as never, catalogue).kind, id).toBe('correct');

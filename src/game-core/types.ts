@@ -60,9 +60,4 @@ export interface ItemState {
 }
 
 export type ModeId =
-  | 'wijs-aan'
-  | 'hoe-heet-dit'
-  | 'sleepronde'
-  | 'bliksemronde'
-  | 'overleven'
-  | 'ontdekken';
+  'wijs-aan' | 'hoe-heet-dit' | 'sleepronde' | 'bliksemronde' | 'overleven' | 'ontdekken';

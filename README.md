@@ -12,10 +12,10 @@ renaming or white-labelling stays a one-file change.
 A child types a name — kept on the device, never sent anywhere — and then
 practises one of two sets in one of two ways:
 
-| | Wijs aan | Typ de naam |
-|---|---|---|
-| **Provincies van Nederland** | click the province | name the highlighted province |
-| **Hoofdsteden van de provincies** | click the city | name the highlighted city |
+|                                   | Wijs aan           | Typ de naam                   |
+| --------------------------------- | ------------------ | ----------------------------- |
+| **Provincies van Nederland**      | click the province | name the highlighted province |
+| **Hoofdsteden van de provincies** | click the city     | name the highlighted city     |
 
 A round covers the whole set: twelve of twelve, ordered by a Leitner scheduler
 so what a child keeps missing comes round first. Answers are judged, saved and
@@ -85,13 +85,13 @@ python -m http.server 8942
 
 ## Documents
 
-| | |
-|---|---|
-| [ARCHITECTURE.md](docs/ARCHITECTURE.md) | How it is put together and why |
-| [DATAMODEL.md](docs/DATAMODEL.md) | Part A: the local store. Part B: the deferred school model |
-| [DECISIONS.md](docs/DECISIONS.md) | Every decision that would be expensive to reverse, including the ones that were reversed |
-| [DATA_SOURCES.md](docs/DATA_SOURCES.md) | Every geodata source with licence, URL and retrieval date |
-| [BUSINESSPLAN.md](docs/BUSINESSPLAN.md) | Market, competition, pricing. Planning only — not built |
+|                                         |                                                                                          |
+| --------------------------------------- | ---------------------------------------------------------------------------------------- |
+| [ARCHITECTURE.md](docs/ARCHITECTURE.md) | How it is put together and why                                                           |
+| [DATAMODEL.md](docs/DATAMODEL.md)       | Part A: the local store. Part B: the deferred school model                               |
+| [DECISIONS.md](docs/DECISIONS.md)       | Every decision that would be expensive to reverse, including the ones that were reversed |
+| [DATA_SOURCES.md](docs/DATA_SOURCES.md) | Every geodata source with licence, URL and retrieval date                                |
+| [BUSINESSPLAN.md](docs/BUSINESSPLAN.md) | Market, competition, pricing. Planning only — not built                                  |
 
 ## Still to come
 

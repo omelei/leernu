@@ -13,26 +13,66 @@
  */
 
 /* Source Sans 3 — body */
-@font-face { font-family:'Source Sans 3'; font-style:normal; font-weight:400; font-display:swap;
-  src:url('/fonts/source-sans-3-latin-400-normal.woff2') format('woff2'); }
-@font-face { font-family:'Source Sans 3'; font-style:normal; font-weight:600; font-display:swap;
-  src:url('/fonts/source-sans-3-latin-600-normal.woff2') format('woff2'); }
-@font-face { font-family:'Source Sans 3'; font-style:normal; font-weight:700; font-display:swap;
-  src:url('/fonts/source-sans-3-latin-700-normal.woff2') format('woff2'); }
+@font-face {
+  font-family: 'Source Sans 3';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/source-sans-3-latin-400-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Source Sans 3';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/source-sans-3-latin-600-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Source Sans 3';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/source-sans-3-latin-700-normal.woff2') format('woff2');
+}
 
 /* Space Grotesk — questions, numbers, anything that carries weight */
-@font-face { font-family:'Space Grotesk'; font-style:normal; font-weight:500; font-display:swap;
-  src:url('/fonts/space-grotesk-latin-500-normal.woff2') format('woff2'); }
-@font-face { font-family:'Space Grotesk'; font-style:normal; font-weight:600; font-display:swap;
-  src:url('/fonts/space-grotesk-latin-600-normal.woff2') format('woff2'); }
-@font-face { font-family:'Space Grotesk'; font-style:normal; font-weight:700; font-display:swap;
-  src:url('/fonts/space-grotesk-latin-700-normal.woff2') format('woff2'); }
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/space-grotesk-latin-500-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/space-grotesk-latin-600-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/space-grotesk-latin-700-normal.woff2') format('woff2');
+}
 
 /* IBM Plex Mono — the small uppercase labels above a question */
-@font-face { font-family:'IBM Plex Mono'; font-style:normal; font-weight:400; font-display:swap;
-  src:url('/fonts/ibm-plex-mono-latin-400-normal.woff2') format('woff2'); }
-@font-face { font-family:'IBM Plex Mono'; font-style:normal; font-weight:500; font-display:swap;
-  src:url('/fonts/ibm-plex-mono-latin-500-normal.woff2') format('woff2'); }
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/ibm-plex-mono-latin-400-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/ibm-plex-mono-latin-500-normal.woff2') format('woff2');
+}
 
 @tailwind base;
 @tailwind components;
@@ -71,7 +111,9 @@
     --touch: 48px;
   }
 
-  html { -webkit-text-size-adjust: 100%; }
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
 
   body {
     margin: 0;
@@ -83,18 +125,30 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  h1, h2, h3 { margin: 0; font-family: 'Space Grotesk', system-ui, sans-serif;
-    font-weight: 600; letter-spacing: -0.02em; color: var(--ink); }
+  h1,
+  h2,
+  h3 {
+    margin: 0;
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
 
   /* One focus style everywhere. On a map region an outline follows the bounding
    * box rather than the shape, which draws a rectangle in the sea — so map
    * shapes thicken their own stroke instead (see .tk-shape). */
-  :focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  :focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+  }
 
   /* Reduced motion removes movement, never feedback. An answer still turns
    * green and still says "goed"; it just stops travelling to get there. */
   @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
+    *,
+    *::before,
+    *::after {
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
@@ -104,70 +158,145 @@
 }
 
 @layer components {
-  .tk-display { font-family: 'Space Grotesk', system-ui, sans-serif; letter-spacing: -0.02em; }
+  .tk-display {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    letter-spacing: -0.02em;
+  }
 
   /* The small uppercase label above a question. Mono and tracked-out so it
    * reads as a category and never competes with the question itself. */
   .tk-label {
     font-family: 'IBM Plex Mono', ui-monospace, monospace;
-    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
-    color: var(--ink-2); white-space: nowrap;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    white-space: nowrap;
   }
 
-  .tk-card { background: var(--paper); border: 1px solid var(--line-strong); }
+  .tk-card {
+    background: var(--paper);
+    border: 1px solid var(--line-strong);
+  }
 
   /* Min-height rather than fixed: Dutch runs longer than the English it is
    * translated from, and buttons are where that shows first. */
   .tk-button {
-    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-    min-height: var(--touch); padding: 0 28px; border: 0; border-radius: 12px;
-    background: var(--ink); color: var(--paper);
-    font-family: 'Source Sans 3', system-ui, sans-serif; font-size: 20px; font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: var(--touch);
+    padding: 0 28px;
+    border: 0;
+    border-radius: 12px;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'Source Sans 3', system-ui, sans-serif;
+    font-size: 20px;
+    font-weight: 600;
     cursor: pointer;
   }
-  .tk-button-big { height: 64px; }
+  .tk-button-big {
+    height: 64px;
+  }
   .tk-button-quiet {
-    background: var(--paper); color: var(--ink); border: 1px solid var(--line-strong);
+    background: var(--paper);
+    color: var(--ink);
+    border: 1px solid var(--line-strong);
   }
 
   .tk-pill {
-    display: inline-flex; align-items: center; min-height: 40px; padding: 0 14px;
-    border-radius: 999px; border: 1px solid var(--line-strong); background: var(--paper);
-    font-size: 15px; font-weight: 600; color: var(--ink); cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 0 14px;
+    border-radius: 999px;
+    border: 1px solid var(--line-strong);
+    background: var(--paper);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    cursor: pointer;
   }
-  .tk-pill[aria-pressed='true'] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .tk-pill[aria-pressed='true'] {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
 
   .tk-input {
-    min-height: var(--touch); width: 100%; padding: 12px 16px;
-    border: 1px solid var(--line-strong); border-radius: 12px;
-    background: var(--paper); color: var(--ink); font: inherit; font-size: 19px;
+    min-height: var(--touch);
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--line-strong);
+    border-radius: 12px;
+    background: var(--paper);
+    color: var(--ink);
+    font: inherit;
+    font-size: 19px;
   }
 
   /* Map shapes. The reveal styles come straight from the design: a correct
    * answer is outlined green on paper rather than filled, and a wrong one is
    * filled with a hatch — a texture, so the difference survives being colour
    * blind or printed in grey. */
-  .tk-shape { fill: var(--map-land); stroke: var(--ink); stroke-width: 1.5; cursor: pointer; }
-  .tk-shape:hover { fill: var(--sunken); }
-  .tk-shape:focus { outline: none; stroke-width: 4; }
+  .tk-shape {
+    fill: var(--map-land);
+    stroke: var(--ink);
+    stroke-width: 1.5;
+    cursor: pointer;
+  }
+  .tk-shape:hover {
+    fill: var(--sunken);
+  }
+  .tk-shape:focus {
+    outline: none;
+    stroke-width: 4;
+  }
   /* The shape being asked about while a child types its name. The module accent
    * rather than green or red: it is a question, not a verdict, and reusing the
    * answer colours here would teach the child that blue-ish means "so far so
    * good" before they have answered anything. */
-  .tk-shape-asked { fill: var(--topo-tint); stroke: var(--topo); stroke-width: 3; cursor: default; }
-  .tk-shape-target { fill: var(--paper); stroke: var(--good); stroke-width: 3; }
-  .tk-shape-wrong { fill: url(#tk-hatch); stroke: var(--bad); stroke-width: 3; }
+  .tk-shape-asked {
+    fill: var(--topo-tint);
+    stroke: var(--topo);
+    stroke-width: 3;
+    cursor: default;
+  }
+  .tk-shape-target {
+    fill: var(--paper);
+    stroke: var(--good);
+    stroke-width: 3;
+  }
+  .tk-shape-wrong {
+    fill: url(#tk-hatch);
+    stroke: var(--bad);
+    stroke-width: 3;
+  }
   /* The dimmed provinces behind a capitals exercise. They recede, but they are
    * not decoration: they are how a child knows where on the map they are, and
    * WCAG asks 3:1 for a graphical object you need in order to understand the
    * content. --line-strong reaches only 1.91:1 against paper; --ink-3 reaches
    * 3.75:1, which is why the token that is too light for text is exactly right
    * for a line. */
-  .tk-shape-dim { fill: var(--paper); stroke: var(--ink-3); stroke-width: 1; cursor: default; }
+  .tk-shape-dim {
+    fill: var(--paper);
+    stroke: var(--ink-3);
+    stroke-width: 1;
+    cursor: default;
+  }
 
   .tk-sr-only {
-    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
-    overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
   }
 }
 
@@ -175,6 +304,10 @@
  * point of the animation is that the child sees the distance, so it is the one
  * place movement teaches something. Reduced motion is handled above. */
 @keyframes tk-travel {
-  from { transform: translate(var(--tk-dx), var(--tk-dy)); }
-  to { transform: translate(0, 0); }
+  from {
+    transform: translate(var(--tk-dx), var(--tk-dy));
+  }
+  to {
+    transform: translate(0, 0);
+  }
 }

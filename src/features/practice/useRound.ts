@@ -41,11 +41,7 @@ export type PracticeMode = 'wijs-aan' | 'hoe-heet-dit';
 
 export const PRACTICE_MODES: readonly PracticeMode[] = ['wijs-aan', 'hoe-heet-dit'];
 
-export const SET_IDS: readonly SetId[] = [
-  'nl-provincies',
-  'nl-hoofdsteden',
-  'nl-waddeneilanden',
-];
+export const SET_IDS: readonly SetId[] = ['nl-provincies', 'nl-hoofdsteden', 'nl-waddeneilanden'];
 
 /**
  * Names live in i18n; only the map behaviour belongs here. `answers` says what
@@ -277,7 +273,11 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
         chosenForMap: confused,
         // The normalised text, never raw input: an attempt row is data, and a
         // free-text column is how a data model quietly grows one.
-        recorded: correct ? null : (judged.kind === 'near-miss' ? judged.confusedWith.id : 'onbekend'),
+        recorded: correct
+          ? null
+          : judged.kind === 'near-miss'
+            ? judged.confusedWith.id
+            : 'onbekend',
         judged,
       });
     },

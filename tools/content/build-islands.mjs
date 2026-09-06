@@ -162,7 +162,9 @@ const payload = {
 const path = join(OUT_DIR, 'waddeneilanden.json');
 writeFileSync(path, JSON.stringify(payload));
 
-console.log(`  waddeneilanden  ${vormen.length} shapes  ${(statSync(path).size / 1024).toFixed(1)} kB`);
+console.log(
+  `  waddeneilanden  ${vormen.length} shapes  ${(statSync(path).size / 1024).toFixed(1)} kB`,
+);
 for (const vorm of vormen) {
   const [minX, minY, maxX, maxY] = vorm.bbox;
   console.log(

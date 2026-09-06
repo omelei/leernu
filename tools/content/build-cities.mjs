@@ -101,5 +101,7 @@ const payload = {
 const path = join(OUT_DIR, 'hoofdsteden.json');
 writeFileSync(path, JSON.stringify(payload));
 
-console.log(`  hoofdsteden  ${punten.length} points  ${(statSync(path).size / 1024).toFixed(1)} kB`);
+console.log(
+  `  hoofdsteden  ${punten.length} points  ${(statSync(path).size / 1024).toFixed(1)} kB`,
+);
 console.log(`\nWritten to ${OUT_DIR}`);

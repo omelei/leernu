@@ -19,9 +19,7 @@ const day = (key: string) => {
   return new Date(y ?? 1970, (m ?? 1) - 1, d ?? 1);
 };
 
-const KERST: HolidayPeriod[] = [
-  { naam: 'Kerstvakantie', start: '2026-12-19', eind: '2027-01-03' },
-];
+const KERST: HolidayPeriod[] = [{ naam: 'Kerstvakantie', start: '2026-12-19', eind: '2027-01-03' }];
 
 function after(state: StreakState, key: string, holidays: HolidayPeriod[] = []) {
   return recordActivity(state, day(key), holidays).state;
@@ -221,10 +219,12 @@ describe('the holiday calendar', () => {
    * anyone would act.
    */
   it('has at least a hundred days left before it runs out', () => {
-    const last = calendar.vakanties.map((period) => period.eind).sort().at(-1) ?? '';
-    const daysLeft = Math.round(
-      (new Date(last).getTime() - Date.now()) / 86_400_000,
-    );
+    const last =
+      calendar.vakanties
+        .map((period) => period.eind)
+        .sort()
+        .at(-1) ?? '';
+    const daysLeft = Math.round((new Date(last).getTime() - Date.now()) / 86_400_000);
 
     expect(
       daysLeft,

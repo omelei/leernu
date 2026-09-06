@@ -98,7 +98,9 @@ test('asks about every province, and lets a child stop early', async ({ page }) 
 
 test('practises the capitals as points on the map', async ({ page }) => {
   await signIn(page, 'Amir');
-  await setCard(page, 'Hoofdsteden van de provincies').getByRole('button', { name: 'Wijs aan' }).click();
+  await setCard(page, 'Hoofdsteden van de provincies')
+    .getByRole('button', { name: 'Wijs aan' })
+    .click();
 
   await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
   // Cities are points, and each one carries a 48px target of its own.
@@ -108,7 +110,9 @@ test('practises the capitals as points on the map', async ({ page }) => {
 
 test('typing a name: a real place from elsewhere is a near miss, not a cross', async ({ page }) => {
   await signIn(page, 'Roos');
-  await setCard(page, 'Provincies van Nederland').getByRole('button', { name: 'Typ de naam' }).click();
+  await setCard(page, 'Provincies van Nederland')
+    .getByRole('button', { name: 'Typ de naam' })
+    .click();
 
   // The map shows which area is meant; it does not say its name.
   await expect(page.getByRole('heading', { name: 'Hoe heet dit gebied?' })).toBeVisible();

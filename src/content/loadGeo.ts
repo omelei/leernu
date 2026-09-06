@@ -73,11 +73,7 @@ export function geoUrl(onderwerp: string, niveau: Detailniveau, regio = 'nl'): s
  * result, so two components asking at the same time share a single request
  * instead of racing each other.
  */
-export function loadGeoSet(
-  onderwerp: string,
-  niveau: Detailniveau,
-  regio = 'nl',
-): Promise<GeoSet> {
+export function loadGeoSet(onderwerp: string, niveau: Detailniveau, regio = 'nl'): Promise<GeoSet> {
   const url = geoUrl(onderwerp, niveau, regio);
   const existing = cache.get(url);
   if (existing) return existing;

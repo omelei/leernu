@@ -95,7 +95,10 @@ export function PracticeScreen({
         <SpeakButton text={vraag} />
 
         <div className="ml-auto flex items-center gap-5">
-          <Counter label={t('practice.counterQuestion')} value={`${state.index + 1}/${state.total}`} />
+          <Counter
+            label={t('practice.counterQuestion')}
+            value={`${state.index + 1}/${state.total}`}
+          />
           <Counter label={t('practice.counterCombo')} value={`×${state.combo}`} />
           <button type="button" className="tk-button tk-button-quiet" onClick={stop}>
             {t('practice.stop')}
@@ -241,7 +244,8 @@ function FeedbackIcon({ kind }: { readonly kind: 'good' | 'near' | 'bad' }) {
   // A shape, not only a colour. The near miss gets its own mark — neither a
   // tick nor a cross — because it is genuinely a third outcome and dressing it
   // as either would undo the point of ADR-017.
-  const background = kind === 'good' ? 'var(--good)' : kind === 'near' ? 'var(--topo)' : 'var(--bad)';
+  const background =
+    kind === 'good' ? 'var(--good)' : kind === 'near' ? 'var(--topo)' : 'var(--bad)';
 
   return (
     <span
@@ -249,7 +253,14 @@ function FeedbackIcon({ kind }: { readonly kind: 'good' | 'near' | 'bad' }) {
       className="flex h-8 w-8 flex-none items-center justify-center"
       style={{ background }}
     >
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--paper)" strokeWidth={3}>
+      <svg
+        viewBox="0 0 24 24"
+        width="20"
+        height="20"
+        fill="none"
+        stroke="var(--paper)"
+        strokeWidth={3}
+      >
         {kind === 'good' && <path d="M4 12l5 5L20 6" />}
         {kind === 'bad' && <path d="M6 6l12 12M18 6L6 18" />}
         {kind === 'near' && <path d="M5 12h14M13 6l6 6-6 6" />}

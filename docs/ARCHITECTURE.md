@@ -194,10 +194,10 @@ they were protecting.
 
 Kept intentionally reversible, each with a live ADR:
 
-| Then needed | Deferred ADR |
-|---|---|
-| Pupil sign-in without e-mail (class code + PIN, custom JWT) | ADR-002 |
-| Server-authored rounds and validated scores | ADR-003 |
-| Divisions gated on player population | ADR-009 |
-| Retention anchored on class archival | ADR-012 |
-| Payments behind a provider interface | ADR-013 |
+| Then needed                                                 | Deferred ADR |
+| ----------------------------------------------------------- | ------------ |
+| Pupil sign-in without e-mail (class code + PIN, custom JWT) | ADR-002      |
+| Server-authored rounds and validated scores                 | ADR-003      |
+| Divisions gated on player population                        | ADR-009      |
+| Retention anchored on class archival                        | ADR-012      |
+| Payments behind a provider interface                        | ADR-013      |

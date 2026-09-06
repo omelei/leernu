@@ -72,7 +72,10 @@ export function ringArea(points) {
  * the map that looks like a bug because it is one.
  */
 export function simplifyRing(ring, tolerance) {
-  const closed = ring.length > 1 && ring[0][0] === ring[ring.length - 1][0] && ring[0][1] === ring[ring.length - 1][1];
+  const closed =
+    ring.length > 1 &&
+    ring[0][0] === ring[ring.length - 1][0] &&
+    ring[0][1] === ring[ring.length - 1][1];
   const open = closed ? ring.slice(0, -1) : ring;
 
   if (open.length <= 3) return closed ? [...open, open[0]] : [...open];

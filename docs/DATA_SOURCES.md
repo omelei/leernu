@@ -24,22 +24,22 @@ Daarna `http://localhost:8942/tools/content/preview.html`.
 
 ## Nederland — provinciegrenzen
 
-| | |
-|---|---|
-| Bron | CBS Gebiedsindelingen 2023, geleverd via PDOK |
-| Laag | `gebiedsindelingen:provincie_gegeneraliseerd` |
-| Endpoint | `https://service.pdok.nl/cbs/gebiedsindelingen/2023/wfs/v1_0` |
-| Licentie | **CC BY 4.0** |
-| Vindplaats licentie | `AccessConstraints` in de GetCapabilities van de service zelf: `https://creativecommons.org/licenses/by/4.0/deed.nl`. Fees: `none` |
-| Verplichte bronvermelding | **Bron: CBS, Kadaster** |
-| Geraadpleegd | 5 september 2026 |
-| Omvang | 12 features, 0,59 MB |
+|                           |                                                                                                                                    |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| Bron                      | CBS Gebiedsindelingen 2023, geleverd via PDOK                                                                                      |
+| Laag                      | `gebiedsindelingen:provincie_gegeneraliseerd`                                                                                      |
+| Endpoint                  | `https://service.pdok.nl/cbs/gebiedsindelingen/2023/wfs/v1_0`                                                                      |
+| Licentie                  | **CC BY 4.0**                                                                                                                      |
+| Vindplaats licentie       | `AccessConstraints` in de GetCapabilities van de service zelf: `https://creativecommons.org/licenses/by/4.0/deed.nl`. Fees: `none` |
+| Verplichte bronvermelding | **Bron: CBS, Kadaster**                                                                                                            |
+| Geraadpleegd              | 5 september 2026                                                                                                                   |
+| Omvang                    | 12 features, 0,59 MB                                                                                                               |
 
 ## Nederland — labelpunten provincies
 
-| | |
-|---|---|
-| Laag | `gebiedsindelingen:provincie_labelpoint` |
+|        |                                                                       |
+| ------ | --------------------------------------------------------------------- |
+| Laag   | `gebiedsindelingen:provincie_labelpoint`                              |
 | Overig | Identiek aan hierboven: zelfde service, zelfde licentie, zelfde datum |
 
 Officiële labelpunten van CBS, gebruikt om de provincienaam op de kaart te
@@ -48,9 +48,9 @@ valt het zwaartepunt in het water.
 
 ## Nederland — gemeentegrenzen (voor de Waddeneilanden)
 
-| | |
-|---|---|
-| Laag | `gebiedsindelingen:gemeente_gegeneraliseerd` |
+|        |                                                 |
+| ------ | ----------------------------------------------- |
+| Laag   | `gebiedsindelingen:gemeente_gegeneraliseerd`    |
 | Overig | Zelfde service, licentie en datum als hierboven |
 
 Elk Waddeneiland is een eigen gemeente, dus de gemeentelaag levert hun
@@ -65,13 +65,13 @@ van er een paar eenheden naast.
 Dat is de voor de hand liggende bron en hij is voor dit product ongeschikt.
 Vastgesteld op 5 september 2026 met punt-in-polygoon-tests op de ruwe data:
 
-| Testpunt | Valt binnen (Bestuurlijke Gebieden) | Valt binnen (CBS) |
-|---|---|---|
-| IJsselmeer, midden (5,35 O — 52,75 N) | **Noord-Holland** | — (water) |
-| Markermeer, midden (5,20 O — 52,52 N) | **Flevoland** | — (water) |
-| Waddenzee (5,30 O — 53,35 N) | **Fryslân** | — (water) |
-| Amsterdam (controle) | Noord-Holland | Noord-Holland |
-| Assen (controle) | Drenthe | Drenthe |
+| Testpunt                              | Valt binnen (Bestuurlijke Gebieden) | Valt binnen (CBS) |
+| ------------------------------------- | ----------------------------------- | ----------------- |
+| IJsselmeer, midden (5,35 O — 52,75 N) | **Noord-Holland**                   | — (water)         |
+| Markermeer, midden (5,20 O — 52,52 N) | **Flevoland**                       | — (water)         |
+| Waddenzee (5,30 O — 53,35 N)          | **Fryslân**                         | — (water)         |
+| Amsterdam (controle)                  | Noord-Holland                       | Noord-Holland     |
+| Assen (controle)                      | Drenthe                             | Drenthe           |
 
 `provinciegebied` bevat het water dat bestuurlijk aan een provincie is
 toegewezen. Dat levert twee fouten op, en de tweede is de ernstige:

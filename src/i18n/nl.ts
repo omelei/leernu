@@ -9,7 +9,6 @@
  * and we never use a word a ten-year-old would have to guess at.
  */
 export const nl = {
-
   // Home
   'home.greeting': 'Hoi {naam}!',
   'home.streakNone': 'Je begint vandaag',
@@ -49,7 +48,8 @@ export const nl = {
   // The near miss from ADR-017: naming another real place is not a typo, and
   // saying so is the whole reason that decision exists.
   'practice.almost': 'Bijna!',
-  'practice.almostSub': 'Je schreef {gekozen}. Dat bestaat ook, maar het ligt ergens anders. Wij zochten {naam}.',
+  'practice.almostSub':
+    'Je schreef {gekozen}. Dat bestaat ook, maar het ligt ergens anders. Wij zochten {naam}.',
   'practice.next': 'Volgende vraag',
   'practice.stop': 'Stoppen',
   'practice.kindCity': 'Wijs de stad aan',

@@ -31,9 +31,7 @@ function days(n: number): Date {
 describe('itemRetention', () => {
   it('is zero for something never answered', () => {
     expect(itemRetention(undefined, days(21))).toBe(0);
-    expect(
-      itemRetention({ ...state('x', 1, 0), laatsteReview: null }, days(21)),
-    ).toBe(0);
+    expect(itemRetention({ ...state('x', 1, 0), laatsteReview: null }, days(21))).toBe(0);
   });
 
   it('is one at the moment of review', () => {

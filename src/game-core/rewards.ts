@@ -147,11 +147,8 @@ export const BADGES: readonly BadgeDefinition[] = [
  * Returns only what is new, so the result screen can say "je hebt een badge"
  * without checking a list of everything a child already had.
  */
-export function newBadges(
-  snapshot: RewardSnapshot,
-  alreadyHeld: ReadonlySet<string>,
-): BadgeId[] {
-  return BADGES.filter(
-    (badge) => !alreadyHeld.has(badge.id) && badge.criterion(snapshot),
-  ).map((badge) => badge.id);
+export function newBadges(snapshot: RewardSnapshot, alreadyHeld: ReadonlySet<string>): BadgeId[] {
+  return BADGES.filter((badge) => !alreadyHeld.has(badge.id) && badge.criterion(snapshot)).map(
+    (badge) => badge.id,
+  );
 }

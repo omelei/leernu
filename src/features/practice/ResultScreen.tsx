@@ -58,11 +58,7 @@ export function ResultScreen({
           {state.geo !== null && (
             <section className="md:w-1/2" aria-label={t('result.mapLabel')}>
               <div className="tk-card flex justify-center rounded-control p-3">
-                <ReviewMap
-                  background={state.geo}
-                  answers={state.answers}
-                  highlighted={missedIds}
-                />
+                <ReviewMap background={state.geo} answers={state.answers} highlighted={missedIds} />
               </div>
               <p className="mt-2 text-ink-2">{t('result.mapHelp')}</p>
             </section>

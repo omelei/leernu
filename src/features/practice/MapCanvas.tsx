@@ -345,7 +345,15 @@ function CityMarker({
           pointerEvents="none"
         />
       )}
-      <circle cx={x} cy={y} r={7} fill={fill} stroke={stroke} strokeWidth={2} pointerEvents="none" />
+      <circle
+        cx={x}
+        cy={y}
+        r={7}
+        fill={fill}
+        stroke={stroke}
+        strokeWidth={2}
+        pointerEvents="none"
+      />
       {clickable && (
         <circle
           cx={x}

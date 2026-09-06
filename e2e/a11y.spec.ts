@@ -108,9 +108,7 @@ test('a keyboard reaches the map and can answer with it', async ({ page }) => {
     await page.keyboard.press('Tab');
     reached = await page.evaluate(() => {
       const active = document.activeElement;
-      return active?.tagName.toLowerCase() === 'path'
-        ? active.getAttribute('aria-label')
-        : null;
+      return active?.tagName.toLowerCase() === 'path' ? active.getAttribute('aria-label') : null;
     });
   }
 
