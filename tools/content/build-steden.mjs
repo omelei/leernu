@@ -354,7 +354,17 @@ const payload = {
     licentie: 'CC-BY-4.0',
     opgehaald: labelpunten._opgehaald ?? null,
   },
-  punten: punten.map(({ provincieNaam: _naam, inwoners: _inw, niveau: _niv, ...rest }) => rest),
+  // Spelled out rather than stripped with a rest element: this is the file a
+  // child downloads, so what it does *not* contain is worth being able to read.
+  // Population and level decide the set and then stay behind in content/sets;
+  // shipping them would be bytes on a school network for facts the map never
+  // shows.
+  punten: punten.map((stad) => ({
+    id: stad.id,
+    bronnaam: stad.bronnaam,
+    provincie: stad.provincie,
+    punt: stad.punt,
+  })),
 };
 
 const path = join(OUT_DIR, 'steden.json');
