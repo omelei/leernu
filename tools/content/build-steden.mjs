@@ -203,7 +203,10 @@ function insideRing(point, ring) {
   for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
     const [xi, yi] = ring[i];
     const [xj, yj] = ring[j];
-    if (yi > point[1] !== yj > point[1] && point[0] < ((xj - xi) * (point[1] - yi)) / (yj - yi) + xi) {
+    if (
+      yi > point[1] !== yj > point[1] &&
+      point[0] < ((xj - xi) * (point[1] - yi)) / (yj - yi) + xi
+    ) {
       inside = !inside;
     }
   }
@@ -233,7 +236,9 @@ function slug(naam) {
 // ---------------------------------------------------------------------------
 
 const provincies = JSON.parse(readFileSync(join(SOURCE_DIR, 'nl-provincies.json'), 'utf8'));
-const labelpunten = JSON.parse(readFileSync(join(SOURCE_DIR, 'nl-gemeenten-labelpunten.json'), 'utf8'));
+const labelpunten = JSON.parse(
+  readFileSync(join(SOURCE_DIR, 'nl-gemeenten-labelpunten.json'), 'utf8'),
+);
 const gemeenten = JSON.parse(readFileSync(join(SOURCE_DIR, 'nl-gemeenten.json'), 'utf8'));
 const bevolking = JSON.parse(readFileSync(join(SOURCE_DIR, 'nl-bevolking.json'), 'utf8'));
 
@@ -423,15 +428,16 @@ function prettyJson(value) {
 const setPath = join(process.cwd(), 'content', 'sets', 'nl-steden.json');
 writeFileSync(
   setPath,
-  prettyJson({
-    id: 'nl-steden',
-    naam: 'Steden van Nederland',
-    regioSet: 'nederland',
-    contentVersie: new Date().toISOString().slice(0, 10),
-    _herkomst:
-      'Gegenereerd door tools/content/build-steden.mjs. De selectie is CBS-bevolking, grootste eerst, in drie lagen van 25/30/25, met de provinciehoofdsteden eruit en een handmatige uitsluitlijst van gemeenten die geen stad zijn. Het weetje is afgeleid uit de geometrie en kan dus niet fout zijn.',
-    _redactie:
-      'De selectie is een verdedigbaar beginpunt, geen afgeronde leerlijn: inwonertal is niet hetzelfde als curriculumbelang. Nakijken tegen een schoolmethode zodra docs/CURRICULUM.md bestaat.',
+  prettyJson(
+    {
+      id: 'nl-steden',
+      naam: 'Steden van Nederland',
+      regioSet: 'nederland',
+      contentVersie: new Date().toISOString().slice(0, 10),
+      _herkomst:
+        'Gegenereerd door tools/content/build-steden.mjs. De selectie is CBS-bevolking, grootste eerst, in drie lagen van 25/30/25, met de provinciehoofdsteden eruit en een handmatige uitsluitlijst van gemeenten die geen stad zijn. Het weetje is afgeleid uit de geometrie en kan dus niet fout zijn.',
+      _redactie:
+        'De selectie is een verdedigbaar beginpunt, geen afgeronde leerlijn: inwonertal is niet hetzelfde als curriculumbelang. Nakijken tegen een schoolmethode zodra docs/CURRICULUM.md bestaat.',
       items,
     },
     null,

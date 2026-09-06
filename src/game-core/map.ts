@@ -156,12 +156,7 @@ export function detailFor(renderedPx: number): 'overview' | 'region' | 'detail' 
  */
 export function reachablePoints<
   T extends { readonly id: string; readonly punt: readonly [number, number] },
->(
-  points: readonly T[],
-  fit: ViewFit,
-  targetId: string | null,
-  minPx: number = MIN_TOUCH_PX,
-): T[] {
+>(points: readonly T[], fit: ViewFit, targetId: string | null, minPx: number = MIN_TOUCH_PX): T[] {
   const minUnits = minPx * fit.unitsPerPixel;
   const target = points.find((point) => point.id === targetId);
   const rest = points.filter((point) => point.id !== targetId);

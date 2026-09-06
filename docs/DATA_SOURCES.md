@@ -60,9 +60,9 @@ van er een paar eenheden naast.
 
 ## Nederland — labelpunten gemeenten (voor de steden)
 
-|        |                                              |
-| ------ | -------------------------------------------- |
-| Laag   | `gebiedsindelingen:gemeente_labelpoint`      |
+|        |                                                 |
+| ------ | ----------------------------------------------- |
+| Laag   | `gebiedsindelingen:gemeente_labelpoint`         |
 | Overig | Zelfde service, licentie en datum als hierboven |
 
 Eén punt per gemeente, door CBS geplaatst waar het label hoort te staan — in de
@@ -77,13 +77,13 @@ gemeente valt, zodat de keuze niet afhangt van de volgorde in het bestand.
 
 ## Nederland — inwonertal per gemeente
 
-|            |                                                                    |
-| ---------- | ------------------------------------------------------------------ |
-| Bron       | CBS StatLine, tabel `70072ned` (Regionale kerncijfers Nederland)    |
-| Veld       | `TotaleBevolking_1`, per `RegioS` (gemeentecode)                    |
-| Licentie   | CC BY 4.0                                                          |
-| URL        | https://opendata.cbs.nl/ODataApi/odata/70072ned                    |
-| Opgehaald  | 2026-09-06                                                         |
+|           |                                                                  |
+| --------- | ---------------------------------------------------------------- |
+| Bron      | CBS StatLine, tabel `70072ned` (Regionale kerncijfers Nederland) |
+| Veld      | `TotaleBevolking_1`, per `RegioS` (gemeentecode)                 |
+| Licentie  | CC BY 4.0                                                        |
+| URL       | https://opendata.cbs.nl/ODataApi/odata/70072ned                  |
+| Opgehaald | 2026-09-06                                                       |
 
 Bepaalt welke tachtig steden in de set komen en in welke laag: 25 basis, 30
 gevorderd, 25 expert, aflopend op inwonertal. Dat is een reproduceerbare
@@ -103,11 +103,11 @@ enkele provincie, dan faalt de build.
 
 ## Nederland — zeeën en meren
 
-| | |
-|---|---|
-| Bron | Punten gekozen, **geverifieerd** tegen CBS Gebiedsindelingen 2023 |
-| Licentie | De geometrie die de controle uitvoert is CC BY 4.0; de punten zelf zijn geen dataset |
-| Geraadpleegd | 6 september 2026 |
+|              |                                                                                      |
+| ------------ | ------------------------------------------------------------------------------------ |
+| Bron         | Punten gekozen, **geverifieerd** tegen CBS Gebiedsindelingen 2023                    |
+| Licentie     | De geometrie die de controle uitvoert is CC BY 4.0; de punten zelf zijn geen dataset |
+| Geraadpleegd | 6 september 2026                                                                     |
 
 Voor het IJsselmeer, de Waddenzee, het Markermeer, de Ooster- en Westerschelde
 en de Noordzee is geen bruikbare polygoonbron gevonden. PDOK's waterlagen

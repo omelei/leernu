@@ -45,11 +45,7 @@ import type { AnswerLayer } from './MapCanvas';
 const MAX_ROUND = 15;
 
 export type SetId =
-  | 'nl-provincies'
-  | 'nl-hoofdsteden'
-  | 'nl-waddeneilanden'
-  | 'nl-wateren'
-  | 'nl-steden';
+  'nl-provincies' | 'nl-hoofdsteden' | 'nl-waddeneilanden' | 'nl-wateren' | 'nl-steden';
 
 /**
  * How a child answers. Pointing tests where something is; typing tests whether
