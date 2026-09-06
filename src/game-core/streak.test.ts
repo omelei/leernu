@@ -127,7 +127,7 @@ describe('recordActivity', () => {
   });
 
   it('spends a freeze for one missed school day', () => {
-    let state = after(emptyStreak(), '2026-09-07');
+    const state = after(emptyStreak(), '2026-09-07');
     expect(state.vriezers).toBe(1); // earned in this week
 
     // Skips Tuesday, comes back Wednesday.

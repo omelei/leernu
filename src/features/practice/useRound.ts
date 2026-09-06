@@ -1,20 +1,21 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   composeRound,
+  COMBO_THRESHOLD,
+  countMastered,
   emptyState,
   judgeAnswer,
   review,
   type AnswerVerdict,
   type Item,
   type ItemState,
+  type StreakChange,
 } from '@/game-core';
-import { loadGeoSet, loadPointSet, type GeoSet, type PointSet } from '@/content/loadGeo';
+import { loadGeoSet, loadPointSet, type GeoSet } from '@/content/loadGeo';
 import { loadAllItems, loadItemSets } from '@/content/loadSets';
 import { finishSession, loadItemStates, saveAnswer, startSession } from '@/store/progress';
 import { recordRoundFinished } from '@/store/streakStore';
 import { applyRoundRewards, type RoundOutcome } from '@/store/rewardStore';
-import { COMBO_THRESHOLD, countMastered } from '@/game-core';
-import type { StreakChange } from '@/game-core';
 import type { AnswerLayer } from './MapCanvas';
 
 /**
