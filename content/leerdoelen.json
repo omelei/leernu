@@ -17,6 +17,20 @@
       "kerndoelRefs": []
     },
     {
+      "id": "ak-nl-hoofdsteden-aanwijzen",
+      "code": "AK.NL.H1",
+      "omschrijving": "De leerling wijst de hoofdstad van elke provincie aan op een kaart.",
+      "leerjaar": ["groep7", "groep8"],
+      "kerndoelRefs": []
+    },
+    {
+      "id": "ak-nl-hoofdsteden-benoemen",
+      "code": "AK.NL.H2",
+      "omschrijving": "De leerling noemt bij een provincie de juiste hoofdstad.",
+      "leerjaar": ["groep7", "groep8"],
+      "kerndoelRefs": []
+    },
+    {
       "id": "ak-nl-ligging",
       "code": "AK.NL.L1",
       "omschrijving": "De leerling beschrijft waar een provincie ligt ten opzichte van andere provincies, de zee en de buurlanden.",

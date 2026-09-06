@@ -92,15 +92,23 @@ describe('content sets', () => {
   });
 });
 
+function itemsOfSet(setId: string) {
+  return sets.find((set) => set.id === setId)?.items ?? [];
+}
+
+function loadPointsFromDisk(onderwerp: string): { punten: { id: string }[] } {
+  const path = join(process.cwd(), 'public', 'geo', 'nl', `${onderwerp}.json`);
+  return JSON.parse(readFileSync(path, 'utf8')) as { punten: { id: string }[] };
+}
+
 describe('geometry references', () => {
   // The promise from ARCHITECTURE section 8, made into a test: an item that
   // points at a shape which does not exist is a hole in a map, and a hole in a
   // map is only discovered by the child looking at it.
-  it.each(NIVEAUS)('resolves every geometrieRef at detail level %s', (niveau) => {
-    const geo = loadGeoFromDisk('provincies', niveau);
-    const shapes = new Set(geo.vormen.map((vorm) => vorm.id));
+  it.each(NIVEAUS)('resolves every province geometrieRef at detail level %s', (niveau) => {
+    const shapes = new Set(loadGeoFromDisk('provincies', niveau).vormen.map((vorm) => vorm.id));
 
-    const dangling = items
+    const dangling = itemsOfSet('nl-provincies')
       .filter((item) => item.geometrieRef !== undefined)
       .filter((item) => !shapes.has(item.geometrieRef as string))
       .map((item) => `${item.id} -> ${item.geometrieRef ?? ''}`);
@@ -111,12 +119,34 @@ describe('geometry references', () => {
   // The other direction. A shape nobody can be asked about is dead weight in a
   // file every device downloads.
   it.each(NIVEAUS)('has an item for every shape at detail level %s', (niveau) => {
-    const geo = loadGeoFromDisk('provincies', niveau);
-    const refs = new Set(items.map((item) => item.geometrieRef).filter(Boolean));
-
-    const orphans = geo.vormen.filter((vorm) => !refs.has(vorm.id)).map((vorm) => vorm.id);
+    const refs = new Set(itemsOfSet('nl-provincies').map((item) => item.geometrieRef));
+    const orphans = loadGeoFromDisk('provincies', niveau)
+      .vormen.filter((vorm) => !refs.has(vorm.id))
+      .map((vorm) => vorm.id);
 
     expect(orphans).toEqual([]);
+  });
+
+  it('resolves every capital to a projected point', () => {
+    const points = new Set(loadPointsFromDisk('hoofdsteden').punten.map((punt) => punt.id));
+
+    const dangling = itemsOfSet('nl-hoofdsteden')
+      .filter((item) => !points.has(item.geometrieRef ?? ''))
+      .map((item) => item.id);
+
+    expect(dangling).toEqual([]);
+  });
+
+  // Points and shapes are projected by the same fit, so a city dot lands inside
+  // the province it belongs to. If these ever drift apart the map looks broken
+  // in a way that is hard to attribute — the dots would simply be slightly off.
+  it('projects capitals into the same view box as the provinces', () => {
+    const shapes = loadGeoFromDisk('provincies', 'region');
+    const points = JSON.parse(
+      readFileSync(join(process.cwd(), 'public', 'geo', 'nl', 'hoofdsteden.json'), 'utf8'),
+    ) as { viewBox: number[] };
+
+    expect(points.viewBox).toEqual(shapes.viewBox);
   });
 
   it.each(NIVEAUS)('gives every shape a label point inside the view box at %s', (niveau) => {

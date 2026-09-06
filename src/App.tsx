@@ -3,9 +3,10 @@ import { HomeScreen } from '@/features/home/HomeScreen';
 import { PracticeScreen } from '@/features/practice/PracticeScreen';
 import { ProfileGate } from '@/features/player/ProfileGate';
 import { getProfile } from '@/store/profile';
+import type { SetId } from '@/features/practice/useRound';
 import type { ProfileRecord } from '@/store/db';
 
-type Screen = 'home' | 'practice';
+type Screen = { name: 'home' } | { name: 'practice'; setId: SetId };
 type Boot = { status: 'loading' } | { status: 'ready'; profile: ProfileRecord | null };
 
 /**
@@ -20,7 +21,7 @@ type Boot = { status: 'loading' } | { status: 'ready'; profile: ProfileRecord | 
  */
 export default function App() {
   const [boot, setBoot] = useState<Boot>({ status: 'loading' });
-  const [screen, setScreen] = useState<Screen>('home');
+  const [screen, setScreen] = useState<Screen>({ name: 'home' });
   const [visit, setVisit] = useState(0);
 
   useEffect(() => {
@@ -35,13 +36,12 @@ export default function App() {
     return <ProfileGate onReady={(profile) => setBoot({ status: 'ready', profile })} />;
   }
 
-  if (screen === 'practice') {
+  if (screen.name === 'practice') {
     return (
       <PracticeScreen
-        key={visit}
-        onHome={() => {
-          setScreen('home');
-        }}
+        key={`${screen.setId}-${visit}`}
+        setId={screen.setId}
+        onHome={() => setScreen({ name: 'home' })}
       />
     );
   }
@@ -49,9 +49,9 @@ export default function App() {
   return (
     <HomeScreen
       profile={boot.profile}
-      onStart={() => {
+      onStart={(setId) => {
         setVisit(visit + 1);
-        setScreen('practice');
+        setScreen({ name: 'practice', setId });
       }}
     />
   );

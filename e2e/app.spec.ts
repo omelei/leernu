@@ -6,6 +6,11 @@ import { expect, test, type Page } from '@playwright/test';
  * account.
  */
 
+/** The home screen offers a card per set; this picks one by its name. */
+function setCard(page: Page, naam: string) {
+  return page.getByRole('article').filter({ hasText: naam });
+}
+
 async function signIn(page: Page, naam: string) {
   await page.goto('/');
   await page.getByPlaceholder('Je naam').fill(naam);
@@ -40,7 +45,7 @@ test('keeps the profile across a reload, with no sign-in', async ({ page }) => {
 
 test('plays a round: question, map, answer, feedback', async ({ page }) => {
   await signIn(page, 'Noor');
-  await page.getByRole('button', { name: /Ga verder/ }).click();
+  await setCard(page, 'Provincies van Nederland').getByRole('button').click();
 
   // The question arrives with the map, not before it.
   await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
@@ -60,7 +65,7 @@ test('plays a round: question, map, answer, feedback', async ({ page }) => {
 
 test('announces the question and the outcome to a screen reader', async ({ page }) => {
   await signIn(page, 'Fatima');
-  await page.getByRole('button', { name: /Ga verder/ }).click();
+  await setCard(page, 'Provincies van Nederland').getByRole('button').click();
 
   const live = page.getByRole('status');
   await expect(live).toContainText('Waar ligt');
@@ -77,4 +82,26 @@ test('every button meets the 48px touch target', async ({ page }) => {
     const box = await control.boundingBox();
     expect(box?.height ?? 0).toBeGreaterThanOrEqual(48);
   }
+});
+
+test('asks about every province, and lets a child stop early', async ({ page }) => {
+  await signIn(page, 'Jesse');
+  await setCard(page, 'Provincies van Nederland').getByRole('button').click();
+
+  // Twelve provinces means twelve questions, not a sample of ten.
+  await expect(page.getByText('1/12')).toBeVisible();
+
+  await page.getByRole('button', { name: 'Stoppen' }).click();
+  await expect(page.getByRole('heading', { name: /goed/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Terug naar start' })).toBeVisible();
+});
+
+test('practises the capitals as points on the map', async ({ page }) => {
+  await signIn(page, 'Amir');
+  await setCard(page, 'Hoofdsteden van de provincies').getByRole('button').click();
+
+  await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
+  // Cities are points, and each one carries a 48px target of its own.
+  await expect(page.getByRole('button', { name: 'Maastricht' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Leeuwarden' })).toBeVisible();
 });

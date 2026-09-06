@@ -40,7 +40,29 @@ export interface GeoSet {
   readonly vormen: readonly Vorm[];
 }
 
+/** A city: a point rather than a shape, and too small to hit without help. */
+export interface Punt {
+  readonly id: string;
+  readonly bronnaam: string;
+  /** The shape it sits in, so the map can show where a wrong answer belongs. */
+  readonly provincie: string;
+  readonly punt: readonly [number, number];
+}
+
+export interface PointSet {
+  readonly regioSet: string;
+  readonly onderwerp: string;
+  readonly viewBox: readonly [number, number, number, number];
+  readonly bron: {
+    readonly naam: string | null;
+    readonly licentie: string | null;
+    readonly opgehaald: string | null;
+  };
+  readonly punten: readonly Punt[];
+}
+
 const cache = new Map<string, Promise<GeoSet>>();
+const pointCache = new Map<string, Promise<PointSet>>();
 
 export function geoUrl(onderwerp: string, niveau: Detailniveau, regio = 'nl'): string {
   return `/geo/${regio}/${onderwerp}.${niveau}.json`;
@@ -74,6 +96,26 @@ export function loadGeoSet(
   return request;
 }
 
+/**
+ * Loads a set of points — cities — projected into the same view box as the
+ * shapes, so a dot and an outline line up exactly.
+ */
+export function loadPointSet(onderwerp: string, regio = 'nl'): Promise<PointSet> {
+  const url = `/geo/${regio}/${onderwerp}.json`;
+  const existing = pointCache.get(url);
+  if (existing) return existing;
+
+  const request = fetch(url).then(async (response) => {
+    if (!response.ok) {
+      throw new Error(`Kaartbestand ${url} kon niet geladen worden (${response.status})`);
+    }
+    return (await response.json()) as PointSet;
+  });
+
+  pointCache.set(url, request);
+  return request;
+}
+
 export function vormById(geo: GeoSet, id: string): Vorm | undefined {
   return geo.vormen.find((vorm) => vorm.id === id);
 }
@@ -81,4 +123,5 @@ export function vormById(geo: GeoSet, id: string): Vorm | undefined {
 /** Test seam, and the way to force a reload after a content rebuild. */
 export function clearGeoCache(): void {
   cache.clear();
+  pointCache.clear();
 }

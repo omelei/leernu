@@ -9,7 +9,6 @@
  * and we never use a word a ten-year-old would have to guess at.
  */
 export const nl = {
-  'app.tagline': 'Leer waar alles ligt',
 
   // Home
   'home.greeting': 'Hoi {naam}!',
@@ -19,10 +18,12 @@ export const nl = {
   'home.retention': 'weet je hier over drie weken nog van',
   'home.retentionAfter': 'Eén ronde vandaag houdt het op {procent}%.',
   'home.continueAction': 'Ga verder — {aantal} vragen',
-  'home.chooseOther': 'Of kies iets anders',
-  'home.moduleTopo': 'Topografie',
   'home.setMastered': '{goed}/{totaal} vast',
   'home.setNew': 'nog niet geoefend',
+
+  // Set names
+  'set.nl-provincies': 'Provincies van Nederland',
+  'set.nl-hoofdsteden': 'Hoofdsteden van de provincies',
 
   // Practice
   'practice.kind': 'Wijs aan op de kaart',
@@ -34,6 +35,8 @@ export const nl = {
   'practice.wrong': '{naam} ligt hier.',
   'practice.wrongSub': 'Je wees {gekozen} aan.',
   'practice.next': 'Volgende vraag',
+  'practice.stop': 'Stoppen',
+  'practice.kindCity': 'Wijs de stad aan',
   'practice.loading': 'Kaart wordt geladen…',
   'practice.mapFailed': 'De kaart kon niet geladen worden.',
 
@@ -43,6 +46,9 @@ export const nl = {
   'result.practiceMore': 'Deze moet je nog oefenen',
   'result.allCorrect': 'Alles goed. Morgen komen er nieuwe bij.',
   'result.home': 'Terug naar start',
+  'result.stoppedEarly': 'Je stopte na {gedaan} van de {totaal} vragen.',
+  'result.mapLabel': 'Kaart met wat je nog moet oefenen',
+  'result.mapHelp': 'De blauwe plekken moet je nog oefenen.',
 
   // Profile
   'profile.title': 'Wie ben jij?',
