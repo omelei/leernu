@@ -80,8 +80,10 @@ and no subprocessor list to defend. See ADR-015.
 The risk is that a local-first v1 becomes hard to graft accounts onto. ADR-015
 addresses it directly; it is the thing to get right in this phase.
 
-The business case for the school product is documented separately in
-`docs/BUSINESSPLAN.md` and is deliberately not implemented.
+The business case for the school product is documented separately, outside this
+repository — it holds pricing and competitor analysis, and this repository is
+public so that the privacy claim on the home screen can be checked rather than
+believed. It is deliberately not implemented either way.
 
 ---
 

@@ -4,21 +4,37 @@ Topography for Dutch primary and lower-secondary education. Short rounds, a map
 that fills the screen, and progress a child can feel. No advertising, no
 tracking, no account required.
 
+That last sentence is why this repository is public. The best-known free
+alternative is paid for by advertising from over a hundred vendors, on a page
+eleven-year-olds sit on. "No trackers" is a claim; here it is something you can
+check — there is no analytics, no third-party script, and no network traffic
+beyond the map files in `public/`.
+
 The product name lives in `src/config/brand.ts` and is never hardcoded, so
 renaming or white-labelling stays a one-file change.
 
 ## What it does today
 
 A child types a name — kept on the device, never sent anywhere — and then
-practises one of two sets in one of two ways:
+practises one of five sets:
 
-|                                   | Wijs aan           | Typ de naam                   |
-| --------------------------------- | ------------------ | ----------------------------- |
-| **Provincies van Nederland**      | click the province | name the highlighted province |
-| **Hoofdsteden van de provincies** | click the city     | name the highlighted city     |
+| Set                               | Items | What it teaches                       |
+| --------------------------------- | ----- | ------------------------------------- |
+| **Provincies van Nederland**      | 12    | the twelve provinces as shapes        |
+| **Hoofdsteden van de provincies** | 12    | each capital as a point               |
+| **De Waddeneilanden**             | 5     | five islands, west to east            |
+| **Zeeën en meren**                | 6     | the large bodies of water             |
+| **Steden van Nederland**          | 80    | cities, and the province each is in   |
 
-A round covers the whole set: twelve of twelve, ordered by a Leitner scheduler
-so what a child keeps missing comes round first. Answers are judged, saved and
+In five ways. **Wijs aan** points at the map; **typ de naam** names what is
+highlighted; **ontdekken** asks nothing at all and exists so a child's first
+meeting with an item is not a question they get wrong; **bliksemronde** puts
+sixty seconds on it and **overleven** gives three lives.
+
+A round covers the whole set where the set is small enough — twelve of twelve —
+and is capped at fifteen questions where it is not, because eighty questions is
+twenty minutes with no stopping point. Order comes from a Leitner scheduler, so
+what a child keeps missing comes round first. Answers are judged, saved and
 scheduled locally; a round can be stopped early and what was answered is kept.
 
 The home screen forecasts retention rather than reporting a score — "69%, weet
@@ -48,7 +64,7 @@ npm run dev
 The full gate, in the order CI runs it:
 
 ```bash
-npm run lint && npm run typecheck && npm run format:check && npm test && npm run build
+npm run check
 ```
 
 ```bash
@@ -91,7 +107,6 @@ python -m http.server 8942
 | [DATAMODEL.md](docs/DATAMODEL.md)       | Part A: the local store. Part B: the deferred school model                               |
 | [DECISIONS.md](docs/DECISIONS.md)       | Every decision that would be expensive to reverse, including the ones that were reversed |
 | [DATA_SOURCES.md](docs/DATA_SOURCES.md) | Every geodata source with licence, URL and retrieval date                                |
-| [BUSINESSPLAN.md](docs/BUSINESSPLAN.md) | Market, competition, pricing. Planning only — not built                                  |
 
 ## Still to come
 
