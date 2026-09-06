@@ -157,7 +157,13 @@
   .tk-shape-asked { fill: var(--topo-tint); stroke: var(--topo); stroke-width: 3; cursor: default; }
   .tk-shape-target { fill: var(--paper); stroke: var(--good); stroke-width: 3; }
   .tk-shape-wrong { fill: url(#tk-hatch); stroke: var(--bad); stroke-width: 3; }
-  .tk-shape-dim { fill: var(--paper); stroke: var(--line-strong); stroke-width: 1; cursor: default; }
+  /* The dimmed provinces behind a capitals exercise. They recede, but they are
+   * not decoration: they are how a child knows where on the map they are, and
+   * WCAG asks 3:1 for a graphical object you need in order to understand the
+   * content. --line-strong reaches only 1.91:1 against paper; --ink-3 reaches
+   * 3.75:1, which is why the token that is too light for text is exactly right
+   * for a line. */
+  .tk-shape-dim { fill: var(--paper); stroke: var(--ink-3); stroke-width: 1; cursor: default; }
 
   .tk-sr-only {
     position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;

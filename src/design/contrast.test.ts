@@ -63,25 +63,40 @@ describe('palette contrast', () => {
     expect(contrastRatio(foreground, background)).toBeGreaterThanOrEqual(4.5);
   });
 
-  // Non-text contrast: an outline or a rail only has to be distinguishable.
+  /**
+   * WCAG 1.4.11 for the map. What matters is the thing that *identifies* a
+   * state, which on every one of these is the outline — the fills are paper or
+   * a pale tint by design, and measuring them would be measuring decoration.
+   *
+   * The dimmed provinces are in this list on purpose. Behind a capitals
+   * exercise they look like background, but they are how a child knows where
+   * on the map they are, which makes them a graphical object needed to
+   * understand the content rather than an ornament.
+   */
   it.each([
     ['the green outline of a correct answer', token('good'), paper],
     ['the red outline of a wrong answer', token('bad'), paper],
+    ['the outline of the shape being asked about', token('topo'), paper],
+    ['that outline against its own tinted fill', token('topo'), token('topo-tint')],
+    ['the outline of a dimmed province', token('ink-3'), paper],
     ['the progress rail', token('topo'), paper],
   ])('%s clears 3:1 as a non-text indicator', (_name, foreground, background) => {
     expect(contrastRatio(foreground, background)).toBeGreaterThanOrEqual(3);
   });
 
   /**
-   * --ink-3 comes from the design, where it labels inactive tabs. At 3.75:1 it
-   * is below AA for text, so it is not exposed as a Tailwind colour and nothing
-   * may set type in it. The token stays for borders and device chrome.
+   * --ink-3 sits in a useful gap: at 3.75:1 it is below AA for text and above
+   * the 3:1 that a line needs. So it draws the dimmed provinces (checked above)
+   * and sets no type anywhere, which is why it is not exposed as a Tailwind
+   * colour.
    *
    * This test pins the fact rather than the intention: if the value is ever
-   * darkened past 4.5:1 it fails, and that failure is the prompt to make it a
-   * text colour properly. #70756e is the nearest shade that would qualify.
+   * darkened past 4.5:1 it fails, and that failure is the prompt to decide
+   * deliberately whether it has become a text colour. #70756e is the nearest
+   * shade that would qualify.
    */
   it('keeps ink-3 out of text, and says so when that changes', () => {
     expect(contrastRatio(token('ink-3'), paper)).toBeLessThan(4.5);
+    expect(contrastRatio(token('ink-3'), paper)).toBeGreaterThanOrEqual(3);
   });
 });
