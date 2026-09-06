@@ -36,6 +36,14 @@ export const nl = {
   // Modes
   'mode.wijs-aan': 'Wijs aan',
   'mode.hoe-heet-dit': 'Typ de naam',
+  'mode.ontdekken': 'Ontdek',
+
+  // Explore
+  'explore.kind': 'Ontdek de kaart',
+  'explore.hint': 'Kies een naam. Je ziet meteen waar het ligt.',
+  'explore.listLabel': 'Alles wat je kunt ontdekken',
+  'explore.nothingChosen': 'Kies iets uit de lijst of tik op de kaart.',
+  'explore.done': 'Klaar',
 
   // Practice
   'practice.kind': 'Wijs aan op de kaart',

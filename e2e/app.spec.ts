@@ -172,3 +172,25 @@ test('cities: asks a round a child can finish', async ({ page }) => {
   // The counter reads "vraag 1/15": fifteen, not eighty.
   await expect(page.getByText('1/15')).toBeVisible();
 });
+
+/**
+ * Explore exists because being asked is not the same as being taught. It must
+ * therefore teach without scoring: nothing it does may reach the scheduler, or
+ * the retention figure on the home screen starts describing browsing rather
+ * than knowing.
+ */
+test('explore names a city, places it, and scores nothing', async ({ page }) => {
+  await signIn(page, 'Joris');
+  await setCard(page, 'Steden van Nederland').getByRole('button', { name: 'Ontdek' }).click();
+
+  await expect(page.getByText('Kies iets uit de lijst of tik op de kaart.')).toBeVisible();
+
+  await page.getByRole('navigation').getByRole('button', { name: 'Nijmegen', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Nijmegen' })).toBeVisible();
+  await expect(page.getByText('Nijmegen ligt in de provincie Gelderland.')).toBeVisible();
+
+  await page.getByRole('button', { name: 'Klaar' }).click();
+
+  // Back on the home screen the set is still untouched: browsing is not practice.
+  await expect(setCard(page, 'Steden van Nederland')).toContainText('nog niet geoefend');
+});

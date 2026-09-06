@@ -40,11 +40,14 @@ export type AnswerLayer =
   | { readonly kind: 'points'; readonly set: PointSet };
 
 /**
- * `pick` — the child answers by pointing, so every answer is a control.
- * `show` — the child answers by typing, so the map only highlights what is
- * being asked about and nothing is clickable.
+ * `pick` — the child answers by pointing, so every answer is a control and
+ * nothing is highlighted: the highlight would be the answer.
+ * `show` — the child answers by typing, so the map highlights what is being
+ * asked about and nothing is clickable.
+ * `explore` — nothing is being asked. Both at once: everything is a control and
+ * whatever the child chose stays lit.
  */
-export type MapInteraction = 'pick' | 'show';
+export type MapInteraction = 'pick' | 'show' | 'explore';
 
 export interface MapCanvasProps {
   /** Always the provinces: the country a child orients by. */
@@ -92,7 +95,8 @@ function stateOf(
     if (id === chosenId) return 'wrong';
     return 'open';
   }
-  return interaction === 'show' && id === targetId ? 'asked' : 'open';
+  // Lit everywhere except `pick`, where the question is precisely which one it is.
+  return interaction !== 'pick' && id === targetId ? 'asked' : 'open';
 }
 
 export function MapCanvas({
@@ -119,7 +123,7 @@ export function MapCanvas({
     return [] as Vorm[];
   }, [answers, background]);
 
-  const clickable = interaction === 'pick' && !revealed;
+  const clickable = interaction !== 'show' && !revealed;
 
   // Every point that is drawn must be hittable, including the ones the child
   // does not want. See reachablePoints: with eighty cities in the set, drawing

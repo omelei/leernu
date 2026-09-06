@@ -105,7 +105,7 @@ export const SETS: Record<SetId, SetShape> = {
 };
 
 /** One switch, so a new set cannot forget to load its own layer. */
-async function loadAnswerLayer(shape: SetShape): Promise<AnswerLayer> {
+export async function loadAnswerLayer(shape: SetShape): Promise<AnswerLayer> {
   switch (shape.answers) {
     case 'background':
       return { kind: 'background' };

@@ -120,3 +120,25 @@ test('a keyboard reaches the map and can answer with it', async ({ page }) => {
   // provinces to carry on.
   await expect(page.getByRole('button', { name: 'Volgende vraag' })).toBeFocused();
 });
+
+/**
+ * Ontdekken is the screen with the most controls on it — eighty names in a list
+ * beside a map that is itself a set of controls — so it is the one where a
+ * duplicate accessible name or an unlabelled region is most likely to appear.
+ */
+test('explore has no violations, empty or with something chosen', async ({ page }) => {
+  await signIn(page, 'Tess');
+  await setCard(page, 'Steden van Nederland').getByRole('button', { name: 'Ontdek' }).click();
+
+  // Scoped to the list: the map carries the same names, and it should — a
+  // marker without an accessible name is the bug this file exists to catch.
+  const lijst = page.getByRole('navigation');
+  await expect(lijst.getByRole('button', { name: 'Amsterdam', exact: true })).toBeVisible();
+
+  expect((await scan(page)).violations).toEqual([]);
+
+  await lijst.getByRole('button', { name: 'Amsterdam', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Amsterdam' })).toBeVisible();
+
+  expect((await scan(page)).violations).toEqual([]);
+});

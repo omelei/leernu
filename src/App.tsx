@@ -1,16 +1,20 @@
 import { useEffect, useState } from 'react';
 import { HomeScreen } from '@/features/home/HomeScreen';
 import { PracticeScreen } from '@/features/practice/PracticeScreen';
+import { ExploreScreen } from '@/features/explore/ExploreScreen';
 import { ProfileGate } from '@/features/player/ProfileGate';
 import { getProfile } from '@/store/profile';
 import type { PracticeMode, SetId } from '@/features/practice/useRound';
 import type { ProfileRecord } from '@/store/db';
 
-type Screen = { name: 'home' } | { name: 'practice'; setId: SetId; practiceMode: PracticeMode };
+type Screen =
+  | { name: 'home' }
+  | { name: 'practice'; setId: SetId; practiceMode: PracticeMode }
+  | { name: 'explore'; setId: SetId };
 type Boot = { status: 'loading' } | { status: 'ready'; profile: ProfileRecord | null };
 
 /**
- * Three screens and no router.
+ * Four screens and no router.
  *
  * A router would be a dependency and a bundle cost for a product whose entire
  * navigation is "start a round, finish it, come back". When there are more
@@ -36,6 +40,10 @@ export default function App() {
     return <ProfileGate onReady={(profile) => setBoot({ status: 'ready', profile })} />;
   }
 
+  if (screen.name === 'explore') {
+    return <ExploreScreen setId={screen.setId} onHome={() => setScreen({ name: 'home' })} />;
+  }
+
   if (screen.name === 'practice') {
     return (
       <PracticeScreen
@@ -54,6 +62,7 @@ export default function App() {
         setVisit(visit + 1);
         setScreen({ name: 'practice', setId, practiceMode });
       }}
+      onExplore={(setId) => setScreen({ name: 'explore', setId })}
     />
   );
 }

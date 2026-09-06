@@ -52,9 +52,11 @@ const MODE_NAME_KEY: Record<PracticeMode, TranslationKey> = {
 export function HomeScreen({
   profile,
   onStart,
+  onExplore,
 }: {
   readonly profile: ProfileRecord;
   readonly onStart: (setId: SetId, practiceMode: PracticeMode) => void;
+  readonly onExplore: (setId: SetId) => void;
 }) {
   const [states, setStates] = useState<Map<string, ItemState> | null>(null);
   const [streak, setStreak] = useState<StreakState | null>(null);
@@ -124,9 +126,11 @@ export function HomeScreen({
                 </div>
               )}
 
-              {/* Two ways into the same content. Pointing asks where something
-                  is, typing asks whether you can name it — different skills,
-                  and a child who has one is not done with the other. */}
+              {/* Three ways into the same content. Pointing asks where
+                  something is, typing asks whether you can name it — different
+                  skills, and a child who has one is not done with the other.
+                  Ontdekken asks nothing at all, which is where a set this size
+                  has to start: being wrong eighty times is not a first lesson. */}
               <div className="flex flex-wrap gap-3">
                 {PRACTICE_MODES.map((practiceMode) => (
                   <button
@@ -142,6 +146,13 @@ export function HomeScreen({
                     {t(MODE_NAME_KEY[practiceMode])}
                   </button>
                 ))}
+                <button
+                  type="button"
+                  className="tk-button tk-button-big tk-button-quiet"
+                  onClick={() => onExplore(setId)}
+                >
+                  {t('mode.ontdekken')}
+                </button>
               </div>
               <p className="mt-2 text-ink-2">{t('home.continueAction', { aantal: ids.length })}</p>
             </article>

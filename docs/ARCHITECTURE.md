@@ -143,8 +143,22 @@ interface GameMode {
 ```
 
 In scope for this phase: wijs aan, hoe heet dit, sleepronde, bliksemronde,
-overleven, ontdekmodus. Deferred with accounts: duel and klassenstrijd — both
-need a second player who exists somewhere other than this device.
+overleven, ontdekmodus. Built so far: wijs aan, hoe heet dit, ontdekmodus.
+Deferred with accounts: duel and klassenstrijd — both need a second player who
+exists somewhere other than this device.
+
+**Ontdekmodus is not a round.** It has no questions, no scoring, and it writes
+nothing to the scheduler. That is the point of it: with 115 items across five
+sets, a child's first meeting with each one was previously a question they got
+wrong, which is testing rather than teaching. Browsing must also not move the
+retention figure on the home screen — the moment looking counts as knowing, the
+number stops meaning anything.
+
+It is driven by a list beside the map rather than by the map alone, because the
+map cannot reach everything: 77 of the 80 cities have a neighbour closer than a
+fingertip (ADR-022). The list works at any density, on any device, and is
+keyboard-navigable without being made so. The map still takes taps for what it
+can show.
 
 ## 6. Accessibility (WCAG 2.2 AA) on a map
 
