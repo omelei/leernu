@@ -31,7 +31,11 @@ import type { AnswerLayer } from './MapCanvas';
  * child who closes the tab halfway keeps what they answered.
  */
 
-export type SetId = 'nl-provincies' | 'nl-hoofdsteden' | 'nl-waddeneilanden';
+export type SetId =
+  | 'nl-provincies'
+  | 'nl-hoofdsteden'
+  | 'nl-waddeneilanden'
+  | 'nl-wateren';
 
 /**
  * How a child answers. Pointing tests where something is; typing tests whether
@@ -52,6 +56,7 @@ export const SETS: Record<SetId, { readonly answers: 'background' | 'shapes' | '
   'nl-provincies': { answers: 'background' },
   'nl-hoofdsteden': { answers: 'points' },
   'nl-waddeneilanden': { answers: 'shapes' },
+  'nl-wateren': { answers: 'points' },
 };
 
 export interface RoundQuestion {
@@ -133,7 +138,9 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
         const [loadedGeo, loadedAnswers, loadedStates] = await Promise.all([
           loadGeoSet('provincies', 'region'),
           layer === 'points'
-            ? loadPointSet('hoofdsteden').then((set) => ({ kind: 'points', set }) as AnswerLayer)
+            ? loadPointSet(setId === 'nl-wateren' ? 'wateren' : 'hoofdsteden').then(
+                (set) => ({ kind: 'points', set }) as AnswerLayer,
+              )
             : layer === 'shapes'
               ? loadGeoSet('waddeneilanden', 'detail').then(
                   (set) => ({ kind: 'shapes', set }) as AnswerLayer,

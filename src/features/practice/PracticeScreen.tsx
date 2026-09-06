@@ -65,14 +65,17 @@ export function PracticeScreen({
 
   // The label names what a child is looking for, which is not the same in every
   // exercise: an area, a city and an island are found in different ways.
-  const pickLabel =
-    answers === 'points'
+  const water = setId === 'nl-wateren';
+  const pickLabel = water
+    ? 'practice.kindWater'
+    : answers === 'points'
       ? 'practice.kindCity'
       : answers === 'shapes'
         ? 'practice.kindIsland'
         : 'practice.kind';
-  const typeLabel =
-    answers === 'points'
+  const typeLabel = water
+    ? 'practice.kindTypeWater'
+    : answers === 'points'
       ? 'practice.kindTypeCity'
       : answers === 'shapes'
         ? 'practice.kindTypeIsland'

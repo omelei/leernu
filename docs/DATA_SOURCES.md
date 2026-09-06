@@ -58,6 +58,32 @@ omtrekken uit dezelfde geverifieerde bron. Ze worden door dezelfde projectie
 gehaald als de provincies, zodat een eiland op zijn eigen kust ligt in plaats
 van er een paar eenheden naast.
 
+## Nederland — zeeën en meren
+
+| | |
+|---|---|
+| Bron | Punten gekozen, **geverifieerd** tegen CBS Gebiedsindelingen 2023 |
+| Licentie | De geometrie die de controle uitvoert is CC BY 4.0; de punten zelf zijn geen dataset |
+| Geraadpleegd | 6 september 2026 |
+
+Voor het IJsselmeer, de Waddenzee, het Markermeer, de Ooster- en Westerschelde
+en de Noordzee is geen bruikbare polygoonbron gevonden. PDOK's waterlagen
+beschrijven scheepvaartroutes in plaats van aardrijkskunde, en het IJsselmeer
+afleiden uit het gat tussen drie provincies vraagt booleaanse geometrie.
+
+Daarom zijn het **punten met een ruim trefvlak**, en is de coördinaat gekozen in
+plaats van overgenomen. Dat zou normaal precies zijn wat spec §12 verbiedt, dus
+de build controleert ze: CBS-provincies bevatten geen water (ADR-019), dus elk
+waterpunt moet buiten alle twaalf provincies vallen. Een coördinaat die op land
+belandt laat `tools/content/build-waters.mjs` falen in plaats van een klaslokaal
+te bereiken. Die controle is het licentie-equivalent — de geometrie die
+controleert is wél gelicentieerd.
+
+**Rivieren staan hier niet in.** Een rivier is een lijn, en een punt op de Maas
+zegt niets over een waterweg die het halve land doorkruist. Ze hebben een eigen
+bron en een eigen antwoordvorm nodig; Natural Earth is de kandidaat, maar de
+detaillering op Nederlandse schaal is nog niet gemeten.
+
 ---
 
 ## Waarom niet PDOK Bestuurlijke Gebieden

@@ -44,8 +44,11 @@ export interface GeoSet {
 export interface Punt {
   readonly id: string;
   readonly bronnaam: string;
-  /** The shape it sits in, so the map can show where a wrong answer belongs. */
-  readonly provincie: string;
+  /**
+   * The shape it sits in, when there is one. Null for water: the IJsselmeer
+   * belongs to no province, which is the whole reason it is not drawn as land.
+   */
+  readonly provincie: string | null;
   readonly punt: readonly [number, number];
 }
 

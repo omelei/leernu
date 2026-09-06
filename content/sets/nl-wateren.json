@@ -1,0 +1,76 @@
+{
+  "id": "nl-wateren",
+  "naam": "Zeeën en meren",
+  "regioSet": "nederland",
+  "contentVersie": "2026-09-06",
+  "_geometrie": "geometrieRef verwijst naar een punt-id in public/geo/nl/wateren.json. Die punten zijn gekozen en vervolgens door de build geverifieerd tegen de CBS-provinciegeometrie: die bevat geen water, dus elk punt moet buiten alle twaalf provincies vallen. Zie tools/content/build-waters.mjs en docs/DATA_SOURCES.md.",
+  "_rivieren": "Rivieren staan hier bewust niet in. Een rivier is een lijn, en een punt op de Maas zegt niets over een waterweg die het halve land doorkruist. Die hebben een eigen bron en een eigen antwoordvorm nodig.",
+  "items": [
+    {
+      "id": "nl-water-noordzee",
+      "type": "zee",
+      "naam": "Noordzee",
+      "aliassen": [],
+      "regioSet": "nederland",
+      "geometrieRef": "nl-water-noordzee",
+      "niveau": 1,
+      "leerdoelen": ["ak-nl-wateren"],
+      "weetje": "De zee ten westen van Nederland."
+    },
+    {
+      "id": "nl-water-waddenzee",
+      "type": "zee",
+      "naam": "Waddenzee",
+      "aliassen": [],
+      "regioSet": "nederland",
+      "geometrieRef": "nl-water-waddenzee",
+      "niveau": 2,
+      "leerdoelen": ["ak-nl-wateren"],
+      "weetje": "Ondiepe zee tussen de eilanden en het vasteland. Bij eb valt een deel droog."
+    },
+    {
+      "id": "nl-water-ijsselmeer",
+      "type": "water",
+      "naam": "IJsselmeer",
+      "aliassen": [],
+      "regioSet": "nederland",
+      "geometrieRef": "nl-water-ijsselmeer",
+      "niveau": 1,
+      "leerdoelen": ["ak-nl-wateren"],
+      "weetje": "Vroeger was dit de Zuiderzee. De Afsluitdijk maakte er een meer van."
+    },
+    {
+      "id": "nl-water-markermeer",
+      "type": "water",
+      "naam": "Markermeer",
+      "aliassen": [],
+      "regioSet": "nederland",
+      "geometrieRef": "nl-water-markermeer",
+      "niveau": 2,
+      "leerdoelen": ["ak-nl-wateren"],
+      "weetje": "Ligt onder het IJsselmeer. Een dijk scheidt de twee."
+    },
+    {
+      "id": "nl-water-oosterschelde",
+      "type": "water",
+      "naam": "Oosterschelde",
+      "aliassen": [],
+      "regioSet": "nederland",
+      "geometrieRef": "nl-water-oosterschelde",
+      "niveau": 2,
+      "leerdoelen": ["ak-nl-wateren"],
+      "weetje": "Hier ligt de Oosterscheldekering, de grootste van de Deltawerken."
+    },
+    {
+      "id": "nl-water-westerschelde",
+      "type": "water",
+      "naam": "Westerschelde",
+      "aliassen": [],
+      "regioSet": "nederland",
+      "geometrieRef": "nl-water-westerschelde",
+      "niveau": 2,
+      "leerdoelen": ["ak-nl-wateren"],
+      "weetje": "Grote schepen varen hier naar de haven van Antwerpen."
+    }
+  ]
+}

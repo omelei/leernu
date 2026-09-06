@@ -168,6 +168,37 @@ describe('geometry references', () => {
     expect(dangling).toEqual([]);
   });
 
+  it('resolves every body of water to a projected point', () => {
+    const points = new Set(loadPointsFromDisk('wateren').punten.map((punt) => punt.id));
+
+    const dangling = itemsOfSet('nl-wateren')
+      .filter((item) => !points.has(item.geometrieRef ?? ''))
+      .map((item) => item.id);
+
+    expect(dangling).toEqual([]);
+  });
+
+  /**
+   * The water points are chosen rather than sourced, so the build verifies them
+   * against province geometry that is: CBS provinces contain no water, so a
+   * water point must fall outside all twelve. This is the same guarantee, kept
+   * where anyone reading the tests can see it.
+   */
+  it('keeps every body of water inside the map', () => {
+    const geo = loadGeoFromDisk('provincies', 'region');
+    const wateren = JSON.parse(
+      readFileSync(join(process.cwd(), 'public', 'geo', 'nl', 'wateren.json'), 'utf8'),
+    ) as { viewBox: number[]; punten: { id: string; punt: [number, number] }[] };
+
+    expect(wateren.viewBox).toEqual(geo.viewBox);
+
+    const outside = wateren.punten
+      .filter(({ punt: [x, y] }) => x < 0 || x > geo.viewBox[2] || y < 0 || y > geo.viewBox[3])
+      .map((punt) => punt.id);
+
+    expect(outside).toEqual([]);
+  });
+
   // Points and shapes are projected by the same fit, so a city dot lands inside
   // the province it belongs to. If these ever drift apart the map looks broken
   // in a way that is hard to attribute — the dots would simply be slightly off.
