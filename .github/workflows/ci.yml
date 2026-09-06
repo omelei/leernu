@@ -15,6 +15,10 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
+      # Listed step by step rather than as `npm run check`, so a red run names
+      # what failed on the job page instead of one collapsed script. The script
+      # exists for local use and runs the same commands in the same order — add
+      # a step to one and add it to the other.
       - run: npm run lint
       - run: npm run typecheck
       - run: npm run format:check
