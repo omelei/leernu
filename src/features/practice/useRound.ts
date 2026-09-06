@@ -12,6 +12,8 @@ import { loadGeoSet, loadPointSet, type GeoSet, type PointSet } from '@/content/
 import { loadAllItems, loadItemSets } from '@/content/loadSets';
 import { finishSession, loadItemStates, saveAnswer, startSession } from '@/store/progress';
 import { recordRoundFinished } from '@/store/streakStore';
+import { applyRoundRewards, type RoundOutcome } from '@/store/rewardStore';
+import { COMBO_THRESHOLD, countMastered } from '@/game-core';
 import type { StreakChange } from '@/game-core';
 import type { AnswerLayer } from './MapCanvas';
 
@@ -86,6 +88,8 @@ export interface RoundState {
   readonly answeredCount: number;
   /** Set once the round ends: the streak after this round, and how it got there. */
   readonly streak: StreakChange | null;
+  /** Set once the round ends: what it earned. */
+  readonly reward: RoundOutcome | null;
   readonly error: string | null;
 }
 
@@ -112,6 +116,9 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
   const [missed, setMissed] = useState<Item[]>([]);
   const [verdict, setVerdict] = useState<AnswerVerdict | null>(null);
   const [streak, setStreak] = useState<StreakChange | null>(null);
+  const [reward, setReward] = useState<RoundOutcome | null>(null);
+  /** Correct answers given while five or more were already right in a row. */
+  const [comboAnswers, setComboAnswers] = useState(0);
   const [error, setError] = useState<string | null>(null);
 
   const sessionId = useRef<string | null>(null);
@@ -211,7 +218,9 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
       setVerdict(params.judged);
       setLastCorrect(correct);
       setPhase('revealed');
-      setCombo(correct ? combo + 1 : 0);
+      const nextCombo = correct ? combo + 1 : 0;
+      setCombo(nextCombo);
+      if (nextCombo >= COMBO_THRESHOLD) setComboAnswers(comboAnswers + 1);
       setAnswered(answeredCount + 1);
       if (correct) setCorrectCount(correctCount + 1);
       else setMissed([...missed, question.item]);
@@ -228,7 +237,7 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
         nextState,
       });
     },
-    [phase, question, states, combo, correctCount, answeredCount, missed],
+    [phase, question, states, combo, comboAnswers, correctCount, answeredCount, missed],
   );
 
   /** "Wijs aan": the child pointed at a shape or a city. */
@@ -277,10 +286,30 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
   const finish = useCallback(() => {
     setPhase('finished');
     if (sessionId.current) void finishSession(sessionId.current, correctCount);
+
     // A round counts for the day even when it was stopped early: the child
     // turned up and did the work, which is the only thing a streak measures.
-    void recordRoundFinished().then(setStreak);
-  }, [correctCount]);
+    void recordRoundFinished().then((change) => {
+      setStreak(change);
+
+      const ids = items.map((item) => item.id);
+      void applyRoundRewards({
+        correct: correctCount,
+        answered: answeredCount,
+        comboAnswers,
+        snapshot: {
+          setId,
+          perfectRound: answeredCount > 0 && correctCount === answeredCount,
+          // The badge asks for the whole set, not a round stopped while ahead.
+          completeRound: answeredCount === questions.length,
+          streakDays: change.state.huidigeStreak,
+          mastered: countMastered(states, ids),
+          setSize: ids.length,
+          roundsFinished: 1,
+        },
+      }).then(setReward);
+    });
+  }, [correctCount, answeredCount, comboAnswers, items, questions.length, setId, states]);
 
   const next = useCallback(() => {
     if (phase !== 'revealed') return;
@@ -321,6 +350,7 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
     missed,
     answeredCount,
     streak,
+    reward,
     error,
   };
 

@@ -36,6 +36,7 @@ export function ResultScreen({
           </p>
         )}
         <StreakLine state={state} />
+        <RewardLine state={state} />
       </div>
 
       {state.missed.length === 0 ? (
@@ -176,5 +177,39 @@ function StreakLine({ state }: { readonly state: RoundState }) {
       {streak.freezesUsed > 0 && ` ${t('result.streakSaved')}`}
       {streak.freezeEarned && ` ${t('result.freezeEarned')}`}
     </p>
+  );
+}
+
+/**
+ * What the round earned. Below the score and the streak, in that order: the
+ * number that matters is what the child learned, and points that lead the
+ * screen turn a lesson into a scoreboard.
+ */
+const BADGE_NAME = {
+  'eerste-ronde': 'badge.eerste-ronde',
+  'provincies-foutloos': 'badge.provincies-foutloos',
+  'hoofdsteden-foutloos': 'badge.hoofdsteden-foutloos',
+  'eilanden-foutloos': 'badge.eilanden-foutloos',
+  'week-op-rij': 'badge.week-op-rij',
+  'set-vast': 'badge.set-vast',
+} as const;
+
+function RewardLine({ state }: { readonly state: RoundState }) {
+  const reward = state.reward;
+  if (reward === null || (reward.xp === 0 && reward.coins === 0 && reward.badges.length === 0)) {
+    return null;
+  }
+
+  return (
+    <>
+      <p className="mt-1 text-ink-2">
+        {t('result.earned', { xp: reward.xp, munten: reward.coins })}
+      </p>
+      {reward.badges.map((badge) => (
+        <p key={badge} className="tk-display mt-1 font-semibold text-topo-text">
+          {t('result.newBadge', { naam: t(BADGE_NAME[badge]) })}
+        </p>
+      ))}
+    </>
   );
 }

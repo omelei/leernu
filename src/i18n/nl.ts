@@ -78,6 +78,19 @@ export const nl = {
   'result.streakGrewOne': 'Dat is je eerste dag.',
   'result.streakSaved': 'Je vriezer heeft je streak gered.',
   'result.freezeEarned': 'Je hebt er een vriezer bij verdiend.',
+  'result.earned': 'Je verdiende {xp} punten en {munten} munten.',
+  'result.newBadge': 'Nieuwe badge: {naam}',
+
+  // Badges. Elk criterium staat erbij, want een badge die je niet kunt
+  // uitleggen is een raadsel in plaats van een beloning.
+  'badge.eerste-ronde': 'Op weg',
+  'badge.provincies-foutloos': 'Alle provincies foutloos',
+  'badge.hoofdsteden-foutloos': 'Alle hoofdsteden foutloos',
+  'badge.eilanden-foutloos': 'Alle Waddeneilanden foutloos',
+  'badge.week-op-rij': 'Zeven dagen op rij',
+  'badge.set-vast': 'Alles vast',
+
+  'home.level': 'Level {level}',
 
   // Profile
   'profile.title': 'Wie ben jij?',

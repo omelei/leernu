@@ -5,7 +5,7 @@ import { t } from '@/i18n';
 import { brand } from '@/config/brand';
 import { loadItemStates } from '@/store/progress';
 import { loadStreak, HOLIDAYS } from '@/store/streakStore';
-import { currentStreak, type StreakState } from '@/game-core';
+import { currentStreak, levelFor, levelProgress, type StreakState } from '@/game-core';
 import { PRACTICE_MODES, SET_IDS, type PracticeMode, type SetId } from '@/features/practice/useRound';
 import type { ProfileRecord } from '@/store/db';
 
@@ -62,6 +62,7 @@ export function HomeScreen({
       <header className="flex items-baseline gap-4">
         <p className="tk-display text-2xl font-bold">{brand.name}</p>
         <StreakBadge state={streak} />
+        <LevelBadge xp={profile.xp} />
       </header>
 
       <h1 className="tk-display text-3xl font-semibold">
@@ -163,5 +164,32 @@ function StreakBadge({ state }: { readonly state: StreakState | null }) {
             : t('home.freezesMany', { aantal: state.vriezers })
         }`}
     </p>
+  );
+}
+
+/**
+ * The level, and how far into it the child is.
+ *
+ * Sits beside the streak rather than above the sets: it is a reward for turning
+ * up, not a reason to pick one exercise over another.
+ */
+function LevelBadge({ xp }: { readonly xp: number }) {
+  const level = levelFor(xp);
+  const progress = Math.round(levelProgress(xp) * 100);
+
+  return (
+    <span className="ml-auto flex items-center gap-2">
+      <span className="tk-label">{t('home.level', { level })}</span>
+      <span
+        className="block h-2 w-16 overflow-hidden rounded-full bg-sunken"
+        role="progressbar"
+        aria-valuenow={progress}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-label={t('home.level', { level })}
+      >
+        <span className="block h-full bg-topo" style={{ width: `${progress}%` }} />
+      </span>
+    </span>
   );
 }
