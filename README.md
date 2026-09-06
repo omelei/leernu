@@ -7,57 +7,72 @@ tracking, no account required.
 The product name lives in `src/config/brand.ts` and is never hardcoded, so
 renaming or white-labelling stays a one-file change.
 
-## Scope of this phase
+## What it does today
 
-Decided 2026-09-05 ([ADR-014](docs/DECISIONS.md)): **build the app itself.** No
-commercial model, no classes, no pupil administration. Anyone can play and learn.
+A child types a name — kept on the device, never sent anywhere — and then
+practises one of two sets in one of two ways:
 
-That makes v1 a static single-page app with **no backend at all** — all progress
-lives in IndexedDB on the device ([ADR-015](docs/DECISIONS.md)). Nothing about a
-player leaves the browser.
+| | Wijs aan | Typ de naam |
+|---|---|---|
+| **Provincies van Nederland** | click the province | name the highlighted province |
+| **Hoofdsteden van de provincies** | click the city | name the highlighted city |
+
+A round covers the whole set: twelve of twelve, ordered by a Leitner scheduler
+so what a child keeps missing comes round first. Answers are judged, saved and
+scheduled locally; a round can be stopped early and what was answered is kept.
+
+The home screen forecasts retention rather than reporting a score — "69%, weet
+je hier over drie weken nog van" — because that is the only number that argues
+for practising today.
+
+## Architecture in one paragraph
+
+A static single-page app with **no backend at all**. Everything a player does
+lives in IndexedDB on their device ([ADR-015](docs/DECISIONS.md)). There are no
+accounts, so there is no personal data, so there is nothing to secure beyond the
+device. Maps are pre-projected SVG paths built offline from CBS geodata and
+fetched per region set, never bundled. Fonts are self-hosted. Nothing loads from
+a third party.
 
 ## Getting started
 
 Development happens in **GitHub Codespaces** ([ADR-001](docs/DECISIONS.md)): the
-npm registry is unreachable from the machine this was drafted on. The
-`.devcontainer` installs dependencies and the Playwright browser on create.
+npm registry is unreachable from the machine much of this was written on. The
+`.devcontainer` installs dependencies and both Playwright browsers on create.
 
 ```bash
-npm install          # first run only; commit the package-lock.json it produces
-npm run dev          # http://localhost:5173
+npm install
+npm run dev
 ```
 
-Then, in this order, because that is the order CI runs them in:
+The full gate, in the order CI runs it:
 
 ```bash
-npm run lint && npm run typecheck && npm test && npm run build
+npm run lint && npm run typecheck && npm run format:check && npm test && npm run build
 ```
 
-> **Nothing in this repository has been executed yet.** It was written on a
-> machine where `npm install` cannot run, so the first Codespace session is also
-> the first time the toolchain sees any of it. Expect to fix dependency versions:
-> they were pinned conservatively (Vite 5 / Vitest 2 / Tailwind 3) precisely
-> because they could not be verified, and moving to current majors is a sensible
-> first task once CI is green.
->
-> What *has* been verified: the six self-hosted fonts render in a browser, and
-> every colour pair in the palette clears WCAG AA — measured, not estimated, and
-> now pinned by `src/design/contrast.test.ts`, which reads the real stylesheet.
+```bash
+npm run test:e2e     # Playwright: flows, accessibility (axe), keyboard
+npm run lighthouse   # performance >= 85, accessibility >= 95
+```
 
-## What phase 0 delivers
+### Content, which needs no npm
 
-| | |
-|---|---|
-| Toolchain | Vite, TypeScript strict (`noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`), Tailwind, ESLint flat config, Prettier |
-| CI | lint, typecheck, format, content validation, unit tests, build, Playwright on Chromebook and iPad viewports |
-| Design system | `src/index.css` — the only file allowed to name a colour, enforced by lint. Self-hosted Nunito and OpenDyslexic |
-| i18n | Every user-visible string in `src/i18n/nl.ts`; nothing inline |
-| `game-core` | Leitner scheduler and answer matching, pure and fully tested. No DOM imports, enforced by lint |
-| Local store | The IndexedDB schema from DATAMODEL part A |
-| App | Name entry, a start screen, and a working reading-font setting that survives a reload |
+The pipeline is dependency-free on purpose ([ADR-018](docs/DECISIONS.md)), so it
+runs anywhere and its output can be checked before anyone sees it:
 
-The app is deliberately honest about being empty: it says the maps are still
-coming rather than showing a mock-up of them.
+```bash
+node tools/content/fetch-source.mjs   # CBS geodata, into content/geo/_source
+node tools/content/build-geo.mjs      # provinces, three detail levels
+node tools/content/build-cities.mjs   # the twelve capitals as points
+```
+
+To look at the result without a build, serve the project root and open
+`tools/content/preview.html`:
+
+```bash
+python -m http.server 8942
+```
 
 ## Conventions
 
@@ -72,15 +87,16 @@ coming rather than showing a mock-up of them.
 
 | | |
 |---|---|
-| [ARCHITECTURE.md](docs/ARCHITECTURE.md) | How it is put together, and what the scope decision changed |
+| [ARCHITECTURE.md](docs/ARCHITECTURE.md) | How it is put together and why |
 | [DATAMODEL.md](docs/DATAMODEL.md) | Part A: the local store. Part B: the deferred school model |
-| [DECISIONS.md](docs/DECISIONS.md) | 16 ADRs, including what was rejected and why |
+| [DECISIONS.md](docs/DECISIONS.md) | Every decision that would be expensive to reverse, including the ones that were reversed |
+| [DATA_SOURCES.md](docs/DATA_SOURCES.md) | Every geodata source with licence, URL and retrieval date |
 | [BUSINESSPLAN.md](docs/BUSINESSPLAN.md) | Market, competition, pricing. Planning only — not built |
 
 ## Still to come
 
-- `docs/DATA_SOURCES.md` — every geodata source with licence, URL and retrieval
-  date. PDOK Bestuurlijke Gebieden is CC-BY-4.0 (verified 2026-09-05); Natural
-  Earth is public domain.
-- `docs/CURRICULUM.md` — learning goals mapped to published kerndoelen, with
-  sources and dates.
+`docs/CURRICULUM.md` — learning goals mapped to published kerndoelen with
+sources and dates. `content/leerdoelen.json` carries our own goals and leaves
+`kerndoelRefs` empty on purpose: the kerndoelen were revised, the first sets
+entered law in August 2026, and geography spans two learning areas. A reference
+invented now would be a claim we cannot support ([ADR-011](docs/DECISIONS.md)).

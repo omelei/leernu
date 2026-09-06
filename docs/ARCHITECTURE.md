@@ -126,9 +126,10 @@ content/
 public/fonts/             self-hosted woff2 — nothing is fetched from a CDN
 ```
 
-Zustand holds the live round, which is a state machine that must survive a
-reload mid-round. TanStack Query has nothing to query in v1 and is deferred with
-the backend.
+Round state is plain React state. Zustand was planned for it and removed once
+the round turned out to be a small state machine owned by one screen — a store
+would have been ceremony around four `useState` calls (ADR-021). TanStack Query
+has nothing to query in v1 and is deferred with the backend.
 
 Modes implement one interface, registered in a map:
 
@@ -157,8 +158,13 @@ never be the only carrier of meaning:
   announced through a live region.
 - Read-aloud uses the browser's own SpeechSynthesis. A cloud TTS would be an
   external request and a subprocessor, and this architecture has neither.
-- Dyslexia-friendly font and `prefers-reduced-motion` are settings, and the
-  reduced-motion path removes movement, not feedback.
+- `prefers-reduced-motion` is honoured, and that path removes movement, not
+  feedback: a wrong answer still shows the line to the right place, it just
+  stops travelling along it.
+- There is no dyslexia font setting. It was built and then removed (ADR-020):
+  the evidence for OpenDyslexic over a well-set standard face is thin, and what
+  does help — line height, line length, contrast, and the read-aloud button on
+  every question — is in the design itself rather than behind a switch.
 
 ## 7. Offline
 
@@ -177,9 +183,9 @@ shared by thirty children it may be the most noticeable quality of the product.
 - `validate:content` in CI on every push. A broken geometry reference must never
   reach a classroom.
 - Bundle size is measured and reported in CI against the 300 kB budget from spec
-  §8. It reports rather than fails: keeping Framer Motion was a deliberate
-  choice (ADR-010, rejected), and the number should be visible so the trade
-  stays an informed one.
+  §8. It reports rather than fails, so the number stays visible without a red
+  build. Framer Motion has since been removed (ADR-021): the animations that
+  needed it turned out to be CSS keyframes.
 
 The negative RLS tests from the original draft are deferred with the database
 they were protecting.

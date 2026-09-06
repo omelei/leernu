@@ -66,6 +66,9 @@ export default tseslint.config(
         {
           patterns: [
             {
+              // zustand and framer-motion are no longer installed (ADR-021).
+              // They stay in this list on purpose: if either comes back, it
+              // still must not come back inside game-core.
               group: ['react', 'react-dom', 'zustand', 'idb', 'framer-motion', '@/store/*', '@/features/*'],
               message: 'game-core must stay pure: no browser or framework imports. See ADR-015.',
             },

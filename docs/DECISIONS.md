@@ -104,7 +104,7 @@ Two rules keep later accounts affordable:
 
 1. The local store uses the **same row shapes** as the future server tables, so
    adding accounts means uploading rows rather than transforming them.
-2. Scoring and scheduling live in one pure module, `packages/game-core`, with no
+2. Scoring and scheduling live in one pure module, `src/game-core`, with no
    browser dependencies, so the server can import the same code when scores must
    be validated server-side.
 
@@ -179,6 +179,43 @@ The right call for this content size, and it has a property SM-2 lacks: it can
 be explained to a teacher in one sentence. That matters, because the mastery
 percentage derived from box level is the number a teacher will eventually act
 on. An algorithm nobody can explain makes a report nobody trusts.
+
+---
+
+## ADR-021 — Remove Framer Motion and Zustand
+
+**Status:** accepted 2026-09-06. **Supersedes ADR-010.**
+
+### Context
+
+Both were chosen on paper and neither was ever imported.
+
+ADR-010 kept Framer Motion at the owner's request, against a proposal to drop
+it. That decision was about how animations should be written. In the event the
+only animation this product has — the dot travelling from a wrong answer to the
+right one — turned out to be eleven lines of CSS keyframes, so the library sat
+in `package.json` with no code behind it.
+
+Zustand was promised by ARCHITECTURE for round state. The round turned out to be
+a small state machine owned by a single screen, and a store would have been
+ceremony around four `useState` calls.
+
+### Decision
+
+Remove both. Runtime dependencies are now `react`, `react-dom` and `idb`.
+
+### Consequences
+
+No bundle change: neither was imported, so neither was ever shipped. What goes
+is maintenance and `npm audit` surface — two libraries nobody has to keep
+current, upgrade, or explain to a security review.
+
+Both stay listed in the `no-restricted-imports` rule that keeps `game-core`
+pure. If either ever comes back, it still must not come back in there.
+
+This does not reopen the animation question. Should a screen one day need
+shared-layout transitions, adding the library back is one command and this
+record is the reason it was not there.
 
 ---
 
@@ -427,7 +464,9 @@ other, which is an access-control question as much as a game-design one.
 
 ## ADR-010 — Framer Motion stays
 
-**Status:** rejected (the proposed removal was declined; spec §2 stands).
+**Status:** superseded by ADR-021 (2026-09-06). Kept because the reasoning that
+led to it, and what actually happened afterwards, both matter: it was kept on
+request and then never imported once.
 
 ### Context
 
