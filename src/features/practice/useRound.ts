@@ -51,9 +51,56 @@ export type SetId =
  * How a child answers. Pointing tests where something is; typing tests whether
  * they can name it, which is a different thing and often the harder one.
  */
-export type PracticeMode = 'wijs-aan' | 'hoe-heet-dit';
+export type PracticeMode = 'wijs-aan' | 'hoe-heet-dit' | 'bliksemronde' | 'overleven';
 
-export const PRACTICE_MODES: readonly PracticeMode[] = ['wijs-aan', 'hoe-heet-dit'];
+/**
+ * Split by what a child is doing, not by how the hook implements it. The first
+ * two are practice; the last two are practice with pressure on top and belong
+ * behind the ones a child should start with.
+ */
+export const LEARNING_MODES: readonly PracticeMode[] = ['wijs-aan', 'hoe-heet-dit'];
+export const CHALLENGE_MODES: readonly PracticeMode[] = ['bliksemronde', 'overleven'];
+
+/**
+ * How a round ends. This is the only thing the two new modes change — the map,
+ * the judging and the scheduler are identical — so it is worth being a value
+ * rather than a set of `if (mode === …)` scattered through the hook.
+ *
+ * `vast` asks a list and stops. `tijd` and `levens` keep asking until the clock
+ * or the lives run out, so they draw from the whole set rather than a round's
+ * worth.
+ */
+export type RoundRule =
+  | { readonly kind: 'vast'; readonly aantal: number }
+  | { readonly kind: 'tijd'; readonly seconden: number }
+  | { readonly kind: 'levens'; readonly levens: number };
+
+/**
+ * Sixty seconds and three lives.
+ *
+ * Both are pressure, and pressure is the point — but neither may punish. A lost
+ * life costs no coins, a finished clock is still a finished round for the
+ * streak, and nothing here is ranked against another child (spec §10). What
+ * they add is a reason to answer without hesitating, which is the difference
+ * between knowing where Zwolle is and working it out each time.
+ */
+export const ROUND_RULE: Record<PracticeMode, RoundRule> = {
+  'wijs-aan': { kind: 'vast', aantal: MAX_ROUND },
+  'hoe-heet-dit': { kind: 'vast', aantal: MAX_ROUND },
+  bliksemronde: { kind: 'tijd', seconden: 60 },
+  overleven: { kind: 'levens', levens: 3 },
+};
+
+/**
+ * Which way a child answers. Only one mode types; the rest point. Kept separate
+ * from the mode so a future timed typing round is a table change, not a rewrite.
+ */
+export function typesTheAnswer(mode: PracticeMode): boolean {
+  return mode === 'hoe-heet-dit';
+}
+
+/** How many questions to prepare. An endless round still needs a finite pool. */
+const ENDLESS_POOL = 60;
 
 export const SET_IDS: readonly SetId[] = [
   'nl-provincies',
@@ -128,6 +175,9 @@ export interface RoundState {
   readonly phase: RoundPhase;
   readonly setId: SetId;
   readonly practiceMode: PracticeMode;
+  /** How this round ends. The result screen needs it: "9 van 60" is a lie in a
+   * round that was never going to ask sixty. */
+  readonly rule: RoundRule;
   /** The provinces, always: the country a child orients by. */
   readonly geo: GeoSet | null;
   /** What is being answered, ready for the canvas. */
@@ -145,6 +195,10 @@ export interface RoundState {
   /** Items answered wrongly, for the result screen. */
   readonly missed: readonly Item[];
   readonly answeredCount: number;
+  /** Bliksemronde only: whole seconds left, or null in every other mode. */
+  readonly secondsLeft: number | null;
+  /** Overleven only: lives remaining, or null in every other mode. */
+  readonly livesLeft: number | null;
   /** Set once the round ends: the streak after this round, and how it got there. */
   readonly streak: StreakChange | null;
   /** Set once the round ends: what it earned. */
@@ -173,6 +227,9 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
   const [answeredCount, setAnswered] = useState(0);
   const [combo, setCombo] = useState(0);
   const [missed, setMissed] = useState<Item[]>([]);
+  const rule = ROUND_RULE[practiceMode];
+  const [secondsLeft, setSecondsLeft] = useState(rule.kind === 'tijd' ? rule.seconden : 0);
+  const [livesLeft, setLivesLeft] = useState(rule.kind === 'levens' ? rule.levens : 0);
   const [verdict, setVerdict] = useState<AnswerVerdict | null>(null);
   const [streak, setStreak] = useState<StreakChange | null>(null);
   const [reward, setReward] = useState<RoundOutcome | null>(null);
@@ -182,6 +239,12 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
 
   const sessionId = useRef<string | null>(null);
   const askedAt = useRef<number>(0);
+  /**
+   * Wall-clock end of a bliksemronde, set once when the round starts. A counter
+   * that decrements on a tick loses whatever the tick was late by, and over
+   * sixty seconds on a school Chromebook that is not nothing.
+   */
+  const deadline = useRef<number | null>(null);
   const shape = SETS[setId];
 
   useEffect(() => {
@@ -203,7 +266,7 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
         const picked = composeRound({
           items: all,
           states: loadedStates,
-          size: Math.min(all.length, MAX_ROUND),
+          size: Math.min(all.length, rule.kind === 'vast' ? rule.aantal : ENDLESS_POOL),
           now: new Date(),
         });
 
@@ -213,7 +276,7 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
         }));
 
         sessionId.current = await startSession(
-          'wijs-aan',
+          practiceMode,
           round.map((question) => question.item.id),
         );
         if (cancelled) return;
@@ -226,6 +289,7 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
         setQuestions(round);
         setPhase(round.length > 0 ? 'asking' : 'finished');
         askedAt.current = performance.now();
+        if (rule.kind === 'tijd') deadline.current = Date.now() + rule.seconden * 1000;
       } catch (cause) {
         if (!cancelled) setError(cause instanceof Error ? cause.message : String(cause));
       }
@@ -235,7 +299,7 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
     return () => {
       cancelled = true;
     };
-  }, [setId, shape]);
+  }, [setId, shape, rule, practiceMode]);
 
   const namesById = useMemo(() => {
     const map = new Map<string, string>();
@@ -280,9 +344,11 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
 
       setStates(new Map(states).set(question.item.id, nextState));
 
+      if (!correct && rule.kind === 'levens') setLivesLeft(livesLeft - 1);
+
       void saveAnswer({
         sessionId: sessionId.current,
-        mode: 'wijs-aan',
+        mode: practiceMode,
         itemId: question.item.id,
         correct,
         responseMs,
@@ -290,7 +356,19 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
         nextState,
       });
     },
-    [phase, question, states, combo, comboAnswers, correctCount, answeredCount, missed],
+    [
+      phase,
+      question,
+      states,
+      combo,
+      comboAnswers,
+      correctCount,
+      answeredCount,
+      missed,
+      rule,
+      livesLeft,
+      practiceMode,
+    ],
   );
 
   /** "Wijs aan": the child pointed at a shape or a city. */
@@ -341,6 +419,8 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
   );
 
   const finish = useCallback(() => {
+    // The clock, the last life and the stop button can all arrive at once.
+    if (phase === 'finished') return;
     setPhase('finished');
     if (sessionId.current) void finishSession(sessionId.current, correctCount);
 
@@ -366,12 +446,14 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
         },
       }).then(setReward);
     });
-  }, [correctCount, answeredCount, comboAnswers, items, questions.length, setId, states]);
+  }, [phase, correctCount, answeredCount, comboAnswers, items, questions.length, setId, states]);
 
   const next = useCallback(() => {
     if (phase !== 'revealed') return;
 
-    if (index + 1 >= questions.length) {
+    // Out of lives, or out of questions. A timed round ends on the clock
+    // instead, which is handled by the interval below.
+    if ((rule.kind === 'levens' && livesLeft <= 0) || index + 1 >= questions.length) {
       finish();
       return;
     }
@@ -381,7 +463,42 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
     setVerdict(null);
     setPhase('asking');
     askedAt.current = performance.now();
-  }, [phase, index, questions.length, finish]);
+  }, [phase, index, questions.length, finish, rule, livesLeft]);
+
+  /**
+   * The clock. Ticks four times a second so the number on screen is not up to a
+   * second behind what it claims, and reads the deadline rather than counting
+   * down, so a busy frame costs no time.
+   *
+   * WCAG 2.2.1 asks that time limits be adjustable, with an exception where the
+   * limit is essential to the activity. Here it is the activity: a bliksemronde
+   * without a clock is just wijs-aan. The other three modes have no clock at
+   * all, so nothing a child needs is behind a timer.
+   */
+  useEffect(() => {
+    if (rule.kind !== 'tijd') return;
+    if (phase === 'loading' || phase === 'finished') return;
+
+    const tick = () => {
+      const over = Math.max(0, Math.ceil(((deadline.current ?? 0) - Date.now()) / 1000));
+      setSecondsLeft(over);
+      if (over === 0) finish();
+    };
+    tick();
+    const id = setInterval(tick, 250);
+    return () => clearInterval(id);
+  }, [rule, phase, finish]);
+
+  /**
+   * A lightning round moves on by itself: making a child press Volgende while a
+   * clock runs is charging them for the button. A wrong answer gets twice as
+   * long, because the thing worth seeing is where it actually was.
+   */
+  useEffect(() => {
+    if (rule.kind !== 'tijd' || phase !== 'revealed') return;
+    const id = setTimeout(next, lastCorrect ? 900 : 1800);
+    return () => clearTimeout(id);
+  }, [rule, phase, lastCorrect, next]);
 
   /** Ends the round early. What was answered is already saved. */
   const stop = useCallback(() => {
@@ -393,6 +510,7 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
     phase,
     setId,
     practiceMode,
+    rule,
     geo,
     answers,
     namesById,
@@ -406,6 +524,8 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
     verdict,
     missed,
     answeredCount,
+    secondsLeft: rule.kind === 'tijd' ? secondsLeft : null,
+    livesLeft: rule.kind === 'levens' ? livesLeft : null,
     streak,
     reward,
     error,

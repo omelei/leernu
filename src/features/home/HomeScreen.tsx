@@ -7,7 +7,8 @@ import { loadItemStates } from '@/store/progress';
 import { loadStreak, HOLIDAYS } from '@/store/streakStore';
 import { currentStreak, levelFor, levelProgress, type StreakState } from '@/game-core';
 import {
-  PRACTICE_MODES,
+  CHALLENGE_MODES,
+  LEARNING_MODES,
   SET_IDS,
   type PracticeMode,
   type SetId,
@@ -47,6 +48,8 @@ const SET_NAME_KEY: Record<SetId, TranslationKey> = {
 const MODE_NAME_KEY: Record<PracticeMode, TranslationKey> = {
   'wijs-aan': 'mode.wijs-aan',
   'hoe-heet-dit': 'mode.hoe-heet-dit',
+  bliksemronde: 'mode.bliksemronde',
+  overleven: 'mode.overleven',
 };
 
 export function HomeScreen({
@@ -126,13 +129,12 @@ export function HomeScreen({
                 </div>
               )}
 
-              {/* Three ways into the same content. Pointing asks where
-                  something is, typing asks whether you can name it — different
-                  skills, and a child who has one is not done with the other.
-                  Ontdekken asks nothing at all, which is where a set this size
-                  has to start: being wrong eighty times is not a first lesson. */}
+              {/* The two ways of practising, which is what this card is for.
+                  Pointing asks where something is, typing asks whether you can
+                  name it — different skills, and a child who has one is not
+                  done with the other. */}
               <div className="flex flex-wrap gap-3">
-                {PRACTICE_MODES.map((practiceMode) => (
+                {LEARNING_MODES.map((practiceMode) => (
                   <button
                     key={practiceMode}
                     type="button"
@@ -146,13 +148,32 @@ export function HomeScreen({
                     {t(MODE_NAME_KEY[practiceMode])}
                   </button>
                 ))}
+              </div>
+
+              {/* Separated rather than lined up with the two above, because
+                  five equal buttons per card across five sets is a wall and
+                  none of these three is where a child should start. Ontdekken
+                  asks nothing at all; the other two add a clock and lives to
+                  something already known. */}
+              <p className="tk-label mt-5">{t('home.moreWays')}</p>
+              <div className="mt-2 flex flex-wrap gap-3">
                 <button
                   type="button"
-                  className="tk-button tk-button-big tk-button-quiet"
+                  className="tk-button tk-button-quiet"
                   onClick={() => onExplore(setId)}
                 >
                   {t('mode.ontdekken')}
                 </button>
+                {CHALLENGE_MODES.map((practiceMode) => (
+                  <button
+                    key={practiceMode}
+                    type="button"
+                    className="tk-button tk-button-quiet"
+                    onClick={() => onStart(setId, practiceMode)}
+                  >
+                    {t(MODE_NAME_KEY[practiceMode])}
+                  </button>
+                ))}
               </div>
               <p className="mt-2 text-ink-2">{t('home.continueAction', { aantal: ids.length })}</p>
             </article>

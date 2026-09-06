@@ -183,14 +183,65 @@ test('explore names a city, places it, and scores nothing', async ({ page }) => 
   await signIn(page, 'Joris');
   await setCard(page, 'Steden van Nederland').getByRole('button', { name: 'Ontdek' }).click();
 
-  await expect(page.getByText('Kies iets uit de lijst of tik op de kaart.')).toBeVisible();
+  // Scoped to main: the live region for screen readers carries the same words,
+  // and it should — that is how a child who cannot see the panel hears it.
+  const kaartkant = page.getByRole('main');
+  await expect(kaartkant.getByText('Kies iets uit de lijst of tik op de kaart.')).toBeVisible();
 
   await page.getByRole('navigation').getByRole('button', { name: 'Nijmegen', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Nijmegen' })).toBeVisible();
-  await expect(page.getByText('Nijmegen ligt in de provincie Gelderland.')).toBeVisible();
+  await expect(kaartkant.getByText('Nijmegen ligt in de provincie Gelderland.')).toBeVisible();
 
   await page.getByRole('button', { name: 'Klaar' }).click();
 
   // Back on the home screen the set is still untouched: browsing is not practice.
   await expect(setCard(page, 'Steden van Nederland')).toContainText('nog niet geoefend');
+});
+
+/** Answers the current province question wrongly, whatever it happens to be. */
+async function answerWrongly(page: Page) {
+  const vraag = await page.getByRole('heading', { name: /Waar ligt / }).textContent();
+  const fout = vraag?.includes('Limburg') ? 'Groningen' : 'Limburg';
+  await page.locator('svg').getByRole('button', { name: fout, exact: true }).click();
+}
+
+/**
+ * The bliksemronde adds a clock and takes away the Volgende button. Both matter:
+ * a timed round where a child pays for a button press with their own seconds is
+ * a timed round that measures the wrong thing.
+ */
+test('bliksemronde runs a clock and moves on by itself', async ({ page }) => {
+  await signIn(page, 'Sem');
+  await setCard(page, 'Provincies van Nederland')
+    .getByRole('button', { name: 'Bliksemronde' })
+    .click();
+
+  await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
+  // Sixty seconds reads as 1:00, so the first tick a test can see is not 0:xx.
+  await expect(page.getByText(/^[01]:[0-5]\d$/)).toBeVisible();
+
+  await answerWrongly(page);
+  await expect(page.getByRole('button', { name: 'Volgende vraag' })).toHaveCount(0);
+
+  // No click of ours: the round advances on its own after showing the answer.
+  await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible({ timeout: 5000 });
+});
+
+/** Overleven ends when the lives do, and a life is lost only for a wrong answer. */
+test('overleven spends a life on a wrong answer', async ({ page }) => {
+  await signIn(page, 'Lieke');
+  await setCard(page, 'Provincies van Nederland')
+    .getByRole('button', { name: 'Overleven' })
+    .click();
+
+  await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
+  const levens = page.getByRole('banner').locator('div').filter({ hasText: /^levens\d$/ });
+  await expect(levens).toContainText('3');
+
+  await answerWrongly(page);
+  await expect(levens).toContainText('2');
+
+  await page.getByRole('button', { name: 'Volgende vraag' }).click();
+  await answerWrongly(page);
+  await expect(levens).toContainText('1');
 });

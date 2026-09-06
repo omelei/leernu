@@ -31,7 +31,7 @@ export function ResultScreen({
         <h1 className="tk-display text-3xl font-semibold">
           {t('result.score', { goed: state.correctCount, totaal: state.answeredCount })}
         </h1>
-        {state.answeredCount < state.total && (
+        {state.rule.kind === 'vast' && state.answeredCount < state.total && (
           <p className="text-ink-2">
             {t('result.stoppedEarly', { gedaan: state.answeredCount, totaal: state.total })}
           </p>

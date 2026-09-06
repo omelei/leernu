@@ -3,7 +3,14 @@ import { t, type TranslationKey } from '@/i18n';
 import { SpeakButton } from '@/components/SpeakButton';
 import { MapCanvas } from './MapCanvas';
 import { ResultScreen } from './ResultScreen';
-import { SETS, useRound, type Noemer, type PracticeMode, type SetId } from './useRound';
+import {
+  SETS,
+  typesTheAnswer,
+  useRound,
+  type Noemer,
+  type PracticeMode,
+  type SetId,
+} from './useRound';
 
 /**
  * The practice screen, following docs/leer.nu oefenkaart.html.
@@ -80,7 +87,7 @@ export function PracticeScreen({
 
   const naam = state.question.item.naam;
   const revealed = state.phase === 'revealed';
-  const typing = practiceMode === 'hoe-heet-dit';
+  const typing = typesTheAnswer(practiceMode);
   const { noemer } = SETS[setId];
 
   const label = typing ? t('practice.typeQuestion') : t(PICK_LABEL[noemer]);
@@ -100,10 +107,29 @@ export function PracticeScreen({
         <SpeakButton text={vraag} />
 
         <div className="ml-auto flex items-center gap-5">
-          <Counter
-            label={t('practice.counterQuestion')}
-            value={`${state.index + 1}/${state.total}`}
-          />
+          {/* What is running out, or how far along you are — never both, because
+              in a timed round the question number counts towards nothing. */}
+          {state.secondsLeft !== null ? (
+            <Counter
+              label={t('practice.counterTime')}
+              value={klok(state.secondsLeft)}
+              urgent={state.secondsLeft <= 10}
+            />
+          ) : state.livesLeft !== null ? (
+            <Counter
+              label={t('practice.counterLives')}
+              value={String(state.livesLeft)}
+              urgent={state.livesLeft <= 1}
+            />
+          ) : (
+            <Counter
+              label={t('practice.counterQuestion')}
+              value={`${state.index + 1}/${state.total}`}
+            />
+          )}
+          {state.secondsLeft !== null || state.livesLeft !== null ? (
+            <Counter label={t('practice.counterCorrect')} value={String(state.correctCount)} />
+          ) : null}
           <Counter label={t('practice.counterCombo')} value={`×${state.combo}`} />
           <button type="button" className="tk-button tk-button-quiet" onClick={stop}>
             {t('practice.stop')}
@@ -145,9 +171,18 @@ export function PracticeScreen({
             </p>
             <p className="text-lg text-ink-2">{feedbackDetail(state, naam, chosenName)}</p>
           </div>
-          <button ref={nextButton} type="button" className="tk-button tk-button-big" onClick={next}>
-            {t('practice.next')}
-          </button>
+          {/* A lightning round moves on by itself, so there is nothing to press
+              and nothing to charge a child for pressing. */}
+          {state.rule.kind !== 'tijd' && (
+            <button
+              ref={nextButton}
+              type="button"
+              className="tk-button tk-button-big"
+              onClick={next}
+            >
+              {t('practice.next')}
+            </button>
+          )}
         </section>
       )}
 
@@ -236,13 +271,41 @@ function AnswerField({ onSubmit }: { readonly onSubmit: (value: string) => void 
   );
 }
 
-function Counter({ label, value }: { readonly label: string; readonly value: string }) {
+/**
+ * `urgent` is never the only signal that something is running out: the number
+ * itself is already counting down in plain sight, and a child who cannot tell
+ * the red from the ink still reads "0:07".
+ */
+function Counter({
+  label,
+  value,
+  urgent = false,
+}: {
+  readonly label: string;
+  readonly value: string;
+  readonly urgent?: boolean;
+}) {
   return (
     <div className="flex flex-col items-end">
       <span className="tk-label">{label}</span>
-      <b className="tk-display text-2xl font-bold tabular-nums">{value}</b>
+      <b
+        className={
+          urgent
+            ? 'tk-display text-2xl font-bold tabular-nums text-bad'
+            : 'tk-display text-2xl font-bold tabular-nums'
+        }
+      >
+        {value}
+      </b>
     </div>
   );
+}
+
+/** Seconds as a clock, because 0:07 reads as "nearly out" and 7 does not. */
+function klok(seconden: number): string {
+  const m = Math.floor(seconden / 60);
+  const sec = seconden % 60;
+  return `${m}:${String(sec).padStart(2, '0')}`;
 }
 
 function FeedbackIcon({ kind }: { readonly kind: 'good' | 'near' | 'bad' }) {

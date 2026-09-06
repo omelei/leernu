@@ -25,6 +25,7 @@ export const nl = {
   'home.continueAction': 'Ga verder — {aantal} vragen',
   'home.setMastered': '{goed}/{totaal} vast',
   'home.setNew': 'nog niet geoefend',
+  'home.moreWays': 'Andere manieren',
 
   // Set names
   'set.nl-provincies': 'Provincies van Nederland',
@@ -37,6 +38,8 @@ export const nl = {
   'mode.wijs-aan': 'Wijs aan',
   'mode.hoe-heet-dit': 'Typ de naam',
   'mode.ontdekken': 'Ontdek',
+  'mode.bliksemronde': 'Bliksemronde',
+  'mode.overleven': 'Overleven',
 
   // Explore
   'explore.kind': 'Ontdek de kaart',
@@ -49,6 +52,9 @@ export const nl = {
   'practice.kind': 'Wijs aan op de kaart',
   'practice.question': 'Waar ligt {naam}?',
   'practice.counterQuestion': 'vraag',
+  'practice.counterTime': 'tijd',
+  'practice.counterLives': 'levens',
+  'practice.counterCorrect': 'goed',
   'practice.counterCombo': 'goed op rij',
   'practice.speak': 'Lees de vraag voor',
   'practice.correct': '{naam} — goed.',

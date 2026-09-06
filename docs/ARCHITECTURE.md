@@ -143,9 +143,22 @@ interface GameMode {
 ```
 
 In scope for this phase: wijs aan, hoe heet dit, sleepronde, bliksemronde,
-overleven, ontdekmodus. Built so far: wijs aan, hoe heet dit, ontdekmodus.
+overleven, ontdekmodus. Built so far: wijs aan, hoe heet dit, ontdekmodus,
+bliksemronde, overleven.
 Deferred with accounts: duel and klassenstrijd — both need a second player who
 exists somewhere other than this device.
+
+**Bliksemronde and overleven change one thing only: when a round ends.** The
+map, the judging and the scheduler are identical, so the difference is a value
+— `RoundRule` is `vast` (a list of fifteen), `tijd` (sixty seconds) or `levens`
+(three) — rather than three code paths. Both draw from the whole set instead of
+a round's worth, because a round that ends on a clock cannot also end on a list.
+
+Neither may punish. A lost life costs no coins, a finished clock still counts as
+a finished round for the streak, and nothing is ranked against another child
+(spec §10). What they add is a reason to answer without working it out each
+time, which is the difference between knowing where Zwolle is and being able to
+find it.
 
 **Ontdekmodus is not a round.** It has no questions, no scoring, and it writes
 nothing to the scheduler. That is the point of it: with 115 items across five
@@ -172,6 +185,13 @@ never be the only carrier of meaning:
   announced through a live region.
 - Read-aloud uses the browser's own SpeechSynthesis. A cloud TTS would be an
   external request and a subprocessor, and this architecture has neither.
+- The bliksemronde clock is the one time limit in the product. WCAG 2.2.1 asks
+  that limits be adjustable, with an exception where the limit is essential to
+  the activity — and here it is the activity: a bliksemronde without a clock is
+  wijs aan. Nothing a child needs is behind it, because the same content is in
+  four untimed modes. The clock is text, never a bar or a colour alone, and it
+  is not in a live region: announcing every second would make the round unusable
+  with a screen reader rather than more accessible.
 - `prefers-reduced-motion` is honoured, and that path removes movement, not
   feedback: a wrong answer still shows the line to the right place, it just
   stops travelling along it.
