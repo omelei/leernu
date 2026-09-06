@@ -59,5 +59,5 @@ export interface ItemState {
   readonly foutCount: number;
 }
 
-export type ModeId =
-  'wijs-aan' | 'hoe-heet-dit' | 'sleepronde' | 'bliksemronde' | 'overleven' | 'ontdekken';
+/** The modes that exist. Sleepronde was dropped, not deferred: ADR-023. */
+export type ModeId = 'wijs-aan' | 'hoe-heet-dit' | 'bliksemronde' | 'overleven' | 'ontdekken';

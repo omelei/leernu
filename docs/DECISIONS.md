@@ -272,6 +272,55 @@ its own — when a second dense set arrives, that is the decision to revisit.
 
 ---
 
+## ADR-023 — No sleepronde
+
+**Status:** accepted 2026-09-06, by the product owner. **Removes a mode from the
+spec's list.**
+
+### Context
+
+The spec lists a sleepronde among the six modes: drag a name onto the right
+place on the map. It is the idiom Topomania and Seterra both use, so it is what
+a school recognises, and children like dragging things.
+
+Four things weigh against it, and the first is not a preference.
+
+**WCAG 2.2 added 2.5.7 Dragging Movements at level AA.** Every dragging
+movement must have a single-pointer alternative. Here that alternative can only
+be "tap the name, tap the place" — which, ordering aside, is wijs aan. The
+distinctive interaction has to ship alongside a near-duplicate of a mode we
+already have, and the duplicate is the one that has to work everywhere.
+
+**Dragging is the least reliable interaction on a phone.** The hand covers the
+target on the way to it. With the 26 city points a dense set can show
+(ADR-022), a child drags blind.
+
+**It tests something we are not teaching.** The child still has to know where
+the place is; the drag adds a motor demand on top. In groep 6 that turns fine
+motor control into a confound — we would be measuring aim.
+
+**It is the most expensive of the six.** Pointer capture, drop targets, hit
+testing against SVG paths, plus a keyboard route and a screen-reader route that
+each have to be correct on their own.
+
+### Decision
+
+No sleepronde. `ModeId` loses the member: the type lists modes that exist, and a
+value nothing can produce is a trap for the next person writing an exhaustive
+switch. No attempt row has ever carried it, so nothing stored needs migrating.
+
+### Consequences
+
+Five modes instead of six, and the spec's list is now one item shorter than what
+we build — recorded here rather than quietly dropped.
+
+The tactile version is not impossible, it is blocked on the same thing ADR-022
+named: pan and zoom. With a zoomed map, dragging has room and the drop target is
+big enough to be honest. If a second dense set makes zoom worth building, this
+decision is worth reopening at the same time.
+
+---
+
 ## ADR-020 — No dyslexia font setting
 
 **Status:** accepted 2026-09-06, by the product owner.

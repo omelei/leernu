@@ -142,9 +142,10 @@ interface GameMode {
 }
 ```
 
-In scope for this phase: wijs aan, hoe heet dit, sleepronde, bliksemronde,
-overleven, ontdekmodus. Built so far: wijs aan, hoe heet dit, ontdekmodus,
-bliksemronde, overleven.
+Built: wijs aan, hoe heet dit, ontdekmodus, bliksemronde, overleven. The spec
+also listed a sleepronde; it was dropped rather than deferred, because WCAG
+2.5.7 forces a tap alternative that duplicates wijs aan and dragging measures aim
+alongside knowledge (ADR-023).
 Deferred with accounts: duel and klassenstrijd — both need a second player who
 exists somewhere other than this device.
 
