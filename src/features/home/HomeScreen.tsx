@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { countMastered, retentionAfterRound, setRetention, type ItemState } from '@/game-core';
 import { loadItemSets } from '@/content/loadSets';
-import { t } from '@/i18n';
+import { t, type TranslationKey } from '@/i18n';
 import { brand } from '@/config/brand';
 import { loadItemStates } from '@/store/progress';
 import { loadStreak, HOLIDAYS } from '@/store/streakStore';
@@ -30,16 +30,22 @@ const THREE_WEEKS_DAYS = 21;
  * promise the product cannot keep, and children notice that faster than adults.
  */
 
-/** Explicit rather than a template literal, so a missing key is a type error. */
-const SET_NAME_KEY = {
+/**
+ * Typed as a complete record, so adding a set to `SetId` fails to compile here
+ * rather than rendering a blank heading. The islands were added and this was
+ * not, which is exactly the mistake the type now prevents — and the reason the
+ * annotation belongs on the definition and not on the lookup.
+ */
+const SET_NAME_KEY: Record<SetId, TranslationKey> = {
   'nl-provincies': 'set.nl-provincies',
   'nl-hoofdsteden': 'set.nl-hoofdsteden',
-} as const;
+  'nl-waddeneilanden': 'set.nl-waddeneilanden',
+};
 
-const MODE_NAME_KEY = {
+const MODE_NAME_KEY: Record<PracticeMode, TranslationKey> = {
   'wijs-aan': 'mode.wijs-aan',
   'hoe-heet-dit': 'mode.hoe-heet-dit',
-} as const;
+};
 
 export function HomeScreen({
   profile,

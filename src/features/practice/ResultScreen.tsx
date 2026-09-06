@@ -1,6 +1,7 @@
-import { t } from '@/i18n';
+import { t, type TranslationKey } from '@/i18n';
 import type { GeoSet } from '@/content/loadGeo';
 import type { AnswerLayer } from './MapCanvas';
+import type { BadgeId } from '@/game-core';
 import type { RoundState } from './useRound';
 
 /**
@@ -181,14 +182,14 @@ function StreakLine({ state }: { readonly state: RoundState }) {
  * number that matters is what the child learned, and points that lead the
  * screen turn a lesson into a scoreboard.
  */
-const BADGE_NAME = {
+const BADGE_NAME: Record<BadgeId, TranslationKey> = {
   'eerste-ronde': 'badge.eerste-ronde',
   'provincies-foutloos': 'badge.provincies-foutloos',
   'hoofdsteden-foutloos': 'badge.hoofdsteden-foutloos',
   'eilanden-foutloos': 'badge.eilanden-foutloos',
   'week-op-rij': 'badge.week-op-rij',
   'set-vast': 'badge.set-vast',
-} as const;
+};
 
 function RewardLine({ state }: { readonly state: RoundState }) {
   const reward = state.reward;
