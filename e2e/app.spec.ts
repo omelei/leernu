@@ -235,7 +235,10 @@ test('overleven spends a life on a wrong answer', async ({ page }) => {
     .click();
 
   await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
-  const levens = page.getByRole('banner').locator('div').filter({ hasText: /^levens\d$/ });
+  const levens = page
+    .getByRole('banner')
+    .locator('div')
+    .filter({ hasText: /^levens\d$/ });
   await expect(levens).toContainText('3');
 
   await answerWrongly(page);
