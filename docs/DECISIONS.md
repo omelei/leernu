@@ -182,6 +182,37 @@ on. An algorithm nobody can explain makes a report nobody trusts.
 
 ---
 
+## ADR-020 — No dyslexia font setting
+
+**Status:** accepted 2026-09-06, by the product owner.
+
+### Context
+
+Spec §8 asks for "optie voor een dyslexievriendelijk lettertype", and phase 0
+shipped one: a switch that swapped the interface to OpenDyslexic. Seeing it in
+the running app, the owner called it surplus and asked for it to go.
+
+### Decision
+
+Removed: the switch, the setting, the OpenDyslexic files, the CSS hook and the
+end-to-end test that covered it.
+
+### Consequences
+
+This is a deviation from the specification, recorded as one. It is defensible on
+the evidence rather than only on preference: controlled studies have generally
+not found OpenDyslexic to improve reading speed or accuracy for dyslexic readers
+over a well-set standard face, and Source Sans 3 — a humanist sans with open
+apertures and distinct letterforms — is already a good one. A setting that costs
+a screen, a file and a test while doing little is worth losing.
+
+What genuinely helps dyslexic readers stays and is not negotiable: generous line
+height, short lines, high contrast, no justified text, and the read-aloud button
+on every question. If the font question returns, the honest form of it is a text
+size control, which helps every reader and can be tested.
+
+---
+
 ## ADR-019 — Province boundaries come from CBS, not Bestuurlijke Gebieden
 
 **Status:** accepted 2026-09-05.

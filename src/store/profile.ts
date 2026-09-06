@@ -40,19 +40,3 @@ export async function setSetting(key: string, value: string): Promise<void> {
   await db.put('settings', { key, value });
 }
 
-export const SETTING_FONT = 'font';
-export const FONT_DYSLEXIC = 'dyslexic';
-export const FONT_DEFAULT = 'default';
-
-/**
- * The font choice is applied to the document element rather than a React tree,
- * because it has to survive before the app paints. Anything slower shows the
- * child a flash of the font they explicitly turned off.
- */
-export function applyFontSetting(font: string): void {
-  if (font === FONT_DYSLEXIC) {
-    document.documentElement.setAttribute('data-font', FONT_DYSLEXIC);
-  } else {
-    document.documentElement.removeAttribute('data-font');
-  }
-}

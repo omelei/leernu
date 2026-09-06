@@ -38,19 +38,6 @@ test('keeps the profile across a reload, with no sign-in', async ({ page }) => {
   await expect(page.getByPlaceholder('Je naam')).toHaveCount(0);
 });
 
-test('remembers the reading font after a reload', async ({ page }) => {
-  await signIn(page, 'Tom');
-
-  const toggle = page.getByRole('switch', { name: 'Makkelijker lezen' });
-  await expect(toggle).toHaveAttribute('aria-checked', 'false');
-
-  await toggle.click();
-  await expect(page.locator('html')).toHaveAttribute('data-font', 'dyslexic');
-
-  await page.reload();
-  await expect(page.locator('html')).toHaveAttribute('data-font', 'dyslexic');
-});
-
 test('plays a round: question, map, answer, feedback', async ({ page }) => {
   await signIn(page, 'Noor');
   await page.getByRole('button', { name: /Ga verder/ }).click();

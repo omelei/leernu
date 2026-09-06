@@ -4,14 +4,6 @@ import { loadAllItems } from '@/content/loadSets';
 import { t } from '@/i18n';
 import { brand } from '@/config/brand';
 import { loadItemStates } from '@/store/progress';
-import {
-  applyFontSetting,
-  FONT_DEFAULT,
-  FONT_DYSLEXIC,
-  getSetting,
-  SETTING_FONT,
-  setSetting,
-} from '@/store/profile';
 import type { ProfileRecord } from '@/store/db';
 
 const THREE_WEEKS_DAYS = 21;
@@ -104,52 +96,8 @@ export function HomeScreen({
         </div>
       </section>
 
-      <FontSetting />
-
       <p className="mt-auto text-center text-ink-2">{t('home.privacy')}</p>
     </main>
   );
 }
 
-function FontSetting() {
-  const [dyslexic, setDyslexic] = useState(false);
-
-  useEffect(() => {
-    void getSetting(SETTING_FONT).then((value) => setDyslexic(value === FONT_DYSLEXIC));
-  }, []);
-
-  async function toggle() {
-    const nextValue = !dyslexic ? FONT_DYSLEXIC : FONT_DEFAULT;
-    setDyslexic(!dyslexic);
-    applyFontSetting(nextValue);
-    await setSetting(SETTING_FONT, nextValue);
-  }
-
-  return (
-    <section aria-label={t('a11y.settings')} className="tk-card rounded-control p-4">
-      <div className="flex items-center justify-between gap-4">
-        <div>
-          <p id="font-setting-label" className="font-semibold">
-            {t('settings.font')}
-          </p>
-          <p id="font-setting-help" className="text-ink-2">
-            {t('settings.fontHelp')}
-          </p>
-        </div>
-        {/* The button's own text is "Aan" or "Uit", so without an explicit label
-            a screen reader announces "Uit, schakelaar" and never says what is off. */}
-        <button
-          type="button"
-          role="switch"
-          aria-checked={dyslexic}
-          aria-labelledby="font-setting-label"
-          aria-describedby="font-setting-help"
-          onClick={() => void toggle()}
-          className="tk-button tk-button-quiet min-w-24"
-        >
-          {dyslexic ? t('settings.on') : t('settings.off')}
-        </button>
-      </div>
-    </section>
-  );
-}

@@ -51,13 +51,6 @@ export const nl = {
   'profile.submit': 'Beginnen',
   'profile.nameTooShort': 'Typ eerst je naam.',
 
-  // Settings
-  'settings.font': 'Makkelijker lezen',
-  'settings.fontHelp': 'Een letter die voor sommige kinderen prettiger leest.',
-  'settings.on': 'Aan',
-  'settings.off': 'Uit',
-
   // Accessible names for things that have no visible label of their own
   'a11y.progress': 'Voortgang in deze ronde',
-  'a11y.settings': 'Instellingen',
 } as const;
