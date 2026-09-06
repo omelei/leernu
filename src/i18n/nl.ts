@@ -13,6 +13,12 @@ export const nl = {
   // Home
   'home.greeting': 'Hoi {naam}!',
   'home.streakNone': 'Je begint vandaag',
+  // Dutch needs both forms; "1 dagen op rij" is the kind of small wrongness a
+  // ten-year-old notices immediately.
+  'home.streakOne': '1 dag op rij',
+  'home.streakMany': '{aantal} dagen op rij',
+  'home.freezes': '{aantal} vriezer bewaard',
+  'home.freezesMany': '{aantal} vriezers bewaard',
   'home.privacy': 'Geen advertenties. Geen account nodig.',
   'home.continueTitle': 'Verder waar je was',
   'home.retention': 'weet je hier over drie weken nog van',
@@ -64,6 +70,11 @@ export const nl = {
   'result.stoppedEarly': 'Je stopte na {gedaan} van de {totaal} vragen.',
   'result.mapLabel': 'Kaart met wat je nog moet oefenen',
   'result.mapHelp': 'De blauwe plekken moet je nog oefenen.',
+  'result.streakStarted': 'Je bent begonnen. Kom morgen terug!',
+  'result.streakGrew': 'Dat is {aantal} dagen op rij.',
+  'result.streakGrewOne': 'Dat is je eerste dag.',
+  'result.streakSaved': 'Je vriezer heeft je streak gered.',
+  'result.freezeEarned': 'Je hebt er een vriezer bij verdiend.',
 
   // Profile
   'profile.title': 'Wie ben jij?',

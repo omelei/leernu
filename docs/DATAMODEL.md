@@ -45,12 +45,17 @@ device itself.
 { id, sessionId, itemId, mode, correct, responseMs, gekozenAntwoord, tijdstip }
 
 // object store: streak        exactly one record, key 'me'
-{ id, huidigeStreak, langsteStreak, laatsteActieveDag, vriezers }
+{ id, huidigeStreak, langsteStreak, laatsteActieveDag, vriezers, vriezerWeek }
 
 // object store: badges        { badgeId, behaaldOp }
 // object store: stamps        { regioSet, behaaldOp }
 // object store: settings      { key, value } — device preferences, not player data
 ```
+
+`vriezerWeek` is the ISO week in which the last freeze was earned, so a week of
+practice yields exactly one. It is not in part B's `streaks` table because part B
+was written before the rule existed; it belongs there too when that table is
+built.
 
 Field names are camelCase here and snake_case in Postgres. That single renaming is
 the only translation between part A and part B, and it belongs in one mapping

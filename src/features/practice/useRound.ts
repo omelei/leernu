@@ -11,6 +11,8 @@ import {
 import { loadGeoSet, loadPointSet, type GeoSet, type PointSet } from '@/content/loadGeo';
 import { loadAllItems, loadItemSets } from '@/content/loadSets';
 import { finishSession, loadItemStates, saveAnswer, startSession } from '@/store/progress';
+import { recordRoundFinished } from '@/store/streakStore';
+import type { StreakChange } from '@/game-core';
 import type { MapMode } from './MapCanvas';
 
 /**
@@ -72,6 +74,8 @@ export interface RoundState {
   /** Items answered wrongly, for the result screen. */
   readonly missed: readonly Item[];
   readonly answeredCount: number;
+  /** Set once the round ends: the streak after this round, and how it got there. */
+  readonly streak: StreakChange | null;
   readonly error: string | null;
 }
 
@@ -97,6 +101,7 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
   const [combo, setCombo] = useState(0);
   const [missed, setMissed] = useState<Item[]>([]);
   const [verdict, setVerdict] = useState<AnswerVerdict | null>(null);
+  const [streak, setStreak] = useState<StreakChange | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const sessionId = useRef<string | null>(null);
@@ -256,6 +261,9 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
   const finish = useCallback(() => {
     setPhase('finished');
     if (sessionId.current) void finishSession(sessionId.current, correctCount);
+    // A round counts for the day even when it was stopped early: the child
+    // turned up and did the work, which is the only thing a streak measures.
+    void recordRoundFinished().then(setStreak);
   }, [correctCount]);
 
   const next = useCallback(() => {
@@ -297,6 +305,7 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
     verdict,
     missed,
     answeredCount,
+    streak,
     error,
   };
 

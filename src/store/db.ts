@@ -64,6 +64,8 @@ export interface StreakRecord {
   langsteStreak: number;
   laatsteActieveDag: string | null;
   vriezers: number;
+  /** ISO week in which the last freeze was earned, so one week gives one. */
+  vriezerWeek: string | null;
 }
 
 export interface BadgeRecord {

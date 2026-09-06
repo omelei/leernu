@@ -4,6 +4,8 @@ import { loadItemSets } from '@/content/loadSets';
 import { t } from '@/i18n';
 import { brand } from '@/config/brand';
 import { loadItemStates } from '@/store/progress';
+import { loadStreak, HOLIDAYS } from '@/store/streakStore';
+import { currentStreak, type StreakState } from '@/game-core';
 import { PRACTICE_MODES, SET_IDS, type PracticeMode, type SetId } from '@/features/practice/useRound';
 import type { ProfileRecord } from '@/store/db';
 
@@ -42,9 +44,11 @@ export function HomeScreen({
   readonly onStart: (setId: SetId, practiceMode: PracticeMode) => void;
 }) {
   const [states, setStates] = useState<Map<string, ItemState> | null>(null);
+  const [streak, setStreak] = useState<StreakState | null>(null);
 
   useEffect(() => {
     void loadItemStates().then(setStates);
+    void loadStreak().then(setStreak);
   }, []);
 
   const sets = loadItemSets();
@@ -57,7 +61,7 @@ export function HomeScreen({
     <main className="mx-auto flex min-h-screen max-w-2xl flex-col gap-8 p-6">
       <header className="flex items-baseline gap-4">
         <p className="tk-display text-2xl font-bold">{brand.name}</p>
-        <p className="tk-label">{t('home.streakNone')}</p>
+        <StreakBadge state={streak} />
       </header>
 
       <h1 className="tk-display text-3xl font-semibold">
@@ -133,5 +137,31 @@ export function HomeScreen({
 
       <p className="mt-auto text-center text-ink-2">{t('home.privacy')}</p>
     </main>
+  );
+}
+
+/**
+ * The streak, reported honestly.
+ *
+ * `currentStreak` rather than the stored number: a child who has already run
+ * out of freezes should not be shown a 12 that turns into a 1 the moment they
+ * practise. Seeing it drop is worse than never having been told.
+ */
+function StreakBadge({ state }: { readonly state: StreakState | null }) {
+  if (state === null) return <p className="tk-label" />;
+
+  const days = currentStreak(state, new Date(), HOLIDAYS);
+  if (days === 0) return <p className="tk-label">{t('home.streakNone')}</p>;
+
+  return (
+    <p className="tk-label">
+      {days === 1 ? t('home.streakOne') : t('home.streakMany', { aantal: days })}
+      {state.vriezers > 0 &&
+        ` · ${
+          state.vriezers === 1
+            ? t('home.freezes', { aantal: state.vriezers })
+            : t('home.freezesMany', { aantal: state.vriezers })
+        }`}
+    </p>
   );
 }

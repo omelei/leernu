@@ -34,6 +34,7 @@ export function ResultScreen({
             {t('result.stoppedEarly', { gedaan: state.answeredCount, totaal: state.total })}
           </p>
         )}
+        <StreakLine state={state} />
       </div>
 
       {state.missed.length === 0 ? (
@@ -132,5 +133,34 @@ function ReviewMap({
             />
           ))}
     </svg>
+  );
+}
+
+/**
+ * What today did to the streak.
+ *
+ * Told after the score, never before it: the number that matters is what the
+ * child learned, and a streak that leads the screen turns a lesson into a
+ * scoreboard. It is also silent when nothing happened — a second round on the
+ * same day says nothing, because nothing changed.
+ */
+function StreakLine({ state }: { readonly state: RoundState }) {
+  const streak = state.streak;
+  if (streak === null || !streak.counted) return null;
+
+  const days = streak.state.huidigeStreak;
+
+  return (
+    <p className="mt-2 text-ink-2">
+      {days === 1
+        ? streak.broken
+          ? t('result.streakGrewOne')
+          : t('result.streakStarted')
+        : t('result.streakGrew', { aantal: days })}
+      {/* Said out loud rather than silently spent. A safety net nobody knows
+          about protects the streak but teaches nothing about coming back. */}
+      {streak.freezesUsed > 0 && ` ${t('result.streakSaved')}`}
+      {streak.freezeEarned && ` ${t('result.freezeEarned')}`}
+    </p>
   );
 }

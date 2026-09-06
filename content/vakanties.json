@@ -1,0 +1,40 @@
+{
+  "schooljaar": "2026-2027",
+  "bron": "Rijksoverheid, overzicht schoolvakanties 2026-2027",
+  "bronUrl": "https://www.rijksoverheid.nl/themas/onderwijs/schoolvakanties/overzicht-schoolvakanties-per-schooljaar/overzicht-schoolvakanties-2026-2027",
+  "geraadpleegd": "2026-09-06",
+  "_werkwijze": "Per vakantie de unie van de regio's noord, midden en zuid: de vroegste startdatum en de laatste einddatum. Zonder accounts weten we niet in welke regio een kind zit, en een streak mag nooit breken op een dag dat een kind vrij was. De ruimste uitleg is dan de enige die niemand onterecht straft. Kerst- en zomervakantie liggen wettelijk vast; herfst-, voorjaars- en meivakantie zijn adviesdata waar een school van mag afwijken, wat het argument voor de unie alleen sterker maakt.",
+  "_onderhoud": "Dit bestand loopt af. src/game-core/streak.test.ts faalt zodra er minder dan honderd dagen kalender over is, zodat het opvalt voordat een kind zijn streak verliest in een vakantie die wij niet kennen.",
+  "vakanties": [
+    {
+      "naam": "Herfstvakantie",
+      "start": "2026-10-10",
+      "eind": "2026-10-25",
+      "_regios": "noord 10–18 okt, midden en zuid 17–25 okt"
+    },
+    {
+      "naam": "Kerstvakantie",
+      "start": "2026-12-19",
+      "eind": "2027-01-03",
+      "_regios": "alle regio's gelijk, wettelijk vastgelegd"
+    },
+    {
+      "naam": "Voorjaarsvakantie",
+      "start": "2027-02-13",
+      "eind": "2027-02-28",
+      "_regios": "zuid 13–21 feb, noord en midden 20–28 feb"
+    },
+    {
+      "naam": "Meivakantie",
+      "start": "2027-04-24",
+      "eind": "2027-05-02",
+      "_regios": "alle regio's gelijk"
+    },
+    {
+      "naam": "Zomervakantie",
+      "start": "2027-07-10",
+      "eind": "2027-09-05",
+      "_regios": "noord 10 jul–22 aug, midden 17 jul–29 aug, zuid 24 jul–5 sep"
+    }
+  ]
+}
