@@ -176,7 +176,6 @@ export function HomeScreen({
           );
         })}
       </section>
-
     </div>
   );
 }

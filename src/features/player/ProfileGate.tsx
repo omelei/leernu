@@ -61,7 +61,6 @@ export function ProfileGate({ onReady }: { readonly onReady: (profile: ProfileRe
           {t('profile.submit')}
         </button>
       </form>
-
     </main>
   );
 }
