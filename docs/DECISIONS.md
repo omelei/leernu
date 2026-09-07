@@ -1667,7 +1667,7 @@ in ADR-028, but it is the first thing that has made it look solvable.
 
 ## ADR-045 — The parent gets an account; the child's practice stays on the device
 
-**Status:** accepted — 2026-09-07. Supersedes ADR-015 in part. Not yet built.
+**Status:** superseded by ADR-046, the same day. Never built.
 
 ### Context
 
@@ -1727,6 +1727,93 @@ should not arrive as a side effect of adding a login for parents.
 
 Progress still does not follow a child to a second device. That was the main
 thing a full account would have bought, and it is the price of this shape.
+
+---
+
+## ADR-046 — A child's progress lives in the parent's account. Supersedes ADR-045 and reverses ADR-015
+
+**Status:** accepted — 2026-09-07. Supersedes ADR-045. Reverses ADR-015. Not yet built.
+
+### Context
+
+ADR-045, written earlier the same day, kept every answer a child gave on the
+device. The question that undid it was a simple one from the owner: a family
+with several children and one iPad — what then?
+
+Answering it properly meant looking at how Safari treats storage and at what
+comparable products do, and both went the other way.
+
+**Safari deletes all script-writable storage after seven days without use.**
+LocalStorage, IndexedDB, service workers — all of it, at once, per origin. The
+longest Leitner interval in this product is twenty-one days. So an item a child
+has genuinely learned is one they will not be asked about for three weeks, and a
+family that does not open the site for one of those weeks loses everything. The
+children most exposed are the ones the schedule is working best for, on the
+device §D calls the classroom one. Home-screen web apps are exempt, and no
+product can require a family to install one.
+
+That single fact makes pure local-first untenable for something built on spaced
+repetition. It should have been checked before ADR-045 rather than after.
+
+**Squla**, the closest comparison in this market and age group, puts child
+accounts inside a parent account. The child signs in by tapping their own tile
+and never holds credentials. Their help pages give the reason plainly: each
+child needs their own account because the level adapts to the answers that child
+gave — which is exactly what Leitner does here.
+
+**Duolingo** takes the other shape: separate accounts with separate logins, and
+the family plan is bundled billing rather than a shared learning space. That
+works because its family members are mostly adults. A seven-year-old with a
+password is the wrong object.
+
+And the business model points the same way. The product sells, for €79 a year
+and up to four children, what each child remembers. Progress that can evaporate
+is not that, and the parent overview the plan calls the screen that sells the
+subscription cannot exist while the data sits on the child's device.
+
+### Decision
+
+**Child profiles live in the parent's account, on the server.** The parent
+creates them; the child opens one by tapping a tile and never has credentials of
+their own. Squla's shape, for Squla's reasons.
+
+**The device keeps a local copy**, so a round is fast and works without a
+connection, and it syncs when there is one. IndexedDB stops being the record and
+becomes a cache — which is also what makes the seven-day eviction survivable
+rather than fatal.
+
+**ADR-015 is reversed, not softened.** There is a backend and it holds what a
+child answered. ADR-045's split — parent on the server, child on the device —
+lasted about an hour and is superseded.
+
+**"Geen advertenties. Geen account nodig." is removed** rather than reworded.
+The second half stops being true the moment a parent has to sign in, and the
+owner's judgement was that the pair added nothing worth keeping. What replaces
+it is nothing: the product can demonstrate this rather than assert it on the
+first screen.
+
+### Consequences
+
+The multiple-children question answers itself. Four children on one iPad are
+four tiles; nobody has to guess who is practising, and nobody pollutes a
+sibling's boxes. That was the failure waiting in the current schema, where
+`itemStates` is keyed by item alone and two children silently share one set of
+Leitner boxes.
+
+Legally this is the safer side rather than the riskier one. The parent creates
+the profile and consents, and the child never authenticates, so ADR-008's
+refusal — no self-service account for a minor — stands untouched.
+
+`e2e/network.spec.ts` has to narrow rather than go. A round must still prove it
+asks nobody anything; sync is a separate moment and should be tested as one. The
+README's claim needs rewriting when the backend lands, not before: it is still
+true today.
+
+Still not decided, and not to be decided by accident: whether a child gets a
+server-side identity that other children can see. Growth points relative to
+friends (ADR-034) and the whole friend layer need one. Storing a child's
+progress under their parent's account does not give them one, and adding it
+should be its own decision with its own record.
 
 ---
 

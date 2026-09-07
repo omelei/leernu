@@ -20,7 +20,6 @@ export const nl = {
   // where it means something a child is done with rather than a day off.
   'home.restDay': '{aantal} rustdag bewaard',
   'home.restDays': '{aantal} rustdagen bewaard',
-  'home.privacy': 'Geen advertenties. Geen account nodig.',
   'home.continueTitle': 'Verder waar je was',
   'home.retention': 'weet je hier over drie weken nog van',
   'home.retentionAfter': 'Eén ronde vandaag houdt het op {procent}%.',

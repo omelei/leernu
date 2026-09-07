@@ -177,7 +177,6 @@ export function HomeScreen({
         })}
       </section>
 
-      <p className="mt-auto text-center text-ink-2">{t('home.privacy')}</p>
     </div>
   );
 }

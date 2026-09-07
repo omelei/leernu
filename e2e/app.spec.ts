@@ -34,9 +34,14 @@ test('asks for a name on the first visit and never for anything else', async ({ 
   await page.goto('/');
 
   await expect(page.getByRole('heading', { name: 'Wie ben jij?' })).toBeVisible();
-  await expect(page.getByText(/Geen advertenties/)).toBeVisible();
 
-  // Nothing that would make this an account.
+  // The two sentences that used to be asserted here — no adverts, no account
+  // needed — are gone (ADR-046). The second stopped being true for the parent
+  // the moment they had to sign in, and a claim on the first screen is exactly
+  // the kind this product should not be making loosely.
+  //
+  // What is still asserted is the thing itself rather than the boast about it:
+  // no child is asked for anything that would make this an account.
   await expect(page.locator('input[type="email"]')).toHaveCount(0);
   await expect(page.locator('input[type="password"]')).toHaveCount(0);
 });

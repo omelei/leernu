@@ -62,7 +62,6 @@ export function ProfileGate({ onReady }: { readonly onReady: (profile: ProfileRe
         </button>
       </form>
 
-      <p className="text-center text-ink-2">{t('home.privacy')}</p>
     </main>
   );
 }
