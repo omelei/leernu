@@ -126,6 +126,7 @@ export function MapCanvas({
   targetId,
   chosenId,
   revealed,
+  verdict,
   onPick,
 }: MapCanvasProps) {
   const svgRef = useRef<SVGSVGElement>(null);
