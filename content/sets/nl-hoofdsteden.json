@@ -28,7 +28,7 @@
       "niveau": 1,
       "leerdoelen": ["ak-nl-hoofdsteden-aanwijzen", "ak-nl-hoofdsteden-benoemen"],
       "relaties": { "hoofdstadVan": "nl-prov-fryslan" },
-      "weetje": "De hoofdstad van Friesland. In het Fries heet de stad Ljouwert."
+      "weetje": "De hoofdstad van Fryslân. In het Fries heet de stad Ljouwert."
     },
     {
       "id": "nl-stad-assen",

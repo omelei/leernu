@@ -66,12 +66,12 @@ export const CHALLENGE_MODES: readonly PracticeMode[] = ['bliksemronde', 'overle
  * the judging and the scheduler are identical — so it is worth being a value
  * rather than a set of `if (mode === …)` scattered through the hook.
  *
- * `vast` asks a list and stops. `tijd` and `levens` keep asking until the clock
+ * `fixed` asks a list and stops. `tijd` and `levens` keep asking until the clock
  * or the lives run out, so they draw from the whole set rather than a round's
  * worth.
  */
 export type RoundRule =
-  | { readonly kind: 'vast'; readonly aantal: number }
+  | { readonly kind: 'fixed'; readonly aantal: number }
   | { readonly kind: 'tijd'; readonly seconden: number }
   | { readonly kind: 'levens'; readonly levens: number };
 
@@ -85,8 +85,8 @@ export type RoundRule =
  * between knowing where Zwolle is and working it out each time.
  */
 export const ROUND_RULE: Record<PracticeMode, RoundRule> = {
-  'wijs-aan': { kind: 'vast', aantal: MAX_ROUND },
-  'hoe-heet-dit': { kind: 'vast', aantal: MAX_ROUND },
+  'wijs-aan': { kind: 'fixed', aantal: MAX_ROUND },
+  'hoe-heet-dit': { kind: 'fixed', aantal: MAX_ROUND },
   bliksemronde: { kind: 'tijd', seconden: 60 },
   overleven: { kind: 'levens', levens: 3 },
 };
@@ -266,7 +266,7 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
         const picked = composeRound({
           items: all,
           states: loadedStates,
-          size: Math.min(all.length, rule.kind === 'vast' ? rule.aantal : ENDLESS_POOL),
+          size: Math.min(all.length, rule.kind === 'fixed' ? rule.aantal : ENDLESS_POOL),
           now: new Date(),
         });
 

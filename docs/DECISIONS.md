@@ -1360,6 +1360,73 @@ placeholder ships.
 
 ---
 
+## ADR-040 — Travel stamps, and the reward that was for turning up
+
+**Status:** accepted — 2026-09-07, business plan v6 §5.7.
+
+### Context
+
+A badge became a **reisstempel**, and the plan attaches a condition to it: a
+stamp is earned when an item goes right four times in a row, and never for
+taking part alone.
+
+Four correct in a row is not a new mechanic. It is exactly what carries an item
+to box five in the Leitner schedule (ADR-005), which is what `set-onthouden`
+already required of every item in a set. The plan's rule and the scheduler
+agreed all along; the reward list did not.
+
+**`eerste-ronde` — "Op weg" — was earned by finishing one round.** That is the
+rule's exact counter-example: a reward for turning up, given before the child
+has remembered anything. It was also almost certainly the first reward every
+child ever saw, which makes it the one that taught them what a stamp means.
+
+### Decision
+
+`eerste-ronde` is removed. Not hidden — removed, so that no round awards it.
+
+`set-vast` becomes `set-onthouden`, because it carried the word ADR-030 retired
+while describing the exact thing that word was replaced with.
+
+`BadgeId` becomes `StampId`, `BADGES` becomes `STAMPS`, `newBadges` becomes
+`newStamps`, and the copy keys move from `badge.*` to `stamp.*`. Each stamp now
+carries its criterion as a second string, shown beside the name: a reward you
+cannot explain is a riddle, and a child who does not know what earned it cannot
+set out to earn another.
+
+XP and coins are still calculated and still stored, and neither is shown
+(ADR-034 for levels, and coins were already hidden because there is nothing to
+spend them on).
+
+**The stored rows change, so `DB_VERSION` goes to 3.** The retired row is
+deleted rather than left to be ignored: a stamp the app will never name again is
+not a reward anybody still holds, and leaving it means every later reader of the
+store has to know that. The renamed row keeps its earned date.
+
+The object store is still called `badges` and its key is still `badgeId`. That
+is the one thing that does not follow the rename, and deliberately: the store
+holds what children have already earned, and a schema rename to tidy up a word
+would risk real rows for a change no child can see. `rewardStore.ts` says so at
+the top, so the mismatch is a decision rather than an oversight.
+
+### Consequences
+
+Nine stamps remain, of which seven need a flawless round or a sustained streak
+and two need every item in a set at box five.
+
+**Two of the nine are arguably still about turning up.** `week-op-rij` is seven
+days of practice, and the `-foutloos` stamps need a complete round rather than
+four correct in a row per item. They are kept because sustained practice is not
+"meedoen alleen" — a week of coming back is the behaviour the product exists to
+produce — but the plan's wording would support a stricter reading, and that is
+worth someone deciding rather than me assuming.
+
+`doel_beheersing` and `beheersing` stay as column names in the deferred Postgres
+schema in `docs/DATAMODEL.md`. ADR-030 retires the word from what a parent
+reads and allows it as a percentage; a column holding a percentage is that
+allowed use.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because

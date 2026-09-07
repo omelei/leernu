@@ -37,8 +37,11 @@ const DEFINITION_SELECTORS = /^(:root|\[data-module='[a-z]+'\])$/;
 
 /** Lines in components that may name an accent, and why. */
 const ALLOWED_LINES: readonly { file: string; snippet: string; why: string }[] = [
-  { file: 'src/features/home/HomeScreen.tsx', snippet: 'bg-accent', why: 'the progress bar' },
-  { file: 'src/features/practice/PracticeScreen.tsx', snippet: 'bg-accent', why: 'the progress bar' },
+  {
+    file: 'src/features/practice/PracticeScreen.tsx',
+    snippet: 'bg-accent',
+    why: 'the progress bar',
+  },
   {
     file: 'src/features/practice/MapCanvas.tsx',
     snippet: 'var(--accent',

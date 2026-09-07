@@ -5,7 +5,7 @@ import { t, type TranslationKey } from '@/i18n';
 import { Wordmark } from '@/components/Wordmark';
 import { loadItemStates } from '@/store/progress';
 import { loadStreak, HOLIDAYS } from '@/store/streakStore';
-import { currentStreak, levelFor, levelProgress, type StreakState } from '@/game-core';
+import { currentStreak, type StreakState } from '@/game-core';
 import {
   CHALLENGE_MODES,
   LEARNING_MODES,
@@ -80,7 +80,6 @@ export function HomeScreen({
       <header className="flex items-baseline gap-4">
         <Wordmark size={28} clearSpace={false} />
         <StreakBadge state={streak} />
-        <LevelBadge xp={profile.xp} />
       </header>
 
       <h1 className="tk-display text-h1 font-semibold">
@@ -209,32 +208,5 @@ function StreakBadge({ state }: { readonly state: StreakState | null }) {
             : t('home.restDays', { aantal: state.rustdagen })
         }`}
     </p>
-  );
-}
-
-/**
- * The level, and how far into it the child is.
- *
- * Sits beside the streak rather than above the sets: it is a reward for turning
- * up, not a reason to pick one exercise over another.
- */
-function LevelBadge({ xp }: { readonly xp: number }) {
-  const level = levelFor(xp);
-  const progress = Math.round(levelProgress(xp) * 100);
-
-  return (
-    <span className="ml-auto flex items-center gap-2">
-      <span className="tk-label">{t('home.level', { level })}</span>
-      <span
-        className="block h-2 w-16 overflow-hidden rounded-full bg-sunken"
-        role="progressbar"
-        aria-valuenow={progress}
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-label={t('home.level', { level })}
-      >
-        <span className="block h-full bg-accent" style={{ width: `${progress}%` }} />
-      </span>
-    </span>
   );
 }

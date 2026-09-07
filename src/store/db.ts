@@ -26,8 +26,12 @@ export const DB_NAME = 'leernu';
  * as `undefined` would quietly reset a child's saved rest days to zero, with
  * no error anywhere — the exact failure the streak exists to avoid — so the
  * rename ships with a migration rather than a hope that nobody had data.
+ *
+ * 3 since ADR-040, which retired the stamp awarded for taking part and renamed
+ * the one that used the word this product no longer uses. Both are rows rather
+ * than fields, so the migration rewrites values and leaves the schema alone.
  */
-export const DB_VERSION = 2;
+export const DB_VERSION = 3;
 
 /** Both singleton stores use this key, so there is never a "which row" question. */
 export const SINGLETON_KEY = 'me';
@@ -157,6 +161,22 @@ export function getDb(): Promise<IDBPDatabase<TopoDB>> {
             rustdagen: legacy.vriezers ?? 0,
             rustdagWeek: legacy.vriezerWeek ?? null,
           });
+        });
+      }
+
+      // ADR-040: "eerste-ronde" was earned by taking part and no longer exists;
+      // "set-vast" is the same achievement under the word ADR-030 retired.
+      //
+      // The retired row is deleted rather than left to be ignored. A stamp the
+      // app will never name again is not a reward a child still holds, and
+      // leaving it would mean every later reader of this store has to know that.
+      if (oldVersion >= 1 && oldVersion < 3) {
+        const stamps = tx.objectStore('badges');
+        void stamps.delete('eerste-ronde');
+        void stamps.get('set-vast').then((row) => {
+          if (!row) return;
+          void stamps.delete('set-vast');
+          void stamps.put({ badgeId: 'set-onthouden', behaaldOp: row.behaaldOp });
         });
       }
     },

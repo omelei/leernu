@@ -85,13 +85,12 @@ export function rewardForRound(params: {
 
 // ---------------------------------------------------------------------------
 
-export type BadgeId =
-  | 'eerste-ronde'
+export type StampId =
   | 'provincies-foutloos'
   | 'hoofdsteden-foutloos'
   | 'eilanden-foutloos'
   | 'week-op-rij'
-  | 'set-vast'
+  | 'set-onthouden'
   | 'wateren-foutloos'
   | 'steden-foutloos'
   | 'bliksem-tien'
@@ -115,21 +114,22 @@ export interface RewardSnapshot {
   readonly correct: number;
 }
 
-export interface BadgeDefinition {
-  readonly id: BadgeId;
-  /** Stated in one sentence, because a badge nobody can explain is a mystery. */
+export interface StampDefinition {
+  readonly id: StampId;
+  /** Stated in one sentence, because a stamp nobody can explain is a mystery. */
   readonly criterion: (snapshot: RewardSnapshot) => boolean;
 }
 
 /**
- * Every badge is earned by practising and by nothing else. There is no path
+ * Every stamp is earned by practising and by nothing else. There is no path
  * here that money, luck or waiting could take.
+ *
+ * And none of them is earned by taking part. "Op weg", for finishing a first
+ * round, was exactly that and is gone (ADR-040): a reward for turning up tells
+ * a child the turning up was the achievement, which is the opposite of what
+ * this product is for.
  */
-export const BADGES: readonly BadgeDefinition[] = [
-  {
-    id: 'eerste-ronde',
-    criterion: (s) => s.roundsFinished >= 1,
-  },
+export const STAMPS: readonly StampDefinition[] = [
   {
     // Perfect *and* complete: twelve of twelve, not eight of eight after
     // stopping early. Otherwise the surest route to a badge is to quit while
@@ -174,21 +174,22 @@ export const BADGES: readonly BadgeDefinition[] = [
     criterion: (s) => s.streakDays >= 7,
   },
   {
-    // Mastery over a single good day: every item in the set at box five, which
-    // takes weeks of coming back rather than one lucky round.
-    id: 'set-vast',
+    // Every item in the set at box five — which is four correct answers in a
+    // row each, and so takes weeks of coming back rather than one lucky round.
+    // This is the stamp the others are shaped after.
+    id: 'set-onthouden',
     criterion: (s) => s.setSize > 0 && s.mastered === s.setSize,
   },
 ];
 
 /**
- * Badges newly earned by this round: satisfied now and not already held.
+ * Stamps newly earned by this round: satisfied now and not already held.
  *
- * Returns only what is new, so the result screen can say "je hebt een badge"
- * without checking a list of everything a child already had.
+ * Returns only what is new, so the result screen can name a stamp without
+ * checking a list of everything a child already had.
  */
-export function newBadges(snapshot: RewardSnapshot, alreadyHeld: ReadonlySet<string>): BadgeId[] {
-  return BADGES.filter((badge) => !alreadyHeld.has(badge.id) && badge.criterion(snapshot)).map(
-    (badge) => badge.id,
+export function newStamps(snapshot: RewardSnapshot, alreadyHeld: ReadonlySet<string>): StampId[] {
+  return STAMPS.filter((stamp) => !alreadyHeld.has(stamp.id) && stamp.criterion(snapshot)).map(
+    (stamp) => stamp.id,
   );
 }

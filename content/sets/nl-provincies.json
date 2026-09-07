@@ -20,13 +20,13 @@
     {
       "id": "nl-prov-fryslan",
       "type": "provincie",
-      "naam": "Friesland",
-      "aliassen": ["Fryslân"],
+      "naam": "Fryslân",
+      "aliassen": ["Friesland"],
       "regioSet": "nederland",
       "geometrieRef": "nl-prov-fryslan",
       "niveau": 1,
       "leerdoelen": ["ak-nl-provincies-aanwijzen", "ak-nl-provincies-benoemen"],
-      "weetje": "Friesland heet in het Fries Fryslân. Fries is naast Nederlands een officiële taal."
+      "weetje": "Fryslân is de Friese naam, en de officiële. Fries is naast Nederlands een erkende taal."
     },
     {
       "id": "nl-prov-drenthe",

@@ -25,7 +25,7 @@ export const nl = {
   'home.retention': 'weet je hier over drie weken nog van',
   'home.retentionAfter': 'Eén ronde vandaag houdt het op {procent}%.',
   'home.continueAction': 'Ga verder — {aantal} vragen',
-  'home.setMastered': '{goed}/{totaal} vast',
+  'home.setMastered': '{goed} van de {totaal} onthoud je',
   'home.setNew': 'nog niet geoefend',
   'home.moreWays': 'Andere manieren',
 
@@ -93,7 +93,13 @@ export const nl = {
   'practice.mapFailed': 'De kaart kon niet geladen worden.',
 
   // Result
-  'result.title': 'Klaar!',
+  // "Ronde klaar" and not "Klaar!" (K8). The exclamation mark congratulated the
+  // child for stopping, which is the one thing on this screen that is not an
+  // achievement — and the register rule is that we talk about the work, never
+  // about the child.
+  'result.title': 'Ronde klaar',
+  // The one place the word "score" is allowed: the result of one round. It is
+  // never a word for how much a child knows (ADR-030).
   'result.score': '{goed} van de {totaal} goed',
   'result.practiceMore': 'Deze moet je nog oefenen',
   'result.allCorrect': 'Alles goed. Morgen komen er nieuwe bij.',
@@ -106,24 +112,32 @@ export const nl = {
   'result.streakGrewOne': 'Dat is je eerste dag.',
   'result.streakSaved': 'Je rustdag heeft je streak gered.',
   'result.restDayEarned': 'Je hebt er een rustdag bij verdiend.',
-  'result.earned': 'Je verdiende {xp} punten.',
-  'result.newBadge': 'Nieuwe badge: {naam}',
+  'result.newStamp': 'Nieuwe reisstempel: {naam}',
 
-  // Badges. Elk criterium staat erbij, want een badge die je niet kunt
-  // uitleggen is een raadsel in plaats van een beloning.
-  'badge.eerste-ronde': 'Op weg',
-  'badge.provincies-foutloos': 'Alle provincies foutloos',
-  'badge.hoofdsteden-foutloos': 'Alle hoofdsteden foutloos',
-  'badge.eilanden-foutloos': 'Alle Waddeneilanden foutloos',
-  'badge.week-op-rij': 'Zeven dagen op rij',
-  'badge.set-vast': 'Alles vast',
-  'badge.wateren-foutloos': 'Alle wateren foutloos',
-  'badge.steden-foutloos': 'Alle steden foutloos',
-  'badge.bliksem-tien': 'Tien in een minuut',
-  'badge.overleven-vijftien': 'Vijftien levens lang',
-
-  'home.level': 'Level {level}',
-
+  // Reisstempels. Elk criterium staat erbij, want een stempel die je niet kunt
+  // uitleggen is een raadsel in plaats van een beloning — en een kind dat niet
+  // weet waarvoor het er een kreeg, kan er ook niet nog een verdienen.
+  //
+  // "Op weg", voor je eerste ronde, bestaat niet meer: een stempel is er voor
+  // wat je onthoudt, nooit voor meedoen alleen (ADR-040).
+  'stamp.provincies-foutloos': 'Alle provincies foutloos',
+  'stamp.provincies-foutloos.criterion': 'Een hele ronde provincies zonder fout.',
+  'stamp.hoofdsteden-foutloos': 'Alle hoofdsteden foutloos',
+  'stamp.hoofdsteden-foutloos.criterion': 'Een hele ronde hoofdsteden zonder fout.',
+  'stamp.eilanden-foutloos': 'Alle Waddeneilanden foutloos',
+  'stamp.eilanden-foutloos.criterion': 'Een hele ronde Waddeneilanden zonder fout.',
+  'stamp.wateren-foutloos': 'Alle wateren foutloos',
+  'stamp.wateren-foutloos.criterion': 'Een hele ronde wateren zonder fout.',
+  'stamp.steden-foutloos': 'Alle steden foutloos',
+  'stamp.steden-foutloos.criterion': 'Een hele ronde steden zonder fout.',
+  'stamp.week-op-rij': 'Zeven dagen op rij',
+  'stamp.week-op-rij.criterion': 'Zeven dagen achter elkaar geoefend.',
+  'stamp.set-onthouden': 'Alles onthouden',
+  'stamp.set-onthouden.criterion': 'Elk onderdeel vier keer op rij goed.',
+  'stamp.bliksem-tien': 'Tien in een minuut',
+  'stamp.bliksem-tien.criterion': 'Tien goed binnen één minuut.',
+  'stamp.overleven-vijftien': 'Vijftien levens lang',
+  'stamp.overleven-vijftien.criterion': 'Vijftien goed met drie levens.',
   // Profile
   'profile.title': 'Wie ben jij?',
   'profile.help': 'Typ je naam. Je naam blijft op dit apparaat.',

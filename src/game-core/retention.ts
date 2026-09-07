@@ -108,7 +108,7 @@ export function retentionAfterRound(
   return Math.round((total / itemIds.length) * 100);
 }
 
-/** How many items in a set are at box 5 — the "8/12 vast" on the home screen. */
+/** How many items in a set are at box 5 — the "8 van de 12 onthoud je" on home. */
 export function countMastered(
   states: ReadonlyMap<string, ItemState>,
   itemIds: readonly string[],

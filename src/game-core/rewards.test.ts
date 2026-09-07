@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import {
-  BADGES,
+  STAMPS,
   COINS_PERFECT_ROUND,
   levelFor,
   levelProgress,
-  newBadges,
+  newStamps,
   rewardForRound,
   xpForLevel,
   XP_COMBO_BONUS,
@@ -25,16 +25,16 @@ const snapshot = (over: Partial<RewardSnapshot> = {}): RewardSnapshot => ({
   ...over,
 });
 
-describe('the badges the challenge modes earn', () => {
+describe('the stamps the challenge modes earn', () => {
   it('gives bliksem-tien for ten right inside the minute, in that mode only', () => {
-    expect(newBadges(snapshot({ mode: 'bliksemronde', correct: 10 }), new Set())).toContain(
+    expect(newStamps(snapshot({ mode: 'bliksemronde', correct: 10 }), new Set())).toContain(
       'bliksem-tien',
     );
-    expect(newBadges(snapshot({ mode: 'bliksemronde', correct: 9 }), new Set())).not.toContain(
+    expect(newStamps(snapshot({ mode: 'bliksemronde', correct: 9 }), new Set())).not.toContain(
       'bliksem-tien',
     );
     // The same ten right in an untimed round is not the same achievement.
-    expect(newBadges(snapshot({ mode: 'wijs-aan', correct: 40 }), new Set())).not.toContain(
+    expect(newStamps(snapshot({ mode: 'wijs-aan', correct: 40 }), new Set())).not.toContain(
       'bliksem-tien',
     );
   });
@@ -42,7 +42,7 @@ describe('the badges the challenge modes earn', () => {
   it('allows two mistakes on the way to overleven-vijftien', () => {
     // Fifteen right on three lives: not a perfect round, and deliberately not.
     const survived = snapshot({ mode: 'overleven', correct: 15, perfectRound: false });
-    expect(newBadges(survived, new Set())).toContain('overleven-vijftien');
+    expect(newStamps(survived, new Set())).toContain('overleven-vijftien');
   });
 });
 
@@ -115,60 +115,75 @@ describe('rewardForRound', () => {
   });
 });
 
-describe('badges', () => {
-  it('gives the first one for finishing anything', () => {
-    expect(newBadges(snapshot(), new Set())).toContain('eerste-ronde');
+describe('stamps', () => {
+  /**
+   * ADR-040. "Op weg", for finishing a first round, used to be the first thing
+   * a child earned, and it was earned by taking part. A reward for turning up
+   * tells a child the turning up was the achievement.
+   */
+  it('gives nothing at all for merely finishing a round', () => {
+    expect(newStamps(snapshot(), new Set())).toEqual([]);
   });
 
-  it('does not give the same badge twice', () => {
-    expect(newBadges(snapshot(), new Set(['eerste-ronde']))).not.toContain('eerste-ronde');
+  it('does not give the same stamp twice', () => {
+    const perfect = snapshot({ perfectRound: true });
+    expect(newStamps(perfect, new Set())).toContain('provincies-foutloos');
+    expect(newStamps(perfect, new Set(['provincies-foutloos']))).not.toContain(
+      'provincies-foutloos',
+    );
   });
 
   /**
-   * The rule that stops the badge teaching the wrong lesson. Without
+   * The rule that stops the stamp teaching the wrong lesson. Without
    * `completeRound`, the surest way to a perfect score is to stop after one
    * right answer — which would make quitting while ahead the winning move.
    */
   it('refuses a perfect score from a round that was cut short', () => {
     const cutShort = snapshot({ perfectRound: true, completeRound: false });
-    expect(newBadges(cutShort, new Set())).not.toContain('provincies-foutloos');
+    expect(newStamps(cutShort, new Set())).not.toContain('provincies-foutloos');
 
     const finished = snapshot({ perfectRound: true, completeRound: true });
-    expect(newBadges(finished, new Set())).toContain('provincies-foutloos');
+    expect(newStamps(finished, new Set())).toContain('provincies-foutloos');
   });
 
-  it('gives each set its own perfect-round badge', () => {
+  it('gives each set its own perfect-round stamp', () => {
     const islands = snapshot({
       setId: 'nl-waddeneilanden',
       perfectRound: true,
       setSize: 5,
     });
-    const earned = newBadges(islands, new Set());
+    const earned = newStamps(islands, new Set());
 
     expect(earned).toContain('eilanden-foutloos');
     expect(earned).not.toContain('provincies-foutloos');
   });
 
-  it('gives the week badge at seven days and not before', () => {
-    expect(newBadges(snapshot({ streakDays: 6 }), new Set())).not.toContain('week-op-rij');
-    expect(newBadges(snapshot({ streakDays: 7 }), new Set())).toContain('week-op-rij');
+  it('gives the week stamp at seven days and not before', () => {
+    expect(newStamps(snapshot({ streakDays: 6 }), new Set())).not.toContain('week-op-rij');
+    expect(newStamps(snapshot({ streakDays: 7 }), new Set())).toContain('week-op-rij');
   });
 
-  it('gives the mastery badge only when the whole set is in the last box', () => {
-    expect(newBadges(snapshot({ mastered: 11, setSize: 12 }), new Set())).not.toContain('set-vast');
-    expect(newBadges(snapshot({ mastered: 12, setSize: 12 }), new Set())).toContain('set-vast');
+  it('gives the retention stamp only when the whole set is in the last box', () => {
+    expect(newStamps(snapshot({ mastered: 11, setSize: 12 }), new Set())).not.toContain(
+      'set-onthouden',
+    );
+    expect(newStamps(snapshot({ mastered: 12, setSize: 12 }), new Set())).toContain(
+      'set-onthouden',
+    );
   });
 
   it('never awards mastery for an empty set', () => {
-    expect(newBadges(snapshot({ mastered: 0, setSize: 0 }), new Set())).not.toContain('set-vast');
+    expect(newStamps(snapshot({ mastered: 0, setSize: 0 }), new Set())).not.toContain(
+      'set-onthouden',
+    );
   });
 
   // Spec §12: every reward must be reachable by practising and by nothing else.
-  it('has a criterion for every badge and no duplicates', () => {
-    const ids = BADGES.map((badge) => badge.id);
+  it('has a criterion for every stamp and no duplicates', () => {
+    const ids = STAMPS.map((stamp) => stamp.id);
     expect(new Set(ids).size).toBe(ids.length);
-    for (const badge of BADGES) {
-      expect(typeof badge.criterion, badge.id).toBe('function');
+    for (const stamp of STAMPS) {
+      expect(typeof stamp.criterion, stamp.id).toBe('function');
     }
   });
 });

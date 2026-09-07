@@ -1,7 +1,7 @@
 import { t, type TranslationKey } from '@/i18n';
 import type { GeoSet } from '@/content/loadGeo';
 import type { AnswerLayer } from './MapCanvas';
-import type { BadgeId } from '@/game-core';
+import type { StampId } from '@/game-core';
 import type { RoundState } from './useRound';
 
 /**
@@ -31,7 +31,7 @@ export function ResultScreen({
         <h1 className="tk-display text-h1 font-semibold">
           {t('result.score', { goed: state.correctCount, totaal: state.answeredCount })}
         </h1>
-        {state.rule.kind === 'vast' && state.answeredCount < state.total && (
+        {state.rule.kind === 'fixed' && state.answeredCount < state.total && (
           <p className="text-ink-2">
             {t('result.stoppedEarly', { gedaan: state.answeredCount, totaal: state.total })}
           </p>
@@ -182,17 +182,16 @@ function StreakLine({ state }: { readonly state: RoundState }) {
  * number that matters is what the child learned, and points that lead the
  * screen turn a lesson into a scoreboard.
  */
-const BADGE_NAME: Record<BadgeId, TranslationKey> = {
-  'eerste-ronde': 'badge.eerste-ronde',
-  'provincies-foutloos': 'badge.provincies-foutloos',
-  'hoofdsteden-foutloos': 'badge.hoofdsteden-foutloos',
-  'eilanden-foutloos': 'badge.eilanden-foutloos',
-  'week-op-rij': 'badge.week-op-rij',
-  'set-vast': 'badge.set-vast',
-  'wateren-foutloos': 'badge.wateren-foutloos',
-  'steden-foutloos': 'badge.steden-foutloos',
-  'bliksem-tien': 'badge.bliksem-tien',
-  'overleven-vijftien': 'badge.overleven-vijftien',
+const STAMP_NAME: Record<StampId, TranslationKey> = {
+  'provincies-foutloos': 'stamp.provincies-foutloos',
+  'hoofdsteden-foutloos': 'stamp.hoofdsteden-foutloos',
+  'eilanden-foutloos': 'stamp.eilanden-foutloos',
+  'week-op-rij': 'stamp.week-op-rij',
+  'set-onthouden': 'stamp.set-onthouden',
+  'wateren-foutloos': 'stamp.wateren-foutloos',
+  'steden-foutloos': 'stamp.steden-foutloos',
+  'bliksem-tien': 'stamp.bliksem-tien',
+  'overleven-vijftien': 'stamp.overleven-vijftien',
 };
 
 /**
@@ -206,16 +205,27 @@ const BADGE_NAME: Record<BadgeId, TranslationKey> = {
  */
 function RewardLine({ state }: { readonly state: RoundState }) {
   const reward = state.reward;
-  if (reward === null || (reward.xp === 0 && reward.badges.length === 0)) {
-    return null;
-  }
+  if (reward === null || reward.stamps.length === 0) return null;
+
+  // Unknown ids are skipped rather than rendered. Stored rows outlive the code
+  // that wrote them — "eerste-ronde" is retired and "set-vast" was renamed — and
+  // a stamp nobody can name is a blank line where a reward should be.
+  const named = reward.stamps.filter((stamp) => stamp in STAMP_NAME);
+  if (named.length === 0) return null;
 
   return (
     <>
-      <p className="mt-1 text-ink-2">{t('result.earned', { xp: reward.xp })}</p>
-      {reward.badges.map((badge) => (
-        <p key={badge} className="tk-display mt-1 font-semibold">
-          {t('result.newBadge', { naam: t(BADGE_NAME[badge]) })}
+      {named.map((stamp) => (
+        <p key={stamp} className="mt-1">
+          <span className="tk-display font-semibold">
+            {t('result.newStamp', { naam: t(STAMP_NAME[stamp]) })}
+          </span>
+          {/* The criterion beside the name, always. A reward you cannot explain
+              is a riddle, and a child who does not know what earned it cannot
+              earn another one on purpose. */}
+          <span className="block text-ink-2">
+            {t(`${STAMP_NAME[stamp]}.criterion` as TranslationKey)}
+          </span>
         </p>
       ))}
     </>

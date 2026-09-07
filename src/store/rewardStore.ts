@@ -1,8 +1,15 @@
-import { newBadges, rewardForRound, type BadgeId, type RewardSnapshot } from '@/game-core';
+import { newStamps, rewardForRound, type RewardSnapshot, type StampId } from '@/game-core';
 import { getDb, SINGLETON_KEY } from './db';
 
 /**
- * XP, coins and badges, on the device.
+ * XP, coins and travel stamps, on the device.
+ *
+ * The object store is still called `badges` and its key is still `badgeId`.
+ * That is the one thing here that does not follow the rename: the storage holds
+ * what children have already earned, and a schema rename to tidy up a word
+ * would be a migration risking real rows for no gain a child can see. The code
+ * around it says stamp, the screen says reisstempel, and this paragraph is why
+ * the two do not match.
  *
  * Nothing here can be bought, won by chance, or granted by waiting. Spec §12 is
  * blunt about that and the audience is why: every one of these is reachable only
@@ -14,17 +21,17 @@ export interface RoundOutcome {
   readonly xp: number;
   readonly coins: number;
   readonly totalXp: number;
-  readonly badges: readonly BadgeId[];
+  readonly stamps: readonly StampId[];
 }
 
-export async function loadBadges(): Promise<Set<string>> {
+export async function loadStamps(): Promise<Set<string>> {
   const db = await getDb();
   const rows = await db.getAll('badges');
   return new Set(rows.map((row) => row.badgeId));
 }
 
 /**
- * Applies a finished round: adds what was earned, awards any badge the round
+ * Applies a finished round: adds what was earned, awards any stamp the round
  * newly satisfies, and reports both so the result screen can say so.
  */
 export async function applyRoundRewards(params: {
@@ -47,12 +54,12 @@ export async function applyRoundRewards(params: {
     });
   }
 
-  const held = await loadBadges();
-  const earned = newBadges(params.snapshot, held);
+  const held = await loadStamps();
+  const earned = newStamps(params.snapshot, held);
   const behaaldOp = new Date().toISOString();
   for (const badgeId of earned) {
     await db.put('badges', { badgeId, behaaldOp });
   }
 
-  return { xp: reward.xp, coins: reward.coins, totalXp, badges: earned };
+  return { xp: reward.xp, coins: reward.coins, totalXp, stamps: earned };
 }
