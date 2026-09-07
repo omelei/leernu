@@ -888,6 +888,171 @@
     color: var(--ink);
   }
 
+  /* ---- The round, on four sizes (K3) -----------------------------------
+   * Three arrangements of the same two things, and the design gives a reason
+   * for each. Beside the map where there is width and a hand on a keyboard.
+   * Above it when the tablet is turned over and there is height instead. On the
+   * map when there is neither, because a question and the thing it is about
+   * must be in view together — on 393 as much as on 1440.
+   *
+   * Written as one grid with three shapes rather than three components: the
+   * question does not move in the document, so the reading order and the tab
+   * order are the same at every size, and nothing is rendered twice.
+   *
+   * No navigation appears here at any size. That is enforced by not wrapping
+   * this screen in the Shell at all (ADR-041), not by hiding anything.
+   */
+  .tk-round-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: none;
+    padding: 12px 16px;
+    border-bottom: var(--stroke-hair) solid var(--line);
+  }
+  @media (min-width: 768px) {
+    .tk-round-bar {
+      gap: 20px;
+      padding: 0 48px;
+      height: 64px;
+    }
+  }
+
+  /* The stop, which is a cross and not a word: it is the one control that must
+   * read the same to a child who cannot yet read. 44 is the floor, and this is
+   * the one place the floor is right — leaving is not the thing we want to make
+   * easiest. */
+  .tk-stop {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: var(--touch-min);
+    height: var(--touch-min);
+    border: var(--stroke-hair) solid var(--line-strong);
+    border-radius: var(--radius-card);
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .tk-stop:hover {
+    background: var(--surface);
+  }
+
+  /* Ten dots, which are the progress bar of §B — one of the three things a
+   * module may colour. An answered question is filled, the one being asked is a
+   * ring, and the rest are the empty track. They are an indication and not a
+   * control, so they shrink on a phone rather than claiming a hit target. */
+  .tk-round-dots {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  @media (min-width: 768px) {
+    .tk-round-dots {
+      gap: 8px;
+    }
+  }
+  .tk-round-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: var(--radius-full);
+    background: var(--sunken);
+  }
+  @media (min-width: 768px) {
+    .tk-round-dot {
+      width: 18px;
+      height: 18px;
+    }
+  }
+  @media (min-width: 1024px) {
+    .tk-round-dot {
+      width: 20px;
+      height: 20px;
+    }
+  }
+  .tk-round-dot-done {
+    background: var(--accent);
+  }
+  .tk-round-dot-now {
+    background: transparent;
+    border: var(--stroke-answer) solid var(--accent);
+  }
+
+  /* ---- The two things that share the screen ---------------------------- */
+  .tk-round-body {
+    position: relative;
+    display: grid;
+    flex: 1;
+    min-height: 0;
+    /* Phone: one cell. The map has it, and the question lies on top. */
+    grid-template-areas: 'map';
+  }
+  .tk-round-map {
+    grid-area: map;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+    min-width: 0;
+    padding: 12px;
+  }
+
+  /* On the map, on paper, with its own boundary — so the contrast of the words
+   * does not depend on which province happens to be underneath them. */
+  .tk-round-question {
+    grid-area: map;
+    align-self: start;
+    z-index: 1;
+    margin: 16px;
+    padding: 16px;
+    background: var(--paper);
+    border: var(--stroke-region) solid var(--line-strong);
+    border-radius: var(--radius-card);
+  }
+
+  /* Tablet upright: the bar goes above the canvas and the map takes the full
+   * width. A surface fill and a 1.5 boundary, which is what §D gives a block
+   * that is part of the page rather than lying over it. */
+  @media (min-width: 768px) {
+    .tk-round-body {
+      grid-template-areas: 'question' 'map';
+      grid-template-rows: auto minmax(0, 1fr);
+    }
+    .tk-round-question {
+      grid-area: question;
+      align-self: stretch;
+      margin: 0;
+      padding: 24px;
+      background: var(--surface);
+      border: 0;
+      border-bottom: var(--stroke-region) solid var(--line-strong);
+      border-radius: var(--radius-flat);
+    }
+    .tk-round-map {
+      padding: 24px;
+    }
+  }
+
+  /* Desktop and tablet on its side: beside, because there is width to spare and
+   * the hand is on a keyboard rather than on the map. */
+  @media (min-width: 1024px) {
+    .tk-round-body {
+      grid-template-areas: 'question map';
+      grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
+      grid-template-rows: minmax(0, 1fr);
+    }
+    .tk-round-question {
+      align-self: center;
+      padding: 48px;
+      background: transparent;
+      border: 0;
+    }
+    .tk-round-map {
+      padding: 48px;
+    }
+  }
+
   /* Map shapes, and the four answer states of step 7.
    *
    * Each one is told apart by its shape before its colour: a fill, a border

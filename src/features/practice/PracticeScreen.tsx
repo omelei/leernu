@@ -2,6 +2,8 @@ import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { t, type TranslationKey } from '@/i18n';
 import { SpeakButton } from '@/components/SpeakButton';
 import { MapCanvas } from './MapCanvas';
+import { RoundProgress } from './RoundProgress';
+import { StopButton } from './StopButton';
 import { ResultScreen } from './ResultScreen';
 import {
   SETS,
@@ -15,11 +17,20 @@ import {
 /**
  * The practice screen, following docs/leer.nu oefenkaart.html.
  *
- * Layout from the design: a question bar across the top, the map taking every
- * pixel that is left, feedback appearing below only once an answer is given,
- * and a progress rail at the very bottom. The map is the interface — it gets
- * the whole stage rather than a panel in a page, which is the single biggest
- * difference from what a child meets on the free alternatives.
+ * Three arrangements of two things, at four sizes (K3). Beside the map where
+ * there is width and a hand on a keyboard; above it when the tablet is turned
+ * over and there is height instead; on the map when there is neither. The map
+ * is the interface — it gets the whole stage rather than a panel in a page,
+ * which is the single biggest difference from what a child meets on the free
+ * alternatives.
+ *
+ * Feedback appears exactly where the question was, at every size, so between
+ * K3 and K4 nothing moves except the words. On a phone that makes it a strip
+ * lying on the map rather than a dialog: a round is never interrupted by
+ * something a child has to dismiss.
+ *
+ * The ten dots at the top are the progress bar of §B and carry the question
+ * number, which is why no counter says it any more.
  *
  * Two ways of answering share this screen. Pointing asks where something is;
  * typing asks whether the child can name it, which is a different skill and
@@ -109,24 +120,21 @@ export function PracticeScreen({
 
   return (
     <div className="flex h-screen flex-col bg-paper">
-      {/* Wraps rather than truncates.
-       *
-       * The question used to be `truncate` in a row it shared with the counters
-       * and the stop button. At 393px that row overflows, `min-w-0` lets the
-       * question shrink to nothing, and the child is left looking at a map with
-       * no question — which is what the e2e run found: the heading was in the
-       * document and zero pixels wide.
-       *
-       * A question is the one thing on this screen that may never be clipped, so
-       * it takes a whole line of its own when the header cannot hold everything,
-       * and the counters drop below it. K3 replaces this properly on a phone by
-       * putting the question on the map; until then it wraps, which is at least
-       * always readable. */}
-      <header className="flex flex-none flex-wrap items-center gap-4 border-b border-line px-6 py-4 md:gap-6">
-        <div className="min-w-0 flex-1 basis-full md:basis-auto">
-          <p className="tk-label">{label}</p>
-          <h1 className="tk-display text-h1 font-semibold">{vraag}</h1>
-        </div>
+      {/* Everything that is not the question or the map, on one line at the top.
+          No navigation at any size — this screen is not wrapped in the Shell at
+          all (ADR-041), so there is nothing to hide. */}
+      <header className="tk-round-bar">
+        <StopButton onStop={stop} />
+
+        {/* The ten dots, except in the endless modes, which have no ten to
+            count towards. There the counters carry it instead. */}
+        {state.rule.kind === 'fixed' ? (
+          <RoundProgress
+            total={state.total}
+            index={state.index}
+            answered={state.index + (revealed ? 1 : 0)}
+          />
+        ) : null}
 
         <SpeakButton text={vraag} />
 
@@ -145,19 +153,11 @@ export function PracticeScreen({
               value={String(state.livesLeft)}
               urgent={state.livesLeft <= 1}
             />
-          ) : (
-            <Counter
-              label={t('practice.counterQuestion')}
-              value={`${state.index + 1}/${state.total}`}
-            />
-          )}
+          ) : null}
           {state.secondsLeft !== null || state.livesLeft !== null ? (
             <Counter label={t('practice.counterCorrect')} value={String(state.correctCount)} />
           ) : null}
           <Counter label={t('practice.counterCombo')} value={`×${state.combo}`} />
-          <button type="button" className="tk-button tk-button-secondary" onClick={stop}>
-            {t('practice.stop')}
-          </button>
         </div>
       </header>
 
@@ -167,62 +167,66 @@ export function PracticeScreen({
         {revealed ? feedbackSentence(state, naam, chosenName) : vraag}
       </p>
 
-      <main className="flex min-h-0 flex-1 items-center justify-center p-3">
-        <MapCanvas
-          background={state.geo}
-          answers={state.answers}
-          interaction={typing ? 'show' : 'pick'}
-          namesById={state.namesById}
-          targetId={state.question.answerId}
-          chosenId={state.chosenId}
-          revealed={revealed}
-          verdict={mapVerdict}
-          onPick={pick}
-        />
-      </main>
+      <div className="tk-round-body">
+        {/* The question, and after an answer the feedback, in the same place.
+            K4 asks for exactly that: between question and answer nothing moves
+            except the words, so a child's eyes do not have to find the sentence
+            again at the moment they most want to read it.
+            On a phone this is a strip lying on the map rather than a dialog —
+            a round is never interrupted by something that has to be dismissed. */}
+        <div className="tk-round-question">
+          {revealed ? (
+            <>
+              <div className="flex items-start gap-4">
+                <FeedbackIcon kind={state.lastCorrect ? 'good' : nearMiss ? 'near' : 'bad'} />
+                <div className="min-w-0">
+                  {/* The heading is the right answer, not the word "fout" (K6):
+                      first what it is, and only then what the child chose. */}
+                  <p className="tk-display text-h2 font-semibold">
+                    {state.lastCorrect
+                      ? t('practice.correct', { naam })
+                      : nearMiss
+                        ? t('practice.almost')
+                        : t('practice.wrong', { naam })}
+                  </p>
+                  <p className="text-body text-ink-2">{feedbackDetail(state, naam, chosenName)}</p>
+                </div>
+              </div>
 
-      {typing && !revealed && <AnswerField key={state.index} onSubmit={submit} />}
-
-      {revealed && (
-        <section className="flex flex-none items-end gap-6 border-t border-line bg-paper px-6 py-6">
-          <FeedbackIcon kind={state.lastCorrect ? 'good' : nearMiss ? 'near' : 'bad'} />
-          <div className="flex-1">
-            <p className="tk-display text-h2 font-semibold">
-              {state.lastCorrect
-                ? t('practice.correct', { naam })
-                : nearMiss
-                  ? t('practice.almost')
-                  : t('practice.wrong', { naam })}
-            </p>
-            <p className="text-body text-ink-2">{feedbackDetail(state, naam, chosenName)}</p>
-          </div>
-          {/* A lightning round moves on by itself, so there is nothing to press
-              and nothing to charge a child for pressing. */}
-          {state.rule.kind !== 'tijd' && (
-            <button ref={nextButton} type="button" className="tk-button" onClick={next}>
-              {t('practice.next')}
-            </button>
+              {/* A lightning round moves on by itself, so there is nothing to
+                  press and nothing to charge a child for pressing. */}
+              {state.rule.kind !== 'tijd' && (
+                <button ref={nextButton} type="button" className="tk-button mt-4" onClick={next}>
+                  {t('practice.next')}
+                </button>
+              )}
+            </>
+          ) : (
+            <>
+              <p className="tk-label">{label}</p>
+              <h1 className="tk-display mt-1 text-h1 font-semibold">{vraag}</h1>
+              {typing ? <AnswerField key={state.index} onSubmit={submit} /> : null}
+            </>
           )}
-        </section>
-      )}
+        </div>
 
-      <div
-        className="h-2 flex-none bg-sunken"
-        role="progressbar"
-        aria-label={t('a11y.progress')}
-        aria-valuenow={state.index + (revealed ? 1 : 0)}
-        aria-valuemin={0}
-        aria-valuemax={state.total}
-      >
-        <div
-          className="h-full bg-accent transition-[width] duration-200"
-          style={{ width: `${((state.index + (revealed ? 1 : 0)) / state.total) * 100}%` }}
-        />
+        <div className="tk-round-map">
+          <MapCanvas
+            background={state.geo}
+            answers={state.answers}
+            interaction={typing ? 'show' : 'pick'}
+            namesById={state.namesById}
+            targetId={state.question.answerId}
+            chosenId={state.chosenId}
+            revealed={revealed}
+            verdict={mapVerdict}
+            onPick={pick}
+          />
+        </div>
       </div>
     </div>
   );
 }
-
 type State = ReturnType<typeof useRound>['state'];
 
 /** What a screen reader hears. Same three cases as the panel below the map. */

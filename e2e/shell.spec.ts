@@ -57,6 +57,30 @@ test('a round has no navigation in the document at all', async ({ page }) => {
   await expect(page.getByRole('progressbar')).toBeVisible();
 });
 
+test('shows the question and the map together, at every size', async ({ page }) => {
+  // The failure this is here for: the question used to share a row with the
+  // counters and the stop button, and on 393 it was squeezed to nothing — in
+  // the document, zero pixels wide, with a child looking at a map and no
+  // question. K3 gives it a place of its own at each size.
+  await signIn(page, 'Lotte');
+  await startRound(page);
+
+  const question = page.getByRole('heading', { name: /Waar ligt / });
+  await expect(question).toBeVisible();
+
+  const box = await question.boundingBox();
+  expect(box, 'the question has no box at all').not.toBeNull();
+  // Wide enough to hold a province name rather than technically present.
+  expect(box?.width ?? 0, 'the question was squeezed').toBeGreaterThan(120);
+
+  // And the map is on screen with it, which is the whole point of the layout.
+  await expect(page.locator('.tk-round-map svg').first()).toBeVisible();
+
+  // The ten dots, and nothing that could be mistaken for navigation.
+  await expect(page.getByRole('progressbar')).toBeVisible();
+  await expect(page.getByRole('navigation')).toHaveCount(0);
+});
+
 test('the frame comes back when the round ends', async ({ page }) => {
   await signIn(page, 'Noor');
   await startRound(page);

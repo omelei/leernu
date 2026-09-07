@@ -27,6 +27,11 @@ const ROOT = process.cwd();
 const ALLOWED_SELECTORS: ReadonlyMap<string, string> = new Map([
   ['.tk-shape-asked', 'the highlight on the image'],
   ['.tk-progress-fill', 'the progress bar'],
+  // The ten dots of a round are the progress bar too — the same idea counted
+  // out rather than drawn as a rail, because a round is a countable number of
+  // questions and a child can see how many are left.
+  ['.tk-round-dot-done', 'the progress bar, as ten dots'],
+  ['.tk-round-dot-now', 'the progress bar, as ten dots'],
   ['.tk-module-card', 'the module entrance'],
   ['.tk-module-card:hover', 'the module entrance'],
   ['.tk-module-card:disabled', 'the module entrance'],

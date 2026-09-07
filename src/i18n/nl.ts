@@ -110,7 +110,7 @@ export const nl = {
   // Practice
   'practice.kind': 'Wijs aan op de kaart',
   'practice.question': 'Waar ligt {naam}?',
-  'practice.counterQuestion': 'vraag',
+  'practice.questionOf': 'vraag {nu} van {totaal}',
   'practice.counterTime': 'tijd',
   'practice.counterLives': 'levens',
   'practice.counterCorrect': 'goed',

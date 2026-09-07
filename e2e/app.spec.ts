@@ -153,12 +153,7 @@ test('typing a name: a real place from elsewhere is a near miss, not a cross', a
  * is the test that would catch that rule being removed: a screen that renders
  * all eighty is not a harmless regression, it is a map a child cannot answer.
  */
-test('cities: draws only points that are far enough apart to hit', async ({ page }, testInfo) => {
-  // On a phone the map gets so little height that reachablePoints cannot find
-  // 48px between two cities however many it drops. The rule is right; the
-  // screen it runs on is the one step 6 rebuilds.
-  test.fixme(PHONES.includes(testInfo.project.name), 'the map has no phone layout yet');
-
+test('cities: draws only points that are far enough apart to hit', async ({ page }) => {
   await signIn(page, 'Bram');
   await setCard(page, 'Steden van Nederland').getByRole('button', { name: 'Wijs aan' }).click();
 
