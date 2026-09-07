@@ -81,9 +81,12 @@ export interface MapCanvasProps {
   readonly onPick: (id: string) => void;
 }
 
-/** The map's rendered height in CSS pixels, so touch targets can be real. */
-function useRenderedHeight(ref: React.RefObject<SVGSVGElement | null>): number {
-  const [height, setHeight] = useState(600);
+/** The map's rendered box in CSS pixels, so touch targets can be real. */
+function useRenderedSize(ref: React.RefObject<SVGSVGElement | null>): {
+  readonly width: number;
+  readonly height: number;
+} {
+  const [size, setSize] = useState({ width: 600, height: 600 });
 
   // Measured before the browser paints, not after.
   //
@@ -96,8 +99,8 @@ function useRenderedHeight(ref: React.RefObject<SVGSVGElement | null>): number {
   useLayoutEffect(() => {
     const element = ref.current;
     if (!element) return;
-    const measured = element.getBoundingClientRect().height;
-    if (measured > 0) setHeight(measured);
+    const box = element.getBoundingClientRect();
+    if (box.height > 0 && box.width > 0) setSize({ width: box.width, height: box.height });
   }, [ref]);
 
   useEffect(() => {
@@ -106,13 +109,15 @@ function useRenderedHeight(ref: React.RefObject<SVGSVGElement | null>): number {
 
     const observer = new ResizeObserver((entries) => {
       const entry = entries[0];
-      if (entry) setHeight(entry.contentRect.height || 600);
+      if (!entry) return;
+      const { width, height } = entry.contentRect;
+      if (width > 0 && height > 0) setSize({ width, height });
     });
     observer.observe(element);
     return () => observer.disconnect();
   }, [ref]);
 
-  return height;
+  return size;
 }
 
 type AnswerState = 'open' | 'asked' | 'correct' | 'near' | 'wrong' | 'missed';
@@ -154,12 +159,24 @@ export function MapCanvas({
   onPick,
 }: MapCanvasProps) {
   const svgRef = useRef<SVGSVGElement>(null);
-  const renderedHeight = useRenderedHeight(svgRef);
+  const rendered = useRenderedSize(svgRef);
 
   const [, , viewWidth, viewHeight] = background.viewBox;
+
+  // The height of the *drawing*, which is not the height of the element.
+  //
+  // An SVG keeps its aspect ratio, so on a screen narrower than the map is wide
+  // the drawing is scaled to the width and sits with space above and below it.
+  // Taking the scale from the element's height then overstates it, which makes
+  // 48 CSS pixels look like fewer map units than it is, which lets
+  // reachablePoints keep two cities a finger cannot separate. On a phone, where
+  // the map area is tall and narrow, that is most of the error.
+  const drawnHeight =
+    Math.min(rendered.height, (rendered.width * viewHeight) / viewWidth) || rendered.height;
+
   // Memoised because reachablePoints keys off it: a fresh object every render
   // would recompute the whole layer on every keystroke.
-  const fit = useMemo(() => fitView(viewHeight, renderedHeight), [viewHeight, renderedHeight]);
+  const fit = useMemo(() => fitView(viewHeight, drawnHeight), [viewHeight, drawnHeight]);
 
   const answerShapes = useMemo(() => {
     if (answers.kind === 'background') return keyboardOrder(background.vormen as Vorm[]);
