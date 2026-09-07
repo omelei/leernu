@@ -18,3 +18,6 @@ coverage/
 # Raw geodata: refetch with tools/content/fetch-source.mjs.
 # The processed output in content/geo/nl/ is committed; this is not.
 content/geo/_source/
+
+# Prompts and notes handed to Claude Code. Working material, not the project.
+Claude outputs/
