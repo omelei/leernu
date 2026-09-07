@@ -61,10 +61,13 @@ export function PracticeScreen({
   setId,
   practiceMode,
   onHome,
+  onAgain,
 }: {
   readonly setId: SetId;
   readonly practiceMode: PracticeMode;
   readonly onHome: () => void;
+  /** Another round of the same thing: K8's one primary button. */
+  readonly onAgain: () => void;
 }) {
   const { state, pick, submit, next, stop } = useRound(setId, practiceMode);
   const nextButton = useRef<HTMLButtonElement>(null);
@@ -86,7 +89,8 @@ export function PracticeScreen({
     );
   }
 
-  if (state.phase === 'finished') return <ResultScreen state={state} onHome={onHome} />;
+  if (state.phase === 'finished')
+    return <ResultScreen state={state} onHome={onHome} onAgain={onAgain} />;
 
   if (state.phase === 'loading' || !state.geo || !state.answers || !state.question) {
     return (

@@ -91,6 +91,7 @@ export default function App() {
         setId={screen.setId}
         practiceMode={screen.practiceMode}
         onHome={() => setScreen({ name: 'home' })}
+        onAgain={() => setVisit(visit + 1)}
       />
     );
   }

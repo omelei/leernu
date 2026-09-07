@@ -194,6 +194,13 @@ export interface RoundState {
   readonly verdict: AnswerVerdict | null;
   /** Items answered wrongly, for the result screen. */
   readonly missed: readonly Item[];
+  /**
+   * How many more items in this set the child now remembers than when the round
+   * started. Never negative: a round can move an item down a box, and telling a
+   * child they finished with less than they began is not what this figure is
+   * for. It reports what was gained, or nothing.
+   */
+  readonly gained: number;
   readonly answeredCount: number;
   /** Bliksemronde only: whole seconds left, or null in every other mode. */
   readonly secondsLeft: number | null;
@@ -218,6 +225,15 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
    */
   const [catalogue, setCatalogue] = useState<Item[]>([]);
   const [states, setStates] = useState<Map<string, ItemState>>(new Map());
+  /**
+   * How many items in this set were remembered before the round started.
+   *
+   * K8's whole point: the score is what happened, and what changed is the
+   * product. Without a reading from before, "two more than when you sat down"
+   * cannot be said — and it is the only sentence on that screen a child could
+   * not have worked out for themselves.
+   */
+  const masteredAtStart = useRef(0);
   const [questions, setQuestions] = useState<RoundQuestion[]>([]);
   const [index, setIndex] = useState(0);
   const [phase, setPhase] = useState<RoundPhase>('loading');
@@ -286,6 +302,10 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
         setItems([...all]);
         setCatalogue(loadAllItems().filter((item) => item.regioSet === set.regioSet));
         setStates(loadedStates);
+        masteredAtStart.current = countMastered(
+          loadedStates,
+          all.map((item) => item.id),
+        );
         setQuestions(round);
         setPhase(round.length > 0 ? 'asking' : 'finished');
         askedAt.current = performance.now();
@@ -535,6 +555,13 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
     lastCorrect,
     verdict,
     missed,
+    gained: Math.max(
+      0,
+      countMastered(
+        states,
+        items.map((item) => item.id),
+      ) - masteredAtStart.current,
+    ),
     answeredCount,
     secondsLeft: rule.kind === 'tijd' ? secondsLeft : null,
     livesLeft: rule.kind === 'levens' ? livesLeft : null,

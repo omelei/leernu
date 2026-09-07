@@ -176,6 +176,13 @@ export const nl = {
   'result.streakSaved': 'Je rustdag heeft je streak gered.',
   'result.restDayEarned': 'Je hebt er een rustdag bij verdiend.',
   'result.newStamp': 'Nieuwe reisstempel: {naam}',
+  // K8. De score staat er, maar wat er veranderd is, is het product: het enige
+  // op dit scherm dat een kind niet zelf had kunnen uitrekenen.
+  'result.changed': 'Wat er is veranderd',
+  'result.gainedOne': 'Eén vraag meer die je nu onthoudt.',
+  'result.gainedMany': '{aantal} vragen meer die je nu onthoudt.',
+  'result.gainedNone': 'Nog niets erbij. Deze komen morgen terug.',
+  'result.again': 'Nog een ronde',
 
   // Reisstempels. Elk criterium staat erbij, want een stempel die je niet kunt
   // uitleggen is een raadsel in plaats van een beloning — en een kind dat niet

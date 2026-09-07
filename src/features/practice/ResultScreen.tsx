@@ -16,9 +16,11 @@ import type { RoundState } from './useRound';
 export function ResultScreen({
   state,
   onHome,
+  onAgain,
 }: {
   readonly state: RoundState;
   readonly onHome: () => void;
+  readonly onAgain: () => void;
 }) {
   const missedIds = new Set(
     state.missed.map((item) => item.geometrieRef).filter((id): id is string => id !== undefined),
@@ -26,11 +28,24 @@ export function ResultScreen({
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-6 p-6">
+      {/* The score is what happened; what changed is the product.
+          So the heading is the change and the score sits under it as a fact —
+          the round's result is a number a child could count themselves, and
+          "two more than when you sat down" is the one thing on this screen
+          they could not have. */}
       <div>
         <p className="tk-label">{t('result.title')}</p>
-        <h1 className="tk-display text-h1 font-semibold">
+        <h1 className="tk-display text-h1 font-semibold">{t('result.changed')}</h1>
+        <p className="text-body">
+          {state.gained === 0
+            ? t('result.gainedNone')
+            : state.gained === 1
+              ? t('result.gainedOne')
+              : t('result.gainedMany', { aantal: state.gained })}
+        </p>
+        <p className="mt-2 text-ink-2">
           {t('result.score', { goed: state.correctCount, totaal: state.answeredCount })}
-        </h1>
+        </p>
         {state.rule.kind === 'fixed' && state.answeredCount < state.total && (
           <p className="text-ink-2">
             {t('result.stoppedEarly', { gedaan: state.answeredCount, totaal: state.total })}
@@ -67,8 +82,13 @@ export function ResultScreen({
         </div>
       )}
 
+      {/* One primary button, and it is another round rather than the way out:
+          the shortest path back to practising, same as K1. */}
       <div className="mt-auto flex flex-wrap gap-3">
-        <button type="button" className="tk-button" onClick={onHome}>
+        <button type="button" className="tk-button" onClick={onAgain}>
+          {t('result.again')}
+        </button>
+        <button type="button" className="tk-button tk-button-secondary" onClick={onHome}>
           {t('result.home')}
         </button>
       </div>
