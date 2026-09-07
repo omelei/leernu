@@ -149,6 +149,7 @@ export const nl = {
   'practice.kindTypeArea': 'Hoe heet dit gebied?',
   'practice.kindTypeCity': 'Hoe heet deze stad?',
   'practice.typeQuestion': 'Typ de naam',
+  'practice.chooseQuestion': 'Kies de naam',
   'practice.typePlaceholder': 'Naam',
   'practice.check': 'Kijk na',
   'practice.emptyAnswer': 'Typ eerst een naam.',

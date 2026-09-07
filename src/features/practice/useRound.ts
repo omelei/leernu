@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
+  buildOptions,
   composeRound,
   COMBO_THRESHOLD,
   countMastered,
@@ -13,6 +14,7 @@ import {
 } from '@/game-core';
 import { loadGeoSet, loadPointSet, type Detailniveau, type GeoSet } from '@/content/loadGeo';
 import { loadAllItems, loadItemSets } from '@/content/loadSets';
+import { loadNeighbours } from '@/content/loadNeighbours';
 import { finishSession, loadItemStates, saveAnswer, startSession } from '@/store/progress';
 import { recordRoundFinished } from '@/store/streakStore';
 import { applyRoundRewards, type RoundOutcome } from '@/store/rewardStore';
@@ -48,17 +50,19 @@ export type SetId =
   'nl-provincies' | 'nl-hoofdsteden' | 'nl-waddeneilanden' | 'nl-wateren' | 'nl-steden';
 
 /**
- * How a child answers. Pointing tests where something is; typing tests whether
- * they can name it, which is a different thing and often the harder one.
+ * How a child answers. Pointing tests where something is; naming it is a
+ * different thing and often the harder one — and choosing between four names is
+ * the step in between, where the answer is on the screen and the child has to
+ * know which of the four it is.
  */
-export type PracticeMode = 'wijs-aan' | 'hoe-heet-dit' | 'bliksemronde' | 'overleven';
+export type PracticeMode = 'wijs-aan' | 'meerkeuze' | 'hoe-heet-dit' | 'bliksemronde' | 'overleven';
 
 /**
  * Split by what a child is doing, not by how the hook implements it. The first
- * two are practice; the last two are practice with pressure on top and belong
+ * three are practice; the last two are practice with pressure on top and belong
  * behind the ones a child should start with.
  */
-export const LEARNING_MODES: readonly PracticeMode[] = ['wijs-aan', 'hoe-heet-dit'];
+export const LEARNING_MODES: readonly PracticeMode[] = ['wijs-aan', 'meerkeuze', 'hoe-heet-dit'];
 export const CHALLENGE_MODES: readonly PracticeMode[] = ['bliksemronde', 'overleven'];
 
 /**
@@ -86,21 +90,59 @@ export type RoundRule =
  */
 export const ROUND_RULE: Record<PracticeMode, RoundRule> = {
   'wijs-aan': { kind: 'fixed', aantal: MAX_ROUND },
+  meerkeuze: { kind: 'fixed', aantal: MAX_ROUND },
   'hoe-heet-dit': { kind: 'fixed', aantal: MAX_ROUND },
   bliksemronde: { kind: 'tijd', seconden: 60 },
   overleven: { kind: 'levens', levens: 3 },
 };
 
 /**
- * Which way a child answers. Only one mode types; the rest point. Kept separate
- * from the mode so a future timed typing round is a table change, not a rewrite.
+ * Which way a child answers. One mode types, one chooses, the rest point. Kept
+ * separate from the mode so a future timed typing round is a table change, not
+ * a rewrite.
  */
 export function typesTheAnswer(mode: PracticeMode): boolean {
   return mode === 'hoe-heet-dit';
 }
 
+export function choosesTheAnswer(mode: PracticeMode): boolean {
+  return mode === 'meerkeuze';
+}
+
+/**
+ * Both of these show the map rather than ask a child to touch it. Choosing and
+ * typing ask the same question — what is this place called — and differ only in
+ * how much help the screen gives with the answer.
+ */
+export function readsTheMap(mode: PracticeMode): boolean {
+  return typesTheAnswer(mode) || choosesTheAnswer(mode);
+}
+
 /** How many questions to prepare. An endless round still needs a finite pool. */
 const ENDLESS_POOL = 60;
+
+/**
+ * The four names for one question, resolved from ids to items.
+ *
+ * A closure over the set rather than a function of it, because the two lookups
+ * it builds are the same for every question in the round and rebuilding them
+ * eighty times would be work for nothing.
+ */
+function optionDealer(all: readonly Item[]): (item: Item) => Item[] {
+  const neighbours = loadNeighbours();
+  const byId = new Map(all.map((item) => [item.id, item]));
+  const pool = all.map((item) => item.id);
+
+  return (item) => {
+    const ids = buildOptions({
+      answerId: item.id,
+      neighbours: neighbours.get(item.id) ?? [],
+      pool,
+    });
+
+    return ids.map((id) => byId.get(id)).filter((option): option is Item => option !== undefined);
+  };
+}
 
 export const SET_IDS: readonly SetId[] = [
   'nl-provincies',
@@ -167,6 +209,13 @@ export interface RoundQuestion {
   readonly item: Item;
   /** The shape or point that answers it. */
   readonly answerId: string;
+  /**
+   * Meerkeuze only: the four names to choose between, in the order they are
+   * shown, the right one among them. Dealt once when the round is composed —
+   * a component that re-renders must not deal them again, or the options would
+   * move under a child's finger.
+   */
+  readonly options: readonly Item[] | null;
 }
 
 export type RoundPhase = 'loading' | 'asking' | 'revealed' | 'finished';
@@ -286,9 +335,18 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
           now: new Date(),
         });
 
+        // Dealt here rather than per render: the options must not move under a
+        // child's finger, and the neighbour lists are a bundled lookup so this
+        // costs nothing at the moment the round starts.
+        // Dealt here rather than per render: options that move under a child's
+        // finger are worse than no options. Only built for the mode that has
+        // them, so the other four never touch the neighbour lists.
+        const deal = choosesTheAnswer(practiceMode) ? optionDealer(all) : null;
+
         const round = picked.map((item) => ({
           item,
           answerId: item.geometrieRef as string,
+          options: deal ? deal(item) : null,
         }));
 
         sessionId.current = await startSession(
@@ -404,6 +462,31 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
       });
     },
     [question, settle],
+  );
+
+  /**
+   * "Meerkeuze": the child picked one of four names.
+   *
+   * A wrong pick travels to the map, the same way a near miss does when typing:
+   * "you said Drenthe, and Drenthe is here" teaches something, where a red cross
+   * beside a word teaches nothing. There is no near miss to judge — every option
+   * on the screen was put there by us, so a wrong one is simply wrong.
+   */
+  const choose = useCallback(
+    (itemId: string) => {
+      if (!question) return;
+
+      const correct = itemId === question.item.id;
+      const chosen = items.find((candidate) => candidate.id === itemId);
+
+      settle({
+        correct,
+        chosenForMap: chosen?.geometrieRef ?? null,
+        recorded: correct ? null : itemId,
+        judged: null,
+      });
+    },
+    [question, items, settle],
   );
 
   /**
@@ -570,5 +653,5 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
     error,
   };
 
-  return { state, pick, submit, next, stop };
+  return { state, pick, choose, submit, next, stop };
 }

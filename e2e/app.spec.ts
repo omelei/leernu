@@ -169,6 +169,31 @@ test('practises the capitals as points on the map', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'Leeuwarden' })).toBeVisible();
 });
 
+/**
+ * Multiple choice, K5. The question is the one typing asks — the map shows the
+ * area and does not name it — and the four names below it are where the mode
+ * earns its place in the order: three of them are neighbours, so a child who
+ * knows roughly where they are still has to know which.
+ */
+test('multiple choice offers four names, three of them wrong', async ({ page }) => {
+  await signIn(page, 'Daan');
+  await chooseAndStart(page, /Provincies van Nederland/, /Kies uit vier namen/);
+
+  await expect(page.getByRole('heading', { name: 'Hoe heet dit gebied?' })).toBeVisible();
+
+  const options = page.getByRole('group', { name: 'Kies de naam' });
+  await expect(options.getByRole('button')).toHaveCount(4);
+
+  // There is nothing to type and nothing to point at: the map is on show.
+  await expect(page.getByPlaceholder('Naam')).toHaveCount(0);
+
+  await options.getByRole('button').first().click();
+
+  // Either outcome is a real answer, and both move the round on.
+  await expect(page.getByRole('status')).toContainText(/goed\.|ligt hier\./);
+  await expect(page.getByRole('button', { name: 'Volgende vraag' })).toBeVisible();
+});
+
 test('typing a name: a real place from elsewhere is a near miss, not a cross', async ({ page }) => {
   await signIn(page, 'Roos');
   await chooseAndStart(page, /Provincies van Nederland/, /Typ de naam/);

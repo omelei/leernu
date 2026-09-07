@@ -584,6 +584,42 @@
     opacity: 0.35;
   }
 
+  /* ---- Multiple choice, K5 ---------------------------------------------
+   * Two by two where there is width, one under the other where there is not,
+   * so no option is ever the odd one at the end of a row. `auto-fit` with a
+   * 200px floor does that without a breakpoint: two columns fit a tablet and a
+   * desktop, one fits a phone, and nothing has to know which it is on.
+   *
+   * The box is the target. `--touch` rather than `--touch-min`, because this
+   * is a control a child aims at in a hurry with a thumb, and ADR-032 puts the
+   * 44 at the smallest a control may ever be, not the size it should be.
+   */
+  .tk-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .tk-option {
+    display: flex;
+    align-items: center;
+    min-height: var(--touch);
+    padding: 12px 20px;
+    border: var(--stroke-hair) solid var(--line-strong);
+    border-radius: var(--radius-field);
+    background: var(--paper);
+    color: var(--ink);
+    font-size: var(--type-body);
+    line-height: var(--type-body-lh);
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+  }
+  .tk-option:hover {
+    background: var(--surface);
+    border-color: var(--ink-3);
+  }
+
   /* ---- Chip and pill ---------------------------------------------------
    * A chip is a filter you can switch on; a pill is a choice among several.
    * Both are controls, so both clear the 44 floor — the old 40 here was below

@@ -15,17 +15,15 @@ import type { PracticeMode } from '@/features/practice/useRound';
  * child already knows; they are not a way to learn it, and putting them beside
  * these four would say they were.
  *
- * `built` is what ADR-037 does everywhere else: multiple choice is step 7b and
- * does not exist, so it is not offered. Its place in the order is already here
- * so that arriving does not mean rearranging the screen.
+ * `built` is what ADR-037 does everywhere else: a way that does not exist is
+ * not offered. All four exist now — multiple choice arrived with step 7b — so
+ * the flag currently lets nothing through. It stays because the next way to be
+ * drawn before it is built will need it, and because its arriving was a flag
+ * flip rather than a rearrangement, which is what it was for.
  */
 export interface Way {
-  /**
-   * `meerkeuze` is not a `PracticeMode` yet — step 7b adds it to the union, and
-   * naming it here before then is the point: the order exists before the mode
-   * does, so arriving is a flag flip rather than a rearrangement.
-   */
-  readonly id: PracticeMode | 'ontdekken' | 'meerkeuze';
+  /** Exploring is not a way of answering, so it is not a `PracticeMode`. */
+  readonly id: PracticeMode | 'ontdekken';
   readonly name: TranslationKey;
   /** One line saying what this is for, which is what makes the order legible. */
   readonly reason: TranslationKey;
@@ -34,7 +32,7 @@ export interface Way {
 
 export const WAYS: readonly Way[] = [
   { id: 'wijs-aan', name: 'mode.wijs-aan', reason: 'way.wijs-aan', built: true },
-  { id: 'meerkeuze', name: 'mode.meerkeuze', reason: 'way.meerkeuze', built: false },
+  { id: 'meerkeuze', name: 'mode.meerkeuze', reason: 'way.meerkeuze', built: true },
   { id: 'hoe-heet-dit', name: 'mode.hoe-heet-dit', reason: 'way.hoe-heet-dit', built: true },
   { id: 'ontdekken', name: 'mode.ontdekken', reason: 'way.ontdekken', built: true },
 ];

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { t, type TranslationKey } from '@/i18n';
+import type { Item } from '@/game-core';
 import { SpeakButton } from '@/components/SpeakButton';
 import { usePreferences } from '@/features/player/settings';
 import { MapCanvas } from './MapCanvas';
@@ -7,6 +8,8 @@ import { RoundProgress } from './RoundProgress';
 import { StopButton } from './StopButton';
 import { ResultScreen } from './ResultScreen';
 import {
+  choosesTheAnswer,
+  readsTheMap,
   SETS,
   typesTheAnswer,
   useRound,
@@ -33,11 +36,16 @@ import {
  * The ten dots at the top are the progress bar of §B and carry the question
  * number, which is why no counter says it any more.
  *
- * Two ways of answering share this screen. Pointing asks where something is;
- * typing asks whether the child can name it, which is a different skill and
- * usually the harder one. Typing is also where ADR-017 finally shows up: a
- * child who writes the name of a different real place is not told they were
- * right, and is not simply told they were wrong either.
+ * Three ways of answering share this screen. Pointing asks where something is.
+ * Naming it is a different skill and usually the harder one, and it comes in
+ * two strengths: choosing between four names, where the answer is on the screen
+ * and the work is knowing which one, and typing it unaided.
+ *
+ * Typing is where ADR-017 shows up: a child who writes the name of a different
+ * real place is not told they were right, and is not simply told they were
+ * wrong either. Choosing has no such case — every name on the screen was put
+ * there by us, so a wrong one is wrong — but it does travel to the map, which
+ * is the same lesson by a shorter road.
  */
 /**
  * An area, a city, an island and a stretch of water are looked for in different
@@ -70,7 +78,7 @@ export function PracticeScreen({
   /** Another round of the same thing: K8's one primary button. */
   readonly onAgain: () => void;
 }) {
-  const { state, pick, submit, next, stop } = useRound(setId, practiceMode);
+  const { state, pick, choose, submit, next, stop } = useRound(setId, practiceMode);
   const prefs = usePreferences();
   const nextButton = useRef<HTMLButtonElement>(null);
 
@@ -105,10 +113,15 @@ export function PracticeScreen({
   const naam = state.question.item.naam;
   const revealed = state.phase === 'revealed';
   const typing = typesTheAnswer(practiceMode);
+  const choosing = choosesTheAnswer(practiceMode);
+  const reading = readsTheMap(practiceMode);
   const { noemer } = SETS[setId];
 
-  const label = typing ? t('practice.typeQuestion') : t(PICK_LABEL[noemer]);
-  const vraag = typing ? t(TYPE_LABEL[noemer]) : t('practice.question', { naam });
+  // Choosing and typing ask the same question of the same map. Only the
+  // instruction differs, because what the child does next differs.
+  const instruction = choosing ? 'practice.chooseQuestion' : 'practice.typeQuestion';
+  const label = reading ? t(instruction) : t(PICK_LABEL[noemer]);
+  const vraag = reading ? t(TYPE_LABEL[noemer]) : t('practice.question', { naam });
 
   const chosenName = state.chosenId === null ? '' : (state.namesById.get(state.chosenId) ?? '');
   const nearMiss = state.verdict?.kind === 'near-miss';
@@ -212,6 +225,9 @@ export function PracticeScreen({
               <p className="tk-label">{label}</p>
               <h1 className="tk-display mt-1 text-h1 font-semibold">{vraag}</h1>
               {typing ? <AnswerField key={state.index} onSubmit={submit} /> : null}
+              {choosing && state.question.options ? (
+                <OptionList key={state.index} options={state.question.options} onChoose={choose} />
+              ) : null}
             </>
           )}
         </div>
@@ -220,7 +236,7 @@ export function PracticeScreen({
           <MapCanvas
             background={state.geo}
             answers={state.answers}
-            interaction={typing ? 'show' : 'pick'}
+            interaction={reading ? 'show' : 'pick'}
             namesById={state.namesById}
             targetId={state.question.answerId}
             chosenId={state.chosenId}
@@ -254,6 +270,42 @@ function feedbackDetail(state: State, naam: string, chosen: string): string {
   // Pointing names what was pointed at; typing has nothing sensible to quote
   // back, because whatever was typed was not a place we teach.
   return chosen ? `${t('practice.wrongSub', { gekozen: chosen })} ${weetje}` : weetje;
+}
+
+/**
+ * The four names, K5.
+ *
+ * Two by two where there is width and one under the other where there is not,
+ * so no option is ever the odd one at the end of a row — a child scanning four
+ * boxes should not have to work out whether the fourth is a fourth option or
+ * something else. Each is a whole box rather than a radio button with a label
+ * beside it: the target is the answer, not a five-millimetre circle next to it.
+ *
+ * No option is marked in any way before it is pressed. There is no "chosen but
+ * not confirmed" state to be in, because a second press to confirm is a second
+ * chance to mis-tap and buys nothing at four options.
+ */
+function OptionList({
+  options,
+  onChoose,
+}: {
+  readonly options: readonly Item[];
+  readonly onChoose: (itemId: string) => void;
+}) {
+  return (
+    <div className="tk-options" role="group" aria-label={t('practice.chooseQuestion')}>
+      {options.map((option) => (
+        <button
+          key={option.id}
+          type="button"
+          className="tk-option"
+          onClick={() => onChoose(option.id)}
+        >
+          {option.naam}
+        </button>
+      ))}
+    </div>
+  );
 }
 
 /**

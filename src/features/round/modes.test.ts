@@ -27,10 +27,11 @@ describe('the ways of practising', () => {
   });
 
   it('offers only what exists', () => {
-    // ADR-037, again: multiple choice is step 7b. Its place in the order is
-    // already here so that arriving is a flag rather than a rearrangement.
-    expect(BUILT_WAYS.map((way) => way.id)).not.toContain('meerkeuze');
-    expect(WAYS.map((way) => way.id)).toContain('meerkeuze');
+    // ADR-037. Multiple choice arrived with step 7b and its place in the order
+    // did not have to move, which is what naming it early was for. All four
+    // exist now, so the flag lets everything through — and it is still here,
+    // because the next way drawn before it is built will need it.
+    expect(BUILT_WAYS.map((way) => way.id)).toEqual(WAYS.map((way) => way.id));
   });
 
   it('keeps the challenge modes out of the list entirely', () => {
