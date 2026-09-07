@@ -137,9 +137,7 @@ export function HomeScreen({
                     key={practiceMode}
                     type="button"
                     className={
-                      practiceMode === 'wijs-aan'
-                        ? 'tk-button'
-                        : 'tk-button tk-button-secondary'
+                      practiceMode === 'wijs-aan' ? 'tk-button' : 'tk-button tk-button-secondary'
                     }
                     onClick={() => onStart(setId, practiceMode)}
                   >

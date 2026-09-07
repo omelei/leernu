@@ -58,18 +58,32 @@ export function Gallery() {
               also the only way to check that the focus ring survives on a
               control whose own background is nearly ink. */}
           <Button variant={variant}>Hover mij</Button>
-          <Button variant={variant} disabled>Uit</Button>
-          <Button variant={variant} busy>Bezig</Button>
+          <Button variant={variant} disabled>
+            Uit
+          </Button>
+          <Button variant={variant} busy>
+            Bezig
+          </Button>
         </div>
       ))}
 
       <h2 className={HEADING}>Chip en pill</h2>
       <div className={ROW}>
-        <button type="button" className="tk-chip">Chip</button>
-        <button type="button" className="tk-chip" aria-pressed="true">Chip aan</button>
-        <button type="button" className="tk-chip" disabled>Chip uit</button>
-        <button type="button" className="tk-pill">Pill</button>
-        <button type="button" className="tk-pill" aria-pressed="true">Pill aan</button>
+        <button type="button" className="tk-chip">
+          Chip
+        </button>
+        <button type="button" className="tk-chip" aria-pressed="true">
+          Chip aan
+        </button>
+        <button type="button" className="tk-chip" disabled>
+          Chip uit
+        </button>
+        <button type="button" className="tk-pill">
+          Pill
+        </button>
+        <button type="button" className="tk-pill" aria-pressed="true">
+          Pill aan
+        </button>
       </div>
 
       <h2 className={HEADING}>Invoerveld</h2>
