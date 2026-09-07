@@ -1445,7 +1445,7 @@ at four sizes without emulating a hand. `(pointer: coarse)` would be truer to
 §D's own reasoning, but it is unreliable under device emulation, which would
 make the tests less trustworthy than the rule they check.
 
-**A rail and a bottom bar are not two components.** §D says the rail *becomes* a
+**A rail and a bottom bar are not two components.** §D says the rail _becomes_ a
 bar. Two classes would drift apart the first time one of them was touched.
 
 **The frame has almost nothing to frame.** The rail lists modules and one exists;
