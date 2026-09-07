@@ -16,9 +16,11 @@ import { Dot } from '@/components/Dot';
  * Follows docs/leer.nu oefenkaart.html. Three choices there are worth keeping in
  * mind while reading this:
  *
- * - A correct answer is **outlined** green on paper, not filled. A wrong one is
- *   filled with a **hatch**. Texture rather than colour alone, so the difference
- *   survives colour blindness and a grey printout.
+ * - Four answer states, each told apart by shape before colour (ADR-043): a
+ *   correct answer is closed with a tick, a near miss is open with one heavier
+ *   rule and a half-filled dot, a wrong one is hatched with a cross, and the
+ *   right answer the child did not give has a double rule and a full dot. Shape
+ *   rather than colour alone, so all four survive colour blindness and grey.
  * - After a wrong answer a dot **travels** from the place the child pointed at
  *   to the right one. The one moment in this product where movement teaches
  *   instead of decorates: the child sees the distance they were out by.
@@ -68,7 +70,7 @@ export interface MapCanvasProps {
    * naming another real place that is nearly the one asked for (ADR-017) — is a
    * verdict the answer module reaches, not a position on a map.
    */
-  readonly verdict?: 'correct' | 'near' | 'wrong';
+  readonly verdict?: 'correct' | 'near' | 'wrong' | undefined;
   readonly onPick: (id: string) => void;
 }
 
@@ -433,8 +435,12 @@ function CityMarker({
   const [x, y] = point.punt;
   const radius = helpTargetFor([x, y, x, y], fit)?.r ?? MIN_TOUCH_PX / 2;
 
+  // A point has no area to fill and no room for a double rule, so the four
+  // states arrive here as the StateMark drawn beside it plus these two colours.
+  // "Bijna" and "gemist" stay ink on paper deliberately: their marks — the half
+  // dot and the full one — are what tell them apart, exactly as on an area.
   const fill =
-    state === 'target'
+    state === 'correct'
       ? 'var(--good)'
       : state === 'wrong'
         ? 'var(--bad)'
@@ -442,7 +448,7 @@ function CityMarker({
           ? 'var(--accent-tint)'
           : 'var(--paper)';
   const stroke =
-    state === 'target'
+    state === 'correct'
       ? 'var(--good)'
       : state === 'wrong'
         ? 'var(--bad)'
