@@ -106,7 +106,6 @@ test('fits a whole round inside the height of a Chromebook', async ({ page }, te
 });
 
 test('keeps the wordmark and the question legible at 200% text', async ({ page }) => {
-
   // ADR-025 dropped the reading mode and left this as the only typographic
   // accessibility affordance in the product, with the note that it therefore has
   // to work. The type scale is in rem (ADR-033), so the root size is what a
