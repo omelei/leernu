@@ -1427,6 +1427,75 @@ allowed use.
 
 ---
 
+## ADR-041 — The shell: one rail with two postures, and no navigation to nowhere
+
+**Status:** accepted — 2026-09-07.
+
+### Context
+
+§D gives four sizes four navigation models and says why: the model follows the
+number of hands and the distance to the screen, not the operating system. Behind
+a laptop there is a mouse at eye level and the modules stand in a rail; in one
+hand there is one thumb and they lie along the bottom.
+
+Three things had to be decided to build that.
+
+**Width is a poor proxy for hands.** It is also the only one that can be tested
+at four sizes without emulating a hand. `(pointer: coarse)` would be truer to
+§D's own reasoning, but it is unreliable under device emulation, which would
+make the tests less trustworthy than the rule they check.
+
+**A rail and a bottom bar are not two components.** §D says the rail *becomes* a
+bar. Two classes would drift apart the first time one of them was touched.
+
+**The frame has almost nothing to frame.** The rail lists modules and one exists;
+the tab bar lists Vandaag, Onthouden, Vrienden and Jij, of which one exists —
+the other three are step 6 and the friend layer that ADR-015 rules out.
+
+### Decision
+
+**The rail is one component with two postures**, switching at 1280. Lying down
+is the default because that is what the smaller half of the range gets;
+standing up is the exception. 1280 rather than 1024 so that a tablet in
+landscape — exactly 1024 — gets the bar the design draws for it, and a 1366
+Chromebook gets the rail.
+
+**Navigation appears when there is somewhere to go**, at two entries or more.
+A rail with one module is a decoration, and a tab bar with one destination is a
+label you cannot press taking 56px off the bottom of the smallest screen in the
+range. So today the shell is an app bar and the content, and it grows navigation
+when step 6 gives it somewhere to point.
+
+Both lists are injectable, so the frame is tested with all seven modules and all
+four destinations. A test that could only ever see one entry would be testing the
+content rather than the component.
+
+**A round is not wrapped in the shell at all.** Not hidden — not rendered. There
+is nothing in the document to tab into, nothing to mis-tap with the map under a
+thumb on a 393px screen, and nothing that can be hidden on the way in and
+forgotten on the way out. `e2e/shell.spec.ts` asserts it from the outside, at
+every size.
+
+### Consequences
+
+The home screen gives up its own header and its own `main`. The shell provides
+both, and two `main` landmarks on a page is one more than a screen reader can
+make sense of.
+
+Playwright grows from two projects to six: 1366 and 1440, the iPad in both
+orientations, an iPhone at 393 and a Pixel at 412. The 1366 promise — a whole
+round with no vertical scrolling — is asserted only there, because a phone
+scrolls by nature and a round on 852 of height is a different layout rather than
+a broken one.
+
+**The shell is worth less than it should be until step 6 exists**, and that is an
+ordering problem in the build rather than in the design: the frame was specified
+before the three screens it frames. Nothing here is wrong, but the responsive
+work will need looking at again once Onthouden and Jij are real, because a bar
+with four destinations lays out differently from a bar with none.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because

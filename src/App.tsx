@@ -4,6 +4,7 @@ import { PracticeScreen } from '@/features/practice/PracticeScreen';
 import { ExploreScreen } from '@/features/explore/ExploreScreen';
 import { ProfileGate } from '@/features/player/ProfileGate';
 import { Gallery } from '@/design/Gallery';
+import { Shell } from '@/features/shell/Shell';
 import { getProfile } from '@/store/profile';
 import type { PracticeMode, SetId } from '@/features/practice/useRound';
 import type { ProfileRecord } from '@/store/db';
@@ -50,6 +51,11 @@ export default function App() {
     return <ProfileGate onReady={(profile) => setBoot({ status: 'ready', profile })} />;
   }
 
+  // Explore and practice are rounds, and a round has no navigation: no rail,
+  // no bar, no tab bar, only the stop cross, the progress dots and the
+  // read-aloud button. They are not wrapped in the Shell rather than having it
+  // hidden inside them — there is nothing in the document to tab into, and
+  // nothing that can be forgotten on the way back out.
   if (screen.name === 'explore') {
     return <ExploreScreen setId={screen.setId} onHome={() => setScreen({ name: 'home' })} />;
   }
@@ -66,13 +72,15 @@ export default function App() {
   }
 
   return (
-    <HomeScreen
-      profile={boot.profile}
-      onStart={(setId, practiceMode) => {
-        setVisit(visit + 1);
-        setScreen({ name: 'practice', setId, practiceMode });
-      }}
-      onExplore={(setId) => setScreen({ name: 'explore', setId })}
-    />
+    <Shell>
+      <HomeScreen
+        profile={boot.profile}
+        onStart={(setId, practiceMode) => {
+          setVisit(visit + 1);
+          setScreen({ name: 'practice', setId, practiceMode });
+        }}
+        onExplore={(setId) => setScreen({ name: 'explore', setId })}
+      />
+    </Shell>
   );
 }

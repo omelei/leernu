@@ -29,6 +29,23 @@ export const nl = {
   'home.setNew': 'nog niet geoefend',
   'home.moreWays': 'Andere manieren',
 
+  // The frame. Module order is ADR-029; only the ones with content are shown,
+  // so six of these seven are written down before they are needed rather than
+  // guessed at when they are.
+  'nav.modules': 'Modules',
+  'nav.destinations': 'Waar je heen kunt',
+  'nav.vandaag': 'Vandaag',
+  'nav.onthouden': 'Onthouden',
+  'nav.vrienden': 'Vrienden',
+  'nav.jij': 'Jij',
+  'module.topo': 'Topografie',
+  'module.tafels': 'Tafels',
+  'module.klok': 'Klokkijken',
+  'module.woorden': 'Woordjes',
+  'module.spelling': 'Spelling',
+  'module.tijdvakken': 'Tijdvakken',
+  'module.vlaggen': 'Vlaggen',
+
   // Item status, K9. Four states, each with a shape as well as a word — and
   // none of them green, because green is an answer state and would tell a
   // child they had just got something right.

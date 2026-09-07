@@ -801,24 +801,35 @@
     background: var(--paper);
     border-bottom: var(--stroke-hair) solid var(--line);
   }
+/* The rail is one component with two postures, not two components.
+   *
+   * Lying down is the default, because that is what the smaller half of the
+   * range gets: §D puts a bar of 72 under a tablet, where the child is pointing
+   * at the map with a finger. Standing up is the exception, at a width where
+   * there is a mouse and room to spare.
+   *
+   * The breakpoint is 1280 rather than 1024 so that a tablet in landscape —
+   * exactly 1024 — gets the bar the design draws for it, and a 1366 Chromebook
+   * gets the rail. §D's own reasoning is about hands rather than pixels, and
+   * width is the poorer proxy; it is the one that can be tested. */
   .tk-rail {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-    width: 88px;
-    padding: 16px 8px;
-    background: var(--paper);
-    border-right: var(--stroke-hair) solid var(--line);
-  }
-  /* On a tablet the rail lies down: §D says a bar of 72 with 88x56 targets,
-   * because there the child is pointing at the map with a finger. */
-  .tk-rail-bar {
     flex-direction: row;
-    width: auto;
+    gap: 8px;
     height: 72px;
     padding: 8px 16px;
-    border-right: 0;
+    background: var(--paper);
     border-top: var(--stroke-hair) solid var(--line);
+  }
+  @media (min-width: 1280px) {
+    .tk-rail {
+      flex-direction: column;
+      width: 88px;
+      height: auto;
+      padding: 16px 8px;
+      border-top: 0;
+      border-right: var(--stroke-hair) solid var(--line);
+    }
   }
   .tk-tabbar {
     display: flex;
@@ -827,6 +838,36 @@
     background: var(--paper);
     border-top: var(--stroke-hair) solid var(--line);
   }
+  .tk-rail-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-width: 88px;
+    min-height: var(--touch);
+    border: 0;
+    border-radius: var(--card-radius);
+    background: transparent;
+    color: var(--ink-2);
+    font-size: var(--type-small);
+    line-height: var(--type-small-lh);
+    font-weight: 600;
+    cursor: pointer;
+  }
+  @media (min-width: 1280px) {
+    .tk-rail-item {
+      min-width: 64px;
+      min-height: 64px;
+    }
+  }
+  /* The module entrance is one of the three things an accent may colour, and
+   * the rail is where it does most of its work. */
+  .tk-rail-item[aria-current='page'] {
+    background: var(--accent-tint);
+    color: var(--accent-text);
+  }
+
   .tk-tabbar-item {
     flex: 1;
     display: flex;

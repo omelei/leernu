@@ -1,8 +1,17 @@
 import { defineConfig, devices } from '@playwright/test';
 
-// The two devices that matter in a Dutch classroom. The Chromebook viewport is
-// the one from spec section 8; testing at a generic desktop size would hide the
-// layout problems that actually occur on school hardware.
+// The five sizes of the app design, because §D gives each of them a different
+// navigation model and the difference between them is where layout breaks.
+//
+// 1366 is the Chromebook of spec section 8 and the size that must fit a whole
+// round inside 768 of height. 1024 and 768 are the same iPad turned over, and
+// they are not one case: landscape puts the vraagbalk beside the canvas and
+// portrait puts it above. 393 is iOS and 412 is the Android delta, which is not
+// a rounding difference — it is edge-to-edge under the system bars, a 48px
+// navigation bar, and no back button of our own.
+//
+// WebKit for the iPad on purpose: an iPad in a classroom is Safari, and the
+// layout problems only WebKit shows are the ones a school hits first.
 export default defineConfig({
   testDir: './e2e',
   fullyParallel: true,
@@ -24,8 +33,24 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'], viewport: { width: 1366, height: 768 } },
     },
     {
-      name: 'ipad',
+      name: 'desktop-1440',
+      use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } },
+    },
+    {
+      name: 'ipad-landscape',
+      use: { ...devices['iPad (gen 7) landscape'] },
+    },
+    {
+      name: 'ipad-portrait',
       use: { ...devices['iPad (gen 7)'] },
+    },
+    {
+      name: 'iphone',
+      use: { ...devices['iPhone 14 Pro'] },
+    },
+    {
+      name: 'android',
+      use: { ...devices['Pixel 7'] },
     },
   ],
   webServer: {

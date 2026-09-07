@@ -30,6 +30,9 @@ const ALLOWED_SELECTORS: ReadonlyMap<string, string> = new Map([
   ['.tk-module-card', 'the module entrance'],
   ['.tk-module-card:hover', 'the module entrance'],
   ['.tk-module-card:disabled', 'the module entrance'],
+  // The rail is where the module entrance does most of its work: a column of
+  // seven accents is the only place in the product that shows them together.
+  [".tk-rail-item[aria-current='page']", 'the module entrance, in the rail'],
 ]);
 
 /** Where an accent may be *defined* rather than used. */

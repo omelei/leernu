@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { countMastered, retentionAfterRound, setRetention, type ItemState } from '@/game-core';
 import { loadItemSets } from '@/content/loadSets';
 import { t, type TranslationKey } from '@/i18n';
-import { Wordmark } from '@/components/Wordmark';
 import { loadItemStates } from '@/store/progress';
 import { loadStreak, HOLIDAYS } from '@/store/streakStore';
 import { currentStreak, type StreakState } from '@/game-core';
@@ -76,11 +75,8 @@ export function HomeScreen({
   const inThreeWeeks = new Date(now.getTime() + THREE_WEEKS_DAYS * 86_400_000);
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-2xl flex-col gap-8 p-6">
-      <header className="flex items-baseline gap-4">
-        <Wordmark size={28} clearSpace={false} />
-        <StreakBadge state={streak} />
-      </header>
+    <div className="mx-auto flex w-full max-w-2xl flex-col gap-8 p-6">
+      <StreakBadge state={streak} />
 
       <h1 className="tk-display text-h1 font-semibold">
         {t('home.greeting', { naam: profile.naam })}
@@ -181,7 +177,7 @@ export function HomeScreen({
       </section>
 
       <p className="mt-auto text-center text-ink-2">{t('home.privacy')}</p>
-    </main>
+    </div>
   );
 }
 
