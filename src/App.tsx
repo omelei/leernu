@@ -6,10 +6,11 @@ import { ProfileGate } from '@/features/player/ProfileGate';
 import { Gallery } from '@/design/Gallery';
 import { Shell } from '@/features/shell/Shell';
 import { RetentionScreen } from '@/features/retention/RetentionScreen';
-import type { Destination } from '@/features/shell/modules';
+import { MODULES, type Destination } from '@/features/shell/modules';
 import { useRoute } from '@/features/shell/useRoute';
 import { ModuleSoon } from '@/features/shell/ModuleSoon';
 import { CategoryScreen } from '@/features/shell/CategoryScreen';
+import { ChooseRoundScreen } from '@/features/round/ChooseRoundScreen';
 import type { Route } from '@/features/shell/routes';
 import { getProfile } from '@/store/profile';
 import type { PracticeMode, SetId } from '@/features/practice/useRound';
@@ -111,6 +112,23 @@ export default function App() {
   // A module the plan has and the product does not. Reached only by typing the
   // address: ADR-037 keeps it out of the rail, because a rail entry is an offer
   // and this is an answer to a question the child asked.
+  // A module's address is where you choose a round in it. Two numbered steps,
+  // what and then how (K2), which is also why /topografie is not the home
+  // screen: the front door is every module, this is one of them.
+  if (route.name === 'module') {
+    return (
+      <Shell onNavigate={goTo}>
+        <ChooseRoundScreen
+          onStart={(setId, practiceMode) => {
+            setVisit(visit + 1);
+            setScreen({ name: 'practice', setId, practiceMode });
+          }}
+          onExplore={(setId) => setScreen({ name: 'explore', setId })}
+        />
+      </Shell>
+    );
+  }
+
   if (route.name === 'soon') {
     return (
       <Shell onNavigate={goTo}>
@@ -135,7 +153,7 @@ export default function App() {
           setVisit(visit + 1);
           setScreen({ name: 'practice', setId, practiceMode });
         }}
-        onExplore={(setId) => setScreen({ name: 'explore', setId })}
+        onChoose={() => go({ name: 'module', module: MODULES[0]! })}
       />
     </Shell>
   );

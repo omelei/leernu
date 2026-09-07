@@ -99,6 +99,20 @@ export const nl = {
   'mode.ontdekken': 'Ontdek',
   'mode.bliksemronde': 'Bliksemronde',
   'mode.overleven': 'Overleven',
+  'mode.meerkeuze': 'Meerkeuze',
+
+  // K2. De volgorde van de vier manieren is het argument, dus staat de reden
+  // erbij: meerkeuze is de instap naar typen, geen alternatief ervoor.
+  'way.wijs-aan': 'Tik het gebied aan — voor de eerste keer',
+  'way.meerkeuze': 'Kies uit vier namen — de instap naar typen',
+  'way.hoe-heet-dit': 'Schrijf het zelf op — voor de toets',
+  'way.ontdekken': 'Rondkijken, geen vragen',
+  'choose.title': 'Wat wil je oefenen?',
+  'choose.stepWhat': '1 · Waarover',
+  'choose.stepHow': '2 · Hoe wil je oefenen? van makkelijk naar moeilijk',
+  'choose.whenItSticks': 'Voor als het al zit',
+  'choose.dueToday': '{aantal} vandaag op de rol',
+  'choose.start': '{set} {hoe} · {aantal} vragen',
 
   // Explore
   'explore.kind': 'Ontdek de kaart',

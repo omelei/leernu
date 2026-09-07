@@ -6,13 +6,7 @@ import { TestDate } from './TestDate';
 import { loadItemStates } from '@/store/progress';
 import { loadStreak, HOLIDAYS } from '@/store/streakStore';
 import { currentStreak, type StreakState } from '@/game-core';
-import {
-  CHALLENGE_MODES,
-  LEARNING_MODES,
-  SET_IDS,
-  type PracticeMode,
-  type SetId,
-} from '@/features/practice/useRound';
+import { SET_IDS, type PracticeMode, type SetId } from '@/features/practice/useRound';
 import type { ProfileRecord } from '@/store/db';
 
 const THREE_WEEKS_DAYS = 21;
@@ -55,11 +49,12 @@ const MODE_NAME_KEY: Record<PracticeMode, TranslationKey> = {
 export function HomeScreen({
   profile,
   onStart,
-  onExplore,
+  onChoose,
 }: {
   readonly profile: ProfileRecord;
   readonly onStart: (setId: SetId, practiceMode: PracticeMode) => void;
-  readonly onExplore: (setId: SetId) => void;
+  /** Every other way of practising, which is K2's job now. */
+  readonly onChoose: () => void;
 }) {
   const [states, setStates] = useState<Map<string, ItemState> | null>(null);
   const [streak, setStreak] = useState<StreakState | null>(null);
@@ -127,50 +122,22 @@ export function HomeScreen({
                 </div>
               )}
 
-              {/* The two ways of practising, which is what this card is for.
-                  Pointing asks where something is, typing asks whether you can
-                  name it — different skills, and a child who has one is not
-                  done with the other. */}
+              {/* One primary button, which K1 asks for: the shortest way into a
+                  round is pointing, and every other choice lives on K2 rather
+                  than as five more buttons on a card. */}
               <div className="flex flex-wrap gap-3">
-                {LEARNING_MODES.map((practiceMode) => (
-                  <button
-                    key={practiceMode}
-                    type="button"
-                    className={
-                      practiceMode === 'wijs-aan' ? 'tk-button' : 'tk-button tk-button-secondary'
-                    }
-                    onClick={() => onStart(setId, practiceMode)}
-                  >
-                    {t(MODE_NAME_KEY[practiceMode])}
-                  </button>
-                ))}
-              </div>
-
-              {/* Separated rather than lined up with the two above, because
-                  five equal buttons per card across five sets is a wall and
-                  none of these three is where a child should start. Ontdekken
-                  asks nothing at all; the other two add a clock and lives to
-                  something already known. */}
-              <p className="tk-label mt-6">{t('home.moreWays')}</p>
-              <div className="mt-2 flex flex-wrap gap-3">
                 <button
                   type="button"
-                  className="tk-button tk-button-secondary"
-                  onClick={() => onExplore(setId)}
+                  className="tk-button"
+                  onClick={() => onStart(setId, 'wijs-aan')}
                 >
-                  {t('mode.ontdekken')}
+                  {t(MODE_NAME_KEY['wijs-aan'])}
                 </button>
-                {CHALLENGE_MODES.map((practiceMode) => (
-                  <button
-                    key={practiceMode}
-                    type="button"
-                    className="tk-button tk-button-secondary"
-                    onClick={() => onStart(setId, practiceMode)}
-                  >
-                    {t(MODE_NAME_KEY[practiceMode])}
-                  </button>
-                ))}
+                <button type="button" className="tk-button tk-button-secondary" onClick={onChoose}>
+                  {t('home.moreWays')}
+                </button>
               </div>
+
               <p className="mt-2 text-ink-2">{t('home.continueAction', { aantal: ids.length })}</p>
             </article>
           );
