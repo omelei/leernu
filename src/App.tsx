@@ -9,6 +9,7 @@ import { RetentionScreen } from '@/features/retention/RetentionScreen';
 import type { Destination } from '@/features/shell/modules';
 import { useRoute } from '@/features/shell/useRoute';
 import { ModuleSoon } from '@/features/shell/ModuleSoon';
+import { CategoryScreen } from '@/features/shell/CategoryScreen';
 import type { Route } from '@/features/shell/routes';
 import { getProfile } from '@/store/profile';
 import type { PracticeMode, SetId } from '@/features/practice/useRound';
@@ -22,11 +23,18 @@ type Screen =
 type Boot = { status: 'loading' } | { status: 'ready'; profile: ProfileRecord | null };
 
 /**
- * Four screens and no router.
+ * Seven screens and a router of about sixty lines.
  *
- * A router would be a dependency and a bundle cost for a product whose entire
- * navigation is "start a round, finish it, come back". When there are more
- * modules than one it earns its place; today it would be furniture.
+ * This comment used to say a router would be furniture until there was more
+ * than one module. There still is one; the reason changed. A module has an
+ * address now, and §A's "leer.nu/topografie" only reads as a sentence if the
+ * path is real. Hand-rolled rather than a package: the whole map is literal
+ * paths with no parameters and no nesting.
+ *
+ * A round has no address, on purpose. It is something you are in the middle of,
+ * and a URL that resumed one halfway would either lie about the progress or
+ * throw it away — which is why the round screens are chosen by `screen` and
+ * everything else by `route`.
  *
  * The practice screen is keyed on each visit so a second round starts genuinely
  * fresh rather than reusing the first round's state.
@@ -83,6 +91,20 @@ export default function App() {
         practiceMode={screen.practiceMode}
         onHome={() => setScreen({ name: 'home' })}
       />
+    );
+  }
+
+  // The word a parent types. Tafels sits under rekenen; klokkijken does not,
+  // because telling the time is reading an instrument rather than arithmetic.
+  if (route.name === 'category') {
+    return (
+      <Shell onNavigate={goTo}>
+        <CategoryScreen
+          category={route.category}
+          onOpen={(module) => go({ name: 'module', module })}
+          onHome={() => go({ name: 'home' })}
+        />
+      </Shell>
     );
   }
 

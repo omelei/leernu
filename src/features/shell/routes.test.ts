@@ -61,6 +61,21 @@ describe('the addresses', () => {
     }
   });
 
+  it('puts tafels under rekenen and klokkijken beside it', () => {
+    // The distinction the owner drew: telling the time is not arithmetic, it is
+    // reading an instrument. Business plan v6 already split them into two
+    // modules with two accents; the category adds the word a parent types
+    // without collapsing that back into one thing.
+    expect(routeFor('/rekenen')).toMatchObject({ name: 'category' });
+    const rekenen = routeFor('/rekenen');
+    if (rekenen.name !== 'category') throw new Error('expected a category');
+    expect(rekenen.category.modules).toEqual(['tafels']);
+    expect(rekenen.category.modules).not.toContain('klok');
+
+    // And the clock keeps its own address, one level up.
+    expect(routeFor('/klokkijken')).toMatchObject({ name: 'soon' });
+  });
+
   it('keeps the retention screen at a word a child could type', () => {
     expect(RETENTION_SLUG).toBe('onthouden');
     expect(routeFor('/onthouden')).toEqual({ name: 'retention' });

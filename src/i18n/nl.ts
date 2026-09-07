@@ -74,6 +74,11 @@ export const nl = {
   'soon.body': 'Deze module bestaat nog niet. We beginnen bij topografie.',
   'soon.action': 'Naar topografie',
 
+  // Eén categorie, en de vorm ervan is het punt: tafels hoort onder rekenen,
+  // klokkijken niet. Klokkijken is geen rekenen maar een instrument aflezen.
+  'category.rekenen': 'Rekenen',
+  'category.holds': 'Hieronder valt:',
+
   // Item status, K9. Four states, each with a shape as well as a word — and
   // none of them green, because green is an answer state and would tell a
   // child they had just got something right.

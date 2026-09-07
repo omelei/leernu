@@ -40,6 +40,28 @@ export const MODULES: readonly Module[] = [
 export const BUILT_MODULES = MODULES.filter((module) => module.built);
 
 /**
+ * A category groups modules that a parent would look for under one word.
+ *
+ * There is one, and its shape is the point: **tafels belongs under rekenen,
+ * klokkijken does not.** Telling the time is not arithmetic — it is reading an
+ * instrument — and business plan v6 already split them into two modules with
+ * two entrances and two accents (ADR-028). This keeps that split and adds the
+ * word an adult actually types.
+ *
+ * Categories are for addresses, not for the rail. The rail lists modules,
+ * because a module is what a child practises; nobody practises "rekenen".
+ */
+export interface Category {
+  readonly id: 'rekenen';
+  readonly name: TranslationKey;
+  readonly modules: readonly Module['id'][];
+}
+
+export const CATEGORIES: readonly Category[] = [
+  { id: 'rekenen', name: 'category.rekenen', modules: ['tafels'] },
+];
+
+/**
  * The four places the tab bar goes on a phone.
  *
  * Same rule as the rail: a destination that does not exist is not offered. Two

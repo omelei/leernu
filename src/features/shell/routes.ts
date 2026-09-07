@@ -1,4 +1,4 @@
-import { MODULES, type Module } from './modules';
+import { CATEGORIES, MODULES, type Category, type Module } from './modules';
 
 /**
  * The paths, and why the app has any.
@@ -32,7 +32,9 @@ export type Route =
   /** A module that exists. */
   | { readonly name: 'module'; readonly module: Module }
   /** A module the plan has but the product does not yet. */
-  | { readonly name: 'soon'; readonly module: Module };
+  | { readonly name: 'soon'; readonly module: Module }
+  /** A word a parent looks for, holding the modules that sit under it. */
+  | { readonly name: 'category'; readonly category: Category };
 
 export const RETENTION_SLUG = 'onthouden';
 
@@ -54,6 +56,9 @@ export function routeFor(pathname: string): Route {
   const module = MODULES.find((candidate) => MODULE_SLUG[candidate.id] === slug);
   if (module) return module.built ? { name: 'module', module } : { name: 'soon', module };
 
+  const category = CATEGORIES.find((candidate) => candidate.id === slug);
+  if (category) return { name: 'category', category };
+
   // Anything else is the front door. A child who mistypes a module gets the
   // place they can find one, not an error page about their spelling.
   return { name: 'home' };
@@ -66,6 +71,8 @@ export function pathFor(route: Route): string {
       ? ''
       : route.name === 'retention'
         ? RETENTION_SLUG
-        : MODULE_SLUG[route.module.id];
+        : route.name === 'category'
+          ? route.category.id
+          : MODULE_SLUG[route.module.id];
   return `${base}${slug}`.replace(/\/{2,}/g, '/');
 }

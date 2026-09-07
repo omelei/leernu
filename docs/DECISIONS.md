@@ -1608,6 +1608,128 @@ still the only place movement teaches anything.
 
 ---
 
+## ADR-044 — Every module has an address, and rekenen is a word rather than a module
+
+**Status:** accepted — 2026-09-07.
+
+### Context
+
+The product needed addresses: leer.nu as a front door, and a path per module so
+a child can be sent to one. `App.tsx` had said a router would be furniture until
+there was more than one module. There still is one, but the reason changed — §A
+draws "leer.nu/topografie" as a lockup, and it only reads as a sentence if the
+path is real.
+
+The owner also asked for `/rekenen`, which business plan v6 does not have. The
+plan has tafels and klokkijken as two modules with two entrances and two
+accents (ADR-028, decision 12).
+
+### Decision
+
+**Paths use the whole word**: `/topografie`, not §A's drawn `/topo`. The
+abbreviation works in a lockup and would need seven of them, and
+"leer.nu/tijdv" reads as nothing. The whole word is also what a parent types.
+
+**A hand-rolled router**, about sixty lines. The map is literal paths with no
+parameters, no nesting and no data loading, and the rule against a new runtime
+dependency is worth more than what a package would save.
+
+**A round has no address.** It is something you are in the middle of, and a URL
+that resumed one halfway would either lie about the progress or throw it away.
+Round screens are chosen by state; everything else by the path.
+
+**A module the plan has and the product does not gets a page saying so**, rather
+than a redirect. ADR-037 keeps those six out of the rail because a rail entry is
+an offer; a URL is a question the child asked, and answering it with a different
+screen is how an app teaches you not to trust its addresses.
+
+**Rekenen is a category, and it holds tafels only.** Klokkijken sits beside it,
+not under it: telling the time is reading an instrument rather than arithmetic,
+which is the distinction the owner drew and the same one business plan v6 made
+when it split them. Categories exist at addresses and not in the rail — the rail
+lists modules, because a module is what a child practises and nobody practises
+"rekenen".
+
+### Consequences
+
+Deep links need `dist/404.html` to be a copy of `index.html`, because Pages
+serves static files and there is no file called `topografie`. Without it every
+address works when clicked and breaks when typed or shared, which is the worse
+half. The status code really is 404 for a page that renders; the honest fix is a
+host that can rewrite, and `tools/spa-fallback.mjs` says so in place.
+
+The category shape leaves room for the long tail in §5.5 — biology, road signs,
+music notation — to be grouped under words a parent knows without every one of
+them needing an accent of its own. That does not solve the eight-module ceiling
+in ADR-028, but it is the first thing that has made it look solvable.
+
+---
+
+## ADR-045 — The parent gets an account; the child's practice stays on the device
+
+**Status:** accepted — 2026-09-07. Supersedes ADR-015 in part. Not yet built.
+
+### Context
+
+The owner asked for user management: signing in, signing out, and a database
+instead of everything living in the browser.
+
+That reverses ADR-015, which chose local-first and no backend, and it collides
+with three things the product currently says out loud. The start screen says
+"Geen account nodig". `e2e/network.spec.ts` proves, over a real round, that the
+app never asks anything of anyone. And the README gives that as the reason the
+repository is public.
+
+It also collides with two records that were deferred rather than decided.
+ADR-008 refused a self-service account for a minor, because it makes us the
+controller of a child's data under a different legal regime. ADR-012 tied
+retention and deletion to a class that no longer exists.
+
+Three shapes were on the table: the child signs in and everything moves to the
+server; nobody signs in and profiles are switched on the device; or the parent
+signs in and the child's practice stays where it is.
+
+### Decision
+
+**The parent has an account. The child does not.**
+
+The parent's account carries what an account is actually for here: paying,
+managing up to four children, and the one screen per child that V1 describes.
+The child's practice — every answer, every Leitner box, every streak — stays in
+IndexedDB on the device, exactly as ADR-015 designed it.
+
+This follows the business plan's own sentence about who this product is for: the
+parent buys and the child uses. It also keeps the sharpest edge away from us. A
+child never authenticates, so we never hold a credential belonging to a
+ten-year-old, and the thing ADR-008 refused stays refused.
+
+### Consequences
+
+**ADR-015 is superseded in part, not overturned.** There is a backend now, and
+it holds parents. It does not hold what a child answered.
+
+Three claims have to change and one has to stay:
+
+- "Geen account nodig" stays true for the child and becomes false for the
+  parent who pays. The copy needs to say which.
+- `e2e/network.spec.ts` will have to allow the requests the parent's session
+  makes and must keep proving that a round makes none. That is a narrowing of
+  the test, and it should be written so the narrowing is obvious.
+- The README's reason for being public needs rewriting rather than deleting.
+- Nothing about the child's data leaving the device changes, and that is the
+  claim worth defending hardest.
+
+**What this does not unlock.** Growth points relative to friends (ADR-034) and
+the friend layer still need the child to have an identity the server knows, and
+this decision deliberately does not give them one. Whether a child gets a
+server-side identity for that is a separate decision, and a harder one, and it
+should not arrive as a side effect of adding a login for parents.
+
+Progress still does not follow a child to a second device. That was the main
+thing a full account would have bought, and it is the price of this shape.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because
