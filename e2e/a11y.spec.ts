@@ -48,7 +48,10 @@ async function chooseAndStart(page: Page, set: RegExp, way: RegExp) {
 
   await what.getByRole('button', { name: set }).click();
   await how.getByRole('button', { name: way }).click();
-  await page.getByRole('button', { name: /vragen$/ }).last().click();
+  await page
+    .getByRole('button', { name: /vragen$/ })
+    .last()
+    .click();
 }
 test('the name screen has no violations', async ({ page }) => {
   await page.goto('/');

@@ -59,7 +59,10 @@ async function chooseAndStart(page: Page, set: RegExp, way: RegExp) {
 
   await what.getByRole('button', { name: set }).click();
   await how.getByRole('button', { name: way }).click();
-  await page.getByRole('button', { name: /vragen$/ }).last().click();
+  await page
+    .getByRole('button', { name: /vragen$/ })
+    .last()
+    .click();
 }
 async function signIn(page: Page, naam: string) {
   await page.goto('/');
