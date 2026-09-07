@@ -39,10 +39,7 @@ function read(value: string | undefined, fallback: boolean): boolean {
 }
 
 export async function loadPreferences(): Promise<Preferences> {
-  const [readAloud, timer] = await Promise.all([
-    getSetting(KEY.readAloud),
-    getSetting(KEY.timer),
-  ]);
+  const [readAloud, timer] = await Promise.all([getSetting(KEY.readAloud), getSetting(KEY.timer)]);
 
   return {
     readAloud: read(readAloud, DEFAULT_PREFERENCES.readAloud),

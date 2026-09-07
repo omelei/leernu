@@ -39,9 +39,17 @@ function setCard(page: Page, naam: string) {
 async function chooseAndStart(page: Page, set: RegExp, way: RegExp) {
   await page.getByRole('button', { name: 'Andere manieren' }).first().click();
   await expect(page.getByRole('heading', { name: 'Wat wil je oefenen?' })).toBeVisible();
-  await page.getByRole('button', { name: set }).click();
-  await page.getByRole('button', { name: way }).click();
-  await page.getByRole('button', { name: /vragen$/ }).click();
+  // Scoped to the two steps: the set name is on the start button too, which
+  // is exactly what K2 puts it there for.
+  await page
+    .getByRole('region', { name: /Waarover/ })
+    .getByRole('button', { name: set })
+    .click();
+  await page
+    .getByRole('region', { name: /Hoe wil je/ })
+    .getByRole('button', { name: way })
+    .click();
+  await page.getByRole('button', { name: /vragen$/ }).last().click();
 }
 
 test('the name screen has no violations', async ({ page }) => {

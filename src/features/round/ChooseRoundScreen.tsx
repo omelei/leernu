@@ -66,7 +66,7 @@ export function ChooseRoundScreen({
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-8 p-6">
       <h1 className="tk-display text-h1 font-semibold">{t('choose.title')}</h1>
 
-      <section className="flex flex-col gap-3">
+      <section className="flex flex-col gap-3" aria-label={t('choose.stepWhat')}>
         <h2 className="tk-label">{t('choose.stepWhat')}</h2>
         {SET_IDS.map((id) => {
           const set = sets.find((candidate) => candidate.id === id);
@@ -103,7 +103,7 @@ export function ChooseRoundScreen({
         })}
       </section>
 
-      <section className="flex flex-col gap-3">
+      <section className="flex flex-col gap-3" aria-label={t('choose.stepHow')}>
         {/* The order is the argument, so it is written down rather than left to
             be inferred from the sequence. */}
         <h2 className="tk-label">{t('choose.stepHow')}</h2>
@@ -123,7 +123,7 @@ export function ChooseRoundScreen({
         ))}
       </section>
 
-      <section className="flex flex-col gap-3">
+      <section className="flex flex-col gap-3" aria-label={t('choose.whenItSticks')}>
         {/* Chips, not entries in the list above: a clock and three lives are
             things you add to something you already know, and standing them
             beside the four ways would say they were a fifth way to learn it. */}

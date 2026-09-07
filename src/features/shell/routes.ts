@@ -76,8 +76,8 @@ export function pathFor(route: Route): string {
         ? RETENTION_SLUG
         : route.name === 'you'
           ? YOU_SLUG
-        : route.name === 'category'
-          ? route.category.id
-          : MODULE_SLUG[route.module.id];
+          : route.name === 'category'
+            ? route.category.id
+            : MODULE_SLUG[route.module.id];
   return `${base}${slug}`.replace(/\/{2,}/g, '/');
 }
