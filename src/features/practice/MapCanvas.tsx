@@ -1,4 +1,11 @@
-import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
+import {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type KeyboardEvent,
+} from 'react';
 import {
   fitView,
   helpTargetFor,
@@ -77,6 +84,21 @@ export interface MapCanvasProps {
 /** The map's rendered height in CSS pixels, so touch targets can be real. */
 function useRenderedHeight(ref: React.RefObject<SVGSVGElement | null>): number {
   const [height, setHeight] = useState(600);
+
+  // Measured before the browser paints, not after.
+  //
+  // 600 is a guess, and everything that decides which cities can be drawn at all
+  // is computed from this number (reachablePoints, helpTargetFor). Waiting for
+  // the ResizeObserver meant the first paint used the guess, so on a screen
+  // shorter than 600 the map drew points a finger could not separate and then
+  // corrected itself — visible as a flicker, and long enough for a test to
+  // catch two cities on top of each other.
+  useLayoutEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+    const measured = element.getBoundingClientRect().height;
+    if (measured > 0) setHeight(measured);
+  }, [ref]);
 
   useEffect(() => {
     const element = ref.current;

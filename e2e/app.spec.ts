@@ -105,8 +105,10 @@ test('asks about every province, and lets a child stop early', async ({ page }) 
   await signIn(page, 'Jesse');
   await setCard(page, 'Provincies van Nederland').getByRole('button', { name: 'Wijs aan' }).click();
 
-  // Twelve provinces means twelve questions, not a sample of ten.
-  await expect(page.getByText('1/12')).toBeVisible();
+  // Twelve provinces means twelve questions, not a sample of ten. The dots say
+  // so, and say it to a screen reader too.
+  await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuemax', '12');
+  await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuetext', 'vraag 1 van 12');
 
   await page.getByRole('button', { name: 'Stoppen' }).click();
   await expect(page.getByRole('heading', { name: /goed/ })).toBeVisible();
@@ -186,8 +188,9 @@ test('cities: asks a round a child can finish', async ({ page }) => {
   await signIn(page, 'Fenna');
   await setCard(page, 'Steden van Nederland').getByRole('button', { name: 'Wijs aan' }).click();
 
-  // The counter reads "vraag 1/15": fifteen, not eighty.
-  await expect(page.getByText('1/15')).toBeVisible();
+  // Fifteen questions, not eighty: a set larger than a round is sampled from
+  // (ADR-022), and the dots are what say how many are coming.
+  await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuemax', '15');
 });
 
 /**

@@ -985,8 +985,12 @@
     display: grid;
     flex: 1;
     min-height: 0;
-    /* Phone: one cell. The map has it, and the question lies on top. */
+    /* Phone: one cell. The map has it, and the question lies on top.
+     * The row is named rather than left implicit: the map sizes itself from the
+     * height it is given, so a row sized by its contents is a circle, and the
+     * canvas collapses to nothing inside it. */
     grid-template-areas: 'map';
+    grid-template-rows: minmax(0, 1fr);
   }
   .tk-round-map {
     grid-area: map;
