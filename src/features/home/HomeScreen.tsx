@@ -78,12 +78,12 @@ export function HomeScreen({
   return (
     <main className="mx-auto flex min-h-screen max-w-2xl flex-col gap-8 p-6">
       <header className="flex items-baseline gap-4">
-        <p className="tk-display text-2xl font-bold">{brand.name}</p>
+        <p className="tk-display text-h2 font-bold">{brand.name}</p>
         <StreakBadge state={streak} />
         <LevelBadge xp={profile.xp} />
       </header>
 
-      <h1 className="tk-display text-3xl font-semibold">
+      <h1 className="tk-display text-h1 font-semibold">
         {t('home.greeting', { naam: profile.naam })}
       </h1>
 
@@ -102,7 +102,7 @@ export function HomeScreen({
 
           return (
             <article key={setId} className="tk-card rounded-control p-6">
-              <h3 className="tk-display mb-1 text-2xl font-semibold">{t(SET_NAME_KEY[setId])}</h3>
+              <h3 className="tk-display mb-1 text-h2 font-semibold">{t(SET_NAME_KEY[setId])}</h3>
               <p className="mb-4 text-ink-2">
                 {started
                   ? t('home.setMastered', { goed: mastered, totaal: ids.length })
@@ -114,8 +114,8 @@ export function HomeScreen({
                   honest answer is "nothing yet", and a 0% reads as failure
                   rather than as a start. */}
               {started && (
-                <div className="mb-5">
-                  <p className="tk-display text-3xl font-bold tabular-nums text-topo-text">
+                <div className="mb-6">
+                  <p className="tk-display text-h1 font-bold tabular-nums text-accent-text">
                     {retention}%
                   </p>
                   <p className="text-ink-2">{t('home.retention')}</p>
@@ -155,7 +155,7 @@ export function HomeScreen({
                   none of these three is where a child should start. Ontdekken
                   asks nothing at all; the other two add a clock and lives to
                   something already known. */}
-              <p className="tk-label mt-5">{t('home.moreWays')}</p>
+              <p className="tk-label mt-6">{t('home.moreWays')}</p>
               <div className="mt-2 flex flex-wrap gap-3">
                 <button
                   type="button"
@@ -233,7 +233,7 @@ function LevelBadge({ xp }: { readonly xp: number }) {
         aria-valuemax={100}
         aria-label={t('home.level', { level })}
       >
-        <span className="block h-full bg-topo" style={{ width: `${progress}%` }} />
+        <span className="block h-full bg-accent" style={{ width: `${progress}%` }} />
       </span>
     </span>
   );

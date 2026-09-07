@@ -28,7 +28,7 @@ export function ResultScreen({
     <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-6 p-6">
       <div>
         <p className="tk-label">{t('result.title')}</p>
-        <h1 className="tk-display text-3xl font-semibold">
+        <h1 className="tk-display text-h1 font-semibold">
           {t('result.score', { goed: state.correctCount, totaal: state.answeredCount })}
         </h1>
         {state.rule.kind === 'vast' && state.answeredCount < state.total && (
@@ -41,7 +41,7 @@ export function ResultScreen({
       </div>
 
       {state.missed.length === 0 ? (
-        <p className="text-lg">{t('result.allCorrect')}</p>
+        <p className="text-body">{t('result.allCorrect')}</p>
       ) : (
         <div className="flex flex-col gap-6 md:flex-row md:items-start">
           <section className="md:w-1/2">
@@ -49,7 +49,7 @@ export function ResultScreen({
             <ul className="flex flex-col gap-2">
               {state.missed.map((item) => (
                 <li key={item.id} className="tk-card rounded-control px-4 py-3">
-                  <p className="tk-display text-xl font-semibold">{item.naam}</p>
+                  <p className="tk-display text-h3 font-semibold">{item.naam}</p>
                   {item.weetje !== undefined && <p className="text-ink-2">{item.weetje}</p>}
                 </li>
               ))}
@@ -123,8 +123,8 @@ function ReviewMap({
           <path
             key={vorm.id}
             d={vorm.d}
-            fill="var(--topo-tint)"
-            stroke="var(--topo)"
+            fill="var(--accent-tint)"
+            stroke="var(--accent)"
             strokeWidth={3}
             strokeLinejoin="round"
           />
@@ -139,8 +139,8 @@ function ReviewMap({
               cx={point.punt[0]}
               cy={point.punt[1]}
               r={9}
-              fill="var(--topo-tint)"
-              stroke="var(--topo)"
+              fill="var(--accent-tint)"
+              stroke="var(--accent)"
               strokeWidth={3}
             />
           ))}
@@ -214,7 +214,7 @@ function RewardLine({ state }: { readonly state: RoundState }) {
     <>
       <p className="mt-1 text-ink-2">{t('result.earned', { xp: reward.xp })}</p>
       {reward.badges.map((badge) => (
-        <p key={badge} className="tk-display mt-1 font-semibold text-topo-text">
+        <p key={badge} className="tk-display mt-1 font-semibold text-accent-text">
           {t('result.newBadge', { naam: t(BADGE_NAME[badge]) })}
         </p>
       ))}

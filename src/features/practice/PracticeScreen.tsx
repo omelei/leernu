@@ -67,7 +67,7 @@ export function PracticeScreen({
   if (state.error !== null) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-6">
-        <p className="tk-display text-2xl">{t('practice.mapFailed')}</p>
+        <p className="tk-display text-h2">{t('practice.mapFailed')}</p>
         <button type="button" className="tk-button" onClick={onHome}>
           {t('result.home')}
         </button>
@@ -98,15 +98,15 @@ export function PracticeScreen({
 
   return (
     <div className="flex h-screen flex-col bg-paper">
-      <header className="flex flex-none items-center gap-5 border-b border-line px-6 py-4">
+      <header className="flex flex-none items-center gap-6 border-b border-line px-6 py-4">
         <div className="min-w-0">
           <p className="tk-label">{label}</p>
-          <h1 className="tk-display truncate text-3xl font-semibold">{vraag}</h1>
+          <h1 className="tk-display truncate text-h1 font-semibold">{vraag}</h1>
         </div>
 
         <SpeakButton text={vraag} />
 
-        <div className="ml-auto flex items-center gap-5">
+        <div className="ml-auto flex items-center gap-6">
           {/* What is running out, or how far along you are — never both, because
               in a timed round the question number counts towards nothing. */}
           {state.secondsLeft !== null ? (
@@ -159,17 +159,17 @@ export function PracticeScreen({
       {typing && !revealed && <AnswerField key={state.index} onSubmit={submit} />}
 
       {revealed && (
-        <section className="flex flex-none items-end gap-5 border-t border-line bg-paper px-6 py-5">
+        <section className="flex flex-none items-end gap-6 border-t border-line bg-paper px-6 py-6">
           <FeedbackIcon kind={state.lastCorrect ? 'good' : nearMiss ? 'near' : 'bad'} />
           <div className="flex-1">
-            <p className="tk-display text-2xl font-semibold">
+            <p className="tk-display text-h2 font-semibold">
               {state.lastCorrect
                 ? t('practice.correct', { naam })
                 : nearMiss
                   ? t('practice.almost')
                   : t('practice.wrong', { naam })}
             </p>
-            <p className="text-lg text-ink-2">{feedbackDetail(state, naam, chosenName)}</p>
+            <p className="text-body text-ink-2">{feedbackDetail(state, naam, chosenName)}</p>
           </div>
           {/* A lightning round moves on by itself, so there is nothing to press
               and nothing to charge a child for pressing. */}
@@ -195,7 +195,7 @@ export function PracticeScreen({
         aria-valuemax={state.total}
       >
         <div
-          className="h-full bg-topo transition-[width] duration-200"
+          className="h-full bg-accent transition-[width] duration-200"
           style={{ width: `${((state.index + (revealed ? 1 : 0)) / state.total) * 100}%` }}
         />
       </div>
@@ -291,8 +291,8 @@ function Counter({
       <b
         className={
           urgent
-            ? 'tk-display text-2xl font-bold tabular-nums text-bad'
-            : 'tk-display text-2xl font-bold tabular-nums'
+            ? 'tk-display text-h2 font-bold tabular-nums text-bad'
+            : 'tk-display text-h2 font-bold tabular-nums'
         }
       >
         {value}
@@ -313,7 +313,7 @@ function FeedbackIcon({ kind }: { readonly kind: 'good' | 'near' | 'bad' }) {
   // tick nor a cross — because it is genuinely a third outcome and dressing it
   // as either would undo the point of ADR-017.
   const background =
-    kind === 'good' ? 'var(--good)' : kind === 'near' ? 'var(--topo)' : 'var(--bad)';
+    kind === 'good' ? 'var(--good)' : kind === 'near' ? 'var(--accent)' : 'var(--bad)';
 
   return (
     <span

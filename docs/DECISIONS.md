@@ -13,7 +13,8 @@ streak), ADR-004 accepted, and ADR-006, ADR-009 and ADR-010 rejected in favour
 of the original specification.
 
 **Decisions taken by the product owner on 2026-09-07**, on business plan v6:
-ADR-024 through ADR-031. Where the app design and the business plan disagree,
+ADR-024 through ADR-031. ADR-032 and ADR-033 follow from building on them.
+Where the app design and the business plan disagree,
 the plan wins; where the styleguide and the design disagree, the styleguide
 wins.
 
@@ -968,6 +969,83 @@ thing.
 
 ---
 
+
+## ADR-032 — Three hit sizes, and 44 is the one that is a rule
+
+**Status:** accepted — styleguide §D, 2026-09-07.
+
+### Context
+
+`--touch` was a single value of 48px and `brand.minTouchTargetPx` was 48, which
+contradicted its own comment ("reachable at 44px on the smallest supported
+device") and had no basis in the styleguide.
+
+Styleguide §D has three: 44 as the floor, 56 for PO and for anything touched
+with a finger, 72 for the digibord. 48 is none of them. It is the Material
+default, which is where it came from.
+
+### Decision
+
+Three tokens: `--touch-min: 44px`, `--touch: 56px`, `--touch-board: 72px`.
+
+**56 wins as the default**, because the app is PO 8-12 and is used with a finger
+on a shared school tablet more often than with a mouse. A default of 44 would
+make every control legal and none of them comfortable.
+
+`brand.minTouchTargetPx` becomes **44** — the floor, which is what a field named
+"min" should hold. The target belongs in CSS, because it changes with the guise
+and the screen size; the floor does not change, which is why it is the number
+worth stating in code at all.
+
+### Consequences
+
+Buttons and inputs grow from 48 to 56, which is a visible change and the
+intended one. `.tk-pill` is still 40 and therefore below the floor; it is left
+for the component layer, where it is rebuilt with all its states.
+
+72 stays in the tokens although the digibord is out of scope, so that the size
+costs nothing when the school channel opens.
+
+---
+
+## ADR-033 — The type scale is relative; everything else is absolute
+
+**Status:** accepted — 2026-09-07, following ADR-025.
+
+### Context
+
+Styleguide §C writes the type scale in pixels. ADR-025 dropped the reading mode
+and left "the base typography follows the system setting up to 200%" as the only
+typographic accessibility affordance in the product, with the note that it has
+to actually work.
+
+A scale in `px` cannot do that. Every desktop browser exposes a default font
+size and it moves `rem`, not `px`. Shipping the scale in pixels would have made
+ADR-025's replacement affordance false on the day it was written, and false
+invisibly — nothing fails, the text simply never grows.
+
+### Decision
+
+The type scale is declared in `rem` (`--type-*`), with the styleguide's pixel
+value in a comment beside each. At the default root size the rendering is
+identical, so this is a faithful transcription rather than a reinterpretation.
+
+Everything else stays absolute: spacing, hit targets, corner radii and stroke
+widths. 44px is a measure of a fingertip and 1.5px is a hairline between two
+provinces; growing either with the reader's text size would make the interface
+worse, not more accessible.
+
+`-webkit-text-size-adjust: 100%` stays. It switches off the automatic inflation
+phones apply on rotation and does not touch what the reader asked for.
+
+### Consequences
+
+The 200% claim is now testable, and ADR-025 says it must be tested: on all four
+sizes, heading-1 wrapping to two lines, the question bar growing with it, and
+nothing clipped. That test does not exist yet and is owed with the responsive
+shell.
+
+---
 
 ## Deferred with accounts and commerce (ADR-014)
 

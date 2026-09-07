@@ -339,7 +339,7 @@ function CityMarker({
       : state === 'wrong'
         ? 'var(--bad)'
         : state === 'asked'
-          ? 'var(--topo-tint)'
+          ? 'var(--accent-tint)'
           : 'var(--paper)';
   const stroke =
     state === 'target'
@@ -347,7 +347,7 @@ function CityMarker({
       : state === 'wrong'
         ? 'var(--bad)'
         : state === 'asked'
-          ? 'var(--topo)'
+          ? 'var(--accent)'
           : 'var(--ink)';
 
   return (

@@ -13,8 +13,17 @@ export const brand = {
   /** Shown under the name on the start screen. Kept factual, not a slogan. */
   tagline: 'Leer waar alles ligt',
   locale: 'nl-NL',
-  /** Reachable at 44px on the smallest supported device. */
-  minTouchTargetPx: 48,
+  /**
+   * The floor, not the target — which is what the name promises and what this
+   * value was contradicting at 48.
+   *
+   * Styleguide §D has three hit sizes: 44 is the ground WCAG 2.2 asks for and
+   * the only one that is a rule, 56 is what PO and any finger actually get, and
+   * 72 is the digibord. The target lives in CSS as --touch, because it changes
+   * with the guise and the screen; this number does not change, which is why it
+   * is the one worth stating in code. See ADR-032.
+   */
+  minTouchTargetPx: 44,
 } as const;
 
 /**

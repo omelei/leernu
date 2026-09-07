@@ -28,7 +28,7 @@ export function ProfileGate({ onReady }: { readonly onReady: (profile: ProfileRe
   return (
     <main className="mx-auto flex min-h-screen max-w-xl flex-col justify-center gap-8 p-6">
       <div>
-        <p className="tk-display text-2xl font-bold">{brand.name}</p>
+        <p className="tk-display text-h2 font-bold">{brand.name}</p>
         <p className="text-ink-2">{brand.tagline}</p>
       </div>
 
@@ -36,7 +36,7 @@ export function ProfileGate({ onReady }: { readonly onReady: (profile: ProfileRe
         onSubmit={(event) => void handleSubmit(event)}
         className="tk-card flex flex-col gap-4 rounded-control p-6"
       >
-        <h1 className="tk-display text-2xl font-semibold">{t('profile.title')}</h1>
+        <h1 className="tk-display text-h2 font-semibold">{t('profile.title')}</h1>
         <label htmlFor="naam" className="text-ink-2">
           {t('profile.help')}
         </label>

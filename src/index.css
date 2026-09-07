@@ -79,38 +79,319 @@
 @tailwind utilities;
 
 @layer base {
+  /*
+   * Every value below is transcribed from styleguide §B, §C and §D, and every
+   * ratio in a comment was re-measured from the hex rather than copied — see
+   * src/design/contrast.test.ts, which reads this file and fails on a drift.
+   */
   :root {
-    /* Surfaces. Contrast ratios are measured, not estimated — see
-     * src/design/contrast.test.ts, which reads this file. */
+    /* ---- Surfaces, styleguide §B "moederpalet" ---------------------------- */
     --paper: #fafaf7; /* --papier */
     --surface: #f0f0ec; /* --oppervlak */
     --sunken: #e5e5df; /* --diep */
-    --line: #d6d6cf; /* --lijn */
-    --line-strong: #b7b8b0; /* --lijnsterk */
+    --line: #d6d6cf; /* --lijn        1.40:1, carries no text */
+    --line-strong: #b7b8b0; /* --lijnsterk   1.91:1 */
 
     /* Ink */
-    --ink: #1d221c; /* --tekst      16.4:1 on paper */
-    --ink-2: #5a5f59; /* --tekst2    6.2:1 */
-    --ink-3: #7d827b; /* --tekst3    3.7:1 — see the note in contrast.test.ts */
+    --ink: #1d221c; /* --tekst      15.47:1 on paper */
+    --ink-2: #5a5f59; /* --tekst2      6.24:1 */
+    --ink-3: #7d827b; /* --tekst3      3.75:1 — see the note in contrast.test.ts */
 
-    /* Answer states. Never carried by colour alone: correct adds a tick and a
-     * word, wrong adds a hatch pattern and a word. */
-    --good: #287c42; /* --goed */
-    --bad: #b02a2d; /* --fout */
+    /* ---- Semantics, styleguide §B ----------------------------------------
+     * Outside the accent system: a module may never borrow one of these, and
+     * an accent may never mean right or wrong. Never carried by colour alone
+     * either — every state also has a shape and a word (§7).
+     */
+    --good: #287c42; /* --goed          paper on it 4.96:1 */
+    --good-text: #006e4a; /* --goedTekst */
+    --bad: #b02a2d; /* --fout          paper on it 6.25:1 */
+    --attention: #bd871c; /* --aandacht      ink on it 5.12:1; on paper only 3.02:1 */
+    --attention-text: #855a00; /* --aandachtTekst on paper 5.80:1 — the one that may be text */
+    --neutral: #5c6b7a; /* --neutraal      paper on it 5.23:1 */
 
-    /* Topography module accent */
-    --topo: #2e75b7; /* --topo */
-    --topo-text: #005a9d; /* --topoTekst */
-    --topo-tint: #d7eaff; /* --topoTint */
+    /* ---- Module accents, styleguide §B and ADR-028 ------------------------
+     * One ring: lightness 0.55, chroma 0.125, only the hue differs — measured
+     * exactly so for four of the seven. Tafels sits at C 0.116, tijdvakken at
+     * C 0.119, and vlaggen at C 0.096 / L 0.565 because that hue does not fit
+     * in sRGB at 0.125, which is why vlaggen reads a little duller than the
+     * rest. The styleguide's claim that only the hue varies is not quite true
+     * as built; the colours are right, the sentence about them is not.
+     *
+     * A module never reaches for these names directly. It sets
+     * data-module="…" and reads --accent, --accent-text and --accent-tint, so
+     * that an eighth module is a block of CSS and a content entry rather than
+     * a change to any component.
+     */
+    --topo: #2e75b7; /* 1 topografie   hue 249.8° */
+    --topo-text: #005a9d; /*                on tint 5.80:1 */
+    --topo-tint: #d7eaff;
 
-    /* The map itself. Land is the surface tone so the country reads as part of
-     * the page rather than a picture pasted onto it. */
-    --map-land: #f0f0ec;
-    --map-water: #fafaf7;
+    --tafels: #008863; /* 2 tafels       hue 165.8° */
+    --tafels-text: #006e4a; /*                on tint 5.21:1 */
+    --tafels-tint: #d3f0e3;
 
-    --touch: 48px;
+    --klok: #a9591f; /* 3 klokkijken   hue  52.0°, ADR-028 */
+    --klok-text: #823c00; /*                on tint 6.47:1 */
+    --klok-tint: #ffe0cd;
+
+    --woorden: #6f64b6; /* 4 woordjes     hue 287.7° */
+    --woorden-text: #56489b; /*                on tint 6.09:1 */
+    --woorden-tint: #e6e5ff;
+
+    --spelling: #965598; /* 5 spelling     hue 326.0° */
+    --spelling-text: #7c397e; /*                on tint 6.15:1 */
+    --spelling-tint: #f5e0f5;
+
+    --tijdvakken: #797600; /* 6 tijdvakken   hue 108.0° */
+    --tijdvakken-text: #605c00; /*                on tint 5.67:1 */
+    --tijdvakken-tint: #eaead0;
+
+    --vlaggen: #00868e; /* 7 vlaggen      hue 202.2° */
+    --vlaggen-text: #006b74; /*                on tint 5.14:1 */
+    --vlaggen-tint: #ceeff1;
+
+    /* The resolved accent. Topography is the default because it is the only
+     * module that exists; the mapping blocks below override it per module. */
+    --accent: var(--topo);
+    --accent-text: var(--topo-text);
+    --accent-tint: var(--topo-tint);
+
+    /* ---- The map ---------------------------------------------------------
+     * Land is the surface tone so the country reads as part of the page
+     * rather than a picture pasted onto it.
+     */
+    --map-land: var(--surface);
+    --map-water: var(--paper);
+
+    /* ---- Hit targets, styleguide §D --------------------------------------
+     * Three values, not one. 44 is the floor WCAG 2.2 asks for and the only
+     * number that is a rule; 56 is what PO and any finger actually get, and
+     * is therefore the default; 72 is the digibord, out of scope but costing
+     * nothing to keep. brand.minTouchTargetPx carries the floor, because that
+     * is what its name promises — see ADR-032.
+     */
+    --touch-min: 44px;
+    --touch: 56px;
+    --touch-board: 72px;
+
+    /* ---- Corner radii, styleguide §D ------------------------------------- */
+    --radius-flat: 0px; /* table, map area, practice canvas, heatmap cell */
+    --radius-field: 2px; /* input, select, tab */
+    --radius-control: 6px; /* button, message, card in VO */
+    --radius-card: 12px; /* card in PO, dialog, bottom sheet */
+    --radius-full: 999px; /* chip, label, progress bar, the dot */
+
+    /* ---- Stroke widths, styleguide §D ------------------------------------
+     * Named apart from the --line colours on purpose: --line is what a rule
+     * looks like, --stroke-* is how thick it is, and conflating them is how a
+     * 1.5px border ends up 1px on one screen.
+     */
+    --stroke-hair: 1px; /* divider, table rule */
+    --stroke-region: 1.5px; /* boundary between two map areas */
+    --stroke-active: 2px; /* icon line, active border, focus ring */
+    --stroke-answer: 3px; /* answer state */
+
+    /* ---- Elevation, styleguide §D ----------------------------------------
+     * Level 0 is no shadow at all and covers well over ninety percent: things
+     * that lie in the screen are separated by a line or a surface, not by
+     * depth. Level 1 is what hovers over it. Level 2 is what blocks it, and
+     * always sits on the scrim.
+     */
+    --shadow-1: 0 2px 6px rgb(29 34 28 / 10%);
+    --shadow-2: 0 12px 32px rgb(29 34 28 / 18%);
+    --scrim: rgb(29 34 28 / 45%);
+
+    /* ---- Type scale, styleguide §C — PO 8-12, desktop --------------------
+     * Two guises, one set of classes. The tokens switch underneath, so a
+     * component says text-h1 and never has to know which guise it is in. The
+     * guise follows the age in the child's profile, never a preference of the
+     * pupil's — and there is no age field yet, so PO is simply the default.
+     */
+    --type-score: 3.75rem; /* 60px */
+    --type-score-lh: 3.75rem; /* 60px */
+    --type-score-ls: -0.03em;
+    --type-h1: 2.5rem; /* 40px */
+    --type-h1-lh: 3rem; /* 48px */
+    --type-h1-ls: -0.02em;
+    --type-h2: 1.75rem; /* 28px */
+    --type-h2-lh: 2.25rem; /* 36px */
+    --type-h3: 1.375rem; /* 22px */
+    --type-h3-lh: 1.875rem; /* 30px */
+    --type-body: 1.25rem; /* 20px */
+    --type-body-lh: 2rem; /* 32px */
+    --type-label: 1.0625rem; /* 17px */
+    --type-label-lh: 1.5rem; /* 24px */
+    /* PO has no step below the label: metadata in PO is set at label size.
+     * The smaller step exists only in VO, where §C calls it "klein". */
+    --type-small: 1.0625rem; /* 17px */
+    --type-small-lh: 1.5rem; /* 24px */
   }
 
+  /* PO on a phone, 393-412. The heading shrinks; the reading text never does,
+   * which is the whole point of the PO scale. */
+  @media (max-width: 767px) {
+    :root {
+      --type-score: 2.75rem; /* 44px */
+      --type-score-lh: 2.75rem; /* 44px */
+      --type-h1: 1.875rem; /* 30px */
+      --type-h1-lh: 2.375rem; /* 38px */
+      --type-h2: 1.5rem; /* 24px */
+      --type-h2-lh: 1.875rem; /* 30px */
+    }
+  }
+
+  /* VO 12-16. Tokens only: nothing sets data-guise yet, because there is no
+   * age field to set it from. Written now so that adding one is a data change
+   * (§0.3 E, and the scope note in the build brief). */
+  [data-guise='vo'] {
+    --type-score: 2.75rem; /* 44px */
+    --type-score-lh: 2.75rem; /* 44px */
+    --type-h1: 1.875rem; /* 30px */
+    --type-h1-lh: 2.375rem; /* 38px */
+    --type-h2: 1.375rem; /* 22px */
+    --type-h2-lh: 1.75rem; /* 28px */
+    --type-h3: 1.125rem; /* 18px */
+    --type-h3-lh: 1.5rem; /* 24px */
+    --type-body: 1rem; /* 16px */
+    --type-body-lh: 1.5rem; /* 24px */
+    --type-label: 0.9375rem; /* 15px */
+    --type-label-lh: 1.25rem; /* 20px */
+    --type-small: 0.8125rem; /* 13px */
+    --type-small-lh: 1.125rem; /* 18px */
+  }
+
+  @media (max-width: 767px) {
+    [data-guise='vo'] {
+      --type-score: 2.125rem; /* 34px */
+      --type-score-lh: 2.125rem; /* 34px */
+      --type-h1: 1.5rem; /* 24px */
+      --type-h1-lh: 1.875rem; /* 30px */
+    }
+  }
+
+  /* ---- A module asks for its accent as a set, never as loose variables ----
+   * Order is the rail order from ADR-029. Adding an eighth module means one
+   * block here and one entry in the content, and touches no component.
+   */
+  [data-module='topo'] {
+    --accent: var(--topo);
+    --accent-text: var(--topo-text);
+    --accent-tint: var(--topo-tint);
+  }
+  [data-module='tafels'] {
+    --accent: var(--tafels);
+    --accent-text: var(--tafels-text);
+    --accent-tint: var(--tafels-tint);
+  }
+  [data-module='klok'] {
+    --accent: var(--klok);
+    --accent-text: var(--klok-text);
+    --accent-tint: var(--klok-tint);
+  }
+  [data-module='woorden'] {
+    --accent: var(--woorden);
+    --accent-text: var(--woorden-text);
+    --accent-tint: var(--woorden-tint);
+  }
+  [data-module='spelling'] {
+    --accent: var(--spelling);
+    --accent-text: var(--spelling-text);
+    --accent-tint: var(--spelling-tint);
+  }
+  [data-module='tijdvakken'] {
+    --accent: var(--tijdvakken);
+    --accent-text: var(--tijdvakken-text);
+    --accent-tint: var(--tijdvakken-tint);
+  }
+  [data-module='vlaggen'] {
+    --accent: var(--vlaggen);
+    --accent-text: var(--vlaggen-text);
+    --accent-tint: var(--vlaggen-tint);
+  }
+
+  /* ---- Dark theme, styleguide §B ----------------------------------------
+   * Not an inversion. The surfaces get lighter rather than darker, the line
+   * values are pulled up, and the semantic colours are chosen again at a
+   * higher lightness because saturated red and green are unreadable on ink.
+   *
+   * Tokens only, and no switch: the app follows the system. The design has
+   * not drawn the dark screens yet, so there is nothing here that decides a
+   * layout — redefining the same names is exactly what keeps it that way.
+   */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #0f130f; /* greener than neutral black, not #000 */
+      --surface: #1b201a; /* lighter than paper, never darker */
+      --sunken: #282d27;
+      --line: #373c36; /* 1.66:1, carries no text */
+      --line-strong: #525751; /* 2.54:1 */
+
+      --ink: #f3f4ef; /* 16.96:1 — not pure white: less halo on OLED */
+      --ink-2: #b6b8b1; /* 9.35:1 */
+      --ink-3: #91938c; /* 6.03:1 — reaches AA at 15px here, unlike in light */
+
+      /* One value per semantic in dark: each already reads as text on paper,
+       * so the text variant is the same colour rather than a second one. */
+      --good: #73c385; /* 8.81:1 */
+      --good-text: #73c385;
+      --bad: #f07f77; /* 7.15:1 */
+      --attention: #e6b55d; /* 9.94:1 — unlike in light, this one may be text */
+      --attention-text: #e6b55d;
+      --neutral: #91a3b5; /* 7.24:1 (styleguide §B says 7.66; see ADR-028) */
+
+      /* The accents keep their names and change their values, so the mapping
+       * blocks above are written once. The styleguide gives one dark value
+       * per accent and no dark tint, so the tint falls back to the dark
+       * surface: neutral rather than invented. Flagged for the designer. */
+      --topo: #70b0f1;
+      --topo-text: #70b0f1;
+      --topo-tint: var(--surface);
+
+      --tafels: #55c29d;
+      --tafels-text: #55c29d;
+      --tafels-tint: var(--surface);
+
+      --klok: #e49564; /* ADR-028, 7.84:1 on dark paper */
+      --klok-text: #e49564;
+      --klok-tint: var(--surface);
+
+      --woorden: #a79fef;
+      --woorden-text: #a79fef;
+      --woorden-tint: var(--surface);
+
+      --spelling: #d091d2;
+      --spelling-text: #d091d2;
+      --spelling-tint: var(--surface);
+
+      --tijdvakken: #b2b054;
+      --tijdvakken-text: #b2b054;
+      --tijdvakken-tint: var(--surface);
+
+      --vlaggen: #33c0c7;
+      --vlaggen-text: #33c0c7;
+      --vlaggen-tint: var(--surface);
+
+      /* Shadow weakens in dark and a lighter surface takes over the job of
+       * height: level 1 is --surface with a line, level 2 keeps its shadow
+       * and gains one. */
+      --shadow-1: 0 2px 6px rgb(0 0 0 / 24%);
+      --shadow-2: 0 12px 32px rgb(0 0 0 / 40%);
+      --scrim: rgb(0 0 0 / 45%);
+    }
+  }
+
+  /*
+   * The type scale is in rem rather than the px the styleguide writes,
+   * which renders identically at the default root size and is the only way
+   * the reader’s own text-size setting reaches it. ADR-025 dropped the
+   * reading mode and left following the system setting up to 200% as the one
+   * typographic accessibility affordance in the product; in px that promise
+   * would be silently false in every desktop browser. Spacing, hit targets,
+   * radii and stroke widths stay absolute: 44px is a measure of a fingertip.
+   *
+   * text-size-adjust only switches off the automatic inflation phones apply
+   * on rotation. It does not touch what the reader asked for.
+   */
   html {
     -webkit-text-size-adjust: 100%;
   }
@@ -120,8 +401,8 @@
     background: var(--paper);
     color: var(--ink);
     font-family: 'Source Sans 3', system-ui, sans-serif;
-    font-size: 17px;
-    line-height: 1.5;
+    font-size: var(--type-body);
+    line-height: var(--type-body-lh);
     -webkit-font-smoothing: antialiased;
   }
 
@@ -139,7 +420,7 @@
    * box rather than the shape, which draws a rectangle in the sea — so map
    * shapes thicken their own stroke instead (see .tk-shape). */
   :focus-visible {
-    outline: 2px solid var(--ink);
+    outline: var(--stroke-active) solid var(--ink);
     outline-offset: 2px;
   }
 
@@ -167,7 +448,7 @@
    * reads as a category and never competes with the question itself. */
   .tk-label {
     font-family: 'IBM Plex Mono', ui-monospace, monospace;
-    font-size: 11px;
+    font-size: 11px; /* the eyebrow, not the §C label — see fontSize.eyebrow */
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--ink-2);
@@ -176,7 +457,7 @@
 
   .tk-card {
     background: var(--paper);
-    border: 1px solid var(--line-strong);
+    border: var(--stroke-hair) solid var(--line-strong);
   }
 
   /* Min-height rather than fixed: Dutch runs longer than the English it is
@@ -189,11 +470,12 @@
     min-height: var(--touch);
     padding: 0 28px;
     border: 0;
-    border-radius: 12px;
+    border-radius: var(--radius-control);
     background: var(--ink);
     color: var(--paper);
     font-family: 'Source Sans 3', system-ui, sans-serif;
-    font-size: 20px;
+    font-size: var(--type-label);
+    line-height: var(--type-label-lh);
     font-weight: 600;
     cursor: pointer;
   }
@@ -203,7 +485,7 @@
   .tk-button-quiet {
     background: var(--paper);
     color: var(--ink);
-    border: 1px solid var(--line-strong);
+    border: var(--stroke-hair) solid var(--line-strong);
   }
 
   .tk-pill {
@@ -212,9 +494,9 @@
     min-height: 40px;
     padding: 0 14px;
     border-radius: 999px;
-    border: 1px solid var(--line-strong);
+    border: var(--stroke-hair) solid var(--line-strong);
     background: var(--paper);
-    font-size: 15px;
+    font-size: var(--type-label);
     font-weight: 600;
     color: var(--ink);
     cursor: pointer;
@@ -229,12 +511,12 @@
     min-height: var(--touch);
     width: 100%;
     padding: 12px 16px;
-    border: 1px solid var(--line-strong);
-    border-radius: 12px;
+    border: var(--stroke-hair) solid var(--line-strong);
+    border-radius: var(--radius-field);
     background: var(--paper);
     color: var(--ink);
     font: inherit;
-    font-size: 19px;
+    font-size: var(--type-body);
   }
 
   /* Map shapes. The reveal styles come straight from the design: a correct
@@ -244,7 +526,7 @@
   .tk-shape {
     fill: var(--map-land);
     stroke: var(--ink);
-    stroke-width: 1.5;
+    stroke-width: var(--stroke-region);
     cursor: pointer;
   }
   .tk-shape:hover {
@@ -259,8 +541,8 @@
    * answer colours here would teach the child that blue-ish means "so far so
    * good" before they have answered anything. */
   .tk-shape-asked {
-    fill: var(--topo-tint);
-    stroke: var(--topo);
+    fill: var(--accent-tint);
+    stroke: var(--accent);
     stroke-width: 3;
     cursor: default;
   }

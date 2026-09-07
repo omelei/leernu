@@ -86,10 +86,10 @@ export function ExploreScreen({
 
   return (
     <div className="flex h-screen flex-col bg-paper">
-      <header className="flex flex-none items-center gap-5 border-b border-line px-6 py-4">
+      <header className="flex flex-none items-center gap-6 border-b border-line px-6 py-4">
         <div className="min-w-0">
           <p className="tk-label">{t('explore.kind')}</p>
-          <h1 className="tk-display truncate text-3xl font-semibold">{set?.naam ?? ''}</h1>
+          <h1 className="tk-display truncate text-h1 font-semibold">{set?.naam ?? ''}</h1>
         </div>
 
         {chosen !== null && <SpeakButton text={spoken} />}
@@ -105,11 +105,16 @@ export function ExploreScreen({
       </p>
 
       <div className="flex min-h-0 flex-1 flex-col-reverse md:flex-row">
+        {/* 320px was w-80, which no longer exists now that the spacing scale is
+            the styleguide's nine steps. It is a layout width rather than a step
+            on that scale, and §D names no width for this column — the shell in
+            step 5 gives it a real one. Spelled out until then, so that it is a
+            decision waiting to be made and not a number that looks settled. */}
         <nav
           aria-label={t('explore.listLabel')}
-          className="flex min-h-0 flex-none flex-col border-t border-line md:w-80 md:border-r md:border-t-0"
+          className="flex min-h-0 flex-none flex-col border-t border-line md:w-[320px] md:border-r md:border-t-0"
         >
-          <p className="flex-none px-5 py-3 text-ink-2">{t('explore.hint')}</p>
+          <p className="flex-none px-6 py-3 text-ink-2">{t('explore.hint')}</p>
 
           <ul className="min-h-0 flex-1 overflow-y-auto px-3 pb-3">
             {items.map((item) => {
@@ -121,7 +126,7 @@ export function ExploreScreen({
                     aria-current={picked ? 'true' : undefined}
                     className={
                       picked
-                        ? 'w-full rounded-control border-2 border-ink bg-topo-tint px-4 py-3 text-left font-semibold'
+                        ? 'w-full rounded-control border-2 border-ink bg-accent-tint px-4 py-3 text-left font-semibold'
                         : 'w-full rounded-control border-2 border-transparent px-4 py-3 text-left'
                     }
                     onClick={() => setChosenId(picked ? null : item.id)}
@@ -157,7 +162,7 @@ export function ExploreScreen({
               <p className="text-ink-2">{t('explore.nothingChosen')}</p>
             ) : (
               <>
-                <h2 className="tk-display text-2xl font-semibold">{chosen.naam}</h2>
+                <h2 className="tk-display text-h2 font-semibold">{chosen.naam}</h2>
                 {chosen.weetje !== undefined && <p className="mt-1">{chosen.weetje}</p>}
               </>
             )}
