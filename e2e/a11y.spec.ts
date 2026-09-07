@@ -35,17 +35,21 @@ function setCard(page: Page, naam: string) {
  * Every way of practising except the default now lives on K2, so a test that
  * wants one goes through it. "Andere manieren" is on every set card and the
  * chooser has its own step 1, so which card it is opened from does not matter.
+ *
+ * The two steps are named regions, and the queries are scoped to them: the set
+ * name is on the start button as well, which is what K2 puts it there for.
  */
 async function chooseAndStart(page: Page, set: RegExp, way: RegExp) {
   await page.getByRole('button', { name: 'Andere manieren' }).first().click();
   await expect(page.getByRole('heading', { name: 'Wat wil je oefenen?' })).toBeVisible();
-  // Scoped to the two steps: the set name is on the start button too, which
-  // is exactly what K2 puts it there for.
-  await page.getByRole('region', { name: /Waarover/ }).getByRole('button', { name: set }).click();
-  await page.getByRole('region', { name: /Hoe wil je/ }).getByRole('button', { name: way }).click();
+
+  const what = page.getByRole('region', { name: /Waarover/ });
+  const how = page.getByRole('region', { name: /Hoe wil je/ });
+
+  await what.getByRole('button', { name: set }).click();
+  await how.getByRole('button', { name: way }).click();
   await page.getByRole('button', { name: /vragen$/ }).last().click();
 }
-
 test('the name screen has no violations', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: 'Wie ben jij?' })).toBeVisible();

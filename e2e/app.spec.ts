@@ -12,38 +12,56 @@ function setCard(page: Page, naam: string) {
 }
 
 /**
- * Every way of practising except the default now lives on K2, so a test that
- * wants one goes through it. "Andere manieren" is on every set card and the
- * chooser has its own step 1, so which card it is opened from does not matter.
+ * The lightning round is only offered when the clock is switched on, and it is
+ * off by default (K10). Turning it on is part of getting there, so this tests
+ * the setting as well as the round.
+ *
+ * The reload is not decoration. The preference is written to IndexedDB without
+ * being awaited, so the switch reads as on before the write has landed; coming
+ * back to the page is what proves it persisted.
  */
 async function turnTheClockOn(page: Page) {
   await page.goto('/jij');
+
   const clock = page.getByRole('button', { name: /Klok bij het oefenen/ });
   await expect(clock).toHaveAttribute('aria-pressed', 'false');
   await clock.click();
-  await expect(clock).toHaveAttribute('aria-pressed', 'true');
+
+  await page.reload();
+  await expect(page.getByRole('button', { name: /Klok bij het oefenen/ })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
 }
 
 async function startChallenge(page: Page, naam: string) {
   await page.goto('/topografie');
   await expect(page.getByRole('heading', { name: 'Wat wil je oefenen?' })).toBeVisible();
-  await page
-    .getByRole('region', { name: /Waarover/ })
-    .getByRole('button', { name: /Provincies van Nederland/ })
-    .click();
+
+  const what = page.getByRole('region', { name: /Waarover/ });
+  await what.getByRole('button', { name: /Provincies van Nederland/ }).click();
   await page.getByRole('button', { name: naam, exact: true }).click();
 }
 
+/**
+ * Every way of practising except the default now lives on K2, so a test that
+ * wants one goes through it. "Andere manieren" is on every set card and the
+ * chooser has its own step 1, so which card it is opened from does not matter.
+ *
+ * The two steps are named regions, and the queries are scoped to them: the set
+ * name is on the start button as well, which is what K2 puts it there for.
+ */
 async function chooseAndStart(page: Page, set: RegExp, way: RegExp) {
   await page.getByRole('button', { name: 'Andere manieren' }).first().click();
   await expect(page.getByRole('heading', { name: 'Wat wil je oefenen?' })).toBeVisible();
-  // Scoped to the two steps: the set name is on the start button too, which
-  // is exactly what K2 puts it there for.
-  await page.getByRole('region', { name: /Waarover/ }).getByRole('button', { name: set }).click();
-  await page.getByRole('region', { name: /Hoe wil je/ }).getByRole('button', { name: way }).click();
+
+  const what = page.getByRole('region', { name: /Waarover/ });
+  const how = page.getByRole('region', { name: /Hoe wil je/ });
+
+  await what.getByRole('button', { name: set }).click();
+  await how.getByRole('button', { name: way }).click();
   await page.getByRole('button', { name: /vragen$/ }).last().click();
 }
-
 async function signIn(page: Page, naam: string) {
   await page.goto('/');
   await page.getByPlaceholder('Je naam').fill(naam);
