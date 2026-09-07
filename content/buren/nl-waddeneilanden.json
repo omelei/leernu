@@ -1,0 +1,39 @@
+{
+  "_gegenereerd": "tools/content/build-neighbours.mjs — gegenereerd, niet met de hand bewerken.",
+  "_regel": "De dichtstbijzijnde plekken, het dichtstbij eerst.",
+  "setId": "nl-waddeneilanden",
+  "contentVersie": "2026-09-06",
+  "regel": "afstand",
+  "buren": {
+    "nl-eiland-texel": [
+      "nl-eiland-vlieland",
+      "nl-eiland-terschelling",
+      "nl-eiland-ameland",
+      "nl-eiland-schiermonnikoog"
+    ],
+    "nl-eiland-vlieland": [
+      "nl-eiland-terschelling",
+      "nl-eiland-texel",
+      "nl-eiland-ameland",
+      "nl-eiland-schiermonnikoog"
+    ],
+    "nl-eiland-terschelling": [
+      "nl-eiland-vlieland",
+      "nl-eiland-ameland",
+      "nl-eiland-texel",
+      "nl-eiland-schiermonnikoog"
+    ],
+    "nl-eiland-ameland": [
+      "nl-eiland-terschelling",
+      "nl-eiland-schiermonnikoog",
+      "nl-eiland-vlieland",
+      "nl-eiland-texel"
+    ],
+    "nl-eiland-schiermonnikoog": [
+      "nl-eiland-ameland",
+      "nl-eiland-terschelling",
+      "nl-eiland-vlieland",
+      "nl-eiland-texel"
+    ]
+  }
+}

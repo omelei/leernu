@@ -4,6 +4,12 @@
 # formatter and the pipeline permanently at odds — regenerate, and format:check
 # fails again.
 public/geo/
+# Also generated — tools/content/build-neighbours.mjs — and for the same
+# second reason: it is written indented so a reviewer can read the diff, and
+# Prettier would fill its arrays back onto one line each regeneration. What
+# guards this file is src/content/neighbours.test.ts, which is a stronger gate
+# than its indentation.
+content/buren/
 dist/
 playwright-report/
 lighthouse-report/

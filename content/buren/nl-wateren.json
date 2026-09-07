@@ -1,0 +1,51 @@
+{
+  "_gegenereerd": "tools/content/build-neighbours.mjs — gegenereerd, niet met de hand bewerken.",
+  "_regel": "De dichtstbijzijnde plekken, het dichtstbij eerst.",
+  "setId": "nl-wateren",
+  "contentVersie": "2026-09-06",
+  "regel": "afstand",
+  "buren": {
+    "nl-water-noordzee": [
+      "nl-water-oosterschelde",
+      "nl-water-markermeer",
+      "nl-water-ijsselmeer",
+      "nl-water-westerschelde",
+      "nl-water-waddenzee"
+    ],
+    "nl-water-waddenzee": [
+      "nl-water-ijsselmeer",
+      "nl-water-markermeer",
+      "nl-water-noordzee",
+      "nl-water-oosterschelde",
+      "nl-water-westerschelde"
+    ],
+    "nl-water-ijsselmeer": [
+      "nl-water-markermeer",
+      "nl-water-waddenzee",
+      "nl-water-noordzee",
+      "nl-water-oosterschelde",
+      "nl-water-westerschelde"
+    ],
+    "nl-water-markermeer": [
+      "nl-water-ijsselmeer",
+      "nl-water-waddenzee",
+      "nl-water-noordzee",
+      "nl-water-oosterschelde",
+      "nl-water-westerschelde"
+    ],
+    "nl-water-oosterschelde": [
+      "nl-water-westerschelde",
+      "nl-water-noordzee",
+      "nl-water-markermeer",
+      "nl-water-ijsselmeer",
+      "nl-water-waddenzee"
+    ],
+    "nl-water-westerschelde": [
+      "nl-water-oosterschelde",
+      "nl-water-noordzee",
+      "nl-water-markermeer",
+      "nl-water-ijsselmeer",
+      "nl-water-waddenzee"
+    ]
+  }
+}

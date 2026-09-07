@@ -1,0 +1,105 @@
+{
+  "_gegenereerd": "tools/content/build-neighbours.mjs — gegenereerd, niet met de hand bewerken.",
+  "_regel": "De dichtstbijzijnde plekken, het dichtstbij eerst.",
+  "setId": "nl-hoofdsteden",
+  "contentVersie": "2026-09-06",
+  "regel": "afstand",
+  "buren": {
+    "nl-stad-groningen": [
+      "nl-stad-assen",
+      "nl-stad-leeuwarden",
+      "nl-stad-zwolle",
+      "nl-stad-lelystad",
+      "nl-stad-arnhem",
+      "nl-stad-haarlem"
+    ],
+    "nl-stad-leeuwarden": [
+      "nl-stad-groningen",
+      "nl-stad-assen",
+      "nl-stad-zwolle",
+      "nl-stad-lelystad",
+      "nl-stad-haarlem",
+      "nl-stad-utrecht"
+    ],
+    "nl-stad-assen": [
+      "nl-stad-groningen",
+      "nl-stad-leeuwarden",
+      "nl-stad-zwolle",
+      "nl-stad-lelystad",
+      "nl-stad-arnhem",
+      "nl-stad-utrecht"
+    ],
+    "nl-stad-zwolle": [
+      "nl-stad-lelystad",
+      "nl-stad-arnhem",
+      "nl-stad-assen",
+      "nl-stad-leeuwarden",
+      "nl-stad-utrecht",
+      "nl-stad-groningen"
+    ],
+    "nl-stad-lelystad": [
+      "nl-stad-zwolle",
+      "nl-stad-utrecht",
+      "nl-stad-haarlem",
+      "nl-stad-arnhem",
+      "nl-stad-leeuwarden",
+      "nl-stad-den-bosch"
+    ],
+    "nl-stad-arnhem": [
+      "nl-stad-den-bosch",
+      "nl-stad-utrecht",
+      "nl-stad-zwolle",
+      "nl-stad-lelystad",
+      "nl-stad-haarlem",
+      "nl-stad-den-haag"
+    ],
+    "nl-stad-utrecht": [
+      "nl-stad-haarlem",
+      "nl-stad-den-bosch",
+      "nl-stad-lelystad",
+      "nl-stad-den-haag",
+      "nl-stad-arnhem",
+      "nl-stad-zwolle"
+    ],
+    "nl-stad-haarlem": [
+      "nl-stad-den-haag",
+      "nl-stad-utrecht",
+      "nl-stad-lelystad",
+      "nl-stad-den-bosch",
+      "nl-stad-arnhem",
+      "nl-stad-zwolle"
+    ],
+    "nl-stad-den-haag": [
+      "nl-stad-haarlem",
+      "nl-stad-utrecht",
+      "nl-stad-middelburg",
+      "nl-stad-den-bosch",
+      "nl-stad-lelystad",
+      "nl-stad-arnhem"
+    ],
+    "nl-stad-middelburg": [
+      "nl-stad-den-haag",
+      "nl-stad-den-bosch",
+      "nl-stad-utrecht",
+      "nl-stad-haarlem",
+      "nl-stad-maastricht",
+      "nl-stad-lelystad"
+    ],
+    "nl-stad-den-bosch": [
+      "nl-stad-utrecht",
+      "nl-stad-arnhem",
+      "nl-stad-den-haag",
+      "nl-stad-lelystad",
+      "nl-stad-haarlem",
+      "nl-stad-maastricht"
+    ],
+    "nl-stad-maastricht": [
+      "nl-stad-den-bosch",
+      "nl-stad-arnhem",
+      "nl-stad-utrecht",
+      "nl-stad-middelburg",
+      "nl-stad-den-haag",
+      "nl-stad-lelystad"
+    ]
+  }
+}

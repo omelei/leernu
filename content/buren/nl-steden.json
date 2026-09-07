@@ -1,0 +1,649 @@
+{
+  "_gegenereerd": "tools/content/build-neighbours.mjs — gegenereerd, niet met de hand bewerken.",
+  "_regel": "De dichtstbijzijnde plekken, het dichtstbij eerst.",
+  "setId": "nl-steden",
+  "contentVersie": "2026-09-06",
+  "regel": "afstand",
+  "buren": {
+    "nl-stad-amsterdam": [
+      "nl-stad-amstelveen",
+      "nl-stad-zaanstad",
+      "nl-stad-purmerend",
+      "nl-stad-beverwijk",
+      "nl-stad-heemskerk",
+      "nl-stad-almere"
+    ],
+    "nl-stad-rotterdam": [
+      "nl-stad-schiedam",
+      "nl-stad-capelle-aan-den-ijssel",
+      "nl-stad-barendrecht",
+      "nl-stad-ridderkerk",
+      "nl-stad-vlaardingen",
+      "nl-stad-delft"
+    ],
+    "nl-stad-eindhoven": [
+      "nl-stad-veldhoven",
+      "nl-stad-helmond",
+      "nl-stad-weert",
+      "nl-stad-tilburg",
+      "nl-stad-venray",
+      "nl-stad-oss"
+    ],
+    "nl-stad-tilburg": [
+      "nl-stad-oosterhout",
+      "nl-stad-breda",
+      "nl-stad-veldhoven",
+      "nl-stad-etten-leur",
+      "nl-stad-eindhoven",
+      "nl-stad-dordrecht"
+    ],
+    "nl-stad-almere": [
+      "nl-stad-huizen",
+      "nl-stad-hilversum",
+      "nl-stad-amsterdam",
+      "nl-stad-amersfoort",
+      "nl-stad-soest",
+      "nl-stad-nijkerk"
+    ],
+    "nl-stad-breda": [
+      "nl-stad-etten-leur",
+      "nl-stad-oosterhout",
+      "nl-stad-tilburg",
+      "nl-stad-dordrecht",
+      "nl-stad-roosendaal",
+      "nl-stad-zwijndrecht"
+    ],
+    "nl-stad-nijmegen": [
+      "nl-stad-wijchen",
+      "nl-stad-zevenaar",
+      "nl-stad-wageningen",
+      "nl-stad-oss",
+      "nl-stad-ede",
+      "nl-stad-veenendaal"
+    ],
+    "nl-stad-apeldoorn": [
+      "nl-stad-ede",
+      "nl-stad-barneveld",
+      "nl-stad-zutphen",
+      "nl-stad-harderwijk",
+      "nl-stad-deventer",
+      "nl-stad-nijkerk"
+    ],
+    "nl-stad-enschede": [
+      "nl-stad-hengelo",
+      "nl-stad-almelo",
+      "nl-stad-deventer",
+      "nl-stad-zutphen",
+      "nl-stad-raalte",
+      "nl-stad-hardenberg"
+    ],
+    "nl-stad-amersfoort": [
+      "nl-stad-soest",
+      "nl-stad-nijkerk",
+      "nl-stad-zeist",
+      "nl-stad-de-bilt",
+      "nl-stad-barneveld",
+      "nl-stad-hilversum"
+    ],
+    "nl-stad-zaanstad": [
+      "nl-stad-beverwijk",
+      "nl-stad-heemskerk",
+      "nl-stad-purmerend",
+      "nl-stad-amsterdam",
+      "nl-stad-alkmaar",
+      "nl-stad-amstelveen"
+    ],
+    "nl-stad-leiden": [
+      "nl-stad-katwijk",
+      "nl-stad-zoetermeer",
+      "nl-stad-alphen-aan-den-rijn",
+      "nl-stad-noordwijk",
+      "nl-stad-rijswijk",
+      "nl-stad-delft"
+    ],
+    "nl-stad-zoetermeer": [
+      "nl-stad-leiden",
+      "nl-stad-delft",
+      "nl-stad-rijswijk",
+      "nl-stad-alphen-aan-den-rijn",
+      "nl-stad-katwijk",
+      "nl-stad-capelle-aan-den-ijssel"
+    ],
+    "nl-stad-ede": [
+      "nl-stad-barneveld",
+      "nl-stad-wageningen",
+      "nl-stad-veenendaal",
+      "nl-stad-apeldoorn",
+      "nl-stad-nijkerk",
+      "nl-stad-amersfoort"
+    ],
+    "nl-stad-dordrecht": [
+      "nl-stad-zwijndrecht",
+      "nl-stad-ridderkerk",
+      "nl-stad-barendrecht",
+      "nl-stad-capelle-aan-den-ijssel",
+      "nl-stad-oosterhout",
+      "nl-stad-rotterdam"
+    ],
+    "nl-stad-alphen-aan-den-rijn": [
+      "nl-stad-leiden",
+      "nl-stad-gouda",
+      "nl-stad-zoetermeer",
+      "nl-stad-katwijk",
+      "nl-stad-woerden",
+      "nl-stad-capelle-aan-den-ijssel"
+    ],
+    "nl-stad-alkmaar": [
+      "nl-stad-purmerend",
+      "nl-stad-heemskerk",
+      "nl-stad-zaanstad",
+      "nl-stad-beverwijk",
+      "nl-stad-hoorn",
+      "nl-stad-schagen"
+    ],
+    "nl-stad-emmen": [
+      "nl-stad-hoogeveen",
+      "nl-stad-hardenberg",
+      "nl-stad-almelo",
+      "nl-stad-hengelo",
+      "nl-stad-enschede",
+      "nl-stad-raalte"
+    ],
+    "nl-stad-delft": [
+      "nl-stad-rijswijk",
+      "nl-stad-schiedam",
+      "nl-stad-vlaardingen",
+      "nl-stad-zoetermeer",
+      "nl-stad-rotterdam",
+      "nl-stad-capelle-aan-den-ijssel"
+    ],
+    "nl-stad-venlo": [
+      "nl-stad-roermond",
+      "nl-stad-venray",
+      "nl-stad-weert",
+      "nl-stad-helmond",
+      "nl-stad-sittard-geleen",
+      "nl-stad-eindhoven"
+    ],
+    "nl-stad-deventer": [
+      "nl-stad-raalte",
+      "nl-stad-zutphen",
+      "nl-stad-apeldoorn",
+      "nl-stad-almelo",
+      "nl-stad-doetinchem",
+      "nl-stad-hengelo"
+    ],
+    "nl-stad-helmond": [
+      "nl-stad-eindhoven",
+      "nl-stad-veldhoven",
+      "nl-stad-venray",
+      "nl-stad-weert",
+      "nl-stad-oss",
+      "nl-stad-wijchen"
+    ],
+    "nl-stad-oss": [
+      "nl-stad-wijchen",
+      "nl-stad-tiel",
+      "nl-stad-nijmegen",
+      "nl-stad-wageningen",
+      "nl-stad-veenendaal",
+      "nl-stad-houten"
+    ],
+    "nl-stad-amstelveen": [
+      "nl-stad-amsterdam",
+      "nl-stad-woerden",
+      "nl-stad-zaanstad",
+      "nl-stad-hilversum",
+      "nl-stad-alphen-aan-den-rijn",
+      "nl-stad-huizen"
+    ],
+    "nl-stad-purmerend": [
+      "nl-stad-alkmaar",
+      "nl-stad-zaanstad",
+      "nl-stad-hoorn",
+      "nl-stad-heemskerk",
+      "nl-stad-amsterdam",
+      "nl-stad-beverwijk"
+    ],
+    "nl-stad-hilversum": [
+      "nl-stad-de-bilt",
+      "nl-stad-huizen",
+      "nl-stad-soest",
+      "nl-stad-zeist",
+      "nl-stad-amersfoort",
+      "nl-stad-almere"
+    ],
+    "nl-stad-sittard-geleen": [
+      "nl-stad-heerlen",
+      "nl-stad-kerkrade",
+      "nl-stad-roermond",
+      "nl-stad-weert",
+      "nl-stad-venlo",
+      "nl-stad-helmond"
+    ],
+    "nl-stad-heerlen": [
+      "nl-stad-kerkrade",
+      "nl-stad-sittard-geleen",
+      "nl-stad-roermond",
+      "nl-stad-weert",
+      "nl-stad-venlo",
+      "nl-stad-helmond"
+    ],
+    "nl-stad-hengelo": [
+      "nl-stad-enschede",
+      "nl-stad-almelo",
+      "nl-stad-deventer",
+      "nl-stad-raalte",
+      "nl-stad-hardenberg",
+      "nl-stad-zutphen"
+    ],
+    "nl-stad-schiedam": [
+      "nl-stad-vlaardingen",
+      "nl-stad-rotterdam",
+      "nl-stad-delft",
+      "nl-stad-rijswijk",
+      "nl-stad-barendrecht",
+      "nl-stad-capelle-aan-den-ijssel"
+    ],
+    "nl-stad-roosendaal": [
+      "nl-stad-bergen-op-zoom",
+      "nl-stad-etten-leur",
+      "nl-stad-breda",
+      "nl-stad-oosterhout",
+      "nl-stad-dordrecht",
+      "nl-stad-zwijndrecht"
+    ],
+    "nl-stad-gouda": [
+      "nl-stad-capelle-aan-den-ijssel",
+      "nl-stad-alphen-aan-den-rijn",
+      "nl-stad-zoetermeer",
+      "nl-stad-woerden",
+      "nl-stad-ridderkerk",
+      "nl-stad-rotterdam"
+    ],
+    "nl-stad-hoorn": [
+      "nl-stad-purmerend",
+      "nl-stad-alkmaar",
+      "nl-stad-schagen",
+      "nl-stad-zaanstad",
+      "nl-stad-heemskerk",
+      "nl-stad-almere"
+    ],
+    "nl-stad-vlaardingen": [
+      "nl-stad-schiedam",
+      "nl-stad-delft",
+      "nl-stad-rotterdam",
+      "nl-stad-rijswijk",
+      "nl-stad-barendrecht",
+      "nl-stad-capelle-aan-den-ijssel"
+    ],
+    "nl-stad-almelo": [
+      "nl-stad-hengelo",
+      "nl-stad-enschede",
+      "nl-stad-raalte",
+      "nl-stad-hardenberg",
+      "nl-stad-deventer",
+      "nl-stad-zutphen"
+    ],
+    "nl-stad-bergen-op-zoom": [
+      "nl-stad-roosendaal",
+      "nl-stad-etten-leur",
+      "nl-stad-goes",
+      "nl-stad-breda",
+      "nl-stad-zwijndrecht",
+      "nl-stad-oosterhout"
+    ],
+    "nl-stad-veenendaal": [
+      "nl-stad-wageningen",
+      "nl-stad-ede",
+      "nl-stad-barneveld",
+      "nl-stad-tiel",
+      "nl-stad-amersfoort",
+      "nl-stad-nijkerk"
+    ],
+    "nl-stad-capelle-aan-den-ijssel": [
+      "nl-stad-ridderkerk",
+      "nl-stad-rotterdam",
+      "nl-stad-barendrecht",
+      "nl-stad-gouda",
+      "nl-stad-zwijndrecht",
+      "nl-stad-schiedam"
+    ],
+    "nl-stad-zeist": [
+      "nl-stad-soest",
+      "nl-stad-de-bilt",
+      "nl-stad-houten",
+      "nl-stad-amersfoort",
+      "nl-stad-nieuwegein",
+      "nl-stad-hilversum"
+    ],
+    "nl-stad-katwijk": [
+      "nl-stad-leiden",
+      "nl-stad-noordwijk",
+      "nl-stad-zoetermeer",
+      "nl-stad-alphen-aan-den-rijn",
+      "nl-stad-rijswijk",
+      "nl-stad-delft"
+    ],
+    "nl-stad-nieuwegein": [
+      "nl-stad-houten",
+      "nl-stad-de-bilt",
+      "nl-stad-zeist",
+      "nl-stad-woerden",
+      "nl-stad-soest",
+      "nl-stad-hilversum"
+    ],
+    "nl-stad-hardenberg": [
+      "nl-stad-hoogeveen",
+      "nl-stad-almelo",
+      "nl-stad-raalte",
+      "nl-stad-emmen",
+      "nl-stad-hengelo",
+      "nl-stad-deventer"
+    ],
+    "nl-stad-barneveld": [
+      "nl-stad-nijkerk",
+      "nl-stad-ede",
+      "nl-stad-veenendaal",
+      "nl-stad-amersfoort",
+      "nl-stad-apeldoorn",
+      "nl-stad-harderwijk"
+    ],
+    "nl-stad-roermond": [
+      "nl-stad-venlo",
+      "nl-stad-weert",
+      "nl-stad-sittard-geleen",
+      "nl-stad-heerlen",
+      "nl-stad-venray",
+      "nl-stad-kerkrade"
+    ],
+    "nl-stad-doetinchem": [
+      "nl-stad-zevenaar",
+      "nl-stad-zutphen",
+      "nl-stad-nijmegen",
+      "nl-stad-deventer",
+      "nl-stad-apeldoorn",
+      "nl-stad-ede"
+    ],
+    "nl-stad-rijswijk": [
+      "nl-stad-delft",
+      "nl-stad-zoetermeer",
+      "nl-stad-schiedam",
+      "nl-stad-vlaardingen",
+      "nl-stad-rotterdam",
+      "nl-stad-leiden"
+    ],
+    "nl-stad-oosterhout": [
+      "nl-stad-breda",
+      "nl-stad-tilburg",
+      "nl-stad-etten-leur",
+      "nl-stad-dordrecht",
+      "nl-stad-zwijndrecht",
+      "nl-stad-ridderkerk"
+    ],
+    "nl-stad-den-helder": [
+      "nl-stad-schagen",
+      "nl-stad-alkmaar",
+      "nl-stad-hoorn",
+      "nl-stad-purmerend",
+      "nl-stad-heemskerk",
+      "nl-stad-beverwijk"
+    ],
+    "nl-stad-hoogeveen": [
+      "nl-stad-hardenberg",
+      "nl-stad-emmen",
+      "nl-stad-raalte",
+      "nl-stad-almelo",
+      "nl-stad-kampen",
+      "nl-stad-heerenveen"
+    ],
+    "nl-stad-kampen": [
+      "nl-stad-dronten",
+      "nl-stad-harderwijk",
+      "nl-stad-raalte",
+      "nl-stad-deventer",
+      "nl-stad-apeldoorn",
+      "nl-stad-hardenberg"
+    ],
+    "nl-stad-terneuzen": [
+      "nl-stad-vlissingen",
+      "nl-stad-goes",
+      "nl-stad-bergen-op-zoom",
+      "nl-stad-roosendaal",
+      "nl-stad-etten-leur",
+      "nl-stad-breda"
+    ],
+    "nl-stad-woerden": [
+      "nl-stad-nieuwegein",
+      "nl-stad-alphen-aan-den-rijn",
+      "nl-stad-gouda",
+      "nl-stad-de-bilt",
+      "nl-stad-amstelveen",
+      "nl-stad-hilversum"
+    ],
+    "nl-stad-heerenveen": [
+      "nl-stad-hoogeveen",
+      "nl-stad-kampen",
+      "nl-stad-dronten",
+      "nl-stad-hardenberg",
+      "nl-stad-raalte",
+      "nl-stad-hoorn"
+    ],
+    "nl-stad-weert": [
+      "nl-stad-roermond",
+      "nl-stad-helmond",
+      "nl-stad-sittard-geleen",
+      "nl-stad-veldhoven",
+      "nl-stad-eindhoven",
+      "nl-stad-venlo"
+    ],
+    "nl-stad-houten": [
+      "nl-stad-nieuwegein",
+      "nl-stad-zeist",
+      "nl-stad-de-bilt",
+      "nl-stad-soest",
+      "nl-stad-tiel",
+      "nl-stad-amersfoort"
+    ],
+    "nl-stad-harderwijk": [
+      "nl-stad-nijkerk",
+      "nl-stad-dronten",
+      "nl-stad-barneveld",
+      "nl-stad-apeldoorn",
+      "nl-stad-amersfoort",
+      "nl-stad-almere"
+    ],
+    "nl-stad-barendrecht": [
+      "nl-stad-ridderkerk",
+      "nl-stad-zwijndrecht",
+      "nl-stad-rotterdam",
+      "nl-stad-capelle-aan-den-ijssel",
+      "nl-stad-schiedam",
+      "nl-stad-dordrecht"
+    ],
+    "nl-stad-zutphen": [
+      "nl-stad-deventer",
+      "nl-stad-doetinchem",
+      "nl-stad-apeldoorn",
+      "nl-stad-zevenaar",
+      "nl-stad-raalte",
+      "nl-stad-ede"
+    ],
+    "nl-stad-ridderkerk": [
+      "nl-stad-barendrecht",
+      "nl-stad-zwijndrecht",
+      "nl-stad-capelle-aan-den-ijssel",
+      "nl-stad-rotterdam",
+      "nl-stad-dordrecht",
+      "nl-stad-schiedam"
+    ],
+    "nl-stad-schagen": [
+      "nl-stad-den-helder",
+      "nl-stad-alkmaar",
+      "nl-stad-hoorn",
+      "nl-stad-purmerend",
+      "nl-stad-heemskerk",
+      "nl-stad-beverwijk"
+    ],
+    "nl-stad-soest": [
+      "nl-stad-zeist",
+      "nl-stad-amersfoort",
+      "nl-stad-de-bilt",
+      "nl-stad-hilversum",
+      "nl-stad-huizen",
+      "nl-stad-nijkerk"
+    ],
+    "nl-stad-veldhoven": [
+      "nl-stad-eindhoven",
+      "nl-stad-helmond",
+      "nl-stad-weert",
+      "nl-stad-tilburg",
+      "nl-stad-oss",
+      "nl-stad-venray"
+    ],
+    "nl-stad-kerkrade": [
+      "nl-stad-heerlen",
+      "nl-stad-sittard-geleen",
+      "nl-stad-roermond",
+      "nl-stad-weert",
+      "nl-stad-venlo",
+      "nl-stad-venray"
+    ],
+    "nl-stad-noordwijk": [
+      "nl-stad-katwijk",
+      "nl-stad-leiden",
+      "nl-stad-alphen-aan-den-rijn",
+      "nl-stad-zoetermeer",
+      "nl-stad-amstelveen",
+      "nl-stad-rijswijk"
+    ],
+    "nl-stad-vlissingen": [
+      "nl-stad-goes",
+      "nl-stad-terneuzen",
+      "nl-stad-bergen-op-zoom",
+      "nl-stad-roosendaal",
+      "nl-stad-vlaardingen",
+      "nl-stad-etten-leur"
+    ],
+    "nl-stad-zevenaar": [
+      "nl-stad-doetinchem",
+      "nl-stad-nijmegen",
+      "nl-stad-zutphen",
+      "nl-stad-wijchen",
+      "nl-stad-wageningen",
+      "nl-stad-ede"
+    ],
+    "nl-stad-zwijndrecht": [
+      "nl-stad-ridderkerk",
+      "nl-stad-dordrecht",
+      "nl-stad-barendrecht",
+      "nl-stad-capelle-aan-den-ijssel",
+      "nl-stad-rotterdam",
+      "nl-stad-schiedam"
+    ],
+    "nl-stad-nijkerk": [
+      "nl-stad-amersfoort",
+      "nl-stad-barneveld",
+      "nl-stad-soest",
+      "nl-stad-harderwijk",
+      "nl-stad-veenendaal",
+      "nl-stad-huizen"
+    ],
+    "nl-stad-venray": [
+      "nl-stad-venlo",
+      "nl-stad-helmond",
+      "nl-stad-roermond",
+      "nl-stad-eindhoven",
+      "nl-stad-weert",
+      "nl-stad-nijmegen"
+    ],
+    "nl-stad-etten-leur": [
+      "nl-stad-breda",
+      "nl-stad-oosterhout",
+      "nl-stad-roosendaal",
+      "nl-stad-dordrecht",
+      "nl-stad-bergen-op-zoom",
+      "nl-stad-zwijndrecht"
+    ],
+    "nl-stad-de-bilt": [
+      "nl-stad-zeist",
+      "nl-stad-hilversum",
+      "nl-stad-soest",
+      "nl-stad-nieuwegein",
+      "nl-stad-houten",
+      "nl-stad-amersfoort"
+    ],
+    "nl-stad-dronten": [
+      "nl-stad-kampen",
+      "nl-stad-harderwijk",
+      "nl-stad-almere",
+      "nl-stad-nijkerk",
+      "nl-stad-apeldoorn",
+      "nl-stad-barneveld"
+    ],
+    "nl-stad-beverwijk": [
+      "nl-stad-heemskerk",
+      "nl-stad-zaanstad",
+      "nl-stad-alkmaar",
+      "nl-stad-purmerend",
+      "nl-stad-amsterdam",
+      "nl-stad-amstelveen"
+    ],
+    "nl-stad-tiel": [
+      "nl-stad-oss",
+      "nl-stad-veenendaal",
+      "nl-stad-houten",
+      "nl-stad-wageningen",
+      "nl-stad-wijchen",
+      "nl-stad-zeist"
+    ],
+    "nl-stad-wijchen": [
+      "nl-stad-nijmegen",
+      "nl-stad-oss",
+      "nl-stad-wageningen",
+      "nl-stad-tiel",
+      "nl-stad-veenendaal",
+      "nl-stad-zevenaar"
+    ],
+    "nl-stad-huizen": [
+      "nl-stad-hilversum",
+      "nl-stad-almere",
+      "nl-stad-soest",
+      "nl-stad-amersfoort",
+      "nl-stad-de-bilt",
+      "nl-stad-nijkerk"
+    ],
+    "nl-stad-wageningen": [
+      "nl-stad-veenendaal",
+      "nl-stad-ede",
+      "nl-stad-wijchen",
+      "nl-stad-nijmegen",
+      "nl-stad-barneveld",
+      "nl-stad-tiel"
+    ],
+    "nl-stad-goes": [
+      "nl-stad-vlissingen",
+      "nl-stad-terneuzen",
+      "nl-stad-bergen-op-zoom",
+      "nl-stad-roosendaal",
+      "nl-stad-vlaardingen",
+      "nl-stad-etten-leur"
+    ],
+    "nl-stad-heemskerk": [
+      "nl-stad-beverwijk",
+      "nl-stad-zaanstad",
+      "nl-stad-alkmaar",
+      "nl-stad-purmerend",
+      "nl-stad-amsterdam",
+      "nl-stad-amstelveen"
+    ],
+    "nl-stad-raalte": [
+      "nl-stad-deventer",
+      "nl-stad-almelo",
+      "nl-stad-zutphen",
+      "nl-stad-kampen",
+      "nl-stad-hardenberg",
+      "nl-stad-apeldoorn"
+    ]
+  }
+}

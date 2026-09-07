@@ -1817,6 +1817,49 @@ should be its own decision with its own record.
 
 ---
 
+## ADR-047 — Two corrections the neighbour build forced
+
+**Status:** accepted — 2026-09-08. Supersedes the classification in ADR-036;
+the rest of ADR-036 stands.
+
+### Context
+
+ADR-036 was written ahead of the build and split the sets two ways: provinces
+and waters were areas that share edges, everything else was points. Building it
+turned up two things the record had wrong.
+
+The waters are not areas. ADR-019 already decided they are points, because no
+licensed polygon source exists for them — `build-waters.mjs` ships six
+coordinates, verified to fall outside all twelve provinces. So provinces are
+the only areas we have, and the area rule has exactly one set.
+
+And a list of borders alone is not enough to ask a question with. Zeeland and
+Limburg border two provinces each, and multiple choice needs three wrong
+answers. Two of the twelve provinces would have been unaskable.
+
+### Decision
+
+The waters are built with the distance rule, like the other point sets.
+
+For areas the list is borders first, then the nearest of the rest. The order
+carries the difference: everything that shares a boundary comes before anything
+that merely lies close, so a caller taking the first three gets borders
+wherever there are three.
+
+### Consequences
+
+The second ring is a weaker distractor than a border, and for Zeeland and
+Limburg that is what a question will use. It is still a plausible mistake and
+never the other end of the country, which is the property the whole exercise is
+for.
+
+`neighbours.test.ts` pins a handful of facts about the Netherlands — Groningen
+touches two provinces, Zeeland does not touch Limburg, Gelderland touches six.
+The structural checks around them would all pass on a list built from the wrong
+geometry; these are the ones that would not.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because

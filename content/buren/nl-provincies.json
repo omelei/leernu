@@ -1,0 +1,105 @@
+{
+  "_gegenereerd": "tools/content/build-neighbours.mjs — gegenereerd, niet met de hand bewerken.",
+  "_regel": "Gebieden die een grens delen, de langste grens eerst, daarna de dichtstbijzijnde.",
+  "setId": "nl-provincies",
+  "contentVersie": "2026-09-05",
+  "regel": "grens",
+  "buren": {
+    "nl-prov-groningen": [
+      "nl-prov-drenthe",
+      "nl-prov-fryslan",
+      "nl-prov-overijssel",
+      "nl-prov-flevoland",
+      "nl-prov-gelderland",
+      "nl-prov-noord-holland"
+    ],
+    "nl-prov-fryslan": [
+      "nl-prov-groningen",
+      "nl-prov-overijssel",
+      "nl-prov-drenthe",
+      "nl-prov-flevoland",
+      "nl-prov-noord-holland",
+      "nl-prov-gelderland"
+    ],
+    "nl-prov-drenthe": [
+      "nl-prov-overijssel",
+      "nl-prov-groningen",
+      "nl-prov-fryslan",
+      "nl-prov-flevoland",
+      "nl-prov-gelderland",
+      "nl-prov-noord-holland"
+    ],
+    "nl-prov-overijssel": [
+      "nl-prov-gelderland",
+      "nl-prov-drenthe",
+      "nl-prov-fryslan",
+      "nl-prov-flevoland",
+      "nl-prov-utrecht",
+      "nl-prov-groningen"
+    ],
+    "nl-prov-flevoland": [
+      "nl-prov-overijssel",
+      "nl-prov-fryslan",
+      "nl-prov-gelderland",
+      "nl-prov-noord-holland",
+      "nl-prov-utrecht",
+      "nl-prov-drenthe"
+    ],
+    "nl-prov-gelderland": [
+      "nl-prov-utrecht",
+      "nl-prov-overijssel",
+      "nl-prov-noord-brabant",
+      "nl-prov-limburg",
+      "nl-prov-zuid-holland",
+      "nl-prov-flevoland"
+    ],
+    "nl-prov-utrecht": [
+      "nl-prov-gelderland",
+      "nl-prov-noord-holland",
+      "nl-prov-zuid-holland",
+      "nl-prov-flevoland",
+      "nl-prov-noord-brabant",
+      "nl-prov-overijssel"
+    ],
+    "nl-prov-noord-holland": [
+      "nl-prov-utrecht",
+      "nl-prov-zuid-holland",
+      "nl-prov-flevoland",
+      "nl-prov-fryslan",
+      "nl-prov-gelderland",
+      "nl-prov-overijssel"
+    ],
+    "nl-prov-zuid-holland": [
+      "nl-prov-utrecht",
+      "nl-prov-noord-holland",
+      "nl-prov-noord-brabant",
+      "nl-prov-gelderland",
+      "nl-prov-zeeland",
+      "nl-prov-flevoland"
+    ],
+    "nl-prov-zeeland": [
+      "nl-prov-noord-brabant",
+      "nl-prov-zuid-holland",
+      "nl-prov-utrecht",
+      "nl-prov-noord-holland",
+      "nl-prov-limburg",
+      "nl-prov-gelderland"
+    ],
+    "nl-prov-noord-brabant": [
+      "nl-prov-gelderland",
+      "nl-prov-limburg",
+      "nl-prov-zuid-holland",
+      "nl-prov-zeeland",
+      "nl-prov-utrecht",
+      "nl-prov-flevoland"
+    ],
+    "nl-prov-limburg": [
+      "nl-prov-noord-brabant",
+      "nl-prov-gelderland",
+      "nl-prov-utrecht",
+      "nl-prov-zuid-holland",
+      "nl-prov-overijssel",
+      "nl-prov-zeeland"
+    ]
+  }
+}

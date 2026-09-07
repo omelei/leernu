@@ -78,10 +78,13 @@ The pipeline is dependency-free on purpose ([ADR-018](docs/DECISIONS.md)), so it
 runs anywhere and its output can be checked before anyone sees it:
 
 ```bash
-node tools/content/fetch-source.mjs   # CBS geodata, into content/geo/_source
-node tools/content/build-geo.mjs      # provinces, three detail levels
-node tools/content/build-cities.mjs   # the twelve capitals as points
+node tools/content/fetch-source.mjs      # CBS geodata, into content/geo/_source
+node tools/content/build-geo.mjs         # provinces, three detail levels
+node tools/content/build-cities.mjs      # the twelve capitals as points
+node tools/content/build-neighbours.mjs  # who lies next to whom, into content/buren
 ```
+
+The last one runs after the others, because it reads what they write.
 
 To look at the result without a build, serve the project root and open
 `tools/content/preview.html`:
