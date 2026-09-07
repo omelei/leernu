@@ -49,6 +49,11 @@ export default function App() {
 
   // The tab bar's four destinations, two of which exist. Mapping them here
   // rather than inside the Shell keeps the frame ignorant of what a screen is.
+  const goHome = () => {
+    go({ name: 'home' });
+    setScreen({ name: 'home' });
+  };
+
   const goTo = (id: Destination['id']) => {
     const next: Route =
       id === 'onthouden'
@@ -87,7 +92,7 @@ export default function App() {
   // hidden inside them — there is nothing in the document to tab into, and
   // nothing that can be forgotten on the way back out.
   if (screen.name === 'explore') {
-    return <ExploreScreen setId={screen.setId} onHome={() => setScreen({ name: 'home' })} />;
+    return <ExploreScreen setId={screen.setId} onHome={goHome} />;
   }
 
   if (screen.name === 'practice') {
@@ -96,7 +101,7 @@ export default function App() {
         key={`${screen.setId}-${screen.practiceMode}-${visit}`}
         setId={screen.setId}
         practiceMode={screen.practiceMode}
-        onHome={() => setScreen({ name: 'home' })}
+        onHome={goHome}
         onAgain={() => setVisit(visit + 1)}
       />
     );

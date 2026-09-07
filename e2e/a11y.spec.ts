@@ -41,14 +41,8 @@ async function chooseAndStart(page: Page, set: RegExp, way: RegExp) {
   await expect(page.getByRole('heading', { name: 'Wat wil je oefenen?' })).toBeVisible();
   // Scoped to the two steps: the set name is on the start button too, which
   // is exactly what K2 puts it there for.
-  await page
-    .getByRole('region', { name: /Waarover/ })
-    .getByRole('button', { name: set })
-    .click();
-  await page
-    .getByRole('region', { name: /Hoe wil je/ })
-    .getByRole('button', { name: way })
-    .click();
+  await page.getByRole('region', { name: /Waarover/ }).getByRole('button', { name: set }).click();
+  await page.getByRole('region', { name: /Hoe wil je/ }).getByRole('button', { name: way }).click();
   await page.getByRole('button', { name: /vragen$/ }).last().click();
 }
 
