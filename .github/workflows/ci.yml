@@ -56,6 +56,16 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 7
+      # Spec section 8: the screens at every size the app claims to work at.
+      # Uploaded separately from the report because these are meant to be
+      # looked at, not dug out of a zip — and because nobody here owns an
+      # Android phone or an iPad to look at them on.
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: screenshots
+          path: screenshots/
+          retention-days: 7
 
   lighthouse:
     runs-on: ubuntu-latest

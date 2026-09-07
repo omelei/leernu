@@ -41,6 +41,7 @@ const SET_NAME_KEY: Record<SetId, TranslationKey> = {
 
 const MODE_NAME_KEY: Record<PracticeMode, TranslationKey> = {
   'wijs-aan': 'mode.wijs-aan',
+  meerkeuze: 'mode.meerkeuze',
   'hoe-heet-dit': 'mode.hoe-heet-dit',
   bliksemronde: 'mode.bliksemronde',
   overleven: 'mode.overleven',

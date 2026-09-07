@@ -59,5 +59,11 @@ export interface ItemState {
   readonly foutCount: number;
 }
 
-/** The modes that exist. Sleepronde was dropped, not deferred: ADR-023. */
-export type ModeId = 'wijs-aan' | 'hoe-heet-dit' | 'bliksemronde' | 'overleven' | 'ontdekken';
+/**
+ * The modes that exist. Sleepronde was dropped, not deferred: ADR-023.
+ *
+ * Wider than `PracticeMode`, and deliberately: exploring is not a way of
+ * answering, but a session of it is still a session and the store records it.
+ */
+export type ModeId =
+  'wijs-aan' | 'meerkeuze' | 'hoe-heet-dit' | 'bliksemronde' | 'overleven' | 'ontdekken';

@@ -9,6 +9,9 @@ Thumbs.db
 desktop.ini
 playwright-report/
 test-results/
+# Written by e2e/screens.spec.ts on every run, and uploaded by CI. Committing
+# them would put a few megabytes of PNG in every diff to say nothing.
+screenshots/
 .vite/
 coverage/
 
