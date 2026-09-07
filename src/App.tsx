@@ -7,6 +7,9 @@ import { Gallery } from '@/design/Gallery';
 import { Shell } from '@/features/shell/Shell';
 import { RetentionScreen } from '@/features/retention/RetentionScreen';
 import type { Destination } from '@/features/shell/modules';
+import { useRoute } from '@/features/shell/useRoute';
+import { ModuleSoon } from '@/features/shell/ModuleSoon';
+import type { Route } from '@/features/shell/routes';
 import { getProfile } from '@/store/profile';
 import type { PracticeMode, SetId } from '@/features/practice/useRound';
 import type { ProfileRecord } from '@/store/db';
@@ -31,13 +34,15 @@ type Boot = { status: 'loading' } | { status: 'ready'; profile: ProfileRecord | 
 export default function App() {
   const [boot, setBoot] = useState<Boot>({ status: 'loading' });
   const [screen, setScreen] = useState<Screen>({ name: 'home' });
-
   const [visit, setVisit] = useState(0);
+  const [route, go] = useRoute();
 
   // The tab bar's four destinations, two of which exist. Mapping them here
   // rather than inside the Shell keeps the frame ignorant of what a screen is.
   const goTo = (id: Destination['id']) => {
-    setScreen(id === 'onthouden' ? { name: 'retention' } : { name: 'home' });
+    const next: Route = id === 'onthouden' ? { name: 'retention' } : { name: 'home' };
+    go(next);
+    setScreen(next.name === 'retention' ? { name: 'retention' } : { name: 'home' });
   };
 
   useEffect(() => {
@@ -81,7 +86,18 @@ export default function App() {
     );
   }
 
-  if (screen.name === 'retention') {
+  // A module the plan has and the product does not. Reached only by typing the
+  // address: ADR-037 keeps it out of the rail, because a rail entry is an offer
+  // and this is an answer to a question the child asked.
+  if (route.name === 'soon') {
+    return (
+      <Shell onNavigate={goTo}>
+        <ModuleSoon module={route.module} onHome={() => go({ name: 'home' })} />
+      </Shell>
+    );
+  }
+
+  if (route.name === 'retention' || screen.name === 'retention') {
     return (
       <Shell current="onthouden" onNavigate={goTo}>
         <RetentionScreen />

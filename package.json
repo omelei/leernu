@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build && node tools/report-bundle-size.mjs",
+    "build": "vite build && node tools/spa-fallback.mjs && node tools/report-bundle-size.mjs",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",

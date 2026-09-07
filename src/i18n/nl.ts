@@ -68,6 +68,12 @@ export const nl = {
   'home.testSet': 'Datum instellen',
   'home.testChange': 'Datum wijzigen',
 
+  // Een module die het plan wel heeft en het product nog niet. Alleen te
+  // bereiken door het adres te typen; geen datum, want een datum die we missen
+  // is erger dan geen datum.
+  'soon.body': 'Deze module bestaat nog niet. We beginnen bij topografie.',
+  'soon.action': 'Naar topografie',
+
   // Item status, K9. Four states, each with a shape as well as a word — and
   // none of them green, because green is an answer state and would tell a
   // child they had just got something right.
