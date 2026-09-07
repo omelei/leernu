@@ -971,7 +971,6 @@ thing.
 
 ---
 
-
 ## ADR-032 — Three hit sizes, and 44 is the one that is a rule
 
 **Status:** accepted — styleguide §D, 2026-09-07.
@@ -1157,7 +1156,7 @@ label points and no relationships at all.
 And "borders on" is not one idea. Provinces and waters are areas and share
 edges. Cities, capitals and the Wadden islands are points, and no two of them
 share an edge — for those the mistake a child makes is about a place that is
-*near*, not one that touches.
+_near_, not one that touches.
 
 ### Decision
 
