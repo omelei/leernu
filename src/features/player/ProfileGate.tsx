@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { brand } from '@/config/brand';
+import { Wordmark } from '@/components/Wordmark';
 import { t } from '@/i18n';
 import { createProfile } from '@/store/profile';
 import type { ProfileRecord } from '@/store/db';
@@ -28,8 +29,8 @@ export function ProfileGate({ onReady }: { readonly onReady: (profile: ProfileRe
   return (
     <main className="mx-auto flex min-h-screen max-w-xl flex-col justify-center gap-8 p-6">
       <div>
-        <p className="tk-display text-h2 font-bold">{brand.name}</p>
-        <p className="text-ink-2">{brand.tagline}</p>
+        <Wordmark size={28} clearSpace={false} />
+        <p className="mt-1 text-ink-2">{brand.slogan}</p>
       </div>
 
       <form

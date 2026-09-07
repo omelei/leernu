@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { countMastered, retentionAfterRound, setRetention, type ItemState } from '@/game-core';
 import { loadItemSets } from '@/content/loadSets';
 import { t, type TranslationKey } from '@/i18n';
-import { brand } from '@/config/brand';
+import { Wordmark } from '@/components/Wordmark';
 import { loadItemStates } from '@/store/progress';
 import { loadStreak, HOLIDAYS } from '@/store/streakStore';
 import { currentStreak, levelFor, levelProgress, type StreakState } from '@/game-core';
@@ -78,7 +78,7 @@ export function HomeScreen({
   return (
     <main className="mx-auto flex min-h-screen max-w-2xl flex-col gap-8 p-6">
       <header className="flex items-baseline gap-4">
-        <p className="tk-display text-h2 font-bold">{brand.name}</p>
+        <Wordmark size={28} clearSpace={false} />
         <StreakBadge state={streak} />
         <LevelBadge xp={profile.xp} />
       </header>

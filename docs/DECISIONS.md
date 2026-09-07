@@ -1217,6 +1217,78 @@ Nothing here decides what the rail does at seven modules — six visible plus
 
 ---
 
+## ADR-038 — The mark is one component, and the delivered SVGs are not used in the app
+
+**Status:** accepted — 2026-09-07.
+
+### Context
+
+The dot is the logo, the app icon, the highlight on the map, the progress bar,
+the retention indicator, the item status and the shape of the "Bijna" answer
+state. Fifteen SVGs in `docs/Logo` cover the static uses.
+
+The build brief expected those files to pull Space Grotesk from Google Fonts
+with an `@import`, and to be a ship-blocker on that ground. **They do not.**
+There is no font reference of any kind in any of the fifteen — checked. The
+privacy claim is safe and was never at risk here.
+
+The real flaw is different and smaller. The four wordmark files set the name as
+`<text font-family="Space Grotesk, sans-serif">` with nothing attached and
+nothing embedded, so they render correctly only on a machine that happens to
+have the face installed and fall back to whatever sans-serif is to hand
+everywhere else. That is a portability problem, not a privacy one.
+
+### Decision
+
+One component, `Dot`, with its arithmetic in `src/design/dotGeometry.ts` so it
+can be pinned in a test. `Wordmark` composes it with live text in the
+self-hosted face, which has neither problem: no request to make, and no
+dependence on what the reader has installed.
+
+The delivered SVGs are not used in the app. `public/favicon.svg` is the mark
+from `leer-nu-favicon-32.svg` with its C2PA metadata stripped, since a favicon
+cannot be a React component.
+
+The geometry is pinned against the artefacts rather than against the prose,
+because the two disagree twice and the drawings are what the logo actually is:
+
+- §A says the dot is 41% of the **x-height**. Every drawing puts it at 41% of
+  the **font size** — 36 at 88, 26 at 64, 41 at 100.
+- The styleguide's canvas samples show whole-pixel rings, but only because a
+  CSS border cannot be fractional. The delivered files never round: a 41px dot
+  carries a 3.417px ring, which is 41/12.
+
+`dotGeometry.test.ts` reproduces seven delivered files to three decimals. The
+mark can no longer drift without a test saying so.
+
+### Consequences
+
+Three things for the designer, none of them blocking:
+
+1. **The three coloured merktekens should not exist.** `leer-nu-merkteken-topo`,
+   `-vlaggen` and `-woorden` are the mark in a module accent, and the logo
+   documentation says in as many words that there are no module variants and no
+   coloured marks. They are not used; deleting them is the owner's call.
+2. **The app icons skip the 10% negative correction.** The negative wordmark
+   (3.758 against 3.417) and the paper merkteken (8.8 against 8) both apply it,
+   to four decimals, and the documentation states it for the paper merkteken
+   outright. The three icon files use a plain twelfth despite also being paper
+   on ink.
+3. **§A contradicts itself on colour.** Its misuse panel says "only the dot may
+   be coloured, and only within a module", while the paragraph above it says the
+   dot never takes a module colour. The rest of the styleguide, the logo
+   documentation and business plan v6 all agree on never; the misuse caption is
+   the odd one out.
+
+The wordmark SVG set still wants outlining before it goes anywhere external —
+for the fallback, not for a request.
+
+The 72px minimum width is documented on the component and not enforced, because
+enforcing it means measuring rendered text. At the sizes it is called with today
+it is not close.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because
