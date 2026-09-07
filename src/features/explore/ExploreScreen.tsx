@@ -105,14 +105,18 @@ export function ExploreScreen({
       </p>
 
       <div className="flex min-h-0 flex-1 flex-col-reverse md:flex-row">
-        {/* 320px was w-80, which no longer exists now that the spacing scale is
-            the styleguide's nine steps. It is a layout width rather than a step
-            on that scale, and §D names no width for this column — the shell in
-            step 5 gives it a real one. Spelled out until then, so that it is a
-            decision waiting to be made and not a number that looks settled. */}
+        {/* On a phone the list gets half the screen and scrolls inside it.
+            It used to be flex-none, so its height came from its own contents —
+            eighty cities in a container that could not grow — and the buttons
+            ended up somewhere a thumb could not reach and a test could not
+            click. Beside the map there is room for a column, so from md it goes
+            back to a fixed 320.
+
+            320 is still a layout width rather than a step on §D's scale, which
+            names none for this column. Spelled out so it stays a decision. */}
         <nav
           aria-label={t('explore.listLabel')}
-          className="flex min-h-0 flex-none flex-col border-t border-line md:w-[320px] md:border-r md:border-t-0"
+          className="flex min-h-0 flex-1 flex-col border-t border-line md:w-[320px] md:flex-none md:border-r md:border-t-0"
         >
           <p className="flex-none px-6 py-3 text-ink-2">{t('explore.hint')}</p>
 
@@ -139,7 +143,10 @@ export function ExploreScreen({
           </ul>
         </nav>
 
-        <main className="flex min-h-0 flex-1 flex-col">
+        {/* Half the screen on a phone, all of what is left beside the list on
+            anything wider. Bounded rather than greedy: a map that takes the
+            whole height leaves the list with none. */}
+        <main className="flex min-h-0 flex-none basis-1/2 flex-col md:flex-1 md:basis-auto">
           <div className="flex min-h-0 flex-1 items-center justify-center p-3">
             <MapCanvas
               background={geo}

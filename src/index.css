@@ -417,6 +417,13 @@
     font-size: var(--type-body);
     line-height: var(--type-body-lh);
     -webkit-font-smoothing: antialiased;
+    /* At 200% text a single long word can be wider than the column it is in,
+     * and the page then scrolls sideways — which is the one failure mode that
+     * makes a screen unusable rather than merely cramped. "Waddeneilanden" at
+     * twice the size is wider than a phone. Breaking inside a word is ugly and
+     * losing the screen is worse, and ADR-025 made following the reader's text
+     * size the only typographic affordance left in the product. */
+    overflow-wrap: break-word;
   }
 
   h1,

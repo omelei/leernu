@@ -2,18 +2,6 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 
 /**
- * Screens that do not have a phone layout yet.
- *
- * Step 5 added the 393 and 412 projects; step 6 rebuilds these screens for
- * them. Running them at phone width today tests something already known to be
- * unfinished, so they are marked outstanding rather than skipped quietly: a
- * fixme shows up in the report every run, where a skip disappears.
- *
- * Take the fixme away, do not weaken the assertion.
- */
-const PHONES = ['iphone', 'android'];
-
-/**
  * Accessibility, checked on the screens Lighthouse cannot reach.
  *
  * Lighthouse loads one URL and scores it. This product's hardest screen is
@@ -138,12 +126,7 @@ test('a keyboard reaches the map and can answer with it', async ({ page }) => {
  * beside a map that is itself a set of controls — so it is the one where a
  * duplicate accessible name or an unlabelled region is most likely to appear.
  */
-test('explore has no violations, empty or with something chosen', async ({ page }, testInfo) => {
-  // Explore stacks its list under the map on a narrow screen and the list ends
-  // up with almost no height, which axe sees and a thumb would too. K3 and the
-  // explore screen get their phone layout in step 6.
-  test.fixme(PHONES.includes(testInfo.project.name), 'explore has no phone layout yet');
-
+test('explore has no violations, empty or with something chosen', async ({ page }) => {
   await signIn(page, 'Tess');
   await setCard(page, 'Steden van Nederland').getByRole('button', { name: 'Ontdek' }).click();
 

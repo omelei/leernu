@@ -72,7 +72,7 @@ export function ChooseRoundScreen({
 
           const ids = set.items.map((item) => item.id);
           const known = states ?? new Map<string, ItemState>();
-          const mastered = countMastered(ids, known);
+          const mastered = countMastered(known, ids);
           const due = ids.filter((itemId) => {
             const state = known.get(itemId);
             return state ? isDue(state, now) : false;
