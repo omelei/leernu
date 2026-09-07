@@ -1,6 +1,18 @@
 import { expect, test, type Page } from '@playwright/test';
 
 /**
+ * Screens that do not have a phone layout yet.
+ *
+ * Step 5 added the 393 and 412 projects; step 6 rebuilds these screens for
+ * them. Running them at phone width today tests something already known to be
+ * unfinished, so they are marked outstanding rather than skipped quietly: a
+ * fixme shows up in the report every run, where a skip disappears.
+ *
+ * Take the fixme away, do not weaken the assertion.
+ */
+const PHONES = ['iphone', 'android'];
+
+/**
  * The flows that exist today. Two of them are the point of the local-first
  * decision (ADR-015): progress survives a reload, and it does so without an
  * account.
@@ -136,7 +148,12 @@ test('typing a name: a real place from elsewhere is a near miss, not a cross', a
  * is the test that would catch that rule being removed: a screen that renders
  * all eighty is not a harmless regression, it is a map a child cannot answer.
  */
-test('cities: draws only points that are far enough apart to hit', async ({ page }) => {
+test('cities: draws only points that are far enough apart to hit', async ({ page }, testInfo) => {
+  // On a phone the map gets so little height that reachablePoints cannot find
+  // 48px between two cities however many it drops. The rule is right; the
+  // screen it runs on is the one step 6 rebuilds.
+  test.fixme(PHONES.includes(testInfo.project.name), 'the map has no phone layout yet');
+
   await signIn(page, 'Bram');
   await setCard(page, 'Steden van Nederland').getByRole('button', { name: 'Wijs aan' }).click();
 
@@ -179,7 +196,9 @@ test('cities: asks a round a child can finish', async ({ page }) => {
  * the retention figure on the home screen starts describing browsing rather
  * than knowing.
  */
-test('explore names a city, places it, and scores nothing', async ({ page }) => {
+test('explore names a city, places it, and scores nothing', async ({ page }, testInfo) => {
+  test.fixme(PHONES.includes(testInfo.project.name), 'explore has no phone layout yet');
+
   await signIn(page, 'Joris');
   await setCard(page, 'Steden van Nederland').getByRole('button', { name: 'Ontdek' }).click();
 

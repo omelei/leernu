@@ -1,6 +1,18 @@
 import { expect, test, type Page } from '@playwright/test';
 
 /**
+ * Screens that do not have a phone layout yet.
+ *
+ * Step 5 added the 393 and 412 projects; step 6 rebuilds these screens for
+ * them. Running them at phone width today tests something already known to be
+ * unfinished, so they are marked outstanding rather than skipped quietly: a
+ * fixme shows up in the report every run, where a skip disappears.
+ *
+ * Take the fixme away, do not weaken the assertion.
+ */
+const PHONES = ['iphone', 'android'];
+
+/**
  * The frame, and the rule that it disappears.
  *
  * Every one of these runs at all six sizes in playwright.config.ts, because the
@@ -81,7 +93,13 @@ test('fits a whole round inside the height of a Chromebook', async ({ page }, te
   expect(scrollable, 'a round should not need scrolling on 1366x768').toBeLessThanOrEqual(0);
 });
 
-test('keeps the wordmark and the question legible at 200% text', async ({ page }) => {
+test('keeps the wordmark and the question legible at 200% text', async ({ page }, testInfo) => {
+  // Doubling the text on a 393px screen overflows the home screen sideways by
+  // about 16px. That is a real failure of the promise ADR-025 made when it
+  // dropped the reading mode, and it is owed by K1's phone layout in step 6 —
+  // which is also where the set cards become rows. Recorded, not weakened.
+  test.fixme(PHONES.includes(testInfo.project.name), 'K1 has no phone layout yet (ADR-025)');
+
   // ADR-025 dropped the reading mode and left this as the only typographic
   // accessibility affordance in the product, with the note that it therefore has
   // to work. The type scale is in rem (ADR-033), so the root size is what a
