@@ -12,6 +12,7 @@ import {
   type SetId,
 } from '@/features/practice/useRound';
 import { BUILT_WAYS } from './modes';
+import { usePreferences } from '@/features/player/settings';
 
 /**
  * K2, "kies je ronde": two numbered steps, and the numbers are load-bearing.
@@ -44,6 +45,7 @@ export function ChooseRoundScreen({
   const [states, setStates] = useState<Map<string, ItemState> | null>(null);
   const [setId, setSetId] = useState<SetId>('nl-provincies');
   const [way, setWay] = useState<string>('wijs-aan');
+  const prefs = usePreferences();
 
   useEffect(() => {
     void loadItemStates().then(setStates);
@@ -127,7 +129,7 @@ export function ChooseRoundScreen({
             beside the four ways would say they were a fifth way to learn it. */}
         <h2 className="tk-label">{t('choose.whenItSticks')}</h2>
         <div className="flex flex-wrap gap-3">
-          {CHALLENGE_MODES.map((mode) => (
+          {CHALLENGE_MODES.filter((mode) => prefs.timer || mode !== 'bliksemronde').map((mode) => (
             <button
               key={mode}
               type="button"

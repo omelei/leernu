@@ -9,6 +9,34 @@ import { expect, test, type Page } from '@playwright/test';
 /** The home screen offers a card per set; this picks one by its name. */
 function setCard(page: Page, naam: string) {
   return page.getByRole('article').filter({ hasText: naam });
+/**
+ * Every way of practising except the default now lives on K2, so a test that
+ * wants one goes through it. "Andere manieren" is on every set card and the
+ * chooser has its own step 1, so which card it is opened from does not matter.
+ */
+async function turnTheClockOn(page: Page) {
+  await page.goto('/jij');
+  const clock = page.getByRole('button', { name: /Klok bij het oefenen/ });
+  await expect(clock).toHaveAttribute('aria-pressed', 'false');
+  await clock.click();
+  await expect(clock).toHaveAttribute('aria-pressed', 'true');
+}
+
+async function startChallenge(page: Page, naam: string) {
+  await page.goto('/topografie');
+  await expect(page.getByRole('heading', { name: 'Wat wil je oefenen?' })).toBeVisible();
+  await page.getByRole('button', { name: /Provincies van Nederland/ }).click();
+  await page.getByRole('button', { name: naam, exact: true }).click();
+}
+
+async function chooseAndStart(page: Page, set: RegExp, way: RegExp) {
+  await page.getByRole('button', { name: 'Andere manieren' }).first().click();
+  await expect(page.getByRole('heading', { name: 'Wat wil je oefenen?' })).toBeVisible();
+  await page.getByRole('button', { name: set }).click();
+  await page.getByRole('button', { name: way }).click();
+  await page.getByRole('button', { name: /vragen$/ }).click();
+}
+
 }
 
 async function signIn(page: Page, naam: string) {
@@ -99,7 +127,8 @@ test('asks about every province, and lets a child stop early', async ({ page }) 
   await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuetext', 'vraag 1 van 12');
 
   await page.getByRole('button', { name: 'Stoppen' }).click();
-  await expect(page.getByRole('heading', { name: /goed/ })).toBeVisible();
+  // K8: the heading is what changed, and the score is a line underneath it.
+  await expect(page.getByRole('heading', { name: 'Wat er is veranderd' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Terug naar start' })).toBeVisible();
 });
 
@@ -117,9 +146,7 @@ test('practises the capitals as points on the map', async ({ page }) => {
 
 test('typing a name: a real place from elsewhere is a near miss, not a cross', async ({ page }) => {
   await signIn(page, 'Roos');
-  await setCard(page, 'Provincies van Nederland')
-    .getByRole('button', { name: 'Typ de naam' })
-    .click();
+  await chooseAndStart(page, /Provincies van Nederland/, /Typ de naam/);
 
   // The map shows which area is meant; it does not say its name.
   await expect(page.getByRole('heading', { name: 'Hoe heet dit gebied?' })).toBeVisible();
@@ -189,7 +216,7 @@ test('cities: asks a round a child can finish', async ({ page }) => {
  */
 test('explore names a city, places it, and scores nothing', async ({ page }) => {
   await signIn(page, 'Joris');
-  await setCard(page, 'Steden van Nederland').getByRole('button', { name: 'Ontdek' }).click();
+  await chooseAndStart(page, /Steden van Nederland/, /Ontdek/);
 
   // Scoped to main: the live region for screen readers carries the same words,
   // and it should — that is how a child who cannot see the panel hears it.
@@ -220,9 +247,8 @@ async function answerWrongly(page: Page) {
  */
 test('bliksemronde runs a clock and moves on by itself', async ({ page }) => {
   await signIn(page, 'Sem');
-  await setCard(page, 'Provincies van Nederland')
-    .getByRole('button', { name: 'Bliksemronde' })
-    .click();
+  await turnTheClockOn(page);
+  await startChallenge(page, 'Bliksemronde');
 
   await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
   // Sixty seconds reads as 1:00, so the first tick a test can see is not 0:xx.
@@ -238,9 +264,7 @@ test('bliksemronde runs a clock and moves on by itself', async ({ page }) => {
 /** Overleven ends when the lives do, and a life is lost only for a wrong answer. */
 test('overleven spends a life on a wrong answer', async ({ page }) => {
   await signIn(page, 'Lieke');
-  await setCard(page, 'Provincies van Nederland')
-    .getByRole('button', { name: 'Overleven' })
-    .click();
+  await startChallenge(page, 'Overleven');
 
   await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
   const levens = page

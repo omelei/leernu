@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { getSetting, setSetting } from '@/store/profile';
 
 /**
@@ -51,4 +52,20 @@ export async function loadPreferences(): Promise<Preferences> {
 
 export async function savePreference(name: keyof Preferences, on: boolean): Promise<void> {
   await setSetting(KEY[name], on ? 'aan' : 'uit');
+}
+
+/**
+ * The preferences as React state, for the two screens that obey them.
+ *
+ * Deliberately not a context: two consumers, one read each, and a provider
+ * around the whole app would be more machinery than the thing it carries.
+ */
+export function usePreferences(): Preferences {
+  const [prefs, setPrefs] = useState<Preferences>(DEFAULT_PREFERENCES);
+
+  useEffect(() => {
+    void loadPreferences().then(setPrefs);
+  }, []);
+
+  return prefs;
 }

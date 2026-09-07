@@ -184,6 +184,20 @@ export const nl = {
   'result.gainedNone': 'Nog niets erbij. Deze komen morgen terug.',
   'result.again': 'Nog een ronde',
 
+  // K10. Twee schakelaars in plaats van drie: de leesmodus verviel (ADR-025).
+  // School en woonplaats staan er niet en komen er niet — dat zijn de twee
+  // velden die een naam op een apparaat veranderen in een vindbaar kind.
+  'you.title': 'Jij',
+  'you.nameIs': 'Je oefent als {naam}.',
+  'you.settings': 'Instellingen',
+  'you.readAloud': 'Vragen voorlezen',
+  'you.readAloudWhy': 'Je kunt elke vraag laten voorlezen.',
+  'you.timer': 'Klok bij het oefenen',
+  'you.timerWhy': 'Haast helpt het onthouden niet.',
+  'you.on': 'aan',
+  'you.off': 'uit',
+  'you.stays': 'Wat je oefent blijft op dit apparaat.',
+
   // Reisstempels. Elk criterium staat erbij, want een stempel die je niet kunt
   // uitleggen is een raadsel in plaats van een beloning — en een kind dat niet
   // weet waarvoor het er een kreeg, kan er ook niet nog een verdienen.

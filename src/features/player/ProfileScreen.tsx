@@ -1,12 +1,7 @@
 import { useEffect, useState } from 'react';
 import { t } from '@/i18n';
 import type { ProfileRecord } from '@/store/db';
-import {
-  DEFAULT_PREFERENCES,
-  loadPreferences,
-  savePreference,
-  type Preferences,
-} from './settings';
+import { DEFAULT_PREFERENCES, loadPreferences, savePreference, type Preferences } from './settings';
 
 /**
  * K10, "Jij".

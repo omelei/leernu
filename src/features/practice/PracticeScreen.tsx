@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { t, type TranslationKey } from '@/i18n';
 import { SpeakButton } from '@/components/SpeakButton';
+import { usePreferences } from '@/features/player/settings';
 import { MapCanvas } from './MapCanvas';
 import { RoundProgress } from './RoundProgress';
 import { StopButton } from './StopButton';
@@ -70,6 +71,7 @@ export function PracticeScreen({
   readonly onAgain: () => void;
 }) {
   const { state, pick, submit, next, stop } = useRound(setId, practiceMode);
+  const prefs = usePreferences();
   const nextButton = useRef<HTMLButtonElement>(null);
 
   // Focus moves to "volgende vraag" the moment an answer lands, so a child on a
@@ -140,7 +142,7 @@ export function PracticeScreen({
           />
         ) : null}
 
-        <SpeakButton text={vraag} />
+        {prefs.readAloud ? <SpeakButton text={vraag} /> : null}
 
         <div className="ml-auto flex items-center gap-4 md:gap-6">
           {/* What is running out, or how far along you are — never both, because

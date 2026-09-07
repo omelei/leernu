@@ -77,7 +77,7 @@ export const DESTINATIONS: readonly Destination[] = [
   { id: 'vandaag', name: 'nav.vandaag', built: true },
   { id: 'onthouden', name: 'nav.onthouden', built: true },
   { id: 'vrienden', name: 'nav.vrienden', built: false },
-  { id: 'jij', name: 'nav.jij', built: false },
+  { id: 'jij', name: 'nav.jij', built: true },
 ];
 
 export const BUILT_DESTINATIONS = DESTINATIONS.filter((destination) => destination.built);

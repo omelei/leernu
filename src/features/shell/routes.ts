@@ -29,6 +29,7 @@ export const MODULE_SLUG: Record<Module['id'], string> = {
 export type Route =
   | { readonly name: 'home' }
   | { readonly name: 'retention' }
+  | { readonly name: 'you' }
   /** A module that exists. */
   | { readonly name: 'module'; readonly module: Module }
   /** A module the plan has but the product does not yet. */
@@ -37,6 +38,7 @@ export type Route =
   | { readonly name: 'category'; readonly category: Category };
 
 export const RETENTION_SLUG = 'onthouden';
+export const YOU_SLUG = 'jij';
 
 /**
  * Vite serves from `/` on a domain of our own and from `/<repo>/` on Pages
@@ -52,6 +54,7 @@ export function routeFor(pathname: string): Route {
   const slug = withoutBase(pathname);
   if (slug === '') return { name: 'home' };
   if (slug === RETENTION_SLUG) return { name: 'retention' };
+  if (slug === YOU_SLUG) return { name: 'you' };
 
   const module = MODULES.find((candidate) => MODULE_SLUG[candidate.id] === slug);
   if (module) return module.built ? { name: 'module', module } : { name: 'soon', module };
@@ -71,6 +74,8 @@ export function pathFor(route: Route): string {
       ? ''
       : route.name === 'retention'
         ? RETENTION_SLUG
+        : route.name === 'you'
+          ? YOU_SLUG
         : route.name === 'category'
           ? route.category.id
           : MODULE_SLUG[route.module.id];

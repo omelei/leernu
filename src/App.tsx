@@ -11,6 +11,7 @@ import { useRoute } from '@/features/shell/useRoute';
 import { ModuleSoon } from '@/features/shell/ModuleSoon';
 import { CategoryScreen } from '@/features/shell/CategoryScreen';
 import { ChooseRoundScreen } from '@/features/round/ChooseRoundScreen';
+import { ProfileScreen } from '@/features/player/ProfileScreen';
 import type { Route } from '@/features/shell/routes';
 import { getProfile } from '@/store/profile';
 import type { PracticeMode, SetId } from '@/features/practice/useRound';
@@ -49,9 +50,14 @@ export default function App() {
   // The tab bar's four destinations, two of which exist. Mapping them here
   // rather than inside the Shell keeps the frame ignorant of what a screen is.
   const goTo = (id: Destination['id']) => {
-    const next: Route = id === 'onthouden' ? { name: 'retention' } : { name: 'home' };
+    const next: Route =
+      id === 'onthouden'
+        ? { name: 'retention' }
+        : id === 'jij'
+          ? { name: 'you' }
+          : { name: 'home' };
     go(next);
-    setScreen(next.name === 'retention' ? { name: 'retention' } : { name: 'home' });
+    setScreen({ name: 'home' });
   };
 
   useEffect(() => {
@@ -134,6 +140,14 @@ export default function App() {
     return (
       <Shell onNavigate={goTo}>
         <ModuleSoon module={route.module} onHome={() => go({ name: 'home' })} />
+      </Shell>
+    );
+  }
+
+  if (route.name === 'you') {
+    return (
+      <Shell current="jij" onNavigate={goTo}>
+        <ProfileScreen profile={boot.profile} />
       </Shell>
     );
   }

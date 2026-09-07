@@ -29,6 +29,19 @@ async function signIn(page: Page, naam: string) {
 
 function setCard(page: Page, naam: string) {
   return page.getByRole('article').filter({ hasText: naam });
+/**
+ * Every way of practising except the default now lives on K2, so a test that
+ * wants one goes through it. "Andere manieren" is on every set card and the
+ * chooser has its own step 1, so which card it is opened from does not matter.
+ */
+async function chooseAndStart(page: Page, set: RegExp, way: RegExp) {
+  await page.getByRole('button', { name: 'Andere manieren' }).first().click();
+  await expect(page.getByRole('heading', { name: 'Wat wil je oefenen?' })).toBeVisible();
+  await page.getByRole('button', { name: set }).click();
+  await page.getByRole('button', { name: way }).click();
+  await page.getByRole('button', { name: /vragen$/ }).click();
+}
+
 }
 
 test('the name screen has no violations', async ({ page }) => {
@@ -65,9 +78,7 @@ test('the map has no violations while asking, and none while showing the answer'
 
 test('the typing mode has no violations', async ({ page }) => {
   await signIn(page, 'Sem');
-  await setCard(page, 'Provincies van Nederland')
-    .getByRole('button', { name: 'Typ de naam' })
-    .click();
+  await chooseAndStart(page, /Provincies van Nederland/, /Typ de naam/);
   await expect(page.getByPlaceholder('Naam')).toBeVisible();
 
   expect((await scan(page)).violations).toEqual([]);
@@ -128,7 +139,7 @@ test('a keyboard reaches the map and can answer with it', async ({ page }) => {
  */
 test('explore has no violations, empty or with something chosen', async ({ page }) => {
   await signIn(page, 'Tess');
-  await setCard(page, 'Steden van Nederland').getByRole('button', { name: 'Ontdek' }).click();
+  await chooseAndStart(page, /Steden van Nederland/, /Ontdek/);
 
   // Scoped to the list: the map carries the same names, and it should — a
   // marker without an accessible name is the bug this file exists to catch.
