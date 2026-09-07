@@ -1011,15 +1011,26 @@
 
   /* On the map, on paper, with its own boundary — so the contrast of the words
    * does not depend on which province happens to be underneath them. */
+  /* On a phone the question lies on the map, which means it is on top of
+   * provinces a child has to be able to tap. Groningen is at the top of the
+   * country and the card is at the top of the screen, so without this the
+   * northern half of the answer is behind the question about it.
+   *
+   * The card itself passes taps through; anything inside it that can be pressed
+   * takes them back. From md it stops overlapping and this stops mattering. */
   .tk-round-question {
     grid-area: map;
     align-self: start;
     z-index: 1;
+    pointer-events: none;
     margin: 16px;
     padding: 16px;
     background: var(--paper);
     border: var(--stroke-region) solid var(--line-strong);
     border-radius: var(--radius-card);
+  }
+  .tk-round-question > * {
+    pointer-events: auto;
   }
 
   /* Tablet upright: the bar goes above the canvas and the map takes the full
@@ -1033,6 +1044,7 @@
     .tk-round-question {
       grid-area: question;
       align-self: stretch;
+      pointer-events: auto;
       margin: 0;
       padding: 24px;
       background: var(--surface);

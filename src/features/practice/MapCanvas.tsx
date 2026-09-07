@@ -165,7 +165,9 @@ export function MapCanvas({
   // reachablePoints keep two cities a finger cannot separate. On a phone, where
   // the map area is tall and narrow, that is most of the error.
   const drawnHeight =
-    Math.min(rendered.height, (rendered.width * viewHeight) / viewWidth) || rendered.height;
+    rendered.width > 0 && rendered.height > 0
+      ? Math.min(rendered.height, (rendered.width * viewHeight) / viewWidth)
+      : rendered.height;
 
   // Memoised because reachablePoints keys off it: a fresh object every render
   // would recompute the whole layer on every keystroke.
