@@ -13,7 +13,9 @@ streak), ADR-004 accepted, and ADR-006, ADR-009 and ADR-010 rejected in favour
 of the original specification.
 
 **Decisions taken by the product owner on 2026-09-07**, on business plan v6:
-ADR-024 through ADR-031. ADR-032 and ADR-033 follow from building on them.
+ADR-024 through ADR-031. ADR-032 and ADR-033 follow from building on them,
+and ADR-034 through ADR-037 were put to the owner as the questions that
+blocked the rest of the work.
 Where the app design and the business plan disagree,
 the plan wins; where the styleguide and the design disagree, the styleguide
 wins.
@@ -1044,6 +1046,175 @@ The 200% claim is now testable, and ADR-025 says it must be tested: on all four
 sizes, heading-1 wrapping to two lines, the question bar growing with it, and
 nothing clipped. That test does not exist yet and is owed with the responsive
 shell.
+
+---
+
+## ADR-034 — Levels and XP leave the screen, and nothing takes their place yet
+
+**Status:** accepted — 2026-09-07, on business plan v6 decision 4.
+
+### Context
+
+The plan replaces levels and XP with growth points: this week only, and only
+relative to friends. Never an absolute score and never a class position.
+
+The friend layer needs a backend, which ADR-015 rules out, so a number relative
+to friends cannot be computed. The build brief's own rule for that case is
+explicit: where the design shows a figure the app cannot work out, the element
+is not built.
+
+Taken together those two say the level badge on K1 and "Je verdiende {xp}
+punten" on K8 come out, and nothing arrives in their place. A weekly growth-point
+total without the comparison would be computable, but it would be exactly the
+absolute score decision 4 forbids — so the honest options were "nothing" or
+"break the rule", not "something smaller".
+
+**The cost, stated rather than glossed over.** This removes every visible reward
+from the app for the length of this phase except the travel stamp. A ten-year-old
+who liked watching a number climb loses that, and gets it back only when friends
+exist. That is a real regression in the thing that brings a child back tomorrow,
+accepted because the alternative teaches the child to chase a number the product
+has decided is the wrong one to chase.
+
+### Decision
+
+`LevelBadge` and the earned-XP line are removed from the interface.
+
+What remains as feedback is the retention dot — which says what the child now
+remembers rather than what they scored — and the travel stamp, which is
+computable today because its criterion is four correct in a row and needs
+nobody else to exist.
+
+`rewardStore`, `game-core/rewards.ts` and the stored `xp` and `munten` fields
+stay exactly as they are. Nothing is deleted. Growth points later are a change
+to what is displayed, not a migration.
+
+### Consequences
+
+`levelFor`, `levelProgress` and `xpForLevel` keep their tests and lose their only
+caller. That is deliberate: they are correct, they are cheap, and deleting them
+would make the friend layer more expensive than leaving them.
+
+`home.level` and `result.earned` leave `nl.ts`.
+
+---
+
+## ADR-035 — "In de vriezer" is box five, and the design's "months" is wrong
+
+**Status:** accepted — 2026-09-07.
+
+### Context
+
+K9 describes an item in the freezer as one remembered so well it will not be
+asked for months. The scheduler disagrees: ADR-005's five Leitner boxes run 1, 2,
+4, 8 and 21 days, so the longest an item can wait is three weeks.
+
+Three ways out were on the table. A sixth box at sixty days would make the
+metaphor literally true, but it changes `game-core` outside step 7b — the one
+step permitted to touch it — and it re-opens ADR-005's interval table, which was
+chosen to be explainable to a teacher in one sentence. A stricter status inside
+box 5 would work, but it would put two different meanings on one criterion,
+since four correct in a row is already what earns a travel stamp.
+
+### Decision
+
+**"In de vriezer" is a display status for box 5 and nothing else.** No change to
+the schedule, no sixth box, no second criterion.
+
+The design's wording is what is wrong, and it is corrected: an item in the
+freezer is not asked **for three weeks**, which is what the app actually does.
+
+### Consequences
+
+The metaphor is weaker than the design intended. Three weeks does not feel like a
+freezer, and a child who reads "in de vriezer" may expect longer.
+
+That is the right way round: a promise the scheduler does not keep is worse than
+a word that oversells slightly, and the interval is a teaching decision that
+should not be moved to rescue a label.
+
+If a sixth box is ever wanted for its own reasons, this record is not in the way
+— the status would follow the top box wherever it lands.
+
+---
+
+## ADR-036 — Neighbourhood is content, computed twice over
+
+**Status:** accepted — 2026-09-07, ahead of step 7b.
+
+### Context
+
+Multiple choice is the step between pointing and typing, and its distractors
+carry the teaching: an option that borders the right answer is the mistake a
+child actually makes, and one from the other side of the country makes the
+question easier rather than more instructive. The build brief requires that
+neighbourhood come from the geodata rather than a hand-written list, so that a
+new set costs nothing to maintain.
+
+No adjacency exists today. `content/geo/_source/*.json` carries polygons and
+label points and no relationships at all.
+
+And "borders on" is not one idea. Provinces and waters are areas and share
+edges. Cities, capitals and the Wadden islands are points, and no two of them
+share an edge — for those the mistake a child makes is about a place that is
+*near*, not one that touches.
+
+### Decision
+
+Adjacency is computed in `tools/content` and shipped as data, so `game-core`
+stays pure and `distractors.ts` reads a list rather than geometry.
+
+Two rules, chosen by what the item is:
+
+- **Areas** — provinces, waters: a shared boundary, from the polygons.
+- **Points** — cities, capitals, islands: the nearest others by distance
+  between label points.
+
+Both produce the same shape, an ordered list of item ids per item, so
+`distractors.ts` never learns which rule made it.
+
+### Consequences
+
+This is its own commit before step 7b, not part of it. It is more work than the
+brief assumes, and burying it inside the multiple-choice step would hide a
+content-pipeline change inside a feature change.
+
+The output is regenerated, so it is subject to the same rule as the rest of the
+pipeline: it is built, not edited, and a hand correction to it is lost at the
+next run.
+
+---
+
+## ADR-037 — The module rail shows the modules that exist
+
+**Status:** accepted — 2026-09-07.
+
+### Context
+
+The rail is navigation on three of the four sizes: 88px on desktop, a bottom bar
+on a tablet, and the source of the tab bar's shape on a phone. The design draws
+six accents in it. Only topography exists as content.
+
+Drawing six disabled entries would follow the design and show a child where the
+product is going. It would also be six promises the app does not keep and six
+things to tap that do nothing, on the screen a child sees first.
+
+### Decision
+
+The rail is built from an ordered list of modules and renders the ones that have
+content. Today that is one.
+
+The measurements are the design's regardless — 88px rail, the tablet bar at 72
+high with 88×56 targets, the phone tab bar — because those are what step 5's four
+sizes are laid out against. The rail exists structurally and is simply short.
+
+### Consequences
+
+A rail with one entry looks odd, and that is accurate: the product has one
+module. Module two is a row of data and no layout work.
+
+Nothing here decides what the rail does at seven modules — six visible plus
+"meer", per ADR-029 — which stays true and untested until there are seven.
 
 ---
 
