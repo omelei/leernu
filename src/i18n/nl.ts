@@ -29,6 +29,14 @@ export const nl = {
   'home.setNew': 'nog niet geoefend',
   'home.moreWays': 'Andere manieren',
 
+  // Item status, K9. Four states, each with a shape as well as a word — and
+  // none of them green, because green is an answer state and would tell a
+  // child they had just got something right.
+  'status.frozen': 'in de vriezer',
+  'status.remembered': 'dit onthoud je nu',
+  'status.practising': 'nog niet onthouden',
+  'status.new': 'nog niet geoefend',
+
   // Set names
   'set.nl-provincies': 'Provincies van Nederland',
   'set.nl-hoofdsteden': 'Hoofdsteden van de provincies',

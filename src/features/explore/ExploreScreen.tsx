@@ -94,7 +94,7 @@ export function ExploreScreen({
 
         {chosen !== null && <SpeakButton text={spoken} />}
 
-        <button type="button" className="tk-button tk-button-quiet ml-auto" onClick={onHome}>
+        <button type="button" className="tk-button tk-button-secondary ml-auto" onClick={onHome}>
           {t('explore.done')}
         </button>
       </header>
@@ -126,7 +126,7 @@ export function ExploreScreen({
                     aria-current={picked ? 'true' : undefined}
                     className={
                       picked
-                        ? 'w-full rounded-control border-2 border-ink bg-accent-tint px-4 py-3 text-left font-semibold'
+                        ? 'w-full rounded-control border-2 border-ink bg-surface px-4 py-3 text-left font-semibold'
                         : 'w-full rounded-control border-2 border-transparent px-4 py-3 text-left'
                     }
                     onClick={() => setChosenId(picked ? null : item.id)}

@@ -131,7 +131,7 @@ export function PracticeScreen({
             <Counter label={t('practice.counterCorrect')} value={String(state.correctCount)} />
           ) : null}
           <Counter label={t('practice.counterCombo')} value={`×${state.combo}`} />
-          <button type="button" className="tk-button tk-button-quiet" onClick={stop}>
+          <button type="button" className="tk-button tk-button-secondary" onClick={stop}>
             {t('practice.stop')}
           </button>
         </div>
@@ -177,7 +177,7 @@ export function PracticeScreen({
             <button
               ref={nextButton}
               type="button"
-              className="tk-button tk-button-big"
+              className="tk-button"
               onClick={next}
             >
               {t('practice.next')}
@@ -313,7 +313,7 @@ function FeedbackIcon({ kind }: { readonly kind: 'good' | 'near' | 'bad' }) {
   // tick nor a cross — because it is genuinely a third outcome and dressing it
   // as either would undo the point of ADR-017.
   const background =
-    kind === 'good' ? 'var(--good)' : kind === 'near' ? 'var(--accent)' : 'var(--bad)';
+    kind === 'good' ? 'var(--good)' : kind === 'near' ? 'var(--ink)' : 'var(--bad)';
 
   return (
     <span

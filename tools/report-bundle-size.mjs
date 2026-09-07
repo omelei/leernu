@@ -48,6 +48,22 @@ for (const file of shellFiles) {
   console.log(`  ${humanKb(file.gzip).padStart(9)}  ${file.name}`);
 }
 
+/**
+ * The component gallery is development-only and must not be in here.
+ *
+ * It hangs behind `import.meta.env.DEV`, which Vite replaces with a literal so
+ * that Rollup can drop the branch and the whole tree beneath it. That is how it
+ * is meant to work; this is the part that checks it did. "Should be tree-shaken"
+ * is a belief until something looks.
+ *
+ * Unlike the budget below, this fails the build. A size overrun is a trade-off
+ * worth seeing; a second interface shipping to children is a mistake.
+ */
+const GALLERY_MARKER = 'Alleen in ontwikkeling.';
+const leaked = shellFiles.filter((file) =>
+  readFileSync(join(ASSETS_DIR, file.name), 'utf8').includes(GALLERY_MARKER),
+);
+
 const percent = Math.round((total / SHELL_BUDGET_BYTES) * 100);
 console.log(`  ${'-'.repeat(30)}`);
 console.log(`  ${humanKb(total).padStart(9)}  total`);
@@ -58,3 +74,11 @@ if (total > SHELL_BUDGET_BYTES) {
 } else {
   console.log('Within budget.\n');
 }
+
+if (leaked.length > 0) {
+  const names = leaked.map((file) => file.name).join(', ');
+  console.error(`The development gallery reached the production bundle: ${names}.\n`);
+  process.exit(1);
+}
+
+console.log('Development gallery is not in the bundle.\n');

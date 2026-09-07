@@ -201,6 +201,15 @@
     --shadow-2: 0 12px 32px rgb(29 34 28 / 18%);
     --scrim: rgb(29 34 28 / 45%);
 
+    /* ---- Density, styleguide §D ------------------------------------------
+     * PO takes one step up from VO for inner margins and row spacing: where
+     * VO takes 16, PO takes 24. Every other distance is the same, so this is
+     * four tokens rather than a second set of components.
+     */
+    --control-height: var(--touch);
+    --card-radius: var(--radius-card);
+    --card-padding: 24px;
+    --row-gap: 24px;
     /* ---- Type scale, styleguide §C — PO 8-12, desktop --------------------
      * Two guises, one set of classes. The tokens switch underneath, so a
      * component says text-h1 and never has to know which guise it is in. The
@@ -244,6 +253,10 @@
    * age field to set it from. Written now so that adding one is a data change
    * (§0.3 E, and the scope note in the build brief). */
   [data-guise='vo'] {
+    --control-height: var(--touch-min);
+    --card-radius: var(--radius-control);
+    --card-padding: 16px;
+    --row-gap: 16px;
     --type-score: 2.75rem; /* 44px */
     --type-score-lh: 2.75rem; /* 44px */
     --type-h1: 1.875rem; /* 30px */
@@ -455,21 +468,39 @@
     white-space: nowrap;
   }
 
+  /* ---- Surfaces --------------------------------------------------------
+   * Not everything is a card. §D asks for restraint here, and a page where
+   * every block has a border is a page with no hierarchy at all — so a card is
+   * for something you could pick up and move, and nothing else.
+   */
   .tk-card {
     background: var(--paper);
     border: var(--stroke-hair) solid var(--line-strong);
+    border-radius: var(--card-radius);
+    padding: var(--card-padding);
+  }
+  /* The one block on a screen that is the reason the child is there — the test
+   * date on K1. A surface fill and a border, where everything else has neither. */
+  .tk-card-accented {
+    background: var(--surface);
   }
 
-  /* Min-height rather than fixed: Dutch runs longer than the English it is
-   * translated from, and buttons are where that shows first. */
+  /* ---- Buttons ---------------------------------------------------------
+   * Three weights and no more. Primary is the way on and there is one per
+   * screen; secondary is the alternative that is still an action; tertiary is
+   * a link that happens to need a hit target.
+   *
+   * Min-height rather than fixed: Dutch runs longer than the English it is
+   * translated from, and buttons are where that shows first.
+   */
   .tk-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    min-height: var(--touch);
-    padding: 0 28px;
-    border: 0;
+    gap: 8px;
+    min-height: var(--control-height);
+    padding: 0 24px;
+    border: var(--stroke-hair) solid transparent;
     border-radius: var(--radius-control);
     background: var(--ink);
     color: var(--paper);
@@ -477,38 +508,147 @@
     font-size: var(--type-label);
     line-height: var(--type-label-lh);
     font-weight: 600;
+    text-align: center;
     cursor: pointer;
   }
-  .tk-button-big {
-    height: 64px;
+  .tk-button:hover {
+    background: var(--ink-2);
   }
-  .tk-button-quiet {
-    background: var(--paper);
-    color: var(--ink);
-    border: var(--stroke-hair) solid var(--line-strong);
+  .tk-button:active {
+    background: var(--ink-2);
+    /* Pressed reads as movement, not as another colour. */
+    transform: translateY(1px);
   }
 
+  .tk-button-secondary {
+    background: var(--paper);
+    color: var(--ink);
+    border-color: var(--line-strong);
+  }
+  .tk-button-secondary:hover {
+    background: var(--surface);
+  }
+  .tk-button-secondary:active {
+    background: var(--sunken);
+  }
+
+  .tk-button-tertiary {
+    background: transparent;
+    color: var(--ink);
+    border-color: transparent;
+    padding: 0 8px;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .tk-button-tertiary:hover {
+    background: var(--surface);
+  }
+  .tk-button-tertiary:active {
+    background: var(--sunken);
+  }
+
+  /* Disabled says "not now", never "you got this wrong", so it recedes rather
+   * than turning a semantic colour. A disabled control keeps its size: a
+   * button that shrinks when it switches off moves everything under it. */
+  .tk-button:disabled,
+  .tk-button[aria-disabled='true'] {
+    background: var(--sunken);
+    color: var(--ink-3);
+    border-color: transparent;
+    cursor: not-allowed;
+    transform: none;
+  }
+  .tk-button-secondary:disabled,
+  .tk-button-secondary[aria-disabled='true'],
+  .tk-button-tertiary:disabled,
+  .tk-button-tertiary[aria-disabled='true'] {
+    background: transparent;
+    color: var(--ink-3);
+    border-color: var(--line);
+  }
+
+  /* Busy. The label stays put and the button keeps its width, because a
+   * control that changes size while you are waiting for it invites a second
+   * click on whatever has moved into its place. */
+  .tk-button[aria-busy='true'] {
+    cursor: progress;
+  }
+  .tk-button[aria-busy='true'] > .tk-button-label {
+    opacity: 0.35;
+  }
+
+  /* ---- Chip and pill ---------------------------------------------------
+   * A chip is a filter you can switch on; a pill is a choice among several.
+   * Both are controls, so both clear the 44 floor — the old 40 here was below
+   * it, which is exactly the kind of thing that survives review because it
+   * looks deliberate (ADR-032).
+   */
+  .tk-chip,
   .tk-pill {
     display: inline-flex;
     align-items: center;
-    min-height: 40px;
-    padding: 0 14px;
-    border-radius: 999px;
+    gap: 8px;
+    min-height: var(--touch-min);
+    padding: 0 16px;
+    border-radius: var(--radius-full);
     border: var(--stroke-hair) solid var(--line-strong);
     background: var(--paper);
     font-size: var(--type-label);
+    line-height: var(--type-label-lh);
     font-weight: 600;
     color: var(--ink);
     cursor: pointer;
   }
+  .tk-chip:hover,
+  .tk-pill:hover {
+    background: var(--surface);
+  }
+  .tk-chip[aria-pressed='true'],
   .tk-pill[aria-pressed='true'] {
     background: var(--ink);
     color: var(--paper);
     border-color: var(--ink);
   }
+  .tk-chip:disabled,
+  .tk-pill:disabled {
+    background: transparent;
+    color: var(--ink-3);
+    border-color: var(--line);
+    cursor: not-allowed;
+  }
 
+  /* ---- Status label ----------------------------------------------------
+   * A label, deliberately not a chip: no border, no background, no hit target,
+   * because it is a fact about a row and not something you can press. K9 gets
+   * this wrong at a glance otherwise — "in de vriezer" looks tappable the
+   * moment it has a border.
+   *
+   * Colour never carries it alone: every status also has an icon and a word.
+   */
+  .tk-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: var(--type-small);
+    line-height: var(--type-small-lh);
+    font-weight: 600;
+    color: var(--ink-2);
+    white-space: nowrap;
+  }
+  /* "Onthoud je" is not the same as "goed". Green is an answer state and may
+   * never mean a status, so a remembered item reads in ink and is told apart
+   * by its dot and its word. */
+  .tk-status-remembered {
+    color: var(--ink);
+  }
+
+  /* ---- Input -----------------------------------------------------------
+   * The focus ring is the global one: 2px of ink with 2px of paper between it
+   * and the field. Neutral in both themes and never semantic — a field does
+   * not turn green because you are typing in it.
+   */
   .tk-input {
-    min-height: var(--touch);
+    min-height: var(--control-height);
     width: 100%;
     padding: 12px 16px;
     border: var(--stroke-hair) solid var(--line-strong);
@@ -517,6 +657,194 @@
     color: var(--ink);
     font: inherit;
     font-size: var(--type-body);
+    line-height: var(--type-body-lh);
+  }
+  .tk-input:hover {
+    border-color: var(--ink-3);
+  }
+  .tk-input:disabled {
+    background: var(--sunken);
+    color: var(--ink-3);
+    border-color: var(--line);
+    cursor: not-allowed;
+  }
+  /* aria-invalid rather than a class: the thing that makes a field wrong for a
+   * screen reader is the same thing that makes it wrong to look at. */
+  .tk-input[aria-invalid='true'] {
+    border-color: var(--bad);
+    border-width: var(--stroke-active);
+  }
+
+  /* ---- Table -----------------------------------------------------------
+   * Square corners (§D), a rule between rows, and figures that do not dance.
+   * Numbers are right-aligned and tabular so a column of them lines up on the
+   * digit rather than on the glyph.
+   */
+  .tk-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: var(--radius-flat);
+  }
+  .tk-table th {
+    padding: 12px 16px;
+    background: var(--surface);
+    border-bottom: var(--stroke-hair) solid var(--line-strong);
+    font-size: var(--type-small);
+    line-height: var(--type-small-lh);
+    font-weight: 600;
+    color: var(--ink-2);
+    text-align: left;
+  }
+  .tk-table td {
+    padding: 12px 16px;
+    border-bottom: var(--stroke-hair) solid var(--line);
+  }
+  .tk-table th.tk-num,
+  .tk-table td.tk-num {
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+
+  /* ---- Progress --------------------------------------------------------
+   * Fully rounded, with the dot as its end point: the bar is the dot filling
+   * up, drawn sideways. The accent is allowed here — it is one of the three
+   * places a module may colour anything.
+   */
+  .tk-progress {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tk-progress-rail {
+    flex: 1;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: var(--sunken);
+    overflow: hidden;
+  }
+  .tk-progress-fill {
+    height: 100%;
+    border-radius: var(--radius-full);
+    background: var(--accent);
+  }
+
+  /* ---- Module entrance -------------------------------------------------
+   * The third and last place an accent may appear. The tint is the fill and
+   * the accent is the rule, so the card is recognisable across a rail without
+   * a single word of it being coloured.
+   */
+  .tk-module-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-height: var(--control-height);
+    padding: var(--card-padding);
+    border: var(--stroke-hair) solid var(--accent);
+    border-radius: var(--card-radius);
+    background: var(--accent-tint);
+    color: var(--ink);
+    cursor: pointer;
+    text-align: left;
+  }
+  .tk-module-card:hover {
+    border-width: var(--stroke-active);
+    /* Compensate the border so nothing beside it moves. */
+    padding: calc(var(--card-padding) - 1px);
+  }
+  .tk-module-card:disabled {
+    background: var(--surface);
+    border-color: var(--line);
+    color: var(--ink-3);
+    cursor: not-allowed;
+  }
+
+  /* ---- Layers over the page --------------------------------------------
+   * Level 2 of §D: what blocks the screen, always on a scrim of ink at 45%.
+   * A round is never interrupted by one of these — see the sheet note below.
+   */
+  .tk-scrim {
+    position: absolute;
+    inset: 0;
+    background: var(--scrim);
+  }
+  .tk-dialog {
+    background: var(--paper);
+    border-radius: var(--radius-card);
+    padding: var(--card-padding);
+    box-shadow: var(--shadow-2);
+    border: var(--stroke-hair) solid var(--line);
+  }
+  /* Bottom sheet: the same weight as a dialog, anchored to the thumb. It is
+   * for a choice the child asked for, never for feedback on an answer — K4 is
+   * a strip in the flow precisely so that a round is not interrupted by
+   * something you have to dismiss. */
+  .tk-sheet {
+    position: absolute;
+    inset: auto 0 0 0;
+    background: var(--paper);
+    border-radius: var(--radius-card) var(--radius-card) 0 0;
+    padding: var(--card-padding);
+    box-shadow: var(--shadow-2);
+  }
+
+  /* ---- Frame -----------------------------------------------------------
+   * The three navigation surfaces, at the sizes §D specifies. All three
+   * disappear during a round: on every size, the only things left are the stop
+   * cross, the ten progress dots and the read-aloud button.
+   */
+  .tk-appbar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    height: 64px;
+    padding: 0 24px;
+    background: var(--paper);
+    border-bottom: var(--stroke-hair) solid var(--line);
+  }
+  .tk-rail {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 88px;
+    padding: 16px 8px;
+    background: var(--paper);
+    border-right: var(--stroke-hair) solid var(--line);
+  }
+  /* On a tablet the rail lies down: §D says a bar of 72 with 88x56 targets,
+   * because there the child is pointing at the map with a finger. */
+  .tk-rail-bar {
+    flex-direction: row;
+    width: auto;
+    height: 72px;
+    padding: 8px 16px;
+    border-right: 0;
+    border-top: var(--stroke-hair) solid var(--line);
+  }
+  .tk-tabbar {
+    display: flex;
+    align-items: stretch;
+    height: var(--touch);
+    background: var(--paper);
+    border-top: var(--stroke-hair) solid var(--line);
+  }
+  .tk-tabbar-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-height: var(--touch);
+    border: 0;
+    background: transparent;
+    color: var(--ink-2);
+    font-size: var(--type-small);
+    line-height: var(--type-small-lh);
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .tk-tabbar-item[aria-current='page'] {
+    color: var(--ink);
   }
 
   /* Map shapes. The reveal styles come straight from the design: a correct

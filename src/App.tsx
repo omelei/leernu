@@ -3,6 +3,7 @@ import { HomeScreen } from '@/features/home/HomeScreen';
 import { PracticeScreen } from '@/features/practice/PracticeScreen';
 import { ExploreScreen } from '@/features/explore/ExploreScreen';
 import { ProfileGate } from '@/features/player/ProfileGate';
+import { Gallery } from '@/design/Gallery';
 import { getProfile } from '@/store/profile';
 import type { PracticeMode, SetId } from '@/features/practice/useRound';
 import type { ProfileRecord } from '@/store/db';
@@ -31,6 +32,15 @@ export default function App() {
   useEffect(() => {
     void getProfile().then((profile) => setBoot({ status: 'ready', profile: profile ?? null }));
   }, []);
+
+  // The component gallery, in development only. import.meta.env.DEV is
+  // replaced with a literal at build time, so this branch and everything under
+  // it is dropped from the production bundle rather than hidden in it —
+  // asserted by tools/report-bundle-size.mjs, because "should be tree-shaken"
+  // is a belief until something checks.
+  if (import.meta.env.DEV && window.location.hash === '#componenten') {
+    return <Gallery />;
+  }
 
   // No spinner: reading one record from IndexedDB is fast enough that a spinner
   // would flash rather than inform.

@@ -48,7 +48,7 @@ export function ResultScreen({
             <h2 className="tk-label mb-2">{t('result.practiceMore')}</h2>
             <ul className="flex flex-col gap-2">
               {state.missed.map((item) => (
-                <li key={item.id} className="tk-card rounded-control px-4 py-3">
+                <li key={item.id} className="tk-card">
                   <p className="tk-display text-h3 font-semibold">{item.naam}</p>
                   {item.weetje !== undefined && <p className="text-ink-2">{item.weetje}</p>}
                 </li>
@@ -58,7 +58,7 @@ export function ResultScreen({
 
           {state.geo !== null && (
             <section className="md:w-1/2" aria-label={t('result.mapLabel')}>
-              <div className="tk-card flex justify-center rounded-control p-3">
+              <div className="tk-card flex justify-center">
                 <ReviewMap background={state.geo} answers={state.answers} highlighted={missedIds} />
               </div>
               <p className="mt-2 text-ink-2">{t('result.mapHelp')}</p>
@@ -214,7 +214,7 @@ function RewardLine({ state }: { readonly state: RoundState }) {
     <>
       <p className="mt-1 text-ink-2">{t('result.earned', { xp: reward.xp })}</p>
       {reward.badges.map((badge) => (
-        <p key={badge} className="tk-display mt-1 font-semibold text-accent-text">
+        <p key={badge} className="tk-display mt-1 font-semibold">
           {t('result.newBadge', { naam: t(BADGE_NAME[badge]) })}
         </p>
       ))}

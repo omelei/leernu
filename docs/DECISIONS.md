@@ -1289,6 +1289,77 @@ it is not close.
 
 ---
 
+## ADR-039 — The accent rule is a test, and the gallery never ships
+
+**Status:** accepted — 2026-09-07.
+
+### Context
+
+Styleguide §B says a module may colour three things: the highlight on the
+image, the progress bar and the module entrance. Not a button, not a message,
+not a table, and never the mark.
+
+That rule was already being broken in four places, and every one of them looked
+like an improvement when it was written: the selected row in the explore list,
+the retention percentage on the home screen, the name of a newly earned stamp,
+and the colour of the "Bijna" feedback mark.
+
+The last of those was the serious one. "Bijna" is an answer state, and an
+accent standing in for one teaches a child that the module colour means
+"nearly" — until they open a different module, where it means something else.
+
+An accent is always the tempting colour, because it is the one that looks like
+the brand. A rule that depends on remembering it will be broken again.
+
+### Decision
+
+**The rule is enforced by `src/design/accent.test.ts`.** Every use of an accent
+in the source has to be named there with a reason: for CSS by the selector it
+paints in, for components by file and snippet. Adding a use is deliberate and
+reads in a diff as what it is. The mark is checked separately — `Dot` and
+`Wordmark` may not mention an accent at all.
+
+The four misuses are gone. Selection is carried by a 2px ink border, the
+retention figure and the stamp name are primary ink, and "Bijna" is drawn in ink
+— which is what step 7 gives it anyway: an open area, a single 3px border and a
+half-filled dot, with no colour of its own, because amber would be a fifth
+meaning and hatching always belongs to wrong.
+
+**The component gallery is development-only**, behind `import.meta.env.DEV` at
+`#componenten`. Vite replaces that with a literal so Rollup drops the branch and
+everything under it — and `tools/report-bundle-size.mjs` now **fails the build**
+if the gallery's marker string appears in the production bundle. "Should be
+tree-shaken" is a belief until something looks.
+
+That check fails the build where the size budget only reports. A size overrun is
+a trade-off worth seeing; a second interface shipping to children is a mistake.
+
+### Consequences
+
+Three smaller corrections came with it, each replacing a value that had no basis
+in §D:
+
+- `tk-button-big` at 64px is gone. 64 is not a control height in §D, and the
+  primary button is already 56 in PO under ADR-032.
+- Chips and pills go from 40 to 44, the floor. Forty was below it and looked
+  deliberate, which is how it survived review.
+- The scrim and the bottom sheet are `absolute` rather than `fixed`, so they
+  fill whatever is positioned around them. That is what makes them components
+  instead of special cases, and it is the only reason the gallery can show them
+  without taking over the page.
+
+The gallery holds Dutch text that is not in `nl.ts`. That is deliberate: its
+labels are addresses for a test query, not copy, and it is not part of the
+product. The language test in step 4 excludes it by name.
+
+Only one of §E's sixteen icons exists — the freezer, which the item status
+needed. Area, flag, clock, tables, word, era, streak, ladder, stamp, read-aloud,
+right, wrong, next, pupil and family are outstanding. They are not stubbed,
+because an icon that is a placeholder is worse than an icon that is missing: the
+placeholder ships.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because

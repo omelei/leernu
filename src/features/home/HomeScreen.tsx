@@ -101,7 +101,7 @@ export function HomeScreen({
           const started = ids.some((id) => known.get(id)?.laatsteReview != null);
 
           return (
-            <article key={setId} className="tk-card rounded-control p-6">
+            <article key={setId} className="tk-card">
               <h3 className="tk-display mb-1 text-h2 font-semibold">{t(SET_NAME_KEY[setId])}</h3>
               <p className="mb-4 text-ink-2">
                 {started
@@ -115,7 +115,7 @@ export function HomeScreen({
                   rather than as a start. */}
               {started && (
                 <div className="mb-6">
-                  <p className="tk-display text-h1 font-bold tabular-nums text-accent-text">
+                  <p className="tk-display text-h1 font-bold tabular-nums">
                     {retention}%
                   </p>
                   <p className="text-ink-2">{t('home.retention')}</p>
@@ -140,8 +140,8 @@ export function HomeScreen({
                     type="button"
                     className={
                       practiceMode === 'wijs-aan'
-                        ? 'tk-button tk-button-big'
-                        : 'tk-button tk-button-big tk-button-quiet'
+                        ? 'tk-button'
+                        : 'tk-button tk-button-secondary'
                     }
                     onClick={() => onStart(setId, practiceMode)}
                   >
@@ -159,7 +159,7 @@ export function HomeScreen({
               <div className="mt-2 flex flex-wrap gap-3">
                 <button
                   type="button"
-                  className="tk-button tk-button-quiet"
+                  className="tk-button tk-button-secondary"
                   onClick={() => onExplore(setId)}
                 >
                   {t('mode.ontdekken')}
@@ -168,7 +168,7 @@ export function HomeScreen({
                   <button
                     key={practiceMode}
                     type="button"
-                    className="tk-button tk-button-quiet"
+                    className="tk-button tk-button-secondary"
                     onClick={() => onStart(setId, practiceMode)}
                   >
                     {t(MODE_NAME_KEY[practiceMode])}
