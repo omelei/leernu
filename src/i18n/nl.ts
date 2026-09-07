@@ -46,6 +46,28 @@ export const nl = {
   'module.tijdvakken': 'Tijdvakken',
   'module.vlaggen': 'Vlaggen',
 
+  // K9, wat je onthoudt. De tabel is het detail, de punten erboven zijn alles
+  // in één blik — dezelfde vorm, kleiner, geen tweede diagram om te leren.
+  'retention.title': 'Wat je onthoudt',
+  'retention.glance': 'Alles in één blik',
+  'retention.item': 'Onderdeel',
+  'retention.status': 'Hoe het gaat',
+  'retention.correct': 'Goed',
+  'retention.due': 'Weer op',
+  'retention.dueNow': 'vandaag',
+
+  // K1's toetsdatumblok: het enige blok op het scherm met een vlak én een
+  // rand, want het is de reden dat het kind vandaag oefent.
+  'home.testLabel': 'toets',
+  'home.testNone': 'Nog geen toetsdatum',
+  'home.testToday': 'De toets is vandaag',
+  'home.testTomorrow': 'De toets is morgen',
+  'home.testInDays': 'Toets over {aantal} dagen',
+  'home.testPast': 'De toets is geweest',
+  'home.testPick': 'Wanneer is de toets?',
+  'home.testSet': 'Datum instellen',
+  'home.testChange': 'Datum wijzigen',
+
   // Item status, K9. Four states, each with a shape as well as a word — and
   // none of them green, because green is an answer state and would tell a
   // child they had just got something right.

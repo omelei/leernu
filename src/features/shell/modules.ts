@@ -53,7 +53,7 @@ export interface Destination {
 
 export const DESTINATIONS: readonly Destination[] = [
   { id: 'vandaag', name: 'nav.vandaag', built: true },
-  { id: 'onthouden', name: 'nav.onthouden', built: false },
+  { id: 'onthouden', name: 'nav.onthouden', built: true },
   { id: 'vrienden', name: 'nav.vrienden', built: false },
   { id: 'jij', name: 'nav.jij', built: false },
 ];

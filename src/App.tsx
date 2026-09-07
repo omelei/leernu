@@ -5,12 +5,15 @@ import { ExploreScreen } from '@/features/explore/ExploreScreen';
 import { ProfileGate } from '@/features/player/ProfileGate';
 import { Gallery } from '@/design/Gallery';
 import { Shell } from '@/features/shell/Shell';
+import { RetentionScreen } from '@/features/retention/RetentionScreen';
+import type { Destination } from '@/features/shell/modules';
 import { getProfile } from '@/store/profile';
 import type { PracticeMode, SetId } from '@/features/practice/useRound';
 import type { ProfileRecord } from '@/store/db';
 
 type Screen =
   | { name: 'home' }
+  | { name: 'retention' }
   | { name: 'practice'; setId: SetId; practiceMode: PracticeMode }
   | { name: 'explore'; setId: SetId };
 type Boot = { status: 'loading' } | { status: 'ready'; profile: ProfileRecord | null };
@@ -28,7 +31,14 @@ type Boot = { status: 'loading' } | { status: 'ready'; profile: ProfileRecord | 
 export default function App() {
   const [boot, setBoot] = useState<Boot>({ status: 'loading' });
   const [screen, setScreen] = useState<Screen>({ name: 'home' });
+
   const [visit, setVisit] = useState(0);
+
+  // The tab bar's four destinations, two of which exist. Mapping them here
+  // rather than inside the Shell keeps the frame ignorant of what a screen is.
+  const goTo = (id: Destination['id']) => {
+    setScreen(id === 'onthouden' ? { name: 'retention' } : { name: 'home' });
+  };
 
   useEffect(() => {
     void getProfile().then((profile) => setBoot({ status: 'ready', profile: profile ?? null }));
@@ -71,8 +81,16 @@ export default function App() {
     );
   }
 
+  if (screen.name === 'retention') {
+    return (
+      <Shell current="onthouden" onNavigate={goTo}>
+        <RetentionScreen />
+      </Shell>
+    );
+  }
+
   return (
-    <Shell>
+    <Shell current="vandaag" onNavigate={goTo}>
       <HomeScreen
         profile={boot.profile}
         onStart={(setId, practiceMode) => {

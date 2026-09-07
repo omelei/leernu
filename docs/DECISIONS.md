@@ -1496,6 +1496,60 @@ with four destinations lays out differently from a bar with none.
 
 ---
 
+## ADR-042 — Three open points closed, and the four item statuses
+
+**Status:** accepted — 2026-09-07.
+
+### Context
+
+Three questions were left open when the work that raised them was committed,
+and one more appeared as soon as K9 needed a table.
+
+### Decision
+
+**The nine stamps stay as they are** (ADR-040's open point). A week of coming
+back is not "meedoen alleen" — it is the behaviour the product exists to
+produce — and a flawless complete round is an achievement rather than
+attendance. Only "Op weg", for finishing one round, was attendance, and it is
+gone. The strict reading of the plan would leave a single stamp reachable after
+weeks, which would make the reward system a thing that almost never happens.
+
+**The object store keeps the name `badges`** (ADR-040). The code around it says
+stamp and `rewardStore.ts` explains the mismatch at the top. Renaming it means a
+migration that touches rows children have already earned, for a word none of
+them can see.
+
+**Dark accent tints stay at `--surface`** until the styleguide has real ones.
+Neutral rather than invented, and nothing depends on it: the design has not
+drawn the dark screens, and ADR-025's scope note says tokens yes, screens no.
+
+**The four item statuses map to the Leitner box**, which K9 needed and no
+record had said:
+
+- never reviewed — "nog niet geoefend", an empty dot
+- box 1 to 3 — "nog niet onthouden", a part-filled dot
+- box 4 — "dit onthoud je nu", a nearly full dot
+- box 5 — "in de vriezer", a full dot and the freezer icon
+
+The dot and the label are answering different questions on purpose. The dot says
+how much of this you hold, straight from `masteryPercent`, and it is the same
+shape as everywhere else in the product. The label says what the scheduler will
+do next. Box five is both the fullest dot and the freezer, and that is not a
+collision — it is the same fact seen from the two sides: you remember it, so we
+will leave it alone for three weeks.
+
+### Consequences
+
+`countMastered` still counts box five, so the home screen's "{goed} van de
+{totaal} onthoud je" and K9's freezer are the same set of items. A child who
+compares the two will find they agree.
+
+None of the four statuses is green. Green is an answer state, and a status that
+borrowed it would tell a child they had just got something right when all it
+means is that they knew it last Tuesday.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because

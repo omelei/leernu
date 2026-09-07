@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { countMastered, retentionAfterRound, setRetention, type ItemState } from '@/game-core';
 import { loadItemSets } from '@/content/loadSets';
 import { t, type TranslationKey } from '@/i18n';
+import { TestDate } from './TestDate';
 import { loadItemStates } from '@/store/progress';
 import { loadStreak, HOLIDAYS } from '@/store/streakStore';
 import { currentStreak, type StreakState } from '@/game-core';
@@ -81,6 +82,10 @@ export function HomeScreen({
       <h1 className="tk-display text-h1 font-semibold">
         {t('home.greeting', { naam: profile.naam })}
       </h1>
+
+      {/* Above the sets, because it is the reason one of them is being opened.
+          K1 gives it the only surface-and-border on the screen. */}
+      <TestDate />
 
       <section className="flex flex-col gap-4">
         <h2 className="tk-label">{t('home.continueTitle')}</h2>
