@@ -9,6 +9,8 @@ import { expect, test, type Page } from '@playwright/test';
 /** The home screen offers a card per set; this picks one by its name. */
 function setCard(page: Page, naam: string) {
   return page.getByRole('article').filter({ hasText: naam });
+}
+
 /**
  * Every way of practising except the default now lives on K2, so a test that
  * wants one goes through it. "Andere manieren" is on every set card and the
@@ -35,8 +37,6 @@ async function chooseAndStart(page: Page, set: RegExp, way: RegExp) {
   await page.getByRole('button', { name: set }).click();
   await page.getByRole('button', { name: way }).click();
   await page.getByRole('button', { name: /vragen$/ }).click();
-}
-
 }
 
 async function signIn(page: Page, naam: string) {
