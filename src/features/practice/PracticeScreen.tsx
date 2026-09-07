@@ -174,12 +174,7 @@ export function PracticeScreen({
           {/* A lightning round moves on by itself, so there is nothing to press
               and nothing to charge a child for pressing. */}
           {state.rule.kind !== 'tijd' && (
-            <button
-              ref={nextButton}
-              type="button"
-              className="tk-button"
-              onClick={next}
-            >
+            <button ref={nextButton} type="button" className="tk-button" onClick={next}>
               {t('practice.next')}
             </button>
           )}

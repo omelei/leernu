@@ -115,9 +115,7 @@ export function HomeScreen({
                   rather than as a start. */}
               {started && (
                 <div className="mb-6">
-                  <p className="tk-display text-h1 font-bold tabular-nums">
-                    {retention}%
-                  </p>
+                  <p className="tk-display text-h1 font-bold tabular-nums">{retention}%</p>
                   <p className="text-ink-2">{t('home.retention')}</p>
                   {/* Only when a round today would actually move the number.
                       When the scheduler says come back later it changes

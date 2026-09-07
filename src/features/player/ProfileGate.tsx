@@ -33,10 +33,7 @@ export function ProfileGate({ onReady }: { readonly onReady: (profile: ProfileRe
         <p className="mt-1 text-ink-2">{brand.slogan}</p>
       </div>
 
-      <form
-        onSubmit={(event) => void handleSubmit(event)}
-        className="tk-card flex flex-col gap-4"
-      >
+      <form onSubmit={(event) => void handleSubmit(event)} className="tk-card flex flex-col gap-4">
         <h1 className="tk-display text-h2 font-semibold">{t('profile.title')}</h1>
         <label htmlFor="naam" className="text-ink-2">
           {t('profile.help')}

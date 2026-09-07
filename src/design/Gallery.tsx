@@ -27,9 +27,7 @@ export function Gallery() {
   return (
     <main className="mx-auto flex max-w-2xl flex-col p-6">
       <h1 className="tk-display text-h1 font-semibold">Componenten</h1>
-      <p className="mt-2 text-ink-2">
-        Alleen in ontwikkeling. Elke component in elke toestand.
-      </p>
+      <p className="mt-2 text-ink-2">Alleen in ontwikkeling. Elke component in elke toestand.</p>
 
       <h2 className={HEADING}>Merk</h2>
       <div className={ROW}>
@@ -60,32 +58,18 @@ export function Gallery() {
               also the only way to check that the focus ring survives on a
               control whose own background is nearly ink. */}
           <Button variant={variant}>Hover mij</Button>
-          <Button variant={variant} disabled>
-            Uit
-          </Button>
-          <Button variant={variant} busy>
-            Bezig
-          </Button>
+          <Button variant={variant} disabled>Uit</Button>
+          <Button variant={variant} busy>Bezig</Button>
         </div>
       ))}
 
       <h2 className={HEADING}>Chip en pill</h2>
       <div className={ROW}>
-        <button type="button" className="tk-chip">
-          Chip
-        </button>
-        <button type="button" className="tk-chip" aria-pressed="true">
-          Chip aan
-        </button>
-        <button type="button" className="tk-chip" disabled>
-          Chip uit
-        </button>
-        <button type="button" className="tk-pill">
-          Pill
-        </button>
-        <button type="button" className="tk-pill" aria-pressed="true">
-          Pill aan
-        </button>
+        <button type="button" className="tk-chip">Chip</button>
+        <button type="button" className="tk-chip" aria-pressed="true">Chip aan</button>
+        <button type="button" className="tk-chip" disabled>Chip uit</button>
+        <button type="button" className="tk-pill">Pill</button>
+        <button type="button" className="tk-pill" aria-pressed="true">Pill aan</button>
       </div>
 
       <h2 className={HEADING}>Invoerveld</h2>

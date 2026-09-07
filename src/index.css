@@ -801,7 +801,7 @@
     background: var(--paper);
     border-bottom: var(--stroke-hair) solid var(--line);
   }
-/* The rail is one component with two postures, not two components.
+  /* The rail is one component with two postures, not two components.
    *
    * Lying down is the default, because that is what the smaller half of the
    * range gets: §D puts a bar of 72 under a tablet, where the child is pointing
