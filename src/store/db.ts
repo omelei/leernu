@@ -20,7 +20,14 @@ import type { ItemState, ModeId, Niveau } from '@/game-core';
  * keeps this string and changes only `brand.name`.
  */
 export const DB_NAME = 'leernu';
-export const DB_VERSION = 1;
+/**
+ * 2 since ADR-031, which renamed the streak record's `vriezers` and
+ * `vriezerWeek` to `rustdagen` and `rustdagWeek`. Reading a renamed field back
+ * as `undefined` would quietly reset a child's saved rest days to zero, with
+ * no error anywhere — the exact failure the streak exists to avoid — so the
+ * rename ships with a migration rather than a hope that nobody had data.
+ */
+export const DB_VERSION = 2;
 
 /** Both singleton stores use this key, so there is never a "which row" question. */
 export const SINGLETON_KEY = 'me';
@@ -63,9 +70,22 @@ export interface StreakRecord {
   huidigeStreak: number;
   langsteStreak: number;
   laatsteActieveDag: string | null;
-  vriezers: number;
-  /** ISO week in which the last freeze was earned, so one week gives one. */
-  vriezerWeek: string | null;
+  rustdagen: number;
+  /** ISO week in which the last rest day was earned, so one week gives one. */
+  rustdagWeek: string | null;
+}
+
+/**
+ * The streak record as it was stored before ADR-031. It exists only so the
+ * migration in `getDb` can read the old field names; nothing else may use it.
+ */
+interface LegacyStreakRecord {
+  id: string;
+  huidigeStreak: number;
+  langsteStreak: number;
+  laatsteActieveDag: string | null;
+  vriezers?: number;
+  vriezerWeek?: string | null;
 }
 
 export interface BadgeRecord {
@@ -102,21 +122,43 @@ let dbPromise: Promise<IDBPDatabase<TopoDB>> | null = null;
 
 export function getDb(): Promise<IDBPDatabase<TopoDB>> {
   dbPromise ??= openDB<TopoDB>(DB_NAME, DB_VERSION, {
-    upgrade(db) {
-      db.createObjectStore('profile', { keyPath: 'id' });
-      db.createObjectStore('itemStates', { keyPath: 'itemId' });
-      db.createObjectStore('sessions', { keyPath: 'id' });
+    upgrade(db, oldVersion, _newVersion, tx) {
+      if (oldVersion < 1) {
+        db.createObjectStore('profile', { keyPath: 'id' });
+        db.createObjectStore('itemStates', { keyPath: 'itemId' });
+        db.createObjectStore('sessions', { keyPath: 'id' });
 
-      const attempts = db.createObjectStore('attempts', { keyPath: 'id', autoIncrement: true });
-      // Both reports we know we will want: what happened in one round, and how
-      // one item is going over time.
-      attempts.createIndex('by-session', 'sessionId');
-      attempts.createIndex('by-item', 'itemId');
+        const attempts = db.createObjectStore('attempts', { keyPath: 'id', autoIncrement: true });
+        // Both reports we know we will want: what happened in one round, and
+        // how one item is going over time.
+        attempts.createIndex('by-session', 'sessionId');
+        attempts.createIndex('by-item', 'itemId');
 
-      db.createObjectStore('streak', { keyPath: 'id' });
-      db.createObjectStore('badges', { keyPath: 'badgeId' });
-      db.createObjectStore('stamps', { keyPath: 'regioSet' });
-      db.createObjectStore('settings', { keyPath: 'key' });
+        db.createObjectStore('streak', { keyPath: 'id' });
+        db.createObjectStore('badges', { keyPath: 'badgeId' });
+        db.createObjectStore('stamps', { keyPath: 'regioSet' });
+        db.createObjectStore('settings', { keyPath: 'key' });
+      }
+
+      // ADR-031: rename the one streak row in place. The read is issued
+      // synchronously and the write lands in the following microtask, which is
+      // still inside this version-change transaction — so the two are atomic,
+      // and a failed put aborts the upgrade instead of leaving half a rename.
+      if (oldVersion >= 1 && oldVersion < 2) {
+        const store = tx.objectStore('streak');
+        void store.get(SINGLETON_KEY).then((row) => {
+          if (!row) return;
+          const legacy = row as unknown as LegacyStreakRecord;
+          void store.put({
+            id: legacy.id,
+            huidigeStreak: legacy.huidigeStreak,
+            langsteStreak: legacy.langsteStreak,
+            laatsteActieveDag: legacy.laatsteActieveDag,
+            rustdagen: legacy.vriezers ?? 0,
+            rustdagWeek: legacy.vriezerWeek ?? null,
+          });
+        });
+      }
     },
   });
 

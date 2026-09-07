@@ -102,7 +102,7 @@ describe('recordActivity', () => {
     const change = recordActivity(friday, day('2026-09-14'));
 
     expect(change.state.huidigeStreak).toBe(2);
-    expect(change.freezesUsed).toBe(0);
+    expect(change.rustdagenGebruikt).toBe(0);
     expect(change.broken).toBe(false);
   });
 
@@ -111,7 +111,7 @@ describe('recordActivity', () => {
     const change = recordActivity(before, day('2027-01-04'), KERST);
 
     expect(change.state.huidigeStreak).toBe(2);
-    expect(change.freezesUsed).toBe(0);
+    expect(change.rustdagenGebruikt).toBe(0);
   });
 
   it('rewards practising during a holiday rather than ignoring it', () => {
@@ -124,41 +124,41 @@ describe('recordActivity', () => {
     expect(change.state.huidigeStreak).toBe(2);
   });
 
-  it('spends a freeze for one missed school day', () => {
+  it('spends a rest day for one missed school day', () => {
     const state = after(emptyStreak(), '2026-09-07');
-    expect(state.vriezers).toBe(1); // earned in this week
+    expect(state.rustdagen).toBe(1); // earned in this week
 
     // Skips Tuesday, comes back Wednesday.
     const change = recordActivity(state, day('2026-09-09'));
-    expect(change.freezesUsed).toBe(1);
+    expect(change.rustdagenGebruikt).toBe(1);
     expect(change.state.huidigeStreak).toBe(2);
     expect(change.broken).toBe(false);
   });
 
-  it('restarts when there are not enough freezes', () => {
+  it('restarts when there are not enough rest days', () => {
     const state = after(emptyStreak(), '2026-09-07');
-    // Four school days missed, at most two freezes ever.
+    // Four school days missed, at most two rest days ever.
     const change = recordActivity(state, day('2026-09-14'));
 
     expect(change.broken).toBe(true);
     expect(change.state.huidigeStreak).toBe(1);
   });
 
-  it('earns one freeze per week and saves no more than two', () => {
+  it('earns one rest day per week and saves no more than two', () => {
     let state = after(emptyStreak(), '2026-09-07');
-    expect(state.vriezers).toBe(1);
+    expect(state.rustdagen).toBe(1);
 
-    // Same week: no second freeze.
+    // Same week: no second rest day.
     state = after(state, '2026-09-08');
-    expect(state.vriezers).toBe(1);
+    expect(state.rustdagen).toBe(1);
 
     // Next week: a second.
     state = after(state, '2026-09-14');
-    expect(state.vriezers).toBe(2);
+    expect(state.rustdagen).toBe(2);
 
     // The week after that: still two, because two is the ceiling.
     state = after(state, '2026-09-21');
-    expect(state.vriezers).toBe(2);
+    expect(state.rustdagen).toBe(2);
   });
 
   it('remembers the longest run even after a break', () => {
@@ -188,10 +188,10 @@ describe('currentStreak', () => {
    * streak at all: they open the app on 12, practise, and watch it become 1.
    * This reports what a round today would actually be joining.
    */
-  it('reports zero once the freezes can no longer cover the gap', () => {
+  it('reports zero once the rest days can no longer cover the gap', () => {
     const state = after(emptyStreak(), '2026-09-07');
-    expect(currentStreak(state, day('2026-09-09'))).toBe(1); // one freeze covers it
-    expect(currentStreak(state, day('2026-09-14'))).toBe(0); // four days, one freeze
+    expect(currentStreak(state, day('2026-09-09'))).toBe(1); // one rest day covers it
+    expect(currentStreak(state, day('2026-09-14'))).toBe(0); // four days, one rest day
   });
 });
 

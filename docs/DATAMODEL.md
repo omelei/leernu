@@ -52,7 +52,7 @@ device itself.
 
 // object store: streak        exactly one record, key 'me'
 {
-  (id, huidigeStreak, langsteStreak, laatsteActieveDag, vriezers, vriezerWeek);
+  (id, huidigeStreak, langsteStreak, laatsteActieveDag, rustdagen, rustdagWeek);
 }
 
 // object store: badges        { badgeId, behaaldOp }
@@ -60,7 +60,7 @@ device itself.
 // object store: settings      { key, value } — device preferences, not player data
 ```
 
-`vriezerWeek` is the ISO week in which the last freeze was earned, so a week of
+`rustdagWeek` is the ISO week in which the last rest day was earned, so a week of
 practice yields exactly one. It is not in part B's `streaks` table because part B
 was written before the rule existed; it belongs there too when that table is
 built.
@@ -363,7 +363,7 @@ create table streaks (
   huidige_streak    integer not null default 0,
   langste_streak    integer not null default 0,
   laatste_actieve_dag date,
-  vriezers          smallint not null default 0 check (vriezers between 0 and 2)
+  rustdagen         smallint not null default 0 check (rustdagen between 0 and 2)
 );
 
 create table league_entries (

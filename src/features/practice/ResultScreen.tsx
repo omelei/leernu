@@ -171,8 +171,8 @@ function StreakLine({ state }: { readonly state: RoundState }) {
         : t('result.streakGrew', { aantal: days })}
       {/* Said out loud rather than silently spent. A safety net nobody knows
           about protects the streak but teaches nothing about coming back. */}
-      {streak.freezesUsed > 0 && ` ${t('result.streakSaved')}`}
-      {streak.freezeEarned && ` ${t('result.freezeEarned')}`}
+      {streak.rustdagenGebruikt > 0 && ` ${t('result.streakSaved')}`}
+      {streak.rustdagVerdiend && ` ${t('result.restDayEarned')}`}
     </p>
   );
 }

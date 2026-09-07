@@ -12,6 +12,11 @@ ADR-014 (scope: app only, no commercial model, no classes), ADR-016 (no class
 streak), ADR-004 accepted, and ADR-006, ADR-009 and ADR-010 rejected in favour
 of the original specification.
 
+**Decisions taken by the product owner on 2026-09-07**, on business plan v6:
+ADR-024 through ADR-031. Where the app design and the business plan disagree,
+the plan wins; where the styleguide and the design disagree, the styleguide
+wins.
+
 ---
 
 ## ADR-001 — Build environment
@@ -624,6 +629,345 @@ unfalsifiable claim. "Voldoet aan de kerndoelen" is not a sentence anyone may
 write.
 
 ---
+
+## ADR-024 — Brand language: one slogan, four fixed sentences
+
+**Status:** accepted — business plan v6, 2026-09-07.
+
+### Context
+
+The app design (P3, homepage) carries the slogan "Geleerd blijft geleerd."
+Business plan v6 §5.11 replaces it. The design predates the plan, and the source
+ranking for this phase is: business plan above styleguide above design.
+
+Two of the four sentences do work the others cannot. The proof line names a
+child and a number, which is the only claim on the page a parent can check
+against their own child. The conversion line names the thing the parent is
+buying their way out of, not the thing we are selling.
+
+### Decision
+
+Four fixed sentences, and they live in `src/config/brand.ts` as data:
+
+- slogan — "Leren om te onthouden."
+- heading — "Spelen. Leren. Onthouden."
+- proof — "Sofie onthoudt 9 van de 12 provincies."
+- conversion — "Nooit meer overhoren."
+
+"Geleerd blijft geleerd" is gone and may not be reintroduced by a component.
+
+The slogan is never set horizontally beside the wordmark. It sits stacked
+underneath it, left-aligned. A horizontal lockup turns the slogan into a
+descender of the logo and forces it below its own reading size on a 393 px
+screen.
+
+### Consequences
+
+A component that needs one of these sentences reads it from `brand`; it may not
+compose its own. That is what keeps white-labelling a one-file change, which
+`brand.ts` already promises in its own header comment.
+
+---
+
+## ADR-025 — No reading mode, and no flag for one
+
+**Status:** accepted — business plan v6 decision 6, confirmed 2026-09-07.
+
+### Context
+
+The design (K10) shows a reading-mode switch with a live sample beside it, and
+styleguide §C specifies the variant in full: letter spacing +4%, word spacing
++16%, line height 1.8×, line length at most 62 characters, headings in the quiet
+family, no italics and no capitals.
+
+Business plan v6 drops it. ADR-020 already rejected a dyslexia font setting, so
+this is the second accessibility affordance to be declined, and that pattern is
+worth being uncomfortable about.
+
+**The counterargument, recorded because a decision without it cannot be
+re-judged in two years.** The read-aloud button on every question covers the
+child who cannot read the question independently. It does not cover the child
+with dyslexia who reads perfectly well and needs nothing but more air between
+the letters. For that child, read-aloud is slower than reading and the offer is
+beside the point. Declining the reading mode is a real cost to a real group; it
+is being declined for scope, not because the need is imagined.
+
+### Decision
+
+Do not build it. Not behind a feature flag either — a switched-off flag is code
+nobody runs and nobody tests, and it breaks silently at the first refactor, so
+it buys the appearance of readiness at the price of a lie in the codebase.
+
+K10 loses the switch and the sample beside it: two switches, not three.
+
+Styleguide §C keeps the specification as a paper reserve, so that reopening this
+is an implementation and not a design round.
+
+What takes its place is not nothing: the base typography must honour the
+system's own text-size setting up to 200%, at which point heading-1 wraps to two
+lines, the question bar grows with it, and nothing is clipped. That is now the
+only typographic accessibility affordance in the product, so it has to actually
+work — on all four sizes, tested, not assumed.
+
+### Consequences
+
+If the reading mode is ever reopened, the styleguide already holds the numbers
+and the change is a token set plus a switch in the child's profile.
+
+Until then, "we support your system text size" is a claim the app has to survive
+being tested on.
+
+---
+
+## ADR-026 — One paid tier, and fourteen free days
+
+**Status:** accepted — business plan v6 §8.1, decision 20.
+
+### Context
+
+The design's pricing page (P2) shows three tiers: Gratis, Basis €49, Compleet
+€79. Business plan v6 collapses them.
+
+A middle tier prices the product against itself. The parent who would pay €79
+now has a reason to pay €49, and the parent who would pay nothing is not moved
+by €49 either — so the tier converts downwards and almost never upwards.
+
+### Decision
+
+One paid tier: €79 per year or €7,95 per month, up to four children. Basis is
+dropped. In its place, fourteen days free to try.
+
+The pricing page shows two columns — Gratis and leer.nu — plus the existing
+comparison against Squla and Junior Einstein.
+
+### Consequences
+
+The public pages are out of scope for this build (no backend, ADR-015), so this
+record governs no code today. It is written now so that the page, when it is
+built, is not built from the design file.
+
+---
+
+## ADR-027 — Challenges are free and unlimited; only the friend count is capped
+
+**Status:** accepted — business plan v6 decision 24.
+
+### Context
+
+The design's free tier (K1) shows "1 uitdaging deze week over". A challenge sent
+is an invitation to a child who does not have the app yet; metering it meters
+our own distribution.
+
+### Decision
+
+No weekly limit on challenges, in either tier. The only limit is the number of
+friends: three on the free tier, twenty on the paid one.
+
+### Consequences
+
+The friend layer is out of scope for this build. The constant that would have
+carried a weekly quota is never introduced, which is cheaper than removing it
+later.
+
+---
+
+## ADR-028 — Seven modules; clock reading is its own, on hue 52°
+
+**Status:** accepted — business plan v6 §5.1 and §5.5, decision 12; hue chosen 2026-09-07.
+
+### Context
+
+The styleguide designs six module accents on one ring — lightness 0.55, chroma
+0.125 — and names the second accent "tafels en klok". Business plan v6 splits
+those into two modules, each with its own name, entrance, pictogram and accent.
+That makes seven, and the seventh needs a hue.
+
+The styleguide's own rule for a new accent: at least 28° from every existing
+accent and 20° from the semantic hues (25° red, 78° amber, 150° green). It then
+suggests 216°, 262° and 300° as free.
+
+**Those three suggestions are wrong.** Measured in OKLCH, the existing accents
+sit at topografie 249.8°, tafels 165.8°, woorden 287.7°, spelling 326.0°,
+tijdvakken 108.0°, vlaggen 202.2°, and the semantic hues at fout 24.9°,
+aandacht 78.4°, goed 150.1° — the last three exactly as the styleguide itself
+notes them, so the measurement agrees with the source. Every hue, chroma and
+contrast figure in this record is measured from the hex values, not copied.
+
+Against the 28° rule, 216° is 13.8° from vlaggen, 262° is 12.2° from
+topografie, and 300° is 12.3° from woorden. All three fail.
+
+A full scan of the circle at 0.1° resolution leaves two gaps, 24.3° of arc in
+total: 44.9°–58.3° (13.4° wide) and 354.0°–4.9° (10.9° wide, bounded by
+fout-red).
+
+### Decision
+
+Clock reading takes the wide gap, at hue 52°:
+
+- `--klok` #A9591F — surface; paper on it 4.86:1
+- `--klok-text` #823C00 — text; on the tint 6.47:1
+- `--klok-tint` #FFE0CD
+- `--klok-dark` #E49564 — dark theme; on paper #0F130F 7.84:1
+
+Measured, it sits on the ring at L 0.550 / C 0.125 — the same place as
+topografie, woorden and spelling — 55.9° from tijdvakken (the nearest accent),
+27.2° from fout-red and 26.3° from aandacht-amber. It clears the styleguide's
+own rule on every count, with the least room against amber.
+
+**Amber is tight.** Clock reading may therefore never be the sole distinction
+beside an attention message. The styleguide already requires that a module is
+always named by pictogram and word as well as by colour; for this accent that
+stops being a good habit and becomes a condition of the colour being usable at
+all.
+
+### Consequences
+
+**One slot is left.** After clock reading takes 52°, a single 10.9° gap remains,
+at 354.0°–4.9°, hemmed in by fout-red. The system runs out at **eight**
+modules, not the twelve the styleguide claims — while business plan §5.5 plans a
+long tail of biology, road signs and music notation behind the seven.
+
+That tail cannot each have its own accent. Whatever replaces "one module, one
+hue" — a shared accent for a family of modules, a second ring at another
+lightness, or accents only for the modules that are sold — is a brand decision,
+and it has to be taken **before** module eight rather than after. It is recorded
+here as an open question. Nothing in this build is designed around an answer to
+it.
+
+A second, smaller correction for the styleguide: "one ring, only the hue
+differs" is not quite true as built. Measured: tafels C 0.116, tijdvakken
+C 0.119, and vlaggen C 0.096 at L 0.565. Vlaggen is visibly less saturated than
+the rest because that hue does not fit in sRGB at that chroma. The colours are
+right; the sentence about them is not, and vlaggen does read slightly duller
+beside the other five.
+
+A third: the dark theme’s neutral, #91A3B5, is noted at 7.66:1 on dark paper
+and measures 7.24:1. Still comfortably AA, and far enough off to be a typo
+rather than a rounding difference. Light neutral #5C6B7A is noted at 5.29:1 and
+measures 5.23:1, which is rounding. Every other ratio in §B — twenty-seven of
+twenty-nine pairs — reproduces exactly, so the styleguide’s measurements can be
+trusted and these two are worth fixing precisely because the rest are right.
+
+---
+
+## ADR-029 — Module order follows the plan, and the clock does not go last
+
+**Status:** accepted — business plan v6 §5.5.
+
+### Context
+
+The design's module rail runs topo, tafels, woorden, spelling, tijdvak,
+vlaggen — the v5 order, from before clock reading was split out.
+
+### Decision
+
+The rail order is: topografie, tafels, klokkijken, woordjes, spelling,
+tijdvakken, vlaggen. Six are visible and the seventh sits behind "meer".
+
+Clock reading takes its place third, in the order, rather than being appended.
+Appending it would put the newest module where a child stops looking, and the
+order is a statement about what the product is for.
+
+### Consequences
+
+The rail renders from an ordered list of modules rather than a hand-written
+sequence of components, so an eighth module is a data change.
+
+---
+
+## ADR-030 — One word for retention: "onthouden"
+
+**Status:** accepted — business plan v6 §5.7, decision 4.
+
+### Context
+
+The app today says `home.setMastered` = "{goed}/{totaal} vast". The business
+plan names this string specifically as one to repair.
+
+"Vast", "blijft zitten" and "beheersing" are three words for one idea, and two
+of them carry school baggage a ten-year-old hears before they hear the meaning.
+"Blijft zitten" in particular means being held back a year.
+
+### Decision
+
+One word for retention, everywhere: **onthouden**.
+
+- `home.setMastered` becomes "{goed} van de {totaal} onthoud je".
+- The fixed phrasings are "dit onthoud je nu", "nog niet onthouden", and
+  "Sofie onthoudt 9 van de 12 provincies".
+- "Vast", "blijft zitten" and "beheersing" do not appear in user-facing text.
+  "Beheersing" survives only as a percentage in the VO guise, and never in
+  anything a parent reads.
+- "Score" has exactly one job: the result of one practice test or one duel. It
+  is not a word for how much a child knows.
+
+### Consequences
+
+A test fails on a user-facing string containing any of the retired words, so
+this is enforced rather than remembered.
+
+---
+
+## ADR-031 — "Vriezer" means one thing: the item status. Streak protection is a "rustdag"
+
+**Status:** accepted — 2026-09-07.
+
+### Context
+
+The word is currently used for two different mechanics.
+
+In the code, a freeze is streak protection: one is earned per week practised, at
+most two are saved, and a missed school day spends one instead of resetting the
+streak (`src/game-core/streak.ts`, `home.freezes`).
+
+In the design (K9), "in de vriezer" is an item status: something remembered so
+well that it will not be asked for months.
+
+One word and one icon for two mechanics is the kind of fault that stays
+invisible in review and surfaces the first time a child asks why their freezer
+went down on a day they got everything right.
+
+### Decision
+
+**The item status keeps "in de vriezer".** It is the design's own decision and
+the stronger metaphor — a thing put away because it is finished — and the
+styleguide's icon belongs to it.
+
+**Streak protection becomes "rustdag".** A day off is what it actually is.
+
+The rename goes all the way down, not just to the visible text:
+
+- `StreakState.vriezers` becomes `rustdagen`, `StreakState.vriezerWeek` becomes
+  `rustdagWeek`
+- `StreakChange.freezesUsed` becomes `rustdagenGebruikt`,
+  `StreakChange.freezeEarned` becomes `rustdagVerdiend`
+- `MAX_FREEZES` becomes `MAX_RUSTDAGEN`
+- `StreakRecord` in the local store, and the future Postgres columns in
+  `docs/DATAMODEL.md`, follow
+- i18n keys `home.freezes` and `home.freezesMany` become `home.restDay` and
+  `home.restDays`; `result.freezeEarned` becomes `result.restDayEarned`
+
+A variable named `vriezers` behind a screen that says "rustdag" is the same
+confusion one layer down, where it is harder to find.
+
+The stored record changes shape, so `DB_VERSION` goes to 2 with a migration that
+rewrites the streak singleton. Nothing has shipped and the migration will almost
+never run, but a field rename that silently reads `undefined` as zero would
+erase a child's saved rest days with no error — which is precisely the failure
+mode the streak feature exists to avoid.
+
+### Consequences
+
+`docs/DATAMODEL.md` is a living specification and is corrected to match. The
+earlier records here are not: ADR-014 and ADR-016 keep the word "freeze",
+because an accepted record is superseded rather than edited, and both use the
+English name of the mechanic rather than the Dutch word a child reads.
+
+"Vriezer" now appears in exactly one place in the product, and it means one
+thing.
+
+---
+
 
 ## Deferred with accounts and commerce (ADR-014)
 

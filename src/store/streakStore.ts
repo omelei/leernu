@@ -29,8 +29,8 @@ export async function loadStreak(): Promise<StreakState> {
     huidigeStreak: row.huidigeStreak,
     langsteStreak: row.langsteStreak,
     laatsteActieveDag: row.laatsteActieveDag,
-    vriezers: row.vriezers,
-    vriezerWeek: row.vriezerWeek,
+    rustdagen: row.rustdagen,
+    rustdagWeek: row.rustdagWeek,
   };
 }
 

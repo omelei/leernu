@@ -190,7 +190,7 @@ export function HomeScreen({
  * The streak, reported honestly.
  *
  * `currentStreak` rather than the stored number: a child who has already run
- * out of freezes should not be shown a 12 that turns into a 1 the moment they
+ * out of rest days should not be shown a 12 that turns into a 1 the moment they
  * practise. Seeing it drop is worse than never having been told.
  */
 function StreakBadge({ state }: { readonly state: StreakState | null }) {
@@ -202,11 +202,11 @@ function StreakBadge({ state }: { readonly state: StreakState | null }) {
   return (
     <p className="tk-label">
       {days === 1 ? t('home.streakOne') : t('home.streakMany', { aantal: days })}
-      {state.vriezers > 0 &&
+      {state.rustdagen > 0 &&
         ` · ${
-          state.vriezers === 1
-            ? t('home.freezes', { aantal: state.vriezers })
-            : t('home.freezesMany', { aantal: state.vriezers })
+          state.rustdagen === 1
+            ? t('home.restDay', { aantal: state.rustdagen })
+            : t('home.restDays', { aantal: state.rustdagen })
         }`}
     </p>
   );

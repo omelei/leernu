@@ -16,8 +16,10 @@ export const nl = {
   // ten-year-old notices immediately.
   'home.streakOne': '1 dag op rij',
   'home.streakMany': '{aantal} dagen op rij',
-  'home.freezes': '{aantal} vriezer bewaard',
-  'home.freezesMany': '{aantal} vriezers bewaard',
+  // "Rustdag", not "vriezer": ADR-031 gives that word back to the item status,
+  // where it means something a child is done with rather than a day off.
+  'home.restDay': '{aantal} rustdag bewaard',
+  'home.restDays': '{aantal} rustdagen bewaard',
   'home.privacy': 'Geen advertenties. Geen account nodig.',
   'home.continueTitle': 'Verder waar je was',
   'home.retention': 'weet je hier over drie weken nog van',
@@ -94,8 +96,8 @@ export const nl = {
   'result.streakStarted': 'Je bent begonnen. Kom morgen terug!',
   'result.streakGrew': 'Dat is {aantal} dagen op rij.',
   'result.streakGrewOne': 'Dat is je eerste dag.',
-  'result.streakSaved': 'Je vriezer heeft je streak gered.',
-  'result.freezeEarned': 'Je hebt er een vriezer bij verdiend.',
+  'result.streakSaved': 'Je rustdag heeft je streak gered.',
+  'result.restDayEarned': 'Je hebt er een rustdag bij verdiend.',
   'result.earned': 'Je verdiende {xp} punten.',
   'result.newBadge': 'Nieuwe badge: {naam}',
 
