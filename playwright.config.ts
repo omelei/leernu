@@ -1,4 +1,11 @@
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig, devices, type ReporterDescription } from '@playwright/test';
+
+// The HTML report carries the traces, so it is written on CI as well as
+// locally. A red run whose uploaded artifact is empty costs a whole round trip
+// to reproduce, and this repository is developed where its toolchain does not
+// run. `github` stands beside it to put failures on the job page.
+const html: ReporterDescription = ['html', { open: 'never' }];
+const github: ReporterDescription = ['github'];
 
 // The five sizes of the app design, because §D gives each of them a different
 // navigation model and the difference between them is where layout breaks.
@@ -21,7 +28,7 @@ export default defineConfig({
   // waits after a failure, which in a Codespace looks exactly like a hung test
   // run. The report is still written; open it yourself with `npx playwright
   // show-report`.
-  reporter: process.env.CI ? 'github' : [['html', { open: 'never' }]],
+  reporter: process.env.CI ? [github, html] : [html],
   use: {
     baseURL: 'http://localhost:4173',
     trace: 'on-first-retry',

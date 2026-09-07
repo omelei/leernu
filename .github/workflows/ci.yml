@@ -22,6 +22,15 @@ jobs:
       - run: npm run lint
       - run: npm run typecheck
       - run: npm run format:check
+      # Prettier names the files it disagrees with but not the disagreement,
+      # and this repository is written on a machine where its toolchain cannot
+      # run. On a red check the diff is the answer, so print it here rather
+      # than guess at it from the file names.
+      - name: Show what Prettier would change
+        if: failure()
+        run: |
+          npx prettier --write . > /dev/null
+          git --no-pager diff
       # A broken geometry reference must never reach a classroom.
       - run: npm run validate:content
       - run: npm test

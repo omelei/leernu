@@ -16,22 +16,21 @@ function setCard(page: Page, naam: string) {
  * off by default (K10). Turning it on is part of getting there, so this tests
  * the setting as well as the round.
  *
- * The reload is not decoration. The preference is written to IndexedDB without
- * being awaited, so the switch reads as on before the write has landed; coming
- * back to the page is what proves it persisted.
+ * The switch moves only once the write has landed, so waiting for it to read as
+ * on is waiting for IndexedDB. The reload then proves the value survives the
+ * page rather than the render.
  */
 async function turnTheClockOn(page: Page) {
-  await page.goto('/jij');
-
   const clock = page.getByRole('button', { name: /Klok bij het oefenen/ });
+
+  await page.goto('/jij');
   await expect(clock).toHaveAttribute('aria-pressed', 'false');
+
   await clock.click();
+  await expect(clock).toHaveAttribute('aria-pressed', 'true');
 
   await page.reload();
-  await expect(page.getByRole('button', { name: /Klok bij het oefenen/ })).toHaveAttribute(
-    'aria-pressed',
-    'true',
-  );
+  await expect(clock).toHaveAttribute('aria-pressed', 'true');
 }
 
 async function startChallenge(page: Page, naam: string) {

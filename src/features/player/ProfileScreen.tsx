@@ -30,10 +30,15 @@ export function ProfileScreen({ profile }: { readonly profile: ProfileRecord }) 
     });
   }, []);
 
+  /**
+   * The switch moves after the write, not before it. Flipping it first and
+   * writing afterwards reads a few milliseconds sooner and is a lie the moment
+   * the write does not land: a child who turns the clock on and closes the tab
+   * would find it off again. What the switch shows is what is stored.
+   */
   const toggle = (name: keyof Preferences) => {
     const next = { ...prefs, [name]: !prefs[name] };
-    setPrefs(next);
-    void savePreference(name, next[name]);
+    void savePreference(name, next[name]).then(() => setPrefs(next));
   };
 
   return (
