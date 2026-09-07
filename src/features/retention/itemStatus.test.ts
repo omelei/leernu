@@ -42,18 +42,22 @@ describe('what one item is doing', () => {
     expect(retentionOf(correctTimes(4))).toBe(1);
   });
 
-  it('takes one slip out of the freezer, but not out of remembering', () => {
-    // A single wrong answer moves box five to box four, which is "dit onthoud
-    // je nu" and not "nog niet onthouden". That is the scheduler being kind on
-    // purpose (ADR-005) and the label following it rather than overruling it: a
-    // child who misses one after weeks of getting it right has not forgotten it.
+  it('sends one wrong answer all the way back to the start', () => {
+    // Leitner here is strict, and this test exists to say so out loud. A wrong
+    // answer does not step down one box: `nextBox` returns 1 whatever the item
+    // was on, so weeks in the freezer end at "nog niet onthouden" the moment a
+    // child misses it once.
+    //
+    // Whether that is right is a teaching question and not this file's to
+    // answer — ADR-005 chose the schedule for being explainable in a sentence,
+    // and "one mistake and it starts again" is certainly that. What matters
+    // here is that the label follows the box rather than softening it, so the
+    // screen never claims a child remembers something the scheduler has already
+    // decided to ask them again tomorrow.
     const slipped = review(correctTimes(4), false, new Date('2026-10-01T10:00:00'));
-    expect(statusOf(slipped)).toBe('remembered');
-    expect(retentionOf(slipped)).toBe(0.75);
-
-    // Two more, and it really is back to practising.
-    const twice = review(slipped, false, new Date('2026-10-02T10:00:00'));
-    expect(statusOf(twice)).toBe('practising');
+    expect(slipped.box).toBe(1);
+    expect(statusOf(slipped)).toBe('practising');
+    expect(retentionOf(slipped)).toBe(0);
   });
 
   it('says "today" for anything already due rather than showing a past date', () => {

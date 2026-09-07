@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { Shell } from './Shell';
-import { DESTINATIONS, MODULES, BUILT_DESTINATIONS, BUILT_MODULES } from './modules';
+import { DESTINATIONS, MODULES } from './modules';
 
 /**
  * The frame, and the rule that decides whether it has navigation at all.
@@ -16,8 +16,11 @@ import { DESTINATIONS, MODULES, BUILT_DESTINATIONS, BUILT_MODULES } from './modu
  */
 describe('the shell', () => {
   it('offers no navigation while there is one of everything', () => {
+    // One of each, written here rather than read from the real lists. Those
+    // grow — this test started failing the moment K9 became a second
+    // destination — and what is being checked is the rule, not the content.
     render(
-      <Shell modules={BUILT_MODULES} destinations={BUILT_DESTINATIONS}>
+      <Shell modules={MODULES.slice(0, 1)} destinations={DESTINATIONS.slice(0, 1)}>
         <p>vandaag</p>
       </Shell>,
     );

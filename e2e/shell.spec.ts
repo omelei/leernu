@@ -35,11 +35,14 @@ test('a round has no navigation in the document at all', async ({ page }) => {
   await expect(page.locator('.tk-tabbar')).toHaveCount(0);
   await expect(page.locator('.tk-appbar')).toHaveCount(0);
 
-  // What is left is the whole of it: a way out, the progress, and the question
-  // read aloud.
+  // What is left is a way out and the progress.
+  //
+  // The read-aloud button belongs in that list and is not asserted, because
+  // SpeakButton renders nothing when the platform offers no speech voices and
+  // headless Chromium offers none. Asserting it here would mean asserting the
+  // browser rather than the app.
   await expect(page.getByRole('button', { name: 'Stoppen' })).toBeVisible();
   await expect(page.getByRole('progressbar')).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Lees de vraag voor' })).toBeVisible();
 });
 
 test('the frame comes back when the round ends', async ({ page }) => {

@@ -98,15 +98,28 @@ export function PracticeScreen({
 
   return (
     <div className="flex h-screen flex-col bg-paper">
-      <header className="flex flex-none items-center gap-6 border-b border-line px-6 py-4">
-        <div className="min-w-0">
+      {/* Wraps rather than truncates.
+       *
+       * The question used to be `truncate` in a row it shared with the counters
+       * and the stop button. At 393px that row overflows, `min-w-0` lets the
+       * question shrink to nothing, and the child is left looking at a map with
+       * no question — which is what the e2e run found: the heading was in the
+       * document and zero pixels wide.
+       *
+       * A question is the one thing on this screen that may never be clipped, so
+       * it takes a whole line of its own when the header cannot hold everything,
+       * and the counters drop below it. K3 replaces this properly on a phone by
+       * putting the question on the map; until then it wraps, which is at least
+       * always readable. */}
+      <header className="flex flex-none flex-wrap items-center gap-4 border-b border-line px-6 py-4 md:gap-6">
+        <div className="min-w-0 flex-1 basis-full md:basis-auto">
           <p className="tk-label">{label}</p>
-          <h1 className="tk-display truncate text-h1 font-semibold">{vraag}</h1>
+          <h1 className="tk-display text-h1 font-semibold">{vraag}</h1>
         </div>
 
         <SpeakButton text={vraag} />
 
-        <div className="ml-auto flex items-center gap-6">
+        <div className="ml-auto flex items-center gap-4 md:gap-6">
           {/* What is running out, or how far along you are — never both, because
               in a timed round the question number counts towards nothing. */}
           {state.secondsLeft !== null ? (
