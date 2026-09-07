@@ -8,6 +8,7 @@ import {
   type ViewFit,
 } from '@/game-core';
 import type { GeoSet, PointSet, Punt, Vorm } from '@/content/loadGeo';
+import { Dot } from '@/components/Dot';
 
 /**
  * The map, and the only place the answer is shown.
@@ -59,6 +60,15 @@ export interface MapCanvasProps {
   readonly targetId: string;
   readonly chosenId: string | null;
   readonly revealed: boolean;
+  /**
+   * How the answer was judged, once it is revealed.
+   *
+   * The map cannot work this out on its own. Pointing at the right shape is
+   * visible here, but a typed answer has no chosen shape at all, and "bijna" —
+   * naming another real place that is nearly the one asked for (ADR-017) — is a
+   * verdict the answer module reaches, not a position on a map.
+   */
+  readonly verdict?: 'correct' | 'near' | 'wrong';
   readonly onPick: (id: string) => void;
 }
 
@@ -81,7 +91,7 @@ function useRenderedHeight(ref: React.RefObject<SVGSVGElement | null>): number {
   return height;
 }
 
-type AnswerState = 'open' | 'asked' | 'target' | 'wrong';
+type AnswerState = 'open' | 'asked' | 'correct' | 'near' | 'wrong' | 'missed';
 
 function stateOf(
   id: string,
@@ -89,9 +99,18 @@ function stateOf(
   chosenId: string | null,
   revealed: boolean,
   interaction: MapInteraction,
+  verdict?: 'correct' | 'near' | 'wrong',
 ): AnswerState {
   if (revealed) {
-    if (id === targetId) return 'target';
+    if (id === targetId) {
+      // The three ways the right shape can end a question, and they must not
+      // look alike: the child found it, the child nearly named it, or the child
+      // is being shown it. Before step 7 all three drew the same green outline,
+      // which told a child who had just got it wrong that they had got it right.
+      if (verdict === 'near') return 'near';
+      if (verdict === 'correct' || chosenId === targetId) return 'correct';
+      return 'missed';
+    }
     if (id === chosenId) return 'wrong';
     return 'open';
   }
@@ -189,7 +208,7 @@ export function MapCanvas({
           key={shape.id}
           shape={shape}
           name={namesById.get(shape.id) ?? shape.bronnaam}
-          state={stateOf(shape.id, targetId, chosenId, revealed, interaction)}
+          state={stateOf(shape.id, targetId, chosenId, revealed, interaction, verdict)}
           dimmedWhenOpen={interaction === 'show'}
           clickable={clickable}
           fit={fit}
@@ -205,7 +224,7 @@ export function MapCanvas({
             key={point.id}
             point={point}
             name={namesById.get(point.id) ?? point.bronnaam}
-            state={stateOf(point.id, targetId, chosenId, revealed, interaction)}
+            state={stateOf(point.id, targetId, chosenId, revealed, interaction, verdict)}
             clickable={clickable}
             fit={fit}
             onPick={() => clickable && onPick(point.id)}
@@ -216,6 +235,19 @@ export function MapCanvas({
       {/* Drawn before the label so the label stays on top of it. */}
       {showTravel && chosenPos !== null && targetPos !== null && (
         <TravelPath from={chosenPos} to={targetPos} />
+      )}
+
+      {/* The mark that says which of the four states this is, drawn after the
+          shapes so it never ends up underneath one. */}
+      {revealed && targetPos !== null && (
+        <StateMark
+          state={stateOf(targetId, targetId, chosenId, revealed, interaction, verdict)}
+          x={targetPos[0]}
+          y={targetPos[1]}
+        />
+      )}
+      {revealed && chosenPos !== null && chosenId !== targetId && (
+        <StateMark state="wrong" x={chosenPos[0]} y={chosenPos[1]} />
       )}
 
       {revealed && targetPos !== null && (
@@ -234,15 +266,76 @@ export function MapCanvas({
 
 function shapeClass(state: AnswerState, dimmedWhenOpen: boolean): string {
   switch (state) {
-    case 'target':
-      return 'tk-shape tk-shape-target';
+    case 'correct':
+      return 'tk-shape tk-shape-correct';
+    case 'near':
+      return 'tk-shape tk-shape-near';
     case 'wrong':
       return 'tk-shape tk-shape-wrong';
+    case 'missed':
+      return 'tk-shape tk-shape-missed-outer';
     case 'asked':
       return 'tk-shape tk-shape-asked';
     default:
       return dimmedWhenOpen ? 'tk-shape-dim' : 'tk-shape';
   }
+}
+
+/**
+ * The four answer states, as marks.
+ *
+ * Colour adds speed and shape carries the meaning, so each of these has to be
+ * told apart in grey: a tick, a cross, a half-filled dot and a full one.
+ *
+ * "Bijna" gets no mark of its own and no colour of its own. A tick would say
+ * it was right and a cross would say it was wrong, and it is neither; amber
+ * would be a fifth thing to learn, and the hatch already belongs to wrong.
+ * What it gets is the half-filled dot — the same half-filled dot that means
+ * "practised, not yet certain" on K9, drawn by the same component, because it
+ * is the same idea arriving at a different moment.
+ */
+function StateMark({
+  state,
+  x,
+  y,
+}: {
+  readonly state: AnswerState;
+  readonly x: number;
+  readonly y: number;
+}) {
+  // Map units, so the mark grows and shrinks with the map rather than floating
+  // at a fixed size over a country that has zoomed away from it.
+  const size = 22;
+
+  if (state === 'correct') {
+    // Paper, not ink: this is the only state with a solid fill under its mark.
+    return (
+      <path
+        d={`M ${x - 7} ${y} l 5 5 l 9 -11`}
+        className="tk-mark tk-mark-on-fill"
+        aria-hidden="true"
+      />
+    );
+  }
+
+  if (state === 'wrong') {
+    return (
+      <g aria-hidden="true" className="tk-mark">
+        <path d={`M ${x - 6} ${y - 6} l 12 12`} />
+        <path d={`M ${x + 6} ${y - 6} l -12 12`} />
+      </g>
+    );
+  }
+
+  if (state === 'near' || state === 'missed') {
+    return (
+      <g transform={`translate(${x - size / 2}, ${y - size / 2})`} aria-hidden="true">
+        <Dot size={size} fill={state === 'near' ? 0.5 : 1} />
+      </g>
+    );
+  }
+
+  return null;
 }
 
 function AnswerShape({
@@ -272,6 +365,12 @@ function AnswerShape({
 
   return (
     <g>
+      {/* The double rule of "gemist". SVG has no double stroke, so the path is
+          drawn twice: the wide ink one below, a narrow paper one on top, which
+          leaves two bands of ink with a gap between them. */}
+      {state === 'missed' && (
+        <path d={shape.d} className="tk-shape-missed-inner" aria-hidden="true" />
+      )}
       <path
         d={shape.d}
         className={shapeClass(state, dimmedWhenOpen)}

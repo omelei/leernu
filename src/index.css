@@ -888,10 +888,21 @@
     color: var(--ink);
   }
 
-  /* Map shapes. The reveal styles come straight from the design: a correct
-   * answer is outlined green on paper rather than filled, and a wrong one is
-   * filled with a hatch — a texture, so the difference survives being colour
-   * blind or printed in grey. */
+  /* Map shapes, and the four answer states of step 7.
+   *
+   * Each one is told apart by its shape before its colour: a fill, a border
+   * weight and a mark. Colour adds speed; form carries the meaning, so all four
+   * survive being colour blind, being printed in grey, and both themes.
+   *
+   *   goed          closed fill, tick, 2px ink border
+   *   bijna         open fill, single 3px border, half-filled dot
+   *   fout          hatched fill, cross
+   *   gemist        open fill, double border, full dot
+   *
+   * The hatch is always on wrong and never on right: the exception gets the
+   * texture. And "gemist" — the answer that was correct but the child did not
+   * give — is never the same picture as one they got right themselves, which is
+   * the whole reason there are four states here rather than three. */
   .tk-shape {
     fill: var(--map-land);
     stroke: var(--ink);
@@ -915,15 +926,63 @@
     stroke-width: 3;
     cursor: default;
   }
-  .tk-shape-target {
-    fill: var(--paper);
-    stroke: var(--good);
-    stroke-width: 3;
+  /* Goed: closed, and the only closed shape on the map — which is why it does
+   * not need reading. §B is precise about the parts: a solid fill, a 2px ink
+   * border, and a tick at 4.96:1 on the fill. That ratio is paper on good, so
+   * the tick is paper rather than ink; the border is what stays ink. */
+  .tk-shape-correct {
+    fill: var(--good);
+    stroke: var(--ink);
+    stroke-width: var(--stroke-active);
   }
+
+  /* Bijna: an open area with one heavier rule and nothing else. No tick, no
+   * cross, and deliberately no colour of its own — amber would be a fifth
+   * meaning to learn, and the hatch belongs to wrong. What says "nearly" is the
+   * half-filled dot, which is the same half-filled dot that means "practised,
+   * not yet certain" on K9. */
+  .tk-shape-near {
+    fill: var(--paper);
+    stroke: var(--ink);
+    stroke-width: var(--stroke-answer);
+  }
+
   .tk-shape-wrong {
     fill: url(#tk-hatch);
     stroke: var(--bad);
+    stroke-width: var(--stroke-answer);
+  }
+
+  /* Gemist: the right answer, which the child did not give. A double rule and a
+   * full dot, so it never reads as the closed green of an answer they got. SVG
+   * has no double stroke, so it is two paths — the wide one underneath, the
+   * narrow paper one on top, leaving two bands of ink. */
+  .tk-shape-missed-outer {
+    fill: var(--paper);
+    stroke: var(--ink);
+    stroke-width: 6;
+  }
+  .tk-shape-missed-inner {
+    fill: none;
+    stroke: var(--paper);
     stroke-width: 3;
+  }
+
+  /* The marks. A mark is never drawn in the colour of the state it marks — a
+   * green tick says "right" twice and leaves the shape doing none of the work.
+   * It takes whichever of ink or paper its own ground needs, and nothing else. */
+  .tk-mark {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: var(--stroke-active);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    pointer-events: none;
+  }
+  /* On the one state with a solid fill. Paper on good is 4.96:1, which is the
+   * figure §B quotes for the tick. */
+  .tk-mark-on-fill {
+    stroke: var(--paper);
   }
   /* The dimmed provinces behind a capitals exercise. They recede, but they are
    * not decoration: they are how a child knows where on the map they are, and

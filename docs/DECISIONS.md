@@ -1550,6 +1550,64 @@ means is that they knew it last Tuesday.
 
 ---
 
+## ADR-043 — Four answer states, and the one that used to be three
+
+**Status:** accepted — 2026-09-07, styleguide §B and step 7.
+
+### Context
+
+The map had three reveal states: the shape being asked about, the right answer,
+and the wrong one. The right answer drew the same green outline whether the
+child had found it or had just been shown it.
+
+That is the bug this record exists for. A child who points at Overijssel and is
+shown Drenthe sees the same picture as a child who pointed at Drenthe and was
+right — so the screen congratulates the one who missed.
+
+"Bijna" had the same problem from the other side. It existed as a sentence
+(ADR-017) and had no shape at all, so a near miss looked exactly like being
+wrong.
+
+### Decision
+
+Four states, each told apart by shape before colour:
+
+- **goed** — solid fill, 2px ink border, paper tick. §B quotes 4.96:1 for the
+  tick, which is paper on good, so the tick is paper and the border is what
+  stays ink.
+- **bijna** — open fill, a single 3px border, and a half-filled dot. No mark of
+  its own and no colour of its own: a tick would say right, a cross would say
+  wrong, amber would be a fifth meaning to learn, and the hatch belongs to
+  wrong.
+- **fout** — hatched fill and a cross. The texture stays on the exception and
+  never on the right answer.
+- **gemist** — open fill, a double border and a full dot. SVG has no double
+  stroke, so the path is drawn twice: wide ink under a narrow paper one.
+
+The half-filled dot of "bijna" is the `Dot` component, at the same fill that
+means "practised, not yet certain" on K9. Not a similar shape — the same one,
+because it is the same idea arriving at a different moment.
+
+The map cannot work out which state applies. A typed answer has no chosen shape,
+and "bijna" is a judgement about a word rather than a position, so
+`PracticeScreen` passes the verdict and the map reads "gemist" from the absence
+of the other three.
+
+### Consequences
+
+`src/design/answerStates.test.ts` reads the stylesheet and refuses to let two
+states share a fill and a border weight. That is step 8's colour-blindness check
+done as a test on the shapes rather than as an eye test: if two states ever
+differ only in colour, a child with deuteranopia is being shown one picture and
+told it means two things.
+
+`.tk-shape-target` is gone. Nothing referenced it by name outside the map.
+
+The travel animation from the chosen shape to the right one is unchanged and
+still the only place movement teaches anything.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because

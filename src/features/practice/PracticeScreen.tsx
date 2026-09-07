@@ -96,6 +96,17 @@ export function PracticeScreen({
   const chosenName = state.chosenId === null ? '' : (state.namesById.get(state.chosenId) ?? '');
   const nearMiss = state.verdict?.kind === 'near-miss';
 
+  // The four answer shapes of step 7 need to know which of them applies. Only
+  // three reach the map: "gemist" is what is left when the child neither found
+  // it nor nearly named it, and the map works that out from the absence.
+  const mapVerdict: 'correct' | 'near' | 'wrong' | undefined = !revealed
+    ? undefined
+    : nearMiss
+      ? 'near'
+      : state.verdict?.kind === 'correct'
+        ? 'correct'
+        : 'wrong';
+
   return (
     <div className="flex h-screen flex-col bg-paper">
       {/* Wraps rather than truncates.
@@ -165,6 +176,7 @@ export function PracticeScreen({
           targetId={state.question.answerId}
           chosenId={state.chosenId}
           revealed={revealed}
+          verdict={mapVerdict}
           onPick={pick}
         />
       </main>
