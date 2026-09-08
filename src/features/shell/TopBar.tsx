@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { currentStreak, type StreakState } from '@/game-core';
 import { t } from '@/i18n';
 import { HOLIDAYS, loadStreak } from '@/store/streakStore';
-import { stickerById } from '@/components/Stickers';
+import { stickerById } from '@/components/stickerSet';
 import type { ProfileRecord } from '@/store/db';
 
 /**

@@ -1,6 +1,4 @@
-import type { ComponentType } from 'react';
 import { Icon, type IconProps } from './Icon';
-import type { TranslationKey } from '@/i18n';
 
 /**
  * Six animals, and the one thing on this screen a child gets to choose.
@@ -21,16 +19,15 @@ import type { TranslationKey } from '@/i18n';
  * whole animal at that size is a smudge and a head with ears is not: ears are
  * the part a five-year-old draws first and the part that tells a cat from a
  * hare.
+ *
+ * The drawings live here and the list of them lives in `stickerSet.ts`, the same
+ * split `features/shell/moduleIcons.ts` makes: a file that exports components
+ * exports only components, so fast refresh keeps working and a registry stays
+ * data a test can read.
  */
 
-export interface Sticker {
-  readonly id: string;
-  readonly name: TranslationKey;
-  readonly draw: ComponentType<Omit<IconProps, 'children'>>;
-}
-
 /** The cat: a round head, two pricked ears and a pair of eyes. */
-function CatSticker(props: Omit<IconProps, 'children'>) {
+export function CatSticker(props: Omit<IconProps, 'children'>) {
   return (
     <Icon {...props}>
       <circle cx="12" cy="13.5" r="7" />
@@ -43,7 +40,7 @@ function CatSticker(props: Omit<IconProps, 'children'>) {
 }
 
 /** The owl: one head, two eyes that are most of it, and a beak between them. */
-function OwlSticker(props: Omit<IconProps, 'children'>) {
+export function OwlSticker(props: Omit<IconProps, 'children'>) {
   return (
     <Icon {...props}>
       <circle cx="12" cy="12.5" r="8.5" />
@@ -55,7 +52,7 @@ function OwlSticker(props: Omit<IconProps, 'children'>) {
 }
 
 /** The fox: a snout that comes to a point, and two ears that come to two more. */
-function FoxSticker(props: Omit<IconProps, 'children'>) {
+export function FoxSticker(props: Omit<IconProps, 'children'>) {
   return (
     <Icon {...props}>
       <path d="M3.5 5.5L8.5 9h7l5-3.5-2 8.5L12 20.5 5.5 14z" strokeLinejoin="round" />
@@ -66,7 +63,7 @@ function FoxSticker(props: Omit<IconProps, 'children'>) {
 }
 
 /** The bear: a round head and two round ears, which is all a bear needs. */
-function BearSticker(props: Omit<IconProps, 'children'>) {
+export function BearSticker(props: Omit<IconProps, 'children'>) {
   return (
     <Icon {...props}>
       <circle cx="12" cy="14" r="6.5" />
@@ -80,7 +77,7 @@ function BearSticker(props: Omit<IconProps, 'children'>) {
 }
 
 /** The hare: the ears do the work, so they are half the icon. */
-function HareSticker(props: Omit<IconProps, 'children'>) {
+export function HareSticker(props: Omit<IconProps, 'children'>) {
   return (
     <Icon {...props}>
       <circle cx="12" cy="15.5" r="5.5" />
@@ -92,7 +89,7 @@ function HareSticker(props: Omit<IconProps, 'children'>) {
 }
 
 /** The fish: a body and a tail, and the only one here that is not a head. */
-function FishSticker(props: Omit<IconProps, 'children'>) {
+export function FishSticker(props: Omit<IconProps, 'children'>) {
   return (
     <Icon {...props}>
       <path d="M9.5 6L17 12l-7.5 6L3 12z" strokeLinejoin="round" />
@@ -100,27 +97,4 @@ function FishSticker(props: Omit<IconProps, 'children'>) {
       <circle cx="7" cy="11.5" r="1" fill="currentColor" />
     </Icon>
   );
-}
-
-/**
- * The six, in the order they are offered.
- *
- * All of them from the first day. There is no order of unlocking and no locked
- * one at the end of the row, because the moment there is, this stops being a
- * choice and becomes a scoreboard with animals on it.
- */
-export const STICKERS: readonly Sticker[] = [
-  { id: 'kat', name: 'sticker.kat', draw: CatSticker },
-  { id: 'uil', name: 'sticker.uil', draw: OwlSticker },
-  { id: 'vos', name: 'sticker.vos', draw: FoxSticker },
-  { id: 'beer', name: 'sticker.beer', draw: BearSticker },
-  { id: 'haas', name: 'sticker.haas', draw: HareSticker },
-  { id: 'vis', name: 'sticker.vis', draw: FishSticker },
-];
-
-/** The first one, which is what a child who has never chosen is shown. */
-export const DEFAULT_STICKER = STICKERS[0] as Sticker;
-
-export function stickerById(id: string | undefined): Sticker {
-  return STICKERS.find((sticker) => sticker.id === id) ?? DEFAULT_STICKER;
 }

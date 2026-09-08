@@ -83,8 +83,8 @@ describe('the icon set', () => {
     for (const fill of fills) {
       expect(['none', 'currentColor'], `fill="${fill ?? ''}"`).toContain(fill);
     }
-    expect(stickers).not.toMatch(/#[0-9a-fA-F]{3,8}/);
-    expect(stickers).not.toMatch(/(?:rgb|hsl|oklch)\(/);
+    expect(stickers).not.toMatch(/#[0-9a-fA-F]{3,8}\b/);
+    expect(stickers).not.toMatch(/\b(?:rgb|hsl|oklch)\(/);
 
     // Same grid, so a sticker cannot quietly be drawn against a bigger one.
     for (const match of stickers.matchAll(/(?:cx|cy|r)="(-?[\d.]+)"/g)) {

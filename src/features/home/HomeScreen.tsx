@@ -14,7 +14,7 @@ import { loadSumSets } from '@/content/loadSums';
 import { Dot } from '@/components/Dot';
 import { ProgressBar } from '@/components/ProgressBar';
 import type { IconProps } from '@/components/Icon';
-import { STICKERS, stickerById } from '@/components/Stickers';
+import { STICKERS, stickerById } from '@/components/stickerSet';
 import { RAIL_MODULES, type Module } from '@/features/shell/modules';
 import { MODULE_ICON } from '@/features/shell/moduleIcons';
 import { t, type TranslationKey } from '@/i18n';
