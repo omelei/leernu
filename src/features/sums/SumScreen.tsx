@@ -118,6 +118,11 @@ export function SumScreen({
           ) : (
             <>
               <p className="tk-label">{instruction}</p>
+              {/* The card carries a heading like every other question card, so
+                  a screen reader gets one and the eye has somewhere to land in
+                  a column that is otherwise a label and a box. The sum itself
+                  is beside it, where the map is on the other screen. */}
+              <h1 className="tk-display mt-1 text-h1 font-semibold">{t('sums.prompt')}</h1>
               {typing ? (
                 <SumField key={state.index} onSubmit={submit} />
               ) : (
@@ -184,7 +189,10 @@ function SumField({ onSubmit }: { readonly onSubmit: (value: string) => void }) 
   }
 
   return (
-    <form onSubmit={handle} className="mt-3 flex items-center gap-3">
+    {/* Wrapping, because the desktop column is 22rem and an answer box beside
+        a button does not fit in it — the button broke "Kijk na" over two lines
+        rather than dropping below, which is what wrapping is for. */}
+    <form onSubmit={handle} className="mt-3 flex flex-wrap items-center gap-3">
       <label htmlFor="som" className="tk-sr-only">
         {t('sums.typeQuestion')}
       </label>
@@ -199,7 +207,11 @@ function SumField({ onSubmit }: { readonly onSubmit: (value: string) => void }) 
         autoComplete="off"
         maxLength={4}
       />
-      <button type="submit" className="tk-button" disabled={value.trim().length === 0}>
+      <button
+        type="submit"
+        className="tk-button flex-none whitespace-nowrap"
+        disabled={value.trim().length === 0}
+      >
         {t('practice.check')}
       </button>
     </form>
