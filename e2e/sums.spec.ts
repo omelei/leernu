@@ -108,15 +108,20 @@ test('rekenen is the word a parent looks for, and it is the page itself', async 
  */
 test('a set has an address, and the page opens on it', async ({ page }) => {
   await signIn(page, 'Nienke');
-  await page.goto('/rekenen/tafel-7');
 
-  await expect(page.getByRole('button', { name: /^Tafel van 7\D/ })).toHaveAttribute(
+  // Scoped to step 1, because the start button names the chosen set as well —
+  // which is what K2 puts it there for, and which makes an unscoped query for
+  // the set name ambiguous on exactly the page that opened on it.
+  const wat = page.getByRole('region', { name: /Waarover/ });
+
+  await page.goto('/rekenen/tafel-7');
+  await expect(wat.getByRole('button', { name: /^Tafel van 7\D/ })).toHaveAttribute(
     'aria-pressed',
     'true',
   );
 
   await page.goto('/topografie/hoofdsteden');
-  await expect(page.getByRole('button', { name: /Hoofdsteden/ })).toHaveAttribute(
+  await expect(wat.getByRole('button', { name: /Hoofdsteden/ })).toHaveAttribute(
     'aria-pressed',
     'true',
   );
