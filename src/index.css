@@ -626,10 +626,16 @@
       padding: 16px 0;
       background: var(--paper);
       border-top: var(--stroke-hair) solid var(--line);
+      /* The bar is a surface, not a target. Without this it sat on top of its
+       * own button and swallowed the press — the same trick the question card
+       * used when it lay over the map: the container passes taps through and
+       * the thing inside it takes them back. */
+      pointer-events: none;
     }
     .tk-choose-start > .tk-button {
       width: 100%;
       justify-content: center;
+      pointer-events: auto;
     }
     /* The bar floats over whatever is still scrolling under it, which is what
      * a bar at the bottom is. What it may not do is take a control with it:
