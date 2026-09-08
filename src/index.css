@@ -596,9 +596,17 @@
    */
   .tk-options {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    /* Two on a phone, where auto-fit would give one and a card tall enough to
+     * leave the map a strip. The names are two words at most and the box grows
+     * to fit a wrap, so a narrow column costs a line and not a truncation. */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
     margin-top: 16px;
+  }
+  @media (min-width: 768px) {
+    .tk-options {
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
   }
   .tk-option {
     display: flex;
@@ -1035,12 +1043,22 @@
     display: grid;
     flex: 1;
     min-height: 0;
-    /* Phone: one cell. The map has it, and the question lies on top.
-     * The row is named rather than left implicit: the map sizes itself from the
-     * height it is given, so a row sized by its contents is a circle, and the
-     * canvas collapses to nothing inside it. */
-    grid-template-areas: 'map';
-    grid-template-rows: minmax(0, 1fr);
+    /* Two rows at every size: the question, then the map. On a phone the
+     * question used to lie on the map and pass taps through, which is what the
+     * design's phone frame reads as — and a screenshot at 393 settled it. The
+     * card is opaque, it sits at the top, and Groningen is at the top of the
+     * country, so "waar ligt Groningen" was asked with Groningen behind the
+     * question. Taps passing through do not help a child who cannot see it.
+     *
+     * It cost nothing to give up. The country is square and the phone is
+     * narrow, so the drawing is width-bound: the vertical space the overlay was
+     * winning back was space the map could not have used.
+     *
+     * The rows are named rather than left implicit — the map sizes itself from
+     * the height it is given, so a row sized by its contents is a circle and
+     * the canvas collapses to nothing inside it. */
+    grid-template-areas: 'question' 'map';
+    grid-template-rows: auto minmax(0, 1fr);
   }
   /* A block and not a flex row. As a flex item the canvas keeps its intrinsic
    * width — `min-width: auto` is the flex default and a replaced element's
@@ -1057,69 +1075,24 @@
     padding: 12px;
   }
 
-  /* On the map, on paper, with its own boundary — so the contrast of the words
-   * does not depend on which province happens to be underneath them. */
-  /* On a phone the question lies on the map, which means it is on top of
-   * provinces a child has to be able to tap. Groningen is at the top of the
-   * country and the card is at the top of the screen, so without this the
-   * northern half of the answer is behind the question about it.
-   *
-   * The card itself passes taps through; anything inside it that can be pressed
-   * takes them back. From md it stops overlapping and this stops mattering. */
+  /* On paper, with its own boundary — so the contrast of the words does not
+   * depend on what is beside them. A card on a phone and a bar from the tablet
+   * up, which is the difference §D draws between a block that sits in the page
+   * and one that introduces it. */
   .tk-round-question {
-    grid-area: map;
-    align-self: start;
-    z-index: 1;
-    pointer-events: none;
+    grid-area: question;
     margin: 16px;
     padding: 16px;
     background: var(--paper);
     border: var(--stroke-region) solid var(--line-strong);
     border-radius: var(--radius-card);
   }
-  .tk-round-question > * {
-    pointer-events: auto;
-  }
-
-  /* Choosing or typing puts an answer control in the card, and four option
-   * boxes cannot lie on a map: the area being asked about ends up behind them,
-   * which is the one thing this screen may never do. There the phone gets two
-   * rows instead — map above, card below — which is the arrangement §D gives
-   * the upright tablet, for the same reason and within thumb reach.
-   *
-   * Scoped to the phone rather than left to specificity: an attribute selector
-   * outranks the plain class the wider layouts use, so without the query this
-   * would win at every size.
-   */
-  @media (max-width: 767px) {
-    .tk-round-body[data-answer='control'] {
-      grid-template-areas: 'map' 'question';
-      grid-template-rows: minmax(0, 1fr) auto;
-    }
-    .tk-round-body[data-answer='control'] .tk-round-question {
-      grid-area: question;
-      align-self: stretch;
-      pointer-events: auto;
-      margin: 0;
-      background: var(--surface);
-      border: 0;
-      border-top: var(--stroke-region) solid var(--line-strong);
-      border-radius: var(--radius-flat);
-    }
-  }
 
   /* Tablet upright: the bar goes above the canvas and the map takes the full
    * width. A surface fill and a 1.5 boundary, which is what §D gives a block
    * that is part of the page rather than lying over it. */
   @media (min-width: 768px) {
-    .tk-round-body {
-      grid-template-areas: 'question' 'map';
-      grid-template-rows: auto minmax(0, 1fr);
-    }
     .tk-round-question {
-      grid-area: question;
-      align-self: stretch;
-      pointer-events: auto;
       margin: 0;
       padding: 24px;
       background: var(--surface);

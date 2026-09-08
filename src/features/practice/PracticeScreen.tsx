@@ -193,7 +193,7 @@ export function PracticeScreen({
         {revealed ? feedbackSentence(state, naam, chosenName) : vraag}
       </p>
 
-      <div className="tk-round-body" data-answer={reading ? 'control' : 'map'}>
+      <div className="tk-round-body">
         {/* The question, and after an answer the feedback, in the same place.
             K4 asks for exactly that: between question and answer nothing moves
             except the words, so a child's eyes do not have to find the sentence
