@@ -55,11 +55,7 @@ export function TopBar({
             card they made it on or it does not look saved. The initial is the
             fallback and nothing more. */}
         <span aria-hidden="true" className="tk-avatar">
-          {sticker ? (
-            <Sticker size={20} />
-          ) : (
-            profile.naam.slice(0, 1).toLocaleUpperCase('nl-NL')
-          )}
+          {sticker ? <Sticker size={20} /> : profile.naam.slice(0, 1).toLocaleUpperCase('nl-NL')}
         </span>
         {/* A name a child chose themselves can be long. It shortens rather than
             pushing the bar off the side of a 393 screen. */}

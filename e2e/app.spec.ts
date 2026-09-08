@@ -145,7 +145,9 @@ test('logs the round that was just played, with its mark', async ({ page }) => {
 
   // Before the first round both are empty, and both say so rather than
   // standing there as headings over nothing.
-  await expect(recent.getByText('Nog niets geoefend. Na je eerste ronde staat het hier.')).toBeVisible();
+  await expect(
+    recent.getByText('Nog niets geoefend. Na je eerste ronde staat het hier.'),
+  ).toBeVisible();
   await expect(
     favourites.getByText('Nog geen favorieten. Wat je vaak oefent, komt hier te staan.'),
   ).toBeVisible();
