@@ -584,6 +584,27 @@
     opacity: 0.35;
   }
 
+  /* ---- The sum ----------------------------------------------------------
+   * What the map is on the other round screen: the thing being asked about,
+   * given the whole stage. A child reads this from across a kitchen table, so
+   * it is set as large as the space allows and no larger — `clamp` rather than
+   * a step on the type scale, because the type scale is for text in a column
+   * and this is a single line that should fill what it is given.
+   *
+   * Tabular figures, so the sum does not shift width between questions. The
+   * accent is deliberately absent: a module colours three things (ADR-039) and
+   * this is not one of them — the sum is ink, like every other thing a child
+   * has to read.
+   */
+  .tk-sum {
+    font-size: clamp(3rem, 14vw, 7rem);
+    line-height: 1.1;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+  }
+
   /* ---- Multiple choice, K5 ---------------------------------------------
    * Two by two where there is width, one under the other where there is not,
    * so no option is ever the odd one at the end of a row. `auto-fit` with a

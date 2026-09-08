@@ -96,8 +96,21 @@ function shuffle<T>(source: readonly T[], rng: () => number): T[] {
   return out;
 }
 
-export interface ComposeRoundInput {
-  readonly items: readonly Item[];
+/**
+ * Everything the scheduler needs from a thing a child practises: an identity.
+ *
+ * Generic rather than `Item` because a multiplication fact is not a place and
+ * has no name, no aliases and no region — and the spacing that decides when it
+ * comes round again is the same spacing either way. Narrowing this to the
+ * geography type would have meant a second copy of the schedule, which is the
+ * one piece of this product that must not exist twice.
+ */
+export interface Schedulable {
+  readonly id: string;
+}
+
+export interface ComposeRoundInput<T extends Schedulable = Item> {
+  readonly items: readonly T[];
   readonly states: ReadonlyMap<string, ItemState>;
   readonly size: number;
   readonly now: Date;
@@ -112,14 +125,14 @@ export interface ComposeRoundInput {
  * has no new material left would be a worse experience than an imperfect mix,
  * and the mix is a target rather than a contract.
  */
-export function composeRound(input: ComposeRoundInput): Item[] {
+export function composeRound<T extends Schedulable = Item>(input: ComposeRoundInput<T>): T[] {
   const { items, states, size, now } = input;
   const rng = input.rng ?? Math.random;
   if (size <= 0 || items.length === 0) return [];
 
-  const due: Item[] = [];
-  const nieuw: Item[] = [];
-  const bekend: Item[] = [];
+  const due: T[] = [];
+  const nieuw: T[] = [];
+  const bekend: T[] = [];
 
   for (const item of items) {
     const state = states.get(item.id);
@@ -143,7 +156,7 @@ export function composeRound(input: ComposeRoundInput): Item[] {
   const nieuwTarget = Math.round(size * ROUND_MIX.nieuw);
   const opfrisTarget = size - dueTarget - nieuwTarget;
 
-  const picked: Item[] = [
+  const picked: T[] = [
     ...due.slice(0, dueTarget),
     ...shuffledNieuw.slice(0, nieuwTarget),
     ...shuffledBekend.slice(0, opfrisTarget),
@@ -158,7 +171,7 @@ export function composeRound(input: ComposeRoundInput): Item[] {
   return shuffle(picked, rng);
 }
 
-function dueTime(states: ReadonlyMap<string, ItemState>, item: Item): number {
+function dueTime(states: ReadonlyMap<string, ItemState>, item: Schedulable): number {
   const at = states.get(item.id)?.volgendeReview;
   return at === null || at === undefined ? 0 : new Date(at).getTime();
 }

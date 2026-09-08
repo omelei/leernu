@@ -1,0 +1,69 @@
+{
+  "_gegenereerd": "tools/content/build-tafels.mjs — gegenereerd, niet met de hand bewerken.",
+  "id": "tafel-2",
+  "tafel": 2,
+  "niveau": 1,
+  "contentVersie": "2026-09-08",
+  "items": [
+    {
+      "id": "tafel-2x1",
+      "table": 2,
+      "by": 1,
+      "antwoord": 2
+    },
+    {
+      "id": "tafel-2x2",
+      "table": 2,
+      "by": 2,
+      "antwoord": 4
+    },
+    {
+      "id": "tafel-2x3",
+      "table": 2,
+      "by": 3,
+      "antwoord": 6
+    },
+    {
+      "id": "tafel-2x4",
+      "table": 2,
+      "by": 4,
+      "antwoord": 8
+    },
+    {
+      "id": "tafel-2x5",
+      "table": 2,
+      "by": 5,
+      "antwoord": 10
+    },
+    {
+      "id": "tafel-2x6",
+      "table": 2,
+      "by": 6,
+      "antwoord": 12
+    },
+    {
+      "id": "tafel-2x7",
+      "table": 2,
+      "by": 7,
+      "antwoord": 14
+    },
+    {
+      "id": "tafel-2x8",
+      "table": 2,
+      "by": 8,
+      "antwoord": 16
+    },
+    {
+      "id": "tafel-2x9",
+      "table": 2,
+      "by": 9,
+      "antwoord": 18
+    },
+    {
+      "id": "tafel-2x10",
+      "table": 2,
+      "by": 10,
+      "antwoord": 20
+    }
+  ]
+}

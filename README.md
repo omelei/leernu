@@ -1,8 +1,13 @@
 # Leernu
 
-Topography for Dutch primary and lower-secondary education. Short rounds, a map
+Practice for Dutch primary and lower-secondary education. Short rounds, a map
 that fills the screen, and progress a child can feel. No advertising, no
 tracking, no account required.
+
+Two modules today: **topografie** and **rekenen**. Five more are planned and
+none of them is offered before it exists ([ADR-037](docs/DECISIONS.md)) — a
+greyed-out entry is a promise, and this product does not make promises to
+children it has not kept yet.
 
 That last sentence is why this repository is public. The best-known free
 alternative is paid for by advertising from over a hundred vendors, on a page
@@ -26,10 +31,16 @@ practises one of five sets:
 | **Zeeën en meren**                | 6     | the large bodies of water           |
 | **Steden van Nederland**          | 80    | cities, and the province each is in |
 
-In five ways. **Wijs aan** points at the map; **typ de naam** names what is
+In six ways. **Wijs aan** points at the map; **meerkeuze** offers four names,
+three of them places that border the right one; **typ de naam** names what is
 highlighted; **ontdekken** asks nothing at all and exists so a child's first
 meeting with an item is not a question they get wrong; **bliksemronde** puts
 sixty seconds on it and **overleven** gives three lives.
+
+Rekenen is the twelve tables, one to twelve, ten sums each. A round is a whole
+table, because "de tafel van 7 ken ik" is only sayable about all of it. Typing
+the answer comes before choosing between four, which is the opposite of the map
+and for a reason ([ADR-049](docs/DECISIONS.md)).
 
 A round covers the whole set where the set is small enough — twelve of twelve —
 and is capped at fifteen questions where it is not, because eighty questions is
@@ -82,9 +93,11 @@ node tools/content/fetch-source.mjs      # CBS geodata, into content/geo/_source
 node tools/content/build-geo.mjs         # provinces, three detail levels
 node tools/content/build-cities.mjs      # the twelve capitals as points
 node tools/content/build-neighbours.mjs  # who lies next to whom, into content/buren
+node tools/content/build-tafels.mjs      # the twelve tables, into content/tafels
 ```
 
-The last one runs after the others, because it reads what they write.
+`build-neighbours` runs after the geometry builds, because it reads what they
+write. `build-tafels` needs nothing but arithmetic.
 
 To look at the result without a build, serve the project root and open
 `tools/content/preview.html`:

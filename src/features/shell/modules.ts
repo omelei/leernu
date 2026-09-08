@@ -10,7 +10,7 @@ import type { TranslationKey } from '@/i18n';
  *
  * `built` is not a feature flag. A flag hides finished work; this says the work
  * does not exist. ADR-037: the rail shows the modules that have content, which
- * today is one. Six greyed-out entries would follow the design and be six
+ * today is two. Five greyed-out entries would follow the design and be five
  * promises the app does not keep, on the screen a child sees first.
  */
 
@@ -29,7 +29,7 @@ export interface Module {
  */
 export const MODULES: readonly Module[] = [
   { id: 'topo', name: 'module.topo', built: true },
-  { id: 'tafels', name: 'module.tafels', built: false },
+  { id: 'tafels', name: 'module.tafels', built: true },
   { id: 'klok', name: 'module.klok', built: false },
   { id: 'woorden', name: 'module.woorden', built: false },
   { id: 'spelling', name: 'module.spelling', built: false },

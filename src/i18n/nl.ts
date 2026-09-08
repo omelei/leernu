@@ -162,6 +162,25 @@ export const nl = {
   // child for stopping, which is the one thing on this screen that is not an
   // achievement — and the register rule is that we talk about the work, never
   // about the child.
+  // Rekenen. De tafels van 1 tot 12 en tien sommen per tafel, allebei uit het
+  // app-ontwerp v2. Het oefenscherm zelf is daar niet getekend (ADR-049).
+  'sums.title': 'Welke tafel?',
+  'sums.table': 'Tafel van {tafel}',
+  'sums.prompt': 'Hoeveel is het?',
+  'sums.typeQuestion': 'Typ het antwoord',
+  'sums.chooseQuestion': 'Kies het antwoord',
+  'sums.typePlaceholder': 'Antwoord',
+  'sums.correct': '{som} = {antwoord} — goed.',
+  'sums.wrong': '{som} = {antwoord}.',
+  'sums.wrongSub': 'Jij zei {gegeven}.',
+  'sums.dontKnowSub': 'Deze komt zo weer langs.',
+  'sums.start': 'Tafel van {tafel} {hoe} · {aantal} sommen',
+  'sums.practiceMore': 'Deze sommen moet je nog oefenen',
+  'mode.som-typen': 'Typ het antwoord',
+  'mode.som-meerkeuze': 'Kies uit vier',
+  'way.som-typen': 'Zeg het antwoord zelf — zo weet je of je de tafel kent',
+  'way.som-meerkeuze': 'Kies uit vier getallen — de weg terug als typen niet lukt',
+
   'result.title': 'Ronde klaar',
   // The one place the word "score" is allowed: the result of one round. It is
   // never a word for how much a child knows (ADR-030).

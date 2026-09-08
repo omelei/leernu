@@ -1915,6 +1915,75 @@ one boolean at the call site.
 
 ---
 
+## ADR-049 — The tables, and the screen the design does not draw
+
+**Status:** accepted — 2026-09-08.
+
+### Context
+
+Rekenen was asked for as the second module, which also brings the rail to life
+(ADR-037). The v2 app design draws the tables as a module: a rail entry with
+its own accent, a card on the front door carrying "8 van de 10 onthoud je", a
+level, and one hard content line — "Tafels en klok · Van 1 tot 12, hele en
+halve uren".
+
+It does not draw the round. There is no tafel question card, no answer field,
+no result screen for it anywhere in the four sizes.
+
+Build brief §0.2 is explicit: do not guess a design that has not been drawn.
+
+### Decision
+
+**The entrance is built as drawn.** Twelve tables, one to twelve, ten sums each
+— which is where a table ends in Dutch primary school; eleven and twelve as
+multipliers are a different exercise. One set per table, because "de tafel van
+7 ken ik" is the sentence this module exists to make sayable and it is only
+sayable about a whole table.
+
+**The round is not invented; it is K3 and K4 with the map removed.** The same
+round bar, the same ten dots, the same feedback in the place the question was,
+the same "Ik weet het niet" under ADR-048's rule. The sum takes the stage the
+map takes, because it is the same thing — what the child is being asked about.
+Nothing on that screen is a new idea; every part of it is a part that was
+drawn, used for the one subject it was not drawn for.
+
+**The content is generated, not written.** The geography sets are hand-written
+because a name, its aliases and its weetje are judgements someone must defend.
+7 × 8 = 56 is not a judgement, and a hand-written file of a hundred and twenty
+of them is a hundred and twenty chances at a typo no reviewer would catch by
+reading. `sums.content.test.ts` multiplies every entry back out, which is a
+stronger guarantee than a careful read and is available exactly here.
+
+**Typing comes before multiple choice, the opposite of the map.** On a map,
+choosing between four names is genuinely easier than producing one. A number is
+not: four plausible products can be narrowed by a child who cannot do the sum,
+so multiple choice measures less here. It is the way back in when typing is
+going badly, not the way in.
+
+**The round wiring is duplicated, deliberately.** `useRound` is six hundred
+lines of map — geometry, an answer layer, a name index, near misses, touch
+targets — and a round of sums shares none of it. `useSumRound` shares the two
+things that matter, the Leitner schedule and what gets written down, by
+importing them; `composeRound` became generic over anything with an id, which
+is the only part of the schedule that had to change.
+
+### Consequences
+
+Extracting a common round now would mean guessing which parts are general from
+a sample of two, and the guess would be made in the map's shape because the map
+got there first. The third module is when that guess becomes an observation.
+Until then there are two round hooks and a reader has to know it.
+
+The rail appears, which answers the question that was parked. It shows two
+modules; the other five stay out of it under ADR-037.
+
+Near misses have no counterpart here and should not be given one. ADR-017
+exists because "Friesland" for Fryslân is a different kind of wrong from
+"Zwolle". 54 for 56 is not a different kind of wrong — it is wrong — and
+dressing it as "bijna" would teach a child that close enough is a grade.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because

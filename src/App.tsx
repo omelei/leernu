@@ -11,17 +11,21 @@ import { useRoute } from '@/features/shell/useRoute';
 import { ModuleSoon } from '@/features/shell/ModuleSoon';
 import { CategoryScreen } from '@/features/shell/CategoryScreen';
 import { ChooseRoundScreen } from '@/features/round/ChooseRoundScreen';
+import { ChooseTableScreen } from '@/features/sums/ChooseTableScreen';
+import { SumScreen } from '@/features/sums/SumScreen';
 import { ProfileScreen } from '@/features/player/ProfileScreen';
 import type { Route } from '@/features/shell/routes';
 import { getProfile } from '@/store/profile';
 import type { PracticeMode, SetId } from '@/features/practice/useRound';
+import type { SumMode } from '@/features/sums/useSumRound';
 import type { ProfileRecord } from '@/store/db';
 
 type Screen =
   | { name: 'home' }
   | { name: 'retention' }
   | { name: 'practice'; setId: SetId; practiceMode: PracticeMode }
-  | { name: 'explore'; setId: SetId };
+  | { name: 'explore'; setId: SetId }
+  | { name: 'sums'; setId: string; sumMode: SumMode };
 type Boot = { status: 'loading' } | { status: 'ready'; profile: ProfileRecord | null };
 
 /**
@@ -108,6 +112,18 @@ export default function App() {
     return <ExploreScreen setId={screen.setId} onHome={goHome} />;
   }
 
+  if (screen.name === 'sums') {
+    return (
+      <SumScreen
+        key={`${screen.setId}-${screen.sumMode}-${visit}`}
+        setId={screen.setId}
+        mode={screen.sumMode}
+        onHome={goHome}
+        onAgain={() => setVisit(visit + 1)}
+      />
+    );
+  }
+
   if (screen.name === 'practice') {
     return (
       <PracticeScreen
@@ -141,15 +157,27 @@ export default function App() {
   // what and then how (K2), which is also why /topografie is not the home
   // screen: the front door is every module, this is one of them.
   if (route.name === 'module') {
+    // Each module chooses its own round. They share the two numbered steps and
+    // nothing else: a table is not a set of places and the ways of answering
+    // one are not the ways of answering the other.
     return (
       <Shell onNavigate={goTo}>
-        <ChooseRoundScreen
-          onStart={(setId, practiceMode) => {
-            setVisit(visit + 1);
-            setScreen({ name: 'practice', setId, practiceMode });
-          }}
-          onExplore={(setId) => setScreen({ name: 'explore', setId })}
-        />
+        {route.module.id === 'tafels' ? (
+          <ChooseTableScreen
+            onStart={(setId, sumMode) => {
+              setVisit(visit + 1);
+              setScreen({ name: 'sums', setId, sumMode });
+            }}
+          />
+        ) : (
+          <ChooseRoundScreen
+            onStart={(setId, practiceMode) => {
+              setVisit(visit + 1);
+              setScreen({ name: 'practice', setId, practiceMode });
+            }}
+            onExplore={(setId) => setScreen({ name: 'explore', setId })}
+          />
+        )}
       </Shell>
     );
   }

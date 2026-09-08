@@ -66,4 +66,11 @@ export interface ItemState {
  * answering, but a session of it is still a session and the store records it.
  */
 export type ModeId =
-  'wijs-aan' | 'meerkeuze' | 'hoe-heet-dit' | 'bliksemronde' | 'overleven' | 'ontdekken';
+  | 'wijs-aan'
+  | 'meerkeuze'
+  | 'hoe-heet-dit'
+  | 'bliksemronde'
+  | 'overleven'
+  | 'ontdekken'
+  | 'som-typen'
+  | 'som-meerkeuze';
