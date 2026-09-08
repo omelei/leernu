@@ -60,8 +60,12 @@ test('rekenen is the word a parent looks for, and it leads to the tables', async
   await signIn(page, 'Daan');
   await page.goto('/rekenen');
 
+  // Scoped to the list: the rail carries the same name, and it should — this
+  // page is the word a parent types, not a second navigation.
+  //
   // Tafels sits under rekenen; klokkijken does not (ADR-044).
-  await page.getByRole('button', { name: /Tafels/ }).click();
+  const lijst = page.getByRole('list');
+  await lijst.getByRole('button', { name: /Tafels/ }).click();
   await expect(page.getByRole('heading', { name: 'Welke tafel?' })).toBeVisible();
 });
 

@@ -22,7 +22,10 @@ describe('the tables', () => {
 
   it('gives every table ten sums, which is where a table ends', () => {
     for (const set of sets) {
-      expect(set.items.map((sum) => sum.by), set.id).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+      expect(
+        set.items.map((sum) => sum.by),
+        set.id,
+      ).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
     }
   });
 
