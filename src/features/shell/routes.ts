@@ -56,7 +56,20 @@ const SET_SLUG: Record<string, string> = {
   'deel-alle': 'alle-deelsommen',
 };
 
-const SLUG_SET = new Map(Object.entries(SET_SLUG).map(([id, slug]) => [slug, id]));
+/**
+ * The way back, for the map sets only.
+ *
+ * `SET_SLUG` holds both modules, and both of them call their mix "mix" — which
+ * is right in an address and fatal in one reverse lookup: built over the whole
+ * table, `mix` resolved to whichever entry came last, and /topografie/mix
+ * opened the Rekenmix. A slug means something inside a module, so the way back
+ * from one belongs to that module. Rekenen answers for its own in `setIdFor`.
+ */
+const SLUG_SET = new Map(
+  Object.entries(SET_SLUG)
+    .filter(([id]) => id.startsWith('nl-'))
+    .map(([id, slug]) => [slug, id]),
+);
 
 /**
  * The sets of rekenen that answer to their own name.
