@@ -106,6 +106,25 @@ describe('the shell', () => {
     }
   });
 
+  it('marks no destination on a screen that is not one', () => {
+    // A module page is not Vandaag. `current` defaulted to 'vandaag', so a
+    // child standing in the tables read an app bar telling them they were on
+    // the front door — and a screen reader heard it as the current page.
+    render(
+      <Shell modules={MODULES} destinations={DESTINATIONS} currentModule="tafels">
+        <p>rekenen</p>
+      </Shell>,
+    );
+
+    for (const bar of screen.getAllByRole('navigation', { name: 'Waar je heen kunt' })) {
+      expect(bar.querySelectorAll('[aria-current="page"]')).toHaveLength(0);
+    }
+
+    // The rail still says which module, because that part is true.
+    const rail = screen.getByRole('navigation', { name: 'Modules' });
+    expect(rail.querySelectorAll('[aria-current="page"]')).toHaveLength(1);
+  });
+
   it('names the product once, in the bar', () => {
     render(
       <Shell>
