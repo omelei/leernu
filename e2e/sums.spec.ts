@@ -37,16 +37,23 @@ async function startTable(page: Page, tafel: number, hoe: RegExp) {
     .click();
 }
 
-test('the rail appears now that there are two modules', async ({ page }) => {
+test('the rail is the map of the product, not a list of what is finished', async ({ page }) => {
   await signIn(page, 'Sam');
 
+  // ADR-051. Five doors, of which three are not open yet — a rail with only
+  // the two built ones does not read as a short list, it reads as the whole
+  // product, and a child could not tell what leer.nu is for.
   const rail = page.getByRole('navigation', { name: 'Modules' });
-  await expect(rail.getByRole('button', { name: 'Topografie' })).toBeVisible();
-  await expect(rail.getByRole('button', { name: 'Tafels' })).toBeVisible();
+  await expect(rail.getByRole('button')).toHaveCount(5);
 
-  // ADR-037 still holds for the rest: a rail entry is an offer, and five of the
-  // seven modules have nothing to offer yet.
-  await expect(rail.getByRole('button')).toHaveCount(2);
+  for (const naam of ['Topo', 'Rekenen', 'Klok', 'Taal', 'Vlaggen']) {
+    await expect(rail.getByRole('button', { name: naam, exact: true })).toBeVisible();
+  }
+
+  // And a door that is not open says so rather than opening onto nothing,
+  // which is the half of ADR-037 that survives.
+  await rail.getByRole('button', { name: 'Klok', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Klok' })).toBeVisible();
 });
 
 test('the tables have an address of their own', async ({ page }) => {

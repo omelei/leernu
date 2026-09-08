@@ -54,11 +54,14 @@ describe('the shell', () => {
 
     // ADR-029. Clock reading is third because that is where the plan puts it,
     // not appended after the modules that happened to exist first.
+    //
+    // Short words, because K1 draws the rail that way: 88 pixels wide reads as
+    // a list, and "Topografie" in it reads as prose that did not fit.
     expect(names).toEqual([
-      'Topografie',
-      'Tafels',
-      'Klokkijken',
-      'Woordjes',
+      'Topo',
+      'Rekenen',
+      'Klok',
+      'Taal',
       'Spelling',
       'Tijdvakken',
       'Vlaggen',
