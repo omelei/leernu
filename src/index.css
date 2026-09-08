@@ -977,10 +977,14 @@
    * a page a child scrolls past rather than reads, so above the phone they lay
    * out in as many columns as fit. Same card either way — what changes is how
    * many go on a line.
+   *
+   * The floor is where "Tafel van 12" and "nog niet geoefend" stop fitting on
+   * one baseline. Three columns on a laptop puts all twelve tables in four
+   * rows, which is what keeps step 2 on the same screen as step 1.
    */
   .tk-sets {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
     gap: 12px;
   }
 

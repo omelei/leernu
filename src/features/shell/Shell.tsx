@@ -40,7 +40,15 @@ import {
 
 export interface ShellProps {
   readonly children: ReactNode;
-  /** Which destination is showing. */
+  /**
+   * Which destination is showing, when one is.
+   *
+   * Not all of them are: a module page is not Vandaag, and it used to say it
+   * was — this defaulted to 'vandaag', so a child standing in the tables read
+   * an app bar telling them they were on the front door. A screen that is not a
+   * destination marks nothing, which is the truth and is also what a screen
+   * reader should hear.
+   */
   readonly current?: Destination['id'];
   readonly onNavigate?: (id: Destination['id']) => void;
   /**
@@ -75,7 +83,7 @@ export interface ShellProps {
 
 export function Shell({
   children,
-  current = 'vandaag',
+  current,
   onNavigate,
   currentModule,
   onModule,

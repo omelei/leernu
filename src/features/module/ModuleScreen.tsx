@@ -130,9 +130,16 @@ export function ModuleScreen({
                   onClick={() => onSet(deel.setId)}
                 >
                   <Dot size={24} fill={ids.length === 0 ? 0 : mastered / ids.length} />
-                  <span className="min-w-0">
-                    <span className="block font-semibold">{naamVan(deel)}</span>
-                    <span className="block text-ink-2">
+                  {/* One line where it fits, which is what K2 draws: the name
+                      and how it is going share a baseline. Stacked, five sets
+                      filled the fold on a laptop and step 2 — the part with
+                      the six ways on it — was never on screen without
+                      scrolling, on the page whose whole argument is that the
+                      two steps are one flow. It wraps back to two lines on a
+                      phone, where the name alone is most of the width. */}
+                  <span className="flex min-w-0 flex-wrap items-baseline gap-x-3">
+                    <span className="font-semibold">{naamVan(deel)}</span>
+                    <span className="text-ink-2">
                       {mastered === 0 && due === 0
                         ? t('home.setNew')
                         : t('home.setMastered', { goed: mastered, totaal: ids.length })}
