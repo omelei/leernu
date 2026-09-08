@@ -147,7 +147,9 @@ test('reports the mark from the last round on the front door', async ({ page }) 
   await signIn(page, 'Jamie');
 
   // Before the first round there is nothing to report, and it says so.
-  await expect(page.getByText('Nog geen ronde gedaan. Die van vandaag is je eerste.')).toBeVisible();
+  await expect(
+    page.getByText('Nog geen ronde gedaan. Die van vandaag is je eerste.'),
+  ).toBeVisible();
 
   await startRound(page, /Provincies van Nederland/, /Aanwijzen/);
   await page.getByRole('button', { name: 'Limburg' }).click();

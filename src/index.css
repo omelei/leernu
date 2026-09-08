@@ -966,11 +966,7 @@
   .tk-tile[data-soon] {
     border-style: dashed;
     border-color: var(--line-strong);
-    background: repeating-linear-gradient(
-      135deg,
-      var(--paper) 0 7px,
-      var(--surface) 7px 14px
-    );
+    background: repeating-linear-gradient(135deg, var(--paper) 0 7px, var(--surface) 7px 14px);
   }
   .tk-tile[data-soon] .tk-tile-head {
     color: var(--ink-2);
