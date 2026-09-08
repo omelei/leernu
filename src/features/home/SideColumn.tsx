@@ -119,7 +119,11 @@ function Reis({
           <Nu size={56} />
         </span>
         <div className="min-w-0">
-          <p className="tk-display text-score font-bold tabular-nums">
+          {/* Not the score size the fraction below it uses: "Niveau 1" is two
+              words in a 320 column beside a 72px animal, and at that size it
+              broke mid-word — "Nivea / u 1". A number that has to be read as a
+              word is not a number that gets the biggest type on the page. */}
+          <p className="tk-display text-h2 font-bold">
             {t('home.journeyLevel', { niveau: level })}
           </p>
           <p className="text-ink-2">

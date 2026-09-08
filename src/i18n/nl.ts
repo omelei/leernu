@@ -171,7 +171,9 @@ export const nl = {
   // De mix. Geen zesde set maar dezelfde items onder één naam, zodat een
   // provincie die je hier goed hebt hetzelfde doosje opschuift als altijd.
   'set.nl-mix': 'Topomix',
-  'set.nl-mix.uitleg': 'Provincies, hoofdsteden, eilanden, wateren en steden door elkaar',
+  // Kort, want deze regel staat op een tegel naast vijf andere: de vijf sets
+  // opnoemen maakte die tegel twee keer zo hoog als de rest van de rij.
+  'set.nl-mix.uitleg': 'Alles van de kaart door elkaar',
 
   // Modes
   'mode.wijs-aan': 'Aanwijzen',
