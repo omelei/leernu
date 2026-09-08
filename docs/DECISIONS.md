@@ -2302,6 +2302,60 @@ the front door, so it had to work, and it now does.
 
 ---
 
+## ADR-057 — The forecast is re-aimed at the test day
+
+**Status:** accepted — 2026-09-08. Builds on ADR-054, which gave the test a
+subject.
+
+### Context
+
+ADR-054 gave K1 a test date and a subject, and then did nothing with them but
+print them. A date the child already knew, on a card, is a sticker.
+
+Meanwhile the number this product argues from — what you will still know in
+three weeks — is aimed at a horizon nobody asked about. A child practising for
+Friday does not care about three weeks. They care about Friday.
+
+### Decision
+
+Ask the retention model the same question about the day that has been set, and
+ask it twice: as things stand, and having practised every day between now and
+then. The gap between the two answers is the argument for opening the app
+tomorrow, said in the terms the child is already thinking in.
+
+The optimistic figure is a simulation over `leitner.ts` and `retention.ts` —
+walk forward a day, answer what a round would put in front of you, get it right,
+ask the model what it thinks on the test day. Every part of it is a function
+that already runs a real round, which is what makes it a forecast rather than a
+marketing number.
+
+Three things bound it:
+
+- **At most a round's worth a day**, oldest due first. Eighty items do not go
+  past a child in one evening, and a plan that assumed they would would be a
+  promise nobody could keep.
+- **Every answer is right**, which nobody's are. That makes it a ceiling, so
+  the copy says "ongeveer" and never states it as a target.
+- **Nothing after the test day counts.** With the date today or past, the two
+  figures are one figure, and the line is not drawn at all.
+
+The screen also says nothing when practising would gain less than two points.
+Below that the gap is rounding, and "practise and it goes up" would be selling.
+
+### Consequences
+
+There is now a number on K1 that a child can hold us to, on a day they will
+remember. That is the point and it is also the risk: it is a ceiling that
+assumes a perfect week, and a child who practises every day and still scores
+under it has been told something that did not happen.
+
+Two things keep that honest and neither may be dropped without revisiting this.
+The word "ongeveer", and the fact that the figure is retention rather than a
+mark — what you are likely to still know, not what you are going to be given.
+If the two ever get conflated in the copy, this decision is the one to reopen.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because

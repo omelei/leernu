@@ -6,6 +6,7 @@ import {
   grade,
   roundPreview,
   setRetention,
+  testOutlook,
   type ItemState,
   type Schedulable,
 } from '@/game-core';
@@ -18,7 +19,7 @@ import { RAIL_MODULES, type Module } from '@/features/shell/modules';
 import { MODULE_ICON } from '@/features/shell/moduleIcons';
 import { t, type TranslationKey } from '@/i18n';
 import { TestDate } from './TestDate';
-import { useTestPlan } from './testPlan';
+import { daysUntil, useTestPlan } from './testPlan';
 import { loadItemStates, loadLastRound, type LastRound } from '@/store/progress';
 import { loadStamps } from '@/store/rewardStore';
 import { SET_IDS, type PracticeMode, type SetId } from '@/features/practice/useRound';
@@ -248,6 +249,11 @@ export function HomeScreen({
                 and the test all queue behind one database handle, so the card
                 settles once and nothing moves. */}
             <TestDate plan={plan} now={now} />
+
+            {/* What the date is for. On its own it is a sticker — the child
+                already knew when the test was. */}
+            <Vooruitzicht deel={verder} known={known} date={plan.date} now={now} />
+
             <Verder
               deel={verder}
               known={known}
@@ -285,6 +291,61 @@ function repeatLine(seen: number): string {
   if (seen === 0) return t('home.todayFresh');
   if (seen === 1) return t('home.todayRepeatOne');
   return t('home.todayRepeats', { aantal: seen });
+}
+
+/**
+ * The forecast, aimed at the day the child actually cares about.
+ *
+ * The number in the right-hand column is about three weeks from now, which is
+ * the right horizon for the product and the wrong one for a test on Friday.
+ * This is the same model asked the same question about that Friday, and asked
+ * twice: once as things stand, and once having practised every day until then.
+ * The gap between the two answers is the whole argument for opening the app
+ * tomorrow.
+ *
+ * It is absent without a date, and absent once the date has gone by. A plan for
+ * a day that has been is not a plan.
+ */
+function Vooruitzicht({
+  deel,
+  known,
+  date,
+  now,
+}: {
+  readonly deel: Onderdeel;
+  readonly known: ReadonlyMap<string, ItemState>;
+  readonly date: string | null;
+  readonly now: Date;
+}) {
+  if (date === null) return null;
+
+  const days = daysUntil(date, now);
+  if (days < 1) return null;
+
+  const [year, month, dayOfMonth] = date.split('-').map(Number);
+  const testDay = new Date(year ?? 1970, (month ?? 1) - 1, dayOfMonth ?? 1);
+
+  const outlook = testOutlook({
+    states: known,
+    itemIds: deel.items.map((item) => item.id),
+    now,
+    testDay,
+    perDay: deel.roundSize,
+  });
+
+  // Rounded figures, so a gap of a point or two is noise rather than an
+  // argument. Below that, saying "practise and it goes up" would be selling.
+  const worthIt = outlook.practised - outlook.asIs > 2;
+
+  return (
+    <p className="text-ink-2">
+      {!outlook.started
+        ? t('home.testOutlookStart', { straks: outlook.practised })
+        : worthIt
+          ? t('home.testOutlook', { nu: outlook.asIs, straks: outlook.practised })
+          : t('home.testOutlookSteady', { nu: outlook.asIs })}
+    </p>
+  );
 }
 
 /**
