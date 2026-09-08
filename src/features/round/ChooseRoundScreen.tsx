@@ -65,7 +65,7 @@ export function ChooseRoundScreen({
   };
 
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-col gap-8 p-6">
+    <div className="tk-choose-page mx-auto flex w-full max-w-2xl flex-col gap-8 p-6">
       <h1 className="tk-display text-h1 font-semibold">{t('choose.title')}</h1>
 
       <section className="flex flex-col gap-3" aria-label={t('choose.stepWhat')}>

@@ -609,6 +609,14 @@
       width: 100%;
       justify-content: center;
     }
+    /* The bar floats over whatever is still scrolling under it, which is what
+     * a bar at the bottom is. What it may not do is take a control with it:
+     * anything scrolled into view by the browser — a focused chip, a keyboard
+     * tab, a test — would land underneath it and be unclickable. The margin is
+     * the bar's own height, so scrolling to a control leaves room for it. */
+    .tk-choose-page button {
+      scroll-margin-bottom: 96px;
+    }
   }
 
   /* ---- The sum ----------------------------------------------------------
