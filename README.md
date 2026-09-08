@@ -48,13 +48,18 @@ twenty minutes with no stopping point. Order comes from a Leitner scheduler, so
 what a child keeps missing comes round first. Answers are judged, saved and
 scheduled locally; a round can be stopped early and what was answered is kept.
 
-The home screen greets a child by name, asks when the test is and what it is
-about, and offers the one thing to carry on with. It carries two numbers and
-keeps them apart on purpose: the mark from the last round — "Je scoorde vorige
-keer een 8,4", over what was answered and not over what was asked — sits on the
-card it belongs to, and the forecast of what is still known in three weeks
-stands in a column of its own, because that is the only number that argues for
-practising today ([ADR-053](docs/DECISIONS.md)).
+The home screen greets a child by name and then does three things. It asks when
+the test is and what it is about, and offers the one thing to carry on with.
+It logs the rounds just played with the mark each came to — "cijfer 8,4", over
+what was answered and not over what was asked ([ADR-053](docs/DECISIONS.md)).
+And down the right it keeps what is the child's own: everything answered
+correctly so far, the exercises they keep going back to, and an animal they
+picked themselves that is not a reward and unlocks nothing.
+
+The forecast — "69%, weet je hier over drie weken nog van" — is the number the
+product argues from and it lives on **Onthouden**, one screen along. On the
+front door beside a mark it read as a second opinion about the same thing
+([ADR-058](docs/DECISIONS.md)).
 
 ## Architecture in one paragraph
 

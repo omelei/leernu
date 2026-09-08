@@ -34,25 +34,44 @@ export const nl = {
   'home.setsOver': '{onderdelen} onderdelen, verdeeld over {rondes} rondes.',
   'home.setsOverOne': '{onderdelen} onderdelen, in één ronde.',
   'home.practiceMore': 'Verder oefenen',
-  'home.rememberTitle': 'Wat onthoud je?',
-  'home.rememberOf': 'van {module}',
-  'home.rememberWhy':
-    'De punt vult zich met wat je over drie weken nog weet — niet met wat je vandaag goed had.',
-  'home.rememberNone': 'Nog niets om te onthouden. Doe één ronde.',
-  'home.stampsTitle': 'Reisstempels',
-  'home.stampsNone': 'Nog geen stempels. Een hele set foutloos is de eerste.',
-  'home.stampsGot': '{namen} gehaald.',
+  // De voorspelling stond hier en staat nu alleen nog op K9. Weg in plaats van
+  // ongebruikt blijven staan: copy die nergens meer verschijnt is copy die
+  // niemand nog leest en die bij de volgende ronde toch wordt meegewogen.
+  // Wat je net gedaan hebt, met het cijfer erbij. Een logboek, geen ranglijst:
+  // het staat er in de volgorde waarin het gebeurde en telt niets bij elkaar op.
+  'home.recentTitle': 'Recent geoefend',
+  'home.recentNone': 'Nog niets geoefend. Na je eerste ronde staat het hier.',
+  'home.recentGrade': 'cijfer',
+  'home.recentOutOf': '{goed} van de {totaal} goed',
+
+  // Alles bij elkaar, over alle rondes ooit. Nadrukkelijk niet hetzelfde als
+  // wat je onthoudt: dit gaat over antwoorden die je gaf, dat over wat er
+  // blijft hangen.
+  'home.accuracyTitle': 'Goed beantwoord',
+  'home.accuracyOf': '{goed} van de {totaal} vragen',
+  'home.accuracyNone': 'Nog geen antwoorden. Doe één ronde.',
+
+  // Waar je zelf steeds naar teruggaat, in één tik. Geen aanbeveling en geen
+  // algoritme: het is wat je het vaakst gekozen hebt.
+  'home.favouritesTitle': 'Jouw favorieten',
+  'home.favouritesNone': 'Nog geen favorieten. Wat je vaak oefent, komt hier te staan.',
+
+  // Het enige op dit scherm dat een kind zelf kiest. Het verdient niets, opent
+  // niets en meet niets — en juist daarom mag het er zijn.
+  'home.stickersTitle': 'Stickers',
+  'home.stickersPick': 'Kies je sticker',
+  'sticker.kat': 'Kat',
+  'sticker.uil': 'Uil',
+  'sticker.vos': 'Vos',
+  'sticker.beer': 'Beer',
+  'sticker.haas': 'Haas',
+  'sticker.vis': 'Vis',
   'home.modules': 'Wat je kunt oefenen',
   'home.continueTitle': 'Verder waar je was',
   'home.retention': 'weet je hier over drie weken nog van',
   'home.setMastered': '{goed} van de {totaal} onthoud je',
   'home.setNew': 'nog niet geoefend',
   'home.moreWays': 'Andere manieren',
-  // Wat de vorige ronde opleverde, als cijfer. Het staat naast de balk die
-  // diezelfde ronde tekent, zodat de twee over hetzelfde gaan.
-  'home.lastGrade': 'Je scoorde vorige keer een {cijfer}',
-  'home.lastGradeBar': 'Je vorige ronde: {goed} van de {totaal} goed',
-  'home.lastGradeNone': 'Nog geen ronde gedaan. Die van vandaag is je eerste.',
 
   // The frame. Module order is ADR-029; only the ones with content are shown,
   // so six of these seven are written down before they are needed rather than
@@ -104,17 +123,6 @@ export const nl = {
   // is. Het gekozen vak bepaalt waarmee "Ga verder" verdergaat.
   'home.testSubjectPick': 'Voor welk vak?',
   'home.testSubjectNone': 'Nog geen vak',
-  'home.testSubjectOf': 'Toets voor {module}',
-  // Waar de datum voor is. Een datum alleen is een sticker: het kind wist al
-  // wanneer. Dit richt de voorspelling op die dag — niet "over drie weken",
-  // maar "op de toetsdag" — en dat is pas een argument om vandaag te oefenen.
-  // "Ongeveer", altijd: het is een schatting waarin elk antwoord goed is, en
-  // dat is niemands week.
-  'home.testOutlook':
-    'Op de toetsdag ken je hier nu ongeveer {nu}% van. Oefen je elke dag even, dan is dat {straks}%.',
-  'home.testOutlookStart':
-    'Nog niet geoefend. Oefen je elke dag even, dan ken je hier op de toetsdag ongeveer {straks}% van.',
-  'home.testOutlookSteady': 'Je ligt op schema: op de toetsdag ken je hier ongeveer {nu}% van.',
 
   // Een module die het plan wel heeft en het product nog niet. Alleen te
   // bereiken door het adres te typen; geen datum, want een datum die we missen

@@ -80,6 +80,31 @@ export async function createChild(naam: string): Promise<ProfileRecord> {
 }
 
 /**
+ * The sticker this child chose, written where the schema already had a place
+ * for it.
+ *
+ * `avatarConfig` has been on `ProfileRecord` since the first version and has
+ * been an empty object ever since. This is what it is for: how a child wants to
+ * be shown, kept beside the name they typed and going nowhere else.
+ *
+ * It belongs to the child rather than to the device, which is why it is here
+ * and not in `settings`. Two children on one iPad are two animals; that is
+ * nearly the whole point of letting them choose.
+ */
+export async function setSticker(sticker: string): Promise<ProfileRecord | undefined> {
+  const db = await getDb();
+  const profile = await getActiveChild();
+  if (!profile) return undefined;
+
+  const updated: ProfileRecord = {
+    ...profile,
+    avatarConfig: { ...profile.avatarConfig, sticker },
+  };
+  await db.put('profile', updated);
+  return updated;
+}
+
+/**
  * Moves what a device learned before it knew about children onto the first of
  * them.
  *

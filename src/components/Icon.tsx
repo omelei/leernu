@@ -25,11 +25,11 @@ import type { ReactNode } from 'react';
  * redraws them later replaces the shapes and keeps the names, the grid and the
  * weight.
  *
- * Two things the construction forces. The tables are a three-by-three array of
- * dots and not a multiplication sign, because a cross already means a wrong
- * answer and an icon may not mean two things. And nothing here curves: the
- * primitives are straight, so a shoulder is a bevel rather than an arc, which
- * is also what survives being drawn at 20px.
+ * Two things the construction forces. Nothing here curves: the primitives are
+ * straight, so a shoulder is a bevel rather than an arc, which is also what
+ * survives being drawn at 20px. And no two icons may share a silhouette —
+ * which is why the tables sign sits on a key rather than bare, since a bare
+ * cross is already the drawing for a wrong answer.
  */
 
 /** Below this, §E drops the stroke to 1.5 and one detail with it. */
@@ -93,16 +93,22 @@ export function FreezerIcon(props: Omit<IconProps, 'children'>) {
 /**
  * The area: topography's own mark, and the first of the module pictograms.
  *
- * A closed outline with one inner boundary, on the 20x20 active area. It is a
- * shape rather than a picture of the Netherlands on purpose — §E's rule is that
- * the real map shape comes from the topography source and never from an icon,
- * because an icon of a country is a country drawn wrong at 24px.
+ * A diamond, which is what K1 draws in the rail — a square stood on its point,
+ * and one of §E's four primitives used whole. It replaced a bevelled outline
+ * with an inner boundary, which was more drawing for less recognition: at 24px
+ * the boundary was a scratch and the outline was a blob.
+ *
+ * It is a shape rather than a picture of the Netherlands on purpose. §E's rule
+ * is that the real map shape comes from the topography source and never from an
+ * icon, because an icon of a country is a country drawn wrong at 24px.
+ *
+ * The diamond is also the inside of `StampIcon`. They are told apart by the
+ * circle around that one, which is the whole of what a stamp is.
  */
 export function AreaIcon(props: Omit<IconProps, 'children'>) {
   return (
     <Icon {...props}>
-      <path d="M6 3h9l3 4v11l-4 3H7l-3-4V6z" strokeLinejoin="round" />
-      <path d="M10 3v8l-6 1" />
+      <path d="M12 3l9 9-9 9-9-9z" strokeLinejoin="round" />
     </Icon>
   );
 }
@@ -133,28 +139,43 @@ export function ClockIcon(props: Omit<IconProps, 'children'>) {
 }
 
 /**
- * The tables: three rows of three dots.
+ * The tables: a times sign, on a key.
  *
- * The array model, which is the picture a child is shown when multiplication is
- * introduced, and the only construction available — a multiplication sign is
- * two crossed lines and two crossed lines already mean a wrong answer.
+ * The sign is what was asked for and it is the right sign — a child who is
+ * learning the tables is learning ×, and a three-by-three array of dots is the
+ * picture their teacher drew once in group 4 and never again.
+ *
+ * The frame around it is not decoration. `WrongIcon` is two crossed lines
+ * corner to corner, and §E's rule is that an icon may not mean two things: a
+ * bare cross in the rail would be the same drawing a child sees when they get
+ * an answer wrong. Inside a key it is an operator on a calculator, which is a
+ * different silhouette at any size and the thing the module actually is.
  */
 export function TablesIcon(props: Omit<IconProps, 'children'>) {
-  const dots = [5, 12, 19].flatMap((y) => [5, 12, 19].map((x) => ({ x, y })));
   return (
     <Icon {...props}>
-      {dots.map((dot) => (
-        <circle key={`${dot.x}-${dot.y}`} cx={dot.x} cy={dot.y} r="1.6" fill="currentColor" />
-      ))}
+      <rect x="3" y="3" width="18" height="18" rx="2" />
+      <path d="M8.5 8.5l7 7M15.5 8.5l-7 7" />
     </Icon>
   );
 }
 
-/** The word: two lines of text, the second short, which is what a word list is. */
+/**
+ * The word: a speech balloon.
+ *
+ * Language is what is said before it is what is written, and this module is
+ * where a child meets a word rather than a spelling of it. Bevelled at the
+ * corners and with a straight tail, because the primitives are straight and an
+ * arc at 20px is a smudge.
+ *
+ * Two ruled lines were the previous drawing. They were a word list, which is
+ * one form the module takes, and they were also very nearly `EraIcon` and very
+ * nearly `FreezerIcon` — three icons of horizontal lines in one set.
+ */
 export function WordIcon(props: Omit<IconProps, 'children'>) {
   return (
     <Icon {...props}>
-      <path d="M4 9h16M4 15h10" />
+      <path d="M4 6h16v10H10l-4 4v-4H4z" strokeLinejoin="round" />
     </Icon>
   );
 }

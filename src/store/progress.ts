@@ -62,31 +62,33 @@ export async function finishSession(id: string, score: number, answered: number)
   });
 }
 
-/** The last finished round over a set, as K1 reports it back. */
-export interface LastRound {
+/** One finished round, as K1's history and its favourites read it back. */
+export interface PlayedRound {
+  readonly mode: ModeId;
+  /** The questions it asked, so a caller can work out which set they came from. */
+  readonly itemIds: readonly string[];
   readonly correct: number;
   readonly answered: number;
   readonly at: string;
 }
 
 /**
- * What happened the last time this child practised these items.
+ * Every finished round this child has played, newest first.
  *
- * Matched on the questions rather than on a set id, because a session records
- * what it asked and not which set it came from. An overlap of one item is
- * enough: a round samples fifteen of eighty, and two rounds over the same set
- * rarely share more than a handful.
+ * Rounds nobody answered a question in are left out. They happened — a child
+ * opened a round and closed it — but they are not practice, and a history that
+ * counted them would report a mark for a round that was never played.
  *
- * Rounds that were opened and abandoned without an answer are skipped. "Je
- * scoorde vorige keer een 1,0" for a round nobody played is not a fact about
- * the child.
+ * The whole list rather than a page of it: this is one device's own rounds, it
+ * is read once when the front door opens, and every caller wants a different
+ * slice of it — the last three, or the most-played four. Cutting it here would
+ * mean cutting it twice.
  */
-export async function loadLastRound(itemIds: readonly string[]): Promise<LastRound | null> {
+export async function loadPlayedRounds(): Promise<PlayedRound[]> {
   const db = await getDb();
   const kindId = await activeChildId();
-  const wanted = new Set(itemIds);
 
-  let best: LastRound | null = null;
+  const played: PlayedRound[] = [];
 
   for (const session of await db.getAll('sessions')) {
     // Rows written before ADR-046 carry no child at all, and they belong to
@@ -94,20 +96,55 @@ export async function loadLastRound(itemIds: readonly string[]): Promise<LastRou
     if ((session.kindId ?? SINGLETON_KEY) !== kindId) continue;
     if (session.geeindigd === null || session.score === null) continue;
 
-    const asked: readonly string[] = Array.isArray(session.itemSet)
+    const itemIds: readonly string[] = Array.isArray(session.itemSet)
       ? (session.itemSet as string[])
       : [];
-    if (!asked.some((id) => wanted.has(id))) continue;
-
-    const answered = session.beantwoord ?? asked.length;
+    const answered = session.beantwoord ?? itemIds.length;
     if (answered === 0) continue;
 
-    if (best === null || session.geeindigd > best.at) {
-      best = { correct: session.score, answered, at: session.geeindigd };
-    }
+    played.push({
+      mode: session.mode,
+      itemIds,
+      correct: session.score,
+      answered,
+      at: session.geeindigd,
+    });
   }
 
-  return best;
+  return played.sort((a, b) => b.at.localeCompare(a.at));
+}
+
+/**
+ * Every answer this child has ever given, as one fraction.
+ *
+ * Counted over attempts rather than over rounds, because that is where an
+ * answer is actually recorded and it is the only version that stays true when
+ * a round is stopped early.
+ *
+ * It is not a retention figure and must never be worded as one: this is what
+ * has been answered correctly, over everything, ever. It goes up slowly, it
+ * never resets, and that is the point — it is the one number on K1 that is
+ * about the whole of the work rather than about today.
+ */
+export interface Accuracy {
+  readonly correct: number;
+  readonly answered: number;
+}
+
+export async function loadAccuracy(): Promise<Accuracy> {
+  const db = await getDb();
+  const kindId = await activeChildId();
+
+  let correct = 0;
+  let answered = 0;
+
+  for (const attempt of await db.getAll('attempts')) {
+    if ((attempt.kindId ?? SINGLETON_KEY) !== kindId) continue;
+    answered++;
+    if (attempt.correct) correct++;
+  }
+
+  return { correct, answered };
 }
 
 export async function recordAttempt(attempt: Omit<AttemptRecord, 'id'>): Promise<void> {
