@@ -1,41 +1,28 @@
-import { getDb, SINGLETON_KEY, type ProfileRecord, type SettingRecord } from './db';
+import type { ProfileRecord } from './db';
+import { createChild, getActiveChild } from './children';
 
 /**
- * The player's profile and device settings.
+ * Who is practising, and the settings that belong to the device.
  *
- * There is exactly one profile per device and it is not an account: no e-mail,
- * no password, no server. A name is asked for so the app can greet the child by
- * it, and that is the entire reason it exists.
+ * A profile is not an account: no e-mail, no password, no sign-in. A name is
+ * asked for so the app can greet the child by it, and that is the entire reason
+ * it exists (ADR-008).
+ *
+ * There used to be exactly one per device. There are now as many as the family
+ * has children (ADR-046) — `store/children.ts` holds that, and these two stay
+ * as the front door for the screens that only ever want whoever is practising.
+ *
+ * The settings below are the device's, not a child's: which switches are on is
+ * a property of the iPad in the kitchen, not of who is holding it.
  */
 
 export async function getProfile(): Promise<ProfileRecord | undefined> {
-  const db = await getDb();
-  return db.get('profile', SINGLETON_KEY);
+  return getActiveChild();
 }
 
 export async function createProfile(naam: string): Promise<ProfileRecord> {
-  const profile: ProfileRecord = {
-    id: SINGLETON_KEY,
-    naam: naam.trim(),
-    avatarConfig: {},
-    niveau: 1,
-    xp: 0,
-    munten: 0,
-    aangemaaktOp: new Date().toISOString(),
-  };
-
-  const db = await getDb();
-  await db.put('profile', profile);
-  return profile;
+  return createChild(naam);
 }
 
-export async function getSetting(key: string): Promise<string | undefined> {
-  const db = await getDb();
-  const record: SettingRecord | undefined = await db.get('settings', key);
-  return record?.value;
-}
-
-export async function setSetting(key: string, value: string): Promise<void> {
-  const db = await getDb();
-  await db.put('settings', { key, value });
-}
+/** Re-exported so the screens that ask for a setting keep one import. */
+export { getSetting, setSetting } from './settings';

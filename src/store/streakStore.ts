@@ -7,10 +7,16 @@ import {
   type StreakState,
 } from '@/game-core';
 import kalender from '../../content/vakanties.json';
-import { getDb, SINGLETON_KEY } from './db';
+import { getDb } from './db';
+import { activeChildId } from './children';
 
 /**
- * The streak, on the device and nowhere else.
+ * The streak, on the device and nowhere else, and belonging to one child.
+ *
+ * Keyed by the child rather than by the device (ADR-046). A shared streak on a
+ * family iPad meant the eldest kept the youngest's going, which is the one
+ * thing a streak may never do: it is a record of turning up, and it has to be
+ * true of whoever it is shown to.
  *
  * The holiday calendar is bundled rather than fetched: it is a kilobyte and a
  * half, and a streak that breaks because a JSON file was slow to arrive would
@@ -22,7 +28,7 @@ export const HOLIDAYS: readonly HolidayPeriod[] = kalender.vakanties;
 
 export async function loadStreak(): Promise<StreakState> {
   const db = await getDb();
-  const row = await db.get('streak', SINGLETON_KEY);
+  const row = await db.get('streak', await activeChildId());
   if (!row) return emptyStreak();
 
   return {
@@ -36,7 +42,7 @@ export async function loadStreak(): Promise<StreakState> {
 
 export async function saveStreak(state: StreakState): Promise<void> {
   const db = await getDb();
-  await db.put('streak', { id: SINGLETON_KEY, ...state });
+  await db.put('streak', { id: await activeChildId(), ...state });
 }
 
 /** Applies a finished round and saves the result. Returns what changed. */

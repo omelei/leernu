@@ -30,10 +30,28 @@ export const DB_NAME = 'leernu';
  * 3 since ADR-040, which retired the stamp awarded for taking part and renamed
  * the one that used the word this product no longer uses. Both are rows rather
  * than fields, so the migration rewrites values and leaves the schema alone.
+ *
+ * 4 since ADR-046 and ADR-050: progress belongs to a child, not to a device.
+ * `itemStates` and `badges` were keyed by item and by badge alone, so three
+ * children on one iPad shared one set of Leitner boxes — the bug ADR-046 named
+ * and the reason the schema had to move before any backend does.
+ *
+ * That migration is deliberately additive: version 4 only creates two stores
+ * and touches nothing that already holds a child's work. Rows are copied across
+ * later, in ordinary transactions where a failure can be seen and retried,
+ * rather than inside a version-change transaction that cannot be tested from
+ * here and whose failure mode is a child's progress becoming unreachable.
  */
-export const DB_VERSION = 3;
+export const DB_VERSION = 4;
 
-/** Both singleton stores use this key, so there is never a "which row" question. */
+/**
+ * The first child's id, and what the settings and streak stores were keyed by
+ * when there was only ever one of them.
+ *
+ * It stays 'me' rather than becoming a uuid so that everything already written
+ * under that key — a streak, a profile, a level — belongs to the first child
+ * without being moved. Children added afterwards get a uuid.
+ */
 export const SINGLETON_KEY = 'me';
 
 export interface ProfileRecord {
@@ -49,6 +67,8 @@ export interface ProfileRecord {
 
 export interface SessionRecord {
   id: string;
+  /** Whose round it was. Absent on rows written before ADR-046. */
+  kindId?: string;
   mode: ModeId;
   /** The questions and their answer key. Unused in v1; see ADR-003. */
   itemSet: unknown;
@@ -60,6 +80,8 @@ export interface SessionRecord {
 export interface AttemptRecord {
   id?: number;
   sessionId: string;
+  /** Whose answer it was. Absent on rows written before ADR-046. */
+  kindId?: string;
   itemId: string;
   mode: ModeId;
   correct: boolean;
@@ -97,6 +119,16 @@ export interface BadgeRecord {
   behaaldOp: string;
 }
 
+/** An item's Leitner state, belonging to one child. */
+export interface ChildItemState extends ItemState {
+  kindId: string;
+}
+
+/** A stamp, belonging to one child. */
+export interface ChildBadgeRecord extends BadgeRecord {
+  kindId: string;
+}
+
 export interface StampRecord {
   regioSet: string;
   behaaldOp: string;
@@ -108,8 +140,14 @@ export interface SettingRecord {
 }
 
 interface TopoDB extends DBSchema {
+  /** One row per child. `profile` is the old name for what is now a family. */
   profile: { key: string; value: ProfileRecord };
+  /** Version 3 and earlier: one device's boxes. Read once, then left alone. */
   itemStates: { key: string; value: ItemState };
+  /** Version 4: the same, per child. */
+  progress: { key: [string, string]; value: ChildItemState };
+  /** Version 3 and earlier: one device's stamps. Read once, then left alone. */
+  kindBadges: { key: [string, string]; value: ChildBadgeRecord };
   sessions: { key: string; value: SessionRecord };
   attempts: {
     key: number;
@@ -162,6 +200,15 @@ export function getDb(): Promise<IDBPDatabase<TopoDB>> {
             rustdagWeek: legacy.vriezerWeek ?? null,
           });
         });
+      }
+
+      // ADR-046 and ADR-050: two stores whose key had to widen from "which
+      // item" to "which child's item". Created and left empty — the rows a
+      // device already holds are copied in by `store/children.ts` on first
+      // read, where a failure is visible and can be tried again.
+      if (oldVersion < 4) {
+        db.createObjectStore('progress', { keyPath: ['kindId', 'itemId'] });
+        db.createObjectStore('kindBadges', { keyPath: ['kindId', 'badgeId'] });
       }
 
       // ADR-040: "eerste-ronde" was earned by taking part and no longer exists;

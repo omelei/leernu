@@ -210,6 +210,14 @@ export const nl = {
   // velden die een naam op een apparaat veranderen in een vindbaar kind.
   'you.title': 'Jij',
   'you.nameIs': 'Je oefent als {naam}.',
+  'you.children': 'Wie oefent er?',
+  'you.practisingNow': 'oefent nu',
+  'you.switchTo': 'Geef {naam} de beurt',
+  'you.addChild': 'Nog een kind erbij',
+  'you.childName': 'Naam van het kind',
+  'you.add': 'Toevoegen',
+  'you.childExplain':
+    'Ieder kind heeft een eigen voortgang. Wat de een oefent, telt niet mee voor de ander.',
   'you.settings': 'Instellingen',
   'you.readAloud': 'Vragen voorlezen',
   'you.readAloudWhy': 'Je kunt elke vraag laten voorlezen.',

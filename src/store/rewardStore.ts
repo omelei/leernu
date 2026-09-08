@@ -1,5 +1,6 @@
 import { newStamps, rewardForRound, type RewardSnapshot, type StampId } from '@/game-core';
-import { getDb, SINGLETON_KEY } from './db';
+import { getDb } from './db';
+import { activeChildId, ensureProgressPerChild } from './children';
 
 /**
  * XP, coins and travel stamps, on the device.
@@ -25,8 +26,11 @@ export interface RoundOutcome {
 }
 
 export async function loadStamps(): Promise<Set<string>> {
+  await ensureProgressPerChild();
+
   const db = await getDb();
-  const rows = await db.getAll('badges');
+  const kindId = await activeChildId();
+  const rows = await db.getAll('kindBadges', IDBKeyRange.bound([kindId], [kindId, []]));
   return new Set(rows.map((row) => row.badgeId));
 }
 
@@ -43,7 +47,8 @@ export async function applyRoundRewards(params: {
   const reward = rewardForRound(params);
   const db = await getDb();
 
-  const profile = await db.get('profile', SINGLETON_KEY);
+  const kindId = await activeChildId();
+  const profile = await db.get('profile', kindId);
   const totalXp = (profile?.xp ?? 0) + reward.xp;
 
   if (profile) {
@@ -58,7 +63,7 @@ export async function applyRoundRewards(params: {
   const earned = newStamps(params.snapshot, held);
   const behaaldOp = new Date().toISOString();
   for (const badgeId of earned) {
-    await db.put('badges', { badgeId, behaaldOp });
+    await db.put('kindBadges', { kindId, badgeId, behaaldOp });
   }
 
   return { xp: reward.xp, coins: reward.coins, totalXp, stamps: earned };

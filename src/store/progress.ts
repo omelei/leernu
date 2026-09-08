@@ -1,5 +1,6 @@
 import type { ItemState, ModeId } from '@/game-core';
 import { getDb, type AttemptRecord, type SessionRecord } from './db';
+import { activeChildId, ensureProgressPerChild } from './children';
 
 /**
  * Reading and writing what a child has learned.
@@ -8,23 +9,31 @@ import { getDb, type AttemptRecord, type SessionRecord } from './db';
  * future server tables (DATAMODEL part A), so adding accounts one day is an
  * upload rather than a migration — including `sessions.itemSet`, which nothing
  * validates yet but which the server will need to re-score against (ADR-003).
+ *
+ * Which child is answering is resolved here and not by the caller. Every screen
+ * asks for "the boxes" and gets the ones belonging to whoever is practising,
+ * which is the only version of this that cannot be got wrong by forgetting.
  */
 
 export async function loadItemStates(): Promise<Map<string, ItemState>> {
+  await ensureProgressPerChild();
+
   const db = await getDb();
-  const rows = await db.getAll('itemStates');
+  const kindId = await activeChildId();
+  const rows = await db.getAll('progress', IDBKeyRange.bound([kindId], [kindId, []]));
   return new Map(rows.map((row) => [row.itemId, row]));
 }
 
 export async function saveItemState(state: ItemState): Promise<void> {
   const db = await getDb();
-  await db.put('itemStates', state);
+  await db.put('progress', { ...state, kindId: await activeChildId() });
 }
 
 export async function startSession(mode: ModeId, itemIds: readonly string[]): Promise<string> {
   const db = await getDb();
   const session: SessionRecord = {
     id: crypto.randomUUID(),
+    kindId: await activeChildId(),
     mode,
     itemSet: [...itemIds],
     score: null,
@@ -63,6 +72,7 @@ export async function saveAnswer(params: {
 }): Promise<void> {
   await recordAttempt({
     sessionId: params.sessionId,
+    kindId: await activeChildId(),
     itemId: params.itemId,
     mode: params.mode,
     correct: params.correct,
