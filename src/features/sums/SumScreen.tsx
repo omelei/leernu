@@ -188,10 +188,10 @@ function SumField({ onSubmit }: { readonly onSubmit: (value: string) => void }) 
     onSubmit(value);
   }
 
+  // Wrapping, because the desktop question column is 22rem and an answer box
+  // beside a button does not fit in it: the button squashed and broke "Kijk na"
+  // over two lines rather than dropping below it.
   return (
-    {/* Wrapping, because the desktop column is 22rem and an answer box beside
-        a button does not fit in it — the button broke "Kijk na" over two lines
-        rather than dropping below, which is what wrapping is for. */}
     <form onSubmit={handle} className="mt-3 flex flex-wrap items-center gap-3">
       <label htmlFor="som" className="tk-sr-only">
         {t('sums.typeQuestion')}
