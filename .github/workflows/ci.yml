@@ -56,9 +56,20 @@ jobs:
           fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          # [skip ci] because a formatting commit has nothing left to check, and
-          # a run that exists only to say so is the noise this step removes.
-          git commit -am 'Run Prettier [skip ci]'
+          # No [skip ci], and it is worth saying why it was removed rather than
+          # leaving the next person to rediscover it.
+          #
+          # A formatting commit has nothing left to check, so skipping its own
+          # run was right. What was wrong is where that marker ends up: a squash
+          # merge folds every commit message on the branch into the body of the
+          # one commit that lands on main, `[skip ci]` included. GitHub reads it
+          # there too. So the merge that was supposed to publish ran nothing at
+          # all, and production silently stayed on the build before it — with a
+          # green tick on the pull request saying everything had passed.
+          #
+          # One redundant run per formatting commit is cheap. A deploy that does
+          # not happen and does not say so is not.
+          git commit -am 'Run Prettier'
           git pull --rebase --autostash
           git push
       # A broken geometry reference must never reach a classroom.
