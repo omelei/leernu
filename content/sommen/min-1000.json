@@ -1,0 +1,325 @@
+{
+  "_gegenereerd": "tools/content/build-rekenen.mjs — gegenereerd, niet met de hand bewerken.",
+  "id": "min-1000",
+  "op": "min",
+  "tafel": null,
+  "niveau": 3,
+  "contentVersie": "2026-09-08",
+  "items": [
+    {
+      "id": "min1000-230-70",
+      "op": "min",
+      "links": 230,
+      "rechts": 70,
+      "antwoord": 160
+    },
+    {
+      "id": "min1000-230-95",
+      "op": "min",
+      "links": 230,
+      "rechts": 95,
+      "antwoord": 135
+    },
+    {
+      "id": "min1000-230-140",
+      "op": "min",
+      "links": 230,
+      "rechts": 140,
+      "antwoord": 90
+    },
+    {
+      "id": "min1000-315-70",
+      "op": "min",
+      "links": 315,
+      "rechts": 70,
+      "antwoord": 245
+    },
+    {
+      "id": "min1000-315-95",
+      "op": "min",
+      "links": 315,
+      "rechts": 95,
+      "antwoord": 220
+    },
+    {
+      "id": "min1000-315-140",
+      "op": "min",
+      "links": 315,
+      "rechts": 140,
+      "antwoord": 175
+    },
+    {
+      "id": "min1000-367-70",
+      "op": "min",
+      "links": 367,
+      "rechts": 70,
+      "antwoord": 297
+    },
+    {
+      "id": "min1000-367-95",
+      "op": "min",
+      "links": 367,
+      "rechts": 95,
+      "antwoord": 272
+    },
+    {
+      "id": "min1000-367-140",
+      "op": "min",
+      "links": 367,
+      "rechts": 140,
+      "antwoord": 227
+    },
+    {
+      "id": "min1000-428-70",
+      "op": "min",
+      "links": 428,
+      "rechts": 70,
+      "antwoord": 358
+    },
+    {
+      "id": "min1000-428-95",
+      "op": "min",
+      "links": 428,
+      "rechts": 95,
+      "antwoord": 333
+    },
+    {
+      "id": "min1000-428-140",
+      "op": "min",
+      "links": 428,
+      "rechts": 140,
+      "antwoord": 288
+    },
+    {
+      "id": "min1000-441-70",
+      "op": "min",
+      "links": 441,
+      "rechts": 70,
+      "antwoord": 371
+    },
+    {
+      "id": "min1000-441-95",
+      "op": "min",
+      "links": 441,
+      "rechts": 95,
+      "antwoord": 346
+    },
+    {
+      "id": "min1000-441-140",
+      "op": "min",
+      "links": 441,
+      "rechts": 140,
+      "antwoord": 301
+    },
+    {
+      "id": "min1000-546-70",
+      "op": "min",
+      "links": 546,
+      "rechts": 70,
+      "antwoord": 476
+    },
+    {
+      "id": "min1000-546-95",
+      "op": "min",
+      "links": 546,
+      "rechts": 95,
+      "antwoord": 451
+    },
+    {
+      "id": "min1000-546-140",
+      "op": "min",
+      "links": 546,
+      "rechts": 140,
+      "antwoord": 406
+    },
+    {
+      "id": "min1000-589-70",
+      "op": "min",
+      "links": 589,
+      "rechts": 70,
+      "antwoord": 519
+    },
+    {
+      "id": "min1000-589-95",
+      "op": "min",
+      "links": 589,
+      "rechts": 95,
+      "antwoord": 494
+    },
+    {
+      "id": "min1000-589-140",
+      "op": "min",
+      "links": 589,
+      "rechts": 140,
+      "antwoord": 449
+    },
+    {
+      "id": "min1000-652-70",
+      "op": "min",
+      "links": 652,
+      "rechts": 70,
+      "antwoord": 582
+    },
+    {
+      "id": "min1000-652-95",
+      "op": "min",
+      "links": 652,
+      "rechts": 95,
+      "antwoord": 557
+    },
+    {
+      "id": "min1000-652-140",
+      "op": "min",
+      "links": 652,
+      "rechts": 140,
+      "antwoord": 512
+    },
+    {
+      "id": "min1000-673-70",
+      "op": "min",
+      "links": 673,
+      "rechts": 70,
+      "antwoord": 603
+    },
+    {
+      "id": "min1000-673-95",
+      "op": "min",
+      "links": 673,
+      "rechts": 95,
+      "antwoord": 578
+    },
+    {
+      "id": "min1000-673-140",
+      "op": "min",
+      "links": 673,
+      "rechts": 140,
+      "antwoord": 533
+    },
+    {
+      "id": "min1000-738-70",
+      "op": "min",
+      "links": 738,
+      "rechts": 70,
+      "antwoord": 668
+    },
+    {
+      "id": "min1000-738-95",
+      "op": "min",
+      "links": 738,
+      "rechts": 95,
+      "antwoord": 643
+    },
+    {
+      "id": "min1000-738-140",
+      "op": "min",
+      "links": 738,
+      "rechts": 140,
+      "antwoord": 598
+    },
+    {
+      "id": "min1000-768-70",
+      "op": "min",
+      "links": 768,
+      "rechts": 70,
+      "antwoord": 698
+    },
+    {
+      "id": "min1000-768-95",
+      "op": "min",
+      "links": 768,
+      "rechts": 95,
+      "antwoord": 673
+    },
+    {
+      "id": "min1000-768-140",
+      "op": "min",
+      "links": 768,
+      "rechts": 140,
+      "antwoord": 628
+    },
+    {
+      "id": "min1000-812-70",
+      "op": "min",
+      "links": 812,
+      "rechts": 70,
+      "antwoord": 742
+    },
+    {
+      "id": "min1000-812-95",
+      "op": "min",
+      "links": 812,
+      "rechts": 95,
+      "antwoord": 717
+    },
+    {
+      "id": "min1000-812-140",
+      "op": "min",
+      "links": 812,
+      "rechts": 140,
+      "antwoord": 672
+    },
+    {
+      "id": "min1000-845-70",
+      "op": "min",
+      "links": 845,
+      "rechts": 70,
+      "antwoord": 775
+    },
+    {
+      "id": "min1000-845-95",
+      "op": "min",
+      "links": 845,
+      "rechts": 95,
+      "antwoord": 750
+    },
+    {
+      "id": "min1000-845-140",
+      "op": "min",
+      "links": 845,
+      "rechts": 140,
+      "antwoord": 705
+    },
+    {
+      "id": "min1000-924-70",
+      "op": "min",
+      "links": 924,
+      "rechts": 70,
+      "antwoord": 854
+    },
+    {
+      "id": "min1000-924-95",
+      "op": "min",
+      "links": 924,
+      "rechts": 95,
+      "antwoord": 829
+    },
+    {
+      "id": "min1000-924-140",
+      "op": "min",
+      "links": 924,
+      "rechts": 140,
+      "antwoord": 784
+    },
+    {
+      "id": "min1000-956-70",
+      "op": "min",
+      "links": 956,
+      "rechts": 70,
+      "antwoord": 886
+    },
+    {
+      "id": "min1000-956-95",
+      "op": "min",
+      "links": 956,
+      "rechts": 95,
+      "antwoord": 861
+    },
+    {
+      "id": "min1000-956-140",
+      "op": "min",
+      "links": 956,
+      "rechts": 140,
+      "antwoord": 816
+    }
+  ]
+}

@@ -19,9 +19,9 @@ import { expect, test, type Page } from '@playwright/test';
  */
 async function startRound(page: Page, set: RegExp, way: RegExp) {
   await page.goto('/topografie');
-  await expect(page.getByRole('heading', { name: 'Wat wil je oefenen?' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
 
-  const what = page.getByRole('region', { name: /Waarover/ });
+  const what = page.getByRole('region', { name: /Kies een onderwerp/ });
   const how = page.getByRole('region', { name: /Hoe wil je/ });
 
   await what.getByRole('button', { name: set }).click();
@@ -184,25 +184,36 @@ test('logs the round that was just played, with its mark', async ({ page }) => {
 });
 
 /**
- * The sticker is the one thing on K1 a child decides, so it has to stick — and
- * it has to show somewhere other than the card it was chosen on, or it does not
- * look saved.
+ * The animal a child picks is theirs, so it has to stick — and it has to show
+ * somewhere other than the card it was chosen on, or it does not look saved.
+ *
+ * It is on "Jij" now rather than in the column on the right (ADR-067). Six of
+ * the twelve are open from the first minute of level one; the other six arrive
+ * one per level, and this checks both halves of that — that a reached one can
+ * be chosen, and that one further up the ladder cannot.
  */
-test('the sticker a child picks is theirs, and follows them', async ({ page }) => {
+test('the animal a child picks is theirs, and follows them', async ({ page }) => {
   await signIn(page, 'Puk');
+  await page.goto('/jij');
 
-  const stickers = page.getByRole('region', { name: 'Stickers' });
-  await stickers.getByRole('button', { name: 'Vos' }).click();
-  await expect(stickers.getByRole('button', { name: 'Vos' })).toHaveAttribute(
+  const dieren = page.getByRole('region', { name: 'Jouw dieren' });
+  await dieren.getByRole('button', { name: 'Vos', exact: true }).click();
+  await expect(dieren.getByRole('button', { name: 'Vos', exact: true })).toHaveAttribute(
     'aria-pressed',
     'true',
   );
 
-  // It belongs to the child, not to the page: it survives a reload, and it is
-  // in the app bar beside their name.
+  // Level one, so the dragon is not hidden — it is there, greyed, saying what
+  // it costs. A collection with an invisible end is a mystery, not a ladder.
+  const draak = dieren.getByRole('button', { name: /Draak, vanaf niveau \d+/ });
+  await expect(draak).toBeDisabled();
+
+  // It belongs to the child, not to the page: it survives a reload.
   await page.reload();
   await expect(
-    page.getByRole('region', { name: 'Stickers' }).getByRole('button', { name: 'Vos' }),
+    page
+      .getByRole('region', { name: 'Jouw dieren' })
+      .getByRole('button', { name: 'Vos', exact: true }),
   ).toHaveAttribute('aria-pressed', 'true');
 });
 
@@ -386,7 +397,7 @@ test('explore names a city, places it, and scores nothing', async ({ page }) => 
   // the sets live now.
   await page.goto('/topografie');
   const steden = page
-    .getByRole('region', { name: /Waarover/ })
+    .getByRole('region', { name: /Kies een onderwerp/ })
     .getByRole('button', { name: /Steden van Nederland/ });
   await expect(steden).toContainText('nog niet geoefend');
 });

@@ -2,6 +2,7 @@ import type { ComponentType } from 'react';
 import {
   BoltIcon,
   ChoiceIcon,
+  DiplomaIcon,
   ExploreIcon,
   KeyboardIcon,
   PointIcon,
@@ -10,7 +11,7 @@ import {
 } from '@/components/Icon';
 import type { ModeId, RoundRule } from '@/game-core';
 import { t, type TranslationKey } from '@/i18n';
-import { ROUND_RULE } from '@/features/practice/useRound';
+import { isMixSet, ROUND_RULE } from '@/features/practice/useRound';
 import { SUM_ROUND_RULE } from '@/features/sums/useSumRound';
 
 /**
@@ -53,6 +54,17 @@ export interface PracticeForm {
   readonly seconds: number | null;
   /** Only offered once the clock is switched on, which it is not by default (K10). */
   readonly needsClock: boolean;
+  /**
+   * Which sets this way of practising is offered for. Absent means all of them.
+   *
+   * Two ways need it and both for the same kind of reason. **Ontdekken** is
+   * where a child meets a set for the first time, and a mix of everything is
+   * not where anyone meets anything for the first time. A **tafeldiploma** is a
+   * diploma for one table, so it is offered on a table and nowhere else — there
+   * is no such thing as a diploma for "alle tafels door elkaar", and offering
+   * one on a mix would mean inventing a certificate no school hands out.
+   */
+  readonly geldtVoor?: (setId: string) => boolean;
 }
 
 /** One glance, not a scroll. See the note above. */
@@ -103,6 +115,7 @@ export const TOPO_FORMS: readonly PracticeForm[] = [
     rule: null,
     seconds: null,
     needsClock: false,
+    geldtVoor: (setId) => !isMixSet(setId),
   },
   {
     id: 'bliksemronde',
@@ -171,18 +184,50 @@ export const SUM_FORMS: readonly PracticeForm[] = [
     seconds: null,
     needsClock: false,
   },
+  {
+    // Last, because it is the heaviest thing rekenen asks and because it is not
+    // practice: it is the test at the end of it, the one a child already knows
+    // from school. Ten sums, all of them right, and one mistake ends the
+    // attempt — which is what makes it worth having and why it is not offered
+    // as the way in.
+    //
+    // No clock, and that is a departure from the tafeltoets a teacher gives.
+    // The product says on its own settings page that haste does not help you
+    // remember, and it does not switch that off for the one exercise where a
+    // child would feel it most (ADR-064).
+    id: 'tafeldiploma',
+    name: 'mode.tafeldiploma',
+    reason: 'way.tafeldiploma',
+    icon: DiplomaIcon,
+    rule: SUM_ROUND_RULE.tafeldiploma,
+    seconds: 8,
+    needsClock: false,
+    geldtVoor: (setId) => /^tafel-\d+$/.test(setId),
+  },
 ];
 
 export function formsFor(moduleId: string): readonly PracticeForm[] {
   return moduleId === 'tafels' ? SUM_FORMS : TOPO_FORMS;
 }
 
-/** What is actually drawn: what the clock setting allows, capped at six. */
+/**
+ * What is actually drawn: what the clock setting allows and what the chosen set
+ * can be practised in, capped at six.
+ *
+ * The set is part of it because step 2 is about a set that step 1 has already
+ * named. A way of practising that does not apply to it is not greyed out — it
+ * is absent, the same way an unbuilt module is absent from the rail: a disabled
+ * control on a chooser is a question a child has to ask someone about.
+ */
 export function offeredForms(
   forms: readonly PracticeForm[],
   clock: boolean,
+  setId: string | null,
 ): readonly PracticeForm[] {
-  return forms.filter((form) => clock || !form.needsClock).slice(0, MAX_FORMS);
+  return forms
+    .filter((form) => clock || !form.needsClock)
+    .filter((form) => setId === null || !form.geldtVoor || form.geldtVoor(setId))
+    .slice(0, MAX_FORMS);
 }
 
 /** How many questions this way of practising asks of this set, where it is knowable. */

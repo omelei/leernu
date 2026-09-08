@@ -56,16 +56,32 @@ export const nl = {
   'home.favouritesTitle': 'Jouw favorieten',
   'home.favouritesNone': 'Nog geen favorieten. Wat je vaak oefent, komt hier te staan.',
 
-  // Het enige op dit scherm dat een kind zelf kiest. Het verdient niets, opent
-  // niets en meet niets — en juist daarom mag het er zijn.
-  'home.stickersTitle': 'Stickers',
-  'home.stickersPick': 'Kies je sticker',
+  // De reis. Alles hier komt uit één getal dat het product al sinds de eerste
+  // versie bijhoudt en nooit liet zien: tien punten voor elk goed antwoord.
+  // De middelste regel is de regel die telt — "nog 340 punten" is een munt
+  // waarin niemand rekent, "nog 6 goede antwoorden" is iets wat je vanmiddag
+  // kunt gaan doen. Nergens staat hoe lang of hoe vaak: door wachten gebeurt
+  // hier niets.
+  'home.journeyTitle': 'Jouw ontdekkingsreis',
+  'home.journeyLevel': 'Niveau {niveau}',
+  'home.journeyHave': '{aantal} van de {totaal} dieren',
+  'home.journeyBar': 'Op weg naar niveau {niveau}',
+  'home.journeyToGo': 'Nog {aantal} goede antwoorden tot niveau {niveau}.',
+  'home.journeyOneToGo': 'Nog één goed antwoord tot niveau {niveau}.',
+  'home.journeyNext': 'Hierna: {dier}',
+  'home.journeyComplete': 'Je hebt alle dieren. Je niveau blijft stijgen.',
   'sticker.kat': 'Kat',
   'sticker.uil': 'Uil',
   'sticker.vos': 'Vos',
   'sticker.beer': 'Beer',
   'sticker.haas': 'Haas',
   'sticker.vis': 'Vis',
+  'sticker.egel': 'Egel',
+  'sticker.kikker': 'Kikker',
+  'sticker.eekhoorn': 'Eekhoorn',
+  'sticker.pinguin': 'Pinguïn',
+  'sticker.olifant': 'Olifant',
+  'sticker.draak': 'Draak',
   'home.modules': 'Wat je kunt oefenen',
   'home.continueTitle': 'Verder waar je was',
   'home.retention': 'weet je hier over drie weken nog van',
@@ -152,6 +168,12 @@ export const nl = {
   'set.nl-waddeneilanden': 'De Waddeneilanden',
   'set.nl-wateren': 'Zeeën en meren',
   'set.nl-steden': 'Steden van Nederland',
+  // De mix. Geen zesde set maar dezelfde items onder één naam, zodat een
+  // provincie die je hier goed hebt hetzelfde doosje opschuift als altijd.
+  'set.nl-mix': 'Topomix',
+  // Kort, want deze regel staat op een tegel naast vijf andere: de vijf sets
+  // opnoemen maakte die tegel twee keer zo hoog als de rest van de rij.
+  'set.nl-mix.uitleg': 'Alles van de kaart door elkaar',
 
   // Modes
   'mode.wijs-aan': 'Aanwijzen',
@@ -171,8 +193,13 @@ export const nl = {
   'way.ontdekken': 'Rondkijken, geen vragen',
   'way.bliksemronde': 'Zo veel mogelijk in een minuut — voor als het al zit',
   'way.overleven': 'Doorgaan tot je levens op zijn — voor als het al zit',
-  'choose.title': 'Wat wil je oefenen?',
-  'choose.stepWhat': '1 · Waarover',
+  // Bij naam, net als de begroeting op de voordeur. "Wat wil je oefenen?" aan
+  // niemand in het bijzonder is een formulier; aan Fem gevraagd is het een
+  // vraag, en zij is degene die hem beantwoordt.
+  'choose.title': 'Wat wil je oefenen, {naam}?',
+  // "Waarover" was een woord dat niemand van tien hardop zegt. Deze zegt wat
+  // de stap van je vraagt in plaats van waar hij over gaat.
+  'choose.stepWhat': '1 · Kies een onderwerp',
   'choose.stepHow': '2 · Hoe wil je oefenen? van makkelijk naar moeilijk',
   'choose.dueToday': '{aantal} vandaag op de rol',
   'choose.testSubject': 'Hier gaat je toets over.',
@@ -192,6 +219,31 @@ export const nl = {
   'choose.startOpen': '{set} {hoe}',
   'choose.minutes': 'Ongeveer {aantal} minuten',
   'choose.minuteOne': 'Ongeveer 1 minuut',
+  // De knop zegt wat hij doet en niets meer; de zin ernaast zegt wat er gaat
+  // gebeuren. Dat was eerst één ding — de knop dróég de zin — en dat leest een
+  // kind niet als de weg vooruit. Wat een schermlezer hoort is nog steeds het
+  // hele ding, want dat staat in het label.
+  'choose.go': 'Start',
+  'choose.goLabel': 'Start: {wat}',
+
+  // De onderwerpen van rekenen. Vier soorten sommen en een mix ervan; de tafels
+  // en het delen hebben er dertien elk, en die staan als knopjes onder de kaart
+  // in plaats van als dertien kaarten ernaast.
+  'onderwerp.tafels': 'Tafels',
+  'onderwerp.tafels.uitleg': 'Keersommen, de tafel van 1 tot en met 12',
+  'onderwerp.tafels.keuze': 'Welke tafel?',
+  'onderwerp.delen': 'Deelsommen',
+  'onderwerp.delen.uitleg': 'De tafels andersom: 56 : 7',
+  'onderwerp.delen.keuze': 'Delen door welk getal?',
+  'onderwerp.plus': 'Plussommen',
+  'onderwerp.plus.uitleg': 'Optellen tot 20, 100 of 1000',
+  'onderwerp.min': 'Minsommen',
+  'onderwerp.min.uitleg': 'Aftrekken tot 20, 100 of 1000',
+  'onderwerp.bereik.keuze': 'Tot welk getal?',
+  // De mix heet naar wat erin zit en niet naar hoe spannend hij is: een kind
+  // dat op deze kaart drukt hoort te weten wat het krijgt.
+  'onderwerp.rekenmix': 'Rekenmix',
+  'onderwerp.rekenmix.uitleg': 'Keer, delen, plus en min door elkaar',
 
   // Explore
   'explore.kind': 'Ontdek de kaart',
@@ -244,6 +296,17 @@ export const nl = {
   // Rekenen. De tafels van 1 tot 12 en tien sommen per tafel, allebei uit het
   // app-ontwerp v2. Het oefenscherm zelf is daar niet getekend (ADR-049).
   'sums.table': 'Tafel van {tafel}',
+  'sums.divideBy': 'Delen door {tafel}',
+  'sums.plusUpTo': 'Plussommen tot {grens}',
+  'sums.minusUpTo': 'Minsommen tot {grens}',
+  'sums.upTo': 'tot {grens}',
+  'sums.allTables': 'Alle tafels door elkaar',
+  'sums.allDivides': 'Alle deelsommen door elkaar',
+  // Het knopje naast de twaalf getallen. 'Door elkaar' en niet 'Alles', zodat
+  // wat je ziet ook in de naam staat die een schermlezer voorleest — WCAG 2.5.3,
+  // en de reden dat spraakbediening 'druk op door elkaar' begrijpt.
+  'sums.allShort': 'Door elkaar',
+  'sums.mix': 'Rekenmix',
   'sums.prompt': 'Hoeveel is het?',
   'sums.typeQuestion': 'Typ het antwoord',
   'sums.chooseQuestion': 'Kies het antwoord',
@@ -255,8 +318,20 @@ export const nl = {
   'sums.practiceMore': 'Deze sommen moet je nog oefenen',
   'mode.som-typen': 'Typ het antwoord',
   'mode.som-meerkeuze': 'Kies uit vier',
+  // De tafeltoets die een kind van school kent, zonder de stopwatch: op de
+  // instellingenpagina staat dat haast het onthouden niet helpt, en dat zetten
+  // we niet uit voor de ene oefening waar een kind het het meest zou voelen.
+  'mode.tafeldiploma': 'Tafeldiploma',
+  'sums.diplomaStop': 'Bekijk je poging',
+  'sums.diplomaEarned': 'Diploma gehaald: tafel van {tafel}',
+  'sums.diplomaMissed': 'Nog geen diploma. Alle tien goed, dan is hij van jou.',
+  'rekenen.diplomasTitle': 'Jouw tafeldiploma’s',
+  'rekenen.diplomasCount': '{aantal} van de {totaal} gehaald',
+  'rekenen.diplomaHave': 'Tafel van {tafel}: diploma gehaald',
+  'rekenen.diplomaWant': 'Tafel van {tafel}: nog geen diploma',
   'way.som-typen': 'Zeg het antwoord zelf — zo weet je of je de tafel kent',
   'way.som-meerkeuze': 'Kies uit vier getallen — de weg terug als typen niet lukt',
+  'way.tafeldiploma': 'De hele tafel foutloos — één fout en je begint opnieuw',
 
   'result.title': 'Ronde klaar',
   // The one place the word "score" is allowed: the result of one round. It is
@@ -295,6 +370,14 @@ export const nl = {
   'you.add': 'Toevoegen',
   'you.childExplain':
     'Ieder kind heeft een eigen voortgang. Wat de een oefent, telt niet mee voor de ander.',
+  // De twaalf dieren, en welke dit kind al heeft. De dieren die er nog niet
+  // zijn staan er wel, grijs en met het niveau erbij: dat is het verschil
+  // tussen een verzameling en een raadsel. Er staat nergens wanneer — door
+  // wachten komt hier niets bij.
+  'you.animals': 'Jouw dieren',
+  'you.animalsHave': '{aantal} van de {totaal}',
+  'you.animalLocked': '{dier}, vanaf niveau {niveau}',
+  'you.animalLevel': 'niveau {niveau}',
   'you.settings': 'Instellingen',
   'you.readAloud': 'Vragen voorlezen',
   'you.readAloudWhy': 'Je kunt elke vraag laten voorlezen.',

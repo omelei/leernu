@@ -16,17 +16,22 @@ import { ModuleScreen } from '@/features/module/ModuleScreen';
 import { SumScreen } from '@/features/sums/SumScreen';
 import { asPracticeMode, asSumMode, type Onderdeel } from '@/features/module/onderdelen';
 import { ProfileScreen } from '@/features/player/ProfileScreen';
-import { addressFor, type Route } from '@/features/shell/routes';
+import type { Route } from '@/features/shell/routes';
 import { getProfile, setSticker } from '@/store/profile';
 import type { ModeId } from '@/game-core';
-import type { PracticeMode, SetId } from '@/features/practice/useRound';
+import {
+  isMixSet,
+  type PracticeMode,
+  type RoundSetId,
+  type SetId,
+} from '@/features/practice/useRound';
 import type { SumMode } from '@/features/sums/useSumRound';
 import type { ProfileRecord } from '@/store/db';
 
 type Screen =
   | { name: 'home' }
   | { name: 'retention' }
-  | { name: 'practice'; setId: SetId; practiceMode: PracticeMode }
+  | { name: 'practice'; setId: RoundSetId; practiceMode: PracticeMode }
   | { name: 'explore'; setId: SetId }
   | { name: 'sums'; setId: string; sumMode: SumMode };
 type Boot = { status: 'loading' } | { status: 'ready'; profile: ProfileRecord | null };
@@ -100,11 +105,18 @@ export default function App() {
       setScreen({ name: 'sums', setId: deel.setId, sumMode: asSumMode(mode) });
       return;
     }
-    if (mode === 'ontdekken') {
+    // Exploring is one set's own layer, so the mix has no way of exploring and
+    // does not offer one (`forms.ts`). A stored favourite from before that rule
+    // could still ask for it, and it points instead than fails.
+    if (mode === 'ontdekken' && !isMixSet(deel.setId)) {
       setScreen({ name: 'explore', setId: deel.setId as SetId });
       return;
     }
-    setScreen({ name: 'practice', setId: deel.setId as SetId, practiceMode: asPracticeMode(mode) });
+    setScreen({
+      name: 'practice',
+      setId: deel.setId as RoundSetId,
+      practiceMode: asPracticeMode(mode),
+    });
   };
 
   /**
@@ -187,11 +199,7 @@ export default function App() {
 
   /** The child's own column, which every screen inside the shell carries. */
   const eigenKolom = (
-    <SideColumn
-      sticker={boot.profile.avatarConfig.sticker}
-      onSticker={chooseSticker}
-      onBegin={beginRonde}
-    />
+    <SideColumn sticker={boot.profile.avatarConfig.sticker} onBegin={beginRonde} />
   );
 
   // A word a parent looks for, holding more than one module. Unreachable while
@@ -199,7 +207,7 @@ export default function App() {
   // address opens the tables themselves (see routes.ts).
   if (route.name === 'category') {
     return (
-      <Shell bar={bar} address={addressFor(route)} onNavigate={goTo} onModule={goModule}>
+      <Shell bar={bar} onNavigate={goTo} onModule={goModule}>
         <CategoryScreen
           category={route.category}
           onOpen={(module) => go({ name: 'module', module, setId: null })}
@@ -214,15 +222,10 @@ export default function App() {
   // not the home screen — the front door is every module, this is one of them.
   if (route.name === 'module') {
     return (
-      <Shell
-        bar={bar}
-        address={addressFor(route)}
-        onNavigate={goTo}
-        onModule={goModule}
-        currentModule={route.module.id}
-      >
+      <Shell bar={bar} onNavigate={goTo} onModule={goModule} currentModule={route.module.id}>
         <ModuleScreen
           module={route.module}
+          naam={boot.profile.naam}
           setId={route.setId}
           onSet={(setId) => go({ name: 'module', module: route.module, setId })}
           onStart={beginRonde}
@@ -237,13 +240,7 @@ export default function App() {
   // and this is an answer to a question the child asked.
   if (route.name === 'soon') {
     return (
-      <Shell
-        bar={bar}
-        address={addressFor(route)}
-        onNavigate={goTo}
-        onModule={goModule}
-        currentModule={route.module.id}
-      >
+      <Shell bar={bar} onNavigate={goTo} onModule={goModule} currentModule={route.module.id}>
         <ModuleSoon module={route.module} onOpen={goModule} aside={eigenKolom} />
       </Shell>
     );
@@ -251,44 +248,25 @@ export default function App() {
 
   if (route.name === 'you') {
     return (
-      <Shell
-        bar={bar}
-        address={addressFor(route)}
-        current="jij"
-        onNavigate={goTo}
-        onModule={goModule}
-      >
-        <ProfileScreen profile={boot.profile} />
+      <Shell bar={bar} current="jij" onNavigate={goTo} onModule={goModule}>
+        <ProfileScreen profile={boot.profile} onSticker={chooseSticker} aside={eigenKolom} />
       </Shell>
     );
   }
 
   if (route.name === 'retention' || screen.name === 'retention') {
     return (
-      <Shell
-        bar={bar}
-        address={addressFor(route)}
-        current="onthouden"
-        onNavigate={goTo}
-        onModule={goModule}
-      >
-        <RetentionScreen />
+      <Shell bar={bar} current="onthouden" onNavigate={goTo} onModule={goModule}>
+        <RetentionScreen aside={eigenKolom} />
       </Shell>
     );
   }
 
   return (
-    <Shell
-      bar={bar}
-      address={addressFor(route)}
-      current="vandaag"
-      onNavigate={goTo}
-      onModule={goModule}
-    >
+    <Shell bar={bar} current="vandaag" onNavigate={goTo} onModule={goModule}>
       <HomeScreen
         naam={boot.profile.naam}
         sticker={boot.profile.avatarConfig.sticker}
-        onSticker={chooseSticker}
         onStart={(setId, practiceMode) => {
           setVisit(visit + 1);
           setScreen({ name: 'practice', setId, practiceMode });

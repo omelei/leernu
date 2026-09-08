@@ -147,6 +147,36 @@ export const SET_IDS: readonly SetId[] = [
 ];
 
 /**
+ * Everything on the map at once: the Topomix.
+ *
+ * Not a set in `content/sets` and deliberately not one. Its questions are the
+ * same items with the same ids, so a province answered inside the mix moves the
+ * same Leitner box as the same province answered inside the provinces — a sixth
+ * file would have meant a child learning Drenthe twice to fill two boxes
+ * (ADR-063).
+ *
+ * What it costs is that a round no longer has one answer layer. A question
+ * about a province is answered on the provinces themselves; the next one, about
+ * a capital, is answered on a layer of points over them. So the layer belongs
+ * to the question rather than to the round, and every layer the round can reach
+ * is loaded before the first question — five small files, none over nine
+ * kilobytes.
+ */
+export const MIX_SET_ID = 'nl-mix';
+
+/** A round is one set, or the mix of all of them. */
+export type RoundSetId = SetId | typeof MIX_SET_ID;
+
+export function isMixSet(id: string): id is typeof MIX_SET_ID {
+  return id === MIX_SET_ID;
+}
+
+/** Which sets a round draws from. One, or all five. */
+export function setsInRound(id: RoundSetId): readonly SetId[] {
+  return isMixSet(id) ? SET_IDS : [id];
+}
+
+/**
  * What the child is being asked to find. It does not follow from `answers`:
  * capitals and seas are both points, but "wijs de stad aan" and "wijs het water
  * aan" are different sentences. Naming it per set beats inferring it, which is
@@ -201,6 +231,8 @@ export async function loadAnswerLayer(shape: SetShape): Promise<AnswerLayer> {
 
 export interface RoundQuestion {
   readonly item: Item;
+  /** Which set it came from, which decides the layer it is answered on. */
+  readonly setId: SetId;
   /** The shape or point that answers it. */
   readonly answerId: string;
   /**
@@ -216,8 +248,17 @@ export type RoundPhase = 'loading' | 'asking' | 'revealed' | 'finished';
 
 export interface RoundState {
   readonly phase: RoundPhase;
-  readonly setId: SetId;
+  readonly setId: RoundSetId;
   readonly practiceMode: PracticeMode;
+  /**
+   * What the child is being asked to find, for the question on screen.
+   *
+   * On the round rather than looked up from the set by the screen, because in
+   * the mix the two disagree: one question asks for a province and the next for
+   * a sea, and "wijs het gebied aan" over a dot in the North Sea is the wrong
+   * sentence.
+   */
+  readonly noemer: Noemer;
   /** How this round ends. The result screen needs it: "9 van 60" is a lie in a
    * round that was never going to ask sixty. */
   readonly rule: RoundRule;
@@ -256,9 +297,10 @@ export interface RoundState {
   readonly error: string | null;
 }
 
-export function useRound(setId: SetId, practiceMode: PracticeMode) {
+export function useRound(setId: RoundSetId, practiceMode: PracticeMode) {
   const [geo, setGeo] = useState<GeoSet | null>(null);
-  const [answers, setAnswers] = useState<AnswerLayer | null>(null);
+  /** One layer per set the round can reach. A single set leaves one entry. */
+  const [layers, setLayers] = useState<ReadonlyMap<SetId, AnswerLayer>>(new Map());
   const [items, setItems] = useState<Item[]>([]);
   /**
    * Everything in the same region, not just this round's set. ADR-017 is
@@ -304,24 +346,39 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
    * sixty seconds on a school Chromebook that is not nothing.
    */
   const deadline = useRef<number | null>(null);
-  const shape = SETS[setId];
 
   useEffect(() => {
     let cancelled = false;
 
     async function boot() {
       try {
-        const set = loadItemSets().find((candidate) => candidate.id === setId);
-        if (!set) throw new Error(`Onbekende set: ${setId}`);
+        const wanted = setsInRound(setId);
+        const sets = loadItemSets().filter((candidate) =>
+          (wanted as readonly string[]).includes(candidate.id),
+        );
+        if (sets.length === 0) throw new Error(`Onbekende set: ${setId}`);
 
-        const [loadedGeo, loadedAnswers, loadedStates] = await Promise.all([
+        const [loadedGeo, loadedLayers, loadedStates] = await Promise.all([
           loadGeoSet('provincies', 'region'),
-          loadAnswerLayer(shape),
+          Promise.all(sets.map((set) => loadAnswerLayer(SETS[set.id as SetId]))),
           loadItemStates(),
         ]);
         if (cancelled) return;
 
-        const all = set.items.filter((item) => item.geometrieRef !== undefined);
+        const layerBySet = new Map<SetId, AnswerLayer>(
+          sets.map((set, at) => [set.id as SetId, loadedLayers[at] as AnswerLayer]),
+        );
+
+        // Which set an item came from, so the question can be answered on the
+        // right layer and asked in the right words.
+        const setOfItem = new Map<string, SetId>();
+        for (const set of sets) {
+          for (const item of set.items) setOfItem.set(item.id, set.id as SetId);
+        }
+
+        const all = sets
+          .flatMap((set) => set.items)
+          .filter((item) => item.geometrieRef !== undefined);
         const picked = composeRound({
           items: all,
           states: loadedStates,
@@ -329,30 +386,43 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
           now: new Date(),
         });
 
-        // Dealt here rather than per render: the options must not move under a
-        // child's finger, and the neighbour lists are a bundled lookup so this
-        // costs nothing at the moment the round starts.
         // Dealt here rather than per render: options that move under a child's
         // finger are worse than no options. Only built for the mode that has
         // them, so the other four never touch the neighbour lists.
-        const deal = choosesTheAnswer(practiceMode) ? optionDealer(all) : null;
+        //
+        // One dealer per set, not one over everything. Three provinces beside a
+        // capital are not four answers to the same question — they are a give-
+        // away — and in the mix a single pool would hand out exactly that.
+        const dealers = choosesTheAnswer(practiceMode)
+          ? new Map(
+              sets.map((set) => [
+                set.id as SetId,
+                optionDealer(set.items.filter((item) => item.geometrieRef !== undefined)),
+              ]),
+            )
+          : null;
 
-        const round = picked.map((item) => ({
-          item,
-          answerId: item.geometrieRef as string,
-          options: deal ? deal(item) : null,
-        }));
+        const round = picked.map((item) => {
+          const from = setOfItem.get(item.id) as SetId;
+          return {
+            item,
+            setId: from,
+            answerId: item.geometrieRef as string,
+            options: dealers ? (dealers.get(from)?.(item) ?? null) : null,
+          };
+        });
 
         sessionId.current = await startSession(
           practiceMode,
           round.map((question) => question.item.id),
+          setId,
         );
         if (cancelled) return;
 
         setGeo(loadedGeo);
-        setAnswers(loadedAnswers);
+        setLayers(layerBySet);
         setItems([...all]);
-        setCatalogue(loadAllItems().filter((item) => item.regioSet === set.regioSet));
+        setCatalogue(loadAllItems().filter((item) => item.regioSet === sets[0]?.regioSet));
         setStates(loadedStates);
         masteredAtStart.current = countMastered(
           loadedStates,
@@ -371,7 +441,7 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
     return () => {
       cancelled = true;
     };
-  }, [setId, shape, rule, practiceMode]);
+  }, [setId, rule, practiceMode]);
 
   const namesById = useMemo(() => {
     const map = new Map<string, string>();
@@ -652,10 +722,17 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
   const state: RoundState = {
     phase,
     setId,
+    noemer: SETS[question?.setId ?? (isMixSet(setId) ? 'nl-provincies' : setId)].noemer,
     practiceMode,
     rule,
     geo,
-    answers,
+    // The layer the question on screen is answered on. Falls back to the last
+    // question rather than to nothing, because the result screen draws a map
+    // after the questions have run out and a null layer there is a blank one.
+    answers: (() => {
+      const op = question ?? questions[questions.length - 1] ?? null;
+      return op === null ? null : (layers.get(op.setId) ?? null);
+    })(),
     namesById,
     question,
     index,

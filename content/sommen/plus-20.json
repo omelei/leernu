@@ -1,0 +1,325 @@
+{
+  "_gegenereerd": "tools/content/build-rekenen.mjs — gegenereerd, niet met de hand bewerken.",
+  "id": "plus-20",
+  "op": "plus",
+  "tafel": null,
+  "niveau": 1,
+  "contentVersie": "2026-09-08",
+  "items": [
+    {
+      "id": "plus-1+1",
+      "op": "plus",
+      "links": 1,
+      "rechts": 1,
+      "antwoord": 2
+    },
+    {
+      "id": "plus-1+2",
+      "op": "plus",
+      "links": 1,
+      "rechts": 2,
+      "antwoord": 3
+    },
+    {
+      "id": "plus-1+3",
+      "op": "plus",
+      "links": 1,
+      "rechts": 3,
+      "antwoord": 4
+    },
+    {
+      "id": "plus-1+4",
+      "op": "plus",
+      "links": 1,
+      "rechts": 4,
+      "antwoord": 5
+    },
+    {
+      "id": "plus-1+5",
+      "op": "plus",
+      "links": 1,
+      "rechts": 5,
+      "antwoord": 6
+    },
+    {
+      "id": "plus-1+6",
+      "op": "plus",
+      "links": 1,
+      "rechts": 6,
+      "antwoord": 7
+    },
+    {
+      "id": "plus-1+7",
+      "op": "plus",
+      "links": 1,
+      "rechts": 7,
+      "antwoord": 8
+    },
+    {
+      "id": "plus-1+8",
+      "op": "plus",
+      "links": 1,
+      "rechts": 8,
+      "antwoord": 9
+    },
+    {
+      "id": "plus-1+9",
+      "op": "plus",
+      "links": 1,
+      "rechts": 9,
+      "antwoord": 10
+    },
+    {
+      "id": "plus-2+2",
+      "op": "plus",
+      "links": 2,
+      "rechts": 2,
+      "antwoord": 4
+    },
+    {
+      "id": "plus-2+3",
+      "op": "plus",
+      "links": 2,
+      "rechts": 3,
+      "antwoord": 5
+    },
+    {
+      "id": "plus-2+4",
+      "op": "plus",
+      "links": 2,
+      "rechts": 4,
+      "antwoord": 6
+    },
+    {
+      "id": "plus-2+5",
+      "op": "plus",
+      "links": 2,
+      "rechts": 5,
+      "antwoord": 7
+    },
+    {
+      "id": "plus-2+6",
+      "op": "plus",
+      "links": 2,
+      "rechts": 6,
+      "antwoord": 8
+    },
+    {
+      "id": "plus-2+7",
+      "op": "plus",
+      "links": 2,
+      "rechts": 7,
+      "antwoord": 9
+    },
+    {
+      "id": "plus-2+8",
+      "op": "plus",
+      "links": 2,
+      "rechts": 8,
+      "antwoord": 10
+    },
+    {
+      "id": "plus-2+9",
+      "op": "plus",
+      "links": 2,
+      "rechts": 9,
+      "antwoord": 11
+    },
+    {
+      "id": "plus-3+3",
+      "op": "plus",
+      "links": 3,
+      "rechts": 3,
+      "antwoord": 6
+    },
+    {
+      "id": "plus-3+4",
+      "op": "plus",
+      "links": 3,
+      "rechts": 4,
+      "antwoord": 7
+    },
+    {
+      "id": "plus-3+5",
+      "op": "plus",
+      "links": 3,
+      "rechts": 5,
+      "antwoord": 8
+    },
+    {
+      "id": "plus-3+6",
+      "op": "plus",
+      "links": 3,
+      "rechts": 6,
+      "antwoord": 9
+    },
+    {
+      "id": "plus-3+7",
+      "op": "plus",
+      "links": 3,
+      "rechts": 7,
+      "antwoord": 10
+    },
+    {
+      "id": "plus-3+8",
+      "op": "plus",
+      "links": 3,
+      "rechts": 8,
+      "antwoord": 11
+    },
+    {
+      "id": "plus-3+9",
+      "op": "plus",
+      "links": 3,
+      "rechts": 9,
+      "antwoord": 12
+    },
+    {
+      "id": "plus-4+4",
+      "op": "plus",
+      "links": 4,
+      "rechts": 4,
+      "antwoord": 8
+    },
+    {
+      "id": "plus-4+5",
+      "op": "plus",
+      "links": 4,
+      "rechts": 5,
+      "antwoord": 9
+    },
+    {
+      "id": "plus-4+6",
+      "op": "plus",
+      "links": 4,
+      "rechts": 6,
+      "antwoord": 10
+    },
+    {
+      "id": "plus-4+7",
+      "op": "plus",
+      "links": 4,
+      "rechts": 7,
+      "antwoord": 11
+    },
+    {
+      "id": "plus-4+8",
+      "op": "plus",
+      "links": 4,
+      "rechts": 8,
+      "antwoord": 12
+    },
+    {
+      "id": "plus-4+9",
+      "op": "plus",
+      "links": 4,
+      "rechts": 9,
+      "antwoord": 13
+    },
+    {
+      "id": "plus-5+5",
+      "op": "plus",
+      "links": 5,
+      "rechts": 5,
+      "antwoord": 10
+    },
+    {
+      "id": "plus-5+6",
+      "op": "plus",
+      "links": 5,
+      "rechts": 6,
+      "antwoord": 11
+    },
+    {
+      "id": "plus-5+7",
+      "op": "plus",
+      "links": 5,
+      "rechts": 7,
+      "antwoord": 12
+    },
+    {
+      "id": "plus-5+8",
+      "op": "plus",
+      "links": 5,
+      "rechts": 8,
+      "antwoord": 13
+    },
+    {
+      "id": "plus-5+9",
+      "op": "plus",
+      "links": 5,
+      "rechts": 9,
+      "antwoord": 14
+    },
+    {
+      "id": "plus-6+6",
+      "op": "plus",
+      "links": 6,
+      "rechts": 6,
+      "antwoord": 12
+    },
+    {
+      "id": "plus-6+7",
+      "op": "plus",
+      "links": 6,
+      "rechts": 7,
+      "antwoord": 13
+    },
+    {
+      "id": "plus-6+8",
+      "op": "plus",
+      "links": 6,
+      "rechts": 8,
+      "antwoord": 14
+    },
+    {
+      "id": "plus-6+9",
+      "op": "plus",
+      "links": 6,
+      "rechts": 9,
+      "antwoord": 15
+    },
+    {
+      "id": "plus-7+7",
+      "op": "plus",
+      "links": 7,
+      "rechts": 7,
+      "antwoord": 14
+    },
+    {
+      "id": "plus-7+8",
+      "op": "plus",
+      "links": 7,
+      "rechts": 8,
+      "antwoord": 15
+    },
+    {
+      "id": "plus-7+9",
+      "op": "plus",
+      "links": 7,
+      "rechts": 9,
+      "antwoord": 16
+    },
+    {
+      "id": "plus-8+8",
+      "op": "plus",
+      "links": 8,
+      "rechts": 8,
+      "antwoord": 16
+    },
+    {
+      "id": "plus-8+9",
+      "op": "plus",
+      "links": 8,
+      "rechts": 9,
+      "antwoord": 17
+    },
+    {
+      "id": "plus-9+9",
+      "op": "plus",
+      "links": 9,
+      "rechts": 9,
+      "antwoord": 18
+    }
+  ]
+}

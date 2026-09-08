@@ -38,16 +38,33 @@ highlighted; **ontdekken** asks nothing at all and exists so a child's first
 meeting with an item is not a question they get wrong; **bliksemronde** puts
 sixty seconds on it and **overleven** gives three lives.
 
-Rekenen is the twelve tables, one to twelve, ten sums each. A round is a whole
-table, because "de tafel van 7 ken ik" is only sayable about all of it. Typing
-the answer comes before choosing between four, which is the opposite of the map
-and for a reason ([ADR-049](docs/DECISIONS.md)).
+Rekenen is four kinds of sum: the twelve tables, the division facts that mirror
+them, and addition and subtraction in three ranges each — five hundred and ten
+sums in all. A round is ten of them. Typing the answer comes before choosing
+between four, which is the opposite of the map and for a reason
+([ADR-049](docs/DECISIONS.md)).
+
+Both modules offer a **mix**: the Rekenmix shuffles all four operations, the
+Topomix shuffles all five map sets. Neither is a set of its own — they hold the
+same items under one name, so a sum answered in a mix moves the box it moves
+anywhere else ([ADR-062](docs/DECISIONS.md), [ADR-063](docs/DECISIONS.md)).
+
+And rekenen has the exercise a Dutch child already knows: a **tafeldiploma**.
+The whole table, ten sums in order, every one right, one mistake and you sit it
+again. No stopwatch — the settings page says haste does not help you remember,
+and we do not switch that off for the one exercise where it would be felt most
+([ADR-064](docs/DECISIONS.md)). Twelve of them hang on the rekenen page with the
+gaps showing.
 
 Every module has a page of its own at the word a parent would type — leer.nu
 /topografie, /rekenen, /klokkijken — and one flow on it: what you want to
-practise, then how, then a button carrying both in words and roughly how long it
-takes. The ways of practising are in order of weight with a line and an icon
-each, six at most ([ADR-061](docs/DECISIONS.md)). A set has an address too, so
+practise, then how, then a button. Step 1 offers **subjects**, six at most, and
+a subject that holds many sets asks which as a row of chips underneath: one
+decision, then a smaller one, instead of thirty-six of equal weight
+([ADR-062](docs/DECISIONS.md)). The ways of practising are in order of weight
+with a line and an icon each, six at most ([ADR-061](docs/DECISIONS.md)). The
+chosen combination is spelled out beside the start button, and the button says
+Start ([ADR-066](docs/DECISIONS.md)). A set has an address too, so
 leer.nu/topografie/provincies is a place a child can be sent.
 
 A round covers the whole set where the set is small enough — twelve of twelve —
@@ -60,9 +77,15 @@ The home screen greets a child by name and then does three things. It asks when
 the test is and what it is about, and offers the one thing to carry on with.
 It logs the rounds just played with the mark each came to — "cijfer 8,4", over
 what was answered and not over what was asked ([ADR-053](docs/DECISIONS.md)).
-And down the right it keeps what is the child's own: everything answered
-correctly so far, the exercises they keep going back to, and an animal they
-picked themselves that is not a reward and unlocks nothing.
+And down the right it keeps what is the child's own — on every screen inside
+the frame, not only here: the journey first, then everything answered correctly
+so far, then the exercises they keep going back to. The journey is the level a
+child has reached and one line saying what the next one costs, in the only unit
+that means anything to them: "nog 6 goede antwoorden"
+([ADR-065](docs/DECISIONS.md)). Three of twelve animals are there from the first
+minute and the other nine arrive a level at a time; choosing between the ones
+reached happens on **Jij** ([ADR-067](docs/DECISIONS.md)). Nothing on that ladder can be bought, won by
+chance or reached by waiting.
 
 The forecast — "69%, weet je hier over drie weken nog van" — is the number the
 product argues from and it lives on **Onthouden**, one screen along. On the
@@ -110,11 +133,11 @@ node tools/content/fetch-source.mjs      # CBS geodata, into content/geo/_source
 node tools/content/build-geo.mjs         # provinces, three detail levels
 node tools/content/build-cities.mjs      # the twelve capitals as points
 node tools/content/build-neighbours.mjs  # who lies next to whom, into content/buren
-node tools/content/build-tafels.mjs      # the twelve tables, into content/tafels
+node tools/content/build-rekenen.mjs     # tables, delen, plus and min, into content/
 ```
 
 `build-neighbours` runs after the geometry builds, because it reads what they
-write. `build-tafels` needs nothing but arithmetic.
+write. `build-rekenen` needs nothing but arithmetic.
 
 To look at the result without a build, serve the project root and open
 `tools/content/preview.html`:

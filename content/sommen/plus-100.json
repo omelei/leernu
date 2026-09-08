@@ -1,0 +1,325 @@
+{
+  "_gegenereerd": "tools/content/build-rekenen.mjs — gegenereerd, niet met de hand bewerken.",
+  "id": "plus-100",
+  "op": "plus",
+  "tafel": null,
+  "niveau": 2,
+  "contentVersie": "2026-09-08",
+  "items": [
+    {
+      "id": "plus100-12+6",
+      "op": "plus",
+      "links": 12,
+      "rechts": 6,
+      "antwoord": 18
+    },
+    {
+      "id": "plus100-12+9",
+      "op": "plus",
+      "links": 12,
+      "rechts": 9,
+      "antwoord": 21
+    },
+    {
+      "id": "plus100-12+14",
+      "op": "plus",
+      "links": 12,
+      "rechts": 14,
+      "antwoord": 26
+    },
+    {
+      "id": "plus100-17+6",
+      "op": "plus",
+      "links": 17,
+      "rechts": 6,
+      "antwoord": 23
+    },
+    {
+      "id": "plus100-17+9",
+      "op": "plus",
+      "links": 17,
+      "rechts": 9,
+      "antwoord": 26
+    },
+    {
+      "id": "plus100-17+14",
+      "op": "plus",
+      "links": 17,
+      "rechts": 14,
+      "antwoord": 31
+    },
+    {
+      "id": "plus100-23+6",
+      "op": "plus",
+      "links": 23,
+      "rechts": 6,
+      "antwoord": 29
+    },
+    {
+      "id": "plus100-23+9",
+      "op": "plus",
+      "links": 23,
+      "rechts": 9,
+      "antwoord": 32
+    },
+    {
+      "id": "plus100-23+14",
+      "op": "plus",
+      "links": 23,
+      "rechts": 14,
+      "antwoord": 37
+    },
+    {
+      "id": "plus100-28+6",
+      "op": "plus",
+      "links": 28,
+      "rechts": 6,
+      "antwoord": 34
+    },
+    {
+      "id": "plus100-28+9",
+      "op": "plus",
+      "links": 28,
+      "rechts": 9,
+      "antwoord": 37
+    },
+    {
+      "id": "plus100-28+14",
+      "op": "plus",
+      "links": 28,
+      "rechts": 14,
+      "antwoord": 42
+    },
+    {
+      "id": "plus100-34+6",
+      "op": "plus",
+      "links": 34,
+      "rechts": 6,
+      "antwoord": 40
+    },
+    {
+      "id": "plus100-34+9",
+      "op": "plus",
+      "links": 34,
+      "rechts": 9,
+      "antwoord": 43
+    },
+    {
+      "id": "plus100-34+14",
+      "op": "plus",
+      "links": 34,
+      "rechts": 14,
+      "antwoord": 48
+    },
+    {
+      "id": "plus100-39+6",
+      "op": "plus",
+      "links": 39,
+      "rechts": 6,
+      "antwoord": 45
+    },
+    {
+      "id": "plus100-39+9",
+      "op": "plus",
+      "links": 39,
+      "rechts": 9,
+      "antwoord": 48
+    },
+    {
+      "id": "plus100-39+14",
+      "op": "plus",
+      "links": 39,
+      "rechts": 14,
+      "antwoord": 53
+    },
+    {
+      "id": "plus100-45+6",
+      "op": "plus",
+      "links": 45,
+      "rechts": 6,
+      "antwoord": 51
+    },
+    {
+      "id": "plus100-45+9",
+      "op": "plus",
+      "links": 45,
+      "rechts": 9,
+      "antwoord": 54
+    },
+    {
+      "id": "plus100-45+14",
+      "op": "plus",
+      "links": 45,
+      "rechts": 14,
+      "antwoord": 59
+    },
+    {
+      "id": "plus100-48+6",
+      "op": "plus",
+      "links": 48,
+      "rechts": 6,
+      "antwoord": 54
+    },
+    {
+      "id": "plus100-48+9",
+      "op": "plus",
+      "links": 48,
+      "rechts": 9,
+      "antwoord": 57
+    },
+    {
+      "id": "plus100-48+14",
+      "op": "plus",
+      "links": 48,
+      "rechts": 14,
+      "antwoord": 62
+    },
+    {
+      "id": "plus100-53+6",
+      "op": "plus",
+      "links": 53,
+      "rechts": 6,
+      "antwoord": 59
+    },
+    {
+      "id": "plus100-53+9",
+      "op": "plus",
+      "links": 53,
+      "rechts": 9,
+      "antwoord": 62
+    },
+    {
+      "id": "plus100-53+14",
+      "op": "plus",
+      "links": 53,
+      "rechts": 14,
+      "antwoord": 67
+    },
+    {
+      "id": "plus100-57+6",
+      "op": "plus",
+      "links": 57,
+      "rechts": 6,
+      "antwoord": 63
+    },
+    {
+      "id": "plus100-57+9",
+      "op": "plus",
+      "links": 57,
+      "rechts": 9,
+      "antwoord": 66
+    },
+    {
+      "id": "plus100-57+14",
+      "op": "plus",
+      "links": 57,
+      "rechts": 14,
+      "antwoord": 71
+    },
+    {
+      "id": "plus100-62+6",
+      "op": "plus",
+      "links": 62,
+      "rechts": 6,
+      "antwoord": 68
+    },
+    {
+      "id": "plus100-62+9",
+      "op": "plus",
+      "links": 62,
+      "rechts": 9,
+      "antwoord": 71
+    },
+    {
+      "id": "plus100-62+14",
+      "op": "plus",
+      "links": 62,
+      "rechts": 14,
+      "antwoord": 76
+    },
+    {
+      "id": "plus100-68+6",
+      "op": "plus",
+      "links": 68,
+      "rechts": 6,
+      "antwoord": 74
+    },
+    {
+      "id": "plus100-68+9",
+      "op": "plus",
+      "links": 68,
+      "rechts": 9,
+      "antwoord": 77
+    },
+    {
+      "id": "plus100-68+14",
+      "op": "plus",
+      "links": 68,
+      "rechts": 14,
+      "antwoord": 82
+    },
+    {
+      "id": "plus100-71+6",
+      "op": "plus",
+      "links": 71,
+      "rechts": 6,
+      "antwoord": 77
+    },
+    {
+      "id": "plus100-71+9",
+      "op": "plus",
+      "links": 71,
+      "rechts": 9,
+      "antwoord": 80
+    },
+    {
+      "id": "plus100-71+14",
+      "op": "plus",
+      "links": 71,
+      "rechts": 14,
+      "antwoord": 85
+    },
+    {
+      "id": "plus100-76+6",
+      "op": "plus",
+      "links": 76,
+      "rechts": 6,
+      "antwoord": 82
+    },
+    {
+      "id": "plus100-76+9",
+      "op": "plus",
+      "links": 76,
+      "rechts": 9,
+      "antwoord": 85
+    },
+    {
+      "id": "plus100-76+14",
+      "op": "plus",
+      "links": 76,
+      "rechts": 14,
+      "antwoord": 90
+    },
+    {
+      "id": "plus100-85+6",
+      "op": "plus",
+      "links": 85,
+      "rechts": 6,
+      "antwoord": 91
+    },
+    {
+      "id": "plus100-85+9",
+      "op": "plus",
+      "links": 85,
+      "rechts": 9,
+      "antwoord": 94
+    },
+    {
+      "id": "plus100-85+14",
+      "op": "plus",
+      "links": 85,
+      "rechts": 14,
+      "antwoord": 99
+    }
+  ]
+}

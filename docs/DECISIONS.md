@@ -2595,6 +2595,352 @@ decision for the day the map files are cheaper, not an oversight.
 
 ---
 
+## ADR-062 — Rekenen is four kinds of sum, a subject is not a set, and a mix is not a file
+
+**Status:** accepted — 2026-09-08.
+
+### Context
+
+Rekenen was the twelve tables and nothing else, and step 1 of its page was
+twelve cards. That was already the most crowded chooser in the product — twelve
+rows of one thing on a phone, with step 2 below the fold on the page whose whole
+argument is that the two steps are one flow.
+
+It could not survive division, addition and subtraction arriving beside it.
+Twelve tables, twelve sets of division facts and three ranges each of plus and
+minus is thirty-six sets. Thirty-six cards of equal weight is not a chooser; it
+is a directory.
+
+Two other things were wrong at the same time. A child who wanted to practise
+everything at once had no way to ask for it — the product could only offer one
+table, ever. And a sum in this codebase was `{ table, by }`, which is the shape
+of a multiplication and would have had to lie about the other three operations.
+
+### Decision
+
+**Step 1 offers subjects, and a subject may hold many sets.** Rekenen has five:
+Tafels, Deelsommen, Plussommen, Minsommen and the Rekenmix. The sets under a
+subject are a row of chips that appears once the subject is chosen — "welke
+tafel?", "tot welk getal?" — so a child makes one decision and then a smaller
+one. Six subjects is the ceiling for a section, which is the ceiling ADR-061
+already set for step 2 and for the same reason: past six a grid stops being one
+glance.
+
+Chips rather than a menu. A select hides eleven of twelve tables behind a
+control a child has to open, and on a touch screen it opens over the thing they
+were looking at.
+
+**A sum carries two numbers and the sign between them.** `{ op, links, rechts,
+antwoord }`, with `op` one of keer, delen, plus and min. The ids did not change:
+`tafel-7x8` is what a child's Leitner box is filed under, and renaming a field
+is not worth throwing away every box in the product.
+
+**A mix is the union of other sets, not a file of its own.** "Alle tafels door
+elkaar" and the Rekenmix hold the same items with the same ids, composed at run
+time. A mix written out as its own content file would have given those sums
+second ids, and a child would then have had to learn every table twice over to
+fill both sets of boxes. The consequence is that mixes are left out of every
+total: a subject's progress is counted over its sets, never over its mix, or
+rekenen would claim a thousand sums and report four hundred remembered out of
+ten.
+
+**Which sums, for plus and minus, is a judgement and is written down as one.**
+A table is every sum in it, because that is what a table is. "Alle plussommen
+tot 100" are nine thousand, so `tools/content/build-rekenen.mjs` carries curated
+lists with the rule that chose each one above it. That is the half of the
+content a teacher could disagree with, and it should be readable rather than
+buried in a loop. The arithmetic stays generated and every one of the five
+hundred is worked back out by `sums.content.test.ts`.
+
+### Consequences
+
+`build-tafels.mjs` became `build-rekenen.mjs` and writes `content/sommen/` as
+well as `content/tafels/`. Five hundred and ten sums, all bundled, a few
+kilobytes.
+
+A timed or survival round draws from everything of the same kind rather than
+from everything: a minute of tables stays a minute of tables, and a child who
+asked for the table of seven is not handed "845 − 140" halfway through
+(`sumPool`).
+
+---
+
+## ADR-063 — The Topomix, and a round that says what it was about
+
+**Status:** accepted — 2026-09-08.
+
+### Context
+
+The map had the same gap the tables did: five sets, and no way to ask for all
+of them. A child preparing for a test on Tuesday practises provinces, then
+capitals, then islands, and never once meets them shuffled — which is exactly
+what the test does.
+
+The obstacle was that a topography round has one answer layer. Provinces are
+answered on themselves; capitals are answered on a layer of points over them;
+the islands are shapes. `useRound` loaded one layer, for the round.
+
+### Decision
+
+**The layer belongs to the question, not to the round.** Every layer the round
+can reach is loaded before the first question — five files, none over nine
+kilobytes — and each question is answered on the layer of the set it came from.
+The sentence follows it too: `noemer` moved onto the round state, so "wijs het
+water aan" appears over a sea and "wijs het gebied aan" over a province, in the
+same round.
+
+**A round records which set it was about.** `SessionRecord.setId`. The history
+used to work this out by matching the questions against the sets, which worked
+while every round was one set and breaks the moment one is not: a mix contains
+every set's items, so the first set that shares an item always matched, and
+every mix would have been logged as a table of one. Rows written before this
+still fall back to matching, which is right for them and cannot recognise a mix
+— a limitation that applies to exactly one release.
+
+**Two things the mix does not get.** There is no exploring a mix: exploring is
+one set's own layer and it is where a child meets a set for the first time,
+which a mix of everything is not. And the result screen draws no map after a
+mix — one map lights up one layer, so it would show a child four of their eight
+misses and quietly drop the rest. The list beside it names all of them.
+
+---
+
+## ADR-064 — The tafeldiploma, without the stopwatch
+
+**Status:** accepted — 2026-09-08.
+
+### Context
+
+The tafeltoets is the one thing about the tables a Dutch child has an opinion
+about before they ever meet this app. It is what the teacher hands out, and "ik
+heb de tafel van 7" is a sentence they have heard and want to be able to say.
+The product had nothing like it: a round of a table was a round of a table, and
+a flawless one earned a stamp shared with all twelve.
+
+### Decision
+
+A **tafeldiploma** is a fifth way of practising, offered on a table and on
+nothing else. The whole table, ten sums, asked in order, every one right. One
+mistake ends the attempt; the result screen names the sum and the child can sit
+it again straight away. It is the only thing in this product that can be failed,
+and that is what makes it a test rather than a longer round.
+
+**No clock**, and that is a deliberate departure from the tafeltoets a teacher
+gives. K10 says on the product's own settings page that haste does not help you
+remember, and the timer is off by default. Switching that off for the one
+exercise where a child would feel it most would make the sentence a decoration.
+
+**In order, not in the scheduler's order.** Everywhere else Leitner decides,
+because practice should start with what a child keeps missing. A test should
+not: a table is something a child recites straight through, and a shuffled one
+would be asking something they were never taught.
+
+**Twelve of them, on a wall, with the gaps showing.** On the rekenen page and
+nowhere else. This is the one place in the product where something not yet
+earned is drawn on purpose — ADR-059 ruled out a shelf of unearned rewards, and
+rightly, because those were things a child could not aim at. These are twelve
+named tables in the order they are taught, and every gap is something a child
+can decide to go and do this afternoon: pressing one chooses that table, with
+step 2 directly above it.
+
+### Consequences
+
+Stored beside the stamps, in the same object store, under `diploma-tafel-7`. No
+schema change and no migration. It is deliberately not in `STAMPS`: that list is
+ten named things with a criterion each, and twelve near-identical entries in a
+list whose own comment argues against exactly that would be a poor way to keep
+it honest.
+
+---
+
+## ADR-065 — The level ladder is shown, and it is counted in correct answers
+
+**Status:** accepted — 2026-09-08.
+
+### Context
+
+The product has awarded XP for every correct answer since the first release: ten
+each, five more for each answer given while five in a row were already right. It
+computed a level from a tuned curve. It stored the total on the profile.
+
+It showed a child none of it. `levelFor` and `levelProgress` had tests and no
+callers. The one number the app kept about how much work a child had done was
+invisible, while the two numbers it did show were both reports on how they were
+performing.
+
+### Decision
+
+The journey is a card at the top of the child's own column: the level, a bar,
+the animal reached, and one line that is the whole point of it —
+
+> Nog 6 goede antwoorden tot niveau 5.
+
+**Counted in correct answers, not in points.** "Nog 340 XP" is a currency
+nobody counts in; six correct answers is a thing a child can decide to do this
+afternoon. It is exact rather than rounded down — a combo can only make it
+arrive sooner, never later.
+
+**Nothing on it mentions time.** Not how many days, not how long, not how often.
+Nothing here moves by waiting, and a card that mentioned time would be inviting
+a child back for the coming back rather than for the work.
+
+---
+
+## ADR-066 — The start button is a button, and it is at the end of the line
+
+**Status:** accepted — 2026-09-08.
+
+### Context
+
+ADR-061 put the chosen combination on the start button in words: "Provincies
+aanwijzen · 15 vragen". That is the right sentence and it was the wrong place
+for it. The button sat at the left-hand end of a row, in the same weight as the
+two secondary buttons above it, carrying a line of prose. Everything a child
+needed to read was on it, and nothing about it said _press me_.
+
+### Decision
+
+The sentence stayed and moved beside the button; the button became a button.
+One word — Start — an arrow, taller and wider than any other control on the
+page, at the right-hand end of the row where a line of reading finishes. What a
+screen reader hears is still the whole thing, because the sentence is the
+button's accessible name.
+
+The same shape on the front door: the alternative first, the way on last. A
+child who has learned where the button is on one page should find it in the same
+place on the other.
+
+On a phone it stacks and goes full width, which is where ADR-052 left it.
+
+---
+
+## ADR-067 — Twelve animals on a ladder, and the journey goes above the figures
+
+**Status:** accepted — 2026-09-08. Reverses ADR-059.
+
+### Context
+
+ADR-059 gave every child all six animals from the first day, on the argument
+that a sticker is a choice and not a scoreboard, and that a shelf of things you
+have not got yet is a poor thing to be shown every morning. That argument was
+right about what was there and wrong about what was missing. The product counted
+XP for every correct answer, worked out a level from it, and showed a child
+neither (ADR-065). So the one thing on the front door that was theirs unlocked
+nothing, and the one thing that was earned was invisible.
+
+The owner asked for what a ten-year-old already understands from every game they
+play: something to work towards that you can see coming.
+
+### Decision
+
+**Twelve animals: three from the first minute, then one per level.** Six more
+drawn on §E's frame, the last a dragon — the last rung should look like the last
+rung. The card in the column shows the animal the child chose, the bar, and the
+next one to arrive as a faded silhouette with the count of correct answers to
+it.
+
+Three at level one rather than one, and that is ADR-059's real point surviving
+the reversal: a child who cannot change anything about an app they are told to
+use can at least decide what it looks like. A ladder starting with a single
+animal takes that away for the fifteen correct answers it costs to reach the
+second. Three is a choice; one is a default.
+
+Three conditions this is not allowed to break, and they are the reason the
+reversal is affordable:
+
+- **Nothing is behind money or chance.** There are no boxes to open and nothing
+  to buy. Spec §4.5 says so and the audience is why.
+- **Nothing is behind waiting.** Only correct answers move it. No daily login,
+  no streak requirement, no timer.
+- **A child always has one.** The first arrives at level one, so the ladder can
+  never leave anybody with nothing to be.
+
+**The journey goes above the two figures.** What is at the top of a child's own
+column should say where they are going, not report on where they have been.
+
+**The picking moved to Jij**, where the rest of what a child owns already lives.
+The ones not reached yet are shown there rather than hidden — greyed, with the
+level on them. That is the difference between a collection and a mystery: a
+child can see there are twelve, see which is next, and know what it costs.
+
+### Consequences
+
+The right-hand column is now the same on every screen inside the shell,
+including Onthouden and Jij, which did not carry it before.
+
+---
+
+## ADR-068 — The path leaves the app bar
+
+**Status:** accepted — 2026-09-08.
+
+### Context
+
+§A draws "leer.nu/topografie" as a lockup and ADR-061 put it in the app bar,
+beside the wordmark, on every page that had an address. It was there to say that
+a page has an address — something a parent can write on a note or a teacher can
+put on a board.
+
+### Decision
+
+It is gone. The addresses are real and untouched: a module has one, a set has
+one, the mixes have one, and `routes.test.ts` is where that is checked.
+
+What the app bar was doing was reading the current address back to a child who
+had arrived by pressing something, in a spelling nobody says out loud, in the
+strip of the screen where width is worth the most. The rail says which module
+you are in and so does the heading. A page does not need to say it a third time.
+
+---
+
+## ADR-069 — The map file a round asks for is the file that has to exist
+
+**Status:** accepted — 2026-09-08.
+
+### Context
+
+Practising the Waddeneilanden answered with "de kaart kon niet geladen worden".
+It had done so since the islands shipped, on production, and nothing in this
+repository noticed.
+
+The cause is two spellings of one filename. `build-islands.mjs` wrote
+`public/geo/nl/waddeneilanden.json`. `SETS['nl-waddeneilanden']` asks
+`loadGeoSet('waddeneilanden', 'detail')`, and `geoUrl` composes
+`waddeneilanden.detail.json` — the scheme every other shape file follows. The
+app fetched a file that was not there and got a 404.
+
+Both halves were tested. `content.test.ts` read the geometry and checked that
+every island resolves to a shape, that every touch target is big enough, that
+the projection matches the provinces — all of it opening the file **by the name
+the builder uses**. The e2e suite starts real rounds and would have caught it in
+a second, and it starts rounds of the provinces, the capitals, the waters and
+the cities. Four sets out of five.
+
+So the failure sat exactly in the gap: every test passed, and the one thing
+neither side checked was that the two names were the same name. It surfaced only
+because the Topomix (ADR-063) loads every layer at once, and a round that used
+to be four sets became five.
+
+### Decision
+
+The builder writes `waddeneilanden.detail.json`, which is what the rest of the
+geometry is called and what the app has always asked for.
+
+And a test that compares the two sides rather than each of them: for every set
+in `SETS`, resolve the URL the round will fetch and assert the file is on disk.
+It is four lines and it is the only check in the content gate written from the
+app's point of view rather than from the content's.
+
+### Consequences
+
+The lesson is not "add a test for the islands". It is that a name composed on
+one side and written on the other needs one assertion that crosses the gap,
+however well each side is covered on its own. Every future set is checked by
+this the moment it is added to `SETS`, which is the only place a set can be
+added.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because

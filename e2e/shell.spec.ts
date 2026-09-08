@@ -20,7 +20,7 @@ async function signIn(page: Page, naam: string) {
 async function startRound(page: Page) {
   await page.goto('/topografie');
   await page
-    .getByRole('region', { name: /Waarover/ })
+    .getByRole('region', { name: /Kies een onderwerp/ })
     .getByRole('button', { name: /Provincies van Nederland/ })
     .click();
   await page

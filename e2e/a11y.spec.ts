@@ -39,9 +39,9 @@ async function signIn(page: Page, naam: string) {
  */
 async function startRound(page: Page, set: RegExp, way: RegExp) {
   await page.goto('/topografie');
-  await expect(page.getByRole('heading', { name: 'Wat wil je oefenen?' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
 
-  const what = page.getByRole('region', { name: /Waarover/ });
+  const what = page.getByRole('region', { name: /Kies een onderwerp/ });
   const how = page.getByRole('region', { name: /Hoe wil je/ });
 
   await what.getByRole('button', { name: set }).click();
@@ -68,20 +68,24 @@ test('the home screen has no violations', async ({ page }) => {
 });
 
 /**
- * The three shapes a page inside the shell takes: a module with five named
- * sets, a module with twelve tables laid out as a grid, and a module that does
- * not exist yet. All three carry the same frame and the child's own column, and
- * the last one is the easiest to get wrong precisely because nobody looks at it.
+ * The three shapes a page inside the shell takes: a module whose subjects are
+ * one set each, a module whose subjects hold thirteen sets behind a row of
+ * chips, and a module that does not exist yet. All three carry the same frame
+ * and the child's own column, and the last one is the easiest to get wrong
+ * precisely because nobody looks at it.
  */
 test('the module pages have no violations, in each of their three shapes', async ({ page }) => {
   await signIn(page, 'Nour');
 
   await page.goto('/topografie');
-  await expect(page.getByRole('heading', { name: 'Wat wil je oefenen?' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
   expect((await scan(page)).violations).toEqual([]);
 
   await page.goto('/rekenen');
-  await expect(page.getByRole('button', { name: /^Tafel van 12\D/ })).toBeVisible();
+  // The chips, which are step 1's second question and the one control on the
+  // page whose visible label is deliberately shorter than its meaning: "12" is
+  // what the eye gets and "Tafel van 12" is what a screen reader gets.
+  await expect(page.getByRole('button', { name: 'Tafel van 12', exact: true })).toBeVisible();
   expect((await scan(page)).violations).toEqual([]);
 
   await page.goto('/klokkijken');

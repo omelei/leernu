@@ -3,15 +3,21 @@ import type { IconProps } from './Icon';
 import {
   BearSticker,
   CatSticker,
+  DragonSticker,
+  ElephantSticker,
   FishSticker,
   FoxSticker,
+  FrogSticker,
   HareSticker,
+  HedgehogSticker,
   OwlSticker,
+  PenguinSticker,
+  SquirrelSticker,
 } from './Stickers';
 import type { TranslationKey } from '@/i18n';
 
 /**
- * The six stickers, as data.
+ * The twelve stickers, as data.
  *
  * Split from the drawings for the same reason `features/shell/moduleIcons.ts`
  * is split from `Icon.tsx`: a file that exports components exports only
@@ -22,24 +28,50 @@ import type { TranslationKey } from '@/i18n';
 export interface Sticker {
   readonly id: string;
   readonly name: TranslationKey;
+  /**
+   * The level at which this one arrives. One is the first, which every child
+   * has from the first minute.
+   */
+  readonly level: number;
   readonly draw: ComponentType<Omit<IconProps, 'children'>>;
 }
 
 /**
- * In the order they are offered, and all of them from the first day.
+ * In the order they arrive: three from the first minute, then one per level.
  *
- * There is no order of unlocking and no locked one at the end of the row. The
- * moment there is, this stops being a choice and becomes a scoreboard with
- * animals on it — which is what the reisstempels already are, properly, and
- * they are earned rather than picked (ADR-059).
+ * **Three at level one, not one.** ADR-059's real point was that a child who
+ * cannot change anything about an app they are told to use can at least decide
+ * what it looks like, and a ladder that starts with a single animal takes that
+ * away for the fifteen correct answers it costs to reach the second. Three is a
+ * choice; one is a default.
+ *
+ * This reverses ADR-059, which had all six unlocked from the first day on the
+ * argument that a sticker is a choice and not a scoreboard. That argument was
+ * right about what was there and wrong about what was missing: the product
+ * counted XP for every correct answer, worked out a level from it, and showed
+ * a child neither. The one thing on the front door that was theirs unlocked
+ * nothing, and the one thing that was earned was invisible.
+ *
+ * So they are a ladder now, and ADR-067 sets the three conditions it has to
+ * keep: **nothing is behind money or chance**, **nothing is behind waiting** —
+ * only correct answers move it — and **a child always has one**, so the ladder
+ * can never leave anybody with nothing to be. What that buys is the thing a
+ * ten-year-old already understands from every game they play: you can see the
+ * next one, and you know exactly what it costs.
  */
 export const STICKERS: readonly Sticker[] = [
-  { id: 'kat', name: 'sticker.kat', draw: CatSticker },
-  { id: 'uil', name: 'sticker.uil', draw: OwlSticker },
-  { id: 'vos', name: 'sticker.vos', draw: FoxSticker },
-  { id: 'beer', name: 'sticker.beer', draw: BearSticker },
-  { id: 'haas', name: 'sticker.haas', draw: HareSticker },
-  { id: 'vis', name: 'sticker.vis', draw: FishSticker },
+  { id: 'kat', name: 'sticker.kat', level: 1, draw: CatSticker },
+  { id: 'uil', name: 'sticker.uil', level: 1, draw: OwlSticker },
+  { id: 'vos', name: 'sticker.vos', level: 1, draw: FoxSticker },
+  { id: 'beer', name: 'sticker.beer', level: 2, draw: BearSticker },
+  { id: 'haas', name: 'sticker.haas', level: 3, draw: HareSticker },
+  { id: 'vis', name: 'sticker.vis', level: 4, draw: FishSticker },
+  { id: 'egel', name: 'sticker.egel', level: 5, draw: HedgehogSticker },
+  { id: 'kikker', name: 'sticker.kikker', level: 6, draw: FrogSticker },
+  { id: 'eekhoorn', name: 'sticker.eekhoorn', level: 7, draw: SquirrelSticker },
+  { id: 'pinguin', name: 'sticker.pinguin', level: 8, draw: PenguinSticker },
+  { id: 'olifant', name: 'sticker.olifant', level: 9, draw: ElephantSticker },
+  { id: 'draak', name: 'sticker.draak', level: 10, draw: DragonSticker },
 ];
 
 /** The first one, which is what a child who has never chosen is shown. */
@@ -54,4 +86,14 @@ export const DEFAULT_STICKER = STICKERS[0] as Sticker;
  */
 export function stickerById(id: string | undefined): Sticker {
   return STICKERS.find((sticker) => sticker.id === id) ?? DEFAULT_STICKER;
+}
+
+/** The ones a child has reached. Never empty: the first arrives at level one. */
+export function unlockedStickers(level: number): Sticker[] {
+  return STICKERS.filter((sticker) => sticker.level <= level);
+}
+
+/** The next one to arrive, or null once a child has all twelve. */
+export function nextSticker(level: number): Sticker | null {
+  return STICKERS.find((sticker) => sticker.level > level) ?? null;
 }

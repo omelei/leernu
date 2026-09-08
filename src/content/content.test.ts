@@ -1,8 +1,10 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { fitView, findNearMisses, helpTargetFor, judgeAnswer, needsHelpTarget } from '@/game-core';
 import { loadAllItems, loadItemSets } from './loadSets';
+import { geoUrl, pointUrl } from './loadGeo';
+import { SET_IDS, SETS } from '@/features/practice/useRound';
 import type { Detailniveau, GeoSet } from './loadGeo';
 
 /**
@@ -128,7 +130,7 @@ describe('geometry references', () => {
   });
 
   it('resolves every island to a shape', () => {
-    const path = join(process.cwd(), 'public', 'geo', 'nl', 'waddeneilanden.json');
+    const path = join(process.cwd(), 'public', 'geo', 'nl', 'waddeneilanden.detail.json');
     const geo = JSON.parse(readFileSync(path, 'utf8')) as GeoSet;
     const shapes = new Set(geo.vormen.map((vorm) => vorm.id));
 
@@ -146,7 +148,7 @@ describe('geometry references', () => {
    * comfortable target, and it is eleven pixels tall.
    */
   it('gives every island a target a finger can land on', () => {
-    const path = join(process.cwd(), 'public', 'geo', 'nl', 'waddeneilanden.json');
+    const path = join(process.cwd(), 'public', 'geo', 'nl', 'waddeneilanden.detail.json');
     const geo = JSON.parse(readFileSync(path, 'utf8')) as GeoSet;
     // A Chromebook, which is the smallest map in spec section 8.
     const fit = fitView(geo.viewBox[3], 700);
@@ -361,5 +363,42 @@ describe('typo tolerance collisions', () => {
     }
 
     expect(true).toBe(true);
+  });
+});
+
+/**
+ * Every set the app can start, against the files that are actually on disk.
+ *
+ * This is the test that was missing, and its absence cost a release. The
+ * islands were written to `waddeneilanden.json` and asked for as
+ * `waddeneilanden.detail.json`; the app 404'd and answered "de kaart kon niet
+ * geladen worden", and nothing here noticed — because the tests above read the
+ * files by the name the *builder* uses, and the app reads them by the name
+ * `loadGeoSet` composes. Two spellings, never compared (ADR-069).
+ *
+ * So this compares them, from the app's side: for each set, the URL the round
+ * will fetch, resolved to a path under public/. The e2e suite cannot stand in
+ * for it — it would have to start a round of every set in every module to find
+ * the same thing, and it started rounds of four sets out of five.
+ */
+describe('the map file every set actually asks for', () => {
+  const onDisk = (url: string) => join(process.cwd(), 'public', url.replace(/^\/+/, ''));
+
+  it('exists for every set a child can practise', () => {
+    const missing: string[] = [];
+
+    // The background, which every round draws whatever it is asking about.
+    if (!existsSync(onDisk(geoUrl('provincies', 'region'))))
+      missing.push(geoUrl('provincies', 'region'));
+
+    for (const setId of SET_IDS) {
+      const shape = SETS[setId];
+      if (shape.answers === 'background') continue;
+      const url =
+        shape.answers === 'points' ? pointUrl(shape.bestand) : geoUrl(shape.bestand, shape.niveau);
+      if (!existsSync(onDisk(url))) missing.push(`${setId} → ${url}`);
+    }
+
+    expect(missing, 'a round of these answers with a blank map').toEqual([]);
   });
 });

@@ -29,12 +29,17 @@ export async function saveItemState(state: ItemState): Promise<void> {
   await db.put('progress', { ...state, kindId: await activeChildId() });
 }
 
-export async function startSession(mode: ModeId, itemIds: readonly string[]): Promise<string> {
+export async function startSession(
+  mode: ModeId,
+  itemIds: readonly string[],
+  setId: string,
+): Promise<string> {
   const db = await getDb();
   const session: SessionRecord = {
     id: crypto.randomUUID(),
     kindId: await activeChildId(),
     mode,
+    setId,
     itemSet: [...itemIds],
     score: null,
     gestart: new Date().toISOString(),
@@ -65,6 +70,8 @@ export async function finishSession(id: string, score: number, answered: number)
 /** One finished round, as K1's history and its favourites read it back. */
 export interface PlayedRound {
   readonly mode: ModeId;
+  /** Which set it was about, or null on a round played before ADR-063. */
+  readonly setId: string | null;
   /** The questions it asked, so a caller can work out which set they came from. */
   readonly itemIds: readonly string[];
   readonly correct: number;
@@ -104,6 +111,7 @@ export async function loadPlayedRounds(): Promise<PlayedRound[]> {
 
     played.push({
       mode: session.mode,
+      setId: session.setId ?? null,
       itemIds,
       correct: session.score,
       answered,

@@ -58,6 +58,19 @@ export function levelProgress(xp: number): number {
   return (xp - start) / (next - start);
 }
 
+/**
+ * How many more correct answers there are between here and the next level.
+ *
+ * The one number on the front door written in what a child actually does. "Nog
+ * 340 XP" is a currency nobody counts in; "nog 6 goede antwoorden" is a thing
+ * you can decide to do, and it is exact rather than a rounding — a combo can
+ * only make it arrive sooner (ADR-065).
+ */
+export function correctToNextLevel(xp: number): number {
+  const next = xpForLevel(levelFor(xp) + 1);
+  return Math.max(1, Math.ceil((next - xp) / XP_PER_CORRECT));
+}
+
 export interface RoundReward {
   readonly xp: number;
   readonly coins: number;
@@ -201,4 +214,33 @@ export function newStamps(snapshot: RewardSnapshot, alreadyHeld: ReadonlySet<str
   return STAMPS.filter((stamp) => !alreadyHeld.has(stamp.id) && stamp.criterion(snapshot)).map(
     (stamp) => stamp.id,
   );
+}
+
+// ---------------------------------------------------------------------------
+
+/**
+ * The tafeldiploma: ten sums of one table, all of them right, in one attempt.
+ *
+ * Not in `STAMPS`, and the reason is the shape of that list rather than of this
+ * reward. A stamp is one of ten named things with a criterion each; a diploma
+ * is twelve of the same thing, one per table, and writing twelve near-identical
+ * entries into a list whose own comment argues against exactly that would be a
+ * poor way to keep it honest.
+ *
+ * It is stored beside the stamps, in the same object store and under an id of
+ * the same shape, so nothing about the storage had to move to hold it.
+ */
+export function diplomaFor(snapshot: RewardSnapshot): string | null {
+  if (snapshot.mode !== 'tafeldiploma') return null;
+  if (!/^tafel-\d+$/.test(snapshot.setId)) return null;
+  if (!snapshot.perfectRound || !snapshot.completeRound) return null;
+  return `diploma-${snapshot.setId}`;
+}
+
+/** Which table a stored diploma is for, or null if the row is not one. */
+export function tableOfDiploma(id: string): number | null {
+  const match = /^diploma-tafel-(\d+)$/.exec(id);
+  if (!match) return null;
+  const tafel = Number(match[1]);
+  return tafel >= 1 && tafel <= 12 ? tafel : null;
 }

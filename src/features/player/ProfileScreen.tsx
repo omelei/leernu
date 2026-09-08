@@ -1,8 +1,11 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent, type ReactNode } from 'react';
 import { t } from '@/i18n';
 import { FamilyIcon, PupilIcon } from '@/components/Icon';
+import { STICKERS, stickerById, unlockedStickers } from '@/components/stickerSet';
+import { levelFor } from '@/game-core';
 import { createChild, listChildren, switchChild } from '@/store/children';
 import type { ProfileRecord } from '@/store/db';
+import { loadXp } from '@/store/rewardStore';
 import { DEFAULT_PREFERENCES, loadPreferences, savePreference, type Preferences } from './settings';
 
 /**
@@ -21,7 +24,15 @@ import { DEFAULT_PREFERENCES, loadPreferences, savePreference, type Preferences 
  * two fields that would turn a name on a device into a child somebody could
  * find, and nothing this product does needs them.
  */
-export function ProfileScreen({ profile }: { readonly profile: ProfileRecord }) {
+export function ProfileScreen({
+  profile,
+  onSticker,
+  aside,
+}: {
+  readonly profile: ProfileRecord;
+  readonly onSticker: (id: string) => void;
+  readonly aside: ReactNode;
+}) {
   const [prefs, setPrefs] = useState<Preferences>(DEFAULT_PREFERENCES);
   const [loaded, setLoaded] = useState(false);
 
@@ -44,36 +55,122 @@ export function ProfileScreen({ profile }: { readonly profile: ProfileRecord }) 
   };
 
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-col gap-8 p-6">
-      <div>
-        <h1 className="tk-display text-h1 font-semibold">{t('you.title')}</h1>
-        <p className="mt-1 text-ink-2">{t('you.nameIs', { naam: profile.naam })}</p>
-      </div>
+    <div className="tk-page">
+      <div className="tk-page-main">
+        <div>
+          <h1 className="tk-display text-h1 font-semibold">{t('you.title')}</h1>
+          <p className="mt-1 text-ink-2">{t('you.nameIs', { naam: profile.naam })}</p>
+        </div>
 
-      <Children active={profile} />
+        <Dieren chosen={profile.avatarConfig.sticker} onChoose={onSticker} />
 
-      <section className="flex flex-col gap-3" aria-busy={!loaded}>
-        <h2 className="tk-label">{t('you.settings')}</h2>
+        <Children active={profile} />
 
-        <Switch
-          on={prefs.readAloud}
-          label={t('you.readAloud')}
-          why={t('you.readAloudWhy')}
-          onToggle={() => toggle('readAloud')}
-        />
-        {/* The reason sits beside the switch rather than in a help page. A
+        <section className="flex flex-col gap-3" aria-busy={!loaded}>
+          <h2 className="tk-label">{t('you.settings')}</h2>
+
+          <Switch
+            on={prefs.readAloud}
+            label={t('you.readAloud')}
+            why={t('you.readAloudWhy')}
+            onToggle={() => toggle('readAloud')}
+          />
+          {/* The reason sits beside the switch rather than in a help page. A
             child who wants the clock should read why it is off before they
             turn it on, and an adult should be able to see we meant it. */}
-        <Switch
-          on={prefs.timer}
-          label={t('you.timer')}
-          why={t('you.timerWhy')}
-          onToggle={() => toggle('timer')}
-        />
-      </section>
+          <Switch
+            on={prefs.timer}
+            label={t('you.timer')}
+            why={t('you.timerWhy')}
+            onToggle={() => toggle('timer')}
+          />
+        </section>
 
-      <p className="text-ink-2">{t('you.stays')}</p>
+        <p className="text-ink-2">{t('you.stays')}</p>
+      </div>
+
+      {aside}
     </div>
+  );
+}
+
+/**
+ * The twelve animals, and which of them this child has reached.
+ *
+ * The picking used to be on the front door, in the column on the right, where
+ * six of them were all unlocked from the first day (ADR-059). It is here now
+ * because the six became twelve and a ladder (ADR-067), and because this is
+ * where the rest of what a child owns already lives — their name, their turn,
+ * their switches.
+ *
+ * The ones not reached yet are shown rather than hidden, greyed and with the
+ * level on them. That is the whole difference between a collection and a
+ * mystery: a child can see there are twelve, see which one is next, and know
+ * what it costs. What none of them says is when — nothing here arrives by
+ * waiting, and the number on a locked one is a level, never a date.
+ */
+function Dieren({
+  chosen,
+  onChoose,
+}: {
+  readonly chosen: string | undefined;
+  readonly onChoose: (id: string) => void;
+}) {
+  const [xp, setXp] = useState<number | null>(null);
+
+  useEffect(() => {
+    void loadXp().then(setXp);
+  }, []);
+
+  if (xp === null) return null;
+
+  const level = levelFor(xp);
+  const current = stickerById(chosen);
+
+  return (
+    <section className="flex flex-col gap-3" aria-label={t('you.animals')}>
+      <h2 className="tk-label">{t('you.animals')}</h2>
+      <p className="text-ink-2">
+        {t('you.animalsHave', {
+          aantal: unlockedStickers(level).length,
+          totaal: STICKERS.length,
+        })}
+      </p>
+
+      <div className="tk-animals">
+        {STICKERS.map((sticker) => {
+          const Draw = sticker.draw;
+          const open = sticker.level <= level;
+
+          return (
+            // The name is on the button and not on the drawing inside it. A
+            // <title> in an SVG is an accessible name in Chromium and is not
+            // one in WebKit, which is where these are read out loud: axe called
+            // all six of them buttons with no discernible text, on the browser
+            // an iPad in a classroom runs.
+            <button
+              key={sticker.id}
+              type="button"
+              className="tk-animal"
+              data-open={open ? 'ja' : undefined}
+              aria-label={
+                open
+                  ? t(sticker.name)
+                  : t('you.animalLocked', { dier: t(sticker.name), niveau: sticker.level })
+              }
+              aria-pressed={open ? sticker.id === current.id : undefined}
+              disabled={!open}
+              onClick={() => onChoose(sticker.id)}
+            >
+              <Draw size={28} />
+              <span aria-hidden="true" className="tk-animal-name">
+                {open ? t(sticker.name) : t('you.animalLevel', { niveau: sticker.level })}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </section>
   );
 }
 

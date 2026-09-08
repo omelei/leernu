@@ -2,7 +2,7 @@ import { t, type TranslationKey } from '@/i18n';
 import type { GeoSet } from '@/content/loadGeo';
 import type { AnswerLayer } from './MapCanvas';
 import type { StampId } from '@/game-core';
-import type { RoundState } from './useRound';
+import { isMixSet, type RoundState } from './useRound';
 
 /**
  * The screen after a round. Spec section 4.6 asks for exactly three things and
@@ -71,7 +71,12 @@ export function ResultScreen({
             </ul>
           </section>
 
-          {state.geo !== null && (
+          {/* The map is absent after a Topomix, and that is the honest thing.
+              A mix asks about provinces, capitals, islands and seas in one
+              round; one map can light up one of those layers, so a review map
+              here would show a child four of their eight misses and quietly
+              drop the rest. The list beside it names all of them. */}
+          {state.geo !== null && !isMixSet(state.setId) && (
             <section className="md:w-1/2" aria-label={t('result.mapLabel')}>
               <div className="tk-card flex justify-center">
                 <ReviewMap background={state.geo} answers={state.answers} highlighted={missedIds} />

@@ -420,3 +420,36 @@ export function ShieldIcon(props: Omit<IconProps, 'children'>) {
     </Icon>
   );
 }
+
+/**
+ * The way on: a triangle pointing right, filled.
+ *
+ * Not `NextIcon`, which is an arrow and means "the next question in a round
+ * that is already running". This one means "begin", and the difference between
+ * the two is worth a second drawing: a child on K2 has not started anything
+ * yet, and a filled triangle is the mark every device they own uses for that.
+ */
+export function GoIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <path d="M8 4.5l12 7.5-12 7.5z" strokeLinejoin="round" fill="currentColor" />
+    </Icon>
+  );
+}
+
+/**
+ * A diploma: a rosette with two ribbons.
+ *
+ * The circle is shared with the clock and the stamp, which is exactly what §E
+ * warns about — so the inside is empty and the ribbons below it carry the
+ * meaning. A stamp is something collected; this is something passed, and the
+ * ribbon is what a child recognises as the difference.
+ */
+export function DiplomaIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <circle cx="12" cy="8.5" r="5.5" />
+      <path d="M8.5 12.5L7 21l5-2.5 5 2.5-1.5-8.5" strokeLinejoin="round" />
+    </Icon>
+  );
+}

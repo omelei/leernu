@@ -10,12 +10,11 @@ import { ResultScreen } from './ResultScreen';
 import {
   choosesTheAnswer,
   readsTheMap,
-  SETS,
   typesTheAnswer,
   useRound,
   type Noemer,
   type PracticeMode,
-  type SetId,
+  type RoundSetId,
 } from './useRound';
 
 /**
@@ -72,7 +71,7 @@ export function PracticeScreen({
   onHome,
   onAgain,
 }: {
-  readonly setId: SetId;
+  readonly setId: RoundSetId;
   readonly practiceMode: PracticeMode;
   readonly onHome: () => void;
   /** Another round of the same thing: K8's one primary button. */
@@ -115,7 +114,9 @@ export function PracticeScreen({
   const typing = typesTheAnswer(practiceMode);
   const choosing = choosesTheAnswer(practiceMode);
   const reading = readsTheMap(practiceMode);
-  const { noemer } = SETS[setId];
+  // From the round rather than from the set: in the Topomix one question is
+  // about a province and the next about a sea, and the sentence has to follow.
+  const { noemer } = state;
 
   // Choosing and typing ask the same question of the same map. Only the
   // instruction differs, because what the child does next differs.
