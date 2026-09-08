@@ -105,7 +105,9 @@ test('keeps the profile across a reload, with no sign-in', async ({ page }) => {
 
 test('plays a round: question, map, answer, feedback', async ({ page }) => {
   await signIn(page, 'Noor');
-  await setCard(page, 'Provincies van Nederland').getByRole('button', { name: 'Aanwijzen' }).click();
+  await setCard(page, 'Provincies van Nederland')
+    .getByRole('button', { name: 'Aanwijzen' })
+    .click();
 
   // The question arrives with the map, not before it.
   await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
@@ -125,7 +127,9 @@ test('plays a round: question, map, answer, feedback', async ({ page }) => {
 
 test('announces the question and the outcome to a screen reader', async ({ page }) => {
   await signIn(page, 'Fatima');
-  await setCard(page, 'Provincies van Nederland').getByRole('button', { name: 'Aanwijzen' }).click();
+  await setCard(page, 'Provincies van Nederland')
+    .getByRole('button', { name: 'Aanwijzen' })
+    .click();
 
   const live = page.getByRole('status');
   await expect(live).toContainText('Waar ligt');
@@ -146,7 +150,9 @@ test('every button meets the 48px touch target', async ({ page }) => {
 
 test('asks about every province, and lets a child stop early', async ({ page }) => {
   await signIn(page, 'Jesse');
-  await setCard(page, 'Provincies van Nederland').getByRole('button', { name: 'Aanwijzen' }).click();
+  await setCard(page, 'Provincies van Nederland')
+    .getByRole('button', { name: 'Aanwijzen' })
+    .click();
 
   // Twelve provinces means twelve questions, not a sample of ten. The dots say
   // so, and say it to a screen reader too.
@@ -320,7 +326,9 @@ test('bliksemronde runs a clock and moves on by itself', async ({ page }) => {
  */
 test('a child can say they do not know, and is shown the answer', async ({ page }) => {
   await signIn(page, 'Pim');
-  await setCard(page, 'Provincies van Nederland').getByRole('button', { name: 'Aanwijzen' }).click();
+  await setCard(page, 'Provincies van Nederland')
+    .getByRole('button', { name: 'Aanwijzen' })
+    .click();
   await expect(page.getByRole('button', { name: 'Limburg' })).toBeVisible();
 
   await page.getByRole('button', { name: 'Ik weet het niet' }).click();
