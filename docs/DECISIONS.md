@@ -2095,6 +2095,49 @@ promises after all, and this decision should be revisited rather than defended.
 
 ---
 
+## ADR-052 — K2's start button waits for its bar
+
+**Status:** accepted — 2026-09-08. Defers a drawn element, with a date to
+revisit rather than a shrug.
+
+### Context
+
+The app design gives K2's start button a bar fixed to the bottom of a phone
+screen, and gives a reason worth honouring: "de enige plek waar hij binnen
+duimbereik blijft zonder te scrollen". Five sets and four ways is more than one
+screenful, and a start button under all of it is one a child has to hunt for.
+
+Three attempts produced three different bugs, each found by the same suite:
+
+1. Pulled out to the screen edges with negative side margins, it made the page
+   forty-eight pixels wider than a 393 phone. The page scrolled sideways and the
+   button's own edges sat off the glass.
+2. Kept inside the margins, the bar sat on top of its own button and swallowed
+   every press — on Android, and on a child's thumb.
+3. Made to pass taps through, the press landed on the list behind it instead:
+   the button's box and the point being pressed had come apart.
+
+### Decision
+
+On a phone the start button is full width at the end of the list, and nothing
+floats. The bar waits.
+
+### Consequences
+
+A child scrolls to it. That is worse than the design and better than a control
+that cannot be pressed, and this is K2 rather than the front door — the
+argument for thumb reach is strongest where a child returns daily, and K2 is
+visited once per round.
+
+What went wrong is worth writing down, because the next attempt should not
+start from scratch. A control floating over a scrolling list has to be right
+about three things at once — stacking, hit testing, and where the box is once
+the browser has scrolled it — and fixing them one at a time moved the failure
+rather than removing it. Whoever picks this up should build it as a sibling of
+the scroll container rather than a child of it, and check it at 393 first.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because

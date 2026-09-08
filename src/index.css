@@ -602,48 +602,25 @@
   }
 
   /* ---- K2's start button -------------------------------------------------
-   * On a phone it becomes a bar at the bottom, which the design gives a reason
-   * for: "de enige plek waar hij binnen duimbereik blijft zonder te scrollen".
-   * Five sets and four ways is more than one screenful, and a start button
-   * below all of it is a start button nobody reaches without hunting.
+   * On a phone it is a full-width button at the end of the list.
    *
-   * Sticky and not fixed, so it comes to rest at the end of the list rather
-   * than sitting on top of the tab bar. The negative margins take it to the
-   * edges of a page that is padded 24, so it reads as a bar rather than as a
-   * button that happens to be low down.
+   * The design draws a bar fixed to the bottom of the screen there, with a
+   * reason: "de enige plek waar hij binnen duimbereik blijft zonder te
+   * scrollen". Three attempts at that produced three bugs — it pushed the page
+   * 48 wider than a 393 screen, then it swallowed the press on its own button,
+   * then it moved out from under the point that was being pressed. A control
+   * that floats over a scrolling list has to be right about layering, hit
+   * testing and scroll position at once, and each fix moved the failure rather
+   * than removing it.
+   *
+   * So it waits (ADR-052). A button a child scrolls to is worse than a bar
+   * within thumb reach and better than a bar that cannot be pressed, and this
+   * is K2 rather than the front door.
    */
   @media (max-width: 767px) {
-    .tk-choose-start {
-      position: sticky;
-      bottom: 0;
-      z-index: 2;
-      /* Vertical only. Pulling it out sideways to the screen edges made the
-       * page 48 wider than a 393 phone: it scrolled sideways, and the start
-       * button's own edges sat off the screen where nothing could press them.
-       * A bar that reaches the text is a bar; one that reaches past the
-       * viewport is a bug. */
-      margin-bottom: -24px;
-      padding: 16px 0;
-      background: var(--paper);
-      border-top: var(--stroke-hair) solid var(--line);
-      /* The bar is a surface, not a target. Without this it sat on top of its
-       * own button and swallowed the press — the same trick the question card
-       * used when it lay over the map: the container passes taps through and
-       * the thing inside it takes them back. */
-      pointer-events: none;
-    }
     .tk-choose-start > .tk-button {
       width: 100%;
       justify-content: center;
-      pointer-events: auto;
-    }
-    /* The bar floats over whatever is still scrolling under it, which is what
-     * a bar at the bottom is. What it may not do is take a control with it:
-     * anything scrolled into view by the browser — a focused chip, a keyboard
-     * tab, a test — would land underneath it and be unclickable. The margin is
-     * the bar's own height, so scrolling to a control leaves room for it. */
-    .tk-choose-page button {
-      scroll-margin-bottom: 96px;
     }
   }
 

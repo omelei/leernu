@@ -144,9 +144,10 @@ export function ChooseRoundScreen({
         </div>
       </section>
 
-      {/* A bar on a phone and a button everywhere else — see .tk-choose-start.
-          The combination is spelled out on it, which is what K2 asks for: a
-          child reads what the round is at the moment they start it. */}
+      {/* Full width on a phone, a button everywhere else — see
+          .tk-choose-start. The combination is spelled out on it, which is what
+          K2 asks for: a child reads what the round is at the moment they start
+          it. */}
       <div className="tk-choose-start flex md:contents">
         <Button className="md:self-start" onClick={start}>
           {t('choose.start', {

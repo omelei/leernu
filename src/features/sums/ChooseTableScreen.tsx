@@ -142,7 +142,7 @@ export function ChooseTableScreen({
         </div>
       </section>
 
-      {/* A bar on a phone, a button everywhere else — see .tk-choose-start. */}
+      {/* Full width on a phone, a button everywhere else. */}
       <div className="tk-choose-start flex md:contents">
         <button
           type="button"
