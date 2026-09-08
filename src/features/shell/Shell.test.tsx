@@ -57,15 +57,7 @@ describe('the shell', () => {
     //
     // Short words, because K1 draws the rail that way: 88 pixels wide reads as
     // a list, and "Topografie" in it reads as prose that did not fit.
-    expect(names).toEqual([
-      'Topo',
-      'Rekenen',
-      'Klok',
-      'Taal',
-      'Spelling',
-      'Tijdvakken',
-      'Vlaggen',
-    ]);
+    expect(names).toEqual(['Topo', 'Rekenen', 'Klok', 'Taal', 'Spelling', 'Tijdvakken', 'Vlaggen']);
   });
 
   it('lets a module carry its own accent without naming it', () => {
