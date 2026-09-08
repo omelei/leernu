@@ -1,6 +1,14 @@
-import type { ReactNode } from 'react';
+import type { ComponentType, ReactNode } from 'react';
 import { Wordmark } from '@/components/Wordmark';
-import { AreaIcon } from '@/components/Icon';
+import {
+  AreaIcon,
+  ClockIcon,
+  EraIcon,
+  FlagIcon,
+  TablesIcon,
+  WordIcon,
+  type IconProps,
+} from '@/components/Icon';
 import { t } from '@/i18n';
 import {
   BUILT_DESTINATIONS,
@@ -9,6 +17,27 @@ import {
   type Destination,
   type Module,
 } from './modules';
+
+/**
+ * A pictogram per module, which is the one place §E lets an icon take an
+ * accent: "een icoon krijgt alleen een module-accent als het de module zelf
+ * aanduidt".
+ *
+ * §E names six of them — gebied, vlag, klok, tafels, woord, tijdvak — and the
+ * plan has seven modules. Spelling has no icon of its own and shares the word,
+ * which is a collision nobody sees yet because neither module is built; it is
+ * a question for the styleguide rather than something to invent a seventh shape
+ * for here.
+ */
+const MODULE_ICON: Record<Module['id'], ComponentType<Omit<IconProps, 'children'>>> = {
+  topo: AreaIcon,
+  tafels: TablesIcon,
+  klok: ClockIcon,
+  woorden: WordIcon,
+  spelling: WordIcon,
+  tijdvakken: EraIcon,
+  vlaggen: FlagIcon,
+};
 
 /**
  * The frame around everything that is not a round.
@@ -74,18 +103,22 @@ export function Shell({
       <div className="flex min-h-0 flex-1 flex-col-reverse xl:flex-row">
         {showRail ? (
           <nav aria-label={t('nav.modules')} className="tk-rail flex-none">
-            {modules.map((module) => (
-              <button
-                key={module.id}
-                type="button"
-                data-module={module.id}
-                aria-current={module.id === modules[0]?.id ? 'page' : undefined}
-                className="tk-rail-item"
-              >
-                <AreaIcon size={24} />
-                {t(module.name)}
-              </button>
-            ))}
+            {modules.map((module) => {
+              const ModuleIcon = MODULE_ICON[module.id];
+
+              return (
+                <button
+                  key={module.id}
+                  type="button"
+                  data-module={module.id}
+                  aria-current={module.id === modules[0]?.id ? 'page' : undefined}
+                  className="tk-rail-item"
+                >
+                  <ModuleIcon size={24} />
+                  {t(module.name)}
+                </button>
+              );
+            })}
           </nav>
         ) : null}
 

@@ -1984,6 +1984,73 @@ dressing it as "bijna" would teach a child that close enough is a grade.
 
 ---
 
+## ADR-050 — Supabase, and what that costs the promise
+
+**Status:** accepted — 2026-09-08. Chosen by the product owner over an own API
+and over deferring the backend again. Supersedes nothing; it is the
+implementation ADR-046 left open.
+
+### Context
+
+ADR-046 decided that a child's progress belongs in their parent's account: a
+family with one iPad and three children currently shares one set of Leitner
+boxes, because `itemStates` is keyed by item alone. It did not decide how.
+
+Three ways were put to the product owner. Supabase — Postgres, auth and
+row-level security without writing a service. An own minimal API on our own
+hosting — full control over where a child's rows sit, and every one of auth,
+sessions, migrations and backups written by us. Or local child profiles only,
+which solves the one iPad and leaves Safari deleting everything after seven
+days of no interaction.
+
+### Decision
+
+Supabase.
+
+**What it is allowed to hold.** Parent account: an e-mail and an auth row.
+Child: a first name, a level, and rows of progress. Nothing else — ADR-008's
+refusal stands, a child never authenticates and never has an e-mail, and the
+two fields that would turn a name into a findable child, school and place of
+residence, are not in the schema and are not to be added to it.
+
+**The region is the EU.** A project holding the first names and study records
+of Dutch primary school children is not going to sit in another jurisdiction
+because the default region was quicker.
+
+**Local first stays local first.** The device remains the source of truth
+during a round: every answer is written to IndexedDB and scheduled there, and
+sync is a separate moment. A round that waited on a network is a round a child
+loses on a school wi-fi, and the whole product is built the other way round.
+
+**The client is loaded only where it is used.** The parent screens import it;
+the round does not. It must not enter the shell budget of 300 kB for a child
+who never signs in.
+
+### Consequences
+
+**The promise changes and the README has to say so.** "No network traffic
+beyond the map files in `public/`" stops being true the moment a parent signs
+in. What survives, and what the promise should have said all along, is the part
+that matters: no advertising, no tracking, no third-party script on a page a
+child looks at, and no network request during a round. Restating it as the
+narrower true claim is better than keeping a wider one that has quietly become
+false — that is exactly the failure this product is positioned against.
+
+**Supabase is a processor and needs a processing agreement**, and the privacy
+statement has to name it. Neither is code and neither is optional.
+
+**The schema change lands before the network does.** `itemStates` keyed by item
+alone is the actual bug; keying it per child fixes the one-iPad family whether
+or not anyone ever signs in, and it is the shape the upload needs. That is a
+local IndexedDB migration and it goes first, on its own.
+
+**What cannot be verified here.** The project, its URL and its keys can only be
+created by the product owner, and CI has none of them. Everything written
+against Supabase is unverified until it runs against a real project, and it
+should be said that way rather than reported as done.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because

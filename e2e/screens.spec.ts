@@ -109,3 +109,23 @@ test('the round: typing the name', async ({ page }, testInfo) => {
   await expect(page.getByPlaceholder('Naam')).toBeVisible(READY);
   await shoot(page, size, '09-typen');
 });
+
+/** Rekenen, the second module: its chooser and a round of it. */
+test('the tables: choosing one, and a sum', async ({ page }, testInfo) => {
+  const size = testInfo.project.name;
+
+  await signIn(page, 'Bas');
+  await page.goto('/tafels');
+  await expect(page.getByRole('heading', { name: 'Welke tafel?' })).toBeVisible();
+  await shoot(page, size, '10-tafels');
+
+  // The chooser opens on the table of one and on typing, so the start button is
+  // enough to get into a round.
+  await page
+    .getByRole('button', { name: /sommen$/ })
+    .last()
+    .click();
+
+  await expect(page.getByPlaceholder('Antwoord')).toBeVisible(READY);
+  await shoot(page, size, '11-som');
+});
