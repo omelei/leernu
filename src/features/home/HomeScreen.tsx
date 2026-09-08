@@ -61,7 +61,7 @@ export function HomeScreen({
   /** Every other way of practising, which is K2's job now. */
   readonly onChoose: () => void;
   /** Into a module, which on a phone this is the only quick way to. */
-  readonly onModule?: (id: Module['id']) => void;
+  readonly onModule?: ((id: Module['id']) => void) | undefined;
 }) {
   const [states, setStates] = useState<Map<string, ItemState> | null>(null);
   const [streak, setStreak] = useState<StreakState | null>(null);
@@ -200,7 +200,9 @@ function Modules({
   onOpen,
 }: {
   readonly known: ReadonlyMap<string, ItemState>;
-  readonly onOpen?: (id: Module['id']) => void;
+  // `| undefined` because exactOptionalPropertyTypes: an optional prop and a
+  // prop that may be passed undefined are two different types here.
+  readonly onOpen?: ((id: Module['id']) => void) | undefined;
 }) {
   // One place that knows what a module is made of. A third module adds a line
   // here and nothing else on this screen.
