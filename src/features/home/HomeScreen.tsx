@@ -15,7 +15,7 @@ import { t, type TranslationKey } from '@/i18n';
 import { TestDate } from './TestDate';
 import { loadItemStates } from '@/store/progress';
 import { loadStamps } from '@/store/rewardStore';
-import type { PracticeMode, SetId } from '@/features/practice/useRound';
+import { SET_IDS, type PracticeMode, type SetId } from '@/features/practice/useRound';
 
 /**
  * K1, the front door — which is also leer.nu itself.
@@ -65,7 +65,16 @@ interface Onderdeel {
  * copy of those three.
  */
 function onderdelen(): Onderdeel[] {
-  const topo = loadItemSets().map((set) => ({
+  // In the curated order, not the order the filenames sort in. It decides what
+  // a child who has never practised is offered first, and that should be the
+  // set the content calls the way in — provinces — rather than whichever JSON
+  // file happens to come first in the alphabet.
+  const sets = loadItemSets();
+  const geordend = SET_IDS.map((id) => sets.find((set) => set.id === id)).filter(
+    (set): set is (typeof sets)[number] => set !== undefined,
+  );
+
+  const topo = geordend.map((set) => ({
     moduleId: 'topo' as const,
     setId: set.id,
     naam: SET_NAME_KEY[set.id as SetId] ?? null,
@@ -220,7 +229,11 @@ function Verder({
   return (
     <article className="tk-card" data-module={deel.moduleId}>
       <h2 className="tk-display mb-1 text-h2 font-semibold">{naamVan(deel)}</h2>
-      <p className="text-ink-2">{t('home.setsOver', { onderdelen: ids.length, rondes })}</p>
+      <p className="text-ink-2">
+        {rondes === 1
+          ? t('home.setsOverOne', { onderdelen: ids.length })
+          : t('home.setsOver', { onderdelen: ids.length, rondes })}
+      </p>
       <p className="mb-4 text-ink-2">
         {mastered === 0
           ? t('home.setNew')

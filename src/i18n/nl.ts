@@ -27,6 +27,7 @@ export const nl = {
   'home.todayFresh': 'Allemaal nieuw. Vanaf morgen komen ze terug.',
   'home.continueWith': 'Ga verder met {module}',
   'home.setsOver': '{onderdelen} onderdelen, verdeeld over {rondes} rondes.',
+  'home.setsOverOne': '{onderdelen} onderdelen, in één ronde.',
   'home.practiceMore': 'Verder oefenen',
   'home.rememberTitle': 'Wat onthoud je?',
   'home.rememberOf': 'van {module}',
