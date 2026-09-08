@@ -37,7 +37,13 @@ async function startTable(page: Page, tafel: number, hoe: RegExp) {
     .click();
 }
 
-test('the rail is the map of the product, not a list of what is finished', async ({ page }) => {
+test('the rail is the map of the product, not a list of what is finished', async ({
+  page,
+}, testInfo) => {
+  // Not on a phone: §D drops the rail at that size and K1 carries the modules
+  // as cards in the flow instead. The test below covers those, at every size.
+  test.skip(['iphone', 'android'].includes(testInfo.project.name), 'no rail on a phone');
+
   await signIn(page, 'Sam');
 
   // ADR-051. Five doors, of which three are not open yet — a rail with only
@@ -54,6 +60,21 @@ test('the rail is the map of the product, not a list of what is finished', async
   // which is the half of ADR-037 that survives.
   await rail.getByRole('button', { name: 'Klok', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Klok' })).toBeVisible();
+});
+
+test('the front door lists every module, at every size', async ({ page }) => {
+  await signIn(page, 'Fien');
+
+  // The phone has no rail, so this is the only way to a module there — and on
+  // a laptop it stands beside the rail, which is what K1 draws.
+  const lijst = page.getByRole('region', { name: 'Verder oefenen' });
+
+  for (const naam of ['Rekenen', 'Klok', 'Taal', 'Vlaggen']) {
+    await expect(lijst.getByRole('button', { name: new RegExp(naam) })).toBeVisible();
+  }
+
+  await lijst.getByRole('button', { name: /Rekenen/ }).click();
+  await expect(page.getByRole('heading', { name: 'Welke tafel?' })).toBeVisible();
 });
 
 test('the tables have an address of their own', async ({ page }) => {

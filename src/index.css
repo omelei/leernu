@@ -969,6 +969,19 @@
     background: var(--paper);
     border-top: var(--stroke-hair) solid var(--line);
   }
+  /* Not on a phone, which is what §D asks for: "op mobiel vervalt de rail en
+   * komt er een tabbalk met vier items ... de modules blijven dan bereikbaar
+   * via de kaarten in de stroom".
+   *
+   * It is also arithmetic. Five entries at the 88 a touch target needs is 440,
+   * and a phone is 393 — the bar cannot be drawn at that size without either
+   * shrinking below the floor ADR-032 sets or pushing the page sideways, and
+   * it did the second. K1 carries the modules as cards there instead. */
+  @media (max-width: 767px) {
+    .tk-rail {
+      display: none;
+    }
+  }
   @media (min-width: 1280px) {
     .tk-rail {
       flex-direction: column;
