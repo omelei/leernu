@@ -24,6 +24,19 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
+  /*
+   * Six sizes of forty-odd tests is two hundred and seventy runs, and a runner
+   * has four cores. Left to Playwright's default of half the cores it uses two
+   * of them and a green suite takes ten minutes; a broken one takes half an
+   * hour, because every failure is thirty seconds three times over.
+   *
+   * `maxFailures` is the part that matters. A suite that is broken is broken
+   * after ten failures, and grinding through the remaining two hundred proves
+   * nothing that the first ten did not — it only decides whether the answer
+   * arrives in four minutes or in twenty-five.
+   */
+  workers: process.env.CI ? 4 : undefined,
+  maxFailures: process.env.CI ? 10 : 0,
   // `open: 'never'` because the HTML reporter otherwise starts a server and
   // waits after a failure, which in a Codespace looks exactly like a hung test
   // run. The report is still written; open it yourself with `npx playwright

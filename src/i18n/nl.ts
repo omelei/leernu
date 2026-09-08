@@ -10,7 +10,6 @@
  */
 export const nl = {
   // Home
-  'home.greeting': 'Hoi {naam}!',
   'home.streakNone': 'Je begint vandaag',
   // Dutch needs both forms; "1 dagen op rij" is the kind of small wrongness a
   // ten-year-old notices immediately.
@@ -40,8 +39,6 @@ export const nl = {
   'home.modules': 'Wat je kunt oefenen',
   'home.continueTitle': 'Verder waar je was',
   'home.retention': 'weet je hier over drie weken nog van',
-  'home.retentionAfter': 'Eén ronde vandaag houdt het op {procent}%.',
-  'home.continueAction': 'Ga verder — {aantal} vragen',
   'home.setMastered': '{goed} van de {totaal} onthoud je',
   'home.setNew': 'nog niet geoefend',
   'home.moreWays': 'Andere manieren',
