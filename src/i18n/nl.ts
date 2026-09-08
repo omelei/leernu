@@ -19,9 +19,14 @@ export const nl = {
   // where it means something a child is done with rather than a day off.
   'home.restDay': '{aantal} rustdag bewaard',
   'home.restDays': '{aantal} rustdagen bewaard',
-  // K1, de landingspagina. De openingszin zegt hardop wat op een fout lijkt:
-  // dat je vragen terugkrijgt die je al had. Dat is precies de belofte.
-  'home.todayTitle': 'Vandaag oefen je {aantal} vragen',
+  // K1, de landingspagina. De begroeting zet het kind bovenaan het scherm; de
+  // zin eronder zegt hardop wat op een fout lijkt: dat je vragen terugkrijgt
+  // die je al had. Dat is precies de belofte.
+  'home.welcome': 'Welkom {naam}!',
+  'home.todayCount': 'Vandaag oefen je {aantal} vragen.',
+  // Dutch needs the word rather than the digit here, the same way "één ronde"
+  // does: "1 vragen" is the small wrongness a ten-year-old spots at once.
+  'home.todayCountOne': 'Vandaag oefen je één vraag.',
   'home.todayRepeats': '{aantal} daarvan heb je eerder gehad. Dat is de bedoeling.',
   'home.todayRepeatOne': 'Eén daarvan heb je eerder gehad. Dat is de bedoeling.',
   'home.todayFresh': 'Allemaal nieuw. Vanaf morgen komen ze terug.',
@@ -43,11 +48,21 @@ export const nl = {
   'home.setMastered': '{goed} van de {totaal} onthoud je',
   'home.setNew': 'nog niet geoefend',
   'home.moreWays': 'Andere manieren',
+  // Wat de vorige ronde opleverde, als cijfer. Het staat naast de balk die
+  // diezelfde ronde tekent, zodat de twee over hetzelfde gaan.
+  'home.lastGrade': 'Je scoorde vorige keer een {cijfer}',
+  'home.lastGradeBar': 'Je vorige ronde: {goed} van de {totaal} goed',
+  'home.lastGradeNone': 'Nog geen ronde gedaan. Die van vandaag is je eerste.',
 
   // The frame. Module order is ADR-029; only the ones with content are shown,
   // so six of these seven are written down before they are needed rather than
   // guessed at when they are.
   'nav.modules': 'Modules',
+  // Het logo linksboven, dat naar de voordeur gaat. De naam van de knop noemt
+  // het merk en wat de knop doet: een merkteken alleen zegt niet waar je
+  // uitkomt, en "Naar Vandaag" alleen laat de naam van het product uit het
+  // scherm verdwijnen voor wie het niet ziet. De merknaam komt uit brand.ts.
+  'nav.home': '{merk}, naar Vandaag',
   'nav.destinations': 'Waar je heen kunt',
   'nav.vandaag': 'Vandaag',
   'nav.onthouden': 'Onthouden',
@@ -82,8 +97,14 @@ export const nl = {
   'home.testInDays': 'Toets over {aantal} dagen',
   'home.testPast': 'De toets is geweest',
   'home.testPick': 'Wanneer is de toets?',
-  'home.testSet': 'Datum instellen',
-  'home.testChange': 'Datum wijzigen',
+  'home.testSet': 'Toets instellen',
+  'home.testChange': 'Toets aanpassen',
+  // Het vak erbij, want een datum zonder vak plant niets. Alleen vakken die
+  // bestaan: een toets voor klokkijken instellen belooft oefenstof die er niet
+  // is. Het gekozen vak bepaalt waarmee "Ga verder" verdergaat.
+  'home.testSubjectPick': 'Voor welk vak?',
+  'home.testSubjectNone': 'Nog geen vak',
+  'home.testSubjectOf': 'Toets voor {module}',
 
   // Een module die het plan wel heeft en het product nog niet. Alleen te
   // bereiken door het adres te typen; geen datum, want een datum die we missen

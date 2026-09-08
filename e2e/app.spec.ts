@@ -105,6 +105,62 @@ test('keeps the profile across a reload, with no sign-in', async ({ page }) => {
   await expect(page.getByPlaceholder('Je naam')).toHaveCount(0);
 });
 
+/**
+ * K1 greets the child by the name they typed, and the front door is the first
+ * place that name is worth anything: a profile that is not an account still has
+ * to be visibly theirs.
+ */
+test('greets the child by name on the front door', async ({ page }) => {
+  await signIn(page, 'Bo');
+  await expect(page.getByRole('heading', { name: 'Welkom Bo!' })).toBeVisible();
+});
+
+/**
+ * The subject of the test is not decoration: it decides what "Ga verder"
+ * carries on with. A child practising for Tuesday's tables should be offered
+ * tables, whatever they happened to do last night.
+ */
+test('the subject of the test decides what to carry on with', async ({ page }) => {
+  await signIn(page, 'Tijn');
+
+  // With no test set, it is the set touched most recently — and on a first
+  // visit that is the way in the content calls the way in.
+  await expect(page.getByRole('button', { name: 'Ga verder met Topo' })).toBeVisible();
+
+  await page.getByRole('button', { name: 'Toets instellen' }).click();
+  await page.getByLabel('Voor welk vak?').selectOption('tafels');
+
+  await expect(page.getByRole('button', { name: 'Ga verder met Rekenen' })).toBeVisible();
+
+  // And it is a device setting, so it survives the page rather than the render.
+  await page.reload();
+  await expect(page.getByRole('button', { name: 'Ga verder met Rekenen' })).toBeVisible();
+});
+
+/**
+ * The mark, which is the one number on K1 that is about what has already
+ * happened. It is over what was answered rather than what was asked — this
+ * round is stopped after a single question, and a 1,0 for the eleven never seen
+ * would make stopping a punishment.
+ */
+test('reports the mark from the last round on the front door', async ({ page }) => {
+  await signIn(page, 'Jamie');
+
+  // Before the first round there is nothing to report, and it says so.
+  await expect(page.getByText('Nog geen ronde gedaan. Die van vandaag is je eerste.')).toBeVisible();
+
+  await startRound(page, /Provincies van Nederland/, /Aanwijzen/);
+  await page.getByRole('button', { name: 'Limburg' }).click();
+  await expect(page.getByRole('button', { name: 'Volgende vraag' })).toBeVisible();
+
+  await page.getByRole('button', { name: 'Stoppen' }).click();
+  await page.getByRole('button', { name: 'Terug naar start' }).click();
+
+  // One answer, so the mark is a 10,0 or a 1,0 and never anything between —
+  // which is exactly what "over what was answered" means.
+  await expect(page.getByText(/Je scoorde vorige keer een (10,0|1,0)$/)).toBeVisible();
+});
+
 test('plays a round: question, map, answer, feedback', async ({ page }) => {
   await signIn(page, 'Noor');
   await startRound(page, /Provincies van Nederland/, /Aanwijzen/);

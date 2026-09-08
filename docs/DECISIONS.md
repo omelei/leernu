@@ -2138,6 +2138,170 @@ the scroll container rather than a child of it, and check it at 393 first.
 
 ---
 
+## ADR-053 — K1 carries a mark, and it is not the retention figure
+
+**Status:** accepted — 2026-09-08. Partially reverses the wording of ADR-030's
+consequence that the front door reports no score.
+
+### Context
+
+Until now K1 said "12 van de 20 onthoud je" beside the set it offers to carry
+on with, and the number this product argues from — what a child will still know
+in three weeks — sat under it. Two figures about remembering, one line apart,
+and neither of them told a child how the last round actually went.
+
+The product owner asked for the mark instead: "Je scoorde vorige keer een 8,4".
+A mark is the number a Dutch ten-year-old reads without being taught how, and
+it is the number they will be given for the test they are practising for. It is
+also exactly the number this repository has been careful not to put on the
+front door, because a scoreboard teaches a child to practise for today's answer
+rather than for what they keep.
+
+### Decision
+
+Both, in different places, and never on the same line.
+
+- The **mark** is on the card, beside a bar that draws the same round. It is
+  about what has already happened and it is honest about which round: the last
+  finished session that overlaps the set being offered.
+- The **forecast** moves into the right-hand column of K1, in a card of its
+  own, with the sentence that says what it is: what you keep, not what you had
+  right.
+
+The mark is `1 + 9 × goed/beantwoord`, to one decimal, over what was
+**answered** and not over what was asked. A round can be stopped early and what
+was answered is kept (ADR-052); marking eleven questions a child never saw as
+wrong would make stopping a punishment, and stopping is allowed here.
+
+`sessions` gains `beantwoord`. It is an added optional field rather than a
+schema version, because rows written before it are still readable and fall back
+to the length of `itemSet`.
+
+### Consequences
+
+The risk is the one ADR-030 named: a child who practises for the mark rather
+than for the forecast. Two things hold it back and neither is decoration. The
+mark never appears without the round it came from, so "een 10,0" over one
+answered question reads as what it is. And the forecast keeps the larger
+figure, the larger dot and the sentence explaining itself, on a card of its own.
+
+Worth watching: if the mark turns out to be the number children talk about and
+the forecast the one nobody reads, this was the wrong trade and the card is
+where to undo it.
+
+---
+
+## ADR-054 — A test has a subject, and the subject decides what "Ga verder" means
+
+**Status:** accepted — 2026-09-08.
+
+### Context
+
+K1's test date was a date and nothing else. A date on its own plans nothing: a
+child practising for Tuesday still had to find the right subject themselves,
+and the front door would happily offer them last night's tables because those
+were touched most recently. "Verder" was answering "where was I" when the child
+was asking "what is the test about".
+
+### Decision
+
+The test block asks for a subject as well as a date, and the subject outranks
+the history when the front door decides what to carry on with. Both live in
+`settings`: they are facts about the device a family shares, not about a child.
+
+Only built modules are offered. A test set for klokkijken would be a promise of
+practice material that does not exist, which is ADR-037's rule.
+
+### Consequences
+
+A child with a topography test on Friday opens the app and is offered
+topography, whatever they did last. A child who sets no subject is where they
+were before, which is the honest default rather than a guess.
+
+When a third module ships it appears in the list without a code change, because
+the list is `BUILT_MODULES`. When one is retired, a subject saved for it reads
+back as no subject rather than as a module nobody can practise.
+
+---
+
+## ADR-055 — The destinations stand in the app bar from a tablet up
+
+**Status:** accepted — 2026-09-08.
+
+### Context
+
+The four destinations — Vandaag, Onthouden, Vrienden, Jij — were drawn as a tab
+bar on a phone and as nothing at all anywhere else, and that is what was built:
+`md:hidden`. So on an iPad and on a Chromebook there was no way to reach
+"Onthouden" except by typing its address. The design's tablet artboards do not
+draw a destinations bar either, which is a gap in the design rather than a
+decision in it.
+
+### Decision
+
+One list, two postures, exactly one of them displayed at any width. On a phone
+it is the tab bar along the bottom, where a thumb is. From 768 up it is a row in
+the app bar, where the pointer is and where the bottom of the screen is a long
+way from anything.
+
+The streak moves with it: it now appears only where the rail stands up (1280),
+because from a tablet up the app bar is carrying navigation and navigation
+costs the width first.
+
+### Consequences
+
+Both bars are in the document at every size, which is a duplicate landmark on
+paper. It is not one in practice — the hidden posture is `display: none`, so it
+is out of the accessibility tree — but a unit test rendering without a
+stylesheet sees both, and `Shell.test.tsx` says so rather than working around
+it.
+
+At 200% text the row of destinations is wider than a tablet's app bar. It
+scrolls inside the bar rather than pushing the page sideways, because a page
+that scrolls horizontally at 393 is the first thing that goes wrong at the small
+end and the one thing `e2e/shell.spec.ts` measures at every size.
+
+---
+
+## ADR-056 — The logo is the way home, and the merkteken heads the rail
+
+**Status:** accepted — 2026-09-08.
+
+### Context
+
+The wordmark in the app bar was a picture that did nothing. Every other site a
+ten-year-old uses puts a logo top left and takes them home when they press it,
+so the one place on the screen they already know how to use was inert. K1 also
+draws the merkteken at the head of the rail, which the built rail did not have.
+
+### Decision
+
+The wordmark in the app bar is a button that goes to Vandaag. Its accessible
+name is the brand and the destination — "leer.nu, naar Vandaag" — because a
+mark alone does not say where you land, and "Naar Vandaag" alone takes the
+product's name away from anyone who cannot see it.
+
+The merkteken heads the rail, but only where the rail stands up. Lying along the
+bottom of a tablet it would be a logo in the last place anyone looks, and the
+app bar carries the wordmark two centimetres away.
+
+It is drawn rather than fetched: `Brandmark` is `Dot` at the wordmark's fill,
+which is exactly what `docs/Logo/leer-nu-merkteken-inkt.svg` contains. One
+shape, no request, and nothing that can drift.
+
+### Consequences
+
+The mark is now in two places on a wide screen and named in one, so a screen
+reader still hears "leer.nu" once.
+
+Finding the merkteken and the progress bar to be the same drawing had a second
+effect worth recording: `.tk-progress-fill` was a `<span>` with a width and a
+height and no `display`, so it had never rendered at all. It appeared only in
+the development gallery, which is why nobody saw it. K1 puts a progress bar on
+the front door, so it had to work, and it now does.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because

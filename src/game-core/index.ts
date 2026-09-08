@@ -4,6 +4,7 @@ export * from './answer';
 export * from './distractors';
 export * from './map';
 export * from './retention';
+export * from './grade';
 export * from './sums';
 export * from './streak';
 export * from './rewards';

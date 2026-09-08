@@ -1,15 +1,9 @@
-import type { ComponentType, ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import { brand } from '@/config/brand';
 import { Wordmark } from '@/components/Wordmark';
-import {
-  AreaIcon,
-  ClockIcon,
-  EraIcon,
-  FlagIcon,
-  TablesIcon,
-  WordIcon,
-  type IconProps,
-} from '@/components/Icon';
+import { Brandmark } from '@/components/Brandmark';
 import { t } from '@/i18n';
+import { MODULE_ICON } from './moduleIcons';
 import {
   BUILT_DESTINATIONS,
   RAIL_MODULES,
@@ -17,27 +11,6 @@ import {
   type Destination,
   type Module,
 } from './modules';
-
-/**
- * A pictogram per module, which is the one place §E lets an icon take an
- * accent: "een icoon krijgt alleen een module-accent als het de module zelf
- * aanduidt".
- *
- * §E names six of them — gebied, vlag, klok, tafels, woord, tijdvak — and the
- * plan has seven modules. Spelling has no icon of its own and shares the word,
- * which is a collision nobody sees yet because neither module is built; it is
- * a question for the styleguide rather than something to invent a seventh shape
- * for here.
- */
-const MODULE_ICON: Record<Module['id'], ComponentType<Omit<IconProps, 'children'>>> = {
-  topo: AreaIcon,
-  tafels: TablesIcon,
-  klok: ClockIcon,
-  woorden: WordIcon,
-  spelling: WordIcon,
-  tijdvakken: EraIcon,
-  vlaggen: FlagIcon,
-};
 
 /**
  * The frame around everything that is not a round.
@@ -52,6 +25,12 @@ const MODULE_ICON: Record<Module['id'], ComponentType<Omit<IconProps, 'children'
  * 1100px window on a laptop gets the tablet posture — but it is the proxy that
  * can be tested at four sizes without emulating a hand.
  *
+ * The four destinations have two postures for the same reason. On a phone they
+ * are the tab bar along the bottom, where a thumb is; from a tablet up they
+ * are a row in the app bar, where the pointer is and where the bottom of the
+ * screen is a long way from anything. Exactly one of the two is displayed at
+ * any width, so nothing is offered twice.
+ *
  * **Nothing here appears during a round.** Not hidden: not rendered. A round
  * screen is not wrapped in this component at all, so there is no navigation in
  * the document to tab into, no bar to mis-tap on a 393px screen with the map
@@ -61,7 +40,7 @@ const MODULE_ICON: Record<Module['id'], ComponentType<Omit<IconProps, 'children'
 
 export interface ShellProps {
   readonly children: ReactNode;
-  /** Which tab bar destination is showing. */
+  /** Which destination is showing. */
   readonly current?: Destination['id'];
   readonly onNavigate?: (id: Destination['id']) => void;
   /**
@@ -100,12 +79,46 @@ export function Shell({
   // go. The rail no longer waits: ADR-051 makes it the map of the product
   // rather than an index of what is finished.
   const showRail = modules.length >= NAVIGATION_MINIMUM;
-  const showTabs = destinations.length >= NAVIGATION_MINIMUM;
+  const showDestinations = destinations.length >= NAVIGATION_MINIMUM;
+
+  const destinationItems = destinations.map((destination) => ({
+    ...destination,
+    label: t(destination.name),
+  }));
 
   return (
     <div className="flex min-h-screen flex-col bg-paper">
       <header className="tk-appbar flex-none">
-        <Wordmark size={24} clearSpace={false} />
+        {/* The mark, and the way back to the front door. A logo that goes home
+            is a convention every child already knows from every other site
+            they use, and until now this one was a picture that did nothing. */}
+        <button
+          type="button"
+          className="tk-brand"
+          aria-label={t('nav.home', { merk: brand.name })}
+          onClick={() => onNavigate?.('vandaag')}
+        >
+          <Wordmark size={24} clearSpace={false} />
+        </button>
+
+        {showDestinations ? (
+          // From a tablet up. On a phone the same list is the tab bar at the
+          // foot of the page, and only one of the two is ever displayed.
+          <nav aria-label={t('nav.destinations')} className="tk-navbar hidden md:flex">
+            {destinationItems.map((destination) => (
+              <button
+                key={destination.id}
+                type="button"
+                aria-current={destination.id === current ? 'page' : undefined}
+                className="tk-navbar-item"
+                onClick={() => onNavigate?.(destination.id)}
+              >
+                {destination.label}
+              </button>
+            ))}
+          </nav>
+        ) : null}
+
         {bar}
       </header>
 
@@ -114,33 +127,41 @@ export function Shell({
           the tab order stay the order of the page. */}
       <div className="flex min-h-0 flex-1 flex-col-reverse xl:flex-row">
         {showRail ? (
-          <nav aria-label={t('nav.modules')} className="tk-rail flex-none">
-            {modules.map((module) => {
-              const ModuleIcon = MODULE_ICON[module.id];
+          <div className="tk-rail flex-none">
+            {/* Top left of the page, where the rail stands up and the design
+                puts the merkteken. It is the mark on its own and the wordmark
+                in the bar is two steps away, so it carries no second name for
+                a screen reader to read out twice. */}
+            <Brandmark className="tk-rail-brand" size={32} />
 
-              return (
-                <button
-                  key={module.id}
-                  type="button"
-                  data-module={module.id}
-                  aria-current={module.id === currentModule ? 'page' : undefined}
-                  className="tk-rail-item"
-                  onClick={() => onModule?.(module.id)}
-                >
-                  <ModuleIcon size={24} />
-                  {t(module.name)}
-                </button>
-              );
-            })}
-          </nav>
+            <nav aria-label={t('nav.modules')} className="tk-rail-nav">
+              {modules.map((module) => {
+                const ModuleIcon = MODULE_ICON[module.id];
+
+                return (
+                  <button
+                    key={module.id}
+                    type="button"
+                    data-module={module.id}
+                    aria-current={module.id === currentModule ? 'page' : undefined}
+                    className="tk-rail-item"
+                    onClick={() => onModule?.(module.id)}
+                  >
+                    <ModuleIcon size={24} />
+                    {t(module.name)}
+                  </button>
+                );
+              })}
+            </nav>
+          </div>
         ) : null}
 
         <main className="min-h-0 min-w-0 flex-1">{children}</main>
       </div>
 
-      {showTabs ? (
+      {showDestinations ? (
         <nav aria-label={t('nav.destinations')} className="tk-tabbar flex-none md:hidden">
-          {destinations.map((destination) => (
+          {destinationItems.map((destination) => (
             <button
               key={destination.id}
               type="button"
@@ -148,7 +169,7 @@ export function Shell({
               className="tk-tabbar-item"
               onClick={() => onNavigate?.(destination.id)}
             >
-              {t(destination.name)}
+              {destination.label}
             </button>
           ))}
         </nav>

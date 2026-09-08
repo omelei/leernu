@@ -288,7 +288,7 @@ export function useSumRound(setId: string, mode: SumMode) {
   const finish = useCallback(() => {
     if (phase === 'finished') return;
     setPhase('finished');
-    if (sessionId.current) void finishSession(sessionId.current, correctCount);
+    if (sessionId.current) void finishSession(sessionId.current, correctCount, answeredCount);
 
     void recordRoundFinished().then((change) => {
       setStreak(change);

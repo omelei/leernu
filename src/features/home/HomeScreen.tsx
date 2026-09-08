@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
+import type { ComponentType } from 'react';
 import {
   countMastered,
+  formatGrade,
+  grade,
   roundPreview,
   setRetention,
   type ItemState,
@@ -9,22 +12,31 @@ import {
 import { loadItemSets } from '@/content/loadSets';
 import { loadSumSets } from '@/content/loadSums';
 import { Dot } from '@/components/Dot';
-import { StampIcon } from '@/components/Icon';
+import { ProgressBar } from '@/components/ProgressBar';
+import { StampIcon, type IconProps } from '@/components/Icon';
 import { RAIL_MODULES, type Module } from '@/features/shell/modules';
+import { MODULE_ICON } from '@/features/shell/moduleIcons';
 import { t, type TranslationKey } from '@/i18n';
 import { TestDate } from './TestDate';
-import { loadItemStates } from '@/store/progress';
+import { useTestPlan } from './testPlan';
+import { loadItemStates, loadLastRound, type LastRound } from '@/store/progress';
 import { loadStamps } from '@/store/rewardStore';
 import { SET_IDS, type PracticeMode, type SetId } from '@/features/practice/useRound';
 
 /**
  * K1, the front door — which is also leer.nu itself.
  *
- * The screen argues for the product in the order it puts things. First what
- * today asks of you and why some of it is a repeat; then the date it is for;
- * then the one thing to carry on with; then everything else there is; and only
- * afterwards what you have kept and what you have earned. A score is nowhere
- * near the top, because this is not a scoreboard.
+ * Three areas, and the design gives a reason for each. The rail on the left is
+ * the whole product. The wide middle is today and the way into it. The column
+ * on the right is what has been kept — a forecast and a shelf of stamps,
+ * neither of which is an instruction, and neither of which should sit above
+ * the work.
+ *
+ * The screen argues for the product in the order it puts things. First the
+ * child's own name, because a front door greets you; then what today asks and
+ * why some of it is a repeat; then the test it is all for, with the one thing
+ * to carry on with inside that same block; and only then everything else there
+ * is to practise.
  *
  * What is deliberately not here. The five set cards moved to K2 — the design
  * gives the front door one thing to continue and a list of modules, and five
@@ -109,12 +121,44 @@ function laatstGeoefend(deel: Onderdeel, known: ReadonlyMap<string, ItemState>):
   return laatste;
 }
 
+/**
+ * What "verder" means.
+ *
+ * The subject of the test comes first, and that is the whole reason the test
+ * block asks for one. A child practising for Tuesday's topography test should
+ * not be offered last night's tables because those were touched more recently:
+ * the plan outranks the history.
+ *
+ * Within a subject, and with no subject set, it is the set touched most
+ * recently. Not a guess about what a child wants next — the honest answer to
+ * "where was I".
+ */
+function verderMet(
+  alles: readonly Onderdeel[],
+  known: ReadonlyMap<string, ItemState>,
+  subject: Module['id'] | null,
+): Onderdeel | null {
+  const binnenVak = subject === null ? alles : alles.filter((deel) => deel.moduleId === subject);
+  const lijst = binnenVak.length > 0 ? binnenVak : alles;
+
+  const laatste = lijst.reduce<{ deel: Onderdeel; at: string } | null>((best, deel) => {
+    const at = laatstGeoefend(deel, known);
+    if (at === null) return best;
+    return best === null || at > best.at ? { deel, at } : best;
+  }, null);
+
+  return laatste?.deel ?? lijst[0] ?? null;
+}
+
 export function HomeScreen({
+  naam,
   onStart,
   onStartSum,
   onChoose,
   onModule,
 }: {
+  /** Whose front door this is. K1 opens by saying so. */
+  readonly naam: string;
   readonly onStart: (setId: SetId, practiceMode: PracticeMode) => void;
   /** A table, typed, which is the shortest way into rekenen. */
   readonly onStartSum: (setId: string) => void;
@@ -128,6 +172,11 @@ export function HomeScreen({
 }) {
   const [states, setStates] = useState<Map<string, ItemState> | null>(null);
   const [stamps, setStamps] = useState<readonly string[]>([]);
+  // Three states, not two: `undefined` is "not read yet". A row that says
+  // "nog geen ronde gedaan" and then changes its mind a frame later is worse
+  // than a row that arrives a moment after the rest of the card.
+  const [lastRound, setLastRound] = useState<LastRound | null | undefined>(undefined);
+  const plan = useTestPlan();
 
   useEffect(() => {
     void loadItemStates().then(setStates);
@@ -139,60 +188,90 @@ export function HomeScreen({
   const inThreeWeeks = new Date(now.getTime() + THREE_WEEKS_DAYS * 86_400_000);
 
   const alles = onderdelen();
+  const verder = verderMet(alles, known, plan.subject);
 
-  // What "verder" means: the set touched most recently, or the first one when
-  // nothing has been. Not a guess about what a child wants next — the honest
-  // answer to "where was I".
-  const verder =
-    alles.reduce<{ deel: Onderdeel; at: string } | null>((best, deel) => {
-      const at = laatstGeoefend(deel, known);
-      if (at === null) return best;
-      return best === null || at > best.at ? { deel, at } : best;
-    }, null)?.deel ??
-    alles[0] ??
-    null;
+  // The previous round over this set, which is what the mark is about. Read
+  // once the set is known, and again when it changes — switching the subject
+  // of the test switches which round "vorige keer" refers to.
+  const verderSetId = verder?.setId ?? null;
+  useEffect(() => {
+    if (verderSetId === null) return;
+    const deel = onderdelen().find((kandidaat) => kandidaat.setId === verderSetId);
+    if (!deel) return;
+
+    // Back to unknown first. Changing the subject of the test changes which
+    // set this is about, and the previous set's mark must not stand under the
+    // new set's name even for a frame.
+    setLastRound(undefined);
+
+    let cancelled = false;
+    void loadLastRound(deel.items.map((item) => item.id)).then((round) => {
+      if (!cancelled) setLastRound(round);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [verderSetId]);
 
   const vooruitblik = verder
     ? roundPreview({ items: verder.items, states: known, size: verder.roundSize, now })
     : { total: 0, seen: 0 };
 
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-col gap-8 p-6">
-      {/* The sentence that argues for the whole product, and it does it by
-          admitting the part that looks like a mistake. A child who is handed a
-          question they have had before should be told that was on purpose. */}
-      <div>
-        <h1 className="tk-display text-h1 font-semibold">
-          {t('home.todayTitle', { aantal: vooruitblik.total })}
-        </h1>
-        <p className="mt-1 text-body text-ink-2">{repeatLine(vooruitblik.seen)}</p>
+    <div className="tk-home">
+      <div className="tk-home-top">
+        {/* The child's own name, and under it the sentence that argues for the
+            whole product by admitting the part that looks like a mistake: a
+            child handed a question they have had before should be told that
+            was on purpose. */}
+        <div>
+          <h1 className="tk-display text-h1 font-semibold">{t('home.welcome', { naam })}</h1>
+          <p className="mt-1 text-body text-ink-2">
+            {`${countLine(vooruitblik.total)} ${repeatLine(vooruitblik.seen)}`}
+          </p>
+        </div>
+
+        {/* The one block with a surface and a border: the test, the set it is
+            about, how the last round went, and the way in. One card because it
+            is one thought — this is why you are here, and this is the door. */}
+        {plan.loaded && verder ? (
+          <section
+            className="tk-card tk-card-accented flex flex-col gap-6"
+            data-module={verder.moduleId}
+          >
+            <TestDate plan={plan} now={now} />
+            <Verder
+              deel={verder}
+              known={known}
+              lastRound={lastRound}
+              onStart={onStart}
+              onStartSum={onStartSum}
+              onChoose={onChoose}
+            />
+          </section>
+        ) : null}
       </div>
 
-      {/* The test date takes the place K1 gives it: above the work, because it
-          is the reason the work is being done. */}
-      <TestDate />
+      {/* The right-hand column: what you have kept, and what you earned by
+          keeping it. Beside the work rather than under it, because neither of
+          them is something to do.
 
-      {verder ? (
-        <Verder
-          deel={verder}
-          known={known}
-          onStart={onStart}
-          onStartSum={onStartSum}
-          onChoose={onChoose}
-        />
-      ) : null}
+          "Samen met" belongs at the foot of this column. It is three friends,
+          and there are none until ADR-050's backend, so it is absent rather
+          than empty. */}
+      <aside className="tk-home-aside">
+        <Onthouden deel={verder} known={known} inThreeWeeks={inThreeWeeks} />
+        <Reisstempels stamps={stamps} />
+      </aside>
 
       <VerderOefenen known={known} verder={verder} onOpen={onModule} />
-
-      <Onthouden deel={verder} known={known} inThreeWeeks={inThreeWeeks} />
-
-      <Reisstempels stamps={stamps} />
-
-      {/* "Samen met" belongs here, between the stamps and the foot of the page.
-          It is three friends and there are none until ADR-050's backend, so it
-          is absent rather than empty. */}
     </div>
   );
+}
+
+function countLine(total: number): string {
+  return total === 1 ? t('home.todayCountOne') : t('home.todayCount', { aantal: total });
 }
 
 function repeatLine(seen: number): string {
@@ -202,21 +281,29 @@ function repeatLine(seen: number): string {
 }
 
 /**
- * The one thing to carry on with.
+ * The one thing to carry on with, and how the last attempt at it went.
  *
  * One primary button, which is K1's rule: the shortest way into a round is
  * pointing, and every other choice lives on K2 rather than as five more
  * buttons here.
+ *
+ * The bar and the mark beside it are the same fact twice — the round that has
+ * been, drawn and then named. They deliberately do not report retention. That
+ * is the forecast in the right-hand column, it is the number this product
+ * argues from, and putting the two on one line would make them look like one
+ * thing.
  */
 function Verder({
   deel,
   known,
+  lastRound,
   onStart,
   onStartSum,
   onChoose,
 }: {
   readonly deel: Onderdeel;
   readonly known: ReadonlyMap<string, ItemState>;
+  readonly lastRound: LastRound | null | undefined;
   readonly onStart: (setId: SetId, practiceMode: PracticeMode) => void;
   readonly onStartSum: (setId: string) => void;
   readonly onChoose: (moduleId: Module['id']) => void;
@@ -225,20 +312,42 @@ function Verder({
   const mastered = countMastered(known, ids);
   const rondes = Math.max(1, Math.ceil(ids.length / deel.roundSize));
   const moduleNaam = t(`module.${deel.moduleId}` as TranslationKey);
+  const cijfer = lastRound ? grade(lastRound.correct, lastRound.answered) : null;
 
   return (
-    <article className="tk-card" data-module={deel.moduleId}>
-      <h2 className="tk-display mb-1 text-h2 font-semibold">{naamVan(deel)}</h2>
-      <p className="text-ink-2">
-        {rondes === 1
-          ? t('home.setsOverOne', { onderdelen: ids.length })
-          : t('home.setsOver', { onderdelen: ids.length, rondes })}
-      </p>
-      <p className="mb-4 text-ink-2">
-        {mastered === 0
-          ? t('home.setNew')
-          : t('home.setMastered', { goed: mastered, totaal: ids.length })}
-      </p>
+    <div className="flex flex-col gap-4">
+      <div>
+        <h3 className="tk-display text-h3 font-semibold">{naamVan(deel)}</h3>
+        <p className="text-ink-2">
+          {rondes === 1
+            ? t('home.setsOverOne', { onderdelen: ids.length })
+            : t('home.setsOver', { onderdelen: ids.length, rondes })}
+        </p>
+        <p className="text-ink-2">
+          {mastered === 0
+            ? t('home.setNew')
+            : t('home.setMastered', { goed: mastered, totaal: ids.length })}
+        </p>
+      </div>
+
+      {lastRound === undefined ? null : cijfer !== null && lastRound !== null ? (
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <ProgressBar
+            className="min-w-[8rem] flex-1"
+            value={lastRound.correct / lastRound.answered}
+            showDot={false}
+            label={t('home.lastGradeBar', {
+              goed: lastRound.correct,
+              totaal: lastRound.answered,
+            })}
+          />
+          <p className="font-semibold tabular-nums">
+            {t('home.lastGrade', { cijfer: formatGrade(cijfer) })}
+          </p>
+        </div>
+      ) : (
+        <p className="text-ink-2">{t('home.lastGradeNone')}</p>
+      )}
 
       <div className="flex flex-wrap gap-3">
         {/* One primary way in per module: pointing on a map, typing a sum. Both
@@ -262,16 +371,18 @@ function Verder({
           {t('home.moreWays')}
         </button>
       </div>
-    </article>
+    </div>
   );
 }
 
 /**
- * Everything else there is, one row per module.
+ * Everything else there is, as tiles across the foot of the page.
  *
- * All five, not only the two that are built (ADR-051). A child who can see that
- * clocks and flags are coming is reading a plan; a rail and a list that show
- * only what is finished make the product look like it stops here.
+ * All five, not only the two that are built (ADR-051). A child who can see
+ * that clocks and flags are coming is reading a plan; a rail and a list that
+ * show only what is finished make the product look like it stops here — and a
+ * module that does not exist yet says so on its own face rather than opening
+ * onto nothing.
  */
 function VerderOefenen({
   known,
@@ -285,38 +396,62 @@ function VerderOefenen({
   const alles = onderdelen();
 
   return (
-    <section className="flex flex-col gap-3" aria-label={t('home.practiceMore')}>
+    <section className="tk-home-more" aria-label={t('home.practiceMore')}>
       <h2 className="tk-label">{t('home.practiceMore')}</h2>
 
-      {RAIL_MODULES.filter((module) => module.id !== verder?.moduleId).map((module) => {
-        const ids = alles
-          .filter((deel) => deel.moduleId === module.id)
-          .flatMap((deel) => deel.items.map((item) => item.id));
-        const mastered = countMastered(known, ids);
-        const started = ids.some((id) => known.get(id)?.laatsteReview != null);
+      <div className="tk-tiles">
+        {RAIL_MODULES.filter((module) => module.id !== verder?.moduleId).map((module) => {
+          const ids = alles
+            .filter((deel) => deel.moduleId === module.id)
+            .flatMap((deel) => deel.items.map((item) => item.id));
+          const mastered = countMastered(known, ids);
+          const started = ids.some((id) => known.get(id)?.laatsteReview != null);
+          const ModuleIcon: ComponentType<Omit<IconProps, 'children'>> = MODULE_ICON[module.id];
 
-        return (
-          <button
-            key={module.id}
-            type="button"
-            data-module={module.id}
-            className="tk-module-card w-full"
-            onClick={() => onOpen?.(module.id)}
-          >
-            <Dot size={24} fill={ids.length === 0 ? 0 : mastered / ids.length} />
-            <span className="min-w-0">
-              <span className="block font-semibold">{t(module.name)}</span>
-              <span className="block text-ink-2">
+          return (
+            <button
+              key={module.id}
+              type="button"
+              data-module={module.id}
+              data-soon={module.built ? undefined : 'ja'}
+              className="tk-tile"
+              onClick={() => onOpen?.(module.id)}
+            >
+              <span className="tk-tile-head">
+                <ModuleIcon size={24} />
+                <span className="tk-display text-h3 font-semibold">{t(module.name)}</span>
+              </span>
+
+              {/* A bar only where there is something to fill it. An empty rail
+                  under a module that does not exist reads as nought percent
+                  rather than as not yet.
+
+                  Hidden from the accessibility tree, because the line under it
+                  says the same thing in words and the whole tile is one button:
+                  without this the bar's own name is folded into the button's,
+                  and a screen reader reads "Rekenen, 8 van de 12 onthoud je, 8
+                  van de 12 onthoud je". */}
+              {module.built ? (
+                <span aria-hidden="true">
+                  <ProgressBar
+                    value={ids.length === 0 ? 0 : mastered / ids.length}
+                    showDot={false}
+                    label={t('home.setMastered', { goed: mastered, totaal: ids.length })}
+                  />
+                </span>
+              ) : null}
+
+              <span className="text-ink-2">
                 {!module.built
                   ? t('soon.subtitle')
                   : started
                     ? t('home.setMastered', { goed: mastered, totaal: ids.length })
                     : t('home.setNew')}
               </span>
-            </span>
-          </button>
-        );
-      })}
+            </button>
+          );
+        })}
+      </div>
     </section>
   );
 }
@@ -326,7 +461,8 @@ function VerderOefenen({
  *
  * It is what a child will still know in three weeks, not what they got right
  * today — and the sentence under it says so, because the two are easy to
- * confuse and only one of them is worth practising for.
+ * confuse and only one of them is worth practising for. It sits in the right
+ * column, away from the mark on the card, so that neither is read as the other.
  */
 function Onthouden({
   deel,
@@ -343,15 +479,15 @@ function Onthouden({
   const moduleNaam = deel ? t(`module.${deel.moduleId}` as TranslationKey) : '';
 
   return (
-    <section className="flex flex-col gap-2" aria-label={t('home.rememberTitle')}>
+    <section className="tk-card flex flex-col gap-3" aria-label={t('home.rememberTitle')}>
       <h2 className="tk-label">{t('home.rememberTitle')}</h2>
 
       {started ? (
         <>
           <div className="flex items-center gap-4">
-            <Dot size={40} fill={procent / 100} />
+            <Dot size={72} fill={procent / 100} />
             <div className="min-w-0">
-              <p className="tk-display text-h1 font-bold tabular-nums">{`${procent}%`}</p>
+              <p className="tk-display text-score font-bold tabular-nums">{`${procent}%`}</p>
               <p className="text-ink-2">{t('home.rememberOf', { module: moduleNaam })}</p>
             </div>
           </div>
@@ -371,7 +507,7 @@ function Reisstempels({ stamps }: { readonly stamps: readonly string[] }) {
   const namen = stamps.map((id) => t(`stamp.${id}` as TranslationKey));
 
   return (
-    <section className="flex flex-col gap-2" aria-label={t('home.stampsTitle')}>
+    <section className="tk-card flex flex-col gap-3" aria-label={t('home.stampsTitle')}>
       <h2 className="tk-label">{t('home.stampsTitle')}</h2>
 
       {namen.length === 0 ? (
