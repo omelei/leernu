@@ -102,12 +102,19 @@ function laatstGeoefend(deel: Onderdeel, known: ReadonlyMap<string, ItemState>):
 
 export function HomeScreen({
   onStart,
+  onStartSum,
   onChoose,
   onModule,
 }: {
   readonly onStart: (setId: SetId, practiceMode: PracticeMode) => void;
-  /** Every other way of practising, which is K2's job. */
-  readonly onChoose: () => void;
+  /** A table, typed, which is the shortest way into rekenen. */
+  readonly onStartSum: (setId: string) => void;
+  /**
+   * Every other way of practising, which is K2's job — and K2 belongs to a
+   * module, so this carries which one. Sending a child who was doing tables to
+   * the topography chooser is the bug this parameter exists to make impossible.
+   */
+  readonly onChoose: (moduleId: Module['id']) => void;
   readonly onModule?: ((id: Module['id']) => void) | undefined;
 }) {
   const [states, setStates] = useState<Map<string, ItemState> | null>(null);
@@ -156,7 +163,15 @@ export function HomeScreen({
           is the reason the work is being done. */}
       <TestDate />
 
-      {verder ? <Verder deel={verder} known={known} onStart={onStart} onChoose={onChoose} /> : null}
+      {verder ? (
+        <Verder
+          deel={verder}
+          known={known}
+          onStart={onStart}
+          onStartSum={onStartSum}
+          onChoose={onChoose}
+        />
+      ) : null}
 
       <VerderOefenen known={known} verder={verder} onOpen={onModule} />
 
@@ -188,12 +203,14 @@ function Verder({
   deel,
   known,
   onStart,
+  onStartSum,
   onChoose,
 }: {
   readonly deel: Onderdeel;
   readonly known: ReadonlyMap<string, ItemState>;
   readonly onStart: (setId: SetId, practiceMode: PracticeMode) => void;
-  readonly onChoose: () => void;
+  readonly onStartSum: (setId: string) => void;
+  readonly onChoose: (moduleId: Module['id']) => void;
 }) {
   const ids = deel.items.map((item) => item.id);
   const mastered = countMastered(known, ids);
@@ -211,16 +228,24 @@ function Verder({
       </p>
 
       <div className="flex flex-wrap gap-3">
-        {deel.moduleId === 'topo' ? (
-          <button
-            type="button"
-            className="tk-button"
-            onClick={() => onStart(deel.setId as SetId, 'wijs-aan')}
-          >
-            {t('home.continueWith', { module: moduleNaam })}
-          </button>
-        ) : null}
-        <button type="button" className="tk-button tk-button-secondary" onClick={onChoose}>
+        {/* One primary way in per module: pointing on a map, typing a sum. Both
+            are the way that module starts, and both are one press away. */}
+        <button
+          type="button"
+          className="tk-button"
+          onClick={() =>
+            deel.moduleId === 'topo'
+              ? onStart(deel.setId as SetId, 'wijs-aan')
+              : onStartSum(deel.setId)
+          }
+        >
+          {t('home.continueWith', { module: moduleNaam })}
+        </button>
+        <button
+          type="button"
+          className="tk-button tk-button-secondary"
+          onClick={() => onChoose(deel.moduleId)}
+        >
           {t('home.moreWays')}
         </button>
       </div>

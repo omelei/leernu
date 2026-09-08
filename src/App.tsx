@@ -226,7 +226,11 @@ export default function App() {
           setVisit(visit + 1);
           setScreen({ name: 'practice', setId, practiceMode });
         }}
-        onChoose={() => go({ name: 'module', module: MODULES[0]! })}
+        onStartSum={(setId) => {
+          setVisit(visit + 1);
+          setScreen({ name: 'sums', setId, sumMode: 'som-typen' });
+        }}
+        onChoose={goModule}
         onModule={goModule}
       />
     </Shell>

@@ -123,7 +123,10 @@ test('keeps the wordmark and the question legible at 200% text', async ({ page }
   await signIn(page, 'Fatima');
   await page.addStyleTag({ content: 'html { font-size: 32px !important; }' });
 
-  const heading = page.getByRole('banner').getByRole('button', { name: 'Fatima' });
+  // The heading of the page, not the name in the app bar: what this is checking
+  // is that the type scale moves with the root size, and only a heading is set
+  // on the scale. A label in a pill would pass this by staying small.
+  const heading = page.getByRole('heading', { name: /Vandaag oefen je/ });
   await expect(heading).toBeVisible();
 
   // Grown, not merely still there.

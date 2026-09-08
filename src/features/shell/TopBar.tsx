@@ -30,18 +30,25 @@ export function TopBar({
   }, []);
 
   return (
-    <div className="ml-auto flex items-center gap-4">
-      <StreakLabel state={streak} />
+    <div className="ml-auto flex min-w-0 items-center gap-4">
+      {/* Not on a phone. The app bar there is a wordmark and a name across 393,
+          and K1's own mobile frame does not carry the streak either — it is
+          context for the work, and the tab bar already costs the width. */}
+      <span className="hidden md:inline">
+        <StreakLabel state={streak} />
+      </span>
 
       {/* The profile switch. It is the way to a sibling's turn (ADR-046), so it
           is a control and not a label — and it says the name rather than only
           drawing an initial, because a child who cannot yet read a monogram can
           read their own name. */}
-      <button type="button" className="tk-pill" onClick={onProfile}>
+      <button type="button" className="tk-pill min-w-0" onClick={onProfile}>
         <span aria-hidden="true" className="tk-avatar">
           {profile.naam.slice(0, 1).toLocaleUpperCase('nl-NL')}
         </span>
-        {profile.naam}
+        {/* A name a child chose themselves can be long. It shortens rather than
+            pushing the bar off the side of a 393 screen. */}
+        <span className="truncate">{profile.naam}</span>
       </button>
     </div>
   );

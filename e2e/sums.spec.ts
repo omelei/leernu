@@ -74,7 +74,7 @@ test('rekenen is the word a parent looks for, and it leads to the tables', async
   //
   // Tafels sits under rekenen; klokkijken does not (ADR-044).
   const lijst = page.getByRole('list');
-  await lijst.getByRole('button', { name: /Tafels/ }).click();
+  await lijst.getByRole('button', { name: /Rekenen/ }).click();
   await expect(page.getByRole('heading', { name: 'Welke tafel?' })).toBeVisible();
 });
 

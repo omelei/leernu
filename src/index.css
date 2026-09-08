@@ -937,7 +937,10 @@
     align-items: center;
     gap: 16px;
     height: 64px;
-    padding: 0 24px;
+    /* 16 on a phone, which is the margin §D gives that size, and the twelve
+       pixels it saves are the difference between a name that fits and a bar
+       that runs off the side. */
+    padding: 0 16px;
     background: var(--paper);
     border-bottom: var(--stroke-hair) solid var(--line);
   }
@@ -1051,6 +1054,9 @@
     border-bottom: var(--stroke-hair) solid var(--line);
   }
   @media (min-width: 768px) {
+    .tk-appbar {
+      padding: 0 24px;
+    }
     .tk-round-bar {
       gap: 20px;
       padding: 0 48px;
