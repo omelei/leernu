@@ -3,7 +3,7 @@ import type { ComponentType } from 'react';
 import { Dot } from '@/components/Dot';
 import type { IconProps } from '@/components/Icon';
 import { ProgressBar } from '@/components/ProgressBar';
-import { DEFAULT_STICKER, nextSticker, unlockedStickers } from '@/components/stickerSet';
+import { nextSticker, stickerById, STICKERS, unlockedStickers } from '@/components/stickerSet';
 import { correctToNextLevel, levelFor, levelProgress, type ModeId } from '@/game-core';
 import { MODULE_ICON } from '@/features/shell/moduleIcons';
 import { t, type TranslationKey } from '@/i18n';
@@ -43,8 +43,11 @@ import {
  * none until ADR-050's backend, so it is absent rather than empty.
  */
 export function SideColumn({
+  sticker,
   onBegin,
 }: {
+  /** Which animal this child chose, so the journey shows theirs. */
+  readonly sticker: string | undefined;
   readonly onBegin: (deel: Onderdeel, mode: ModeId) => void;
 }) {
   const [accuracy, setAccuracy] = useState<Accuracy | null>(null);
@@ -59,7 +62,7 @@ export function SideColumn({
 
   return (
     <aside className="tk-home-aside">
-      <Reis xp={xp} />
+      <Reis xp={xp} sticker={sticker} />
       <Goed accuracy={accuracy} />
       <Favorieten gespeeld={gespeeld} onBegin={onBegin} />
     </aside>
@@ -84,16 +87,23 @@ export function SideColumn({
  * moves by waiting, and a card that mentioned time would be inviting a child
  * to come back for the coming back rather than for the work.
  */
-function Reis({ xp }: { readonly xp: number | null }) {
+function Reis({
+  xp,
+  sticker,
+}: {
+  readonly xp: number | null;
+  readonly sticker: string | undefined;
+}) {
   // Nothing until it is known. A card that says level one and then changes its
   // mind has told a child something about themselves that was not true.
   if (xp === null) return null;
 
   const level = levelFor(xp);
+  // Theirs, not the newest one the ladder handed out. Three arrive at level one
+  // and a child picks between them; drawing whichever the list happens to end
+  // on would be this card telling them they are somebody else.
+  const nu = stickerById(sticker);
   const behaald = unlockedStickers(level);
-  // The latest one reached, which past the twelfth stays the twelfth. A ladder
-  // that ran out and left a child with nobody would be worse than one that ends.
-  const nu = behaald[behaald.length - 1] ?? DEFAULT_STICKER;
   const volgende = nextSticker(level);
   const teGaan = correctToNextLevel(xp);
   const Nu = nu.draw;
@@ -112,7 +122,9 @@ function Reis({ xp }: { readonly xp: number | null }) {
           <p className="tk-display text-score font-bold tabular-nums">
             {t('home.journeyLevel', { niveau: level })}
           </p>
-          <p className="text-ink-2">{t(nu.name)}</p>
+          <p className="text-ink-2">
+            {t('home.journeyHave', { aantal: behaald.length, totaal: STICKERS.length })}
+          </p>
         </div>
       </div>
 

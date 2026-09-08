@@ -198,7 +198,9 @@ export default function App() {
   }
 
   /** The child's own column, which every screen inside the shell carries. */
-  const eigenKolom = <SideColumn onBegin={beginRonde} />;
+  const eigenKolom = (
+    <SideColumn sticker={boot.profile.avatarConfig.sticker} onBegin={beginRonde} />
+  );
 
   // A word a parent looks for, holding more than one module. Unreachable while
   // rekenen is the only category and the tables are the whole of it — that
@@ -264,6 +266,7 @@ export default function App() {
     <Shell bar={bar} current="vandaag" onNavigate={goTo} onModule={goModule}>
       <HomeScreen
         naam={boot.profile.naam}
+        sticker={boot.profile.avatarConfig.sticker}
         onStart={(setId, practiceMode) => {
           setVisit(visit + 1);
           setScreen({ name: 'practice', setId, practiceMode });

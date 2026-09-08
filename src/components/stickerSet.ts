@@ -37,7 +37,13 @@ export interface Sticker {
 }
 
 /**
- * In the order they arrive, one per level.
+ * In the order they arrive: three from the first minute, then one per level.
+ *
+ * **Three at level one, not one.** ADR-059's real point was that a child who
+ * cannot change anything about an app they are told to use can at least decide
+ * what it looks like, and a ladder that starts with a single animal takes that
+ * away for the fifteen correct answers it costs to reach the second. Three is a
+ * choice; one is a default.
  *
  * This reverses ADR-059, which had all six unlocked from the first day on the
  * argument that a sticker is a choice and not a scoreboard. That argument was
@@ -55,17 +61,17 @@ export interface Sticker {
  */
 export const STICKERS: readonly Sticker[] = [
   { id: 'kat', name: 'sticker.kat', level: 1, draw: CatSticker },
-  { id: 'uil', name: 'sticker.uil', level: 2, draw: OwlSticker },
-  { id: 'vos', name: 'sticker.vos', level: 3, draw: FoxSticker },
-  { id: 'beer', name: 'sticker.beer', level: 4, draw: BearSticker },
-  { id: 'haas', name: 'sticker.haas', level: 5, draw: HareSticker },
-  { id: 'vis', name: 'sticker.vis', level: 6, draw: FishSticker },
-  { id: 'egel', name: 'sticker.egel', level: 7, draw: HedgehogSticker },
-  { id: 'kikker', name: 'sticker.kikker', level: 8, draw: FrogSticker },
-  { id: 'eekhoorn', name: 'sticker.eekhoorn', level: 9, draw: SquirrelSticker },
-  { id: 'pinguin', name: 'sticker.pinguin', level: 10, draw: PenguinSticker },
-  { id: 'olifant', name: 'sticker.olifant', level: 11, draw: ElephantSticker },
-  { id: 'draak', name: 'sticker.draak', level: 12, draw: DragonSticker },
+  { id: 'uil', name: 'sticker.uil', level: 1, draw: OwlSticker },
+  { id: 'vos', name: 'sticker.vos', level: 1, draw: FoxSticker },
+  { id: 'beer', name: 'sticker.beer', level: 2, draw: BearSticker },
+  { id: 'haas', name: 'sticker.haas', level: 3, draw: HareSticker },
+  { id: 'vis', name: 'sticker.vis', level: 4, draw: FishSticker },
+  { id: 'egel', name: 'sticker.egel', level: 5, draw: HedgehogSticker },
+  { id: 'kikker', name: 'sticker.kikker', level: 6, draw: FrogSticker },
+  { id: 'eekhoorn', name: 'sticker.eekhoorn', level: 7, draw: SquirrelSticker },
+  { id: 'pinguin', name: 'sticker.pinguin', level: 8, draw: PenguinSticker },
+  { id: 'olifant', name: 'sticker.olifant', level: 9, draw: ElephantSticker },
+  { id: 'draak', name: 'sticker.draak', level: 10, draw: DragonSticker },
 ];
 
 /** The first one, which is what a child who has never chosen is shown. */

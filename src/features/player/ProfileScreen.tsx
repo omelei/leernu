@@ -1,7 +1,7 @@
 import { useEffect, useState, type FormEvent, type ReactNode } from 'react';
 import { t } from '@/i18n';
 import { FamilyIcon, PupilIcon } from '@/components/Icon';
-import { STICKERS, stickerById } from '@/components/stickerSet';
+import { STICKERS, stickerById, unlockedStickers } from '@/components/stickerSet';
 import { levelFor } from '@/game-core';
 import { createChild, listChildren, switchChild } from '@/store/children';
 import type { ProfileRecord } from '@/store/db';
@@ -132,7 +132,7 @@ function Dieren({
       <h2 className="tk-label">{t('you.animals')}</h2>
       <p className="text-ink-2">
         {t('you.animalsHave', {
-          aantal: Math.min(level, STICKERS.length),
+          aantal: unlockedStickers(level).length,
           totaal: STICKERS.length,
         })}
       </p>

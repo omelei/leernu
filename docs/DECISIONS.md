@@ -2833,10 +2833,17 @@ play: something to work towards that you can see coming.
 
 ### Decision
 
-**Twelve animals, one per level.** Six more drawn on §E's frame, the twelfth a
-dragon — the last rung should look like the last rung. The card in the column
-shows the one reached, the bar, and the next one as a faded silhouette with the
-count of correct answers to it.
+**Twelve animals: three from the first minute, then one per level.** Six more
+drawn on §E's frame, the last a dragon — the last rung should look like the last
+rung. The card in the column shows the animal the child chose, the bar, and the
+next one to arrive as a faded silhouette with the count of correct answers to
+it.
+
+Three at level one rather than one, and that is ADR-059's real point surviving
+the reversal: a child who cannot change anything about an app they are told to
+use can at least decide what it looks like. A ladder starting with a single
+animal takes that away for the fifteen correct answers it costs to reach the
+second. Three is a choice; one is a default.
 
 Three conditions this is not allowed to break, and they are the reason the
 reversal is affordable:
@@ -2883,6 +2890,54 @@ What the app bar was doing was reading the current address back to a child who
 had arrived by pressing something, in a spelling nobody says out loud, in the
 strip of the screen where width is worth the most. The rail says which module
 you are in and so does the heading. A page does not need to say it a third time.
+
+---
+
+## ADR-069 — The map file a round asks for is the file that has to exist
+
+**Status:** accepted — 2026-09-08.
+
+### Context
+
+Practising the Waddeneilanden answered with "de kaart kon niet geladen worden".
+It had done so since the islands shipped, on production, and nothing in this
+repository noticed.
+
+The cause is two spellings of one filename. `build-islands.mjs` wrote
+`public/geo/nl/waddeneilanden.json`. `SETS['nl-waddeneilanden']` asks
+`loadGeoSet('waddeneilanden', 'detail')`, and `geoUrl` composes
+`waddeneilanden.detail.json` — the scheme every other shape file follows. The
+app fetched a file that was not there and got a 404.
+
+Both halves were tested. `content.test.ts` read the geometry and checked that
+every island resolves to a shape, that every touch target is big enough, that
+the projection matches the provinces — all of it opening the file **by the name
+the builder uses**. The e2e suite starts real rounds and would have caught it in
+a second, and it starts rounds of the provinces, the capitals, the waters and
+the cities. Four sets out of five.
+
+So the failure sat exactly in the gap: every test passed, and the one thing
+neither side checked was that the two names were the same name. It surfaced only
+because the Topomix (ADR-063) loads every layer at once, and a round that used
+to be four sets became five.
+
+### Decision
+
+The builder writes `waddeneilanden.detail.json`, which is what the rest of the
+geometry is called and what the app has always asked for.
+
+And a test that compares the two sides rather than each of them: for every set
+in `SETS`, resolve the URL the round will fetch and assert the file is on disk.
+It is four lines and it is the only check in the content gate written from the
+app's point of view rather than from the content's.
+
+### Consequences
+
+The lesson is not "add a test for the islands". It is that a name composed on
+one side and written on the other needs one assertion that crosses the gap,
+however well each side is covered on its own. Every future set is checked by
+this the moment it is added to `SETS`, which is the only place a set can be
+added.
 
 ---
 

@@ -159,7 +159,12 @@ const payload = {
   vormen,
 };
 
-const path = join(OUT_DIR, 'waddeneilanden.json');
+// The detail level goes in the filename, the way every other shape file spells
+// it. It did not, and nothing noticed for a release: the app asks `loadGeoSet`
+// for `waddeneilanden.detail`, the content test read `waddeneilanden.json`, and
+// the two names never met — so practising the islands answered with "de kaart
+// kon niet geladen worden" and no test went near it (ADR-069).
+const path = join(OUT_DIR, 'waddeneilanden.detail.json');
 writeFileSync(path, JSON.stringify(payload));
 
 console.log(

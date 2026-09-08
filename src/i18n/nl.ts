@@ -64,6 +64,7 @@ export const nl = {
   // hier niets.
   'home.journeyTitle': 'Jouw ontdekkingsreis',
   'home.journeyLevel': 'Niveau {niveau}',
+  'home.journeyHave': '{aantal} van de {totaal} dieren',
   'home.journeyBar': 'Op weg naar niveau {niveau}',
   'home.journeyToGo': 'Nog {aantal} goede antwoorden tot niveau {niveau}.',
   'home.journeyOneToGo': 'Nog één goed antwoord tot niveau {niveau}.',

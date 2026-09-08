@@ -82,9 +82,9 @@ the frame, not only here: the journey first, then everything answered correctly
 so far, then the exercises they keep going back to. The journey is the level a
 child has reached and one line saying what the next one costs, in the only unit
 that means anything to them: "nog 6 goede antwoorden"
-([ADR-065](docs/DECISIONS.md)). Each level brings one of twelve animals, and
-choosing between the ones reached happens on **Jij**
-([ADR-067](docs/DECISIONS.md)). Nothing on that ladder can be bought, won by
+([ADR-065](docs/DECISIONS.md)). Three of twelve animals are there from the first
+minute and the other nine arrive a level at a time; choosing between the ones
+reached happens on **Jij** ([ADR-067](docs/DECISIONS.md)). Nothing on that ladder can be bought, won by
 chance or reached by waiting.
 
 The forecast — "69%, weet je hier over drie weken nog van" — is the number the

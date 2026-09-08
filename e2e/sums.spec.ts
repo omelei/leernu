@@ -30,7 +30,9 @@ async function startTable(page: Page, tafel: number, hoe: RegExp) {
   // Step 1 is five subjects now, and the tables are one of them. Which table is
   // the second, smaller question underneath — a chip whose visible label is the
   // number and whose accessible name is the whole thing (ADR-062).
-  await wat.getByRole('button', { name: 'Tafels', exact: true }).click();
+  // Anchored rather than exact: a subject card's accessible name is everything
+  // on it — the name, how it is going, and the line saying what is in it.
+  await wat.getByRole('button', { name: /^Tafels/ }).click();
   await wat.getByRole('button', { name: `Tafel van ${tafel}`, exact: true }).click();
   await hoeStap.getByRole('button', { name: hoe }).click();
   await start(page);
@@ -123,7 +125,7 @@ test('a set has an address, and the page opens on it', async ({ page }) => {
   );
   // And the subject the chip sits under is open, so the page shows the chips at
   // all rather than opening on the first subject and hiding the one asked for.
-  await expect(wat.getByRole('button', { name: 'Tafels', exact: true })).toHaveAttribute(
+  await expect(wat.getByRole('button', { name: /^Tafels/ })).toHaveAttribute(
     'aria-pressed',
     'true',
   );
@@ -253,7 +255,7 @@ test('rekenen offers five subjects, and never more than six', async ({ page }) =
   const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
 
   for (const naam of ['Tafels', 'Deelsommen', 'Plussommen', 'Minsommen', 'Rekenmix']) {
-    await expect(wat.getByRole('button', { name: naam, exact: true })).toBeVisible();
+    await expect(wat.getByRole('button', { name: new RegExp(`^${naam}`) })).toBeVisible();
   }
 
   // Six is the ceiling a section may hold (ADR-061, ADR-062). The chips are
@@ -269,17 +271,17 @@ test('a subject with many sets asks which, instead of showing all of them', asyn
 
   // Twelve tables and "alle tafels", as chips under the card. Twelve cards is
   // the page this replaced, and it pushed step 2 off the screen.
-  await wat.getByRole('button', { name: 'Tafels', exact: true }).click();
+  await wat.getByRole('button', { name: /^Tafels/ }).click();
   await expect(page.locator('.tk-variant-chip')).toHaveCount(13);
 
   // Plus has three ranges, and they are offered smallest first. Sorted as
   // numbers: "1000" falls between "100" and "20" in every alphabet there is.
-  await wat.getByRole('button', { name: 'Plussommen', exact: true }).click();
+  await wat.getByRole('button', { name: /^Plussommen/ }).click();
   await expect(page.locator('.tk-variant-chip')).toHaveCount(3);
   await expect(page.locator('.tk-variant-chip')).toHaveText(['tot 20', 'tot 100', 'tot 1000']);
 
   // The mix is one thing, so there is nothing to ask.
-  await wat.getByRole('button', { name: 'Rekenmix', exact: true }).click();
+  await wat.getByRole('button', { name: /^Rekenmix/ }).click();
   await expect(page.locator('.tk-variant-chip')).toHaveCount(0);
 });
 

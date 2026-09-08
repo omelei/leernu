@@ -205,7 +205,7 @@ test('the animal a child picks is theirs, and follows them', async ({ page }) =>
 
   // Level one, so the dragon is not hidden — it is there, greyed, saying what
   // it costs. A collection with an invisible end is a mystery, not a ladder.
-  const draak = dieren.getByRole('button', { name: /Draak, vanaf niveau 12/ });
+  const draak = dieren.getByRole('button', { name: /Draak, vanaf niveau \d+/ });
   await expect(draak).toBeDisabled();
 
   // It belongs to the child, not to the page: it survives a reload.

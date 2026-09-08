@@ -93,6 +93,8 @@ function verderMet(
 export interface HomeScreenProps {
   /** Whose front door this is. K1 opens by saying so. */
   readonly naam: string;
+  /** Which animal they chose. This screen only passes it on to their column. */
+  readonly sticker: string | undefined;
   readonly onStart: (setId: SetId, practiceMode: PracticeMode) => void;
   /** A table, in a chosen way. */
   readonly onStartSum: (setId: string, sumMode: SumMode) => void;
@@ -168,7 +170,7 @@ export function HomeScreen({ naam, onStart, onStartSum, onChoose, onModule }: Ho
         ) : null}
       </div>
 
-      <SideColumn onBegin={begin} />
+      <SideColumn sticker={sticker} onBegin={begin} />
 
       <div className="tk-home-more">
         <Recent gespeeld={gespeeld} onBegin={begin} />
