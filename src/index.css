@@ -584,6 +584,33 @@
     opacity: 0.35;
   }
 
+  /* ---- K2's start button -------------------------------------------------
+   * On a phone it becomes a bar at the bottom, which the design gives a reason
+   * for: "de enige plek waar hij binnen duimbereik blijft zonder te scrollen".
+   * Five sets and four ways is more than one screenful, and a start button
+   * below all of it is a start button nobody reaches without hunting.
+   *
+   * Sticky and not fixed, so it comes to rest at the end of the list rather
+   * than sitting on top of the tab bar. The negative margins take it to the
+   * edges of a page that is padded 24, so it reads as a bar rather than as a
+   * button that happens to be low down.
+   */
+  @media (max-width: 767px) {
+    .tk-choose-start {
+      position: sticky;
+      bottom: 0;
+      z-index: 2;
+      margin: 0 -24px -24px;
+      padding: 16px 24px;
+      background: var(--paper);
+      border-top: var(--stroke-hair) solid var(--line);
+    }
+    .tk-choose-start > .tk-button {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
   /* ---- The sum ----------------------------------------------------------
    * What the map is on the other round screen: the thing being asked about,
    * given the whole stage. A child reads this from across a kitchen table, so

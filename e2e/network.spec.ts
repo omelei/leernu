@@ -44,7 +44,7 @@ test('never asks a third party for anything', async ({ page, baseURL }) => {
   await page
     .getByRole('article')
     .filter({ hasText: 'Provincies van Nederland' })
-    .getByRole('button', { name: 'Wijs aan' })
+    .getByRole('button', { name: 'Aanwijzen' })
     .click();
   await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
 

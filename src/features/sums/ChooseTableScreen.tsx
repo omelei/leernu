@@ -4,7 +4,8 @@ import { Dot } from '@/components/Dot';
 import { countMastered, isDue, type ItemState } from '@/game-core';
 import { loadSumSets } from '@/content/loadSums';
 import { loadItemStates } from '@/store/progress';
-import { SUM_CHALLENGE_MODES, SUM_MODES, type SumMode } from './useSumRound';
+import { SUM_CHALLENGE_MODES, SUM_MODES, SUM_ROUND_RULE, type SumMode } from './useSumRound';
+import { challengeLabel } from '@/features/round/challengeLabel';
 import { usePreferences } from '@/features/player/settings';
 
 /**
@@ -134,20 +135,27 @@ export function ChooseTableScreen({
                 className="tk-chip"
                 onClick={() => onStart(setId, kind)}
               >
-                {t(MODE_NAME[kind])}
+                {challengeLabel(MODE_NAME[kind], SUM_ROUND_RULE[kind])}
               </button>
             ),
           )}
         </div>
       </section>
 
-      <button type="button" className="tk-button self-start" onClick={() => onStart(setId, mode)}>
-        {t('sums.start', {
-          tafel: chosen?.tafel ?? 1,
-          hoe: t(MODE_NAME[mode]).toLocaleLowerCase('nl-NL'),
-          aantal: chosen?.items.length ?? 0,
-        })}
-      </button>
+      {/* A bar on a phone, a button everywhere else — see .tk-choose-start. */}
+      <div className="tk-choose-start flex md:contents">
+        <button
+          type="button"
+          className="tk-button md:self-start"
+          onClick={() => onStart(setId, mode)}
+        >
+          {t('sums.start', {
+            tafel: chosen?.tafel ?? 1,
+            hoe: t(MODE_NAME[mode]).toLocaleLowerCase('nl-NL'),
+            aantal: chosen?.items.length ?? 0,
+          })}
+        </button>
+      </div>
     </div>
   );
 }

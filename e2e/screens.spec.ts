@@ -75,7 +75,7 @@ test('the round: pointing, and the answer', async ({ page }, testInfo) => {
   await page
     .getByRole('article')
     .filter({ hasText: 'Provincies van Nederland' })
-    .getByRole('button', { name: 'Wijs aan' })
+    .getByRole('button', { name: 'Aanwijzen' })
     .click();
 
   await expect(page.getByRole('button', { name: 'Limburg' })).toBeVisible(READY);

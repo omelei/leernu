@@ -449,7 +449,7 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
     ],
   );
 
-  /** "Wijs aan": the child pointed at a shape or a city. */
+  /** "Aanwijzen": the child pointed at a shape or a city. */
   const pick = useCallback(
     (answerId: string) => {
       if (!question) return;

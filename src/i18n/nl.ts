@@ -95,11 +95,15 @@ export const nl = {
   'set.nl-steden': 'Steden van Nederland',
 
   // Modes
-  'mode.wijs-aan': 'Wijs aan',
+  'mode.wijs-aan': 'Aanwijzen',
   'mode.hoe-heet-dit': 'Typ de naam',
-  'mode.ontdekken': 'Ontdek',
+  'mode.ontdekken': 'Ontdekken',
   'mode.bliksemronde': 'Bliksemronde',
   'mode.overleven': 'Overleven',
+  // De chips op K2 dragen hun eigen maat, zoals getekend: "Bliksemronde · 60 s".
+  // De getallen komen uit de rondes zelf, niet uit deze regel.
+  'challenge.tijd': '{naam} · {seconden} s',
+  'challenge.levens': '{naam} · {aantal} levens',
   'mode.meerkeuze': 'Meerkeuze',
 
   // K2. De volgorde van de vier manieren is het argument, dus staat de reden

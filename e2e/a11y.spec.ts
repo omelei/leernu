@@ -72,7 +72,7 @@ test('the map has no violations while asking, and none while showing the answer'
   page,
 }) => {
   await signIn(page, 'Bram');
-  await setCard(page, 'Provincies van Nederland').getByRole('button', { name: 'Wijs aan' }).click();
+  await setCard(page, 'Provincies van Nederland').getByRole('button', { name: 'Aanwijzen' }).click();
   await expect(page.getByRole('button', { name: 'Limburg' })).toBeVisible();
 
   expect((await scan(page)).violations).toEqual([]);
@@ -96,7 +96,7 @@ test('the typing mode has no violations', async ({ page }) => {
 test('the capitals map has no violations', async ({ page }) => {
   await signIn(page, 'Lotte');
   await setCard(page, 'Hoofdsteden van de provincies')
-    .getByRole('button', { name: 'Wijs aan' })
+    .getByRole('button', { name: 'Aanwijzen' })
     .click();
   await expect(page.getByRole('button', { name: 'Maastricht' })).toBeVisible();
 
@@ -105,7 +105,7 @@ test('the capitals map has no violations', async ({ page }) => {
 
 test('the result screen has no violations', async ({ page }) => {
   await signIn(page, 'Yara');
-  await setCard(page, 'Provincies van Nederland').getByRole('button', { name: 'Wijs aan' }).click();
+  await setCard(page, 'Provincies van Nederland').getByRole('button', { name: 'Aanwijzen' }).click();
   await page.getByRole('button', { name: 'Stoppen' }).click();
   await expect(page.getByRole('button', { name: 'Terug naar start' })).toBeVisible();
 
@@ -118,7 +118,7 @@ test('the result screen has no violations', async ({ page }) => {
  */
 test('a keyboard reaches the map and can answer with it', async ({ page }) => {
   await signIn(page, 'Kees');
-  await setCard(page, 'Provincies van Nederland').getByRole('button', { name: 'Wijs aan' }).click();
+  await setCard(page, 'Provincies van Nederland').getByRole('button', { name: 'Aanwijzen' }).click();
   await expect(page.getByRole('button', { name: 'Limburg' })).toBeVisible();
 
   // Tab from the top of the page until a province takes focus, and give up

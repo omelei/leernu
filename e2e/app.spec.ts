@@ -39,7 +39,9 @@ async function startChallenge(page: Page, naam: string) {
 
   const what = page.getByRole('region', { name: /Waarover/ });
   await what.getByRole('button', { name: /Provincies van Nederland/ }).click();
-  await page.getByRole('button', { name: naam, exact: true }).click();
+  // The chips carry their own measure now — "Bliksemronde · 60 s" — so the
+  // name is a prefix rather than the whole label.
+  await page.getByRole('button', { name: new RegExp(`^${naam} ·`) }).click();
 }
 
 /**
@@ -103,7 +105,7 @@ test('keeps the profile across a reload, with no sign-in', async ({ page }) => {
 
 test('plays a round: question, map, answer, feedback', async ({ page }) => {
   await signIn(page, 'Noor');
-  await setCard(page, 'Provincies van Nederland').getByRole('button', { name: 'Wijs aan' }).click();
+  await setCard(page, 'Provincies van Nederland').getByRole('button', { name: 'Aanwijzen' }).click();
 
   // The question arrives with the map, not before it.
   await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
@@ -123,7 +125,7 @@ test('plays a round: question, map, answer, feedback', async ({ page }) => {
 
 test('announces the question and the outcome to a screen reader', async ({ page }) => {
   await signIn(page, 'Fatima');
-  await setCard(page, 'Provincies van Nederland').getByRole('button', { name: 'Wijs aan' }).click();
+  await setCard(page, 'Provincies van Nederland').getByRole('button', { name: 'Aanwijzen' }).click();
 
   const live = page.getByRole('status');
   await expect(live).toContainText('Waar ligt');
@@ -144,7 +146,7 @@ test('every button meets the 48px touch target', async ({ page }) => {
 
 test('asks about every province, and lets a child stop early', async ({ page }) => {
   await signIn(page, 'Jesse');
-  await setCard(page, 'Provincies van Nederland').getByRole('button', { name: 'Wijs aan' }).click();
+  await setCard(page, 'Provincies van Nederland').getByRole('button', { name: 'Aanwijzen' }).click();
 
   // Twelve provinces means twelve questions, not a sample of ten. The dots say
   // so, and say it to a screen reader too.
@@ -160,7 +162,7 @@ test('asks about every province, and lets a child stop early', async ({ page }) 
 test('practises the capitals as points on the map', async ({ page }) => {
   await signIn(page, 'Amir');
   await setCard(page, 'Hoofdsteden van de provincies')
-    .getByRole('button', { name: 'Wijs aan' })
+    .getByRole('button', { name: 'Aanwijzen' })
     .click();
 
   await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
@@ -222,7 +224,7 @@ test('typing a name: a real place from elsewhere is a near miss, not a cross', a
  */
 test('cities: draws only points that are far enough apart to hit', async ({ page }) => {
   await signIn(page, 'Bram');
-  await setCard(page, 'Steden van Nederland').getByRole('button', { name: 'Wijs aan' }).click();
+  await setCard(page, 'Steden van Nederland').getByRole('button', { name: 'Aanwijzen' }).click();
 
   await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
 
@@ -251,7 +253,7 @@ test('cities: draws only points that are far enough apart to hit', async ({ page
 /** A round of eighty would be twenty minutes. It is capped, and the counter says so. */
 test('cities: asks a round a child can finish', async ({ page }) => {
   await signIn(page, 'Fenna');
-  await setCard(page, 'Steden van Nederland').getByRole('button', { name: 'Wijs aan' }).click();
+  await setCard(page, 'Steden van Nederland').getByRole('button', { name: 'Aanwijzen' }).click();
 
   // Fifteen questions, not eighty: a set larger than a round is sampled from
   // (ADR-022), and the dots are what say how many are coming.
@@ -318,7 +320,7 @@ test('bliksemronde runs a clock and moves on by itself', async ({ page }) => {
  */
 test('a child can say they do not know, and is shown the answer', async ({ page }) => {
   await signIn(page, 'Pim');
-  await setCard(page, 'Provincies van Nederland').getByRole('button', { name: 'Wijs aan' }).click();
+  await setCard(page, 'Provincies van Nederland').getByRole('button', { name: 'Aanwijzen' }).click();
   await expect(page.getByRole('button', { name: 'Limburg' })).toBeVisible();
 
   await page.getByRole('button', { name: 'Ik weet het niet' }).click();

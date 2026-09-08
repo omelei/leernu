@@ -131,7 +131,7 @@ test('a finished table says what changed, not only what was scored', async ({ pa
 test('a survival round of tables runs on lives, not on ten questions', async ({ page }) => {
   await signIn(page, 'Lieke');
   await page.goto('/tafels');
-  await page.getByRole('button', { name: 'Overleven', exact: true }).click();
+  await page.getByRole('button', { name: /^Overleven ·/ }).click();
 
   await expect(page.getByPlaceholder('Antwoord')).toBeVisible();
 
@@ -158,7 +158,7 @@ test('the lightning round is offered only once the clock is on', async ({ page }
   await signIn(page, 'Timo');
 
   await page.goto('/tafels');
-  await expect(page.getByRole('button', { name: 'Bliksemronde', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: /^Bliksemronde ·/ })).toHaveCount(0);
 
   const clock = page.getByRole('button', { name: /Klok bij het oefenen/ });
   await page.goto('/jij');
@@ -166,5 +166,5 @@ test('the lightning round is offered only once the clock is on', async ({ page }
   await expect(clock).toHaveAttribute('aria-pressed', 'true');
 
   await page.goto('/tafels');
-  await expect(page.getByRole('button', { name: 'Bliksemronde', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: /^Bliksemronde ·/ })).toBeVisible();
 });

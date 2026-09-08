@@ -7,11 +7,13 @@ import { t, type TranslationKey } from '@/i18n';
 import { loadItemStates } from '@/store/progress';
 import {
   CHALLENGE_MODES,
+  ROUND_RULE,
   SET_IDS,
   type PracticeMode,
   type SetId,
 } from '@/features/practice/useRound';
 import { BUILT_WAYS } from './modes';
+import { challengeLabel } from './challengeLabel';
 import { usePreferences } from '@/features/player/settings';
 
 /**
@@ -136,21 +138,24 @@ export function ChooseRoundScreen({
               className="tk-chip"
               onClick={() => onStart(setId, mode)}
             >
-              {t(`mode.${mode}` as TranslationKey)}
+              {challengeLabel(`mode.${mode}` as TranslationKey, ROUND_RULE[mode])}
             </button>
           ))}
         </div>
       </section>
 
-      {/* The combination in words. A child reads what the round is at the moment
-          they start it, rather than finding out on the first question. */}
-      <Button className="self-start" onClick={start}>
-        {t('choose.start', {
-          set: t(SET_NAME_KEY[setId]),
-          hoe: chosenWay ? t(chosenWay.name).toLocaleLowerCase('nl-NL') : '',
-          aantal: Math.min(chosenSet?.items.length ?? 0, 15),
-        })}
-      </Button>
+      {/* A bar on a phone and a button everywhere else — see .tk-choose-start.
+          The combination is spelled out on it, which is what K2 asks for: a
+          child reads what the round is at the moment they start it. */}
+      <div className="tk-choose-start flex md:contents">
+        <Button className="md:self-start" onClick={start}>
+          {t('choose.start', {
+            set: t(SET_NAME_KEY[setId]),
+            hoe: chosenWay ? t(chosenWay.name).toLocaleLowerCase('nl-NL') : '',
+            aantal: Math.min(chosenSet?.items.length ?? 0, 15),
+          })}
+        </Button>
+      </div>
     </div>
   );
 }

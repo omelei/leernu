@@ -24,7 +24,7 @@ async function signIn(page: Page, naam: string) {
 async function answerOne(page: Page) {
   await page.goto('/');
   const kaart = page.getByRole('article').filter({ hasText: 'Provincies van Nederland' });
-  await kaart.getByRole('button', { name: 'Wijs aan' }).click();
+  await kaart.getByRole('button', { name: 'Aanwijzen' }).click();
 
   await expect(page.getByRole('button', { name: 'Limburg' })).toBeVisible();
   await page.getByRole('button', { name: 'Limburg' }).click();
