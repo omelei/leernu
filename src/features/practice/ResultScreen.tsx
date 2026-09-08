@@ -210,6 +210,7 @@ const STAMP_NAME: Record<StampId, TranslationKey> = {
   'set-onthouden': 'stamp.set-onthouden',
   'wateren-foutloos': 'stamp.wateren-foutloos',
   'steden-foutloos': 'stamp.steden-foutloos',
+  'tafel-foutloos': 'stamp.tafel-foutloos',
   'bliksem-tien': 'stamp.bliksem-tien',
   'overleven-vijftien': 'stamp.overleven-vijftien',
 };

@@ -54,6 +54,7 @@ export function HomeScreen({
   profile,
   onStart,
   onChoose,
+  onModule,
 }: {
   readonly profile: ProfileRecord;
   readonly onStart: (setId: SetId, practiceMode: PracticeMode) => void;
