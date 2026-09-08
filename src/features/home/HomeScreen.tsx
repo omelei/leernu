@@ -235,11 +235,18 @@ export function HomeScreen({
         {/* The one block with a surface and a border: the test, the set it is
             about, how the last round went, and the way in. One card because it
             is one thought — this is why you are here, and this is the door. */}
-        {plan.loaded && verder ? (
+        {verder ? (
           <section
             className="tk-card tk-card-accented flex flex-col gap-6"
             data-module={verder.moduleId}
           >
+            {/* Not gated on the test having been read back. It was, and on
+                WebKit — an iPad in a classroom — the whole card was still
+                absent by the time the screenshots were taken: the one thing on
+                the front door a child is meant to press, missing for as long
+                as IndexedDB took. The block that would otherwise lie waits on
+                its own inside TestDate, which is the same rule this screen
+                already applied to the stamps and the boxes. */}
             <TestDate plan={plan} now={now} />
             <Verder
               deel={verder}
@@ -310,6 +317,7 @@ function Verder({
 }) {
   const ids = deel.items.map((item) => item.id);
   const mastered = countMastered(known, ids);
+  const started = ids.some((id) => known.get(id)?.laatsteReview != null);
   const rondes = Math.max(1, Math.ceil(ids.length / deel.roundSize));
   const moduleNaam = t(`module.${deel.moduleId}` as TranslationKey);
   const cijfer = lastRound ? grade(lastRound.correct, lastRound.answered) : null;
@@ -323,11 +331,14 @@ function Verder({
             ? t('home.setsOverOne', { onderdelen: ids.length })
             : t('home.setsOver', { onderdelen: ids.length, rondes })}
         </p>
-        <p className="text-ink-2">
-          {mastered === 0
-            ? t('home.setNew')
-            : t('home.setMastered', { goed: mastered, totaal: ids.length })}
-        </p>
+        {/* Only once there is something to report. Before the first round the
+            line under this one already says so, and "nog niet geoefend"
+            directly above "nog geen ronde gedaan" is one fact told twice. */}
+        {started ? (
+          <p className="text-ink-2">
+            {t('home.setMastered', { goed: mastered, totaal: ids.length })}
+          </p>
+        ) : null}
       </div>
 
       {lastRound === undefined ? null : cijfer !== null && lastRound !== null ? (

@@ -36,6 +36,12 @@ export function TestDate({
 }) {
   const [editing, setEditing] = useState(false);
 
+  // Nothing at all until the plan has been read. The card around this is drawn
+  // straight away — a front door with no door on it is worse than a door that
+  // arrives a moment late — but a row that says "nog geen toetsdatum" and then
+  // changes its mind is exactly what this waits to avoid.
+  if (!plan.loaded) return null;
+
   const days = plan.date === null ? null : daysUntil(plan.date, now);
   const subject = TEST_SUBJECTS.find((module) => module.id === plan.subject) ?? null;
 

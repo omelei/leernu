@@ -920,18 +920,20 @@
    * The foot of K1: every other module, as one row of equal things.
    *
    * Auto-fit rather than a fixed three, because a fixed three on a phone is
-   * three columns of 88px. The floor of 15rem is roughly where a module name
-   * and a bar stop being legible side by side.
+   * three columns of 88px. The floor of 12rem is where a module name and a bar
+   * stop being legible side by side, and it is low enough that the four
+   * remaining modules make one row on a laptop rather than three and a lonely
+   * fourth.
    *
-   * `min(15rem, 100%)` and not 15rem, because the floor is in rem and a reader
-   * at 200% text moves the rem. Without the min, that floor becomes 480px, a
-   * 393px screen gets a 480px column, and the page scrolls sideways — which is
-   * the first thing that goes wrong at that size and the one e2e/shell.spec.ts
-   * measures.
+   * `min(12rem, 100%)` and not 12rem, because the floor is in rem and a reader
+   * at 200% text moves the rem. Without the min, that floor becomes 384px, a
+   * 393px screen gets a column wider than its own margins, and the page scrolls
+   * sideways — the first thing that goes wrong at that size and the one thing
+   * e2e/shell.spec.ts measures at every size.
    */
   .tk-tiles {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(12rem, 100%), 1fr));
     gap: 16px;
   }
   .tk-tile {
