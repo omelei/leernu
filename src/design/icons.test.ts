@@ -17,6 +17,13 @@ import { describe, expect, it } from 'vitest';
  */
 
 const source = readFileSync(join(process.cwd(), 'src', 'components', 'Icon.tsx'), 'utf8');
+/**
+ * The stickers are not part of §E's sixteen and never will be — that list is
+ * fixed. They sit in the same interface, though, so the two rules that are
+ * about the interface rather than about the list apply to them as well: the
+ * shared frame, and no colour of their own.
+ */
+const stickers = readFileSync(join(process.cwd(), 'src', 'components', 'Stickers.tsx'), 'utf8');
 
 /** The sixteen, in §E's own order. */
 const NAMED = [
@@ -66,6 +73,33 @@ describe('the icon set', () => {
       expect(value, match[0]).toBeGreaterThanOrEqual(0);
       expect(value, match[0]).toBeLessThanOrEqual(24);
     }
+  });
+
+  it('draws the stickers on the same frame, with no colour of their own', () => {
+    expect(stickers).not.toContain('<svg');
+    expect(stickers).toMatch(/<Icon \{\.\.\.props\}>/);
+
+    const fills = [...stickers.matchAll(/fill="([^"]*)"/g)].map((match) => match[1]);
+    for (const fill of fills) {
+      expect(['none', 'currentColor'], `fill="${fill ?? ''}"`).toContain(fill);
+    }
+    expect(stickers).not.toMatch(/#[0-9a-fA-F]{3,8}\b/);
+    expect(stickers).not.toMatch(/\b(?:rgb|hsl|oklch)\(/);
+
+    // Same grid, so a sticker cannot quietly be drawn against a bigger one.
+    for (const match of stickers.matchAll(/(?:cx|cy|r)="(-?[\d.]+)"/g)) {
+      const value = Number(match[1]);
+      expect(value, match[0]).toBeGreaterThanOrEqual(0);
+      expect(value, match[0]).toBeLessThanOrEqual(24);
+    }
+  });
+
+  it('gives no two icons the same silhouette', () => {
+    // §E: an icon may not mean two things. The pair this is written for is the
+    // times sign and the cross for a wrong answer, which are the same drawing
+    // until one of them is put on a key.
+    const paths = [...source.matchAll(/ d="([^"]+)"/g)].map((match) => match[1]);
+    expect(new Set(paths).size, 'two icons share a path').toBe(paths.length);
   });
 
   it('lets no icon carry a colour of its own', () => {

@@ -16,7 +16,7 @@ import { ChooseTableScreen } from '@/features/sums/ChooseTableScreen';
 import { SumScreen } from '@/features/sums/SumScreen';
 import { ProfileScreen } from '@/features/player/ProfileScreen';
 import type { Route } from '@/features/shell/routes';
-import { getProfile } from '@/store/profile';
+import { getProfile, setSticker } from '@/store/profile';
 import type { PracticeMode, SetId } from '@/features/practice/useRound';
 import type { SumMode } from '@/features/sums/useSumRound';
 import type { ProfileRecord } from '@/store/db';
@@ -223,13 +223,22 @@ export default function App() {
     <Shell bar={bar} current="vandaag" onNavigate={goTo} onModule={goModule}>
       <HomeScreen
         naam={boot.profile.naam}
+        sticker={boot.profile.avatarConfig.sticker}
+        // Written through and held here, because the app bar shows the same
+        // animal: a choice that only redrew the card it was made on would look
+        // like it had not been saved.
+        onSticker={(id) => {
+          void setSticker(id).then((updated) => {
+            if (updated) setBoot({ status: 'ready', profile: updated });
+          });
+        }}
         onStart={(setId, practiceMode) => {
           setVisit(visit + 1);
           setScreen({ name: 'practice', setId, practiceMode });
         }}
-        onStartSum={(setId) => {
+        onStartSum={(setId, sumMode) => {
           setVisit(visit + 1);
-          setScreen({ name: 'sums', setId, sumMode: 'som-typen' });
+          setScreen({ name: 'sums', setId, sumMode });
         }}
         onChoose={goModule}
         onModule={goModule}

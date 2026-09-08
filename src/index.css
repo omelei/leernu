@@ -981,6 +981,81 @@
     border-color: var(--ink-2);
   }
 
+  /* ---- The favourite -----------------------------------------------------
+   * A row in the right-hand column that starts a round. Not a `.tk-tile`: a
+   * tile is a door to a module and this is a shortcut back into one exercise,
+   * so it is a line rather than a card, and four of them fit where two tiles
+   * would.
+   */
+  .tk-favourite {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: var(--touch-min);
+    padding: 8px 12px;
+    border: 0;
+    border-radius: var(--radius-control);
+    background: transparent;
+    color: var(--ink);
+    text-align: left;
+    cursor: pointer;
+  }
+  .tk-favourite:hover {
+    background: var(--surface);
+  }
+
+  /* ---- Stickers ----------------------------------------------------------
+   * The one thing on K1 a child chooses. Ink on paper like everything else:
+   * these carry no module and no state, so they take no accent and no colour —
+   * which is also what keeps six animals from looking like six categories.
+   */
+  .tk-sticker-big {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 72px;
+    height: 72px;
+    border-radius: var(--radius-full);
+    background: var(--surface);
+    color: var(--ink);
+  }
+  /* Three across, two down. Six at 44 with gaps is 304 and the column is 272,
+   * so a single row loses one to the next line; equal squares in a grid read as
+   * a set rather than as a row that did not fit. */
+  .tk-sticker-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .tk-sticker {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-width: var(--touch-min);
+    height: var(--touch-min);
+    border: var(--stroke-hair) solid var(--line);
+    border-radius: var(--radius-card);
+    background: var(--paper);
+    color: var(--ink-2);
+    cursor: pointer;
+  }
+  .tk-sticker:hover {
+    background: var(--surface);
+    color: var(--ink);
+  }
+  /* Which one is yours, said with weight and a shape rather than a colour:
+   * §A's rule holds here as much as in a chooser, and a child who cannot tell
+   * two greys apart still has to be able to see which animal is theirs. */
+  .tk-sticker[aria-pressed='true'] {
+    border-color: var(--ink);
+    border-width: var(--stroke-active);
+    background: var(--surface);
+    color: var(--ink);
+  }
+
   /* ---- Badges ----------------------------------------------------------
    * The small hard-edged label K1 puts before a heading: "toets", and the
    * subject that test is for. Square, because §A gives the badge no radius —

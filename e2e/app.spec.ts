@@ -137,49 +137,19 @@ test('the subject of the test decides what to carry on with', async ({ page }) =
   await expect(page.getByRole('button', { name: 'Ga verder met Rekenen' })).toBeVisible();
 });
 
-/**
- * The date is only worth something once the screen says what it means. Without
- * this line it is a sticker: the child already knew when the test was.
- */
-test('a test date turns the forecast on the day of the test', async ({ page }) => {
-  await signIn(page, 'Sepp');
-
-  // Ten days out, worked out from today rather than written down — a date
-  // hardcoded here would quietly become a date in the past.
-  const toetsdag = new Date(Date.now() + 10 * 86_400_000);
-  const iso = [
-    toetsdag.getFullYear(),
-    String(toetsdag.getMonth() + 1).padStart(2, '0'),
-    String(toetsdag.getDate()).padStart(2, '0'),
-  ].join('-');
-
-  await page.getByRole('button', { name: 'Toets instellen' }).click();
-  await page.getByLabel('Wanneer is de toets?').fill(iso);
-
-  // The count and not the exact ten: the runner's clock decides whether ten
-  // times a day of milliseconds lands either side of a midnight, and what is
-  // being tested is that the date is read, not how a calendar works.
-  await expect(page.getByRole('heading', { name: /Toets over \d+ dagen/ })).toBeVisible();
-
-  // Nothing has been practised, so the honest line is the one that says so and
-  // then says what practising would be worth. A percentage, never a promise.
-  const outlook =
-    /Nog niet geoefend\. Oefen je elke dag even, dan ken je hier op de toetsdag ongeveer \d+% van\./;
-  await expect(page.getByText(outlook)).toBeVisible();
-});
-
-/**
- * The mark, which is the one number on K1 that is about what has already
- * happened. It is over what was answered rather than what was asked — this
- * round is stopped after a single question, and a 1,0 for the eleven never seen
- * would make stopping a punishment.
- */
-test('reports the mark from the last round on the front door', async ({ page }) => {
+test('logs the round that was just played, with its mark', async ({ page }) => {
   await signIn(page, 'Jamie');
 
-  // Before the first round there is nothing to report, and it says so.
+  const recent = page.getByRole('region', { name: 'Recent geoefend' });
+  const favourites = page.getByRole('region', { name: 'Jouw favorieten' });
+
+  // Before the first round both are empty, and both say so rather than
+  // standing there as headings over nothing.
   await expect(
-    page.getByText('Nog geen ronde gedaan. Die van vandaag is je eerste.'),
+    recent.getByText('Nog niets geoefend. Na je eerste ronde staat het hier.'),
+  ).toBeVisible();
+  await expect(
+    favourites.getByText('Nog geen favorieten. Wat je vaak oefent, komt hier te staan.'),
   ).toBeVisible();
 
   await startRound(page, /Provincies van Nederland/, /Aanwijzen/);
@@ -191,7 +161,39 @@ test('reports the mark from the last round on the front door', async ({ page }) 
 
   // One answer, so the mark is a 10,0 or a 1,0 and never anything between —
   // which is exactly what "over what was answered" means.
-  await expect(page.getByText(/Je scoorde vorige keer een (10,0|1,0)$/)).toBeVisible();
+  const tegel = recent.getByRole('button', { name: /Provincies van Nederland/ });
+  await expect(tegel).toContainText(/cijfer\s*(10,0|1,0)/);
+  await expect(tegel).toContainText('Aanwijzen');
+
+  // And it went into the column on the right as a way straight back in.
+  await expect(favourites.getByRole('button', { name: /Provincies van Nederland/ })).toBeVisible();
+
+  // The tile is the shortcut it looks like: same set, same way, no chooser.
+  await tegel.click();
+  await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
+});
+
+/**
+ * The sticker is the one thing on K1 a child decides, so it has to stick — and
+ * it has to show somewhere other than the card it was chosen on, or it does not
+ * look saved.
+ */
+test('the sticker a child picks is theirs, and follows them', async ({ page }) => {
+  await signIn(page, 'Puk');
+
+  const stickers = page.getByRole('region', { name: 'Stickers' });
+  await stickers.getByRole('button', { name: 'Vos' }).click();
+  await expect(stickers.getByRole('button', { name: 'Vos' })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
+
+  // It belongs to the child, not to the page: it survives a reload, and it is
+  // in the app bar beside their name.
+  await page.reload();
+  await expect(
+    page.getByRole('region', { name: 'Stickers' }).getByRole('button', { name: 'Vos' }),
+  ).toHaveAttribute('aria-pressed', 'true');
 });
 
 test('plays a round: question, map, answer, feedback', async ({ page }) => {

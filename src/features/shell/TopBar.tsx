@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { currentStreak, type StreakState } from '@/game-core';
 import { t } from '@/i18n';
 import { HOLIDAYS, loadStreak } from '@/store/streakStore';
+import { stickerById } from '@/components/stickerSet';
 import type { ProfileRecord } from '@/store/db';
 
 /**
@@ -29,6 +30,9 @@ export function TopBar({
     void loadStreak().then(setStreak);
   }, []);
 
+  const sticker = profile.avatarConfig.sticker;
+  const Sticker = stickerById(sticker).draw;
+
   return (
     <div className="ml-auto flex min-w-0 items-center gap-4">
       {/* Only where the rail stands up. The app bar on a phone is a wordmark and
@@ -45,8 +49,13 @@ export function TopBar({
           drawing an initial, because a child who cannot yet read a monogram can
           read their own name. */}
       <button type="button" className="tk-pill min-w-0" onClick={onProfile}>
+        {/* The animal they chose, where a monogram used to be. A child who
+            cannot yet read an initial can recognise a fox, and the choice they
+            made on the front door has to be visible somewhere other than the
+            card they made it on or it does not look saved. The initial is the
+            fallback and nothing more. */}
         <span aria-hidden="true" className="tk-avatar">
-          {profile.naam.slice(0, 1).toLocaleUpperCase('nl-NL')}
+          {sticker ? <Sticker size={20} /> : profile.naam.slice(0, 1).toLocaleUpperCase('nl-NL')}
         </span>
         {/* A name a child chose themselves can be long. It shortens rather than
             pushing the bar off the side of a 393 screen. */}

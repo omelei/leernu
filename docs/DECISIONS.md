@@ -2304,8 +2304,9 @@ the front door, so it had to work, and it now does.
 
 ## ADR-057 — The forecast is re-aimed at the test day
 
-**Status:** accepted — 2026-09-08. Builds on ADR-054, which gave the test a
-subject.
+**Status:** superseded by ADR-058 — 2026-09-08. Built on ADR-054, which gave the
+test a subject. The record stays as written: it shipped, it was looked at, and
+what it was wrong about is worth more than the fact that it was.
 
 ### Context
 
@@ -2353,6 +2354,139 @@ Two things keep that honest and neither may be dropped without revisiting this.
 The word "ongeveer", and the fact that the figure is retention rather than a
 mark — what you are likely to still know, not what you are going to be given.
 If the two ever get conflated in the copy, this decision is the one to reopen.
+
+---
+
+## ADR-058 — The front door keeps the record; K9 keeps the forecast
+
+**Status:** accepted — 2026-09-08. **Supersedes ADR-057**, which is a week old
+and shipped for about an hour.
+
+### Context
+
+ADR-057 put a projection on K1: what you will know on the test day as things
+stand, and what you would know having practised until it. It was true, it was
+bounded, it was tested — and read on the screen it was one sentence too many.
+K1 already carried a mark, a progress bar per module and a retention percentage;
+the projection made four numbers about the same child on one page, two of them
+percentages that meant different things.
+
+The product owner cut it, and the same review cut the retention card beside it.
+
+### Decision
+
+K1 reports what has happened. K9 forecasts what will.
+
+Off the front door: the projection, and "Wat onthoud je". Onto it: the rounds
+just played with the mark each came to, everything ever answered correctly as
+one figure, the exercises a child keeps returning to, and a sticker they choose.
+
+The test block is now about the test alone — when it is, what it is for, and the
+way in. No mark, no bar, no projection. A block that reports on the child is not
+a reason to start.
+
+### Consequences
+
+The number this product argues from is one click away instead of on the door.
+That is a real cost and it is the thing to watch: if children stop meeting the
+retention figure at all, "leren om te onthouden" becomes a claim in the README
+rather than something the interface says. **Onthouden** is a tab in the app bar
+and in the tab bar on a phone, so it is not buried; whether that is enough is a
+question for the next time someone watches a child use this.
+
+`outlook.ts` is deleted rather than left switched off. A module nobody renders
+is a module nobody maintains, and this decision records what it did and why it
+went, which is what the file would otherwise have been kept for.
+
+What survives from ADR-057 is the reasoning about honesty in a forecast: over
+what was answered rather than asked, "ongeveer" and never a target, and nothing
+claimed about a day that has been. Those apply to the mark on K1 too, and they
+are the reason it is a mark over an answered round rather than over a set.
+
+---
+
+## ADR-059 — Six animals nobody has to earn
+
+**Status:** accepted — 2026-09-08. Takes the reisstempels off K1 without
+retiring them.
+
+### Context
+
+The corner of the front door held the reisstempels: a shelf of what had been
+earned, which for most of the first week is a shelf of what has not. ADR-040 is
+right that every one of them must be earned by practising — that is what makes
+them worth anything — but "Nog geen stempels" is a poor thing to be shown every
+morning by your own front door.
+
+Everything else on that screen is earned or measured too. There was nothing on
+it a child decided.
+
+### Decision
+
+A sticker. Six animals, drawn on §E's frame with §E's primitives, and the child
+picks one. It shows in the card and beside their name in the app bar, so the
+choice is visible somewhere other than where it was made.
+
+**None of them is locked, and none ever will be.** The moment one has to be
+earned this stops being a choice and becomes a scoreboard with animals on it,
+which is the thing the stamps already do properly.
+
+It lives in `avatarConfig` on the profile, which has been on the record since
+version 1 and empty ever since. It belongs to the child rather than the device:
+two children on one iPad are two animals, and that is most of the point.
+
+The stamps themselves are untouched. They are still earned, still stored, still
+named on the result screen at the end of the round that earns one. What they are
+not any more is the view from a child's own door.
+
+### Consequences
+
+There is now one thing in this product that measures nothing, and that is
+deliberate rather than an oversight — a child who cannot change anything about
+an app they are told to use can at least decide what it looks like when they
+open it.
+
+The obvious next step is to make the animals unlockable, and it is the one thing
+this decision exists to refuse. If someone wants a reward that is chosen rather
+than given, the honest version is more animals for everyone, not the same six
+behind a wall.
+
+---
+
+## ADR-060 — Three module marks redrawn, and the rule that forced a frame
+
+**Status:** accepted — 2026-09-08.
+
+### Context
+
+Three pictograms did not read as their module. Topography was a bevelled outline
+with an inner boundary that was a scratch at 24px; the tables were a
+three-by-three array of dots, which is the picture a teacher draws once in group
+4 and never again; language was two ruled lines, which was also very nearly the
+freezer and very nearly an era — three icons of horizontal lines in one set.
+
+### Decision
+
+Topography is a diamond, which is what K1 draws in the rail and one of §E's four
+primitives used whole. Language is a speech balloon, because a language module
+is where a child meets a word before they meet a spelling of it.
+
+The tables are a times sign, **on a key**. The sign is right and it is what a
+child learning the tables is learning. The frame is not decoration: `WrongIcon`
+is two crossed lines corner to corner, and §E's rule is that an icon may not
+mean two things — a bare cross in the rail is the drawing a child sees when they
+get an answer wrong. Inside a key it is an operator on a calculator, which is a
+different silhouette at any size.
+
+`src/design/icons.test.ts` now asserts that no two icons in the set share a
+path, so the next collision fails a build instead of shipping.
+
+### Consequences
+
+The comment at the top of `Icon.tsx` used to say the tables could not be a
+multiplication sign for exactly this reason. That reasoning was right about the
+collision and wrong about the conclusion: the answer was to change the
+silhouette, not to draw a different idea.
 
 ---
 
