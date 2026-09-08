@@ -23,7 +23,9 @@ export function SumResultScreen({
   readonly onHome: () => void;
   readonly onAgain: () => void;
 }) {
-  const stoppedEarly = state.answeredCount < state.total;
+  // Only a fixed round has a total to fall short of. "Je stopte na 3 van de
+  // 120" would be a lie about a round that was never going to ask 120.
+  const stoppedEarly = state.rule.kind === 'fixed' && state.answeredCount < state.total;
 
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-col gap-8 p-6" data-module="tafels">

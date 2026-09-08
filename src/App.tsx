@@ -6,7 +6,7 @@ import { ProfileGate } from '@/features/player/ProfileGate';
 import { Gallery } from '@/design/Gallery';
 import { Shell } from '@/features/shell/Shell';
 import { RetentionScreen } from '@/features/retention/RetentionScreen';
-import { MODULES, type Destination } from '@/features/shell/modules';
+import { MODULES, type Destination, type Module } from '@/features/shell/modules';
 import { useRoute } from '@/features/shell/useRoute';
 import { ModuleSoon } from '@/features/shell/ModuleSoon';
 import { CategoryScreen } from '@/features/shell/CategoryScreen';
@@ -56,6 +56,13 @@ export default function App() {
   const goHome = () => {
     go({ name: 'home' });
     setScreen({ name: 'home' });
+  };
+
+  const goModule = (id: Module['id']) => {
+    const module = MODULES.find((candidate) => candidate.id === id);
+    if (!module) return;
+    setScreen({ name: 'home' });
+    go(module.built ? { name: 'module', module } : { name: 'soon', module });
   };
 
   const goTo = (id: Destination['id']) => {
@@ -140,7 +147,7 @@ export default function App() {
   // because telling the time is reading an instrument rather than arithmetic.
   if (route.name === 'category') {
     return (
-      <Shell onNavigate={goTo}>
+      <Shell onNavigate={goTo} onModule={goModule}>
         <CategoryScreen
           category={route.category}
           onOpen={(module) => go({ name: 'module', module })}
@@ -161,7 +168,7 @@ export default function App() {
     // nothing else: a table is not a set of places and the ways of answering
     // one are not the ways of answering the other.
     return (
-      <Shell onNavigate={goTo}>
+      <Shell onNavigate={goTo} onModule={goModule} currentModule={route.module.id}>
         {route.module.id === 'tafels' ? (
           <ChooseTableScreen
             onStart={(setId, sumMode) => {
@@ -184,7 +191,7 @@ export default function App() {
 
   if (route.name === 'soon') {
     return (
-      <Shell onNavigate={goTo}>
+      <Shell onNavigate={goTo} onModule={goModule} currentModule={route.module.id}>
         <ModuleSoon module={route.module} onHome={() => go({ name: 'home' })} />
       </Shell>
     );
@@ -192,7 +199,7 @@ export default function App() {
 
   if (route.name === 'you') {
     return (
-      <Shell current="jij" onNavigate={goTo}>
+      <Shell current="jij" onNavigate={goTo} onModule={goModule}>
         <ProfileScreen profile={boot.profile} />
       </Shell>
     );
@@ -200,14 +207,14 @@ export default function App() {
 
   if (route.name === 'retention' || screen.name === 'retention') {
     return (
-      <Shell current="onthouden" onNavigate={goTo}>
+      <Shell current="onthouden" onNavigate={goTo} onModule={goModule}>
         <RetentionScreen />
       </Shell>
     );
   }
 
   return (
-    <Shell current="vandaag" onNavigate={goTo}>
+    <Shell current="vandaag" onNavigate={goTo} onModule={goModule}>
       <HomeScreen
         profile={boot.profile}
         onStart={(setId, practiceMode) => {
@@ -215,6 +222,7 @@ export default function App() {
           setScreen({ name: 'practice', setId, practiceMode });
         }}
         onChoose={() => go({ name: 'module', module: MODULES[0]! })}
+        onModule={goModule}
       />
     </Shell>
   );

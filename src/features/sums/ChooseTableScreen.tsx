@@ -4,7 +4,8 @@ import { Dot } from '@/components/Dot';
 import { countMastered, isDue, type ItemState } from '@/game-core';
 import { loadSumSets } from '@/content/loadSums';
 import { loadItemStates } from '@/store/progress';
-import { SUM_MODES, type SumMode } from './useSumRound';
+import { SUM_CHALLENGE_MODES, SUM_MODES, type SumMode } from './useSumRound';
+import { usePreferences } from '@/features/player/settings';
 
 /**
  * K2 for the tables: which one, and how.
@@ -23,11 +24,20 @@ import { SUM_MODES, type SumMode } from './useSumRound';
 const MODE_NAME: Record<SumMode, TranslationKey> = {
   'som-typen': 'mode.som-typen',
   'som-meerkeuze': 'mode.som-meerkeuze',
+  bliksemronde: 'mode.bliksemronde',
+  overleven: 'mode.overleven',
 };
 
+/**
+ * Complete records, because a new mode must say what it is for rather than
+ * quietly borrowing another one's words. The two challenge modes carry their
+ * own name here and never show it: they are chips, and a chip is one word.
+ */
 const MODE_REASON: Record<SumMode, TranslationKey> = {
   'som-typen': 'way.som-typen',
   'som-meerkeuze': 'way.som-meerkeuze',
+  bliksemronde: 'mode.bliksemronde',
+  overleven: 'mode.overleven',
 };
 
 export function ChooseTableScreen({
@@ -38,6 +48,7 @@ export function ChooseTableScreen({
   const [states, setStates] = useState<Map<string, ItemState> | null>(null);
   const [setId, setSetId] = useState('tafel-1');
   const [mode, setMode] = useState<SumMode>('som-typen');
+  const prefs = usePreferences();
 
   useEffect(() => {
     void loadItemStates().then(setStates);
@@ -105,6 +116,29 @@ export function ChooseTableScreen({
             </span>
           </button>
         ))}
+      </section>
+
+      <section className="flex flex-col gap-3" aria-label={t('choose.whenItSticks')}>
+        {/* Chips rather than a fifth and sixth way, for the reason K2 gives:
+            a clock and three lives are things you add to something you already
+            know. These run over all twelve tables — ten sums is over before a
+            minute is, and a child reaching for the clock is one who knows a
+            table already. */}
+        <h2 className="tk-label">{t('choose.whenItSticks')}</h2>
+        <div className="flex flex-wrap gap-3">
+          {SUM_CHALLENGE_MODES.filter((kind) => prefs.timer || kind !== 'bliksemronde').map(
+            (kind) => (
+              <button
+                key={kind}
+                type="button"
+                className="tk-chip"
+                onClick={() => onStart(setId, kind)}
+              >
+                {t(MODE_NAME[kind])}
+              </button>
+            ),
+          )}
+        </div>
       </section>
 
       <button type="button" className="tk-button self-start" onClick={() => onStart(setId, mode)}>

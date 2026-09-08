@@ -20,6 +20,7 @@ export const nl = {
   // where it means something a child is done with rather than a day off.
   'home.restDay': '{aantal} rustdag bewaard',
   'home.restDays': '{aantal} rustdagen bewaard',
+  'home.modules': 'Wat je kunt oefenen',
   'home.continueTitle': 'Verder waar je was',
   'home.retention': 'weet je hier over drie weken nog van',
   'home.retentionAfter': 'Eén ronde vandaag houdt het op {procent}%.',
@@ -243,6 +244,8 @@ export const nl = {
   'stamp.wateren-foutloos.criterion': 'Een hele ronde wateren zonder fout.',
   'stamp.steden-foutloos': 'Alle steden foutloos',
   'stamp.steden-foutloos.criterion': 'Een hele ronde steden zonder fout.',
+  'stamp.tafel-foutloos': 'Een hele tafel foutloos',
+  'stamp.tafel-foutloos.criterion': 'Een hele tafel in één ronde zonder fout.',
   'stamp.week-op-rij': 'Zeven dagen op rij',
   'stamp.week-op-rij.criterion': 'Zeven dagen achter elkaar geoefend.',
   'stamp.set-onthouden': 'Alles onthouden',

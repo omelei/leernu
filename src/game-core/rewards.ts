@@ -93,6 +93,7 @@ export type StampId =
   | 'set-onthouden'
   | 'wateren-foutloos'
   | 'steden-foutloos'
+  | 'tafel-foutloos'
   | 'bliksem-tien'
   | 'overleven-vijftien';
 
@@ -155,6 +156,14 @@ export const STAMPS: readonly StampDefinition[] = [
     // asks, and it should be worth something.
     id: 'steden-foutloos',
     criterion: (s) => s.setId === 'nl-steden' && s.perfectRound && s.completeRound,
+  },
+  {
+    // A whole table, every sum right, in one round. One stamp for the twelve
+    // rather than twelve stamps: a collection with a dozen near-identical
+    // entries in it says the tables are twelve achievements, and they are one
+    // skill met twelve times.
+    id: 'tafel-foutloos',
+    criterion: (s) => s.setId.startsWith('tafel-') && s.perfectRound && s.completeRound,
   },
   {
     // Ten right inside a minute. Reachable on any set, so a child who loves the

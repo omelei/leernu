@@ -8,11 +8,12 @@ import {
   review,
   sumDistractors,
   type ItemState,
+  type RoundRule,
   type StreakChange,
   type SumItem,
   type SumSet,
 } from '@/game-core';
-import { loadSumSet } from '@/content/loadSums';
+import { loadSumSet, loadSumSets } from '@/content/loadSums';
 import { finishSession, loadItemStates, saveAnswer, startSession } from '@/store/progress';
 import { recordRoundFinished } from '@/store/streakStore';
 import { applyRoundRewards, type RoundOutcome } from '@/store/rewardStore';
@@ -36,7 +37,7 @@ import { applyRoundRewards, type RoundOutcome } from '@/store/rewardStore';
  * all of it.
  */
 
-export type SumMode = 'som-typen' | 'som-meerkeuze';
+export type SumMode = 'som-typen' | 'som-meerkeuze' | 'bliksemronde' | 'overleven';
 
 /**
  * Typing first, choosing second, and the opposite way round from topography.
@@ -49,8 +50,31 @@ export type SumMode = 'som-typen' | 'som-meerkeuze';
  */
 export const SUM_MODES: readonly SumMode[] = ['som-typen', 'som-meerkeuze'];
 
+/**
+ * A clock and three lives, the same two the map offers and for the same reason
+ * (ADR-021): pressure, and neither of them punishes.
+ *
+ * They run over all twelve tables rather than the chosen one. A table is ten
+ * sums, and a lightning round that runs out of questions after eleven seconds
+ * is not a lightning round — what the clock is for is a child who already knows
+ * them meeting them all in one go.
+ */
+export const SUM_CHALLENGE_MODES: readonly SumMode[] = ['bliksemronde', 'overleven'];
+
+export const SUM_ROUND_RULE: Record<SumMode, RoundRule> = {
+  'som-typen': { kind: 'fixed', aantal: 10 },
+  'som-meerkeuze': { kind: 'fixed', aantal: 10 },
+  bliksemronde: { kind: 'tijd', seconden: 60 },
+  overleven: { kind: 'levens', levens: 3 },
+};
+
+/**
+ * Which way a child answers. Typing everywhere except the one mode built to be
+ * easier — including under the clock, because choosing between four numbers
+ * against a stopwatch measures reading speed rather than the table.
+ */
 export function typesTheSum(mode: SumMode): boolean {
-  return mode === 'som-typen';
+  return mode !== 'som-meerkeuze';
 }
 
 export type SumPhase = 'loading' | 'asking' | 'revealed' | 'finished';
@@ -77,6 +101,12 @@ export interface SumRoundState {
   readonly missed: readonly SumItem[];
   /** How many more sums in this table the child now remembers. Never negative. */
   readonly gained: number;
+  /** How this round ends. The result screen needs it to count honestly. */
+  readonly rule: RoundRule;
+  /** Bliksemronde only: whole seconds left. */
+  readonly secondsLeft: number | null;
+  /** Overleven only: lives remaining. */
+  readonly livesLeft: number | null;
   readonly streak: StreakChange | null;
   readonly reward: RoundOutcome | null;
   readonly error: string | null;
@@ -112,9 +142,19 @@ export function useSumRound(setId: string, mode: SumMode) {
   const [reward, setReward] = useState<RoundOutcome | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  const rule = SUM_ROUND_RULE[mode];
+  const [secondsLeft, setSecondsLeft] = useState(rule.kind === 'tijd' ? rule.seconden : 0);
+  const [livesLeft, setLivesLeft] = useState(rule.kind === 'levens' ? rule.levens : 0);
+
   const sessionId = useRef<string | null>(null);
   const askedAt = useRef(0);
   const masteredAtStart = useRef(0);
+  /**
+   * Wall-clock end of a timed round, set once. Counting down on a tick loses
+   * whatever each tick was late by, and over sixty seconds on a school
+   * Chromebook that is not nothing.
+   */
+  const deadline = useRef<number | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -127,18 +167,25 @@ export function useSumRound(setId: string, mode: SumMode) {
         const loadedStates = await loadItemStates();
         if (cancelled) return;
 
-        // The whole table, in the order the scheduler wants it: what a child
-        // keeps missing comes round first even inside ten sums.
+        // A fixed round is the chosen table. A round that ends on a clock or on
+        // lives draws from all twelve, because ten sums would run out long
+        // before the minute does — and a child who reaches for the clock is one
+        // who already knows a table, not one still learning this one.
+        const pool =
+          rule.kind === 'fixed' ? loaded.items : loadSumSets().flatMap((set) => set.items);
+
+        // In the order the scheduler wants it: what a child keeps missing comes
+        // round first, even inside ten sums.
         const picked = composeRound({
-          items: loaded.items,
+          items: pool,
           states: loadedStates,
-          size: loaded.items.length,
+          size: rule.kind === 'fixed' ? rule.aantal : pool.length,
           now: new Date(),
         });
 
         const round = picked.map((sum) => ({
           sum,
-          options: mode === 'som-meerkeuze' ? optionsFor(sum, Math.random) : null,
+          options: typesTheSum(mode) ? null : optionsFor(sum, Math.random),
         }));
 
         sessionId.current = await startSession(
@@ -157,6 +204,7 @@ export function useSumRound(setId: string, mode: SumMode) {
         setQuestions(round);
         setPhase(round.length > 0 ? 'asking' : 'finished');
         askedAt.current = performance.now();
+        if (rule.kind === 'tijd') deadline.current = Date.now() + rule.seconden * 1000;
       } catch (cause) {
         if (!cancelled) setError(cause instanceof Error ? cause.message : String(cause));
       }
@@ -166,13 +214,13 @@ export function useSumRound(setId: string, mode: SumMode) {
     return () => {
       cancelled = true;
     };
-  }, [setId, mode]);
+  }, [setId, mode, rule]);
 
   const question = questions[index] ?? null;
 
   /** One answer, however it arrived: typed, chosen, or not given at all. */
   const settle = useCallback(
-    (answer: number | null) => {
+    (answer: number | null, spendsALife = true) => {
       if (phase !== 'asking' || !question || !sessionId.current) return;
 
       const correct = answer !== null && answer === question.sum.antwoord;
@@ -193,6 +241,8 @@ export function useSumRound(setId: string, mode: SumMode) {
 
       setStates(new Map(states).set(question.sum.id, nextState));
 
+      if (!correct && spendsALife && rule.kind === 'levens') setLivesLeft(livesLeft - 1);
+
       void saveAnswer({
         sessionId: sessionId.current,
         mode,
@@ -205,7 +255,19 @@ export function useSumRound(setId: string, mode: SumMode) {
         nextState,
       });
     },
-    [phase, question, states, combo, comboAnswers, answeredCount, correctCount, missed, mode],
+    [
+      phase,
+      question,
+      states,
+      combo,
+      comboAnswers,
+      answeredCount,
+      correctCount,
+      missed,
+      mode,
+      rule,
+      livesLeft,
+    ],
   );
 
   const submit = useCallback(
@@ -221,7 +283,7 @@ export function useSumRound(setId: string, mode: SumMode) {
   );
 
   const choose = useCallback((value: number) => settle(value), [settle]);
-  const giveUp = useCallback(() => settle(null), [settle]);
+  const giveUp = useCallback(() => settle(null, false), [settle]);
 
   const finish = useCallback(() => {
     if (phase === 'finished') return;
@@ -253,15 +315,53 @@ export function useSumRound(setId: string, mode: SumMode) {
 
   const next = useCallback(() => {
     if (phase !== 'revealed') return;
-    if (index + 1 >= questions.length) {
+
+    // Out of lives, or out of questions. A timed round ends on the clock
+    // instead, which is the interval below.
+    if ((rule.kind === 'levens' && livesLeft <= 0) || index + 1 >= questions.length) {
       finish();
       return;
     }
+
     setIndex(index + 1);
     setGiven(null);
     setPhase('asking');
     askedAt.current = performance.now();
-  }, [phase, index, questions, finish]);
+  }, [phase, index, questions, finish, rule, livesLeft]);
+
+  /**
+   * The clock. Four ticks a second so the number is not up to a second behind
+   * what it claims, and it reads the deadline rather than counting down, so a
+   * busy frame costs no time.
+   *
+   * WCAG 2.2.1 wants time limits adjustable, with an exception where the limit
+   * is the activity. Here it is: a bliksemronde without a clock is just typing.
+   * The two learning modes have no clock at all.
+   */
+  useEffect(() => {
+    if (rule.kind !== 'tijd') return;
+    if (phase === 'loading' || phase === 'finished') return;
+
+    const tick = () => {
+      const over = Math.max(0, Math.ceil(((deadline.current ?? 0) - Date.now()) / 1000));
+      setSecondsLeft(over);
+      if (over === 0) finish();
+    };
+    tick();
+    const id = setInterval(tick, 250);
+    return () => clearInterval(id);
+  }, [rule, phase, finish]);
+
+  /**
+   * A timed round moves on by itself: making a child press Volgende while a
+   * clock runs is charging them for the button. A wrong answer gets twice as
+   * long, because the thing worth seeing is what it actually was.
+   */
+  useEffect(() => {
+    if (rule.kind !== 'tijd' || phase !== 'revealed') return;
+    const id = setTimeout(next, lastCorrect ? 900 : 1800);
+    return () => clearTimeout(id);
+  }, [rule, phase, lastCorrect, next]);
 
   const state: SumRoundState = {
     phase,
@@ -283,6 +383,9 @@ export function useSumRound(setId: string, mode: SumMode) {
         (set?.items ?? []).map((sum) => sum.id),
       ) - masteredAtStart.current,
     ),
+    rule,
+    secondsLeft: rule.kind === 'tijd' ? secondsLeft : null,
+    livesLeft: rule.kind === 'levens' ? livesLeft : null,
     streak,
     reward,
     error,

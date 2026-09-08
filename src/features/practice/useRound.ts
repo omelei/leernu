@@ -9,6 +9,7 @@ import {
   review,
   type AnswerVerdict,
   type Item,
+  type RoundRule,
   type ItemState,
   type StreakChange,
 } from '@/game-core';
@@ -66,18 +67,12 @@ export const LEARNING_MODES: readonly PracticeMode[] = ['wijs-aan', 'meerkeuze',
 export const CHALLENGE_MODES: readonly PracticeMode[] = ['bliksemronde', 'overleven'];
 
 /**
- * How a round ends. This is the only thing the two new modes change — the map,
- * the judging and the scheduler are identical — so it is worth being a value
- * rather than a set of `if (mode === …)` scattered through the hook.
- *
- * `fixed` asks a list and stops. `tijd` and `levens` keep asking until the clock
- * or the lives run out, so they draw from the whole set rather than a round's
- * worth.
+ * How a round ends is the only thing the two challenge modes change — the map,
+ * the judging and the scheduler are identical — so it is a value rather than a
+ * set of `if (mode === …)` scattered through the hook. The type itself lives in
+ * game-core, because the tables end a round the same three ways.
  */
-export type RoundRule =
-  | { readonly kind: 'fixed'; readonly aantal: number }
-  | { readonly kind: 'tijd'; readonly seconden: number }
-  | { readonly kind: 'levens'; readonly levens: number };
+export type { RoundRule };
 
 /**
  * Sixty seconds and three lives.

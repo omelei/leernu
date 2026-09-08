@@ -122,3 +122,49 @@ test('a finished table says what changed, not only what was scored', async ({ pa
   await expect(page.getByText('10 van de 10 goed')).toBeVisible();
   await expect(page.getByText('Alles goed. Morgen komen er nieuwe bij.')).toBeVisible();
 });
+
+/**
+ * The clock and the lives, over all twelve tables rather than the chosen one.
+ * Ten sums is over long before a minute is, and a child who reaches for the
+ * clock is one who already knows a table.
+ */
+test('a survival round of tables runs on lives, not on ten questions', async ({ page }) => {
+  await signIn(page, 'Lieke');
+  await page.goto('/tafels');
+  await page.getByRole('button', { name: 'Overleven', exact: true }).click();
+
+  await expect(page.getByPlaceholder('Antwoord')).toBeVisible();
+
+  // No dots: there is no ten to count towards.
+  await expect(page.getByRole('progressbar')).toHaveCount(0);
+
+  const levens = page
+    .getByRole('banner')
+    .locator('div')
+    .filter({ hasText: /^levens\d$/ });
+  await expect(levens).toContainText('3');
+
+  await page.getByPlaceholder('Antwoord').fill('999');
+  await page.getByRole('button', { name: 'Kijk na' }).click();
+  await expect(levens).toContainText('2');
+
+  // Saying you do not know still costs nothing, here as on the map (ADR-048).
+  await page.getByRole('button', { name: 'Volgende vraag' }).click();
+  await page.getByRole('button', { name: 'Ik weet het niet' }).click();
+  await expect(levens).toContainText('2');
+});
+
+test('the lightning round is offered only once the clock is on', async ({ page }) => {
+  await signIn(page, 'Timo');
+
+  await page.goto('/tafels');
+  await expect(page.getByRole('button', { name: 'Bliksemronde', exact: true })).toHaveCount(0);
+
+  const clock = page.getByRole('button', { name: /Klok bij het oefenen/ });
+  await page.goto('/jij');
+  await clock.click();
+  await expect(clock).toHaveAttribute('aria-pressed', 'true');
+
+  await page.goto('/tafels');
+  await expect(page.getByRole('button', { name: 'Bliksemronde', exact: true })).toBeVisible();
+});

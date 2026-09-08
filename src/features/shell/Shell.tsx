@@ -64,6 +64,15 @@ export interface ShellProps {
   /** Which tab bar destination is showing. */
   readonly current?: Destination['id'];
   readonly onNavigate?: (id: Destination['id']) => void;
+  /**
+   * Which module is open, so the rail can say so truthfully.
+   *
+   * It used to be hardcoded to the first entry, which was harmless while there
+   * was one module and a lie the moment there were two: the rail told a child
+   * they were in topography while they were doing tables.
+   */
+  readonly currentModule?: Module['id'];
+  readonly onModule?: (id: Module['id']) => void;
   /** The streak, the profile switch — whatever the app bar is carrying today. */
   readonly bar?: ReactNode;
   /**
@@ -80,6 +89,8 @@ export function Shell({
   children,
   current = 'vandaag',
   onNavigate,
+  currentModule,
+  onModule,
   bar,
   modules = BUILT_MODULES,
   destinations = BUILT_DESTINATIONS,
@@ -111,8 +122,9 @@ export function Shell({
                   key={module.id}
                   type="button"
                   data-module={module.id}
-                  aria-current={module.id === modules[0]?.id ? 'page' : undefined}
+                  aria-current={module.id === currentModule ? 'page' : undefined}
                   className="tk-rail-item"
+                  onClick={() => onModule?.(module.id)}
                 >
                   <ModuleIcon size={24} />
                   {t(module.name)}

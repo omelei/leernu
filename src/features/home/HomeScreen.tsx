@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { countMastered, retentionAfterRound, setRetention, type ItemState } from '@/game-core';
 import { loadItemSets } from '@/content/loadSets';
+import { loadSumSets } from '@/content/loadSums';
+import { Dot } from '@/components/Dot';
+import { BUILT_MODULES, type Module } from '@/features/shell/modules';
 import { t, type TranslationKey } from '@/i18n';
 import { TestDate } from './TestDate';
 import { loadItemStates } from '@/store/progress';
@@ -56,6 +59,8 @@ export function HomeScreen({
   readonly onStart: (setId: SetId, practiceMode: PracticeMode) => void;
   /** Every other way of practising, which is K2's job now. */
   readonly onChoose: () => void;
+  /** Into a module, which on a phone this is the only quick way to. */
+  readonly onModule?: (id: Module['id']) => void;
 }) {
   const [states, setStates] = useState<Map<string, ItemState> | null>(null);
   const [streak, setStreak] = useState<StreakState | null>(null);
@@ -82,6 +87,8 @@ export function HomeScreen({
       {/* Above the sets, because it is the reason one of them is being opened.
           K1 gives it the only surface-and-border on the screen. */}
       <TestDate />
+
+      <Modules known={known} onOpen={onModule} />
 
       <section className="flex flex-col gap-4">
         <h2 className="tk-label">{t('home.continueTitle')}</h2>
@@ -171,5 +178,65 @@ function StreakBadge({ state }: { readonly state: StreakState | null }) {
             : t('home.restDays', { aantal: state.rustdagen })
         }`}
     </p>
+  );
+}
+
+/**
+ * Every module, with how much of it is remembered.
+ *
+ * The rail is the navigation, and on a laptop it is enough. On a phone it sits
+ * below the content — §D replaces it there with a tab bar that has no modules
+ * in it — so without these a child would have to scroll past five set cards to
+ * find the tables at all. The design says exactly this: "de modules blijven
+ * dan bereikbaar via de kaarten in de stroom".
+ *
+ * The number is the same one the set cards carry, counted over the whole
+ * module: twelve tables is a hundred and twenty sums, and "83 van de 120
+ * onthoud je" is the sentence a child can act on.
+ */
+function Modules({
+  known,
+  onOpen,
+}: {
+  readonly known: ReadonlyMap<string, ItemState>;
+  readonly onOpen?: (id: Module['id']) => void;
+}) {
+  // One place that knows what a module is made of. A third module adds a line
+  // here and nothing else on this screen.
+  const itemsOf: Partial<Record<Module['id'], string[]>> = {
+    topo: loadItemSets().flatMap((set) => set.items.map((item) => item.id)),
+    tafels: loadSumSets().flatMap((set) => set.items.map((sum) => sum.id)),
+  };
+
+  return (
+    <section className="flex flex-col gap-3" aria-label={t('home.modules')}>
+      <h2 className="tk-label">{t('home.modules')}</h2>
+
+      {BUILT_MODULES.map((module) => {
+        const ids = itemsOf[module.id] ?? [];
+        const mastered = countMastered(known, ids);
+        const started = ids.some((id) => known.get(id)?.laatsteReview != null);
+
+        return (
+          <button
+            key={module.id}
+            type="button"
+            data-module={module.id}
+            className="tk-module-card w-full"
+            onClick={() => onOpen?.(module.id)}
+          >
+            <Dot size={24} fill={ids.length === 0 ? 0 : mastered / ids.length} />
+            <span className="min-w-0">
+              <span className="block font-semibold">{t(module.name)}</span>
+              <span className="block text-ink-2">
+                {started
+                  ? t('home.setMastered', { goed: mastered, totaal: ids.length })
+                  : t('home.setNew')}
+              </span>
+            </span>
+          </button>
+        );
+      })}
+    </section>
   );
 }

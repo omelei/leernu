@@ -158,6 +158,20 @@ describe('stamps', () => {
     expect(earned).not.toContain('provincies-foutloos');
   });
 
+  it('gives one stamp for a flawless table, whichever table it was', () => {
+    // One stamp for the twelve, not twelve nearly identical ones: the tables
+    // are one skill met twelve times.
+    const zeven = snapshot({ setId: 'tafel-7', perfectRound: true, completeRound: true });
+    const twaalf = snapshot({ setId: 'tafel-12', perfectRound: true, completeRound: true });
+
+    expect(newStamps(zeven, new Set())).toContain('tafel-foutloos');
+    expect(newStamps(twaalf, new Set())).toContain('tafel-foutloos');
+
+    // And it is not earned by stopping while ahead.
+    const gestopt = snapshot({ setId: 'tafel-7', perfectRound: true, completeRound: false });
+    expect(newStamps(gestopt, new Set())).not.toContain('tafel-foutloos');
+  });
+
   it('gives the week stamp at seven days and not before', () => {
     expect(newStamps(snapshot({ streakDays: 6 }), new Set())).not.toContain('week-op-rij');
     expect(newStamps(snapshot({ streakDays: 7 }), new Set())).toContain('week-op-rij');

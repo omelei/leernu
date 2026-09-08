@@ -75,17 +75,40 @@ export function SumScreen({
     <div className="flex h-screen flex-col bg-paper" data-module="tafels">
       <header className="tk-round-bar">
         <StopButton onStop={stop} />
-        <RoundProgress
-          total={state.total}
-          index={state.index}
-          answered={state.index + (revealed ? 1 : 0)}
-        />
+        {/* The dots, except in the endless rounds, which have no ten to count
+            towards. There the counters carry it instead. */}
+        {state.rule.kind === 'fixed' ? (
+          <RoundProgress
+            total={state.total}
+            index={state.index}
+            answered={state.index + (revealed ? 1 : 0)}
+          />
+        ) : null}
         {prefs.readAloud ? <SpeakButton text={spoken} /> : null}
         <div className="ml-auto flex items-center gap-4 md:gap-6">
-          <div className="hidden flex-col items-end md:flex">
-            <span className="tk-label">{t('practice.counterCombo')}</span>
-            <b className="tk-display text-h2 font-bold tabular-nums">{`×${state.combo}`}</b>
-          </div>
+          {/* What is running out, or nothing. Never both a clock and lives:
+              only one round has each. */}
+          {state.secondsLeft !== null ? (
+            <Counter
+              label={t('practice.counterTime')}
+              value={klok(state.secondsLeft)}
+              urgent={state.secondsLeft <= 10}
+            />
+          ) : state.livesLeft !== null ? (
+            <Counter
+              label={t('practice.counterLives')}
+              value={String(state.livesLeft)}
+              urgent={state.livesLeft <= 1}
+            />
+          ) : null}
+          {state.secondsLeft !== null || state.livesLeft !== null ? (
+            <Counter label={t('practice.counterCorrect')} value={String(state.correctCount)} />
+          ) : null}
+          <Counter
+            label={t('practice.counterCombo')}
+            value={`×${state.combo}`}
+            onlyWide={state.rule.kind === 'fixed'}
+          />
         </div>
       </header>
 
@@ -111,9 +134,13 @@ export function SumScreen({
                     ? t('sums.dontKnowSub')
                     : t('sums.wrongSub', { gegeven: state.given })}
               </p>
-              <button ref={nextButton} type="button" className="tk-button mt-4" onClick={next}>
-                {t('practice.next')}
-              </button>
+              {/* A timed round moves on by itself, so there is nothing to
+                  press and nothing to charge a child for pressing. */}
+              {state.rule.kind !== 'tijd' && (
+                <button ref={nextButton} type="button" className="tk-button mt-4" onClick={next}>
+                  {t('practice.next')}
+                </button>
+              )}
             </>
           ) : (
             <>
@@ -154,6 +181,45 @@ export function SumScreen({
       </div>
     </div>
   );
+}
+
+/**
+ * The same counter the map's round bar uses, and the same reason it is kept off
+ * a phone in a round that has dots: the bar at 393 cannot hold a stop, ten
+ * dots, a read-aloud button and a counter as well.
+ */
+function Counter({
+  label,
+  value,
+  urgent = false,
+  onlyWide = false,
+}: {
+  readonly label: string;
+  readonly value: string;
+  readonly urgent?: boolean;
+  readonly onlyWide?: boolean;
+}) {
+  return (
+    <div className={onlyWide ? 'hidden flex-col items-end md:flex' : 'flex flex-col items-end'}>
+      <span className="tk-label">{label}</span>
+      <b
+        className={
+          urgent
+            ? 'tk-display text-h2 font-bold tabular-nums text-bad'
+            : 'tk-display text-h2 font-bold tabular-nums'
+        }
+      >
+        {value}
+      </b>
+    </div>
+  );
+}
+
+/** Seconds as a clock, because 0:07 reads as "nearly out" and 7 does not. */
+function klok(seconden: number): string {
+  const m = Math.floor(seconden / 60);
+  const sec = seconden % 60;
+  return `${m}:${String(sec).padStart(2, '0')}`;
 }
 
 /** What a screen reader hears once the answer is in. */

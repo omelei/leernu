@@ -46,6 +46,20 @@ export interface Item {
   readonly relaties?: Readonly<Record<string, string>>;
 }
 
+/**
+ * How a round ends.
+ *
+ * `fixed` asks a list and stops. `tijd` and `levens` keep asking until the
+ * clock or the lives run out, so they draw from a wider pool than one round's
+ * worth. It lives here rather than beside the map because both modules end a
+ * round the same three ways, and the second one should not have to import the
+ * first to say so.
+ */
+export type RoundRule =
+  | { readonly kind: 'fixed'; readonly aantal: number }
+  | { readonly kind: 'tijd'; readonly seconden: number }
+  | { readonly kind: 'levens'; readonly levens: number };
+
 /** Leitner boxes, one through five. Box 5 means "known". */
 export type LeitnerBox = 1 | 2 | 3 | 4 | 5;
 
