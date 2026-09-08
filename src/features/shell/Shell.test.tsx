@@ -132,4 +132,32 @@ describe('the shell', () => {
     fireEvent.click(screen.getByRole('button', { name: 'leer.nu, naar Vandaag' }));
     expect(seen).toEqual(['vandaag']);
   });
+
+  it('writes the rest of the address beside the mark, outside the button', () => {
+    const { container } = render(
+      <Shell modules={MODULES} destinations={DESTINATIONS} address="/topografie">
+        <p>topografie</p>
+      </Shell>,
+    );
+
+    // §A draws "leer.nu/topografie" as a lockup, and it only reads as one if
+    // the path sits against the wordmark. Outside the button, because the mark
+    // is the way home and the path is where you already are — putting it inside
+    // would fold it into the button's name and send a screen reader user to
+    // "leer.nu slash topografie, naar Vandaag".
+    expect(container.querySelector('.tk-brand-path')).toHaveTextContent('/topografie');
+    expect(screen.getByRole('button', { name: 'leer.nu, naar Vandaag' })).toBeInTheDocument();
+  });
+
+  it('says nothing where there is no address to say', () => {
+    // The front door's path is empty, and "leer.nu/" is a stub with nothing
+    // after it.
+    const { container } = render(
+      <Shell modules={MODULES} destinations={DESTINATIONS}>
+        <p>vandaag</p>
+      </Shell>,
+    );
+
+    expect(container.querySelector('.tk-brand-path')).toBeNull();
+  });
 });

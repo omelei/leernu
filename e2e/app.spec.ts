@@ -26,10 +26,19 @@ async function startRound(page: Page, set: RegExp, way: RegExp) {
 
   await what.getByRole('button', { name: set }).click();
   await how.getByRole('button', { name: way }).click();
-  await page
-    .getByRole('button', { name: /vragen$/ })
-    .last()
-    .click();
+  await start(page);
+}
+
+/**
+ * The one way out of K2, whatever was chosen.
+ *
+ * Located by its wrapper rather than by its label on purpose: the label is the
+ * combination in words and its measure comes from the round — "· 15 vragen",
+ * "· 60 seconden", "· 3 levens", or nothing at all for exploring. A test that
+ * matched on "vragen" was quietly asserting which modes exist.
+ */
+async function start(page: Page) {
+  await page.locator('.tk-choose-start button').click();
 }
 
 /**
@@ -54,15 +63,16 @@ async function turnTheClockOn(page: Page) {
   await expect(clock).toHaveAttribute('aria-pressed', 'true');
 }
 
+/**
+ * A round with a clock or with lives on it.
+ *
+ * These were chips that started a round the moment they were pressed. They are
+ * ways of practising like the other four now, so getting into one is the same
+ * three steps as anything else — which is the point: the two heaviest rounds
+ * in the product were the only two nobody read a description of first.
+ */
 async function startChallenge(page: Page, naam: string) {
-  await page.goto('/topografie');
-  await expect(page.getByRole('heading', { name: 'Wat wil je oefenen?' })).toBeVisible();
-
-  const what = page.getByRole('region', { name: /Waarover/ });
-  await what.getByRole('button', { name: /Provincies van Nederland/ }).click();
-  // The chips carry their own measure now — "Bliksemronde · 60 s" — so the
-  // name is a prefix rather than the whole label.
-  await page.getByRole('button', { name: new RegExp(`^${naam} ·`) }).click();
+  await startRound(page, /Provincies van Nederland/, new RegExp(`^${naam}\\b`));
 }
 
 async function signIn(page: Page, naam: string) {

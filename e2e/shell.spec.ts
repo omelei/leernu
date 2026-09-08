@@ -27,10 +27,10 @@ async function startRound(page: Page) {
     .getByRole('region', { name: /Hoe wil je/ })
     .getByRole('button', { name: /Aanwijzen/ })
     .click();
-  await page
-    .getByRole('button', { name: /vragen$/ })
-    .last()
-    .click();
+  // The wrapper rather than the label: the label is the combination in words
+  // and its measure comes from the round, so matching on "vragen" was quietly
+  // asserting which modes exist — and one of the mode cards ends in it too.
+  await page.locator('.tk-choose-start button').click();
   await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
 }
 

@@ -25,6 +25,27 @@ export function useRoute(): [Route, (next: Route) => void] {
     return () => window.removeEventListener('popstate', onPop);
   }, []);
 
+  /**
+   * The address a page is reached at is not always the one it lives at.
+   *
+   * /tafels is a synonym for /rekenen; /topografie/verzonnen names no set that
+   * exists; a mistyped module lands on the front door. All three used to leave
+   * the bar saying one thing and the page showing another — and now that the
+   * app bar writes the address out beside the wordmark, that disagreement is
+   * visible rather than merely true.
+   *
+   * Rewritten once, on arrival, and with `replaceState` rather than a push, so
+   * the back button still goes where the child came from instead of bouncing
+   * between the two spellings. Only on arrival: doing it after a popstate would
+   * fight the history it just read.
+   */
+  useEffect(() => {
+    const canonical = pathFor(routeFor(window.location.pathname));
+    if (canonical !== window.location.pathname) {
+      window.history.replaceState(null, '', canonical);
+    }
+  }, []);
+
   const go = (next: Route) => {
     const path = pathFor(next);
     if (path !== window.location.pathname) window.history.pushState(null, '', path);

@@ -46,10 +46,10 @@ async function startRound(page: Page, set: RegExp, way: RegExp) {
 
   await what.getByRole('button', { name: set }).click();
   await how.getByRole('button', { name: way }).click();
-  await page
-    .getByRole('button', { name: /vragen$/ })
-    .last()
-    .click();
+  // The wrapper rather than the label: the label is the combination in words
+  // and its measure comes from the round, so matching on "vragen" was quietly
+  // asserting which modes exist — and one of the mode cards ends in it too.
+  await page.locator('.tk-choose-start button').click();
 }
 
 test('the name screen has no violations', async ({ page }) => {
@@ -65,6 +65,28 @@ test('the home screen has no violations', async ({ page }) => {
 
   const results = await scan(page);
   expect(results.violations).toEqual([]);
+});
+
+/**
+ * The three shapes a page inside the shell takes: a module with five named
+ * sets, a module with twelve tables laid out as a grid, and a module that does
+ * not exist yet. All three carry the same frame and the child's own column, and
+ * the last one is the easiest to get wrong precisely because nobody looks at it.
+ */
+test('the module pages have no violations, in each of their three shapes', async ({ page }) => {
+  await signIn(page, 'Nour');
+
+  await page.goto('/topografie');
+  await expect(page.getByRole('heading', { name: 'Wat wil je oefenen?' })).toBeVisible();
+  expect((await scan(page)).violations).toEqual([]);
+
+  await page.goto('/rekenen');
+  await expect(page.getByRole('button', { name: /^Tafel van 12\D/ })).toBeVisible();
+  expect((await scan(page)).violations).toEqual([]);
+
+  await page.goto('/klokkijken');
+  await expect(page.getByRole('heading', { name: 'Klok' })).toBeVisible();
+  expect((await scan(page)).violations).toEqual([]);
 });
 
 test('the map has no violations while asking, and none while showing the answer', async ({

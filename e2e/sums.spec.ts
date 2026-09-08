@@ -21,8 +21,8 @@ async function signIn(page: Page, naam: string) {
 }
 
 async function startTable(page: Page, tafel: number, hoe: RegExp) {
-  await page.goto('/tafels');
-  await expect(page.getByRole('heading', { name: 'Welke tafel?' })).toBeVisible();
+  await page.goto('/rekenen');
+  await expect(page.getByRole('heading', { name: 'Wat wil je oefenen?' })).toBeVisible();
 
   const wat = page.getByRole('region', { name: /Waarover/ });
   const hoeStap = page.getByRole('region', { name: /Hoe wil je/ });
@@ -31,10 +31,12 @@ async function startTable(page: Page, tafel: number, hoe: RegExp) {
   // name carries the mastery line after it.
   await wat.getByRole('button', { name: new RegExp(`^Tafel van ${tafel}\\D`) }).click();
   await hoeStap.getByRole('button', { name: hoe }).click();
-  await page
-    .getByRole('button', { name: /sommen$/ })
-    .last()
-    .click();
+  await start(page);
+}
+
+/** The one way out of K2, whatever was chosen. See e2e/app.spec.ts. */
+async function start(page: Page) {
+  await page.locator('.tk-choose-start button').click();
 }
 
 test('the rail is the map of the product, not a list of what is finished', async ({
@@ -74,29 +76,55 @@ test('the front door lists every module, at every size', async ({ page }) => {
   }
 
   await lijst.getByRole('button', { name: /Rekenen/ }).click();
-  await expect(page.getByRole('heading', { name: 'Welke tafel?' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Wat wil je oefenen?' })).toBeVisible();
+  await expect(page.getByRole('button', { name: /^Tafel van 7\D/ })).toBeVisible();
 });
 
 test('the tables have an address of their own', async ({ page }) => {
   await signIn(page, 'Roos');
+  // The slug still works — it has been written down — and it is the same page.
   await page.goto('/tafels');
 
-  await expect(page.getByRole('heading', { name: 'Welke tafel?' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Wat wil je oefenen?' })).toBeVisible();
   await expect(page.getByRole('button', { name: /^Tafel van 7\D/ })).toBeVisible();
   await expect(page.getByRole('button', { name: /^Tafel van 12\D/ })).toBeVisible();
 });
 
-test('rekenen is the word a parent looks for, and it leads to the tables', async ({ page }) => {
+test('rekenen is the word a parent looks for, and it is the page itself', async ({ page }) => {
   await signIn(page, 'Daan');
   await page.goto('/rekenen');
 
-  // Scoped to the list: the rail carries the same name, and it should — this
-  // page is the word a parent types, not a second navigation.
-  //
-  // Tafels sits under rekenen; klokkijken does not (ADR-044).
-  const lijst = page.getByRole('list');
-  await lijst.getByRole('button', { name: /Rekenen/ }).click();
-  await expect(page.getByRole('heading', { name: 'Welke tafel?' })).toBeVisible();
+  // A category holding one built module *is* that module. There used to be a
+  // page here with a single card on it saying "Rekenen", which charged a child
+  // a click to be told what they had already typed. Tafels sits under rekenen;
+  // klokkijken sits beside it (ADR-044).
+  await expect(page.getByRole('heading', { name: 'Wat wil je oefenen?' })).toBeVisible();
+  await expect(page.getByRole('button', { name: /^Tafel van 3\D/ })).toBeVisible();
+});
+
+/**
+ * A set has an address, so a parent can send a child to one exercise rather
+ * than to a chooser. The page opens on it rather than on its own first set.
+ */
+test('a set has an address, and the page opens on it', async ({ page }) => {
+  await signIn(page, 'Nienke');
+
+  // Scoped to step 1, because the start button names the chosen set as well —
+  // which is what K2 puts it there for, and which makes an unscoped query for
+  // the set name ambiguous on exactly the page that opened on it.
+  const wat = page.getByRole('region', { name: /Waarover/ });
+
+  await page.goto('/rekenen/tafel-7');
+  await expect(wat.getByRole('button', { name: /^Tafel van 7\D/ })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
+
+  await page.goto('/topografie/hoofdsteden');
+  await expect(wat.getByRole('button', { name: /Hoofdsteden/ })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
 });
 
 test('typing a table: right, wrong, and not knowing', async ({ page }) => {
@@ -160,8 +188,7 @@ test('a finished table says what changed, not only what was scored', async ({ pa
  */
 test('a survival round of tables runs on lives, not on ten questions', async ({ page }) => {
   await signIn(page, 'Lieke');
-  await page.goto('/tafels');
-  await page.getByRole('button', { name: /^Overleven ·/ }).click();
+  await startTable(page, 1, /^Overleven\b/);
 
   await expect(page.getByPlaceholder('Antwoord')).toBeVisible();
 
@@ -187,14 +214,18 @@ test('a survival round of tables runs on lives, not on ten questions', async ({ 
 test('the lightning round is offered only once the clock is on', async ({ page }) => {
   await signIn(page, 'Timo');
 
-  await page.goto('/tafels');
-  await expect(page.getByRole('button', { name: /^Bliksemronde ·/ })).toHaveCount(0);
+  const bliksem = page
+    .getByRole('region', { name: /Hoe wil je/ })
+    .getByRole('button', { name: /^Bliksemronde\b/ });
+
+  await page.goto('/rekenen');
+  await expect(bliksem).toHaveCount(0);
 
   const clock = page.getByRole('button', { name: /Klok bij het oefenen/ });
   await page.goto('/jij');
   await clock.click();
   await expect(clock).toHaveAttribute('aria-pressed', 'true');
 
-  await page.goto('/tafels');
-  await expect(page.getByRole('button', { name: /^Bliksemronde ·/ })).toBeVisible();
+  await page.goto('/rekenen');
+  await expect(bliksem).toBeVisible();
 });

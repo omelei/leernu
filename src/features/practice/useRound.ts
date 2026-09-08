@@ -58,13 +58,12 @@ export type SetId =
  */
 export type PracticeMode = 'wijs-aan' | 'meerkeuze' | 'hoe-heet-dit' | 'bliksemronde' | 'overleven';
 
-/**
- * Split by what a child is doing, not by how the hook implements it. The first
- * three are practice; the last two are practice with pressure on top and belong
- * behind the ones a child should start with.
+/*
+ * The split between practising and practising under pressure used to be two
+ * arrays here. It lives in `features/module/forms.ts` now, with the order, the
+ * icons and the reason under each name — one list, in the order a child meets
+ * them, rather than a fact about modes that a screen had to reassemble.
  */
-export const LEARNING_MODES: readonly PracticeMode[] = ['wijs-aan', 'meerkeuze', 'hoe-heet-dit'];
-export const CHALLENGE_MODES: readonly PracticeMode[] = ['bliksemronde', 'overleven'];
 
 /**
  * How a round ends is the only thing the two challenge modes change — the map,

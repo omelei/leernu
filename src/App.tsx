@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { HomeScreen } from '@/features/home/HomeScreen';
+import { SideColumn } from '@/features/home/SideColumn';
 import { PracticeScreen } from '@/features/practice/PracticeScreen';
 import { ExploreScreen } from '@/features/explore/ExploreScreen';
 import { ProfileGate } from '@/features/player/ProfileGate';
@@ -11,12 +12,13 @@ import { MODULES, type Destination, type Module } from '@/features/shell/modules
 import { useRoute } from '@/features/shell/useRoute';
 import { ModuleSoon } from '@/features/shell/ModuleSoon';
 import { CategoryScreen } from '@/features/shell/CategoryScreen';
-import { ChooseRoundScreen } from '@/features/round/ChooseRoundScreen';
-import { ChooseTableScreen } from '@/features/sums/ChooseTableScreen';
+import { ModuleScreen } from '@/features/module/ModuleScreen';
 import { SumScreen } from '@/features/sums/SumScreen';
+import { asPracticeMode, asSumMode, type Onderdeel } from '@/features/module/onderdelen';
 import { ProfileScreen } from '@/features/player/ProfileScreen';
-import type { Route } from '@/features/shell/routes';
+import { addressFor, type Route } from '@/features/shell/routes';
 import { getProfile, setSticker } from '@/store/profile';
+import type { ModeId } from '@/game-core';
 import type { PracticeMode, SetId } from '@/features/practice/useRound';
 import type { SumMode } from '@/features/sums/useSumRound';
 import type { ProfileRecord } from '@/store/db';
@@ -36,7 +38,7 @@ type Boot = { status: 'loading' } | { status: 'ready'; profile: ProfileRecord | 
  * than one module. There still is one; the reason changed. A module has an
  * address now, and §A's "leer.nu/topografie" only reads as a sentence if the
  * path is real. Hand-rolled rather than a package: the whole map is literal
- * paths with no parameters and no nesting.
+ * paths with one optional segment and no nesting.
  *
  * A round has no address, on purpose. It is something you are in the middle of,
  * and a URL that resumed one halfway would either lie about the progress or
@@ -63,7 +65,7 @@ export default function App() {
     const module = MODULES.find((candidate) => candidate.id === id);
     if (!module) return;
     setScreen({ name: 'home' });
-    go(module.built ? { name: 'module', module } : { name: 'soon', module });
+    go(module.built ? { name: 'module', module, setId: null } : { name: 'soon', module });
   };
 
   const bar =
@@ -80,6 +82,40 @@ export default function App() {
           : { name: 'home' };
     go(next);
     setScreen({ name: 'home' });
+  };
+
+  /**
+   * One way into a round, wherever in the app it is pressed.
+   *
+   * Exploring is the odd one: it is a way of practising as far as a child is
+   * concerned and it is not a round, so it is the one mode that opens a
+   * different screen. That branch belongs here rather than in the page, because
+   * the page's job is to say what was chosen and this is the thing that knows
+   * what a screen is.
+   */
+  const beginRonde = (deel: Onderdeel, mode: ModeId) => {
+    setVisit(visit + 1);
+
+    if (deel.moduleId !== 'topo') {
+      setScreen({ name: 'sums', setId: deel.setId, sumMode: asSumMode(mode) });
+      return;
+    }
+    if (mode === 'ontdekken') {
+      setScreen({ name: 'explore', setId: deel.setId as SetId });
+      return;
+    }
+    setScreen({ name: 'practice', setId: deel.setId as SetId, practiceMode: asPracticeMode(mode) });
+  };
+
+  /**
+   * The animal a child chose, written through and held here, because the app
+   * bar shows it too: a choice that only redrew the card it was made on would
+   * look like it had not been saved.
+   */
+  const chooseSticker = (id: string) => {
+    void setSticker(id).then((updated) => {
+      if (updated) setBoot({ status: 'ready', profile: updated });
+    });
   };
 
   /**
@@ -149,15 +185,48 @@ export default function App() {
     );
   }
 
-  // The word a parent types. Tafels sits under rekenen; klokkijken does not,
-  // because telling the time is reading an instrument rather than arithmetic.
+  /** The child's own column, which every screen inside the shell carries. */
+  const eigenKolom = (
+    <SideColumn
+      sticker={boot.profile.avatarConfig.sticker}
+      onSticker={chooseSticker}
+      onBegin={beginRonde}
+    />
+  );
+
+  // A word a parent looks for, holding more than one module. Unreachable while
+  // rekenen is the only category and the tables are the whole of it — that
+  // address opens the tables themselves (see routes.ts).
   if (route.name === 'category') {
     return (
-      <Shell bar={bar} onNavigate={goTo} onModule={goModule}>
+      <Shell bar={bar} address={addressFor(route)} onNavigate={goTo} onModule={goModule}>
         <CategoryScreen
           category={route.category}
-          onOpen={(module) => go({ name: 'module', module })}
-          onHome={() => go({ name: 'home' })}
+          onOpen={(module) => go({ name: 'module', module, setId: null })}
+          aside={eigenKolom}
+        />
+      </Shell>
+    );
+  }
+
+  // A module's address is where you choose a round in it: what, then how, then
+  // a start button that says what it is starting. It is also why /topografie is
+  // not the home screen — the front door is every module, this is one of them.
+  if (route.name === 'module') {
+    return (
+      <Shell
+        bar={bar}
+        address={addressFor(route)}
+        onNavigate={goTo}
+        onModule={goModule}
+        currentModule={route.module.id}
+      >
+        <ModuleScreen
+          module={route.module}
+          setId={route.setId}
+          onSet={(setId) => go({ name: 'module', module: route.module, setId })}
+          onStart={beginRonde}
+          aside={eigenKolom}
         />
       </Shell>
     );
@@ -166,46 +235,29 @@ export default function App() {
   // A module the plan has and the product does not. Reached only by typing the
   // address: ADR-037 keeps it out of the rail, because a rail entry is an offer
   // and this is an answer to a question the child asked.
-  // A module's address is where you choose a round in it. Two numbered steps,
-  // what and then how (K2), which is also why /topografie is not the home
-  // screen: the front door is every module, this is one of them.
-  if (route.name === 'module') {
-    // Each module chooses its own round. They share the two numbered steps and
-    // nothing else: a table is not a set of places and the ways of answering
-    // one are not the ways of answering the other.
-    return (
-      <Shell bar={bar} onNavigate={goTo} onModule={goModule} currentModule={route.module.id}>
-        {route.module.id === 'tafels' ? (
-          <ChooseTableScreen
-            onStart={(setId, sumMode) => {
-              setVisit(visit + 1);
-              setScreen({ name: 'sums', setId, sumMode });
-            }}
-          />
-        ) : (
-          <ChooseRoundScreen
-            onStart={(setId, practiceMode) => {
-              setVisit(visit + 1);
-              setScreen({ name: 'practice', setId, practiceMode });
-            }}
-            onExplore={(setId) => setScreen({ name: 'explore', setId })}
-          />
-        )}
-      </Shell>
-    );
-  }
-
   if (route.name === 'soon') {
     return (
-      <Shell bar={bar} onNavigate={goTo} onModule={goModule} currentModule={route.module.id}>
-        <ModuleSoon module={route.module} onHome={() => go({ name: 'home' })} />
+      <Shell
+        bar={bar}
+        address={addressFor(route)}
+        onNavigate={goTo}
+        onModule={goModule}
+        currentModule={route.module.id}
+      >
+        <ModuleSoon module={route.module} onOpen={goModule} aside={eigenKolom} />
       </Shell>
     );
   }
 
   if (route.name === 'you') {
     return (
-      <Shell bar={bar} current="jij" onNavigate={goTo} onModule={goModule}>
+      <Shell
+        bar={bar}
+        address={addressFor(route)}
+        current="jij"
+        onNavigate={goTo}
+        onModule={goModule}
+      >
         <ProfileScreen profile={boot.profile} />
       </Shell>
     );
@@ -213,25 +265,30 @@ export default function App() {
 
   if (route.name === 'retention' || screen.name === 'retention') {
     return (
-      <Shell bar={bar} current="onthouden" onNavigate={goTo} onModule={goModule}>
+      <Shell
+        bar={bar}
+        address={addressFor(route)}
+        current="onthouden"
+        onNavigate={goTo}
+        onModule={goModule}
+      >
         <RetentionScreen />
       </Shell>
     );
   }
 
   return (
-    <Shell bar={bar} current="vandaag" onNavigate={goTo} onModule={goModule}>
+    <Shell
+      bar={bar}
+      address={addressFor(route)}
+      current="vandaag"
+      onNavigate={goTo}
+      onModule={goModule}
+    >
       <HomeScreen
         naam={boot.profile.naam}
         sticker={boot.profile.avatarConfig.sticker}
-        // Written through and held here, because the app bar shows the same
-        // animal: a choice that only redrew the card it was made on would look
-        // like it had not been saved.
-        onSticker={(id) => {
-          void setSticker(id).then((updated) => {
-            if (updated) setBoot({ status: 'ready', profile: updated });
-          });
-        }}
+        onSticker={chooseSticker}
         onStart={(setId, practiceMode) => {
           setVisit(visit + 1);
           setScreen({ name: 'practice', setId, practiceMode });
