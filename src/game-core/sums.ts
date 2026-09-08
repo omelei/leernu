@@ -41,7 +41,7 @@ export interface SumSet {
  * attention.
  */
 export function sumText(sum: SumItem): string {
-      return `${sum.table} × ${sum.by}`;
+  return `${sum.table} × ${sum.by}`;
 }
 
 /**
