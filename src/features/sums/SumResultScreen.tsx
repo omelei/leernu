@@ -64,6 +64,17 @@ export function SumResultScreen({
         <p className="text-body">{t('result.allCorrect')}</p>
       )}
 
+      {/* The diploma, above the streak and below what changed. It is the one
+          thing on this screen that is not about today: a table you have a
+          diploma for is a table you have finished. */}
+      {state.reward?.diploma ? (
+        <p className="tk-badge-outline w-fit">
+          {t('sums.diplomaEarned', { tafel: state.reward.diploma })}
+        </p>
+      ) : state.mode === 'tafeldiploma' ? (
+        <p className="text-ink-2">{t('sums.diplomaMissed')}</p>
+      ) : null}
+
       {state.streak ? (
         <p className="text-ink-2">
           {state.streak.state.huidigeStreak <= 1

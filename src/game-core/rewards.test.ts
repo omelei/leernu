@@ -2,10 +2,13 @@ import { describe, expect, it } from 'vitest';
 import {
   STAMPS,
   COINS_PERFECT_ROUND,
+  correctToNextLevel,
+  diplomaFor,
   levelFor,
   levelProgress,
   newStamps,
   rewardForRound,
+  tableOfDiploma,
   xpForLevel,
   XP_COMBO_BONUS,
   XP_PER_CORRECT,
@@ -199,5 +202,83 @@ describe('stamps', () => {
     for (const stamp of STAMPS) {
       expect(typeof stamp.criterion, stamp.id).toBe('function');
     }
+  });
+});
+
+/**
+ * The one number on a child's own column that is written in what they actually
+ * do. "Nog 340 XP" is a currency nobody counts in (ADR-065).
+ */
+describe('how far the next level is', () => {
+  it('counts in correct answers, not in points', () => {
+    // The first level costs 150, which is fifteen correct answers from nothing.
+    expect(correctToNextLevel(0)).toBe(Math.ceil(xpForLevel(2) / XP_PER_CORRECT));
+    expect(correctToNextLevel(0)).toBe(15);
+  });
+
+  it('rounds up, so it never promises a level a whole answer early', () => {
+    // Five XP short of a level is still one more answer, not nought.
+    expect(correctToNextLevel(xpForLevel(2) - 5)).toBe(1);
+    expect(correctToNextLevel(xpForLevel(2) - 1)).toBe(1);
+  });
+
+  it('never says nought, at any point on the curve', () => {
+    for (let xp = 0; xp < 8000; xp += 7) {
+      expect(correctToNextLevel(xp), `${xp}`).toBeGreaterThanOrEqual(1);
+    }
+  });
+
+  it('agrees with the level it is counting towards', () => {
+    for (let xp = 0; xp < 4000; xp += 13) {
+      const naNog = xp + correctToNextLevel(xp) * XP_PER_CORRECT;
+      expect(levelFor(naNog), `${xp}`).toBeGreaterThan(levelFor(xp));
+    }
+  });
+});
+
+/**
+ * The tafeldiploma (ADR-064). Kept out of `STAMPS` on purpose — twelve
+ * near-identical entries in that list would be exactly what its own comment
+ * argues against — so it needs its own few lines here.
+ */
+describe('the tafeldiploma', () => {
+  const diploma = (over: Partial<RewardSnapshot> = {}) =>
+    diplomaFor(
+      snapshot({
+        setId: 'tafel-7',
+        mode: 'tafeldiploma',
+        perfectRound: true,
+        completeRound: true,
+        ...over,
+      }),
+    );
+
+  it('is earned by the whole table, flawless, in one attempt', () => {
+    expect(diploma()).toBe('diploma-tafel-7');
+  });
+
+  it('is not earned by stopping while ahead, or by one mistake', () => {
+    expect(diploma({ completeRound: false })).toBeNull();
+    expect(diploma({ perfectRound: false })).toBeNull();
+  });
+
+  it('exists for a table and for nothing else', () => {
+    // There is no diploma for "alle tafels door elkaar" and none for a mix:
+    // that would be a certificate no school hands out.
+    for (const setId of ['tafels-alle', 'rekenmix', 'deel-7', 'plus-100', 'nl-provincies']) {
+      expect(diploma({ setId }), setId).toBeNull();
+    }
+  });
+
+  it('is not handed out by an ordinary flawless round', () => {
+    expect(diploma({ mode: 'som-typen' })).toBeNull();
+  });
+
+  it('reads back the table it belongs to, and refuses a row that is not one', () => {
+    expect(tableOfDiploma('diploma-tafel-7')).toBe(7);
+    expect(tableOfDiploma('diploma-tafel-12')).toBe(12);
+    // A thirteenth table is a typo, and a stamp is not a diploma.
+    expect(tableOfDiploma('diploma-tafel-13')).toBeNull();
+    expect(tableOfDiploma('week-op-rij')).toBeNull();
   });
 });

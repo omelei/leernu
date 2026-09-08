@@ -1,68 +1,79 @@
 {
-  "_gegenereerd": "tools/content/build-tafels.mjs — gegenereerd, niet met de hand bewerken.",
+  "_gegenereerd": "tools/content/build-rekenen.mjs — gegenereerd, niet met de hand bewerken.",
   "id": "tafel-10",
+  "op": "keer",
   "tafel": 10,
   "niveau": 1,
   "contentVersie": "2026-09-08",
   "items": [
     {
       "id": "tafel-10x1",
-      "table": 10,
-      "by": 1,
+      "op": "keer",
+      "links": 10,
+      "rechts": 1,
       "antwoord": 10
     },
     {
       "id": "tafel-10x2",
-      "table": 10,
-      "by": 2,
+      "op": "keer",
+      "links": 10,
+      "rechts": 2,
       "antwoord": 20
     },
     {
       "id": "tafel-10x3",
-      "table": 10,
-      "by": 3,
+      "op": "keer",
+      "links": 10,
+      "rechts": 3,
       "antwoord": 30
     },
     {
       "id": "tafel-10x4",
-      "table": 10,
-      "by": 4,
+      "op": "keer",
+      "links": 10,
+      "rechts": 4,
       "antwoord": 40
     },
     {
       "id": "tafel-10x5",
-      "table": 10,
-      "by": 5,
+      "op": "keer",
+      "links": 10,
+      "rechts": 5,
       "antwoord": 50
     },
     {
       "id": "tafel-10x6",
-      "table": 10,
-      "by": 6,
+      "op": "keer",
+      "links": 10,
+      "rechts": 6,
       "antwoord": 60
     },
     {
       "id": "tafel-10x7",
-      "table": 10,
-      "by": 7,
+      "op": "keer",
+      "links": 10,
+      "rechts": 7,
       "antwoord": 70
     },
     {
       "id": "tafel-10x8",
-      "table": 10,
-      "by": 8,
+      "op": "keer",
+      "links": 10,
+      "rechts": 8,
       "antwoord": 80
     },
     {
       "id": "tafel-10x9",
-      "table": 10,
-      "by": 9,
+      "op": "keer",
+      "links": 10,
+      "rechts": 9,
       "antwoord": 90
     },
     {
       "id": "tafel-10x10",
-      "table": 10,
-      "by": 10,
+      "op": "keer",
+      "links": 10,
+      "rechts": 10,
       "antwoord": 100
     }
   ]

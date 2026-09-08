@@ -1,0 +1,80 @@
+{
+  "_gegenereerd": "tools/content/build-rekenen.mjs — gegenereerd, niet met de hand bewerken.",
+  "id": "deel-1",
+  "op": "delen",
+  "tafel": 1,
+  "niveau": 1,
+  "contentVersie": "2026-09-08",
+  "items": [
+    {
+      "id": "deel-1-1",
+      "op": "delen",
+      "links": 1,
+      "rechts": 1,
+      "antwoord": 1
+    },
+    {
+      "id": "deel-2-1",
+      "op": "delen",
+      "links": 2,
+      "rechts": 1,
+      "antwoord": 2
+    },
+    {
+      "id": "deel-3-1",
+      "op": "delen",
+      "links": 3,
+      "rechts": 1,
+      "antwoord": 3
+    },
+    {
+      "id": "deel-4-1",
+      "op": "delen",
+      "links": 4,
+      "rechts": 1,
+      "antwoord": 4
+    },
+    {
+      "id": "deel-5-1",
+      "op": "delen",
+      "links": 5,
+      "rechts": 1,
+      "antwoord": 5
+    },
+    {
+      "id": "deel-6-1",
+      "op": "delen",
+      "links": 6,
+      "rechts": 1,
+      "antwoord": 6
+    },
+    {
+      "id": "deel-7-1",
+      "op": "delen",
+      "links": 7,
+      "rechts": 1,
+      "antwoord": 7
+    },
+    {
+      "id": "deel-8-1",
+      "op": "delen",
+      "links": 8,
+      "rechts": 1,
+      "antwoord": 8
+    },
+    {
+      "id": "deel-9-1",
+      "op": "delen",
+      "links": 9,
+      "rechts": 1,
+      "antwoord": 9
+    },
+    {
+      "id": "deel-10-1",
+      "op": "delen",
+      "links": 10,
+      "rechts": 1,
+      "antwoord": 10
+    }
+  ]
+}

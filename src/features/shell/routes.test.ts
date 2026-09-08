@@ -96,12 +96,34 @@ describe('the addresses', () => {
     expect(pathFor(tafel)).toMatch(/\/rekenen\/tafel-7$/);
   });
 
+  it('gives the new sums of rekenen an address each, and the mixes a word', () => {
+    // Four kinds of sum and three mixes, all reachable by typing. The mix is
+    // "mix" in both modules rather than "rekenmix" and "nl-mix": those are ids,
+    // and an id is not what a parent writes on a note.
+    for (const [pad, setId] of [
+      ['/rekenen/deel-7', 'deel-7'],
+      ['/rekenen/plus-20', 'plus-20'],
+      ['/rekenen/min-1000', 'min-1000'],
+      ['/rekenen/alle-tafels', 'tafels-alle'],
+      ['/rekenen/alle-deelsommen', 'deel-alle'],
+      ['/rekenen/mix', 'rekenmix'],
+      ['/topografie/mix', 'nl-mix'],
+    ] as const) {
+      expect(routeFor(pad), pad).toMatchObject({ name: 'module', setId });
+      const route = routeFor(pad);
+      expect(pathFor(route), pad).toMatch(new RegExp(`${pad}$`));
+    }
+  });
+
   it('opens the module when the set is one nobody has heard of', () => {
     // The child asked for topography by typing it. Answering with the front
     // door because the second word was wrong is the behaviour ADR-044 rejected
     // for modules, and it is no better one level down.
     expect(routeFor('/topografie/verzonnen')).toMatchObject({ name: 'module', setId: null });
     expect(routeFor('/rekenen/tafel-13')).toMatchObject({ name: 'module', setId: null });
+    // And a range nobody offers. "Tot 50" is a plausible thing to type and
+    // there is no such set, so it opens rekenen rather than an empty round.
+    expect(routeFor('/rekenen/plus-50')).toMatchObject({ name: 'module', setId: null });
   });
 
   it('keeps the retention screen at a word a child could type', () => {

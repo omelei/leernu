@@ -37,7 +37,7 @@ async function signIn(page: Page, naam: string) {
 
 async function chooseAndStart(page: Page, way: RegExp) {
   await page.getByRole('button', { name: 'Andere manieren' }).first().click();
-  await expect(page.getByRole('heading', { name: 'Wat wil je oefenen?' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
 
   const how = page.getByRole('region', { name: /Hoe wil je/ });
   await how.getByRole('button', { name: way }).click();
@@ -60,7 +60,7 @@ test('the front door, the chooser and the profile', async ({ page }, testInfo) =
   await shoot(page, size, '02-thuis');
 
   await page.getByRole('button', { name: 'Andere manieren' }).first().click();
-  await expect(page.getByRole('heading', { name: 'Wat wil je oefenen?' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
   await shoot(page, size, '03-kiezen');
 
   await page.goto('/jij');
@@ -78,7 +78,7 @@ test('the round: pointing, and the answer', async ({ page }, testInfo) => {
   await signIn(page, 'Joris');
   await page.goto('/topografie');
   await page
-    .getByRole('region', { name: /Waarover/ })
+    .getByRole('region', { name: /Kies een onderwerp/ })
     .getByRole('button', { name: /Provincies van Nederland/ })
     .click();
   await page
@@ -127,7 +127,7 @@ test('the tables: choosing one, and a sum', async ({ page }, testInfo) => {
   // The word a parent types, which is now the page itself rather than a card
   // pointing at one.
   await page.goto('/rekenen');
-  await expect(page.getByRole('heading', { name: 'Wat wil je oefenen?' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
   await shoot(page, size, '10-tafels');
 
   // The page opens on the table of one and on typing, so the start button is

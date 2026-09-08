@@ -5,7 +5,7 @@ import { SpeakButton } from '@/components/SpeakButton';
 import { usePreferences } from '@/features/player/settings';
 import { RoundProgress } from '@/features/practice/RoundProgress';
 import { StopButton } from '@/features/practice/StopButton';
-import { useSumRound, typesTheSum, type SumMode } from './useSumRound';
+import { useSumRound, stopsOnAMistake, typesTheSum, type SumMode } from './useSumRound';
 import { SumResultScreen } from './SumResultScreen';
 
 /**
@@ -138,7 +138,12 @@ export function SumScreen({
                   press and nothing to charge a child for pressing. */}
               {state.rule.kind !== 'tijd' && (
                 <button ref={nextButton} type="button" className="tk-button mt-4" onClick={next}>
-                  {t('practice.next')}
+                  {/* A diploma ends here, so the button says so. "Volgende
+                      vraag" on a button that shows a result is the kind of
+                      small lie a child notices once and then stops trusting. */}
+                  {stopsOnAMistake(mode) && !state.lastCorrect
+                    ? t('sums.diplomaStop')
+                    : t('practice.next')}
                 </button>
               )}
             </>

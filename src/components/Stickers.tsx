@@ -98,3 +98,92 @@ export function FishSticker(props: Omit<IconProps, 'children'>) {
     </Icon>
   );
 }
+
+/**
+ * Six more, and the reason there are now twelve.
+ *
+ * The first six were all there from the first day and unlocked nothing, which
+ * was right for what they were: a choice, not a reward (ADR-059). They are a
+ * ladder now — one per level, and a level is a hundred and fifty correct
+ * answers and then more (ADR-065). ADR-067 says why that reversal is worth
+ * making and what it is not allowed to become.
+ *
+ * Same frame, same primitives, same rule about ears. The dragon is the twelfth
+ * and the only one that is not an animal a child could meet, which is
+ * deliberate: the last thing on a ladder should look like the last thing.
+ */
+
+/** The hedgehog: a body, and a row of spikes that is the whole animal. */
+export function HedgehogSticker(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <circle cx="12" cy="15" r="6" />
+      <path d="M5 11l2.5-4 2 3.2 2.5-4.7 2 4.2 2.5-3.7 2 4.6" strokeLinejoin="round" />
+      <circle cx="8.5" cy="15.5" r="1" fill="currentColor" />
+    </Icon>
+  );
+}
+
+/** The frog: two eyes on top of the head, which is where a frog keeps them. */
+export function FrogSticker(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <circle cx="8" cy="7.5" r="2.8" />
+      <circle cx="16" cy="7.5" r="2.8" />
+      <path d="M4 11.5h16v3.5l-3.5 4h-9l-3.5-4z" strokeLinejoin="round" />
+      <circle cx="8" cy="7.5" r="1" fill="currentColor" />
+      <circle cx="16" cy="7.5" r="1" fill="currentColor" />
+    </Icon>
+  );
+}
+
+/** The squirrel: a head, and a tail bigger than the rest of it. */
+export function SquirrelSticker(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <circle cx="8.5" cy="9" r="4.5" />
+      <path d="M7 5.5L5.5 1.5l3.5 1.6" strokeLinejoin="round" />
+      <path d="M8.5 13.5v5.5h5" strokeLinejoin="round" />
+      <path d="M13.5 19l4.5-1.5 2-4.5-2-4-3.5-.5" strokeLinejoin="round" />
+      <circle cx="7" cy="8.5" r="1" fill="currentColor" />
+    </Icon>
+  );
+}
+
+/** The penguin: a head, a body and a beak, and no arms worth drawing at 24. */
+export function PenguinSticker(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <circle cx="12" cy="7" r="4.5" />
+      <path d="M7.5 10.5L6 20.5h12l-1.5-10" strokeLinejoin="round" />
+      <path d="M12 7.5l2.2 1.2-2.2 1.2z" strokeLinejoin="round" fill="currentColor" />
+      <circle cx="10.2" cy="6" r="0.9" fill="currentColor" />
+      <circle cx="13.8" cy="6" r="0.9" fill="currentColor" />
+    </Icon>
+  );
+}
+
+/** The elephant: the ears and the trunk, which is all an elephant needs. */
+export function ElephantSticker(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <circle cx="12" cy="10.5" r="5.5" />
+      <path d="M6.8 8.5L2.5 5.5v6.5l4 1.5M17.2 8.5l4.3-3v6.5l-4 1.5" strokeLinejoin="round" />
+      <path d="M12 16v4.5l3 1" strokeLinejoin="round" />
+      <circle cx="10" cy="9.5" r="1" fill="currentColor" />
+      <circle cx="14" cy="9.5" r="1" fill="currentColor" />
+    </Icon>
+  );
+}
+
+/** The dragon: a jaw, a horn and one eye. The twelfth, and it looks like it. */
+export function DragonSticker(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <path d="M2.5 15.5l4.5-6 6-2.5 5.5 2 3 4.5-4.5 3.5H7z" strokeLinejoin="round" />
+      <path d="M13.5 7l1.5-4.5 3 4" strokeLinejoin="round" />
+      <path d="M7 17h6.5" />
+      <circle cx="9" cy="12" r="1" fill="currentColor" />
+    </Icon>
+  );
+}

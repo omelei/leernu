@@ -13,7 +13,7 @@ import {
   type SumItem,
   type SumSet,
 } from '@/game-core';
-import { loadSumSet, loadSumSets } from '@/content/loadSums';
+import { loadSumSet, sumPool } from '@/content/loadSums';
 import { finishSession, loadItemStates, saveAnswer, startSession } from '@/store/progress';
 import { recordRoundFinished } from '@/store/streakStore';
 import { applyRoundRewards, type RoundOutcome } from '@/store/rewardStore';
@@ -37,7 +37,12 @@ import { applyRoundRewards, type RoundOutcome } from '@/store/rewardStore';
  * all of it.
  */
 
-export type SumMode = 'som-typen' | 'som-meerkeuze' | 'bliksemronde' | 'overleven';
+export type SumMode =
+  | 'som-typen'
+  | 'som-meerkeuze'
+  | 'bliksemronde'
+  | 'overleven'
+  | 'tafeldiploma';
 
 /*
  * Which of these a child is offered, in which order and with what said about
@@ -55,7 +60,35 @@ export const SUM_ROUND_RULE: Record<SumMode, RoundRule> = {
   'som-meerkeuze': { kind: 'fixed', aantal: 10 },
   bliksemronde: { kind: 'tijd', seconden: 60 },
   overleven: { kind: 'levens', levens: 3 },
+  // Ten, like any round of a table — the difference is not the length but that
+  // it ends on the first mistake. See `stopsOnAMistake`.
+  tafeldiploma: { kind: 'fixed', aantal: 10 },
 };
+
+/**
+ * A diploma is passed or it is not: one wrong answer ends the attempt.
+ *
+ * It is not a life lost — there is no counter and nothing to survive — and it
+ * is not a punishment either. The round stops, the result screen says which sum
+ * it was, and the child can sit it again straight away. That is what makes it
+ * a test rather than a longer round, and it is the only thing in the product
+ * that can be failed.
+ */
+export function stopsOnAMistake(mode: SumMode): boolean {
+  return mode === 'tafeldiploma';
+}
+
+/**
+ * A diploma asks the table in its own order, one to ten.
+ *
+ * Everywhere else the Leitner scheduler decides, because practice should start
+ * with what a child keeps missing. A test should not: "de tafel van 7" is a
+ * thing a child recites in order, and a diploma that shuffled it would be
+ * asking something the child was never taught.
+ */
+function inTableOrder(mode: SumMode): boolean {
+  return mode === 'tafeldiploma';
+}
 
 /**
  * Which way a child answers. Typing everywhere except the one mode built to be
@@ -156,21 +189,25 @@ export function useSumRound(setId: string, mode: SumMode) {
         const loadedStates = await loadItemStates();
         if (cancelled) return;
 
-        // A fixed round is the chosen table. A round that ends on a clock or on
-        // lives draws from all twelve, because ten sums would run out long
-        // before the minute does — and a child who reaches for the clock is one
-        // who already knows a table, not one still learning this one.
-        const pool =
-          rule.kind === 'fixed' ? loaded.items : loadSumSets().flatMap((set) => set.items);
+        // A fixed round is the chosen set. A round that ends on a clock or on
+        // lives draws from everything of the same kind, because ten sums would
+        // run out long before the minute does — and a child who reaches for the
+        // clock is one who already knows a table, not one still learning this
+        // one. What it does not do is reach across kinds: a minute of tables
+        // stays a minute of tables (`sumPool`).
+        const pool = rule.kind === 'fixed' ? loaded.items : sumPool(setId);
 
         // In the order the scheduler wants it: what a child keeps missing comes
-        // round first, even inside ten sums.
-        const picked = composeRound({
-          items: pool,
-          states: loadedStates,
-          size: rule.kind === 'fixed' ? rule.aantal : pool.length,
-          now: new Date(),
-        });
+        // round first, even inside ten sums. A diploma is the exception and
+        // asks the table straight through.
+        const picked = inTableOrder(mode)
+          ? [...loaded.items].slice(0, rule.kind === 'fixed' ? rule.aantal : loaded.items.length)
+          : composeRound({
+              items: pool,
+              states: loadedStates,
+              size: rule.kind === 'fixed' ? rule.aantal : pool.length,
+              now: new Date(),
+            });
 
         const round = picked.map((sum) => ({
           sum,
@@ -180,6 +217,7 @@ export function useSumRound(setId: string, mode: SumMode) {
         sessionId.current = await startSession(
           mode,
           round.map((question) => question.sum.id),
+          setId,
         );
         if (cancelled) return;
 
@@ -305,9 +343,14 @@ export function useSumRound(setId: string, mode: SumMode) {
   const next = useCallback(() => {
     if (phase !== 'revealed') return;
 
-    // Out of lives, or out of questions. A timed round ends on the clock
+    // Out of lives, out of questions, or — in a diploma — out of the attempt,
+    // because one wrong answer ends it. A timed round ends on the clock
     // instead, which is the interval below.
-    if ((rule.kind === 'levens' && livesLeft <= 0) || index + 1 >= questions.length) {
+    if (
+      (rule.kind === 'levens' && livesLeft <= 0) ||
+      (stopsOnAMistake(mode) && !lastCorrect) ||
+      index + 1 >= questions.length
+    ) {
       finish();
       return;
     }
@@ -316,7 +359,7 @@ export function useSumRound(setId: string, mode: SumMode) {
     setGiven(null);
     setPhase('asking');
     askedAt.current = performance.now();
-  }, [phase, index, questions, finish, rule, livesLeft]);
+  }, [phase, index, questions, finish, rule, livesLeft, mode, lastCorrect]);
 
   /**
    * The clock. Four ticks a second so the number is not up to a second behind

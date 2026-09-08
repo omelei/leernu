@@ -87,4 +87,5 @@ export type ModeId =
   | 'overleven'
   | 'ontdekken'
   | 'som-typen'
-  | 'som-meerkeuze';
+  | 'som-meerkeuze'
+  | 'tafeldiploma';

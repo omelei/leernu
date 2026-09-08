@@ -47,19 +47,38 @@ const SET_SLUG: Record<string, string> = {
   'nl-waddeneilanden': 'waddeneilanden',
   'nl-wateren': 'wateren',
   'nl-steden': 'steden',
+  // The mix, on both modules, under the word a child would say. It is not a
+  // file in either of them (ADR-062, ADR-063) and it still has an address,
+  // because "ga naar leer.nu/rekenen/mix" is a sentence a parent can say.
+  'nl-mix': 'mix',
+  rekenmix: 'mix',
+  'tafels-alle': 'alle-tafels',
+  'deel-alle': 'alle-deelsommen',
 };
 
 const SLUG_SET = new Map(Object.entries(SET_SLUG).map(([id, slug]) => [slug, id]));
 
-/** One to twelve, and nothing else. A thirteenth table is a typo, not a set. */
-const TABLE_SLUG = /^tafel-(?:[1-9]|1[0-2])$/;
+/**
+ * The sets of rekenen that answer to their own name.
+ *
+ * One to twelve, times and divide, and three ranges each for plus and minus. A
+ * thirteenth table is a typo, not a set, and so is "plus-50": a slug that does
+ * not name something opens the module rather than an error page.
+ */
+const REKENEN_SLUG = /^(?:tafel|deel)-(?:[1-9]|1[0-2])$|^(?:plus|min)-(?:20|100|1000)$/;
 
 export function setSlug(setId: string): string {
   return SET_SLUG[setId] ?? setId;
 }
 
 function setIdFor(module: Module, slug: string): string | null {
-  if (module.id === 'tafels') return TABLE_SLUG.test(slug) ? slug : null;
+  if (module.id === 'tafels') {
+    if (REKENEN_SLUG.test(slug)) return slug;
+    if (slug === 'mix') return 'rekenmix';
+    if (slug === 'alle-tafels') return 'tafels-alle';
+    if (slug === 'alle-deelsommen') return 'deel-alle';
+    return null;
+  }
   return SLUG_SET.get(slug) ?? null;
 }
 
@@ -153,14 +172,15 @@ export function pathFor(route: Route): string {
   return `${base}${slugFor(route)}`.replace(/\/{2,}/g, '/');
 }
 
-/**
- * The path as it is written beside the wordmark: "leer.nu" + "/topografie".
+/*
+ * There used to be an `addressFor` here, and the app bar printed what it
+ * returned beside the wordmark: "leer.nu" + "/rekenen". It is gone (ADR-068).
  *
- * Without the deployment base, because this is the address a parent would write
- * down rather than the one the bundler serves from — and nothing for the front
- * door, where "leer.nu/" is a stub with nothing after it.
+ * The addresses are real and that has not changed — a set still has one, the
+ * router still reads it, and a parent can still write one down. What the app
+ * bar was doing was reading the current one back to a child who had just
+ * arrived by pressing something, in a spelling nobody says out loud, in the
+ * one strip of the screen where width is worth the most. A page that says
+ * where you are twice — once in the rail, once in the heading — does not need
+ * a third.
  */
-export function addressFor(route: Route): string | undefined {
-  const slug = slugFor(route);
-  return slug === '' ? undefined : `/${slug}`;
-}

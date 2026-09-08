@@ -1,6 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Button } from '@/components/Button';
 import { Dot } from '@/components/Dot';
+import { GoIcon } from '@/components/Icon';
 import { countMastered, type ItemState, type ModeId } from '@/game-core';
 import { t } from '@/i18n';
 import { loadItemStates } from '@/store/progress';
@@ -8,33 +9,53 @@ import { MODULE_ICON } from '@/features/shell/moduleIcons';
 import type { Module } from '@/features/shell/modules';
 import { usePreferences } from '@/features/player/settings';
 import { useTestPlan } from '@/features/home/testPlan';
-import { naamVan, onderdelenVan, opDeRol, type Onderdeel } from './onderdelen';
+import { Tafeldiplomas } from './Tafeldiplomas';
+import {
+  itemsVan,
+  naamVan,
+  onderwerpenVan,
+  onderwerpVan,
+  opDeRol,
+  type Onderdeel,
+  type Onderwerp,
+} from './onderdelen';
 import { formsFor, minutesFor, offeredForms, questionCount, startLabel } from './forms';
 
 /**
  * A module's own page — leer.nu/topografie, leer.nu/rekenen — and the one flow
  * on it.
  *
- * K2 draws this as a column under "Wat wil je oefenen?": first **waarover**,
- * then **hoe**, then a start button carrying the two answers in words. This is
+ * K2 draws this as a column under "Wat wil je oefenen?": first **what about**,
+ * then **how**, then a start button carrying the two answers in words. This is
  * that column, and the same one for every module. Topography and the tables had
  * a screen each before, alike in shape and separately maintained, which is two
  * places to fix a chooser and two chances for them to drift apart. What differs
- * between two modules is the list of sets and the list of ways — data — and
+ * between two modules is the list of subjects and the list of ways — data — and
  * neither is a reason for a second screen.
  *
- * Three things it does that the two screens it replaces did not.
+ * Four things it does that the two screens it replaces did not.
+ *
+ * **Step 1 offers subjects, not sets.** Twelve tables were twelve cards, and
+ * with division, plus and minus beside them rekenen would have had thirty-six.
+ * So a subject is a card and the sets under it are a row of chips that appears
+ * once the subject is chosen — one decision, then a smaller one, instead of
+ * thirty-six of equal weight (ADR-062). Six subjects at most in a section, the
+ * same ceiling step 2 has had since ADR-061.
  *
  * **Every way of practising is in step 2, with a face.** Six at most; see
  * `forms.ts` for why the clock and the lives are in the list now rather than
- * beside it.
+ * beside it, and why a diploma is offered on a table and not on a mix.
  *
  * **A set has an address.** leer.nu/topografie/provincies is a place a parent
- * can send a child, and the page opens on it.
+ * can send a child, and the page opens on it — on the chip and on the subject
+ * card above it.
  *
- * **The start button says how long it takes.** "Ongeveer 4 minuten" is the
- * design's own line and the one thing on this page aimed at the adult in the
- * room as much as at the child.
+ * **The start button is a start button.** It used to be the sentence itself —
+ * "Provincies aanwijzen · 15 vragen" — which is what a child needs to read and
+ * not what a child recognises as the way on. The sentence stayed and moved
+ * beside it; the button says Start, has an arrow on it, and sits at the end of
+ * the line where the eye finishes rather than at the beginning where it started
+ * (ADR-066). What a screen reader hears is still the whole thing.
  *
  * The frame around it is K1's: the rail on the left, the app bar above, and the
  * child's own column on the right. A module page is not a different application
@@ -42,12 +63,15 @@ import { formsFor, minutesFor, offeredForms, questionCount, startLabel } from '.
  */
 export function ModuleScreen({
   module,
+  naam,
   setId,
   onSet,
   onStart,
   aside,
 }: {
   readonly module: Module;
+  /** Whose page this is. The heading asks them by name. */
+  readonly naam: string;
   /** Which set the address names, or null for the module's own way in. */
   readonly setId: string | null;
   readonly onSet: (setId: string) => void;
@@ -67,20 +91,18 @@ export function ModuleScreen({
   const known = states ?? new Map<string, ItemState>();
   const now = new Date();
 
-  const sets = onderdelenVan(module.id);
+  const onderwerpen = onderwerpenVan(module.id);
+  const alleSets = onderwerpen.flatMap((vak) => vak.sets);
+
   // An address that names a set nobody has heard of opens the module rather
   // than an error: the child asked for topography and got topography.
-  const chosen = sets.find((deel) => deel.setId === setId) ?? sets[0] ?? null;
+  const chosen = alleSets.find((deel) => deel.setId === setId) ?? alleSets[0] ?? null;
+  const onderwerp = chosen ? onderwerpVan(onderwerpen, chosen.setId) : null;
 
-  const forms = offeredForms(formsFor(module.id), prefs.timer);
+  const forms = offeredForms(formsFor(module.id), prefs.timer, chosen?.setId ?? null);
   const form = forms.find((candidate) => candidate.id === formId) ?? forms[0] ?? null;
 
   const ModuleIcon = MODULE_ICON[module.id];
-
-  // Twelve tables are a grid and five named sets are a list. The same card
-  // either way — what changes is how many fit on a line, and twelve rows of
-  // one is a page a child scrolls past rather than reads.
-  const dense = sets.length > 6;
 
   const setSize = chosen?.items.length ?? 0;
   const vragen = form === null ? null : questionCount(form, setSize);
@@ -97,7 +119,10 @@ export function ModuleScreen({
             {t(module.name)}
           </p>
 
-          <h1 className="tk-display text-h1 font-semibold">{t('choose.title')}</h1>
+          {/* By name, the way the front door greets them. A chooser that asks
+              "wat wil je oefenen?" of nobody in particular is a form; asked of
+              Fem it is a question, and she is the one answering it. */}
+          <h1 className="tk-display text-h1 font-semibold">{t('choose.title', { naam })}</h1>
 
           {/* The reason this week has a reason, but only on the page it is
               about. K2 stamps "toets" on the set; we know the subject and not
@@ -109,47 +134,103 @@ export function ModuleScreen({
             </p>
           ) : null}
 
-          <Rol sets={sets} chosen={chosen} known={known} now={now} onSet={onSet} />
+          <Rol
+            onderwerpen={onderwerpen}
+            chosen={chosen}
+            known={known}
+            now={now}
+            onSet={onSet}
+          />
         </div>
 
         <section className="flex flex-col gap-3" aria-label={t('choose.stepWhat')}>
           <h2 className="tk-label">{t('choose.stepWhat')}</h2>
 
-          <div className={dense ? 'tk-sets' : 'flex flex-col gap-3'}>
-            {sets.map((deel) => {
-              const ids = deel.items.map((item) => item.id);
+          <div className="tk-sets">
+            {onderwerpen.map((vak) => {
+              const ids = itemsVan(vak);
               const mastered = countMastered(known, ids);
-              const due = opDeRol(deel, known, now);
+              const due = vak.sets
+                .filter((deel) => !deel.mix || vak.sets.length === 1)
+                .reduce((most, deel) => Math.max(most, opDeRol(deel, known, now)), 0);
+              const open = vak.id === onderwerp?.id;
 
               return (
                 <button
-                  key={deel.setId}
+                  key={vak.id}
                   type="button"
                   className="tk-module-card w-full"
-                  aria-pressed={deel.setId === chosen?.setId}
-                  onClick={() => onSet(deel.setId)}
+                  aria-pressed={open}
+                  // The subject's first set, and only when the subject is not
+                  // already the open one: a child who has chosen the table of
+                  // seven and then presses "Tafels" again should not be sent
+                  // back to the table of one for pressing the heading.
+                  onClick={() => {
+                    if (!open) onSet(vak.sets[0]?.setId ?? '');
+                  }}
                 >
                   <Dot size={24} fill={ids.length === 0 ? 0 : mastered / ids.length} />
-                  {/* One line where it fits, which is what K2 draws: the name
-                      and how it is going share a baseline. Stacked, five sets
-                      filled the fold on a laptop and step 2 — the part with
-                      the six ways on it — was never on screen without
-                      scrolling, on the page whose whole argument is that the
-                      two steps are one flow. It wraps back to two lines on a
-                      phone, where the name alone is most of the width. */}
-                  <span className="flex min-w-0 flex-wrap items-baseline gap-x-3">
-                    <span className="font-semibold">{naamVan(deel)}</span>
-                    <span className="text-ink-2">
-                      {mastered === 0 && due === 0
-                        ? t('home.setNew')
-                        : t('home.setMastered', { goed: mastered, totaal: ids.length })}
-                      {due > 0 ? ` · ${t('choose.dueToday', { aantal: due })}` : ''}
+                  <span className="flex min-w-0 flex-col">
+                    {/* The name and how it is going share a baseline, which is
+                        what K2 draws. They wrap to two lines on a phone, where
+                        the name alone is most of the width. */}
+                    <span className="flex min-w-0 flex-wrap items-baseline gap-x-3">
+                      <span className="font-semibold">{t(vak.naam)}</span>
+                      <span className="text-ink-2">
+                        {mastered === 0 && due === 0
+                          ? t('home.setNew')
+                          : t('home.setMastered', { goed: mastered, totaal: ids.length })}
+                        {due > 0 ? ` · ${t('choose.dueToday', { aantal: due })}` : ''}
+                      </span>
                     </span>
+
+                    {/* What is in it, where the name does not say. "Deelsommen"
+                        is a word a child may not have met; "de tafels
+                        andersom: 56 : 7" is the same thing with an example on
+                        it, and an example is what makes a subject choosable. */}
+                    {vak.uitleg ? <span className="text-ink-2">{t(vak.uitleg)}</span> : null}
                   </span>
                 </button>
               );
             })}
           </div>
+
+          {/* The second, smaller decision, and only where there is one. Chips
+              rather than a dropdown: a menu hides eleven of twelve tables
+              behind a control a child has to open, and the whole point of this
+              block is that the one they want is already on the screen. */}
+          {onderwerp && onderwerp.keuze && onderwerp.sets.length > 1 ? (
+            <div className="tk-variant">
+              <p className="tk-label">{t(onderwerp.keuze)}</p>
+              <div className="tk-variant-row">
+                {onderwerp.sets.map((deel) => {
+                  const ids = deel.items.map((item) => item.id);
+                  const mastered = countMastered(known, ids);
+
+                  return (
+                    <button
+                      key={deel.setId}
+                      type="button"
+                      className="tk-variant-chip"
+                      // The full name, because "7" is not a sentence and this
+                      // is the one control on the page whose visible label is
+                      // deliberately shorter than what it means.
+                      aria-label={naamVan(deel)}
+                      aria-pressed={deel.setId === chosen?.setId}
+                      onClick={() => onSet(deel.setId)}
+                    >
+                      <span aria-hidden="true">{deel.kortNaam ?? naamVan(deel)}</span>
+                      <Dot
+                        size={10}
+                        fill={ids.length === 0 ? 0 : mastered / ids.length}
+                        className="tk-variant-dot"
+                      />
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ) : null}
         </section>
 
         <section className="flex flex-col gap-3" aria-label={t('choose.stepHow')}>
@@ -180,21 +261,46 @@ export function ModuleScreen({
           </div>
         </section>
 
-        {/* Full width on a phone, a button with the estimate beside it
-            everywhere else — see .tk-choose-start. The combination is spelled
-            out on it, which is what K2 asks for: a child reads what the round
-            is at the moment they start it. */}
+        {/* What was chosen, in words, and then the way on. Full width and
+            stacked on a phone; one line ending in the button everywhere else.
+            See .tk-choose-start. */}
         {chosen && form ? (
-          <div className="tk-choose-start flex flex-wrap items-center gap-4">
-            <Button onClick={() => onStart(chosen, form.id)}>
-              {startLabel(form, naamVan(chosen), setSize)}
+          <div className="tk-choose-start">
+            <p className="tk-choose-said">
+              <span className="font-semibold">{startLabel(form, naamVan(chosen), setSize)}</span>
+              {minuten === null ? null : (
+                <span className="block text-ink-2">
+                  {minuten === 1 ? t('choose.minuteOne') : t('choose.minutes', { aantal: minuten })}
+                </span>
+              )}
+            </p>
+
+            <Button
+              className="tk-button-go"
+              aria-label={t('choose.goLabel', { wat: startLabel(form, naamVan(chosen), setSize) })}
+              onClick={() => onStart(chosen, form.id)}
+            >
+              {t('choose.go')}
+              <GoIcon size={24} />
             </Button>
-            {minuten === null ? null : (
-              <span className="text-ink-2">
-                {minuten === 1 ? t('choose.minuteOne') : t('choose.minutes', { aantal: minuten })}
-              </span>
-            )}
           </div>
+        ) : null}
+
+        {/* Twelve diplomas, on the page the tables live on and nowhere else.
+            Absent for every other module, because it is not a general idea
+            about progress — it is the tafeltoets, and it is only that.
+
+            Pressing a gap answers both steps at once: that table, and the
+            diploma. A child who presses "9" on a wall of diplomas has said
+            what they want to do, and making them go back up the page to say it
+            again in two more presses is the product not listening. */}
+        {module.id === 'tafels' ? (
+          <Tafeldiplomas
+            onKies={(gekozen) => {
+              onSet(gekozen);
+              setFormId('tafeldiploma');
+            }}
+          />
         ) : null}
       </div>
 
@@ -207,32 +313,37 @@ export function ModuleScreen({
  * What the scheduler has put on today's list, when it is waiting somewhere
  * other than where the child is standing.
  *
- * The set cards each say "3 vandaag op de rol" already. What they cannot say is
- * which of twelve to look at, and on a page of twelve tables the one that needs
- * doing is as likely to be row nine as row one. So this names it and selects
- * it, and then gets out of the way — it does not start a round, because
- * choosing how is still the child's to make.
+ * The subject cards each say "3 vandaag op de rol" already. What they cannot
+ * say is which of twelve tables to look at, and on a page where a subject holds
+ * thirteen sets the one that needs doing is as likely to be the ninth chip as
+ * the first. So this names it and selects it, and then gets out of the way — it
+ * does not start a round, because choosing how is still the child's to make.
  *
  * A line under the heading and not a card of its own, and above the two steps
- * rather than inside them: the flow begins at "1 · Waarover", and a block that
- * pushed that down the page would be answering a question before it was asked.
+ * rather than inside them: the flow begins at step 1, and a block that pushed
+ * that down the page would be answering a question before it was asked.
  *
  * Absent when the busiest set is the one already open. Telling a child to go
  * where they are is furniture.
  */
 function Rol({
-  sets,
+  onderwerpen,
   chosen,
   known,
   now,
   onSet,
 }: {
-  readonly sets: readonly Onderdeel[];
+  readonly onderwerpen: readonly Onderwerp[];
   readonly chosen: Onderdeel | null;
   readonly known: ReadonlyMap<string, ItemState>;
   readonly now: Date;
   readonly onSet: (setId: string) => void;
 }) {
+  // Over the sets rather than the subjects, and never over a mix: a mix holds
+  // every item there is, so it is due more often than anything else by
+  // definition and would be the answer every time.
+  const sets = onderwerpen.flatMap((vak) => vak.sets).filter((deel) => !deel.mix);
+
   const drukste = sets.reduce<{ deel: Onderdeel; due: number } | null>((best, deel) => {
     const due = opDeRol(deel, known, now);
     return best === null || due > best.due ? { deel, due } : best;

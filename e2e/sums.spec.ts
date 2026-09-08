@@ -22,14 +22,16 @@ async function signIn(page: Page, naam: string) {
 
 async function startTable(page: Page, tafel: number, hoe: RegExp) {
   await page.goto('/rekenen');
-  await expect(page.getByRole('heading', { name: 'Wat wil je oefenen?' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
 
-  const wat = page.getByRole('region', { name: /Waarover/ });
+  const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
   const hoeStap = page.getByRole('region', { name: /Hoe wil je/ });
 
-  // Anchored, or "Tafel van 1" also matches ten, eleven and twelve, and the
-  // name carries the mastery line after it.
-  await wat.getByRole('button', { name: new RegExp(`^Tafel van ${tafel}\\D`) }).click();
+  // Step 1 is five subjects now, and the tables are one of them. Which table is
+  // the second, smaller question underneath — a chip whose visible label is the
+  // number and whose accessible name is the whole thing (ADR-062).
+  await wat.getByRole('button', { name: 'Tafels', exact: true }).click();
+  await wat.getByRole('button', { name: `Tafel van ${tafel}`, exact: true }).click();
   await hoeStap.getByRole('button', { name: hoe }).click();
   await start(page);
 }
@@ -76,8 +78,8 @@ test('the front door lists every module, at every size', async ({ page }) => {
   }
 
   await lijst.getByRole('button', { name: /Rekenen/ }).click();
-  await expect(page.getByRole('heading', { name: 'Wat wil je oefenen?' })).toBeVisible();
-  await expect(page.getByRole('button', { name: /^Tafel van 7\D/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Tafel van 7', exact: true })).toBeVisible();
 });
 
 test('the tables have an address of their own', async ({ page }) => {
@@ -85,9 +87,9 @@ test('the tables have an address of their own', async ({ page }) => {
   // The slug still works — it has been written down — and it is the same page.
   await page.goto('/tafels');
 
-  await expect(page.getByRole('heading', { name: 'Wat wil je oefenen?' })).toBeVisible();
-  await expect(page.getByRole('button', { name: /^Tafel van 7\D/ })).toBeVisible();
-  await expect(page.getByRole('button', { name: /^Tafel van 12\D/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Tafel van 7', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Tafel van 12', exact: true })).toBeVisible();
 });
 
 test('rekenen is the word a parent looks for, and it is the page itself', async ({ page }) => {
@@ -98,8 +100,8 @@ test('rekenen is the word a parent looks for, and it is the page itself', async 
   // page here with a single card on it saying "Rekenen", which charged a child
   // a click to be told what they had already typed. Tafels sits under rekenen;
   // klokkijken sits beside it (ADR-044).
-  await expect(page.getByRole('heading', { name: 'Wat wil je oefenen?' })).toBeVisible();
-  await expect(page.getByRole('button', { name: /^Tafel van 3\D/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Tafel van 3', exact: true })).toBeVisible();
 });
 
 /**
@@ -112,10 +114,16 @@ test('a set has an address, and the page opens on it', async ({ page }) => {
   // Scoped to step 1, because the start button names the chosen set as well —
   // which is what K2 puts it there for, and which makes an unscoped query for
   // the set name ambiguous on exactly the page that opened on it.
-  const wat = page.getByRole('region', { name: /Waarover/ });
+  const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
 
   await page.goto('/rekenen/tafel-7');
-  await expect(wat.getByRole('button', { name: /^Tafel van 7\D/ })).toHaveAttribute(
+  await expect(wat.getByRole('button', { name: 'Tafel van 7', exact: true })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
+  // And the subject the chip sits under is open, so the page shows the chips at
+  // all rather than opening on the first subject and hiding the one asked for.
+  await expect(wat.getByRole('button', { name: 'Tafels', exact: true })).toHaveAttribute(
     'aria-pressed',
     'true',
   );
@@ -228,4 +236,158 @@ test('the lightning round is offered only once the clock is on', async ({ page }
 
   await page.goto('/rekenen');
   await expect(bliksem).toBeVisible();
+});
+
+/**
+ * Rekenen is four kinds of sum now, not one.
+ *
+ * What is worth checking is not that 34 + 9 is 43 — `sums.content.test.ts`
+ * works all five hundred of them back out — but that a child can reach each
+ * kind, that the page keeps its shape while they do, and that no section ever
+ * grows past six cards.
+ */
+test('rekenen offers five subjects, and never more than six', async ({ page }) => {
+  await signIn(page, 'Bram');
+  await page.goto('/rekenen');
+
+  const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
+
+  for (const naam of ['Tafels', 'Deelsommen', 'Plussommen', 'Minsommen', 'Rekenmix']) {
+    await expect(wat.getByRole('button', { name: naam, exact: true })).toBeVisible();
+  }
+
+  // Six is the ceiling a section may hold (ADR-061, ADR-062). The chips are
+  // buttons in the same region, so this counts the cards themselves.
+  await expect(page.locator('.tk-sets > button')).toHaveCount(5);
+});
+
+test('a subject with many sets asks which, instead of showing all of them', async ({ page }) => {
+  await signIn(page, 'Sten');
+  await page.goto('/rekenen');
+
+  const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
+
+  // Twelve tables and "alle tafels", as chips under the card. Twelve cards is
+  // the page this replaced, and it pushed step 2 off the screen.
+  await wat.getByRole('button', { name: 'Tafels', exact: true }).click();
+  await expect(page.locator('.tk-variant-chip')).toHaveCount(13);
+
+  // Plus has three ranges, and they are offered smallest first. Sorted as
+  // numbers: "1000" falls between "100" and "20" in every alphabet there is.
+  await wat.getByRole('button', { name: 'Plussommen', exact: true }).click();
+  await expect(page.locator('.tk-variant-chip')).toHaveCount(3);
+  await expect(page.locator('.tk-variant-chip')).toHaveText(['tot 20', 'tot 100', 'tot 1000']);
+
+  // The mix is one thing, so there is nothing to ask.
+  await wat.getByRole('button', { name: 'Rekenmix', exact: true }).click();
+  await expect(page.locator('.tk-variant-chip')).toHaveCount(0);
+});
+
+test('a plus sum is a plus sum, and a division is a division', async ({ page }) => {
+  await signIn(page, 'Lieve');
+  await page.goto('/rekenen/plus-20');
+
+  await page
+    .getByRole('region', { name: /Hoe wil je/ })
+    .getByRole('button', { name: /Typ het antwoord/ })
+    .click();
+  await start(page);
+
+  await expect(page.locator('.tk-sum')).toContainText('+');
+
+  await page.goto('/rekenen/deel-7');
+  await page
+    .getByRole('region', { name: /Hoe wil je/ })
+    .getByRole('button', { name: /Typ het antwoord/ })
+    .click();
+  await start(page);
+
+  // The colon Dutch primary school divides with, never the obelus.
+  await expect(page.locator('.tk-sum')).toContainText(':');
+});
+
+/**
+ * The tafeldiploma: the test a child already knows from school, without the
+ * stopwatch (ADR-064). Ten sums of one table, in order, and one mistake ends
+ * the attempt.
+ */
+test('a diploma is passed or it is not, and one mistake ends the attempt', async ({ page }) => {
+  await signIn(page, 'Guus');
+
+  // Not offered on a mix: there is no diploma for "alle tafels door elkaar".
+  await page.goto('/rekenen/mix');
+  await expect(
+    page.getByRole('region', { name: /Hoe wil je/ }).getByRole('button', { name: /Tafeldiploma/ }),
+  ).toHaveCount(0);
+
+  await startTable(page, 1, /Tafeldiploma/);
+
+  // A diploma asks the table straight through, so the first sum is 1 x 1.
+  await expect(page.locator('.tk-sum')).toContainText('1 × 1');
+
+  await page.getByPlaceholder('Antwoord').fill('999');
+  await page.getByRole('button', { name: 'Kijk na' }).click();
+  // The button says what it does: this attempt is over, not "next question".
+  await page.getByRole('button', { name: 'Bekijk je poging' }).click();
+
+  await expect(page.getByText('Nog geen diploma. Alle tien goed, dan is hij van jou.')).toBeVisible();
+});
+
+test('a diploma passed goes on the wall, where the gaps are the point', async ({ page }) => {
+  await signIn(page, 'Sanne');
+  await startTable(page, 1, /Tafeldiploma/);
+
+  // The table of one, so every answer is the multiplier itself and the attempt
+  // can be passed honestly rather than by guessing.
+  for (let n = 1; n <= 10; n++) {
+    const som = await page.locator('.tk-sum').innerText();
+    const antwoord = som.split('×')[1]?.trim() ?? '';
+
+    await page.getByPlaceholder('Antwoord').fill(antwoord);
+    await page.getByRole('button', { name: 'Kijk na' }).click();
+    // Right every time, so the button stays "Volgende vraag" — the attempt only
+    // ends early on a mistake, and on the tenth it ends because it is over.
+    await page.getByRole('button', { name: 'Volgende vraag' }).click();
+  }
+
+  await expect(page.getByText('Diploma gehaald: tafel van 1')).toBeVisible();
+
+  await page.goto('/rekenen');
+  const muur = page.getByRole('region', { name: /tafeldiploma/i });
+  await expect(muur.getByRole('button', { name: 'Tafel van 1: diploma gehaald' })).toBeVisible();
+  await expect(muur.getByRole('button', { name: 'Tafel van 7: nog geen diploma' })).toBeVisible();
+  await expect(muur).toContainText('1 van de 12 gehaald');
+});
+
+/**
+ * The Topomix: everything on the map at once, which means the answer layer
+ * belongs to the question rather than to the round (ADR-063).
+ */
+test('the topomix asks about more than one kind of thing in one round', async ({ page }) => {
+  await signIn(page, 'Jill');
+  await page.goto('/topografie/mix');
+
+  const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
+  await expect(wat.getByRole('button', { name: /Topomix/ })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
+
+  // Exploring is one set's own layer and is not offered here — a mix is not
+  // where anybody meets a set for the first time.
+  await expect(
+    page.getByRole('region', { name: /Hoe wil je/ }).getByRole('button', { name: /Ontdekken/ }),
+  ).toHaveCount(0);
+
+  await page
+    .getByRole('region', { name: /Hoe wil je/ })
+    .getByRole('button', { name: /Aanwijzen/ })
+    .click();
+  await start(page);
+
+  // A round starts and asks something. Which of the five sets the first
+  // question comes from is the scheduler's business, so this asserts the shape
+  // rather than the item.
+  await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
+  await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuemax', '15');
 });

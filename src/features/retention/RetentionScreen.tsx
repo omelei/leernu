@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { Dot } from '@/components/Dot';
 import { StatusLabel } from '@/components/StatusLabel';
 import { loadItemSets } from '@/content/loadSets';
@@ -32,7 +32,7 @@ const SET_NAME_KEY: Record<SetId, TranslationKey> = {
   'nl-steden': 'set.nl-steden',
 };
 
-export function RetentionScreen() {
+export function RetentionScreen({ aside }: { readonly aside: ReactNode }) {
   const [states, setStates] = useState<Map<string, ItemState> | null>(null);
   const [setId, setSetId] = useState<SetId>('nl-provincies');
 
@@ -55,28 +55,32 @@ export function RetentionScreen() {
   const items = set?.items ?? [];
 
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 p-6">
-      <h1 className="tk-display text-h1 font-semibold">{t('retention.title')}</h1>
+    <div className="tk-page">
+      <div className="tk-page-main">
+        <h1 className="tk-display text-h1 font-semibold">{t('retention.title')}</h1>
 
-      {/* Which set. Pills rather than a select: five options, all worth seeing,
-          and a select on a touch screen is a menu that covers the thing you
-          were looking at. */}
-      <div className="flex flex-wrap gap-2">
-        {SET_IDS.map((id) => (
-          <button
-            key={id}
-            type="button"
-            className="tk-pill"
-            aria-pressed={id === setId}
-            onClick={() => setSetId(id)}
-          >
-            {t(SET_NAME_KEY[id])}
-          </button>
-        ))}
+        {/* Which set. Pills rather than a select: five options, all worth
+            seeing, and a select on a touch screen is a menu that covers the
+            thing you were looking at. */}
+        <div className="flex flex-wrap gap-2">
+          {SET_IDS.map((id) => (
+            <button
+              key={id}
+              type="button"
+              className="tk-pill"
+              aria-pressed={id === setId}
+              onClick={() => setSetId(id)}
+            >
+              {t(SET_NAME_KEY[id])}
+            </button>
+          ))}
+        </div>
+
+        <Heatmap items={items} states={states} />
+        <RetentionTable items={items} states={states} now={now} />
       </div>
 
-      <Heatmap items={items} states={states} />
-      <RetentionTable items={items} states={states} now={now} />
+      {aside}
     </div>
   );
 }

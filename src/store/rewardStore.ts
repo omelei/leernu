@@ -1,4 +1,11 @@
-import { newStamps, rewardForRound, type RewardSnapshot, type StampId } from '@/game-core';
+import {
+  diplomaFor,
+  newStamps,
+  rewardForRound,
+  tableOfDiploma,
+  type RewardSnapshot,
+  type StampId,
+} from '@/game-core';
 import { getDb } from './db';
 import { activeChildId, ensureProgressPerChild } from './children';
 
@@ -23,6 +30,21 @@ export interface RoundOutcome {
   readonly coins: number;
   readonly totalXp: number;
   readonly stamps: readonly StampId[];
+  /** The table this round earned a diploma for, or null. */
+  readonly diploma: number | null;
+}
+
+/**
+ * The XP this child has, which is the whole of what the level ladder runs on.
+ *
+ * Read here rather than taken from the profile the app booted with: a round
+ * adds to it, and a card that showed the figure from before the round would
+ * tell a child their answers had counted for nothing.
+ */
+export async function loadXp(): Promise<number> {
+  const db = await getDb();
+  const profile = await db.get('profile', await activeChildId());
+  return profile?.xp ?? 0;
 }
 
 export async function loadStamps(): Promise<Set<string>> {
@@ -32,6 +54,23 @@ export async function loadStamps(): Promise<Set<string>> {
   const kindId = await activeChildId();
   const rows = await db.getAll('kindBadges', IDBKeyRange.bound([kindId], [kindId, []]));
   return new Set(rows.map((row) => row.badgeId));
+}
+
+/**
+ * The tables this child has a diploma for.
+ *
+ * Read from the same store the stamps are in, filtered by the shape of the id
+ * rather than by a second store. A row that is not a diploma is not one — which
+ * is also what keeps a stamp id and a diploma id from ever having to agree.
+ */
+export async function loadDiplomas(): Promise<Set<number>> {
+  const held = await loadStamps();
+  const tafels = new Set<number>();
+  for (const id of held) {
+    const tafel = tableOfDiploma(id);
+    if (tafel !== null) tafels.add(tafel);
+  }
+  return tafels;
 }
 
 /**
@@ -66,5 +105,19 @@ export async function applyRoundRewards(params: {
     await db.put('kindBadges', { kindId, badgeId, behaaldOp });
   }
 
-  return { xp: reward.xp, coins: reward.coins, totalXp, stamps: earned };
+  // The diploma, if this round was one and it was flawless. Reported even when
+  // the child already had it: a child who sits the test again and passes again
+  // has passed again, and a screen that said nothing would read as a failure.
+  const diplomaId = diplomaFor(params.snapshot);
+  if (diplomaId !== null) {
+    await db.put('kindBadges', { kindId, badgeId: diplomaId, behaaldOp });
+  }
+
+  return {
+    xp: reward.xp,
+    coins: reward.coins,
+    totalXp,
+    stamps: earned,
+    diploma: diplomaId === null ? null : tableOfDiploma(diplomaId),
+  };
 }

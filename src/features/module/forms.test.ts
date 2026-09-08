@@ -34,11 +34,14 @@ describe('the ways of practising', () => {
 
     // The tables are the other way round at the top — typing before choosing,
     // ADR-049 — and have no exploring, because a sum is not somewhere to walk.
+    // The diploma is last: it is not a way of practising but the test at the
+    // end of it, and it is the only thing in this product that can be failed.
     expect(SUM_FORMS.map((form) => form.id)).toEqual([
       'som-typen',
       'som-meerkeuze',
       'bliksemronde',
       'overleven',
+      'tafeldiploma',
     ]);
   });
 
@@ -62,7 +65,7 @@ describe('the ways of practising', () => {
   it('never offers more than six, whatever a module holds', () => {
     // A drawing rule, not a limit on the product: past six the grid stops being
     // one glance. A module with a seventh way has a question to answer here.
-    expect(offeredForms(TOPO_FORMS, true).length).toBeLessThanOrEqual(MAX_FORMS);
+    expect(offeredForms(TOPO_FORMS, true, 'nl-provincies').length).toBeLessThanOrEqual(MAX_FORMS);
     expect(formsFor('topo')).toBe(TOPO_FORMS);
     expect(formsFor('tafels')).toBe(SUM_FORMS);
   });
@@ -70,11 +73,38 @@ describe('the ways of practising', () => {
   it('does not offer the clock while the clock is switched off', () => {
     // K10's switch is off by default, and a switch that only hid the clock
     // while still counting would be a worse lie than no switch.
-    const off = offeredForms(TOPO_FORMS, false).map((form) => form.id);
+    const off = offeredForms(TOPO_FORMS, false, 'nl-provincies').map((form) => form.id);
     expect(off).not.toContain('bliksemronde');
     expect(off).toContain('overleven');
 
-    expect(offeredForms(TOPO_FORMS, true).map((form) => form.id)).toContain('bliksemronde');
+    expect(offeredForms(TOPO_FORMS, true, 'nl-provincies').map((form) => form.id)).toContain(
+      'bliksemronde',
+    );
+  });
+
+  it('offers a diploma on a table and on nothing else', () => {
+    // There is no such thing as a diploma for "alle tafels door elkaar", and
+    // offering one would mean inventing a certificate no school hands out.
+    const opTafel = offeredForms(SUM_FORMS, false, 'tafel-7').map((form) => form.id);
+    expect(opTafel).toContain('tafeldiploma');
+
+    for (const setId of ['tafels-alle', 'rekenmix', 'plus-100', 'deel-7']) {
+      expect(offeredForms(SUM_FORMS, false, setId).map((form) => form.id), setId).not.toContain(
+        'tafeldiploma',
+      );
+    }
+  });
+
+  it('has no way of exploring a mix, which is where nobody meets a set for the first time', () => {
+    // Exploring is one set's own map layer, and it is where a child meets a
+    // set for the first time. A mix of everything is not where anyone meets
+    // anything for the first time.
+    expect(offeredForms(TOPO_FORMS, false, 'nl-provincies').map((form) => form.id)).toContain(
+      'ontdekken',
+    );
+    expect(offeredForms(TOPO_FORMS, false, 'nl-mix').map((form) => form.id)).not.toContain(
+      'ontdekken',
+    );
   });
 });
 

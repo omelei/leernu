@@ -602,26 +602,225 @@
   }
 
   /* ---- K2's start button -------------------------------------------------
-   * On a phone it is a full-width button at the end of the list.
+   * What was chosen, in words, and then the way on — in that order, ending at
+   * the right-hand edge where a line of reading finishes.
    *
-   * The design draws a bar fixed to the bottom of the screen there, with a
-   * reason: "de enige plek waar hij binnen duimbereik blijft zonder te
-   * scrollen". Three attempts at that produced three bugs — it pushed the page
-   * 48 wider than a 393 screen, then it swallowed the press on its own button,
-   * then it moved out from under the point that was being pressed. A control
-   * that floats over a scrolling list has to be right about layering, hit
-   * testing and scroll position at once, and each fix moved the failure rather
-   * than removing it.
+   * The button used to *be* the sentence: "Provincies aanwijzen · 15 vragen",
+   * left-aligned, in the same weight as the two secondary buttons above it.
+   * Everything a child needed to read was on it and nothing about it said
+   * press me. So the sentence stayed and moved beside it, and the button
+   * became a button: one word, an arrow, taller than the rest and alone at the
+   * end of the row (ADR-066). What a screen reader hears is still the whole
+   * sentence, out of the button's label.
    *
-   * So it waits (ADR-052). A button a child scrolls to is worse than a bar
-   * within thumb reach and better than a bar that cannot be pressed, and this
-   * is K2 rather than the front door.
+   * On a phone it stacks and goes full width. The design draws a bar fixed to
+   * the bottom of the screen there, with a reason: "de enige plek waar hij
+   * binnen duimbereik blijft zonder te scrollen". Three attempts at that
+   * produced three bugs — it pushed the page 48 wider than a 393 screen, then
+   * it swallowed the press on its own button, then it moved out from under the
+   * point that was being pressed. So it waits (ADR-052).
    */
+  .tk-choose-start {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+  .tk-choose-said {
+    min-width: 0;
+  }
+  @media (min-width: 768px) {
+    .tk-choose-start {
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 24px;
+    }
+    .tk-choose-said {
+      text-align: right;
+    }
+  }
+  /* The one control on a page of controls that is the way on. Taller and wider
+   * than the standard button, because step 2 is a grid of six things that are
+   * also pressable and a start that matched them is a seventh option. */
+  .tk-button-go {
+    min-height: var(--touch-board);
+    padding: 0 32px;
+    font-size: var(--type-h3);
+    line-height: var(--type-h3-lh);
+  }
+  /* The word and the arrow are both inside the button's own label span, so the
+   * gap belongs there rather than on the button — which spaces its children,
+   * and this button has one. */
+  .tk-button-go > .tk-button-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
   @media (max-width: 767px) {
     .tk-choose-start > .tk-button {
       width: 100%;
       justify-content: center;
     }
+  }
+
+  /* ---- Step 1's second question ----------------------------------------
+   * Which table, which range. It appears under the subject cards once a
+   * subject is chosen and never before: a page that showed thirteen chips for
+   * every one of five subjects would be sixty-five controls in step 1.
+   *
+   * Chips rather than a menu. A select hides eleven of twelve tables behind a
+   * control a child has to open, and on a touch screen it opens over the thing
+   * they were looking at — while the whole argument for this block is that the
+   * one they want is already on the screen.
+   */
+  .tk-variant {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 12px;
+  }
+  .tk-variant-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  /* Square-ish, so twelve numbers read as a keypad rather than as twelve words.
+   * The floor is the 44 every control in this product clears (ADR-032); a chip
+   * whose label is "tot 1000" grows sideways and keeps the height. */
+  .tk-variant-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-width: var(--touch-min);
+    min-height: var(--touch-min);
+    padding: 0 12px;
+    border: var(--stroke-hair) solid var(--line-strong);
+    border-radius: var(--radius-field);
+    background: var(--paper);
+    color: var(--ink);
+    font-size: var(--type-label);
+    line-height: var(--type-label-lh);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+  }
+  .tk-variant-chip:hover {
+    background: var(--surface);
+    border-color: var(--ink-3);
+  }
+  /* Chosen: ink and weight, never a hue on its own. The same two changes the
+   * subject card above it makes, at the size a chip can carry them. */
+  .tk-variant-chip[aria-pressed='true'] {
+    border-color: var(--ink);
+    border-width: var(--stroke-active);
+    background: var(--surface);
+    padding: 0 11px;
+  }
+  /* How that one is going, at the size the numbers leave room for. Decorative:
+   * the chip's accessible name is the set's full name, and this repeats
+   * nothing a screen reader could not get from the subject card above. */
+  .tk-variant-dot {
+    opacity: 0.75;
+  }
+
+  /* ---- The wall of diplomas --------------------------------------------
+   * Twelve tables with the gaps showing, on the rekenen page and nowhere else.
+   * The one place in this product where something not yet earned is drawn on
+   * purpose: every gap here is one table, in the order they are taught, and a
+   * child can press it to go and do that one.
+   */
+  .tk-diplomas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .tk-diploma {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    min-width: var(--touch-min);
+    min-height: var(--touch);
+    padding: 4px 8px;
+    border: var(--stroke-hair) solid var(--line);
+    border-radius: var(--radius-field);
+    background: var(--paper);
+    /* Secondary ink and not ink-3: this is text on a control a child can
+     * press, so it clears 4.5:1 like every other line in the product. What
+     * says "not yet" is the hairline rule and the empty rosette, not a
+     * lightness a reader cannot make out. */
+    color: var(--ink-2);
+    font-size: var(--type-label);
+    line-height: var(--type-label-lh);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+  }
+  .tk-diploma:hover {
+    background: var(--surface);
+  }
+  /* Passed. Ink and a heavier rule — the difference is lightness and weight,
+   * not a colour, so it survives grey and every kind of colour blindness. */
+  .tk-diploma[data-gehaald] {
+    border-color: var(--ink);
+    border-width: var(--stroke-active);
+    padding: 3px 7px;
+    background: var(--surface);
+    color: var(--ink);
+  }
+
+  /* ---- The twelve animals, on Jij ---------------------------------------
+   * A collection, so it is drawn as one: equal cells, in the order they
+   * arrive, with the ones not reached yet greyed and carrying the level rather
+   * than hidden behind it.
+   */
+  .tk-animals {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(6rem, 100%), 1fr));
+    gap: 8px;
+  }
+  .tk-animal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-height: var(--touch-board);
+    padding: 8px;
+    border: var(--stroke-hair) solid var(--line);
+    border-radius: var(--radius-card);
+    background: var(--paper);
+    color: var(--ink-2);
+    cursor: not-allowed;
+  }
+  /* Not reached yet, said with the drawing rather than with the words. The
+   * level on it — "niveau 7" — is the whole point of showing it at all, so it
+   * stays at full legibility; the animal behind it fades, which is what a
+   * silhouette is for. */
+  .tk-animal:not([data-open]) svg {
+    opacity: 0.4;
+  }
+  .tk-animal[data-open] {
+    cursor: pointer;
+  }
+  .tk-animal[data-open]:hover {
+    background: var(--surface);
+    color: var(--ink);
+  }
+  .tk-animal[aria-pressed='true'] {
+    border-color: var(--ink);
+    border-width: var(--stroke-active);
+    padding: 7px;
+    background: var(--surface);
+    color: var(--ink);
+  }
+  .tk-animal-name {
+    font-size: var(--type-label);
+    line-height: var(--type-label-lh);
+    text-align: center;
   }
 
   /* ---- The sum ----------------------------------------------------------
@@ -1138,39 +1337,20 @@
     background: var(--surface);
     color: var(--ink);
   }
-  /* Three across, two down. Six at 44 with gaps is 304 and the column is 272,
-   * so a single row loses one to the next line; equal squares in a grid read as
-   * a set rather than as a row that did not fit. */
-  .tk-sticker-row {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 8px;
-  }
-  .tk-sticker {
+  /* Who arrives at the next level, drawn quietly. Not a padlock and not the
+   * word "locked": a lighter version of the same animal says "not yet" without
+   * saying "no", and it is the same drawing a child will see filled in when
+   * they get there. The picking itself lives on Jij now — see .tk-animals. */
+  .tk-sticker-next {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    min-width: var(--touch-min);
-    height: var(--touch-min);
-    border: var(--stroke-hair) solid var(--line);
-    border-radius: var(--radius-card);
-    background: var(--paper);
-    color: var(--ink-2);
-    cursor: pointer;
-  }
-  .tk-sticker:hover {
+    flex: none;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-full);
     background: var(--surface);
-    color: var(--ink);
-  }
-  /* Which one is yours, said with weight and a shape rather than a colour:
-   * §A's rule holds here as much as in a chooser, and a child who cannot tell
-   * two greys apart still has to be able to see which animal is theirs. */
-  .tk-sticker[aria-pressed='true'] {
-    border-color: var(--ink);
-    border-width: var(--stroke-active);
-    background: var(--surface);
-    color: var(--ink);
+    color: var(--ink-3);
   }
 
   /* ---- Badges ----------------------------------------------------------
@@ -1497,23 +1677,6 @@
    * Quieter than the mark and not part of the button, because the mark is the
    * way home and the path is where you already are. Not on a phone: the bar
    * there is a wordmark and a name across 393, and the name goes first. */
-  .tk-brand-path {
-    display: none;
-    flex: none;
-    /* The bar's own 16 of gap, taken back. "leer.nu" and "/topografie" are one
-     * lockup and a gap between them reads as two things; the 4 that is left is
-     * the button's own padding. */
-    margin-left: -16px;
-    color: var(--ink-2);
-    font-family: 'Space Grotesk', system-ui, sans-serif;
-    font-size: var(--type-label);
-    line-height: var(--type-label-lh);
-  }
-  @media (min-width: 768px) {
-    .tk-brand-path {
-      display: inline;
-    }
-  }
   .tk-brand:hover {
     background: var(--surface);
   }

@@ -70,6 +70,16 @@ export interface SessionRecord {
   /** Whose round it was. Absent on rows written before ADR-046. */
   kindId?: string;
   mode: ModeId;
+  /**
+   * Which set the round was about.
+   *
+   * Absent on rows written before ADR-063, where the reader works it back out
+   * from the questions. That worked while every round was one set: a mix
+   * contains every set's items, so the first set that shares an item with it
+   * always matched and every mix in the history was logged as a table of one.
+   * A round knows what it was about; it should say so rather than be guessed at.
+   */
+  setId?: string;
   /** The questions and their answer key. Unused in v1; see ADR-003. */
   itemSet: unknown;
   score: number | null;

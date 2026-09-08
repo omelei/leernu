@@ -1,14 +1,14 @@
 import { isDue, type ItemState, type ModeId, type Schedulable } from '@/game-core';
 import { loadItemSets } from '@/content/loadSets';
-import { loadSumSets } from '@/content/loadSums';
+import { isMix, loadSumSet, loadSumSets, MIX_IDS } from '@/content/loadSums';
 import { t, type TranslationKey } from '@/i18n';
 import type { Module } from '@/features/shell/modules';
 import type { PlayedRound } from '@/store/progress';
-import { SET_IDS, type PracticeMode, type SetId } from '@/features/practice/useRound';
+import { MIX_SET_ID, SET_IDS, type PracticeMode, type SetId } from '@/features/practice/useRound';
 import type { SumMode } from '@/features/sums/useSumRound';
 
 /**
- * Every set of every built module, flattened, and what can be said about one.
+ * Every set of every built module, and the subjects they are grouped under.
  *
  * This was the top of `HomeScreen`, and it moved because it stopped being the
  * front door's private business: a module page asks the same three questions of
@@ -16,9 +16,15 @@ import type { SumMode } from '@/features/sums/useSumRound';
  * what would a round of it look like — and a second copy of those three is a
  * second place to forget a module.
  *
- * One list rather than a branch per module. A set is a name, some items and a
- * round size; the fact that one of them is drawn on a map and another is ten
- * sums belongs to the round and not to the list of them.
+ * **Two layers, since rekenen grew past the tables (ADR-062).** An *onderdeel*
+ * is a set: ten sums, twelve provinces, the thing a round is made of. An
+ * *onderwerp* is what step 1 offers: "Tafels", "Provincies", "Rekenmix". Where
+ * a subject holds one set the two are the same thing and the page shows one
+ * card. Where it holds thirteen — the twelve tables and all of them at once —
+ * the page shows one card and asks which, because twelve cards for one subject
+ * is a page a child scrolls past rather than reads, and it pushed step 2 off
+ * the screen on the page whose whole argument is that the two steps are one
+ * flow (ADR-061 gives step 2 the same ceiling for the same reason).
  */
 
 export const SET_NAME_KEY: Record<SetId, TranslationKey> = {
@@ -40,44 +46,244 @@ export interface Onderdeel {
   readonly setId: string;
   readonly naam: TranslationKey | null;
   readonly literalNaam: string | null;
+  /**
+   * The label on the chip when this set is one choice among several — "7" under
+   * Tafels, "tot 100" under Plussommen. The full name is still the accessible
+   * name of the chip: "7" on its own is not something a screen reader can make
+   * a sentence of.
+   */
+  readonly kortNaam: string | null;
+  /**
+   * True where this set is the union of others rather than one of its own.
+   *
+   * It matters wherever sets are counted or compared: a mix holds every item
+   * there is, so it is the biggest set, the one with the most due, and the one
+   * a naive "which needs doing most" would pick every single time.
+   */
+  readonly mix: boolean;
   readonly items: readonly Schedulable[];
   readonly roundSize: number;
 }
 
-export function onderdelen(): Onderdeel[] {
+/**
+ * A subject: what step 1 offers, and the sets under it.
+ *
+ * Six at most per section, which is the same ceiling step 2 has and for the
+ * same reason — past six a grid stops being one glance.
+ */
+export interface Onderwerp {
+  readonly moduleId: Module['id'];
+  readonly id: string;
+  readonly naam: TranslationKey;
+  /** One line under the name, where the name alone does not say what is in it. */
+  readonly uitleg: TranslationKey | null;
+  /** The question above the chips. Null for a subject that is one set. */
+  readonly keuze: TranslationKey | null;
+  readonly sets: readonly Onderdeel[];
+}
+
+// ---------------------------------------------------------------------------
+// Topografie
+
+function topoOnderdelen(): Onderdeel[] {
   // In the curated order, not the order the filenames sort in. It decides what
   // a child who has never practised is offered first, and that should be the
   // set the content calls the way in — provinces — rather than whichever JSON
   // file happens to come first in the alphabet.
   const sets = loadItemSets();
-  const geordend = SET_IDS.map((id) => sets.find((set) => set.id === id)).filter(
-    (set): set is (typeof sets)[number] => set !== undefined,
-  );
 
-  const topo = geordend.map((set) => ({
-    moduleId: 'topo' as const,
-    setId: set.id,
-    naam: SET_NAME_KEY[set.id as SetId] ?? null,
-    literalNaam: null,
-    items: set.items as readonly Schedulable[],
-    roundSize: ROUND_SIZE.topo,
-  }));
-
-  const tafels = loadSumSets().map((set) => ({
-    moduleId: 'tafels' as const,
-    setId: set.id,
-    naam: null,
-    literalNaam: t('sums.table', { tafel: set.tafel }),
-    items: set.items as readonly Schedulable[],
-    roundSize: ROUND_SIZE.tafels,
-  }));
-
-  return [...topo, ...tafels];
+  return SET_IDS.map((id) => sets.find((set) => set.id === id))
+    .filter((set): set is (typeof sets)[number] => set !== undefined)
+    .map((set) => ({
+      moduleId: 'topo' as const,
+      setId: set.id,
+      naam: SET_NAME_KEY[set.id as SetId] ?? null,
+      literalNaam: null,
+      kortNaam: null,
+      mix: false,
+      items: set.items as readonly Schedulable[],
+      roundSize: ROUND_SIZE.topo,
+    }));
 }
 
-/** The sets one module holds, in the order a child should meet them. */
-export function onderdelenVan(moduleId: Module['id']): Onderdeel[] {
-  return onderdelen().filter((deel) => deel.moduleId === moduleId);
+/**
+ * Everything on the map at once.
+ *
+ * The same items under a second name rather than a sixth set of them, so a
+ * province answered here moves the box it moves anywhere else. It is not
+ * counted as part of the module's total anywhere, because that total would then
+ * count every province twice (`onderdelen` leaves the mixes out).
+ */
+function topoMix(): Onderdeel {
+  const items = topoOnderdelen().flatMap((deel) => deel.items);
+
+  return {
+    moduleId: 'topo',
+    setId: MIX_SET_ID,
+    naam: 'set.nl-mix',
+    literalNaam: null,
+    kortNaam: null,
+    mix: true,
+    items,
+    roundSize: ROUND_SIZE.topo,
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Rekenen
+
+/** The name of a set of sums, and the short label on its chip. */
+function rekenNaam(setId: string): { naam: string; kort: string } {
+  const tafel = /^tafel-(\d+)$/.exec(setId)?.[1];
+  if (tafel) return { naam: t('sums.table', { tafel }), kort: tafel };
+
+  const deel = /^deel-(\d+)$/.exec(setId)?.[1];
+  if (deel) return { naam: t('sums.divideBy', { tafel: deel }), kort: deel };
+
+  const bereik = /^(plus|min)-(\d+)$/.exec(setId);
+  const grens = bereik?.[2];
+  if (bereik && grens) {
+    const key = bereik[1] === 'plus' ? 'sums.plusUpTo' : 'sums.minusUpTo';
+    return { naam: t(key, { grens }), kort: t('sums.upTo', { grens }) };
+  }
+
+  if (setId === 'tafels-alle') return { naam: t('sums.allTables'), kort: t('sums.allShort') };
+  if (setId === 'deel-alle') return { naam: t('sums.allDivides'), kort: t('sums.allShort') };
+  return { naam: t('sums.mix'), kort: t('sums.mix') };
+}
+
+function rekenOnderdeel(setId: string): Onderdeel | null {
+  const set = loadSumSet(setId);
+  if (!set) return null;
+  const { naam, kort } = rekenNaam(setId);
+
+  return {
+    moduleId: 'tafels',
+    setId,
+    naam: null,
+    literalNaam: naam,
+    kortNaam: kort,
+    mix: isMix(setId),
+    items: set.items as readonly Schedulable[],
+    roundSize: ROUND_SIZE.tafels,
+  };
+}
+
+function rekenOnderdelen(): Onderdeel[] {
+  return loadSumSets()
+    .map((set) => rekenOnderdeel(set.id))
+    .filter((deel): deel is Onderdeel => deel !== null);
+}
+
+function rekenMixen(): Onderdeel[] {
+  return MIX_IDS.map((id) => rekenOnderdeel(id)).filter(
+    (deel): deel is Onderdeel => deel !== null,
+  );
+}
+
+// ---------------------------------------------------------------------------
+
+/**
+ * Every set that is a set of its own: the unit progress is counted over.
+ *
+ * The mixes are deliberately absent. They hold the same items under a second
+ * name, and a total that added them would tell a child there are a thousand
+ * sums in rekenen and that they remember four hundred of a set of ten.
+ */
+export function onderdelen(): Onderdeel[] {
+  return [...topoOnderdelen(), ...rekenOnderdelen()];
+}
+
+/** Every set a round can be started on, mixes included. Used to name a round. */
+export function startbareOnderdelen(): Onderdeel[] {
+  return [...topoOnderdelen(), topoMix(), ...rekenOnderdelen(), ...rekenMixen()];
+}
+
+/**
+ * The subjects a module offers, in the order a child should meet them.
+ *
+ * Topography is five sets and a mix of them, one subject each. Rekenen is four
+ * kinds of sum and a mix of all four, and two of those four hold thirteen sets
+ * apiece.
+ */
+export function onderwerpenVan(moduleId: Module['id']): Onderwerp[] {
+  if (moduleId === 'topo') {
+    const enkel: Onderwerp[] = topoOnderdelen().map((deel) => ({
+      moduleId: 'topo' as const,
+      id: deel.setId,
+      naam: deel.naam as TranslationKey,
+      uitleg: null,
+      keuze: null,
+      sets: [deel],
+    }));
+
+    return [
+      ...enkel,
+      {
+        moduleId: 'topo',
+        id: MIX_SET_ID,
+        naam: 'set.nl-mix',
+        uitleg: 'set.nl-mix.uitleg',
+        keuze: null,
+        sets: [topoMix()],
+      },
+    ];
+  }
+
+  if (moduleId !== 'tafels') return [];
+
+  const sets = rekenOnderdelen();
+  const mix = rekenMixen();
+  const van = (prefix: string) => sets.filter((deel) => deel.setId.startsWith(prefix));
+  const mixMet = (id: string) => mix.filter((deel) => deel.setId === id);
+
+  return [
+    {
+      moduleId: 'tafels',
+      id: 'tafels',
+      naam: 'onderwerp.tafels',
+      uitleg: 'onderwerp.tafels.uitleg',
+      keuze: 'onderwerp.tafels.keuze',
+      sets: [...van('tafel-'), ...mixMet('tafels-alle')],
+    },
+    {
+      moduleId: 'tafels',
+      id: 'delen',
+      naam: 'onderwerp.delen',
+      uitleg: 'onderwerp.delen.uitleg',
+      keuze: 'onderwerp.delen.keuze',
+      sets: [...van('deel-'), ...mixMet('deel-alle')],
+    },
+    {
+      moduleId: 'tafels',
+      id: 'plus',
+      naam: 'onderwerp.plus',
+      uitleg: 'onderwerp.plus.uitleg',
+      keuze: 'onderwerp.bereik.keuze',
+      sets: van('plus-'),
+    },
+    {
+      moduleId: 'tafels',
+      id: 'min',
+      naam: 'onderwerp.min',
+      uitleg: 'onderwerp.min.uitleg',
+      keuze: 'onderwerp.bereik.keuze',
+      sets: van('min-'),
+    },
+    {
+      moduleId: 'tafels',
+      id: 'rekenmix',
+      naam: 'onderwerp.rekenmix',
+      uitleg: 'onderwerp.rekenmix.uitleg',
+      keuze: null,
+      sets: mixMet('rekenmix'),
+    },
+  ];
+}
+
+/** Which subject a set belongs to, so an address for a set opens the right card. */
+export function onderwerpVan(onderwerpen: readonly Onderwerp[], setId: string): Onderwerp | null {
+  return onderwerpen.find((vak) => vak.sets.some((deel) => deel.setId === setId)) ?? null;
 }
 
 export function naamVan(deel: Onderdeel): string {
@@ -105,14 +311,33 @@ export function opDeRol(deel: Onderdeel, known: ReadonlyMap<string, ItemState>, 
   }).length;
 }
 
+/** The whole of a subject, counted over its sets and never over its mix. */
+export function itemsVan(onderwerp: Onderwerp): readonly string[] {
+  const ids = new Set<string>();
+  for (const deel of onderwerp.sets) {
+    if (deel.mix && onderwerp.sets.length > 1) continue;
+    for (const item of deel.items) ids.add(item.id);
+  }
+  return [...ids];
+}
+
 /**
  * Which set a played round was about.
  *
- * A session records the questions it asked and not the set they came from, so
- * this matches on the questions. One shared item is enough: no two sets share
- * an item, and a round of fifteen out of eighty still carries fifteen of them.
+ * A round says so itself now (ADR-063). It did not always: rows written before
+ * that carry only the questions they asked, so those are still matched on the
+ * questions — one shared item is enough, because no two sets that are files
+ * share an item. What that fallback cannot do is recognise a mix, which holds
+ * every set's items and would always match the first one; a mix played before
+ * the round recorded its own set therefore reads as the set it started from,
+ * which is wrong and unfixable and was true of exactly one release.
  */
 export function setVanRonde(ronde: PlayedRound, alles: readonly Onderdeel[]): Onderdeel | null {
+  if (ronde.setId !== null) {
+    const genoemd = alles.find((deel) => deel.setId === ronde.setId);
+    if (genoemd) return genoemd;
+  }
+
   const asked = new Set(ronde.itemIds);
   return alles.find((deel) => deel.items.some((item) => asked.has(item.id))) ?? null;
 }
@@ -179,7 +404,13 @@ const PRACTICE_MODES: readonly ModeId[] = [
   'bliksemronde',
   'overleven',
 ];
-const SUM_MODES: readonly ModeId[] = ['som-typen', 'som-meerkeuze', 'bliksemronde', 'overleven'];
+const SUM_MODES: readonly ModeId[] = [
+  'som-typen',
+  'som-meerkeuze',
+  'bliksemronde',
+  'overleven',
+  'tafeldiploma',
+];
 
 export function asPracticeMode(mode: ModeId): PracticeMode {
   return PRACTICE_MODES.includes(mode) ? (mode as PracticeMode) : 'wijs-aan';

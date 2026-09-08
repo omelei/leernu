@@ -9,7 +9,7 @@ import {
   type ModeId,
 } from '@/game-core';
 import { ProgressBar } from '@/components/ProgressBar';
-import type { IconProps } from '@/components/Icon';
+import { GoIcon, type IconProps } from '@/components/Icon';
 import { RAIL_MODULES, type Module } from '@/features/shell/modules';
 import { MODULE_ICON } from '@/features/shell/moduleIcons';
 import { t, type TranslationKey } from '@/i18n';
@@ -25,6 +25,7 @@ import {
   laatstGeoefend,
   naamVan,
   onderdelen,
+  startbareOnderdelen,
   type Gespeeld,
   type Onderdeel,
 } from '@/features/module/onderdelen';
@@ -92,9 +93,6 @@ function verderMet(
 export interface HomeScreenProps {
   /** Whose front door this is. K1 opens by saying so. */
   readonly naam: string;
-  /** Which animal they chose, out of their own profile. */
-  readonly sticker: string | undefined;
-  readonly onSticker: (id: string) => void;
   readonly onStart: (setId: SetId, practiceMode: PracticeMode) => void;
   /** A table, in a chosen way. */
   readonly onStartSum: (setId: string, sumMode: SumMode) => void;
@@ -109,8 +107,6 @@ export interface HomeScreenProps {
 
 export function HomeScreen({
   naam,
-  sticker,
-  onSticker,
   onStart,
   onStartSum,
   onChoose,
@@ -130,7 +126,9 @@ export function HomeScreen({
 
   const alles = onderdelen();
   const verder = verderMet(alles, known, plan.subject);
-  const gespeeld = geplaatst(played, alles);
+  // Over every set a round can be started on, mixes included: a round of the
+  // Rekenmix that could not be placed would drop out of the history entirely.
+  const gespeeld = geplaatst(played, startbareOnderdelen());
 
   const vooruitblik = verder
     ? roundPreview({ items: verder.items, states: known, size: verder.roundSize, now })
@@ -176,7 +174,7 @@ export function HomeScreen({
         ) : null}
       </div>
 
-      <SideColumn sticker={sticker} onSticker={onSticker} onBegin={begin} />
+      <SideColumn onBegin={begin} />
 
       <div className="tk-home-more">
         <Recent gespeeld={gespeeld} onBegin={begin} />
@@ -228,22 +226,29 @@ function Verder({
         </p>
       </div>
 
-      <div className="flex flex-wrap gap-3">
-        {/* One primary way in per module: pointing on a map, typing a sum. Both
-            are the way that module starts, and both are one press away. */}
-        <button
-          type="button"
-          className="tk-button"
-          onClick={() => onBegin(deel, deel.moduleId === 'topo' ? 'wijs-aan' : 'som-typen')}
-        >
-          {t('home.continueWith', { module: moduleNaam })}
-        </button>
+      {/* The way on sits at the end of the line, and the alternative before it
+          — the same shape the module page's start row has (ADR-066). A child
+          who has learned where the button is on one page should find it in the
+          same place on the other. */}
+      <div className="tk-choose-start">
         <button
           type="button"
           className="tk-button tk-button-secondary"
           onClick={() => onChoose(deel.moduleId)}
         >
           {t('home.moreWays')}
+        </button>
+        {/* One primary way in per module: pointing on a map, typing a sum. Both
+            are the way that module starts, and both are one press away. */}
+        <button
+          type="button"
+          className="tk-button tk-button-go"
+          onClick={() => onBegin(deel, deel.moduleId === 'topo' ? 'wijs-aan' : 'som-typen')}
+        >
+          <span className="tk-button-label">
+            {t('home.continueWith', { module: moduleNaam })}
+            <GoIcon size={24} />
+          </span>
         </button>
       </div>
     </div>
