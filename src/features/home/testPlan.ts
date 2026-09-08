@@ -27,9 +27,6 @@ export interface TestPlan {
   /** YYYY-MM-DD in local time, or null when no date has been set. */
   readonly date: string | null;
   readonly subject: Module['id'] | null;
-  /** Nothing is drawn before this is true; a block that changes its mind is
-   *  worse than a block that arrives a moment late. */
-  readonly loaded: boolean;
   readonly setDate: (value: string) => void;
   readonly setSubject: (value: string) => void;
 }
@@ -42,9 +39,11 @@ function asSubject(value: string | undefined): Module['id'] | null {
 }
 
 export function useTestPlan(): TestPlan {
+  // Null until read, which is also what "no test set" looks like — and that is
+  // the answer for every child who has not set one, which is most of them. K1
+  // draws the block either way rather than waiting: see the note in TestDate.
   const [date, setDateState] = useState<string | null>(null);
   const [subject, setSubjectState] = useState<Module['id'] | null>(null);
-  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     void Promise.all([getSetting(DATE_KEY), getSetting(SUBJECT_KEY)]).then(([when, what]) => {
@@ -52,7 +51,6 @@ export function useTestPlan(): TestPlan {
       // A subject saved before it was retired, or before that module existed,
       // reads back as nothing rather than as a module nobody can practise.
       setSubjectState(asSubject(what));
-      setLoaded(true);
     });
   }, []);
 
@@ -66,7 +64,7 @@ export function useTestPlan(): TestPlan {
     void setSetting(SUBJECT_KEY, asSubject(value) ?? '');
   }, []);
 
-  return { date, subject, loaded, setDate, setSubject };
+  return { date, subject, setDate, setSubject };
 }
 
 /**

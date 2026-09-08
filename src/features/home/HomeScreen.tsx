@@ -240,13 +240,13 @@ export function HomeScreen({
             className="tk-card tk-card-accented flex flex-col gap-6"
             data-module={verder.moduleId}
           >
-            {/* Not gated on the test having been read back. It was, and on
-                WebKit — an iPad in a classroom — the whole card was still
-                absent by the time the screenshots were taken: the one thing on
-                the front door a child is meant to press, missing for as long
-                as IndexedDB took. The block that would otherwise lie waits on
-                its own inside TestDate, which is the same rule this screen
-                already applied to the stamps and the boxes. */}
+            {/* Nothing in this card waits for IndexedDB. It did, and on WebKit
+                — an iPad in a classroom — the screenshots caught the whole
+                block absent: the one thing on the front door a child is meant
+                to press, missing for as long as the read took, and then
+                pushing the button down when it landed. The boxes, the stamps
+                and the test all queue behind one database handle, so the card
+                settles once and nothing moves. */}
             <TestDate plan={plan} now={now} />
             <Verder
               deel={verder}

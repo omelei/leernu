@@ -26,6 +26,15 @@ import { daysUntil, TEST_SUBJECTS, type TestPlan } from './testPlan';
  * State lives in `useTestPlan` rather than here, because the subject decides
  * what the rest of the screen continues with. A block that owned it privately
  * would be a plan nothing acts on.
+ *
+ * It draws before that state has arrived, and "nog geen toetsdatum" is what it
+ * says in the meantime. That is not the usual rule in this codebase, and the
+ * screenshots are why: on WebKit the read takes long enough to see, and a block
+ * that waits is a block that is *absent* — the reason the child is here,
+ * missing, and then pushing the button down when it lands. Everything else in
+ * this card settles at the same moment, because the boxes, the stamps and the
+ * plan all queue behind one database handle. So it settles with them, and
+ * nothing moves.
  */
 export function TestDate({
   plan,
@@ -35,12 +44,6 @@ export function TestDate({
   readonly now?: Date;
 }) {
   const [editing, setEditing] = useState(false);
-
-  // Nothing at all until the plan has been read. The card around this is drawn
-  // straight away — a front door with no door on it is worse than a door that
-  // arrives a moment late — but a row that says "nog geen toetsdatum" and then
-  // changes its mind is exactly what this waits to avoid.
-  if (!plan.loaded) return null;
 
   const days = plan.date === null ? null : daysUntil(plan.date, now);
   const subject = TEST_SUBJECTS.find((module) => module.id === plan.subject) ?? null;
