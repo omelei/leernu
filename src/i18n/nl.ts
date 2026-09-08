@@ -105,6 +105,16 @@ export const nl = {
   'home.testSubjectPick': 'Voor welk vak?',
   'home.testSubjectNone': 'Nog geen vak',
   'home.testSubjectOf': 'Toets voor {module}',
+  // Waar de datum voor is. Een datum alleen is een sticker: het kind wist al
+  // wanneer. Dit richt de voorspelling op die dag — niet "over drie weken",
+  // maar "op de toetsdag" — en dat is pas een argument om vandaag te oefenen.
+  // "Ongeveer", altijd: het is een schatting waarin elk antwoord goed is, en
+  // dat is niemands week.
+  'home.testOutlook':
+    'Op de toetsdag ken je hier nu ongeveer {nu}% van. Oefen je elke dag even, dan is dat {straks}%.',
+  'home.testOutlookStart':
+    'Nog niet geoefend. Oefen je elke dag even, dan ken je hier op de toetsdag ongeveer {straks}% van.',
+  'home.testOutlookSteady': 'Je ligt op schema: op de toetsdag ken je hier ongeveer {nu}% van.',
 
   // Een module die het plan wel heeft en het product nog niet. Alleen te
   // bereiken door het adres te typen; geen datum, want een datum die we missen

@@ -138,6 +138,36 @@ test('the subject of the test decides what to carry on with', async ({ page }) =
 });
 
 /**
+ * The date is only worth something once the screen says what it means. Without
+ * this line it is a sticker: the child already knew when the test was.
+ */
+test('a test date turns the forecast on the day of the test', async ({ page }) => {
+  await signIn(page, 'Sepp');
+
+  // Ten days out, worked out from today rather than written down — a date
+  // hardcoded here would quietly become a date in the past.
+  const toetsdag = new Date(Date.now() + 10 * 86_400_000);
+  const iso = [
+    toetsdag.getFullYear(),
+    String(toetsdag.getMonth() + 1).padStart(2, '0'),
+    String(toetsdag.getDate()).padStart(2, '0'),
+  ].join('-');
+
+  await page.getByRole('button', { name: 'Toets instellen' }).click();
+  await page.getByLabel('Wanneer is de toets?').fill(iso);
+
+  // The count and not the exact ten: the runner's clock decides whether ten
+  // times a day of milliseconds lands either side of a midnight, and what is
+  // being tested is that the date is read, not how a calendar works.
+  await expect(page.getByRole('heading', { name: /Toets over \d+ dagen/ })).toBeVisible();
+
+  // Nothing has been practised, so the honest line is the one that says so and
+  // then says what practising would be worth. A percentage, never a promise.
+  const outlook = /Nog niet geoefend\. Oefen je elke dag even, dan ken je hier op de toetsdag ongeveer \d+% van\./;
+  await expect(page.getByText(outlook)).toBeVisible();
+});
+
+/**
  * The mark, which is the one number on K1 that is about what has already
  * happened. It is over what was answered rather than what was asked — this
  * round is stopped after a single question, and a 1,0 for the eleven never seen
