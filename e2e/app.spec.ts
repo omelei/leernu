@@ -163,7 +163,8 @@ test('a test date turns the forecast on the day of the test', async ({ page }) =
 
   // Nothing has been practised, so the honest line is the one that says so and
   // then says what practising would be worth. A percentage, never a promise.
-  const outlook = /Nog niet geoefend\. Oefen je elke dag even, dan ken je hier op de toetsdag ongeveer \d+% van\./;
+  const outlook =
+    /Nog niet geoefend\. Oefen je elke dag even, dan ken je hier op de toetsdag ongeveer \d+% van\./;
   await expect(page.getByText(outlook)).toBeVisible();
 });
 
