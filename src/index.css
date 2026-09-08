@@ -864,7 +864,11 @@
     grid-template-columns: minmax(0, 1fr);
     gap: var(--row-gap);
     width: 100%;
-    max-width: 1200px;
+    /* The design's own measure: 1440 less the 88 of the rail is 1352, so a
+     * laptop gets the page K1 draws rather than a narrower one, and only a
+     * monitor wider than the design is capped. Below the cap this does
+     * nothing. */
+    max-width: 1400px;
     margin: 0 auto;
     padding: 24px 16px;
   }
