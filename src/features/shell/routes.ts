@@ -10,9 +10,17 @@ import { CATEGORIES, MODULES, type Category, type Module } from './modules';
  * if the path is real.
  *
  * Hand-rolled rather than a router package. The whole map is a handful of
- * literal paths with no parameters, no nesting and no data loading, and the
- * rule against a new runtime dependency (build brief §0.2) is worth more than
- * the fifty lines this saves.
+ * literal paths with one optional segment, no data loading and no nesting worth
+ * the name, and the rule against a new runtime dependency (build brief §0.2) is
+ * worth more than the fifty lines this saves.
+ *
+ * Two things arrived after ADR-044 and both are about the word a parent types.
+ * A **set has an address** — leer.nu/topografie/provincies — so a child can be
+ * sent to one exercise rather than to a chooser. And a **category that holds
+ * one built module is that module**: /rekenen opened onto a page with a single
+ * card on it saying "Rekenen", which is a redirect wearing a hat. The category
+ * survives in `modules.ts` for the day arithmetic is more than the tables; what
+ * it no longer does is cost a child a click to say so.
  */
 
 /** The path segment for each module. Dutch, and the word a child would type. */
@@ -26,15 +34,44 @@ export const MODULE_SLUG: Record<Module['id'], string> = {
   vlaggen: 'vlaggen',
 };
 
+/**
+ * The path segment for a set inside a module.
+ *
+ * The map sets carry a source prefix in their ids — `nl-provincies` — which is
+ * right in a filename and wrong in an address: nobody types the country twice.
+ * The tables already name themselves, so `tafel-7` is both the id and the word.
+ */
+const SET_SLUG: Record<string, string> = {
+  'nl-provincies': 'provincies',
+  'nl-hoofdsteden': 'hoofdsteden',
+  'nl-waddeneilanden': 'waddeneilanden',
+  'nl-wateren': 'wateren',
+  'nl-steden': 'steden',
+};
+
+const SLUG_SET = new Map(Object.entries(SET_SLUG).map(([id, slug]) => [slug, id]));
+
+/** One to twelve, and nothing else. A thirteenth table is a typo, not a set. */
+const TABLE_SLUG = /^tafel-(?:[1-9]|1[0-2])$/;
+
+export function setSlug(setId: string): string {
+  return SET_SLUG[setId] ?? setId;
+}
+
+function setIdFor(module: Module, slug: string): string | null {
+  if (module.id === 'tafels') return TABLE_SLUG.test(slug) ? slug : null;
+  return SLUG_SET.get(slug) ?? null;
+}
+
 export type Route =
   | { readonly name: 'home' }
   | { readonly name: 'retention' }
   | { readonly name: 'you' }
-  /** A module that exists. */
-  | { readonly name: 'module'; readonly module: Module }
+  /** A module that exists, opened on one of its sets or on its own first. */
+  | { readonly name: 'module'; readonly module: Module; readonly setId: string | null }
   /** A module the plan has but the product does not yet. */
   | { readonly name: 'soon'; readonly module: Module }
-  /** A word a parent looks for, holding the modules that sit under it. */
+  /** A word a parent looks for, holding more than one module. */
   | { readonly name: 'category'; readonly category: Category };
 
 export const RETENTION_SLUG = 'onthouden';
@@ -50,34 +87,80 @@ function withoutBase(pathname: string): string {
   return path.replace(/^\/+|\/+$/g, '');
 }
 
+/** The modules under a category that a child can actually practise today. */
+function builtUnder(category: Category): Module[] {
+  return MODULES.filter((module) => module.built && category.modules.includes(module.id));
+}
+
+/** The category a module is currently the whole of, if there is one. */
+function soleCategoryOf(module: Module): Category | null {
+  return (
+    CATEGORIES.find((category) => {
+      const built = builtUnder(category);
+      return built.length === 1 && built[0]?.id === module.id;
+    }) ?? null
+  );
+}
+
+function moduleRoute(module: Module, tail: string | undefined): Route {
+  if (!module.built) return { name: 'soon', module };
+  // A set nobody has heard of opens the module rather than an error page: the
+  // child asked for topography and topography is what they get.
+  const setId = tail === undefined || tail === '' ? null : setIdFor(module, tail);
+  return { name: 'module', module, setId };
+}
+
 export function routeFor(pathname: string): Route {
   const slug = withoutBase(pathname);
   if (slug === '') return { name: 'home' };
   if (slug === RETENTION_SLUG) return { name: 'retention' };
   if (slug === YOU_SLUG) return { name: 'you' };
 
-  const module = MODULES.find((candidate) => MODULE_SLUG[candidate.id] === slug);
-  if (module) return module.built ? { name: 'module', module } : { name: 'soon', module };
+  const [head = '', tail] = slug.split('/');
 
-  const category = CATEGORIES.find((candidate) => candidate.id === slug);
-  if (category) return { name: 'category', category };
+  const module = MODULES.find((candidate) => MODULE_SLUG[candidate.id] === head);
+  if (module) return moduleRoute(module, tail);
+
+  const category = CATEGORIES.find((candidate) => candidate.id === head);
+  if (category) {
+    const built = builtUnder(category);
+    const only = built[0];
+    if (built.length === 1 && only) return moduleRoute(only, tail);
+    if (built.length > 1) return { name: 'category', category };
+  }
 
   // Anything else is the front door. A child who mistypes a module gets the
   // place they can find one, not an error page about their spelling.
   return { name: 'home' };
 }
 
+function slugFor(route: Route): string {
+  if (route.name === 'home') return '';
+  if (route.name === 'retention') return RETENTION_SLUG;
+  if (route.name === 'you') return YOU_SLUG;
+  if (route.name === 'category') return route.category.id;
+  if (route.name === 'soon') return MODULE_SLUG[route.module.id];
+
+  // The word a parent types wins where there is one: the tables are the whole
+  // of rekenen today, so /rekenen is their address and /tafels is a synonym
+  // that keeps working for anyone who wrote it down.
+  const head = soleCategoryOf(route.module)?.id ?? MODULE_SLUG[route.module.id];
+  return route.setId === null ? head : `${head}/${setSlug(route.setId)}`;
+}
+
 export function pathFor(route: Route): string {
   const base = import.meta.env.BASE_URL;
-  const slug =
-    route.name === 'home'
-      ? ''
-      : route.name === 'retention'
-        ? RETENTION_SLUG
-        : route.name === 'you'
-          ? YOU_SLUG
-          : route.name === 'category'
-            ? route.category.id
-            : MODULE_SLUG[route.module.id];
-  return `${base}${slug}`.replace(/\/{2,}/g, '/');
+  return `${base}${slugFor(route)}`.replace(/\/{2,}/g, '/');
+}
+
+/**
+ * The path as it is written beside the wordmark: "leer.nu" + "/topografie".
+ *
+ * Without the deployment base, because this is the address a parent would write
+ * down rather than the one the bundler serves from — and nothing for the front
+ * door, where "leer.nu/" is a stub with nothing after it.
+ */
+export function addressFor(route: Route): string | undefined {
+  const slug = slugFor(route);
+  return slug === '' ? undefined : `/${slug}`;
 }

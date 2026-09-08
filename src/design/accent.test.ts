@@ -44,6 +44,12 @@ const ALLOWED_SELECTORS: ReadonlyMap<string, string> = new Map([
   // is the one case §E lets an icon take an accent: it denotes the module.
   ['.tk-tile:hover', 'the module entrance, on the front door'],
   ['.tk-tile-head', 'the module entrance, on the front door'],
+  // The same pair as .tk-tile-head — the module's pictogram and the module's
+  // name — at the head of the module's own page. If anything in the product is
+  // the module entrance, the line that says which module you have entered is,
+  // and on a phone it is the only thing that says so at all: §D drops the rail
+  // at that width. The heading under it stays ink.
+  ['.tk-eyebrow', 'the module entrance, at the head of its own page'],
 ]);
 
 /** Where an accent may be *defined* rather than used. */

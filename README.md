@@ -5,9 +5,10 @@ that fills the screen, and progress a child can feel. No advertising, no
 tracking, no account required.
 
 Two modules today: **topografie** and **rekenen**. Five more are planned and
-none of them is offered before it exists ([ADR-037](docs/DECISIONS.md)) — a
-greyed-out entry is a promise, and this product does not make promises to
-children it has not kept yet.
+they stand in the rail beside the two that exist ([ADR-051](docs/DECISIONS.md)),
+because a rail that showed only what was finished made the product look like it
+stopped there. What none of them does is pretend: a module that is not built
+says so on its own page and points at the ones that are.
 
 That last sentence is why this repository is public. The best-known free
 alternative is paid for by advertising from over a hundred vendors, on a page
@@ -41,6 +42,13 @@ Rekenen is the twelve tables, one to twelve, ten sums each. A round is a whole
 table, because "de tafel van 7 ken ik" is only sayable about all of it. Typing
 the answer comes before choosing between four, which is the opposite of the map
 and for a reason ([ADR-049](docs/DECISIONS.md)).
+
+Every module has a page of its own at the word a parent would type — leer.nu
+/topografie, /rekenen, /klokkijken — and one flow on it: what you want to
+practise, then how, then a button carrying both in words and roughly how long it
+takes. The ways of practising are in order of weight with a line and an icon
+each, six at most ([ADR-061](docs/DECISIONS.md)). A set has an address too, so
+leer.nu/topografie/provincies is a place a child can be sent.
 
 A round covers the whole set where the set is small enough — twelve of twelve —
 and is capped at fifteen questions where it is not, because eighty questions is

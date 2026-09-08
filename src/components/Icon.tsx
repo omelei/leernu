@@ -308,3 +308,115 @@ export function FamilyIcon(props: Omit<IconProps, 'children'>) {
     </Icon>
   );
 }
+
+/* ---------------------------------------------------------------------------
+ * The ways of practising, which §E does not name and does not forbid.
+ *
+ * The sixteen above are §E's list and it is closed: `icons.test.ts` holds it
+ * to that. What §E also fixes is the reason the list can be closed at all —
+ * four primitives and a construction rule, "zodat de set uitbreidbaar blijft
+ * zonder illustrator". These six are that rule applied to a list §E never had
+ * to make, because when it was written a way of practising was a word on a
+ * card and not a thing with a face.
+ *
+ * They earn their place by being the difference between six cards a child
+ * reads and six cards a child recognises. That is the whole argument for an
+ * icon here, and it is why there is not one on the sets above them: a set is a
+ * name, and a picture of "Provincies van Nederland" is a map drawn wrong at
+ * 24px.
+ *
+ * The same rules apply as to the sixteen. Straight lines, one weight, no
+ * colour, and no two silhouettes alike — which is why exploring is a loupe
+ * with a handle rather than another circle, and surviving is a shield rather
+ * than three dots that would read as the streak.
+ */
+
+/**
+ * Pointing: an arrow, on the slant a cursor sits at.
+ *
+ * Not a hand. A hand at 20px is a mitten, and this mark has to survive beside
+ * five others at that size.
+ */
+export function PointIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <path d="M6 3l4 18 3-7 7-3z" strokeLinejoin="round" />
+    </Icon>
+  );
+}
+
+/**
+ * Multiple choice: four boxes, and a mark in one of them.
+ *
+ * The design fills that box solid. §E allows fill for a dot and for nothing
+ * else, so the box is marked rather than flooded — which also keeps the count
+ * of four legible, and four is the thing the mode is named for.
+ */
+export function ChoiceIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <rect x="3" y="3" width="8" height="8" rx="2" />
+      <rect x="13" y="3" width="8" height="8" rx="2" />
+      <rect x="3" y="13" width="8" height="8" rx="2" />
+      <rect x="13" y="13" width="8" height="8" rx="2" />
+      <circle cx="17" cy="17" r="1.8" fill="currentColor" />
+    </Icon>
+  );
+}
+
+/**
+ * Typing: a key board and the bar under it.
+ *
+ * Two shapes, because at 20px a row of little keys is a smear. It is told
+ * apart from `TablesIcon` — also a rectangle — by being wider than it is tall
+ * and by having nothing inside it.
+ */
+export function KeyboardIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <rect x="2.5" y="6" width="19" height="12" rx="2" />
+      <path d="M8 14.5h8" />
+    </Icon>
+  );
+}
+
+/**
+ * Exploring: a loupe, which is looking without being asked anything.
+ *
+ * The circle is the third in this set and the handle is what separates it from
+ * the other two at any size — the clock has hands inside it and the stamp has
+ * a diamond, and both of those are contained. This one sticks out.
+ */
+export function ExploreIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <circle cx="10.5" cy="10.5" r="6.5" />
+      <path d="M15.5 15.5L21 21" />
+    </Icon>
+  );
+}
+
+/** The lightning round: a bolt. Sixty seconds, drawn as the thing it is named after. */
+export function BoltIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <path d="M13 3L6 13h5l-2 8 8-11h-5z" strokeLinejoin="round" />
+    </Icon>
+  );
+}
+
+/**
+ * Surviving: a shield, bevelled rather than curved.
+ *
+ * Three lives are not three dots — that drawing is already the streak, and a
+ * child who is about to lose one should not be shown the mark for days in a
+ * row. What three lives mean is that you are being protected while you get it
+ * wrong, which is what a shield is.
+ */
+export function ShieldIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <path d="M12 3l7 3v5.5L12 20.5 5 11.5V6z" strokeLinejoin="round" />
+    </Icon>
+  );
+}

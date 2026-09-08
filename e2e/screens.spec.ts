@@ -41,10 +41,12 @@ async function chooseAndStart(page: Page, way: RegExp) {
 
   const how = page.getByRole('region', { name: /Hoe wil je/ });
   await how.getByRole('button', { name: way }).click();
-  await page
-    .getByRole('button', { name: /vragen$/ })
-    .last()
-    .click();
+  await start(page);
+}
+
+/** The one way out of K2, whatever was chosen. See e2e/app.spec.ts. */
+async function start(page: Page) {
+  await page.locator('.tk-choose-start button').click();
 }
 
 test('the front door, the chooser and the profile', async ({ page }, testInfo) => {
@@ -83,10 +85,7 @@ test('the round: pointing, and the answer', async ({ page }, testInfo) => {
     .getByRole('region', { name: /Hoe wil je/ })
     .getByRole('button', { name: /Aanwijzen/ })
     .click();
-  await page
-    .getByRole('button', { name: /vragen$/ })
-    .last()
-    .click();
+  await start(page);
 
   await expect(page.getByRole('button', { name: 'Limburg' })).toBeVisible(READY);
   await shoot(page, size, '05-wijs-aan');
@@ -120,21 +119,20 @@ test('the round: typing the name', async ({ page }, testInfo) => {
   await shoot(page, size, '09-typen');
 });
 
-/** Rekenen, the second module: its chooser and a round of it. */
+/** Rekenen, the second module: the same page, and a round of it. */
 test('the tables: choosing one, and a sum', async ({ page }, testInfo) => {
   const size = testInfo.project.name;
 
   await signIn(page, 'Bas');
-  await page.goto('/tafels');
-  await expect(page.getByRole('heading', { name: 'Welke tafel?' })).toBeVisible();
+  // The word a parent types, which is now the page itself rather than a card
+  // pointing at one.
+  await page.goto('/rekenen');
+  await expect(page.getByRole('heading', { name: 'Wat wil je oefenen?' })).toBeVisible();
   await shoot(page, size, '10-tafels');
 
-  // The chooser opens on the table of one and on typing, so the start button is
+  // The page opens on the table of one and on typing, so the start button is
   // enough to get into a round.
-  await page
-    .getByRole('button', { name: /sommen$/ })
-    .last()
-    .click();
+  await start(page);
 
   await expect(page.getByPlaceholder('Antwoord')).toBeVisible(READY);
   await shoot(page, size, '11-som');

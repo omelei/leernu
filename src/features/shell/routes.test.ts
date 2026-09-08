@@ -55,7 +55,7 @@ describe('the addresses', () => {
 
     for (const module of MODULES) {
       const route = module.built
-        ? ({ name: 'module', module } as const)
+        ? ({ name: 'module', module, setId: null } as const)
         : ({ name: 'soon', module } as const);
       expect(routeFor(pathFor(route)), module.id).toMatchObject({ name: route.name });
     }
@@ -64,16 +64,44 @@ describe('the addresses', () => {
   it('puts tafels under rekenen and klokkijken beside it', () => {
     // The distinction the owner drew: telling the time is not arithmetic, it is
     // reading an instrument. Business plan v6 already split them into two
-    // modules with two accents; the category adds the word a parent types
+    // modules with two accents, and the category is the word a parent types
     // without collapsing that back into one thing.
-    expect(routeFor('/rekenen')).toMatchObject({ name: 'category' });
+    //
+    // What the word leads to is the tables themselves. A category holding one
+    // built module *is* that module: a page with a single card on it saying
+    // "Rekenen" is a redirect wearing a hat, and it charged a child a click.
     const rekenen = routeFor('/rekenen');
-    if (rekenen.name !== 'category') throw new Error('expected a category');
-    expect(rekenen.category.modules).toEqual(['tafels']);
-    expect(rekenen.category.modules).not.toContain('klok');
+    expect(rekenen).toMatchObject({ name: 'module' });
+    if (rekenen.name !== 'module') throw new Error('expected a module');
+    expect(rekenen.module.id).toBe('tafels');
 
-    // And the clock keeps its own address, one level up.
+    // The module's own slug still works: it has been written down.
+    expect(routeFor('/tafels')).toMatchObject({ name: 'module' });
+
+    // And the clock keeps its own address, beside rekenen rather than under it.
     expect(routeFor('/klokkijken')).toMatchObject({ name: 'soon' });
+  });
+
+  it('gives a set an address of its own, and the word a parent types', () => {
+    // leer.nu/topografie/provincies is a place a child can be sent, which a
+    // chooser is not. The map sets drop the source prefix from their ids —
+    // nobody types the country twice — and the tables already name themselves.
+    const provincies = routeFor('/topografie/provincies');
+    expect(provincies).toMatchObject({ name: 'module', setId: 'nl-provincies' });
+
+    const tafel = routeFor('/rekenen/tafel-7');
+    expect(tafel).toMatchObject({ name: 'module', setId: 'tafel-7' });
+
+    expect(pathFor(provincies)).toMatch(/\/topografie\/provincies$/);
+    expect(pathFor(tafel)).toMatch(/\/rekenen\/tafel-7$/);
+  });
+
+  it('opens the module when the set is one nobody has heard of', () => {
+    // The child asked for topography by typing it. Answering with the front
+    // door because the second word was wrong is the behaviour ADR-044 rejected
+    // for modules, and it is no better one level down.
+    expect(routeFor('/topografie/verzonnen')).toMatchObject({ name: 'module', setId: null });
+    expect(routeFor('/rekenen/tafel-13')).toMatchObject({ name: 'module', setId: null });
   });
 
   it('keeps the retention screen at a word a child could type', () => {

@@ -2490,6 +2490,111 @@ silhouette, not to draw a different idea.
 
 ---
 
+## ADR-061 — One module page, six ways with a face each, and a set that has an address
+
+**Status:** accepted — 2026-09-08.
+
+### Context
+
+The category pages — leer.nu/topografie, leer.nu/rekenen, leer.nu/klokkijken —
+were the part of the product the design calls K2 and the part that had grown by
+accretion. Four things were wrong with them at once.
+
+**There were two of them.** `ChooseRoundScreen` and `ChooseTableScreen` were the
+same screen twice: the same two numbered steps, the same cards, the same start
+button, maintained apart. What actually differs between topography and the
+tables is the list of sets and the list of ways, which is data.
+
+**Two ways of practising skipped the sentence.** The lightning round and the
+survival round were chips that started a round the moment they were pressed. So
+the two heaviest rounds in the product were the only two a child never read a
+description of first — K2's whole argument is that the last thing you read
+before a round is what the round is, and the chips were exempt from it.
+
+**A way of practising had no face.** Six cards of text, told apart by reading
+them. The design draws an icon on each and the styleguide's §E fixes the rule
+for drawing one.
+
+**leer.nu/rekenen was a redirect wearing a hat.** ADR-044 made rekenen a
+category holding tafels, which is right — telling the time is not arithmetic.
+What it produced was a page with one card on it, labelled "Rekenen", leading to
+a module also labelled "Rekenen". A child paid a click to be told what they had
+just typed.
+
+### Decision
+
+**One `ModuleScreen` for every module.** Sets and ways are data
+(`features/module/onderdelen.ts`, `features/module/forms.ts`); the page is the
+same for all of them. Twelve tables lay out as a grid and five named sets as a
+list, which is the only thing that branches.
+
+**Every way of practising is in step 2, with its own icon, and never more than
+six.** The clock and the lives are the fifth and sixth, so everything that
+starts a round goes through the same start button. The argument they were kept
+out for — that adding sixty seconds to something you already know is not a way
+of learning it — is still made, by the order and by the line under each name,
+which is where an argument belongs. Six is a drawing rule: past six the grid
+stops being one glance, and a module with a seventh way has a question to answer
+about which six to offer rather than a row to grow.
+
+**Six new icons**, built from §E's primitives on §E's frame. §E's own list of
+sixteen is closed and stays closed; what it also fixes is the reason it can be —
+a construction rule "zodat de set uitbreidbaar blijft zonder illustrator". When
+§E was written a way of practising was a word on a card.
+
+**A set has an address**: leer.nu/topografie/provincies, leer.nu/rekenen/tafel-7.
+A parent or a teacher can send a child to one exercise rather than to a chooser.
+An unknown second segment opens the module rather than an error, for the reason
+ADR-044 gave one level up.
+
+**A category holding one built module _is_ that module.** leer.nu/rekenen opens
+the tables; leer.nu/tafels keeps working, because it has been written down. The
+category page survives for the day arithmetic is more than the tables.
+
+**The start button says how long it takes** — "Ongeveer 4 minuten", from the
+design. The per-question figures are round on purpose; a number to the minute
+would claim a precision this does not have. Nothing is claimed where nothing can
+be: a round that ends on three lives is exactly as long as the child is good.
+
+**"Wat nog niet zit"** names the set the scheduler has most work waiting in, and
+selects it. It does not start a round — choosing how is still the child's — and
+it is absent when the busiest set is the one already open. On twelve tables the
+one that needs doing is as likely to be row nine as row one.
+
+**The child's own column is on every page inside the shell**, unchanged: how the
+whole of it is going, where they keep going back to, and the animal they picked.
+It moved out of `HomeScreen` to be shared and nothing about what it draws
+changed. A module page is not a different application.
+
+**The app bar carries the rest of the address** — "leer.nu" + "/topografie",
+§A's lockup, which K2 puts there. It is the one place in the product that says a
+page has an address someone could write down. Not on a phone, where the bar is a
+wordmark and a name across 393.
+
+### Consequences
+
+`round/modes.ts`, `round/challengeLabel.ts`, `ChooseRoundScreen` and
+`ChooseTableScreen` are gone, and `modes.test.ts` with them —
+`features/module/forms.test.ts` asserts the order, and its last case is the
+reverse of that file's: the challenge modes are in the list now.
+
+Five copy keys were retired with the screens they belonged to, including
+`sums.title`. The tables page is headed "Wat wil je oefenen?" like every other
+module, and its start button counts vragen rather than sommen, which is what the
+round screen already counted.
+
+`.tk-eyebrow` is the fourth selector allowed to paint with a module accent. It
+is the same pair as `.tk-tile-head` — the module's pictogram and the module's
+name — at the head of the module's own page, and on a phone it is the only thing
+that says which module you are in, because §D drops the rail at that width.
+
+Not done, and worth naming: the design's orientation panel beside the flow — the
+map of the chosen set with its progress bar under it. It is drawn in K2 and it
+costs a geo fetch on a screen where nothing has been practised yet. It is a
+decision for the day the map files are cheaper, not an oversight.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because

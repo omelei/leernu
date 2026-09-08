@@ -55,6 +55,15 @@ export interface ShellProps {
   /** The streak, the profile switch — whatever the app bar is carrying today. */
   readonly bar?: ReactNode;
   /**
+   * The rest of the address, drawn beside the wordmark: "leer.nu" + this.
+   *
+   * §A draws that as a lockup and K2 puts it in the app bar, and it is the one
+   * place in the product that says a page has an address — something a parent
+   * can write on a note or a teacher can put on a board. Absent on the front
+   * door, where the address is nothing and "leer.nu/" would be a stub.
+   */
+  readonly address?: string | undefined;
+  /**
    * The two lists, injectable so the frame can be tested with more than the one
    * module and the one destination that exist today. Nothing in the app passes
    * them; a test that could only ever see a single entry would be testing the
@@ -71,6 +80,7 @@ export function Shell({
   currentModule,
   onModule,
   bar,
+  address,
   modules = RAIL_MODULES,
   destinations = BUILT_DESTINATIONS,
 }: ShellProps) {
@@ -100,6 +110,17 @@ export function Shell({
         >
           <Wordmark size={24} clearSpace={false} />
         </button>
+
+        {/* Outside the button, because the mark is the way home and the path
+            is where you already are — one is a control and the other is a
+            fact. Hidden from a screen reader for the same reason the heading
+            under it is not: it says the module's name a second time, in a
+            spelling nobody says out loud. */}
+        {address === undefined ? null : (
+          <span aria-hidden="true" className="tk-brand-path">
+            {address}
+          </span>
+        )}
 
         {showDestinations ? (
           // From a tablet up. On a phone the same list is the tab bar at the

@@ -39,27 +39,16 @@ import { applyRoundRewards, type RoundOutcome } from '@/store/rewardStore';
 
 export type SumMode = 'som-typen' | 'som-meerkeuze' | 'bliksemronde' | 'overleven';
 
-/**
- * Typing first, choosing second, and the opposite way round from topography.
+/*
+ * Which of these a child is offered, in which order and with what said about
+ * each, lives in `features/module/forms.ts` — including the reason typing comes
+ * before choosing here and the other way round on a map. What stays here is how
+ * a round of each one ends, because that is the hook's own business.
  *
- * On a map, choosing between four names is easier than producing one, so it
- * comes first. A number is different: the four options are all plausible
- * products and a child who cannot do the sum can still often reject three, so
- * multiple choice measures less here than typing does. It is the way back in
- * when typing is going badly, not the way in.
+ * The clock and the lives are the same two the map offers and for the same
+ * reason (ADR-021): pressure, and neither of them punishes. They run over all
+ * twelve tables rather than the chosen one; see the pool in `boot` below.
  */
-export const SUM_MODES: readonly SumMode[] = ['som-typen', 'som-meerkeuze'];
-
-/**
- * A clock and three lives, the same two the map offers and for the same reason
- * (ADR-021): pressure, and neither of them punishes.
- *
- * They run over all twelve tables rather than the chosen one. A table is ten
- * sums, and a lightning round that runs out of questions after eleven seconds
- * is not a lightning round — what the clock is for is a child who already knows
- * them meeting them all in one go.
- */
-export const SUM_CHALLENGE_MODES: readonly SumMode[] = ['bliksemronde', 'overleven'];
 
 export const SUM_ROUND_RULE: Record<SumMode, RoundRule> = {
   'som-typen': { kind: 'fixed', aantal: 10 },

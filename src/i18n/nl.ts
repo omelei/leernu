@@ -124,12 +124,14 @@ export const nl = {
   'home.testSubjectPick': 'Voor welk vak?',
   'home.testSubjectNone': 'Nog geen vak',
 
-  // Een module die het plan wel heeft en het product nog niet. Alleen te
-  // bereiken door het adres te typen; geen datum, want een datum die we missen
-  // is erger dan geen datum.
+  // Een module die het plan wel heeft en het product nog niet. Geen datum,
+  // want een datum die we missen is erger dan geen datum — en geen enkele
+  // module wordt bij naam genoemd als de plek om heen te gaan: die lijst staat
+  // eronder en groeit vanzelf mee.
   'soon.subtitle': 'Bestaat nog niet',
-  'soon.body': 'Deze module bestaat nog niet. We beginnen bij topografie.',
-  'soon.action': 'Naar topografie',
+  'soon.body': 'Deze module bestaat nog niet. We zijn hem aan het maken.',
+  'soon.instead': 'Dit kun je nu wel oefenen',
+  'soon.insteadLine': 'Klaar om te oefenen',
 
   // Eén categorie, en de vorm ervan is het punt: tafels hoort onder rekenen,
   // klokkijken niet. Klokkijken is geen rekenen maar een instrument aflezen.
@@ -157,24 +159,39 @@ export const nl = {
   'mode.ontdekken': 'Ontdekken',
   'mode.bliksemronde': 'Bliksemronde',
   'mode.overleven': 'Overleven',
-  // De chips op K2 dragen hun eigen maat, zoals getekend: "Bliksemronde · 60 s".
-  // De getallen komen uit de rondes zelf, niet uit deze regel.
-  'challenge.tijd': '{naam} · {seconden} s',
-  'challenge.levens': '{naam} · {aantal} levens',
   'mode.meerkeuze': 'Meerkeuze',
 
-  // K2. De volgorde van de vier manieren is het argument, dus staat de reden
-  // erbij: meerkeuze is de instap naar typen, geen alternatief ervoor.
+  // K2. De volgorde van de zes manieren is het argument, dus staat de reden
+  // erbij: meerkeuze is de instap naar typen, geen alternatief ervoor. De klok
+  // en de levens staan achteraan en zeggen zelf waarvoor ze zijn — ze staan in
+  // de lijst, want alles wat een ronde start hoort langs dezelfde startknop.
   'way.wijs-aan': 'Tik het gebied aan — voor de eerste keer',
   'way.meerkeuze': 'Kies uit vier namen — de instap naar typen',
   'way.hoe-heet-dit': 'Schrijf het zelf op — voor de toets',
   'way.ontdekken': 'Rondkijken, geen vragen',
+  'way.bliksemronde': 'Zo veel mogelijk in een minuut — voor als het al zit',
+  'way.overleven': 'Doorgaan tot je levens op zijn — voor als het al zit',
   'choose.title': 'Wat wil je oefenen?',
   'choose.stepWhat': '1 · Waarover',
   'choose.stepHow': '2 · Hoe wil je oefenen? van makkelijk naar moeilijk',
-  'choose.whenItSticks': 'Voor als het al zit',
   'choose.dueToday': '{aantal} vandaag op de rol',
+  'choose.testSubject': 'Hier gaat je toets over.',
+
+  // Wat er nog niet zit, als dat ergens anders wacht dan waar het kind kijkt.
+  // Het kiest de set en start niets: hoe je oefent blijft aan het kind.
+  'choose.dueBody': 'Er staan {aantal} onderdelen van {set} vandaag op de rol.',
+  'choose.dueAction': 'Kies {set}',
+
+  // De startknop draagt de gekozen combinatie in woorden, en zijn maat komt
+  // uit de ronde zelf: vragen, seconden of levens. Daarnaast hoe lang het
+  // ongeveer duurt — de enige regel op deze pagina die net zo goed voor de
+  // ouder in de kamer is als voor het kind.
   'choose.start': '{set} {hoe} · {aantal} vragen',
+  'choose.startTime': '{set} {hoe} · {seconden} seconden',
+  'choose.startLives': '{set} {hoe} · {aantal} levens',
+  'choose.startOpen': '{set} {hoe}',
+  'choose.minutes': 'Ongeveer {aantal} minuten',
+  'choose.minuteOne': 'Ongeveer 1 minuut',
 
   // Explore
   'explore.kind': 'Ontdek de kaart',
@@ -226,7 +243,6 @@ export const nl = {
   // about the child.
   // Rekenen. De tafels van 1 tot 12 en tien sommen per tafel, allebei uit het
   // app-ontwerp v2. Het oefenscherm zelf is daar niet getekend (ADR-049).
-  'sums.title': 'Welke tafel?',
   'sums.table': 'Tafel van {tafel}',
   'sums.prompt': 'Hoeveel is het?',
   'sums.typeQuestion': 'Typ het antwoord',
@@ -236,7 +252,6 @@ export const nl = {
   'sums.wrong': '{som} = {antwoord}.',
   'sums.wrongSub': 'Jij zei {gegeven}.',
   'sums.dontKnowSub': 'Deze komt zo weer langs.',
-  'sums.start': 'Tafel van {tafel} {hoe} · {aantal} sommen',
   'sums.practiceMore': 'Deze sommen moet je nog oefenen',
   'mode.som-typen': 'Typ het antwoord',
   'mode.som-meerkeuze': 'Kies uit vier',
