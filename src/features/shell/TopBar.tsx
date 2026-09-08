@@ -31,10 +31,12 @@ export function TopBar({
 
   return (
     <div className="ml-auto flex min-w-0 items-center gap-4">
-      {/* Not on a phone. The app bar there is a wordmark and a name across 393,
-          and K1's own mobile frame does not carry the streak either — it is
-          context for the work, and the tab bar already costs the width. */}
-      <span className="hidden md:inline">
+      {/* Only where the rail stands up. The app bar on a phone is a wordmark and
+          a name across 393, and from a tablet up it now carries the four
+          destinations as well — K1's own frames do not put the streak on
+          either. It is context for the work, and navigation costs the width
+          first. */}
+      <span className="hidden xl:inline">
         <StreakLabel state={streak} />
       </span>
 

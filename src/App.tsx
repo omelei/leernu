@@ -222,6 +222,7 @@ export default function App() {
   return (
     <Shell bar={bar} current="vandaag" onNavigate={goTo} onModule={goModule}>
       <HomeScreen
+        naam={boot.profile.naam}
         onStart={(setId, practiceMode) => {
           setVisit(visit + 1);
           setScreen({ name: 'practice', setId, practiceMode });

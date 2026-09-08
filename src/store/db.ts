@@ -73,6 +73,15 @@ export interface SessionRecord {
   /** The questions and their answer key. Unused in v1; see ADR-003. */
   itemSet: unknown;
   score: number | null;
+  /**
+   * How many of them were actually answered.
+   *
+   * `score` alone cannot be turned into a mark: a round can be stopped early
+   * (ADR-052 keeps what was answered), so eight correct out of fifteen asked
+   * may be eight out of eight. Absent on rows written before K1 reported a
+   * grade, and the reader falls back to the length of `itemSet` there.
+   */
+  beantwoord?: number;
   gestart: string;
   geeindigd: string | null;
 }

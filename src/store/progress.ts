@@ -1,5 +1,5 @@
 import type { ItemState, ModeId } from '@/game-core';
-import { getDb, type AttemptRecord, type SessionRecord } from './db';
+import { getDb, SINGLETON_KEY, type AttemptRecord, type SessionRecord } from './db';
 import { activeChildId, ensureProgressPerChild } from './children';
 
 /**
@@ -44,11 +44,70 @@ export async function startSession(mode: ModeId, itemIds: readonly string[]): Pr
   return session.id;
 }
 
-export async function finishSession(id: string, score: number): Promise<void> {
+/**
+ * @param score     how many were right
+ * @param answered  how many were asked and answered, which is not the same as
+ *                  how many the round set out to ask — a round can be stopped
+ *                  early. Without it a mark cannot be worked out afterwards.
+ */
+export async function finishSession(id: string, score: number, answered: number): Promise<void> {
   const db = await getDb();
   const existing = await db.get('sessions', id);
   if (!existing) return;
-  await db.put('sessions', { ...existing, score, geeindigd: new Date().toISOString() });
+  await db.put('sessions', {
+    ...existing,
+    score,
+    beantwoord: answered,
+    geeindigd: new Date().toISOString(),
+  });
+}
+
+/** The last finished round over a set, as K1 reports it back. */
+export interface LastRound {
+  readonly correct: number;
+  readonly answered: number;
+  readonly at: string;
+}
+
+/**
+ * What happened the last time this child practised these items.
+ *
+ * Matched on the questions rather than on a set id, because a session records
+ * what it asked and not which set it came from. An overlap of one item is
+ * enough: a round samples fifteen of eighty, and two rounds over the same set
+ * rarely share more than a handful.
+ *
+ * Rounds that were opened and abandoned without an answer are skipped. "Je
+ * scoorde vorige keer een 1,0" for a round nobody played is not a fact about
+ * the child.
+ */
+export async function loadLastRound(itemIds: readonly string[]): Promise<LastRound | null> {
+  const db = await getDb();
+  const kindId = await activeChildId();
+  const wanted = new Set(itemIds);
+
+  let best: LastRound | null = null;
+
+  for (const session of await db.getAll('sessions')) {
+    // Rows written before ADR-046 carry no child at all, and they belong to
+    // the first one — the same fallback activeChildId() makes.
+    if ((session.kindId ?? SINGLETON_KEY) !== kindId) continue;
+    if (session.geeindigd === null || session.score === null) continue;
+
+    const asked: readonly string[] = Array.isArray(session.itemSet)
+      ? (session.itemSet as string[])
+      : [];
+    if (!asked.some((id) => wanted.has(id))) continue;
+
+    const answered = session.beantwoord ?? asked.length;
+    if (answered === 0) continue;
+
+    if (best === null || session.geeindigd > best.at) {
+      best = { correct: session.score, answered, at: session.geeindigd };
+    }
+  }
+
+  return best;
 }
 
 export async function recordAttempt(attempt: Omit<AttemptRecord, 'id'>): Promise<void> {

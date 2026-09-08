@@ -28,9 +28,14 @@ export function ProgressBar({ value, label, showDot = true, className }: Progres
   const filled = Math.min(1, Math.max(0, value));
   const percent = Math.round(filled * 100);
 
+  // Spans rather than divs, all the way down. A progress bar belongs inside a
+  // module tile on K1, a tile is a button, and a button may only contain
+  // phrasing content — a div there is markup no validator accepts and every
+  // browser quietly forgives. Nothing about the drawing changes: the rail is a
+  // flex item and the fill is displayed as a block in the stylesheet.
   return (
-    <div className={['tk-progress', className].filter(Boolean).join(' ')}>
-      <div
+    <span className={['tk-progress', className].filter(Boolean).join(' ')}>
+      <span
         className="tk-progress-rail"
         role="progressbar"
         aria-label={label}
@@ -42,9 +47,9 @@ export function ProgressBar({ value, label, showDot = true, className }: Progres
         aria-valuetext={`${percent}%`}
       >
         <span className="tk-progress-fill" style={{ width: `${percent}%` }} />
-      </div>
+      </span>
 
       {showDot ? <Dot size={24} fill={filled} /> : null}
-    </div>
+    </span>
   );
 }

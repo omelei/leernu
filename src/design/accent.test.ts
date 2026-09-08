@@ -38,6 +38,12 @@ const ALLOWED_SELECTORS: ReadonlyMap<string, string> = new Map([
   // The rail is where the module entrance does most of its work: a column of
   // seven accents is the only place in the product that shows them together.
   [".tk-rail-item[aria-current='page']", 'the module entrance, in the rail'],
+  // K1's tiles are the module entrance too — the same door as .tk-module-card,
+  // drawn as a tile because the front door lays them out in a row rather than
+  // a list. The head of the tile is the icon and the name of the module, which
+  // is the one case §E lets an icon take an accent: it denotes the module.
+  ['.tk-tile:hover', 'the module entrance, on the front door'],
+  ['.tk-tile-head', 'the module entrance, on the front door'],
 ]);
 
 /** Where an accent may be *defined* rather than used. */

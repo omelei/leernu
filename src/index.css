@@ -828,16 +828,190 @@
     gap: 8px;
   }
   .tk-progress-rail {
+    display: block;
     flex: 1;
     height: 8px;
     border-radius: var(--radius-full);
     background: var(--sunken);
     overflow: hidden;
   }
+  /* Displayed, and said out loud. Both of these are spans so that the bar is
+   * legal inside a button, and width and height mean nothing on an inline box
+   * — which is how the fill managed to be invisible for as long as the only
+   * place it appeared was the development gallery. */
   .tk-progress-fill {
+    display: block;
     height: 100%;
     border-radius: var(--radius-full);
     background: var(--accent);
+  }
+
+  /* ---- K1, the front door ----------------------------------------------
+   * Three areas, and one grid that holds all four sizes.
+   *
+   * The design gives the widest size a rail, a wide middle and a column of 320
+   * on the right, and the two smaller ones the same three things stacked. That
+   * is one grid with two shapes rather than two layouts: the document order is
+   * the reading order at every size — greeting, today, what you have kept,
+   * everything else there is — and only the placement changes.
+   *
+   * The right-hand column is deliberately not first on a phone. It is a
+   * forecast and a shelf of stamps; neither is something to do, and a child who
+   * opens the app should meet the work before they meet a report on it.
+   */
+  .tk-home {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--row-gap);
+    width: 100%;
+    /* The design's own measure: 1440 less the 88 of the rail is 1352, so a
+     * laptop gets the page K1 draws rather than a narrower one, and only a
+     * monitor wider than the design is capped. Below the cap this does
+     * nothing. */
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px 16px;
+  }
+  .tk-home-top {
+    display: flex;
+    flex-direction: column;
+    gap: var(--row-gap);
+    min-width: 0;
+  }
+  .tk-home-aside {
+    display: flex;
+    flex-direction: column;
+    gap: var(--row-gap);
+    min-width: 0;
+  }
+  .tk-home-more {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
+  }
+  @media (min-width: 768px) {
+    .tk-home {
+      padding: 32px 24px;
+    }
+  }
+  /* The same breakpoint as the rail, because it is the same judgement: at this
+   * width there is a pointer and room to spare, and the page can be three
+   * columns wide instead of one. */
+  @media (min-width: 1280px) {
+    .tk-home {
+      grid-template-columns: minmax(0, 1fr) 320px;
+      align-items: start;
+      padding: 48px;
+    }
+    .tk-home-top {
+      grid-column: 1;
+      grid-row: 1;
+    }
+    .tk-home-aside {
+      grid-column: 2;
+      /* Beside both rows of the middle column, so a short sidebar does not
+       * leave the tiles reaching under it. */
+      grid-row: 1 / span 2;
+    }
+    .tk-home-more {
+      grid-column: 1;
+      grid-row: 2;
+    }
+  }
+
+  /* ---- Tiles -----------------------------------------------------------
+   * The foot of K1: every other module, as one row of equal things.
+   *
+   * Auto-fit rather than a fixed three, because a fixed three on a phone is
+   * three columns of 88px. The floor of 12rem is where a module name and a bar
+   * stop being legible side by side, and it is low enough that the four
+   * remaining modules make one row on a laptop rather than three and a lonely
+   * fourth.
+   *
+   * `min(12rem, 100%)` and not 12rem, because the floor is in rem and a reader
+   * at 200% text moves the rem. Without the min, that floor becomes 384px, a
+   * 393px screen gets a column wider than its own margins, and the page scrolls
+   * sideways — the first thing that goes wrong at that size and the one thing
+   * e2e/shell.spec.ts measures at every size.
+   */
+  .tk-tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(12rem, 100%), 1fr));
+    gap: 16px;
+  }
+  .tk-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    min-height: var(--control-height);
+    padding: var(--card-padding);
+    border: var(--stroke-hair) solid var(--line);
+    border-radius: var(--card-radius);
+    background: var(--paper);
+    color: var(--ink);
+    text-align: left;
+    cursor: pointer;
+  }
+  .tk-tile:hover {
+    border-color: var(--accent);
+    border-width: var(--stroke-active);
+    /* Compensate the border so nothing beside it moves. */
+    padding: calc(var(--card-padding) - 1px);
+  }
+  .tk-tile-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--accent-text);
+  }
+  /* A module the plan has and the product does not. Hatched and dashed, which
+   * is what K1 draws — a shape rather than a colour, so that "not yet" is
+   * legible to a child who cannot tell the two greys apart. */
+  .tk-tile[data-soon] {
+    border-style: dashed;
+    border-color: var(--line-strong);
+    background: repeating-linear-gradient(135deg, var(--paper) 0 7px, var(--surface) 7px 14px);
+  }
+  .tk-tile[data-soon] .tk-tile-head {
+    color: var(--ink-2);
+  }
+  .tk-tile[data-soon]:hover {
+    border-color: var(--ink-2);
+  }
+
+  /* ---- Badges ----------------------------------------------------------
+   * The small hard-edged label K1 puts before a heading: "toets", and the
+   * subject that test is for. Square, because §A gives the badge no radius —
+   * it is a stamp on the page. Deliberately not a `.tk-chip`, which is a
+   * filter you can switch on: this is a fact, and nothing here is pressable.
+   */
+  .tk-badge,
+  .tk-badge-outline {
+    display: inline-flex;
+    align-items: center;
+    flex: none;
+    padding: 4px 10px;
+    border-radius: var(--radius-flat);
+    font-size: var(--type-label);
+    line-height: var(--type-label-lh);
+    font-weight: 600;
+  }
+  .tk-badge {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  /* The quiet one: which subject the test is for. Ink on paper with a rule
+   * round it, and not the module's accent — §B allows an accent on the
+   * highlight, the progress bar and the module entrance, and a badge is none
+   * of the three. The module's own icon sits inside it instead, which is what
+   * §E does let carry a module. */
+  .tk-badge-outline {
+    gap: 8px;
+    background: var(--paper);
+    color: var(--ink);
+    box-shadow: inset 0 0 0 var(--stroke-hair) var(--line-strong);
   }
 
   /* ---- Module entrance -------------------------------------------------
@@ -946,11 +1120,28 @@
   .tk-rail {
     display: flex;
     flex-direction: row;
+    align-items: center;
     gap: 8px;
     height: 72px;
     padding: 8px 16px;
     background: var(--paper);
     border-top: var(--stroke-hair) solid var(--line);
+  }
+  /* The list of modules inside it. `inherit` rather than a repeated value, so
+   * the rail's two postures stay one decision made in one place. */
+  .tk-rail-nav {
+    display: flex;
+    flex-direction: inherit;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+  /* The mark at the head of the rail, which K1 draws only where the rail
+   * stands up — that is the corner it means by "linksboven". Lying along the
+   * bottom of a tablet it would be a logo in the last place anyone looks, and
+   * the app bar already carries the wordmark two centimetres away. */
+  .tk-rail-brand {
+    display: none;
   }
   /* Not on a phone, which is what §D asks for: "op mobiel vervalt de rail en
    * komt er een tabbalk met vier items ... de modules blijven dan bereikbaar
@@ -968,11 +1159,22 @@
   @media (min-width: 1280px) {
     .tk-rail {
       flex-direction: column;
+      align-items: stretch;
       width: 88px;
       height: auto;
       padding: 16px 8px;
       border-top: 0;
       border-right: var(--stroke-hair) solid var(--line);
+    }
+    .tk-rail-nav {
+      align-items: stretch;
+    }
+    .tk-rail-brand {
+      display: flex;
+      justify-content: center;
+      /* The 12 K1 puts between the mark and the first module, so the mark
+       * reads as the head of the rail and not as a sixth entry in it. */
+      padding: 0 0 12px;
     }
   }
   .tk-tabbar {
@@ -1030,6 +1232,73 @@
   }
   .tk-tabbar-item[aria-current='page'] {
     color: var(--ink);
+  }
+
+  /* The same four destinations, standing up in the app bar. From a tablet
+   * upwards the foot of the screen is a long way from the pointer and the bar
+   * at the top is where a page's own navigation lives; below that width this
+   * is not displayed and the tab bar is. Exactly one of the two at any width,
+   * so nothing is offered twice. */
+  .tk-navbar {
+    align-items: center;
+    gap: 4px;
+    /* Both of these are about a reader at 200% text. The items may not wrap —
+     * a destination broken over two lines is not a destination — so at that
+     * size the row is wider than a tablet's app bar, and something has to
+     * give. It scrolls inside the bar rather than pushing the page sideways,
+     * which is the failure e2e/shell.spec.ts measures and the first thing that
+     * goes wrong at the small end. */
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tk-navbar::-webkit-scrollbar {
+    display: none;
+  }
+  .tk-navbar-item {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--touch-min);
+    padding: 0 12px;
+    border: 0;
+    border-radius: var(--radius-control);
+    background: transparent;
+    color: var(--ink-2);
+    font-family: 'Source Sans 3', system-ui, sans-serif;
+    font-size: var(--type-label);
+    line-height: var(--type-label-lh);
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .tk-navbar-item:hover {
+    background: var(--surface);
+    color: var(--ink);
+  }
+  /* Where you are, said with weight and a rule under it rather than with a
+   * colour: §A's rule is that colour never carries a state on its own. */
+  .tk-navbar-item[aria-current='page'] {
+    color: var(--ink);
+    box-shadow: inset 0 -2px 0 0 var(--ink);
+    border-radius: var(--radius-control) var(--radius-control) 0 0;
+  }
+
+  /* The logo, which is now the way back to the front door. A button that looks
+   * like nothing: the mark is the affordance, and a border around it would be
+   * a second one competing with it. */
+  .tk-brand {
+    display: inline-flex;
+    align-items: center;
+    flex: none;
+    min-height: var(--touch-min);
+    padding: 0 4px;
+    border: 0;
+    border-radius: var(--radius-control);
+    background: transparent;
+    cursor: pointer;
+  }
+  .tk-brand:hover {
+    background: var(--surface);
   }
 
   /* ---- The round, on four sizes (K3) -----------------------------------

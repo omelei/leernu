@@ -554,7 +554,7 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
     // The clock, the last life and the stop button can all arrive at once.
     if (phase === 'finished') return;
     setPhase('finished');
-    if (sessionId.current) void finishSession(sessionId.current, correctCount);
+    if (sessionId.current) void finishSession(sessionId.current, correctCount, answeredCount);
 
     // A round counts for the day even when it was stopped early: the child
     // turned up and did the work, which is the only thing a streak measures.

@@ -126,7 +126,7 @@ test('keeps the wordmark and the question legible at 200% text', async ({ page }
   // The heading of the page, not the name in the app bar: what this is checking
   // is that the type scale moves with the root size, and only a heading is set
   // on the scale. A label in a pill would pass this by staying small.
-  const heading = page.getByRole('heading', { name: /Vandaag oefen je/ });
+  const heading = page.getByRole('heading', { name: 'Welkom Fatima!' });
   await expect(heading).toBeVisible();
 
   // Grown, not merely still there.
