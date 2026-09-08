@@ -65,6 +65,19 @@ export default function App() {
     setScreen({ name: 'home' });
   };
 
+  /**
+   * A new screen starts at the top.
+   *
+   * There is no page load between screens — the router swaps a component — so
+   * the browser keeps the scroll position of the one before. On a phone that
+   * meant arriving at the chooser already scrolled past its own heading, with
+   * the wordmark cut in half, because the button that opens it sits below the
+   * fold on the screen you press it from.
+   */
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [screen.name, route.name]);
+
   useEffect(() => {
     void getProfile().then((profile) => setBoot({ status: 'ready', profile: profile ?? null }));
   }, []);

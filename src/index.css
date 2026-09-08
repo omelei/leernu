@@ -802,6 +802,22 @@
     /* Compensate the border so nothing beside it moves. */
     padding: calc(var(--card-padding) - 1px);
   }
+  /* Which one is chosen. K2 had no answer to that at all: five cards in the
+   * same tint with the same border, and the one the screen was going to start
+   * was indistinguishable from the four it was not.
+   *
+   * Two changes at once and neither of them is a hue. The border turns to ink,
+   * which is a lightness difference no colour vision can miss, and the leading
+   * edge thickens into a bar — a shape. §A's rule is that colour never carries
+   * a state on its own, and a chooser is exactly where breaking it costs most.
+   */
+  .tk-module-card[aria-pressed='true'] {
+    border-color: var(--ink);
+    border-width: var(--stroke-active);
+    border-left-width: 8px;
+    padding: calc(var(--card-padding) - 1px);
+    padding-left: calc(var(--card-padding) - 7px);
+  }
   .tk-module-card:disabled {
     background: var(--surface);
     border-color: var(--line);
