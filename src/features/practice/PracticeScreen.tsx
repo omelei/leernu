@@ -238,11 +238,7 @@ export function PracticeScreen({
               {/* Drawn on K3 below the question at every size. It is the one
                   control that lets a child stop guessing, so it is secondary
                   in weight and never hidden behind anything. */}
-              <button
-                type="button"
-                className="tk-button tk-button-secondary mt-4"
-                onClick={giveUp}
-              >
+              <button type="button" className="tk-button tk-button-secondary mt-4" onClick={giveUp}>
                 {t('practice.dontKnow')}
               </button>
             </>
