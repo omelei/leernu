@@ -668,8 +668,11 @@ function Stickerkaart({
       <h2 className="tk-label">{t('home.stickersTitle')}</h2>
 
       <div className="flex items-center gap-4">
+        {/* Decorative: the row underneath says which one is yours, with a name
+            and a pressed state, and hearing the animal twice is worse than
+            hearing it once. */}
         <span className="tk-sticker-big">
-          <Big size={56} label={t(current.name)} />
+          <Big size={56} />
         </span>
         <p className="text-ink-2">{t('home.stickersPick')}</p>
       </div>
@@ -679,14 +682,20 @@ function Stickerkaart({
           const Draw = sticker.draw;
 
           return (
+            // The name is on the button and not on the drawing inside it. A
+            // <title> in an SVG is an accessible name in Chromium and is not
+            // one in WebKit, which is where these are read out loud: axe called
+            // all six of them buttons with no discernible text, on the browser
+            // an iPad in a classroom runs.
             <button
               key={sticker.id}
               type="button"
               className="tk-sticker"
+              aria-label={t(sticker.name)}
               aria-pressed={sticker.id === current.id}
               onClick={() => onChoose(sticker.id)}
             >
-              <Draw size={28} label={t(sticker.name)} />
+              <Draw size={28} />
             </button>
           );
         })}
