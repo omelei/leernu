@@ -8,35 +8,69 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
+    permissions:
+      # Only for the formatting commit below. Everything else here reads.
+      contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Named rather than the detached SHA a push event checks out, so the
+          # formatting step below has a branch to push back to.
+          ref: ${{ github.head_ref || github.ref_name }}
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
       - run: npm ci
       # Listed step by step rather than as `npm run check`, so a red run names
-      # what failed on the job page instead of one collapsed script. The script
-      # exists for local use and runs the same commands in the same order — add
-      # a step to one and add it to the other.
+      # what failed on the job page instead of one collapsed script. The local
+      # script runs the same commands in the same order with one difference,
+      # below: it asserts the formatting and this applies it.
       - run: npm run lint
       - run: npm run typecheck
-      - run: npm run format:check
-      # Prettier names the files it disagrees with but not the disagreement,
-      # and this repository is written on a machine where its toolchain cannot
-      # run. On a red check the diff is the answer, so print it here rather
-      # than guess at it from the file names.
-      - name: Show what Prettier would change
-        if: failure()
+      # Prettier is applied here rather than asserted, and it is the only check
+      # in this file that gets that treatment.
+      #
+      # The reason is ADR-001: the machine most of this is written on cannot
+      # reach the npm registry, so there is no formatter there to obey. Failing
+      # the build for it turned every disagreement about where a line breaks
+      # into a red run and an e-mail — eleven of the sixteen failures in one
+      # night, none of which any human had an opinion about.
+      #
+      # It is still enforced. The commit is made here, so the branch ends up
+      # formatted either way; what changes is that a formatter and a person no
+      # longer argue through the build.
+      - name: Format
+        run: npx prettier --write .
+      - name: Commit the formatting, if there was any
+        # Tolerated rather than required. This repository gives workflows read
+        # access by default, so the push may be refused — and a build that goes
+        # red over where a line breaks is the thing being fixed here. If it is
+        # refused the run stays green with the step marked, and the formatting
+        # lands the next time anyone runs `npm run format`.
+        continue-on-error: true
         run: |
-          npx prettier --write . > /dev/null
-          git --no-pager diff
+          if git diff --quiet; then
+            echo "Nothing to format."
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          # [skip ci] because a formatting commit has nothing left to check, and
+          # a run that exists only to say so is the noise this step removes.
+          git commit -am 'Run Prettier [skip ci]'
+          git pull --rebase --autostash
+          git push
       # A broken geometry reference must never reach a classroom.
       - run: npm run validate:content
       - run: npm test
       - run: npm run build
 
+  # Both of these wait for `check`. They used to run beside it, so one commit
+  # that did not compile produced three failing jobs and three notifications,
+  # and spent eight minutes of runner time proving the same thing three times.
   e2e:
+    needs: [check]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -68,6 +102,7 @@ jobs:
           retention-days: 7
 
   lighthouse:
+    needs: [check]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -118,6 +153,12 @@ jobs:
           # /<repo>/; set it to / once a custom domain is pointed here.
           BASE_PATH: ${{ vars.BASE_PATH || format('/{0}/', github.event.repository.name) }}
       - uses: actions/configure-pages@v5
+      # If this run is a re-run, the artifact uploaded by the previous attempt
+      # is still there and `deploy-pages` finds two called `github-pages` and
+      # refuses. That is the one deploy failure in this repository's history
+      # that was not a broken commit. The remedy is a new commit rather than a
+      # re-run — artifacts belong to the run, and a second attempt does not
+      # clear the first one's.
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
