@@ -35,7 +35,10 @@ export default defineConfig({
    * nothing that the first ten did not — it only decides whether the answer
    * arrives in four minutes or in twenty-five.
    */
-  workers: process.env.CI ? 4 : undefined,
+  // Spread rather than `workers: … : undefined`: under
+  // exactOptionalPropertyTypes an absent option and one set to undefined are
+  // different things, and only the first means "use your own default".
+  ...(process.env.CI ? { workers: 4 } : {}),
   maxFailures: process.env.CI ? 10 : 0,
   // `open: 'never'` because the HTML reporter otherwise starts a server and
   // waits after a failure, which in a Codespace looks exactly like a hung test
