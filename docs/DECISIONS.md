@@ -1860,6 +1860,61 @@ geometry; these are the ones that would not.
 
 ---
 
+## ADR-048 — "Ik weet het niet" is honest, and cheaper than a guess
+
+**Status:** accepted — 2026-09-08. The cost in a survival round is the part
+worth arguing with; see Consequences.
+
+### Context
+
+The button is drawn on K3 at every size in the app design, below the question,
+secondary in weight. It had not been built, because what it costs is not drawn
+and the answer is not obvious.
+
+Three things could happen when a child presses it, and they are not the same
+decision:
+
+- What the scheduler learns.
+- What the round counts.
+- What it costs in a round with lives or a clock.
+
+### Decision
+
+**The scheduler is told the truth: not known.** The item goes back to box one,
+exactly as a wrong answer does. A child who does not know a province does not
+know it, whether or not they guessed first.
+
+**The round counts it among the answered, and not among the correct.** "9 of 12"
+must mean what it says.
+
+**It costs no life.** This is the part that is not symmetric with a wrong
+answer, and it is deliberate. A guess on twelve provinces is right one time in
+twelve; a button that costs exactly what a wrong guess costs is a button no
+child ever presses, and the control becomes decoration. Making it cheaper is
+what buys the honesty — and honesty is precisely what the scheduler needs to
+put the item in front of them again.
+
+In a bliksemronde it still costs the seconds it took, which is the pressure
+that round already applies and enough of it.
+
+The attempt is recorded as `weet-niet` rather than `onbekend`. "I did not know"
+and "you typed something that is not a place" are different things to have
+done, and a row that cannot tell them apart cannot be read later.
+
+### Consequences
+
+A child could press it through a survival round and never lose a life. The
+round ends when the questions do rather than when the lives do, they score
+nothing, and the scheduler gets twelve honest signals. That is a worse round
+and a better lesson, and it is not a way to win anything: nothing here is
+ranked (spec §10) and a lost life costs no coins (ADR-021).
+
+The alternative — costing a life — is defensible and would make the survival
+round stricter. It is the one thing here worth overruling, and overruling it is
+one boolean at the call site.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because

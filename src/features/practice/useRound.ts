@@ -401,6 +401,11 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
       /** Stored on the attempt for later item analysis. */
       readonly recorded: string | null;
       readonly judged: AnswerVerdict | null;
+      /**
+       * False only for "ik weet het niet". Every other wrong answer costs one:
+       * three lives are what makes overleven a survival round.
+       */
+      readonly spendsALife: boolean;
     }) => {
       if (phase !== 'asking' || !question || !sessionId.current) return;
 
@@ -422,7 +427,7 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
 
       setStates(new Map(states).set(question.item.id, nextState));
 
-      if (!correct && rule.kind === 'levens') setLivesLeft(livesLeft - 1);
+      if (!correct && params.spendsALife && rule.kind === 'levens') setLivesLeft(livesLeft - 1);
 
       void saveAnswer({
         sessionId: sessionId.current,
@@ -459,6 +464,7 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
         chosenForMap: answerId,
         recorded: correct ? null : answerId,
         judged: null,
+        spendsALife: true,
       });
     },
     [question, settle],
@@ -484,10 +490,37 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
         chosenForMap: chosen?.geometrieRef ?? null,
         recorded: correct ? null : itemId,
         judged: null,
+        spendsALife: true,
       });
     },
     [question, items, settle],
   );
+
+  /**
+   * "Ik weet het niet". Drawn on K3 at every size, and it does something no
+   * other control does: it lets a child stop guessing.
+   *
+   * Scored as not known, because that is what it is — the item goes back to box
+   * one and the round counts it among the answered. What it does not do is cost
+   * a life. A button that costs exactly what a wrong guess costs is a button
+   * nobody presses, because a guess is right one time in twelve; making it
+   * cheaper is what buys the honesty, and honesty is what the scheduler needs.
+   *
+   * In a bliksemronde it still costs the seconds it took, which is the pressure
+   * that round already applies and enough of it.
+   */
+  const giveUp = useCallback(() => {
+    settle({
+      correct: false,
+      chosenForMap: null,
+      // Its own value, not 'onbekend': "I did not know" and "you typed
+      // something that is not a place" are different things to have done, and
+      // an attempt row that cannot tell them apart cannot be read later.
+      recorded: 'weet-niet',
+      judged: null,
+      spendsALife: false,
+    });
+  }, [settle]);
 
   /**
    * "Hoe heet dit": the child typed a name. ADR-017 decides, and a near miss —
@@ -516,6 +549,7 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
             ? judged.confusedWith.id
             : 'onbekend',
         judged,
+        spendsALife: true,
       });
     },
     [question, catalogue, settle],
@@ -653,5 +687,5 @@ export function useRound(setId: SetId, practiceMode: PracticeMode) {
     error,
   };
 
-  return { state, pick, choose, submit, next, stop };
+  return { state, pick, choose, submit, giveUp, next, stop };
 }

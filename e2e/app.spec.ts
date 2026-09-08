@@ -311,6 +311,39 @@ test('bliksemronde runs a clock and moves on by itself', async ({ page }) => {
   await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible({ timeout: 5000 });
 });
 
+/**
+ * "Ik weet het niet", drawn on K3 at every size. It is the one control that
+ * lets a child stop guessing, so what matters is that it shows the answer and
+ * that pressing it is cheaper than a guess — see ADR-048 for why.
+ */
+test('a child can say they do not know, and is shown the answer', async ({ page }) => {
+  await signIn(page, 'Pim');
+  await setCard(page, 'Provincies van Nederland').getByRole('button', { name: 'Wijs aan' }).click();
+  await expect(page.getByRole('button', { name: 'Limburg' })).toBeVisible();
+
+  await page.getByRole('button', { name: 'Ik weet het niet' }).click();
+
+  await expect(page.getByRole('status')).toContainText('ligt hier.');
+  await expect(page.getByRole('button', { name: 'Volgende vraag' })).toBeVisible();
+});
+
+test('saying you do not know costs no life', async ({ page }) => {
+  await signIn(page, 'Nora');
+  await startChallenge(page, 'Overleven');
+
+  const levens = page
+    .getByRole('banner')
+    .locator('div')
+    .filter({ hasText: /^levens\d$/ });
+  await expect(levens).toContainText('3');
+
+  await page.getByRole('button', { name: 'Ik weet het niet' }).click();
+  await expect(page.getByRole('button', { name: 'Volgende vraag' })).toBeVisible();
+
+  // A wrong guess costs one; this does not, or nobody would ever press it.
+  await expect(levens).toContainText('3');
+});
+
 /** Overleven ends when the lives do, and a life is lost only for a wrong answer. */
 test('overleven spends a life on a wrong answer', async ({ page }) => {
   await signIn(page, 'Lieke');

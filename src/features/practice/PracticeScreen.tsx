@@ -78,7 +78,7 @@ export function PracticeScreen({
   /** Another round of the same thing: K8's one primary button. */
   readonly onAgain: () => void;
 }) {
-  const { state, pick, choose, submit, next, stop } = useRound(setId, practiceMode);
+  const { state, pick, choose, submit, giveUp, next, stop } = useRound(setId, practiceMode);
   const prefs = usePreferences();
   const nextButton = useRef<HTMLButtonElement>(null);
 
@@ -228,6 +228,16 @@ export function PracticeScreen({
               {choosing && state.question.options ? (
                 <OptionList key={state.index} options={state.question.options} onChoose={choose} />
               ) : null}
+              {/* Drawn on K3 below the question at every size. It is the one
+                  control that lets a child stop guessing, so it is secondary
+                  in weight and never hidden behind anything. */}
+              <button
+                type="button"
+                className="tk-button tk-button-secondary mt-4"
+                onClick={giveUp}
+              >
+                {t('practice.dontKnow')}
+              </button>
             </>
           )}
         </div>
