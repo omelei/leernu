@@ -214,7 +214,13 @@ export default function App() {
   // not the home screen — the front door is every module, this is one of them.
   if (route.name === 'module') {
     return (
-      <Shell bar={bar} address={addressFor(route)} onNavigate={goTo} onModule={goModule} currentModule={route.module.id}>
+      <Shell
+        bar={bar}
+        address={addressFor(route)}
+        onNavigate={goTo}
+        onModule={goModule}
+        currentModule={route.module.id}
+      >
         <ModuleScreen
           module={route.module}
           setId={route.setId}
@@ -231,7 +237,13 @@ export default function App() {
   // and this is an answer to a question the child asked.
   if (route.name === 'soon') {
     return (
-      <Shell bar={bar} address={addressFor(route)} onNavigate={goTo} onModule={goModule} currentModule={route.module.id}>
+      <Shell
+        bar={bar}
+        address={addressFor(route)}
+        onNavigate={goTo}
+        onModule={goModule}
+        currentModule={route.module.id}
+      >
         <ModuleSoon module={route.module} onOpen={goModule} aside={eigenKolom} />
       </Shell>
     );
@@ -239,7 +251,13 @@ export default function App() {
 
   if (route.name === 'you') {
     return (
-      <Shell bar={bar} address={addressFor(route)} current="jij" onNavigate={goTo} onModule={goModule}>
+      <Shell
+        bar={bar}
+        address={addressFor(route)}
+        current="jij"
+        onNavigate={goTo}
+        onModule={goModule}
+      >
         <ProfileScreen profile={boot.profile} />
       </Shell>
     );
@@ -247,14 +265,26 @@ export default function App() {
 
   if (route.name === 'retention' || screen.name === 'retention') {
     return (
-      <Shell bar={bar} address={addressFor(route)} current="onthouden" onNavigate={goTo} onModule={goModule}>
+      <Shell
+        bar={bar}
+        address={addressFor(route)}
+        current="onthouden"
+        onNavigate={goTo}
+        onModule={goModule}
+      >
         <RetentionScreen />
       </Shell>
     );
   }
 
   return (
-    <Shell bar={bar} address={addressFor(route)} current="vandaag" onNavigate={goTo} onModule={goModule}>
+    <Shell
+      bar={bar}
+      address={addressFor(route)}
+      current="vandaag"
+      onNavigate={goTo}
+      onModule={goModule}
+    >
       <HomeScreen
         naam={boot.profile.naam}
         sticker={boot.profile.avatarConfig.sticker}

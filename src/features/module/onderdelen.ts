@@ -98,11 +98,7 @@ export function laatstGeoefend(
 }
 
 /** How many of this set the scheduler has put on today's list. */
-export function opDeRol(
-  deel: Onderdeel,
-  known: ReadonlyMap<string, ItemState>,
-  now: Date,
-): number {
+export function opDeRol(deel: Onderdeel, known: ReadonlyMap<string, ItemState>, now: Date): number {
   return deel.items.filter((item) => {
     const state = known.get(item.id);
     return state ? isDue(state, now) : false;
@@ -127,10 +123,7 @@ export interface Gespeeld {
   readonly ronde: PlayedRound;
 }
 
-export function geplaatst(
-  rondes: readonly PlayedRound[],
-  alles: readonly Onderdeel[],
-): Gespeeld[] {
+export function geplaatst(rondes: readonly PlayedRound[], alles: readonly Onderdeel[]): Gespeeld[] {
   return rondes
     .map((ronde) => ({ deel: setVanRonde(ronde, alles), ronde }))
     .filter((played): played is Gespeeld => played.deel !== null);
