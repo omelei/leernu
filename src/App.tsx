@@ -19,7 +19,12 @@ import { ProfileScreen } from '@/features/player/ProfileScreen';
 import type { Route } from '@/features/shell/routes';
 import { getProfile, setSticker } from '@/store/profile';
 import type { ModeId } from '@/game-core';
-import { isMixSet, type PracticeMode, type RoundSetId, type SetId } from '@/features/practice/useRound';
+import {
+  isMixSet,
+  type PracticeMode,
+  type RoundSetId,
+  type SetId,
+} from '@/features/practice/useRound';
 import type { SumMode } from '@/features/sums/useSumRound';
 import type { ProfileRecord } from '@/store/db';
 
@@ -215,12 +220,7 @@ export default function App() {
   // not the home screen — the front door is every module, this is one of them.
   if (route.name === 'module') {
     return (
-      <Shell
-        bar={bar}
-        onNavigate={goTo}
-        onModule={goModule}
-        currentModule={route.module.id}
-      >
+      <Shell bar={bar} onNavigate={goTo} onModule={goModule} currentModule={route.module.id}>
         <ModuleScreen
           module={route.module}
           naam={boot.profile.naam}
@@ -238,12 +238,7 @@ export default function App() {
   // and this is an answer to a question the child asked.
   if (route.name === 'soon') {
     return (
-      <Shell
-        bar={bar}
-        onNavigate={goTo}
-        onModule={goModule}
-        currentModule={route.module.id}
-      >
+      <Shell bar={bar} onNavigate={goTo} onModule={goModule} currentModule={route.module.id}>
         <ModuleSoon module={route.module} onOpen={goModule} aside={eigenKolom} />
       </Shell>
     );
@@ -251,12 +246,7 @@ export default function App() {
 
   if (route.name === 'you') {
     return (
-      <Shell
-        bar={bar}
-        current="jij"
-        onNavigate={goTo}
-        onModule={goModule}
-      >
+      <Shell bar={bar} current="jij" onNavigate={goTo} onModule={goModule}>
         <ProfileScreen profile={boot.profile} onSticker={chooseSticker} aside={eigenKolom} />
       </Shell>
     );
@@ -264,24 +254,14 @@ export default function App() {
 
   if (route.name === 'retention' || screen.name === 'retention') {
     return (
-      <Shell
-        bar={bar}
-        current="onthouden"
-        onNavigate={goTo}
-        onModule={goModule}
-      >
+      <Shell bar={bar} current="onthouden" onNavigate={goTo} onModule={goModule}>
         <RetentionScreen aside={eigenKolom} />
       </Shell>
     );
   }
 
   return (
-    <Shell
-      bar={bar}
-      current="vandaag"
-      onNavigate={goTo}
-      onModule={goModule}
-    >
+    <Shell bar={bar} current="vandaag" onNavigate={goTo} onModule={goModule}>
       <HomeScreen
         naam={boot.profile.naam}
         onStart={(setId, practiceMode) => {

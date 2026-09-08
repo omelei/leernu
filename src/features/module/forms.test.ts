@@ -89,9 +89,10 @@ describe('the ways of practising', () => {
     expect(opTafel).toContain('tafeldiploma');
 
     for (const setId of ['tafels-alle', 'rekenmix', 'plus-100', 'deel-7']) {
-      expect(offeredForms(SUM_FORMS, false, setId).map((form) => form.id), setId).not.toContain(
-        'tafeldiploma',
-      );
+      expect(
+        offeredForms(SUM_FORMS, false, setId).map((form) => form.id),
+        setId,
+      ).not.toContain('tafeldiploma');
     }
   });
 

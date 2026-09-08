@@ -106,5 +106,7 @@ export function sumPool(id: string): readonly SumItem[] {
 
   const set = alles.find((candidate) => candidate.id === id);
   if (!set) return [];
-  return alles.filter((candidate) => candidate.op === set.op).flatMap((candidate) => candidate.items);
+  return alles
+    .filter((candidate) => candidate.op === set.op)
+    .flatMap((candidate) => candidate.items);
 }

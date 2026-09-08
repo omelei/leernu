@@ -105,13 +105,7 @@ export interface HomeScreenProps {
   readonly onModule?: ((id: Module['id']) => void) | undefined;
 }
 
-export function HomeScreen({
-  naam,
-  onStart,
-  onStartSum,
-  onChoose,
-  onModule,
-}: HomeScreenProps) {
+export function HomeScreen({ naam, onStart, onStartSum, onChoose, onModule }: HomeScreenProps) {
   const [states, setStates] = useState<Map<string, ItemState> | null>(null);
   const [played, setPlayed] = useState<readonly PlayedRound[]>([]);
   const plan = useTestPlan();

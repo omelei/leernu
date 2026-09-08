@@ -134,13 +134,7 @@ export function ModuleScreen({
             </p>
           ) : null}
 
-          <Rol
-            onderwerpen={onderwerpen}
-            chosen={chosen}
-            known={known}
-            now={now}
-            onSet={onSet}
-          />
+          <Rol onderwerpen={onderwerpen} chosen={chosen} known={known} now={now} onSet={onSet} />
         </div>
 
         <section className="flex flex-col gap-3" aria-label={t('choose.stepWhat')}>

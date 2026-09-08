@@ -211,7 +211,9 @@ test('the animal a child picks is theirs, and follows them', async ({ page }) =>
   // It belongs to the child, not to the page: it survives a reload.
   await page.reload();
   await expect(
-    page.getByRole('region', { name: 'Jouw dieren' }).getByRole('button', { name: 'Vos', exact: true }),
+    page
+      .getByRole('region', { name: 'Jouw dieren' })
+      .getByRole('button', { name: 'Vos', exact: true }),
   ).toHaveAttribute('aria-pressed', 'true');
 });
 

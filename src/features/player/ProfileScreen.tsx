@@ -67,23 +67,23 @@ export function ProfileScreen({
         <Children active={profile} />
 
         <section className="flex flex-col gap-3" aria-busy={!loaded}>
-        <h2 className="tk-label">{t('you.settings')}</h2>
+          <h2 className="tk-label">{t('you.settings')}</h2>
 
-        <Switch
-          on={prefs.readAloud}
-          label={t('you.readAloud')}
-          why={t('you.readAloudWhy')}
-          onToggle={() => toggle('readAloud')}
-        />
-        {/* The reason sits beside the switch rather than in a help page. A
+          <Switch
+            on={prefs.readAloud}
+            label={t('you.readAloud')}
+            why={t('you.readAloudWhy')}
+            onToggle={() => toggle('readAloud')}
+          />
+          {/* The reason sits beside the switch rather than in a help page. A
             child who wants the clock should read why it is off before they
             turn it on, and an adult should be able to see we meant it. */}
-        <Switch
-          on={prefs.timer}
-          label={t('you.timer')}
-          why={t('you.timerWhy')}
-          onToggle={() => toggle('timer')}
-        />
+          <Switch
+            on={prefs.timer}
+            label={t('you.timer')}
+            why={t('you.timerWhy')}
+            onToggle={() => toggle('timer')}
+          />
         </section>
 
         <p className="text-ink-2">{t('you.stays')}</p>
@@ -131,7 +131,10 @@ function Dieren({
     <section className="flex flex-col gap-3" aria-label={t('you.animals')}>
       <h2 className="tk-label">{t('you.animals')}</h2>
       <p className="text-ink-2">
-        {t('you.animalsHave', { aantal: Math.min(level, STICKERS.length), totaal: STICKERS.length })}
+        {t('you.animalsHave', {
+          aantal: Math.min(level, STICKERS.length),
+          totaal: STICKERS.length,
+        })}
       </p>
 
       <div className="tk-animals">

@@ -56,9 +56,7 @@ export function Tafeldiplomas({ onKies }: { readonly onKies: (setId: string) => 
               className="tk-diploma"
               data-gehaald={gehaald ? 'ja' : undefined}
               aria-label={
-                gehaald
-                  ? t('rekenen.diplomaHave', { tafel })
-                  : t('rekenen.diplomaWant', { tafel })
+                gehaald ? t('rekenen.diplomaHave', { tafel }) : t('rekenen.diplomaWant', { tafel })
               }
               onClick={() => onKies(`tafel-${tafel}`)}
             >

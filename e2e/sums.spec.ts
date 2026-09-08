@@ -330,7 +330,9 @@ test('a diploma is passed or it is not, and one mistake ends the attempt', async
   // The button says what it does: this attempt is over, not "next question".
   await page.getByRole('button', { name: 'Bekijk je poging' }).click();
 
-  await expect(page.getByText('Nog geen diploma. Alle tien goed, dan is hij van jou.')).toBeVisible();
+  await expect(
+    page.getByText('Nog geen diploma. Alle tien goed, dan is hij van jou.'),
+  ).toBeVisible();
 });
 
 test('a diploma passed goes on the wall, where the gaps are the point', async ({ page }) => {

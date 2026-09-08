@@ -37,12 +37,7 @@ import { applyRoundRewards, type RoundOutcome } from '@/store/rewardStore';
  * all of it.
  */
 
-export type SumMode =
-  | 'som-typen'
-  | 'som-meerkeuze'
-  | 'bliksemronde'
-  | 'overleven'
-  | 'tafeldiploma';
+export type SumMode = 'som-typen' | 'som-meerkeuze' | 'bliksemronde' | 'overleven' | 'tafeldiploma';
 
 /*
  * Which of these a child is offered, in which order and with what said about

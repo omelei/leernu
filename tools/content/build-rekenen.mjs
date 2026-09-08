@@ -169,7 +169,13 @@ function minTotTwintig() {
     for (let af = 1; af <= 9; af++) {
       const uit = deeltal - af;
       if (uit < 1 || uit > 9) continue;
-      items.push({ id: `min-${deeltal}-${af}`, op: 'min', links: deeltal, rechts: af, antwoord: uit });
+      items.push({
+        id: `min-${deeltal}-${af}`,
+        op: 'min',
+        links: deeltal,
+        rechts: af,
+        antwoord: uit,
+      });
     }
   }
   return items;

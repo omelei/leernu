@@ -176,9 +176,7 @@ function rekenOnderdelen(): Onderdeel[] {
 }
 
 function rekenMixen(): Onderdeel[] {
-  return MIX_IDS.map((id) => rekenOnderdeel(id)).filter(
-    (deel): deel is Onderdeel => deel !== null,
-  );
+  return MIX_IDS.map((id) => rekenOnderdeel(id)).filter((deel): deel is Onderdeel => deel !== null);
 }
 
 // ---------------------------------------------------------------------------

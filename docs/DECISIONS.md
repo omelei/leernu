@@ -2796,7 +2796,7 @@ ADR-061 put the chosen combination on the start button in words: "Provincies
 aanwijzen · 15 vragen". That is the right sentence and it was the wrong place
 for it. The button sat at the left-hand end of a row, in the same weight as the
 two secondary buttons above it, carrying a line of prose. Everything a child
-needed to read was on it, and nothing about it said *press me*.
+needed to read was on it, and nothing about it said _press me_.
 
 ### Decision
 
