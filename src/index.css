@@ -1021,12 +1021,20 @@
     background: var(--surface);
     color: var(--ink);
   }
+  /* Three across, two down. Six at 44 with gaps is 304 and the column is 272,
+   * so a single row loses one to the next line; equal squares in a grid read as
+   * a set rather than as a row that did not fit. */
+  .tk-sticker-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
   .tk-sticker {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    flex: none;
-    width: var(--touch-min);
+    width: 100%;
+    min-width: var(--touch-min);
     height: var(--touch-min);
     border: var(--stroke-hair) solid var(--line);
     border-radius: var(--radius-card);

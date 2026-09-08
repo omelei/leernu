@@ -668,16 +668,21 @@ function Stickerkaart({
       <h2 className="tk-label">{t('home.stickersTitle')}</h2>
 
       <div className="flex items-center gap-4">
-        {/* Decorative: the row underneath says which one is yours, with a name
-            and a pressed state, and hearing the animal twice is worse than
-            hearing it once. */}
+        {/* Decorative: the name is beside it, and the row underneath names all
+            six. Hearing the animal three times is worse than hearing it once. */}
         <span className="tk-sticker-big">
           <Big size={56} />
         </span>
-        <p className="text-ink-2">{t('home.stickersPick')}</p>
+        <div className="min-w-0">
+          <p className="tk-display text-h3 font-semibold">{t(current.name)}</p>
+          <p className="text-ink-2">{t('home.stickersPick')}</p>
+        </div>
       </div>
 
-      <div className="flex flex-wrap gap-2">
+      {/* Three across and two down, rather than a row that fits five of six in
+          a column of 320. Six equal squares read as a set; five and a straggler
+          read as a mistake. */}
+      <div className="tk-sticker-row">
         {STICKERS.map((sticker) => {
           const Draw = sticker.draw;
 
