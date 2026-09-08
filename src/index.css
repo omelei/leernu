@@ -617,8 +617,13 @@
       position: sticky;
       bottom: 0;
       z-index: 2;
-      margin: 0 -24px -24px;
-      padding: 16px 24px;
+      /* Vertical only. Pulling it out sideways to the screen edges made the
+       * page 48 wider than a 393 phone: it scrolled sideways, and the start
+       * button's own edges sat off the screen where nothing could press them.
+       * A bar that reaches the text is a bar; one that reaches past the
+       * viewport is a bug. */
+      margin-bottom: -24px;
+      padding: 16px 0;
       background: var(--paper);
       border-top: var(--stroke-hair) solid var(--line);
     }
