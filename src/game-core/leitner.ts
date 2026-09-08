@@ -171,6 +171,51 @@ export function composeRound<T extends Schedulable = Item>(input: ComposeRoundIn
   return shuffle(picked, rng);
 }
 
+/**
+ * What the next round will look like, without dealing it.
+ *
+ * K1 opens with "Vandaag oefen je 10 vragen. Zeven daarvan heb je eerder
+ * gehad. Dat is de bedoeling." — a sentence that argues for spaced repetition
+ * by saying out loud the thing that looks like a mistake. It has to be true,
+ * and it has to be true before the round is composed, so this counts the pools
+ * the way `composeRound` fills them rather than running it and looking.
+ *
+ * The split is a target, so `seen` is what the mix asks for capped by what
+ * exists. A child with nothing due yet is told the truth: ten questions, none
+ * of them seen before.
+ */
+export function roundPreview(input: {
+  readonly items: readonly Schedulable[];
+  readonly states: ReadonlyMap<string, ItemState>;
+  readonly size: number;
+  readonly now: Date;
+}): { readonly total: number; readonly seen: number } {
+  const { items, states, size, now } = input;
+
+  let due = 0;
+  let nieuw = 0;
+  let bekend = 0;
+
+  for (const item of items) {
+    const state = states.get(item.id);
+    if (!state || state.laatsteReview === null) nieuw++;
+    else if (isDue(state, now)) due++;
+    else bekend++;
+  }
+
+  const total = Math.min(size, items.length);
+  const dueTarget = Math.min(due, Math.round(total * ROUND_MIX.due));
+  const nieuwTarget = Math.min(nieuw, Math.round(total * ROUND_MIX.nieuw));
+  const opfrisTarget = Math.min(bekend, total - dueTarget - nieuwTarget);
+
+  // A shortfall in one pool is filled from the others, in the order
+  // due -> unseen -> known, which is what composeRound does with its leftovers.
+  const picked = dueTarget + nieuwTarget + opfrisTarget;
+  const restSeen = Math.min(due + bekend - dueTarget - opfrisTarget, total - picked);
+
+  return { total, seen: dueTarget + opfrisTarget + Math.max(0, restSeen) };
+}
+
 function dueTime(states: ReadonlyMap<string, ItemState>, item: Schedulable): number {
   const at = states.get(item.id)?.volgendeReview;
   return at === null || at === undefined ? 0 : new Date(at).getTime();

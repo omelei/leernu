@@ -1,39 +1,39 @@
 import { useEffect, useState } from 'react';
-import { countMastered, retentionAfterRound, setRetention, type ItemState } from '@/game-core';
+import {
+  countMastered,
+  roundPreview,
+  setRetention,
+  type ItemState,
+  type Schedulable,
+} from '@/game-core';
 import { loadItemSets } from '@/content/loadSets';
 import { loadSumSets } from '@/content/loadSums';
 import { Dot } from '@/components/Dot';
-import { BUILT_MODULES, type Module } from '@/features/shell/modules';
+import { StampIcon } from '@/components/Icon';
+import { RAIL_MODULES, type Module } from '@/features/shell/modules';
 import { t, type TranslationKey } from '@/i18n';
 import { TestDate } from './TestDate';
 import { loadItemStates } from '@/store/progress';
-import { loadStreak, HOLIDAYS } from '@/store/streakStore';
-import { currentStreak, type StreakState } from '@/game-core';
-import { SET_IDS, type PracticeMode, type SetId } from '@/features/practice/useRound';
-import type { ProfileRecord } from '@/store/db';
-
-const THREE_WEEKS_DAYS = 21;
+import { loadStamps } from '@/store/rewardStore';
+import type { PracticeMode, SetId } from '@/features/practice/useRound';
 
 /**
- * The home screen, following the app design.
+ * K1, the front door — which is also leer.nu itself.
  *
- * Its one job is a single obvious action. Everything else on the screen argues
- * for pressing it, and the argument is a forecast rather than a score — "69%,
- * weet je hier over drie weken nog van" is the only number that says why
- * practising today is worth anything. A mastery percentage says where you are;
- * this says what happens if you stop.
+ * The screen argues for the product in the order it puts things. First what
+ * today asks of you and why some of it is a repeat; then the date it is for;
+ * then the one thing to carry on with; then everything else there is; and only
+ * afterwards what you have kept and what you have earned. A score is nowhere
+ * near the top, because this is not a scoreboard.
  *
- * Only topography exists as content today. The design shows a Rekenen module
- * beside it, and it is deliberately not drawn: a tile that leads nowhere is a
- * promise the product cannot keep, and children notice that faster than adults.
+ * What is deliberately not here. The five set cards moved to K2 — the design
+ * gives the front door one thing to continue and a list of modules, and five
+ * sets of one module on the door made topography look like the whole product.
+ * "Samen met" is drawn and not built: it is three friends, and there are no
+ * friends without the backend of ADR-050. An element with nothing behind it is
+ * worse than a gap.
  */
 
-/**
- * Typed as a complete record, so adding a set to `SetId` fails to compile here
- * rather than rendering a blank heading. The islands were added and this was
- * not, which is exactly the mistake the type now prevents — and the reason the
- * annotation belongs on the definition and not on the lookup.
- */
 const SET_NAME_KEY: Record<SetId, TranslationKey> = {
   'nl-provincies': 'set.nl-provincies',
   'nl-hoofdsteden': 'set.nl-hoofdsteden',
@@ -42,181 +42,220 @@ const SET_NAME_KEY: Record<SetId, TranslationKey> = {
   'nl-steden': 'set.nl-steden',
 };
 
-const MODE_NAME_KEY: Record<PracticeMode, TranslationKey> = {
-  'wijs-aan': 'mode.wijs-aan',
-  meerkeuze: 'mode.meerkeuze',
-  'hoe-heet-dit': 'mode.hoe-heet-dit',
-  bliksemronde: 'mode.bliksemronde',
-  overleven: 'mode.overleven',
-};
+const THREE_WEEKS_DAYS = 21;
+
+/** What one round of this set asks. Topography samples large sets; a table is whole. */
+const ROUND_SIZE = { topo: 15, tafels: 10 } as const;
+
+interface Onderdeel {
+  readonly moduleId: Module['id'];
+  readonly setId: string;
+  readonly naam: TranslationKey | null;
+  readonly literalNaam: string | null;
+  readonly items: readonly Schedulable[];
+  readonly roundSize: number;
+}
+
+/**
+ * Every set of every built module, flattened.
+ *
+ * One list rather than a branch per module: the front door asks the same three
+ * questions of all of them — how much is remembered, when was it last touched,
+ * what would a round look like — and a second module should not mean a second
+ * copy of those three.
+ */
+function onderdelen(): Onderdeel[] {
+  const topo = loadItemSets().map((set) => ({
+    moduleId: 'topo' as const,
+    setId: set.id,
+    naam: SET_NAME_KEY[set.id as SetId] ?? null,
+    literalNaam: null,
+    items: set.items as readonly Schedulable[],
+    roundSize: ROUND_SIZE.topo,
+  }));
+
+  const tafels = loadSumSets().map((set) => ({
+    moduleId: 'tafels' as const,
+    setId: set.id,
+    naam: null,
+    literalNaam: t('sums.table', { tafel: set.tafel }),
+    items: set.items as readonly Schedulable[],
+    roundSize: ROUND_SIZE.tafels,
+  }));
+
+  return [...topo, ...tafels];
+}
+
+function naamVan(deel: Onderdeel): string {
+  return deel.naam ? t(deel.naam) : (deel.literalNaam ?? '');
+}
+
+/** When this set was last answered, or null. Decides what "verder" means. */
+function laatstGeoefend(deel: Onderdeel, known: ReadonlyMap<string, ItemState>): string | null {
+  let laatste: string | null = null;
+  for (const item of deel.items) {
+    const at = known.get(item.id)?.laatsteReview ?? null;
+    if (at !== null && (laatste === null || at > laatste)) laatste = at;
+  }
+  return laatste;
+}
 
 export function HomeScreen({
-  profile,
   onStart,
   onChoose,
   onModule,
 }: {
-  readonly profile: ProfileRecord;
   readonly onStart: (setId: SetId, practiceMode: PracticeMode) => void;
-  /** Every other way of practising, which is K2's job now. */
+  /** Every other way of practising, which is K2's job. */
   readonly onChoose: () => void;
-  /** Into a module, which on a phone this is the only quick way to. */
   readonly onModule?: ((id: Module['id']) => void) | undefined;
 }) {
   const [states, setStates] = useState<Map<string, ItemState> | null>(null);
-  const [streak, setStreak] = useState<StreakState | null>(null);
+  const [stamps, setStamps] = useState<readonly string[]>([]);
 
   useEffect(() => {
     void loadItemStates().then(setStates);
-    void loadStreak().then(setStreak);
+    void loadStamps().then((held) => setStamps([...held]));
   }, []);
 
-  const sets = loadItemSets();
   const known = states ?? new Map<string, ItemState>();
-
   const now = new Date();
   const inThreeWeeks = new Date(now.getTime() + THREE_WEEKS_DAYS * 86_400_000);
 
+  const alles = onderdelen();
+
+  // What "verder" means: the set touched most recently, or the first one when
+  // nothing has been. Not a guess about what a child wants next — the honest
+  // answer to "where was I".
+  const verder =
+    alles.reduce<{ deel: Onderdeel; at: string } | null>((best, deel) => {
+      const at = laatstGeoefend(deel, known);
+      if (at === null) return best;
+      return best === null || at > best.at ? { deel, at } : best;
+    }, null)?.deel ??
+    alles[0] ??
+    null;
+
+  const vooruitblik = verder
+    ? roundPreview({ items: verder.items, states: known, size: verder.roundSize, now })
+    : { total: 0, seen: 0 };
+
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-8 p-6">
-      <StreakBadge state={streak} />
+      {/* The sentence that argues for the whole product, and it does it by
+          admitting the part that looks like a mistake. A child who is handed a
+          question they have had before should be told that was on purpose. */}
+      <div>
+        <h1 className="tk-display text-h1 font-semibold">
+          {t('home.todayTitle', { aantal: vooruitblik.total })}
+        </h1>
+        <p className="mt-1 text-body text-ink-2">{repeatLine(vooruitblik.seen)}</p>
+      </div>
 
-      <h1 className="tk-display text-h1 font-semibold">
-        {t('home.greeting', { naam: profile.naam })}
-      </h1>
-
-      {/* Above the sets, because it is the reason one of them is being opened.
-          K1 gives it the only surface-and-border on the screen. */}
+      {/* The test date takes the place K1 gives it: above the work, because it
+          is the reason the work is being done. */}
       <TestDate />
 
-      <Modules known={known} onOpen={onModule} />
+      {verder ? (
+        <Verder deel={verder} known={known} onStart={onStart} onChoose={onChoose} />
+      ) : null}
 
-      <section className="flex flex-col gap-4">
-        <h2 className="tk-label">{t('home.continueTitle')}</h2>
+      <VerderOefenen known={known} verder={verder} onOpen={onModule} />
 
-        {SET_IDS.map((setId) => {
-          const set = sets.find((candidate) => candidate.id === setId);
-          if (!set) return null;
+      <Onthouden deel={verder} known={known} inThreeWeeks={inThreeWeeks} />
 
-          const ids = set.items.map((item) => item.id);
-          const retention = setRetention(known, ids, inThreeWeeks);
-          const afterRound = retentionAfterRound(known, ids, inThreeWeeks, now);
-          const mastered = countMastered(known, ids);
-          const started = ids.some((id) => known.get(id)?.laatsteReview != null);
+      <Reisstempels stamps={stamps} />
 
-          return (
-            <article key={setId} className="tk-card">
-              <h3 className="tk-display mb-1 text-h2 font-semibold">{t(SET_NAME_KEY[setId])}</h3>
-              <p className="mb-4 text-ink-2">
-                {started
-                  ? t('home.setMastered', { goed: mastered, totaal: ids.length })
-                  : t('home.setNew')}
-              </p>
-
-              {/* The forecast, and what one round protects. Shown only once
-                  there is something to forecast: before the first round the
-                  honest answer is "nothing yet", and a 0% reads as failure
-                  rather than as a start. */}
-              {started && (
-                <div className="mb-6">
-                  <p className="tk-display text-h1 font-bold tabular-nums">{retention}%</p>
-                  <p className="text-ink-2">{t('home.retention')}</p>
-                  {/* Only when a round today would actually move the number.
-                      When the scheduler says come back later it changes
-                      nothing, and claiming otherwise is how a figure stops
-                      being believed. */}
-                  {afterRound > retention && (
-                    <p className="mt-1">{t('home.retentionAfter', { procent: afterRound })}</p>
-                  )}
-                </div>
-              )}
-
-              {/* One primary button, which K1 asks for: the shortest way into a
-                  round is pointing, and every other choice lives on K2 rather
-                  than as five more buttons on a card. */}
-              <div className="flex flex-wrap gap-3">
-                <button
-                  type="button"
-                  className="tk-button"
-                  onClick={() => onStart(setId, 'wijs-aan')}
-                >
-                  {t(MODE_NAME_KEY['wijs-aan'])}
-                </button>
-                <button type="button" className="tk-button tk-button-secondary" onClick={onChoose}>
-                  {t('home.moreWays')}
-                </button>
-              </div>
-
-              <p className="mt-2 text-ink-2">{t('home.continueAction', { aantal: ids.length })}</p>
-            </article>
-          );
-        })}
-      </section>
+      {/* "Samen met" belongs here, between the stamps and the foot of the page.
+          It is three friends and there are none until ADR-050's backend, so it
+          is absent rather than empty. */}
     </div>
   );
 }
 
-/**
- * The streak, reported honestly.
- *
- * `currentStreak` rather than the stored number: a child who has already run
- * out of rest days should not be shown a 12 that turns into a 1 the moment they
- * practise. Seeing it drop is worse than never having been told.
- */
-function StreakBadge({ state }: { readonly state: StreakState | null }) {
-  if (state === null) return <p className="tk-label" />;
+function repeatLine(seen: number): string {
+  if (seen === 0) return t('home.todayFresh');
+  if (seen === 1) return t('home.todayRepeatOne');
+  return t('home.todayRepeats', { aantal: seen });
+}
 
-  const days = currentStreak(state, new Date(), HOLIDAYS);
-  if (days === 0) return <p className="tk-label">{t('home.streakNone')}</p>;
+/**
+ * The one thing to carry on with.
+ *
+ * One primary button, which is K1's rule: the shortest way into a round is
+ * pointing, and every other choice lives on K2 rather than as five more
+ * buttons here.
+ */
+function Verder({
+  deel,
+  known,
+  onStart,
+  onChoose,
+}: {
+  readonly deel: Onderdeel;
+  readonly known: ReadonlyMap<string, ItemState>;
+  readonly onStart: (setId: SetId, practiceMode: PracticeMode) => void;
+  readonly onChoose: () => void;
+}) {
+  const ids = deel.items.map((item) => item.id);
+  const mastered = countMastered(known, ids);
+  const rondes = Math.max(1, Math.ceil(ids.length / deel.roundSize));
+  const moduleNaam = t(`module.${deel.moduleId}` as TranslationKey);
 
   return (
-    <p className="tk-label">
-      {days === 1 ? t('home.streakOne') : t('home.streakMany', { aantal: days })}
-      {state.rustdagen > 0 &&
-        ` · ${
-          state.rustdagen === 1
-            ? t('home.restDay', { aantal: state.rustdagen })
-            : t('home.restDays', { aantal: state.rustdagen })
-        }`}
-    </p>
+    <article className="tk-card" data-module={deel.moduleId}>
+      <h2 className="tk-display mb-1 text-h2 font-semibold">{naamVan(deel)}</h2>
+      <p className="text-ink-2">{t('home.setsOver', { onderdelen: ids.length, rondes })}</p>
+      <p className="mb-4 text-ink-2">
+        {mastered === 0
+          ? t('home.setNew')
+          : t('home.setMastered', { goed: mastered, totaal: ids.length })}
+      </p>
+
+      <div className="flex flex-wrap gap-3">
+        {deel.moduleId === 'topo' ? (
+          <button
+            type="button"
+            className="tk-button"
+            onClick={() => onStart(deel.setId as SetId, 'wijs-aan')}
+          >
+            {t('home.continueWith', { module: moduleNaam })}
+          </button>
+        ) : null}
+        <button type="button" className="tk-button tk-button-secondary" onClick={onChoose}>
+          {t('home.moreWays')}
+        </button>
+      </div>
+    </article>
   );
 }
 
 /**
- * Every module, with how much of it is remembered.
+ * Everything else there is, one row per module.
  *
- * The rail is the navigation, and on a laptop it is enough. On a phone it sits
- * below the content — §D replaces it there with a tab bar that has no modules
- * in it — so without these a child would have to scroll past five set cards to
- * find the tables at all. The design says exactly this: "de modules blijven
- * dan bereikbaar via de kaarten in de stroom".
- *
- * The number is the same one the set cards carry, counted over the whole
- * module: twelve tables is a hundred and twenty sums, and "83 van de 120
- * onthoud je" is the sentence a child can act on.
+ * All five, not only the two that are built (ADR-051). A child who can see that
+ * clocks and flags are coming is reading a plan; a rail and a list that show
+ * only what is finished make the product look like it stops here.
  */
-function Modules({
+function VerderOefenen({
   known,
+  verder,
   onOpen,
 }: {
   readonly known: ReadonlyMap<string, ItemState>;
-  // `| undefined` because exactOptionalPropertyTypes: an optional prop and a
-  // prop that may be passed undefined are two different types here.
+  readonly verder: Onderdeel | null;
   readonly onOpen?: ((id: Module['id']) => void) | undefined;
 }) {
-  // One place that knows what a module is made of. A third module adds a line
-  // here and nothing else on this screen.
-  const itemsOf: Partial<Record<Module['id'], string[]>> = {
-    topo: loadItemSets().flatMap((set) => set.items.map((item) => item.id)),
-    tafels: loadSumSets().flatMap((set) => set.items.map((sum) => sum.id)),
-  };
+  const alles = onderdelen();
 
   return (
-    <section className="flex flex-col gap-3" aria-label={t('home.modules')}>
-      <h2 className="tk-label">{t('home.modules')}</h2>
+    <section className="flex flex-col gap-3" aria-label={t('home.practiceMore')}>
+      <h2 className="tk-label">{t('home.practiceMore')}</h2>
 
-      {BUILT_MODULES.map((module) => {
-        const ids = itemsOf[module.id] ?? [];
+      {RAIL_MODULES.filter((module) => module.id !== verder?.moduleId).map((module) => {
+        const ids = alles
+          .filter((deel) => deel.moduleId === module.id)
+          .flatMap((deel) => deel.items.map((item) => item.id));
         const mastered = countMastered(known, ids);
         const started = ids.some((id) => known.get(id)?.laatsteReview != null);
 
@@ -232,14 +271,85 @@ function Modules({
             <span className="min-w-0">
               <span className="block font-semibold">{t(module.name)}</span>
               <span className="block text-ink-2">
-                {started
-                  ? t('home.setMastered', { goed: mastered, totaal: ids.length })
-                  : t('home.setNew')}
+                {!module.built
+                  ? t('soon.subtitle')
+                  : started
+                    ? t('home.setMastered', { goed: mastered, totaal: ids.length })
+                    : t('home.setNew')}
               </span>
             </span>
           </button>
         );
       })}
+    </section>
+  );
+}
+
+/**
+ * The forecast, which is the number this product is for.
+ *
+ * It is what a child will still know in three weeks, not what they got right
+ * today — and the sentence under it says so, because the two are easy to
+ * confuse and only one of them is worth practising for.
+ */
+function Onthouden({
+  deel,
+  known,
+  inThreeWeeks,
+}: {
+  readonly deel: Onderdeel | null;
+  readonly known: ReadonlyMap<string, ItemState>;
+  readonly inThreeWeeks: Date;
+}) {
+  const ids = deel ? deel.items.map((item) => item.id) : [];
+  const started = ids.some((id) => known.get(id)?.laatsteReview != null);
+  const procent = started ? setRetention(known, ids, inThreeWeeks) : 0;
+  const moduleNaam = deel ? t(`module.${deel.moduleId}` as TranslationKey) : '';
+
+  return (
+    <section className="flex flex-col gap-2" aria-label={t('home.rememberTitle')}>
+      <h2 className="tk-label">{t('home.rememberTitle')}</h2>
+
+      {started ? (
+        <>
+          <div className="flex items-center gap-4">
+            <Dot size={40} fill={procent / 100} />
+            <div className="min-w-0">
+              <p className="tk-display text-h1 font-bold tabular-nums">{`${procent}%`}</p>
+              <p className="text-ink-2">{t('home.rememberOf', { module: moduleNaam })}</p>
+            </div>
+          </div>
+          <p className="text-ink-2">{t('home.rememberWhy')}</p>
+        </>
+      ) : (
+        // Before the first round the honest answer is "nothing yet". A 0% here
+        // reads as failure rather than as a start.
+        <p className="text-ink-2">{t('home.rememberNone')}</p>
+      )}
+    </section>
+  );
+}
+
+/** What has been earned, named. ADR-040: every one of them by practising. */
+function Reisstempels({ stamps }: { readonly stamps: readonly string[] }) {
+  const namen = stamps.map((id) => t(`stamp.${id}` as TranslationKey));
+
+  return (
+    <section className="flex flex-col gap-2" aria-label={t('home.stampsTitle')}>
+      <h2 className="tk-label">{t('home.stampsTitle')}</h2>
+
+      {namen.length === 0 ? (
+        <p className="text-ink-2">{t('home.stampsNone')}</p>
+      ) : (
+        <ul className="flex flex-col gap-2 p-0">
+          {stamps.map((id, n) => (
+            <li key={id} className="flex items-center gap-3">
+              <StampIcon size={24} />
+              <span>{namen[n]}</span>
+            </li>
+          ))}
+        </ul>
+      )}
     </section>
   );
 }

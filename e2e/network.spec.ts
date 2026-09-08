@@ -39,12 +39,20 @@ test('never asks a third party for anything', async ({ page, baseURL }) => {
   await page.goto('/');
   await page.getByPlaceholder('Je naam').fill('Sofie');
   await page.getByRole('button', { name: 'Beginnen' }).click();
-  await expect(page.getByRole('heading', { name: 'Hoi Sofie!' })).toBeVisible();
+  await expect(page.getByRole('banner').getByRole('button', { name: 'Sofie' })).toBeVisible();
 
+  await page.goto('/topografie');
   await page
-    .getByRole('article')
-    .filter({ hasText: 'Provincies van Nederland' })
-    .getByRole('button', { name: 'Aanwijzen' })
+    .getByRole('region', { name: /Waarover/ })
+    .getByRole('button', { name: /Provincies van Nederland/ })
+    .click();
+  await page
+    .getByRole('region', { name: /Hoe wil je/ })
+    .getByRole('button', { name: /Aanwijzen/ })
+    .click();
+  await page
+    .getByRole('button', { name: /vragen$/ })
+    .last()
     .click();
   await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
 

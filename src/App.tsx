@@ -5,6 +5,7 @@ import { ExploreScreen } from '@/features/explore/ExploreScreen';
 import { ProfileGate } from '@/features/player/ProfileGate';
 import { Gallery } from '@/design/Gallery';
 import { Shell } from '@/features/shell/Shell';
+import { TopBar } from '@/features/shell/TopBar';
 import { RetentionScreen } from '@/features/retention/RetentionScreen';
 import { MODULES, type Destination, type Module } from '@/features/shell/modules';
 import { useRoute } from '@/features/shell/useRoute';
@@ -64,6 +65,11 @@ export default function App() {
     setScreen({ name: 'home' });
     go(module.built ? { name: 'module', module } : { name: 'soon', module });
   };
+
+  const bar =
+    boot.status === 'ready' && boot.profile ? (
+      <TopBar profile={boot.profile} onProfile={() => go({ name: 'you' })} />
+    ) : null;
 
   const goTo = (id: Destination['id']) => {
     const next: Route =
@@ -147,7 +153,7 @@ export default function App() {
   // because telling the time is reading an instrument rather than arithmetic.
   if (route.name === 'category') {
     return (
-      <Shell onNavigate={goTo} onModule={goModule}>
+      <Shell bar={bar} onNavigate={goTo} onModule={goModule}>
         <CategoryScreen
           category={route.category}
           onOpen={(module) => go({ name: 'module', module })}
@@ -168,7 +174,7 @@ export default function App() {
     // nothing else: a table is not a set of places and the ways of answering
     // one are not the ways of answering the other.
     return (
-      <Shell onNavigate={goTo} onModule={goModule} currentModule={route.module.id}>
+      <Shell bar={bar} onNavigate={goTo} onModule={goModule} currentModule={route.module.id}>
         {route.module.id === 'tafels' ? (
           <ChooseTableScreen
             onStart={(setId, sumMode) => {
@@ -191,7 +197,7 @@ export default function App() {
 
   if (route.name === 'soon') {
     return (
-      <Shell onNavigate={goTo} onModule={goModule} currentModule={route.module.id}>
+      <Shell bar={bar} onNavigate={goTo} onModule={goModule} currentModule={route.module.id}>
         <ModuleSoon module={route.module} onHome={() => go({ name: 'home' })} />
       </Shell>
     );
@@ -199,7 +205,7 @@ export default function App() {
 
   if (route.name === 'you') {
     return (
-      <Shell current="jij" onNavigate={goTo} onModule={goModule}>
+      <Shell bar={bar} current="jij" onNavigate={goTo} onModule={goModule}>
         <ProfileScreen profile={boot.profile} />
       </Shell>
     );
@@ -207,16 +213,15 @@ export default function App() {
 
   if (route.name === 'retention' || screen.name === 'retention') {
     return (
-      <Shell current="onthouden" onNavigate={goTo} onModule={goModule}>
+      <Shell bar={bar} current="onthouden" onNavigate={goTo} onModule={goModule}>
         <RetentionScreen />
       </Shell>
     );
   }
 
   return (
-    <Shell current="vandaag" onNavigate={goTo} onModule={goModule}>
+    <Shell bar={bar} current="vandaag" onNavigate={goTo} onModule={goModule}>
       <HomeScreen
-        profile={boot.profile}
         onStart={(setId, practiceMode) => {
           setVisit(visit + 1);
           setScreen({ name: 'practice', setId, practiceMode });

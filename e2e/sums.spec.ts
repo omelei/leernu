@@ -15,7 +15,9 @@ async function signIn(page: Page, naam: string) {
   await page.goto('/');
   await page.getByPlaceholder('Je naam').fill(naam);
   await page.getByRole('button', { name: 'Beginnen' }).click();
-  await expect(page.getByRole('heading', { name: `Hoi ${naam}!` })).toBeVisible();
+  // The name is in the app bar now, beside the streak — K1 puts the profile
+  // switch top right, so that is where "you are signed in" is visible.
+  await expect(page.getByRole('banner').getByRole('button', { name: naam })).toBeVisible();
 }
 
 async function startTable(page: Page, tafel: number, hoe: RegExp) {

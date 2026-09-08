@@ -20,6 +20,23 @@ export const nl = {
   // where it means something a child is done with rather than a day off.
   'home.restDay': '{aantal} rustdag bewaard',
   'home.restDays': '{aantal} rustdagen bewaard',
+  // K1, de landingspagina. De openingszin zegt hardop wat op een fout lijkt:
+  // dat je vragen terugkrijgt die je al had. Dat is precies de belofte.
+  'home.todayTitle': 'Vandaag oefen je {aantal} vragen',
+  'home.todayRepeats': '{aantal} daarvan heb je eerder gehad. Dat is de bedoeling.',
+  'home.todayRepeatOne': 'Eén daarvan heb je eerder gehad. Dat is de bedoeling.',
+  'home.todayFresh': 'Allemaal nieuw. Vanaf morgen komen ze terug.',
+  'home.continueWith': 'Ga verder met {module}',
+  'home.setsOver': '{onderdelen} onderdelen, verdeeld over {rondes} rondes.',
+  'home.practiceMore': 'Verder oefenen',
+  'home.rememberTitle': 'Wat onthoud je?',
+  'home.rememberOf': 'van {module}',
+  'home.rememberWhy':
+    'De punt vult zich met wat je over drie weken nog weet — niet met wat je vandaag goed had.',
+  'home.rememberNone': 'Nog niets om te onthouden. Doe één ronde.',
+  'home.stampsTitle': 'Reisstempels',
+  'home.stampsNone': 'Nog geen stempels. Een hele set foutloos is de eerste.',
+  'home.stampsGot': '{namen} gehaald.',
   'home.modules': 'Wat je kunt oefenen',
   'home.continueTitle': 'Verder waar je was',
   'home.retention': 'weet je hier over drie weken nog van',
@@ -38,10 +55,12 @@ export const nl = {
   'nav.onthouden': 'Onthouden',
   'nav.vrienden': 'Vrienden',
   'nav.jij': 'Jij',
-  'module.topo': 'Topografie',
-  'module.tafels': 'Tafels',
-  'module.klok': 'Klokkijken',
-  'module.woorden': 'Woordjes',
+  // De rail draagt korte woorden, zoals K1 ze tekent: "topo", niet
+  // "Topografie". Een rail van 88 breed leest als een lijst en niet als proza.
+  'module.topo': 'Topo',
+  'module.tafels': 'Rekenen',
+  'module.klok': 'Klok',
+  'module.woorden': 'Taal',
   'module.spelling': 'Spelling',
   'module.tijdvakken': 'Tijdvakken',
   'module.vlaggen': 'Vlaggen',
@@ -71,6 +90,7 @@ export const nl = {
   // Een module die het plan wel heeft en het product nog niet. Alleen te
   // bereiken door het adres te typen; geen datum, want een datum die we missen
   // is erger dan geen datum.
+  'soon.subtitle': 'Bestaat nog niet',
   'soon.body': 'Deze module bestaat nog niet. We beginnen bij topografie.',
   'soon.action': 'Naar topografie',
 

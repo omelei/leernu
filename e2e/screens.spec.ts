@@ -30,7 +30,9 @@ async function signIn(page: Page, naam: string) {
   await page.goto('/');
   await page.getByPlaceholder('Je naam').fill(naam);
   await page.getByRole('button', { name: 'Beginnen' }).click();
-  await expect(page.getByRole('heading', { name: `Hoi ${naam}!` })).toBeVisible();
+  // The name is in the app bar now, beside the streak — K1 puts the profile
+  // switch top right, so that is where "you are signed in" is visible.
+  await expect(page.getByRole('banner').getByRole('button', { name: naam })).toBeVisible();
 }
 
 async function chooseAndStart(page: Page, way: RegExp) {
@@ -72,10 +74,18 @@ test('the round: pointing, and the answer', async ({ page }, testInfo) => {
   const size = testInfo.project.name;
 
   await signIn(page, 'Joris');
+  await page.goto('/topografie');
   await page
-    .getByRole('article')
-    .filter({ hasText: 'Provincies van Nederland' })
-    .getByRole('button', { name: 'Aanwijzen' })
+    .getByRole('region', { name: /Waarover/ })
+    .getByRole('button', { name: /Provincies van Nederland/ })
+    .click();
+  await page
+    .getByRole('region', { name: /Hoe wil je/ })
+    .getByRole('button', { name: /Aanwijzen/ })
+    .click();
+  await page
+    .getByRole('button', { name: /vragen$/ })
+    .last()
     .click();
 
   await expect(page.getByRole('button', { name: 'Limburg' })).toBeVisible(READY);

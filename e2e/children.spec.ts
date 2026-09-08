@@ -18,13 +18,26 @@ async function signIn(page: Page, naam: string) {
   await page.goto('/');
   await page.getByPlaceholder('Je naam').fill(naam);
   await page.getByRole('button', { name: 'Beginnen' }).click();
-  await expect(page.getByRole('heading', { name: `Hoi ${naam}!` })).toBeVisible();
+  // The name is in the app bar now, beside the streak — K1 puts the profile
+  // switch top right, so that is where "you are signed in" is visible.
+  await expect(page.getByRole('banner').getByRole('button', { name: naam })).toBeVisible();
 }
 
 async function answerOne(page: Page) {
   await page.goto('/');
-  const kaart = page.getByRole('article').filter({ hasText: 'Provincies van Nederland' });
-  await kaart.getByRole('button', { name: 'Aanwijzen' }).click();
+  await page.goto('/topografie');
+  await page
+    .getByRole('region', { name: /Waarover/ })
+    .getByRole('button', { name: /Provincies van Nederland/ })
+    .click();
+  await page
+    .getByRole('region', { name: /Hoe wil je/ })
+    .getByRole('button', { name: /Aanwijzen/ })
+    .click();
+  await page
+    .getByRole('button', { name: /vragen$/ })
+    .last()
+    .click();
 
   await expect(page.getByRole('button', { name: 'Limburg' })).toBeVisible();
   await page.getByRole('button', { name: 'Limburg' }).click();
@@ -67,7 +80,7 @@ test('a second child starts with nothing, and the first keeps everything', async
 
   // Bram starts at nothing. Not Anne's day, and not Anne's boxes.
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Hoi Bram!' })).toBeVisible();
+  await expect(page.getByRole('banner').getByRole('button', { name: 'Bram' })).toBeVisible();
   await expect(page.getByText('Je begint vandaag')).toBeVisible();
 
   await page.goto('/onthouden');
@@ -79,7 +92,7 @@ test('a second child starts with nothing, and the first keeps everything', async
   await expect(page.getByText('Je oefent als Anne.')).toBeVisible();
 
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Hoi Anne!' })).toBeVisible();
+  await expect(page.getByRole('banner').getByRole('button', { name: 'Anne' })).toBeVisible();
   await expect(page.getByText('1 dag op rij')).toBeVisible();
 });
 

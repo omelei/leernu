@@ -584,6 +584,23 @@
     opacity: 0.35;
   }
 
+  /* The initial beside a name in the app bar. A circle of ink on paper, not a
+   * module accent: whose turn it is has nothing to do with which subject they
+   * are in. */
+  .tk-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    flex: none;
+    border-radius: var(--radius-full);
+    background: var(--ink);
+    color: var(--paper);
+    font-weight: 700;
+    line-height: 1;
+  }
+
   /* ---- K2's start button -------------------------------------------------
    * On a phone it becomes a bar at the bottom, which the design gives a reason
    * for: "de enige plek waar hij binnen duimbereik blijft zonder te scrollen".

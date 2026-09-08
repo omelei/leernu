@@ -1,0 +1,68 @@
+import { useEffect, useState } from 'react';
+import { currentStreak, type StreakState } from '@/game-core';
+import { t } from '@/i18n';
+import { HOLIDAYS, loadStreak } from '@/store/streakStore';
+import type { ProfileRecord } from '@/store/db';
+
+/**
+ * The right-hand end of the app bar: the streak, and who is practising.
+ *
+ * K1 puts both here rather than in the page — "profielwissel rechtsboven" — and
+ * that is the difference between a number about today and a number about the
+ * work. The streak belongs to the frame because it is true on every screen; a
+ * child's progress does not restart when they open a different module.
+ *
+ * Moving it out of the page also stops it competing with the sentence that
+ * opens K1. "Vandaag oefen je 10 vragen" is the argument; a run of days is
+ * context for it, not a rival headline.
+ */
+export function TopBar({
+  profile,
+  onProfile,
+}: {
+  readonly profile: ProfileRecord;
+  readonly onProfile?: (() => void) | undefined;
+}) {
+  const [streak, setStreak] = useState<StreakState | null>(null);
+
+  useEffect(() => {
+    void loadStreak().then(setStreak);
+  }, []);
+
+  return (
+    <div className="ml-auto flex items-center gap-4">
+      <StreakLabel state={streak} />
+
+      {/* The profile switch. It is the way to a sibling's turn (ADR-046), so it
+          is a control and not a label — and it says the name rather than only
+          drawing an initial, because a child who cannot yet read a monogram can
+          read their own name. */}
+      <button type="button" className="tk-pill" onClick={onProfile}>
+        <span aria-hidden="true" className="tk-avatar">
+          {profile.naam.slice(0, 1).toLocaleUpperCase('nl-NL')}
+        </span>
+        {profile.naam}
+      </button>
+    </div>
+  );
+}
+
+/**
+ * Days in a row, reported honestly.
+ *
+ * Recomputed against today rather than read back, so a streak that has quietly
+ * lapsed says so instead of showing yesterday's number (ADR-031 lets a rest
+ * day bridge a gap; it does not let the label lie about one).
+ */
+function StreakLabel({ state }: { readonly state: StreakState | null }) {
+  if (state === null) return null;
+
+  const days = currentStreak(state, new Date(), HOLIDAYS);
+  if (days === 0) return <span className="tk-label">{t('home.streakNone')}</span>;
+
+  return (
+    <span className="tk-label">
+      {days === 1 ? t('home.streakOne') : t('home.streakMany', { aantal: days })}
+    </span>
+  );
+}

@@ -12,7 +12,7 @@ import {
 import { t } from '@/i18n';
 import {
   BUILT_DESTINATIONS,
-  BUILT_MODULES,
+  RAIL_MODULES,
   NAVIGATION_MINIMUM,
   type Destination,
   type Module,
@@ -92,12 +92,13 @@ export function Shell({
   currentModule,
   onModule,
   bar,
-  modules = BUILT_MODULES,
+  modules = RAIL_MODULES,
   destinations = BUILT_DESTINATIONS,
 }: ShellProps) {
-  // A rail with one module is a decoration, and a tab bar with one destination
-  // is a label you cannot press that costs 56px on the smallest screen there
-  // is. Both appear when there is somewhere to go.
+  // A tab bar with one destination is a label you cannot press that costs 56px
+  // on the smallest screen there is, so it waits until there is somewhere to
+  // go. The rail no longer waits: ADR-051 makes it the map of the product
+  // rather than an index of what is finished.
   const showRail = modules.length >= NAVIGATION_MINIMUM;
   const showTabs = destinations.length >= NAVIGATION_MINIMUM;
 

@@ -2051,6 +2051,50 @@ should be said that way rather than reported as done.
 
 ---
 
+## ADR-051 — The rail is the map of the product, not an index of what is finished
+
+**Status:** accepted — 2026-09-08. Reverses half of ADR-037; the other half —
+that a set or a way of practising is not offered before it exists — stands.
+
+### Context
+
+ADR-037 kept unbuilt modules out of the rail, on the reasoning that a
+greyed-out entry is a promise the app has not kept, on the screen a child sees
+first. At one module that was right, and it stayed right at two.
+
+At five it is wrong, and for a reason the earlier decision could not see: a
+rail with two entries does not read as a short list, it reads as the whole
+product. A child looking at leer.nu could not tell that clocks, flags and
+language are what this is for; they saw a topography app with a tables section
+bolted on. The design's own K1 draws seven entries against two built modules.
+
+### Decision
+
+The rail carries the five entrances the product is planned around: topo,
+rekenen, taal, klok, vlaggen. Not every module — spelling and tijdvakken sit
+under taal and are not their own doors — and not only the built ones.
+
+An entry that is not built still goes somewhere: its address answers with
+"binnenkort" rather than with a round. That is the part of ADR-037 that has to
+survive, because the failure it named is real — a door that opens onto nothing
+is worse than a door that says it is not open yet.
+
+`built` therefore keeps deciding what a module's address does and stops
+deciding whether it appears.
+
+### Consequences
+
+Three of the five doors currently lead to a page that says the module does not
+exist. That is a plan a child can read, and it is checkable: the "verder
+oefenen" list on K1 says "bestaat nog niet" against those three in as many
+words, so nobody has to click to find out.
+
+The risk ADR-037 named has not gone away — it has been traded. If those three
+are still saying "binnenkort" in a year, the rail will have become a list of
+promises after all, and this decision should be revisited rather than defended.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because

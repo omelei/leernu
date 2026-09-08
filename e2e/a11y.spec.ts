@@ -24,23 +24,21 @@ async function signIn(page: Page, naam: string) {
   await page.goto('/');
   await page.getByPlaceholder('Je naam').fill(naam);
   await page.getByRole('button', { name: 'Beginnen' }).click();
-  await expect(page.getByRole('heading', { name: `Hoi ${naam}!` })).toBeVisible();
-}
 
-function setCard(page: Page, naam: string) {
-  return page.getByRole('article').filter({ hasText: naam });
+  // The name is in the app bar now, beside the streak — K1 puts the profile
+  // switch top right, so that is where "you are signed in" is visible.
+  await expect(page.getByRole('banner').getByRole('button', { name: naam })).toBeVisible();
 }
 
 /**
- * Every way of practising except the default now lives on K2, so a test that
- * wants one goes through it. "Andere manieren" is on every set card and the
- * chooser has its own step 1, so which card it is opened from does not matter.
+ * Into a round, through K2.
  *
- * The two steps are named regions, and the queries are scoped to them: the set
- * name is on the start button as well, which is what K2 puts it there for.
+ * The front door no longer carries a card per set: K1 gives it one thing to
+ * continue and a list of modules, and choosing which set is step 1 of K2. So a
+ * test that wants a particular set goes where a child goes.
  */
-async function chooseAndStart(page: Page, set: RegExp, way: RegExp) {
-  await page.getByRole('button', { name: 'Andere manieren' }).first().click();
+async function startRound(page: Page, set: RegExp, way: RegExp) {
+  await page.goto('/topografie');
   await expect(page.getByRole('heading', { name: 'Wat wil je oefenen?' })).toBeVisible();
 
   const what = page.getByRole('region', { name: /Waarover/ });
@@ -53,6 +51,7 @@ async function chooseAndStart(page: Page, set: RegExp, way: RegExp) {
     .last()
     .click();
 }
+
 test('the name screen has no violations', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: 'Wie ben jij?' })).toBeVisible();
@@ -72,9 +71,7 @@ test('the map has no violations while asking, and none while showing the answer'
   page,
 }) => {
   await signIn(page, 'Bram');
-  await setCard(page, 'Provincies van Nederland')
-    .getByRole('button', { name: 'Aanwijzen' })
-    .click();
+  await startRound(page, /Provincies van Nederland/, /Aanwijzen/);
   await expect(page.getByRole('button', { name: 'Limburg' })).toBeVisible();
 
   expect((await scan(page)).violations).toEqual([]);
@@ -89,7 +86,7 @@ test('the map has no violations while asking, and none while showing the answer'
 
 test('the typing mode has no violations', async ({ page }) => {
   await signIn(page, 'Sem');
-  await chooseAndStart(page, /Provincies van Nederland/, /Typ de naam/);
+  await startRound(page, /Provincies van Nederland/, /Typ de naam/);
   await expect(page.getByPlaceholder('Naam')).toBeVisible();
 
   expect((await scan(page)).violations).toEqual([]);
@@ -97,9 +94,7 @@ test('the typing mode has no violations', async ({ page }) => {
 
 test('the capitals map has no violations', async ({ page }) => {
   await signIn(page, 'Lotte');
-  await setCard(page, 'Hoofdsteden van de provincies')
-    .getByRole('button', { name: 'Aanwijzen' })
-    .click();
+  await startRound(page, /Hoofdsteden van de provincies/, /Aanwijzen/);
   await expect(page.getByRole('button', { name: 'Maastricht' })).toBeVisible();
 
   expect((await scan(page)).violations).toEqual([]);
@@ -107,9 +102,7 @@ test('the capitals map has no violations', async ({ page }) => {
 
 test('the result screen has no violations', async ({ page }) => {
   await signIn(page, 'Yara');
-  await setCard(page, 'Provincies van Nederland')
-    .getByRole('button', { name: 'Aanwijzen' })
-    .click();
+  await startRound(page, /Provincies van Nederland/, /Aanwijzen/);
   await page.getByRole('button', { name: 'Stoppen' }).click();
   await expect(page.getByRole('button', { name: 'Terug naar start' })).toBeVisible();
 
@@ -122,9 +115,7 @@ test('the result screen has no violations', async ({ page }) => {
  */
 test('a keyboard reaches the map and can answer with it', async ({ page }) => {
   await signIn(page, 'Kees');
-  await setCard(page, 'Provincies van Nederland')
-    .getByRole('button', { name: 'Aanwijzen' })
-    .click();
+  await startRound(page, /Provincies van Nederland/, /Aanwijzen/);
   await expect(page.getByRole('button', { name: 'Limburg' })).toBeVisible();
 
   // Tab from the top of the page until a province takes focus, and give up
@@ -154,7 +145,7 @@ test('a keyboard reaches the map and can answer with it', async ({ page }) => {
  */
 test('explore has no violations, empty or with something chosen', async ({ page }) => {
   await signIn(page, 'Tess');
-  await chooseAndStart(page, /Steden van Nederland/, /Ontdek/);
+  await startRound(page, /Steden van Nederland/, /Ontdek/);
 
   // Scoped to the list: the map carries the same names, and it should — a
   // marker without an accessible name is the bug this file exists to catch.

@@ -12,14 +12,24 @@ async function signIn(page: Page, naam: string) {
   await page.goto('/');
   await page.getByPlaceholder('Je naam').fill(naam);
   await page.getByRole('button', { name: 'Beginnen' }).click();
-  await expect(page.getByRole('heading', { name: `Hoi ${naam}!` })).toBeVisible();
+  // The name is in the app bar now, beside the streak — K1 puts the profile
+  // switch top right, so that is where "you are signed in" is visible.
+  await expect(page.getByRole('banner').getByRole('button', { name: naam })).toBeVisible();
 }
 
 async function startRound(page: Page) {
+  await page.goto('/topografie');
   await page
-    .getByRole('article')
-    .filter({ hasText: 'Provincies van Nederland' })
-    .getByRole('button', { name: 'Aanwijzen' })
+    .getByRole('region', { name: /Waarover/ })
+    .getByRole('button', { name: /Provincies van Nederland/ })
+    .click();
+  await page
+    .getByRole('region', { name: /Hoe wil je/ })
+    .getByRole('button', { name: /Aanwijzen/ })
+    .click();
+  await page
+    .getByRole('button', { name: /vragen$/ })
+    .last()
     .click();
   await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
 }
@@ -75,7 +85,7 @@ test('the frame comes back when the round ends', async ({ page }) => {
   await page.getByRole('button', { name: 'Stoppen' }).click();
   await page.getByRole('button', { name: 'Terug naar start' }).click();
 
-  await expect(page.getByRole('heading', { name: 'Hoi Noor!' })).toBeVisible();
+  await expect(page.getByRole('banner').getByRole('button', { name: 'Noor' })).toBeVisible();
   await expect(page.locator('.tk-appbar')).toHaveCount(1);
 });
 
@@ -113,7 +123,7 @@ test('keeps the wordmark and the question legible at 200% text', async ({ page }
   await signIn(page, 'Fatima');
   await page.addStyleTag({ content: 'html { font-size: 32px !important; }' });
 
-  const heading = page.getByRole('heading', { name: 'Hoi Fatima!' });
+  const heading = page.getByRole('banner').getByRole('button', { name: 'Fatima' });
   await expect(heading).toBeVisible();
 
   // Grown, not merely still there.

@@ -9,9 +9,14 @@ import type { TranslationKey } from '@/i18n';
  * rather than named at a call site.
  *
  * `built` is not a feature flag. A flag hides finished work; this says the work
- * does not exist. ADR-037: the rail shows the modules that have content, which
- * today is two. Five greyed-out entries would follow the design and be five
- * promises the app does not keep, on the screen a child sees first.
+ * does not exist. It still decides what a module's address does — an unbuilt
+ * one answers with "binnenkort" rather than a round.
+ *
+ * What it no longer decides is the rail. ADR-051 reverses that half of
+ * ADR-037: the rail is the map of the product, and a child who can see that
+ * clocks and flags are coming reads a plan rather than a promise. It was the
+ * right call at one module and the wrong one at five, because a rail with two
+ * entries hides the shape of the thing.
  */
 
 export interface Module {
@@ -38,6 +43,17 @@ export const MODULES: readonly Module[] = [
 ];
 
 export const BUILT_MODULES = MODULES.filter((module) => module.built);
+
+/**
+ * What the rail offers: the five entrances the product is planned around.
+ *
+ * Not every module in `MODULES` — spelling and tijdvakken sit under taal and
+ * are not their own doors — and not only the built ones, per ADR-051. Order is
+ * business plan v6 §5.5.
+ */
+export const RAIL_MODULES = MODULES.filter((module) =>
+  (['topo', 'tafels', 'woorden', 'klok', 'vlaggen'] as const).some((id) => id === module.id),
+);
 
 /**
  * A category groups modules that a parent would look for under one word.
