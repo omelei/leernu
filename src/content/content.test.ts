@@ -388,7 +388,8 @@ describe('the map file every set actually asks for', () => {
     const missing: string[] = [];
 
     // The background, which every round draws whatever it is asking about.
-    if (!existsSync(onDisk(geoUrl('provincies', 'region')))) missing.push(geoUrl('provincies', 'region'));
+    if (!existsSync(onDisk(geoUrl('provincies', 'region'))))
+      missing.push(geoUrl('provincies', 'region'));
 
     for (const setId of SET_IDS) {
       const shape = SETS[setId];
