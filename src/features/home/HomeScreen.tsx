@@ -156,9 +156,7 @@ export function HomeScreen({
           is the reason the work is being done. */}
       <TestDate />
 
-      {verder ? (
-        <Verder deel={verder} known={known} onStart={onStart} onChoose={onChoose} />
-      ) : null}
+      {verder ? <Verder deel={verder} known={known} onStart={onStart} onChoose={onChoose} /> : null}
 
       <VerderOefenen known={known} verder={verder} onOpen={onModule} />
 
