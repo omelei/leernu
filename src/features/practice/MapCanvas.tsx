@@ -214,8 +214,7 @@ export function MapCanvas({
     <svg
       ref={svgRef}
       viewBox={background.viewBox.join(' ')}
-      className="h-full w-auto max-w-full"
-      style={{ aspectRatio: `${viewWidth} / ${viewHeight}` }}
+      className="block h-full w-full"
       role="group"
     >
       <defs>

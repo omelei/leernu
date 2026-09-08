@@ -176,7 +176,14 @@ export function PracticeScreen({
           {state.secondsLeft !== null || state.livesLeft !== null ? (
             <Counter label={t('practice.counterCorrect')} value={String(state.correctCount)} />
           ) : null}
-          <Counter label={t('practice.counterCombo')} value={`×${state.combo}`} />
+          {/* In an endless round the dots are gone and there is room, so the
+              combo stands beside the clock or the lives at every size. In a
+              round with dots it waits for a screen wide enough. */}
+          <Counter
+            label={t('practice.counterCombo')}
+            value={`×${state.combo}`}
+            onlyWide={state.rule.kind === 'fixed'}
+          />
         </div>
       </header>
 
@@ -186,7 +193,7 @@ export function PracticeScreen({
         {revealed ? feedbackSentence(state, naam, chosenName) : vraag}
       </p>
 
-      <div className="tk-round-body">
+      <div className="tk-round-body" data-answer={reading ? 'control' : 'map'}>
         {/* The question, and after an answer the feedback, in the same place.
             K4 asks for exactly that: between question and answer nothing moves
             except the words, so a child's eyes do not have to find the sentence
@@ -372,13 +379,20 @@ function Counter({
   label,
   value,
   urgent = false,
+  onlyWide = false,
 }: {
   readonly label: string;
   readonly value: string;
   readonly urgent?: boolean;
+  /**
+   * Kept off the phone. The round bar at 393 cannot hold the stop, twelve dots,
+   * the read-aloud button and a counter as well, and of those the combo is the
+   * one that says nothing at the start of a round.
+   */
+  readonly onlyWide?: boolean;
 }) {
   return (
-    <div className="flex flex-col items-end">
+    <div className={onlyWide ? 'hidden flex-col items-end md:flex' : 'flex flex-col items-end'}>
       <span className="tk-label">{label}</span>
       <b
         className={
