@@ -16,10 +16,11 @@ import { ChooseTableScreen } from '@/features/sums/ChooseTableScreen';
 import { SumScreen } from '@/features/sums/SumScreen';
 import { ProfileScreen } from '@/features/player/ProfileScreen';
 import type { Route } from '@/features/shell/routes';
-import { getProfile, setSticker } from '@/store/profile';
+import { setSticker } from '@/store/profile';
+import { bootProfile, type Boot } from '@/features/boot/bootProfile';
+import { NoStorage } from '@/features/boot/NoStorage';
 import type { PracticeMode, SetId } from '@/features/practice/useRound';
 import type { SumMode } from '@/features/sums/useSumRound';
-import type { ProfileRecord } from '@/store/db';
 
 type Screen =
   | { name: 'home' }
@@ -27,7 +28,6 @@ type Screen =
   | { name: 'practice'; setId: SetId; practiceMode: PracticeMode }
   | { name: 'explore'; setId: SetId }
   | { name: 'sums'; setId: string; sumMode: SumMode };
-type Boot = { status: 'loading' } | { status: 'ready'; profile: ProfileRecord | null };
 
 /**
  * Seven screens and a router of about sixty lines.
@@ -96,7 +96,7 @@ export default function App() {
   }, [screen.name, route.name]);
 
   useEffect(() => {
-    void getProfile().then((profile) => setBoot({ status: 'ready', profile: profile ?? null }));
+    void bootProfile().then(setBoot);
   }, []);
 
   // The component gallery, in development only. import.meta.env.DEV is
@@ -108,9 +108,22 @@ export default function App() {
     return <Gallery />;
   }
 
-  // No spinner: reading one record from IndexedDB is fast enough that a spinner
-  // would flash rather than inform.
+  // No spinner, and that reasoning is unchanged: reading one record from
+  // IndexedDB is fast enough that a spinner would flash rather than inform.
+  //
+  // What changed is what happens when the read is not fast, which the sentence
+  // above quietly assumed away. This branch used to be the only other outcome,
+  // so an open that never settled left an empty <div> on screen for as long as
+  // the tab was left open. `bootProfile` gives that outcome a name and this
+  // branch a sibling; see ADR-061.
   if (boot.status === 'loading') return <div aria-busy="true" />;
+
+  // Nothing can be saved on this device. Reload rather than retry the read: a
+  // second open of a store that would not open is the same open, and a reload
+  // also clears whatever the first one left half-done.
+  if (boot.status === 'no-storage') {
+    return <NoStorage cause={boot.cause} onRetry={() => window.location.reload()} />;
+  }
 
   if (boot.profile === null) {
     return <ProfileGate onReady={(profile) => setBoot({ status: 'ready', profile })} />;

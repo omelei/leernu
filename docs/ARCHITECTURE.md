@@ -209,6 +209,11 @@ IndexedDB. A round survives a tunnel, a reload and a flat network. This is a
 genuine advantage of the scope decision, not a consolation — on a school network
 shared by thirty children it may be the most noticeable quality of the product.
 
+The other side of it is that a device which will not open IndexedDB has no
+fallback anywhere: there is no server holding a copy. The boot read is raced
+against a clock and a store that never opens gets a screen saying so, rather
+than the blank page it used to get (ADR-061).
+
 ## 8. Testing
 
 - Vitest on `game-core`: Leitner transitions, answer matching, scoring. This is

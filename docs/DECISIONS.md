@@ -2490,6 +2490,74 @@ silhouette, not to draw a different idea.
 
 ---
 
+## ADR-061 — A store that never opens gets a screen, not a blank page
+
+**Status:** accepted — 2026-09-08. Qualifies the "no spinner" rule in `App.tsx`.
+
+### Context
+
+The boot sequence read one record from IndexedDB and rendered an empty busy
+element while it waited, with the reasoning that reading a single local record
+is fast enough that a spinner would flash rather than inform. That is true, and
+it is true only of the path where the read finishes.
+
+`indexedDB.open` has a path where it finishes neither way. A `deleteDatabase`
+blocked by the same app open in another tab, site data switched off in Safari,
+a profile whose storage the browser has quarantined, a database that will not
+open at all — the promise stays pending, forever. The `loading` branch was the
+only other outcome the code had, so the app rendered that empty element and
+stopped there.
+
+This was observed on the live site: `indexedDB.open('leernu')` did not return
+and the body stayed empty. Not a slow app, not an error — a white page, with
+nothing to read, nothing to press, and no word a parent could search for. The
+worst property of it is that it looks like nothing is happening, which is also
+what it looks like when nothing is wrong.
+
+### Decision
+
+The first read is raced against a five-second clock (`bootProfile`), and an open
+that rejects is caught. Both end in one new boot state, `no-storage`, and one
+new screen, `NoStorage`, that says the device is not keeping anything, that
+there is nowhere else it could be kept, and what a person can try: close other
+tabs, leave the private window, allow site data, change browser or device.
+
+Five seconds is chosen to be far outside the working path — a version upgrade
+over a few hundred rows is tens of milliseconds — so no child on a working
+device ever sees it, and well inside how long someone stares at a blank screen
+before deciding the product is broken.
+
+The two causes are kept apart because they are different facts. A rejected open
+is the browser refusing; a silent one is the browser not answering. The child
+gets the same screen and one different sentence.
+
+The screen offers a reload, not a retry. A second read of a store that would not
+open is the same read, and a reload also clears whatever the first attempt left
+half-done. A read that lands after the clock has run out is discarded on
+purpose: by then the screen has said the device cannot save anything and put a
+button under a finger already on its way down, and swapping the app in
+underneath it is a worse failure than the one being reported.
+
+The copy does not promise it will work in a moment. There is no backend
+(ADR-015), so there is no server-side fix on its way and no degraded online mode
+to fall back to — what is on this device is the whole product. Saying "probeer
+het zo nog eens" would be a promise nobody can keep.
+
+### Consequences
+
+The "no spinner" rule survives, narrowed to what it was always about: the fast
+path stays instant, with no flash of a spinner between a tap and a screen.
+
+Every child on a working device pays nothing for this — one `setTimeout` that is
+cleared on the same tick the store answers, asserted by a test that resolves the
+read without advancing a single tick.
+
+The failure mode this leaves is a device that genuinely cannot save anything,
+where the honest answer is that leer.nu cannot be used there. That is a real
+answer and a blank page is not.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because

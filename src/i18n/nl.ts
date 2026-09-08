@@ -322,6 +322,25 @@ export const nl = {
   'profile.submit': 'Beginnen',
   'profile.nameTooShort': 'Typ eerst je naam.',
 
+  // Als het apparaat niets wil bewaren. Er is geen server (ADR-015): wat hier
+  // niet bewaard kan worden, staat nergens anders. Dus geen "probeer het zo nog
+  // eens" — dat zou een belofte zijn die niemand kan waarmaken — maar wat er aan
+  // de hand is, en stap voor stap wat een kind of een ouder er zelf aan kan doen.
+  //
+  // De merknaam komt uit brand.ts en staat hier als {merk}, want de naam is
+  // één plek en deze zin is de andere.
+  'storage.title': '{merk} kan niets op dit apparaat bewaren',
+  'storage.blocked': 'De browser houdt het bewaren tegen.',
+  'storage.silent': 'Het apparaat geeft geen antwoord.',
+  'storage.explain':
+    '{merk} bewaart alles op het apparaat zelf. Er staat niets op internet. Lukt bewaren niet, dan kun je hier niet oefenen.',
+  'storage.tryTitle': 'Wat je kunt proberen',
+  'storage.tryTabs': 'Sluit andere tabbladen van {merk} en probeer het opnieuw.',
+  'storage.tryPrivate': 'Open {merk} in een gewoon venster, niet in een privévenster.',
+  'storage.trySettings': 'Sta in de instellingen van de browser toe dat websites iets bewaren.',
+  'storage.tryOther': 'Helpt dat niet? Probeer een andere browser of een ander apparaat.',
+  'storage.retry': 'Opnieuw proberen',
+
   // Accessible names for things that have no visible label of their own
   'a11y.progress': 'Voortgang in deze ronde',
 } as const;

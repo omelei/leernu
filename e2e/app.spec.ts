@@ -97,6 +97,39 @@ test('refuses an empty name', async ({ page }) => {
   await expect(page.getByRole('alert')).toHaveText('Typ eerst je naam.');
 });
 
+/**
+ * The failure that shipped, reproduced.
+ *
+ * `indexedDB.open` came back with a request whose events never fired — no
+ * success, no error, nothing — and the app rendered an empty busy element and
+ * stopped there. A white page: nothing to read, nothing to press, no word to
+ * search for. The stub below is that request and nothing else.
+ *
+ * This is the only test that covers the wiring rather than the pieces. The unit
+ * tests prove `bootProfile` gives up and that `NoStorage` says something; only
+ * a real page proves the app puts the second in the place of the first.
+ */
+test('says so when the device will not open its store', async ({ page }) => {
+  await page.addInitScript(() => {
+    // Prototype rather than a bare object, because idb checks `instanceof
+    // IDBRequest` before it will wait on anything. The listeners are the real
+    // shape too: they are accepted and never called, which is the whole bug.
+    const hung = Object.create(IDBOpenDBRequest.prototype) as IDBOpenDBRequest;
+    Object.assign(hung, { addEventListener: () => {}, removeEventListener: () => {} });
+    window.indexedDB.open = () => hung;
+  });
+
+  await page.goto('/');
+
+  const title = page.getByRole('heading', { name: /kan niets op dit apparaat bewaren/ });
+
+  // Past the five-second clock in bootProfile, so the default expect timeout is
+  // not the thing being measured.
+  await expect(title).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByText('Het apparaat geeft geen antwoord.')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Opnieuw proberen' })).toBeVisible();
+});
+
 test('keeps the profile across a reload, with no sign-in', async ({ page }) => {
   await signIn(page, 'Sanne');
   await page.reload();
