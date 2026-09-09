@@ -1333,11 +1333,71 @@
     color: var(--ink);
   }
 
+  /* ---- The tiles a module page is made of --------------------------------
+   * Where on the map, which subject, which way of practising, and the switch
+   * under them. Four rows of the same kind of question, so they are drawn with
+   * one face: paper, a hairline rule, a field corner, and — when one is chosen
+   * — an ink rule at double weight over the surface tone.
+   *
+   * They used to be three faces on one page. The region row was this one. The
+   * subjects borrowed .tk-module-card and so arrived in the module's own tint,
+   * which is the styleguide's *module entrance* and the third of the three
+   * things §B lets an accent colour — but pressing "Steden" does not leave
+   * topography, so the tint was saying the wrong thing in the loudest colour
+   * on the page, and every subject on /rekenen was green for the same reason.
+   * The ways of practising were a third face again: the same paper, but a card
+   * corner and an eight-pixel bar on the chosen one, which made two rows of
+   * the same question look like two kinds of control.
+   *
+   * What tells the chosen one apart is a lightness change in two places at
+   * once — the rule goes from grey hairline to ink at double weight, and the
+   * ground goes from paper to surface. No hue carries the state, so §A's rule
+   * holds without the bar, which is also what the region row has always done.
+   *
+   * Sizes still differ, because what is inside them differs: a region is a
+   * word, a subject is a word with its progress beside it, a way of practising
+   * is a name over a reason. The face does not.
+   */
+  .tk-regio,
+  .tk-subject,
+  .tk-form,
+  .tk-switch {
+    display: flex;
+    align-items: center;
+    border: var(--stroke-hair) solid var(--line-strong);
+    border-radius: var(--radius-field);
+    background: var(--paper);
+    color: var(--ink);
+    text-align: left;
+    cursor: pointer;
+  }
+  /* Hover is for the ones not chosen. A chosen tile already carries the ink
+   * rule over the surface tone, and a hover rule that outranked it — which the
+   * region row's did, on specificity — let the pointer quietly un-say what the
+   * page was saying, for as long as it rested there. */
+  .tk-regio:not(:disabled):not([aria-pressed='true']):hover,
+  .tk-subject:not([aria-pressed='true']):hover,
+  .tk-form:not([aria-pressed='true']):hover,
+  .tk-switch:not([aria-pressed='true']):hover {
+    background: var(--surface);
+    border-color: var(--ink-3);
+  }
+  /* Chosen: ink and weight, never a hue on its own. The padding each one gives
+   * back for the second pixel of rule is in its own block below, because the
+   * padding each one starts from is its own. */
+  .tk-regio[aria-pressed='true'],
+  .tk-subject[aria-pressed='true'],
+  .tk-form[aria-pressed='true'],
+  .tk-switch[aria-pressed='true'] {
+    border-color: var(--ink);
+    border-width: var(--stroke-active);
+    background: var(--surface);
+  }
+
   /* ---- Where on the map -------------------------------------------------
-   * Topography's first question, as a row of three. Wider than a chip and
-   * flatter than a card: it is the coarsest choice on the page, so it reads as
-   * one band across the top of the flow rather than as three more cards
-   * competing with the subjects under it.
+   * Topography's first question, as a row of three. Tighter than the cards
+   * under it, because it is the coarsest choice on the page and reads as one
+   * band across the top of the flow.
    *
    * They wrap on a phone rather than shrinking, because "Nederland" at 393px
    * in three columns is six characters and an ellipsis.
@@ -1348,27 +1408,11 @@
     gap: 8px;
   }
   .tk-regio {
-    display: inline-flex;
-    align-items: center;
     gap: 8px;
     min-height: var(--touch-min);
     padding: 0 16px;
-    border: var(--stroke-hair) solid var(--line-strong);
-    border-radius: var(--radius-field);
-    background: var(--paper);
-    color: var(--ink);
-    cursor: pointer;
   }
-  .tk-regio:hover:not(:disabled) {
-    background: var(--surface);
-    border-color: var(--ink-3);
-  }
-  /* Chosen: ink and weight, the same two changes every other chosen control on
-   * this page makes, and never a hue on its own. */
   .tk-regio[aria-pressed='true'] {
-    border-color: var(--ink);
-    border-width: var(--stroke-active);
-    background: var(--surface);
     padding: 0 15px;
   }
   /* A region the plan has and the product does not. Hatched and dashed, which
@@ -1397,6 +1441,18 @@
     grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
     gap: 12px;
   }
+  /* A subject, and no longer a module entrance wearing its clothes. The dot
+   * beside the name is what carries how far along it is; the card itself says
+   * nothing but "this is one of the things you could practise". */
+  .tk-subject {
+    gap: 16px;
+    min-height: var(--control-height);
+    padding: var(--card-padding);
+  }
+  .tk-subject[aria-pressed='true'] {
+    /* Give back the pixel the second rule took, so nothing beside it moves. */
+    padding: calc(var(--card-padding) - 1px);
+  }
 
   /* ---- Step 2, the ways of practising ----------------------------------
    * Two columns where there is room, which is what K2 draws, and one on a
@@ -1413,73 +1469,30 @@
     grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
     gap: 12px;
   }
-  /* A way of practising is not a module entrance, so it takes no accent: §B
-   * allows one on the highlight, the progress bar and the entrance, and this
-   * is none of the three. It is ink on paper with a rule round it, and the
-   * chosen one is told apart the way .tk-module-card does it — a lightness
-   * change and a thickened leading edge, so no colour carries the state alone.
-   */
   .tk-form {
-    display: flex;
-    align-items: center;
     gap: 12px;
     min-height: var(--control-height);
     padding: var(--card-padding);
-    border: var(--stroke-hair) solid var(--line-strong);
-    border-radius: var(--card-radius);
-    background: var(--paper);
-    color: var(--ink);
-    text-align: left;
-    cursor: pointer;
-  }
-  .tk-form:hover {
-    border-color: var(--ink-2);
-    border-width: var(--stroke-active);
-    /* Compensate the border so nothing beside it moves. */
-    padding: calc(var(--card-padding) - 1px);
   }
   .tk-form[aria-pressed='true'] {
-    border-color: var(--ink);
-    border-width: var(--stroke-active);
-    border-left-width: 8px;
-    background: var(--surface);
     padding: calc(var(--card-padding) - 1px);
-    padding-left: calc(var(--card-padding) - 7px);
   }
 
   /* ---- The switch on a round ---------------------------------------------
-   * One control, drawn like a way of practising because that is what it is a
-   * property of — same card, same thickened leading edge when it is on. It is
-   * not one of the six, and it is not shaped like a chip either: a chip is one
-   * of several and this is the only one of its kind on the page.
+   * One control, drawn like the tiles above it because that is what it is a
+   * property of. It is not one of the six, and it is not shaped like a chip
+   * either: a chip is one of several and this is the only one of its kind on
+   * the page — so it is a tile that stops before the full measure.
    */
   .tk-switch {
-    display: flex;
-    align-items: center;
     gap: 12px;
     width: 100%;
     max-width: 32rem;
     min-height: var(--control-height);
     padding: var(--card-padding);
-    border: var(--stroke-hair) solid var(--line-strong);
-    border-radius: var(--card-radius);
-    background: var(--paper);
-    color: var(--ink);
-    text-align: left;
-    cursor: pointer;
-  }
-  .tk-switch:hover {
-    border-color: var(--ink-2);
-    border-width: var(--stroke-active);
-    padding: calc(var(--card-padding) - 1px);
   }
   .tk-switch[aria-pressed='true'] {
-    border-color: var(--ink);
-    border-width: var(--stroke-active);
-    border-left-width: 8px;
-    background: var(--surface);
     padding: calc(var(--card-padding) - 1px);
-    padding-left: calc(var(--card-padding) - 7px);
   }
 
   /* The cijfer, after a toetsstand and nowhere else. The number gets the score
@@ -1743,6 +1756,12 @@
    * The third and last place an accent may appear. The tint is the fill and
    * the accent is the rule, so the card is recognisable across a rail without
    * a single word of it being coloured.
+   *
+   * A door out of where you are standing, and only that: /klokkijken offering
+   * the two modules that exist, /rekenen the day it holds more than one, and
+   * the list of children on Jij. It used to draw the subjects on a module page
+   * as well, which put every one of them in the module's tint on a page the
+   * child had already entered — see .tk-subject, which is what they take now.
    */
   .tk-module-card {
     display: flex;
@@ -1762,14 +1781,13 @@
     /* Compensate the border so nothing beside it moves. */
     padding: calc(var(--card-padding) - 1px);
   }
-  /* Which one is chosen. K2 had no answer to that at all: five cards in the
-   * same tint with the same border, and the one the screen was going to start
-   * was indistinguishable from the four it was not.
+  /* Which one you are already in — the child whose turn it is, on Jij.
    *
    * Two changes at once and neither of them is a hue. The border turns to ink,
    * which is a lightness difference no colour vision can miss, and the leading
    * edge thickens into a bar — a shape. §A's rule is that colour never carries
-   * a state on its own, and a chooser is exactly where breaking it costs most.
+   * a state on its own, and a list you are standing in one of is exactly where
+   * breaking it costs most.
    */
   .tk-module-card[aria-pressed='true'] {
     border-color: var(--ink);

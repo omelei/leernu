@@ -107,6 +107,54 @@ export function Gallery() {
         Nog niet beschikbaar
       </button>
 
+      {/* The one face every tile on a module page wears. Four classes share it
+          — region, subject, way of practising, switch — and what differs
+          between them is size, not treatment. Worth looking at together,
+          because the bug this replaced was exactly that they had drifted into
+          three treatments on one page and nobody had them side by side. */}
+      <h2 className={HEADING}>Keuzetegel — één gezicht, vier maten</h2>
+      <div className="tk-regios">
+        <button type="button" className="tk-regio">
+          Regio
+        </button>
+        <button type="button" className="tk-regio" aria-pressed="true">
+          Regio gekozen
+        </button>
+        <button type="button" className="tk-regio" disabled data-soon="ja">
+          Regio binnenkort
+        </button>
+      </div>
+      <div className="tk-sets mt-3">
+        <button type="button" className="tk-subject w-full">
+          <Dot size={24} fill={0.4} />
+          <span>Onderwerp</span>
+        </button>
+        <button type="button" className="tk-subject w-full" aria-pressed="true">
+          <Dot size={24} fill={0.4} />
+          <span>Onderwerp gekozen</span>
+        </button>
+      </div>
+      <div className="tk-forms mt-3">
+        <button type="button" className="tk-form">
+          <span className="min-w-0">
+            <span className="block font-semibold">Werkvorm</span>
+            <span className="block text-ink-2">De reden eronder</span>
+          </span>
+        </button>
+        <button type="button" className="tk-form" aria-pressed="true">
+          <span className="min-w-0">
+            <span className="block font-semibold">Werkvorm gekozen</span>
+            <span className="block text-ink-2">De reden eronder</span>
+          </span>
+        </button>
+      </div>
+      <button type="button" className="tk-switch mt-3" aria-pressed="true">
+        <span className="min-w-0">
+          <span className="block font-semibold">Schakelaar aan</span>
+          <span className="block text-ink-2">Eén van zijn soort, dus geen chip</span>
+        </span>
+      </button>
+
       <h2 className={HEADING}>Voortgang</h2>
       <ProgressBar value={0} label="Leeg" />
       <ProgressBar value={0.35} label="Ruim een derde" className="mt-3" />
