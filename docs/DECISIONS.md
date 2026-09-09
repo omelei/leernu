@@ -3605,6 +3605,59 @@ open.
 
 ---
 
+## ADR-088 — Every tile on a module page wears one face, and a subject is not a door
+
+**Status:** accepted — 2026-09-09. Applies §B's accent rule to the chooser.
+
+A module page asks three questions in a row — where on the map, which subject,
+which way of practising — and drew them as three different controls.
+
+The region row was paper with a hairline rule and a field corner. The subjects
+reused `.tk-module-card`, which is the styleguide's **module entrance** and one
+of the three things §B lets an accent colour (ADR-028). So every
+subject on /topografie arrived in blue and every subject on /rekenen in green.
+The ways of practising were a third face again: the same paper, but a card
+corner and an eight-pixel leading bar on the chosen one.
+
+**A subject is not an entrance.** Pressing "Steden" does not leave topography;
+it answers a question on a page the child is already standing on. The tint was
+the loudest thing on the page and it was pointing at the one thing there that
+was not a door — which is precisely the failure `accent.test.ts` was written to
+catch, and it did not, because the class was on the list for its other callers.
+A test that names selectors cannot see that a selector is being used for the
+wrong thing.
+
+So the three faces become one: paper, a hairline rule of `--line-strong`, a
+field corner, and — when one is chosen — an ink rule at double weight over the
+surface tone. Two lightness changes at once, so no hue carries the state and
+§A's rule holds. Sizes still differ, because what is inside them differs: a
+region is a word, a subject is a word with its progress beside it, a way of
+practising is a name over a reason.
+
+**The eight-pixel bar goes.** It existed so the chosen card had a shape as well
+as a lightness change, back when the resting card was a tint and the ink border
+was the only other signal. With the tint gone the ground moves too — paper to
+surface — which is a second lightness change and does the same work. Keeping the
+bar would have meant the region row and the subject row still looked like two
+kinds of control, which is the thing this decision is about.
+
+**What was rejected.** Keeping the card corner on the subjects and the forms and
+only dropping the tint: it leaves two geometries on one page, and the corner is
+what a reviewer sees first. And making `.tk-module-card` neutral as well: an
+entrance is the one place §B does allow an accent, the rail is a column of seven
+of them, and a front door that lost its colours would lose the only thing that
+tells a child which of them they are looking at.
+
+**What it costs, stated plainly.** The resting rule on a subject card falls from
+4.70:1 against paper — the accent — to 1.91:1, which is `--line-strong`. That is
+below the 3:1 WCAG 2.2 asks of a control's visual boundary. It is also the rule
+every other choice on this page already carried: the region row, the chips, the
+diplomas and the ways of practising. So this makes an existing shortfall wider
+rather than introducing one, and the honest fix is a separate decision about
+`--line-strong` on pressable things generally, not a special case for one row.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because
