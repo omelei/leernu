@@ -49,6 +49,10 @@ const ALLOWED_SELECTORS: ReadonlyMap<string, string> = new Map([
   [".tk-subject[aria-pressed='true']", 'the answer already given'],
   [".tk-form[aria-pressed='true']", 'the answer already given'],
   [".tk-switch[aria-pressed='true']", 'the answer already given'],
+  // The chips answer a numbered question too — "2 · Welke tafel?" — so they
+  // take the same mark. Without this, rekenen showed the answer to step 1 in
+  // green, step 2 in ink and step 3 in green again.
+  [".tk-variant-chip[aria-pressed='true']", 'the answer already given, as a chip'],
   // The rail is where the module entrance does most of its work: a column of
   // seven accents is the only place in the product that shows them together.
   [".tk-rail-item[aria-current='page']", 'the module entrance, in the rail'],

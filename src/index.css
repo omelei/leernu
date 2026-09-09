@@ -733,12 +733,18 @@
     background: var(--surface);
     border-color: var(--ink-3);
   }
-  /* Chosen: ink and weight, never a hue on its own. The same two changes the
-   * subject card above it makes, at the size a chip can carry them. */
+  /* Chosen: the module's colour and a doubled rule, the same two changes the
+   * tiles make, at the size a chip can carry them (ADR-089).
+   *
+   * A chip is not a tile, and it is the answer to a question that is numbered
+   * like the others — "2 · Welke tafel?" — so on rekenen the answer to step 1
+   * was green, the answer to step 2 was ink and the answer to step 3 was green
+   * again. One page, three steps, two colours of "you chose this" is not a
+   * distinction anybody can use. */
   .tk-variant-chip[aria-pressed='true'] {
-    border-color: var(--ink);
+    border-color: var(--accent);
     border-width: var(--stroke-active);
-    background: var(--surface);
+    background: var(--accent-tint);
     padding: 0 11px;
   }
   /* How that one is going, at the size the numbers leave room for. Decorative:
