@@ -162,14 +162,14 @@ oefening komt over bestuurlijke indeling in plaats van aardrijkskunde, is
 
 ## Natural Earth — landen van Europa en van de wereld
 
-|                   |                                                                                                                                                        |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Bron**          | Natural Earth, `ne_50m_admin_0_countries` en `ne_110m_admin_0_countries`                                                                               |
-| **Vindplaats**    | https://github.com/nvkelso/natural-earth-vector — `geojson/`                                                                                           |
-| **Licentie**      | Publiek domein. Natural Earth stelt zelf: geen toestemming nodig, geen bronvermelding verplicht, geen beperkingen.                                     |
-| **Opgehaald**     | 9 september 2026                                                                                                                                       |
+|                   |                                                                                                                                                                        |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Bron**          | Natural Earth, `ne_50m_admin_0_countries` en `ne_110m_admin_0_countries`                                                                                               |
+| **Vindplaats**    | https://github.com/nvkelso/natural-earth-vector — `geojson/`                                                                                                           |
+| **Licentie**      | Publiek domein. Natural Earth stelt zelf: geen toestemming nodig, geen bronvermelding verplicht, geen beperkingen.                                                     |
+| **Opgehaald**     | 9 september 2026                                                                                                                                                       |
 | **Gebruikt voor** | `public/geo/<regio>/landen.*.json` en `content/sets/<regio>-landen.json`, voor zeven regio&#39;s: europa, afrika, azie, noord-amerika, zuid-amerika, oceanie en wereld |
-| **Gebouwd door**  | `tools/content/build-countries.mjs`                                                                                                                    |
+| **Gebouwd door**  | `tools/content/build-countries.mjs`                                                                                                                                    |
 
 Bronvermelding is niet verplicht en staat er toch, hier en in de kaartbestanden
 zelf: een kaart zonder herkomst is een kaart die niemand kan controleren.

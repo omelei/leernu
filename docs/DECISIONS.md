@@ -3540,22 +3540,22 @@ hard. Some apps draw a dot where a country is too small, and players object that
 it teaches you to recognise the dot rather than the shape.
 
 **What a Dutch test asks.** A blank map with numbers, and the child writes the
-names underneath. Pointing is how topography *begins* in this product; it is not
+names underneath. Pointing is how topography _begins_ in this product; it is not
 how a world topography test works.
 
 **What the numbers said.** For every map, count the countries that end up with
 neither a usable help ring (ADR-086) nor enough of their own area for a
 fingertip:
 
-| regio | landen | laptop | tablet | telefoon |
-| --- | --- | --- | --- | --- |
-| Zuid-Amerika | 12 | 0 | 0 | 1 |
-| Oceanië | 9 | 1 | 1 | 1 |
-| Noord-Amerika | 23 | 12 | 13 | 20 |
-| Europa | 46 | 4 | 7 | 21 |
-| Azië | 47 | 5 | 9 | 29 |
-| Afrika | 52 | 5 | 9 | 19 |
-| Wereld | 167 | 90 | 106 | 160 |
+| regio         | landen | laptop | tablet | telefoon |
+| ------------- | ------ | ------ | ------ | -------- |
+| Zuid-Amerika  | 12     | 0      | 0      | 1        |
+| Oceanië       | 9      | 1      | 1      | 1        |
+| Noord-Amerika | 23     | 12     | 13     | 20       |
+| Europa        | 46     | 4      | 7      | 21       |
+| Azië          | 47     | 5      | 9      | 29       |
+| Afrika        | 52     | 5      | 9      | 19       |
+| Wereld        | 167    | 90     | 106    | 160      |
 
 That table changed the plan. **Werelddelen fix the laptop and the tablet** —
 Europe goes from unusable to four hard countries out of forty-six — and they do
@@ -3581,7 +3581,7 @@ a rule about phones has no business taking that away.
 Point sets are exempt: a city is already drawn as a marker sized for a finger, so
 eighty cities are eighty targets. This rule is about hitting a coastline.
 
-**And a ring says which one.** Choosing and typing ask a child to *find* the
+**And a ring says which one.** Choosing and typing ask a child to _find_ the
 country before they name it, and three pixels of coastline is as hard to find as
 to hit. In those two modes the asked-about shape gets a ring in the accent — not
 a target, since nothing is pressable there, and the one mark on the map that is
