@@ -12,6 +12,7 @@ import { SideColumn } from './SideColumn';
 import { loadItemStates, loadPlayedRounds } from '@/store/progress';
 import type { PlayedRound } from '@/store/progress';
 import {
+  asKlokMode,
   asPracticeMode,
   asSumMode,
   geplaatst,
@@ -26,6 +27,7 @@ import {
 } from '@/features/module/onderdelen';
 import type { PracticeMode, SetId } from '@/features/practice/useRound';
 import type { SumMode } from '@/features/sums/useSumRound';
+import type { KlokMode } from '@/features/klok/useKlokRound';
 
 /**
  * K1, the front door — which is also leer.nu itself.
@@ -75,6 +77,8 @@ export interface HomeScreenProps {
   readonly onStart: (setId: SetId, practiceMode: PracticeMode) => void;
   /** A table, in a chosen way. */
   readonly onStartSum: (setId: string, sumMode: SumMode) => void;
+  /** A step of the clock, in a chosen way. */
+  readonly onStartKlok: (setId: string, klokMode: KlokMode) => void;
   readonly onModule?: ((id: Module['id']) => void) | undefined;
 }
 
@@ -84,6 +88,7 @@ export function HomeScreen({
   onReis,
   onStart,
   onStartSum,
+  onStartKlok,
   onModule,
 }: HomeScreenProps) {
   const [states, setStates] = useState<Map<string, ItemState> | null>(null);
@@ -106,6 +111,7 @@ export function HomeScreen({
   /** One way into a round, wherever on this screen it is pressed. */
   const begin = (deel: Onderdeel, mode: ModeId) => {
     if (deel.moduleId === 'topo') onStart(deel.setId as SetId, asPracticeMode(mode));
+    else if (deel.moduleId === 'klok') onStartKlok(deel.setId, asKlokMode(mode));
     else onStartSum(deel.setId, asSumMode(mode));
   };
 

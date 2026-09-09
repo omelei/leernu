@@ -3666,6 +3666,124 @@ neither is a bug to be found later.
 
 ---
 
+## ADR-092 — Klokkijken is a module, and it asks in two directions
+
+**Status:** accepted — 2026-09-09.
+
+### Context
+
+The third module of business plan v6 §5.5, and the one the rail has been
+promising since ADR-051. It had an accent, a pictogram, a rail entry and an
+address that answered "binnenkort"; what it did not have was a page or anything
+behind one.
+
+Two things about the clock are not true of either module already built.
+
+**There are two notations for one fact.** "Half acht" and "7:30" are the same
+reading, and a child who can say one and not write the other has learned half of
+it. A province has a name; a sum has an answer; a time has a sentence and a
+number, and they are not interchangeable in a Dutch classroom — the sentence is
+what a teacher asks for and the number is what a digital clock shows.
+
+**The hard part is Dutch.** Half past seven is "half _acht_". Every step from
+twenty past onwards names the hour that is coming rather than the one that has
+been, and that single rule is what a Dutch child gets wrong and what a
+schoolbook drills. Any content model that stored the words would have had to
+store that rule twelve times over.
+
+### Decision
+
+**The module is four steps and a mix**, at leer.nu/klokkijken: hele uren, halve
+uren, kwartieren, vijf minuten. One subject per step and one set under each, so
+the page has the shape topografie's Nederland row has rather than the shape
+rekenen has — no region row, no chips, two numbered steps.
+
+**The content stops at five minutes.** A hundred and forty-four faces rather
+than seven hundred and twenty. Going to the minute would add five hundred and
+seventy-six positions no schoolbook shows and no child has words for; the app
+design's line for this module is "hele en halve uren", and this is that plus the
+two steps a classroom teaches after it. That is a judgement, it is written out
+in `tools/content/build-klok.mjs` with the reason, and a teacher who disagrees
+is having a conversation rather than reading a bug.
+
+**The face is twelve hours; what a child may type is twenty-four.** A clock does
+not know whether it is morning, so a child who reads half past seven as 19:30
+has not made a mistake, and `judgeKlok` accepts it. It also accepts `7.30`,
+`730` and `7u30`, on the same argument `judgeSum` makes about a stray full stop:
+failing a child for a separator measures the keyboard.
+
+**The words are not content, and they are not in `game-core` either.**
+`klokVorm` returns which of the eight Dutch shapes a time is said in and which
+hour it names; `features/klok/klokTaal.ts` puts the words on through `t()`. The
+pure layer stays language-neutral — it is the one a server has to be able to
+import (ADR-015) — and the Dutch stays in `i18n` with every other string. It is
+the same split `rekenNaam` already makes for "Tafel van 7".
+
+**Five ways of practising, and one of them runs the other way.** Meerkeuze
+first, which is the map's order and not the tables': the four times offered are
+the four mistakes children actually make reading a clock — an hour out, over for
+voor, the hands swapped, five minutes out — so choosing between them is the
+exercise rather than a way round it. **"Klok zoeken" is second**, and it shows a
+time and asks which of four faces says it. That is not multiple choice with the
+question and the answer swapped: it is the half of clock reading that catches a
+child who has learned to recognise twelve pictures, and it is a mode of its own
+because what the child is looking at differs. Typing is third, for the reason
+the map gives — writing it unaided is what a test asks. Then the clock and the
+lives, as everywhere.
+
+No exploring: twelve faces is not somewhere a child can wander. No diploma: no
+Dutch school hands one out for the clock the way it does for a table, and
+inventing one would be inventing a certificate.
+
+**Read-aloud does not read the answer.** On rekenen the button speaks the
+question, because the question is "7 × 8". Here the question is a picture, so
+the button speaks the instruction — and speaks the time only in the one mode
+where the time _is_ the question. K9's read-aloud is for a child who cannot read
+the words, not for a child who cannot read the clock.
+
+**The subject marks are the module's own mark, saying four particular times.**
+Three of the four tiles are a clock face with the hand where that step puts it,
+so a child who cannot yet read "kwartieren" can see which tile has the hand on
+the three. §E allows the shared circle for the reason it allows the diamond
+inside `StampIcon`: what may not be shared is the silhouette.
+
+**/klok works as well as /klokkijken.** The rail says "Klok", so that is what a
+parent types. One row in a table, one way — `pathFor` still writes the module's
+own slug — which is the same relationship /rekenen and /tafels have a level up.
+
+### The round wiring, and why it is still three copies
+
+`useSumRound` says in as many words that the third module is when the guess
+about what is shared becomes an observation. It is, and the observation is this:
+what all three share is everything from `composeRound` down to
+`applyRoundRewards` — the schedule, the session record, the three ways a round
+ends, the combo, the streak and the rewards — and all of that is already
+imported rather than copied. What none of them share is the question: a map
+needs geometry and an answer layer, a sum needs a keypad, a clock needs a face
+and asks in two directions.
+
+What is genuinely duplicated is the hundred lines of bookkeeping between those
+two, three times over. Extracting it is a change to three working round hooks at
+once, with its own test run and its own way of going wrong, and it is not made
+safer by riding along with the module that finally made the case for it. So it
+is written down here as owed rather than done.
+
+### Consequences
+
+Klokkijken is `built`, which turns on more than its own page: it appears in
+"verder oefenen" with a progress bar, a test may be set for it, its sets show up
+in favourites and in "meest geoefend", and its rail entry opens a chooser rather
+than "binnenkort". Three tests that used klokkijken as their example of a module
+that does not exist yet now use woordjes — which is the plan doing exactly what
+ADR-051 says a rail full of unbuilt doors is for.
+
+The module earns no animals of its own. `rewards.ts` names sets by id for the
+map and the tables, and the two mode-based rewards — a lightning round and a
+survival round — apply here as they do anywhere. A clock-specific collection is
+a content decision and not part of building the module.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because

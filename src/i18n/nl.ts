@@ -158,7 +158,7 @@ export const nl = {
   'home.testRemove': 'Weg',
   'home.testRemoveOne': 'Haal de toets weg: {wanneer}',
   // Het vak erbij, want een datum zonder vak plant niets. Alleen vakken die
-  // bestaan: een toets voor klokkijken instellen belooft oefenstof die er niet
+  // bestaan: een toets voor woordjes instellen belooft oefenstof die er niet
   // is. Het gekozen vak bepaalt waarmee "Ga verder" verdergaat.
   'home.testSubjectPick': 'Voor welk vak?',
   'home.testSubjectNone': 'Nog geen vak',
@@ -208,6 +208,17 @@ export const nl = {
   // opnoemen maakte die tegel twee keer zo hoog als de rest van de rij.
   'set.nl-mix.uitleg': 'Alles van de kaart door elkaar',
 
+  // Klokkijken, in de vier stappen waarin een groep 4 en 5 het leert. De namen
+  // zijn de woorden die de juf gebruikt, niet de id's uit het bestand.
+  'set.klok-heel': 'Hele uren',
+  'set.klok-half': 'Halve uren',
+  'set.klok-kwart': 'Kwartieren',
+  'set.klok-vijf': 'Vijf minuten',
+  // Ook hier geen vijfde bestand maar dezelfde standen onder één naam, zodat
+  // half acht dat je hier goed hebt hetzelfde doosje opschuift als altijd.
+  'set.klok-mix': 'Klokmix',
+  'set.klok-mix.uitleg': 'Alle standen van de klok door elkaar',
+
   // Topografie in drie stappen: eerst waar op de wereld, dan wat, dan hoe.
   // De regio staat vooraan omdat het de grofste keuze is die er te maken valt
   // — en omdat een kind dat de provincies zoekt niet langs de landen van
@@ -246,6 +257,21 @@ export const nl = {
   'onderwerp.landen.zuid-amerika': 'Alle 12 landen van Zuid-Amerika',
   'onderwerp.landen.oceanie': 'Alle 9 landen van Oceanië',
   'onderwerp.landen.wereld': 'Alle 167 landen bij elkaar',
+
+  // De klok, in vier stappen en een mix. Eén woord per tegel, net als bij
+  // topografie — en het merk ernaast is de wijzerstand zelf, zodat een kind
+  // dat "kwartieren" nog niet leest toch ziet welke tegel dat is.
+  'onderwerp.heleUren': 'Hele uren',
+  'onderwerp.heleUren.uitleg': 'Eén uur, twee uur, tot en met twaalf uur',
+  'onderwerp.halveUren': 'Halve uren',
+  // De regel waar het hele vak om draait, en hij staat er voluit: half acht is
+  // half acht en niet half zeven.
+  'onderwerp.halveUren.uitleg': 'Half één tot half twaalf — half acht is 7:30',
+  'onderwerp.kwartieren': 'Kwartieren',
+  'onderwerp.kwartieren.uitleg': 'Kwart over en kwart voor',
+  'onderwerp.vijfMinuten': 'Vijf minuten',
+  'onderwerp.vijfMinuten.uitleg': 'Vijf over, tien voor half, en alles ertussen',
+  'onderwerp.klokmix': 'Klokmix',
 
   // Modes
   'mode.wijs-aan': 'Aanwijzen',
@@ -441,6 +467,70 @@ export const nl = {
   'way.som-typen': 'Zeg het antwoord zelf — zo weet je of je de tafel kent',
   'way.som-meerkeuze': 'Kies uit vier getallen — de weg terug als typen niet lukt',
   'way.tafeldiploma': 'De hele tafel foutloos — één fout en je begint opnieuw',
+
+  // Klokkijken. De klok zelf staat op het toneel waar bij topografie de kaart
+  // staat en bij rekenen de som: het ding waar de vraag over gaat.
+  //
+  // De namen van de vier standen worden hier voluit geschreven en niet in
+  // cijfers. Het verschil tussen "7:30" en "half acht" ís de oefening; een
+  // antwoordknop met "half 8" erop zou het kind het lezen uit handen nemen.
+  'klok.uur.1': 'een',
+  'klok.uur.2': 'twee',
+  'klok.uur.3': 'drie',
+  'klok.uur.4': 'vier',
+  'klok.uur.5': 'vijf',
+  'klok.uur.6': 'zes',
+  'klok.uur.7': 'zeven',
+  'klok.uur.8': 'acht',
+  'klok.uur.9': 'negen',
+  'klok.uur.10': 'tien',
+  'klok.uur.11': 'elf',
+  'klok.uur.12': 'twaalf',
+  // Vijf en tien, en verder niets: de inhoud gaat met stappen van vijf, dus de
+  // afstand tot een kwartier, een half of een heel uur is er een van die twee.
+  'klok.getal.5': 'vijf',
+  'klok.getal.10': 'tien',
+  // De acht vormen waarin het Nederlands een klok uitspreekt. Welke vorm en
+  // welk uur wordt in game-core uitgerekend; hier staan alleen de woorden.
+  'klok.zeg.uur': '{uur} uur',
+  'klok.zeg.over': '{aantal} over {uur}',
+  'klok.zeg.kwartOver': 'kwart over {uur}',
+  'klok.zeg.voorHalf': '{aantal} voor half {uur}',
+  'klok.zeg.half': 'half {uur}',
+  'klok.zeg.overHalf': '{aantal} over half {uur}',
+  'klok.zeg.kwartVoor': 'kwart voor {uur}',
+  'klok.zeg.voor': '{aantal} voor {uur}',
+  // Allebei de notaties, in de volgorde waarin een kind ze leert. Wie er één
+  // van de twee kent, kent het half — daarom staan ze samen op het
+  // resultaatscherm en niet los.
+  'klok.beide': '{woorden} ({cijfers})',
+
+  'klok.prompt': 'Hoe laat is het?',
+  // Wat de voorleesknop zegt op de twee vormen waar een klok op het toneel
+  // staat. Niet de tijd zelf: dat zou het antwoord voorlezen.
+  'klok.lookPrompt': 'Kijk naar de klok. Hoe laat is het?',
+  'klok.typeQuestion': 'Typ hoe laat het is',
+  'klok.chooseQuestion': 'Kies hoe laat het is',
+  'klok.whichQuestion': 'Welke klok is dit?',
+  'klok.typePlaceholder': '7:30',
+  'klok.correct': 'Het is {tijd} — goed.',
+  'klok.wrong': 'Het was {tijd}.',
+  'klok.wrongSub': 'Jij zei {gegeven}.',
+  'klok.dontKnowSub': 'Deze komt zo weer langs.',
+  'klok.practiceMore': 'Deze tijden moet je nog oefenen',
+  'mode.klok-meerkeuze': 'Meerkeuze',
+  // "Klok zoeken" en niet "Welke klok?": de naam van een oefenvorm komt in de
+  // startzin terecht — "Hele uren klok zoeken · 10 vragen" — en een vraagteken
+  // midden in die zin leest als een fout. De vraag zelf staat boven de vier
+  // klokken, waar hij hoort.
+  'mode.klok-welke-klok': 'Klok zoeken',
+  'mode.klok-typen': 'Zelf typen',
+  // De volgorde is het argument. Meerkeuze staat vooraan en niet achteraan
+  // zoals bij rekenen: de vier tijden die je krijgt zijn precies de vier
+  // fouten die kinderen maken, dus kiezen ís de oefening.
+  'way.klok-meerkeuze': 'Kies uit vier tijden — voor de eerste keer',
+  'way.klok-welke-klok': 'Van de tijd naar de wijzers — andersom dus',
+  'way.klok-typen': 'Schrijf de tijd zelf op — voor de toets',
 
   'result.title': 'Ronde klaar',
   // The one place the word "score" is allowed: the result of one round. It is

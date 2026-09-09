@@ -4,10 +4,10 @@ Practice for Dutch primary and lower-secondary education. Short rounds, a map
 that fills the screen, and progress a child can feel. No advertising, no
 tracking, no account required.
 
-Two modules today: **topografie** and **rekenen**. Five more are planned and
-they stand in the rail beside the two that exist ([ADR-051](docs/DECISIONS.md)),
-because a rail that showed only what was finished made the product look like it
-stopped there. What none of them does is pretend: a module that is not built
+Three modules today: **topografie**, **rekenen** and **klokkijken**. Four more
+are planned and they stand in the rail beside the three that exist
+([ADR-051](docs/DECISIONS.md)), because a rail that showed only what was
+finished made the product look like it stopped there. What none of them does is pretend: a module that is not built
 says so on its own page and points at the ones that are.
 
 That last sentence is why this repository is public. The best-known free
@@ -63,9 +63,20 @@ sums in all. A round is ten of them. Typing the answer comes before choosing
 between four, which is the opposite of the map and for a reason
 ([ADR-049](docs/DECISIONS.md)).
 
-Both modules offer a **mix**: the Rekenmix shuffles all four operations — in
+Klokkijken is the clock in the four steps a Dutch classroom teaches it in: hele
+uren, halve uren, kwartieren and the five-minute steps — a hundred and forty-four
+faces, and it stops there because "23 minuten over zeven" is a digital display
+rather than a clock ([ADR-092](docs/DECISIONS.md)). Two of its ways of
+practising show a face and ask the time; the third shows a time and asks which
+of four faces says it, which is the half a child who has learned to recognise
+twelve pictures has never been asked. And "half acht" is half past _seven_ —
+that one rule is what the module is for and what the wrong answers are built
+from.
+
+Every module offers a **mix**: the Rekenmix shuffles all four operations — in
 three difficulties, from the level every set has always carried
-([ADR-073](docs/DECISIONS.md)) — and the Topomix shuffles all five map sets. Neither is a set of its own — they hold the
+([ADR-073](docs/DECISIONS.md)) — the Topomix shuffles all five map sets, and the
+Klokmix every face there is. None of them is a set of its own — they hold the
 same items under one name, so a sum answered in a mix moves the box it moves
 anywhere else ([ADR-062](docs/DECISIONS.md), [ADR-063](docs/DECISIONS.md)).
 
@@ -178,10 +189,11 @@ node tools/content/build-geo.mjs         # provinces, three detail levels
 node tools/content/build-cities.mjs      # the twelve capitals as points
 node tools/content/build-neighbours.mjs  # who lies next to whom, into content/buren
 node tools/content/build-rekenen.mjs     # tables, delen, plus and min, into content/
+node tools/content/build-klok.mjs        # the four steps of the clock, into content/klok
 ```
 
 `build-neighbours` runs after the geometry builds, because it reads what they
-write. `build-rekenen` needs nothing but arithmetic.
+write. `build-rekenen` and `build-klok` need nothing but arithmetic.
 
 To look at the result without a build, serve the project root and open
 `tools/content/preview.html`:

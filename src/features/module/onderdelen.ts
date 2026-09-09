@@ -1,6 +1,7 @@
 import { isDue, type ItemState, type ModeId, type Schedulable } from '@/game-core';
 import { loadItemSets } from '@/content/loadSets';
 import { isMix, loadSumSet, loadSumSets, MIX_IDS } from '@/content/loadSums';
+import { KLOK_MIX_ID, loadKlokSet, loadKlokSets } from '@/content/loadKlok';
 import { t, type TranslationKey } from '@/i18n';
 import type { Module } from '@/features/shell/modules';
 import type { PlayedRound } from '@/store/progress';
@@ -12,6 +13,7 @@ import {
   type SetId,
 } from '@/features/practice/useRound';
 import type { SumMode } from '@/features/sums/useSumRound';
+import type { KlokMode } from '@/features/klok/useKlokRound';
 
 /**
  * Every set of every built module, and the subjects they are grouped under.
@@ -48,8 +50,12 @@ export const SET_NAME_KEY: Record<SetId, TranslationKey> = {
   'wereld-landen': 'set.wereld-landen',
 };
 
-/** What one round of this set asks. Topography samples large sets; a table is whole. */
-export const ROUND_SIZE = { topo: 15, tafels: 10 } as const;
+/**
+ * What one round of this set asks. Topography samples large sets; a table is
+ * whole; the clock is ten, because ten faces is a round and a hundred and
+ * forty-four of them is an afternoon.
+ */
+export const ROUND_SIZE = { topo: 15, tafels: 10, klok: 10 } as const;
 
 /** How many favourites the column on the right holds. */
 export const FAVOURITES_SHOWN = 4;
@@ -250,6 +256,122 @@ function rekenMixen(): Onderdeel[] {
 }
 
 // ---------------------------------------------------------------------------
+// Klokkijken
+
+/**
+ * The four steps of the clock, in the order a classroom teaches them.
+ *
+ * Named by key rather than composed the way rekenen's are: "Hele uren" is a
+ * word, not a number with a word in front of it, so there is nothing here for a
+ * `klokNaam` to work out.
+ */
+const KLOK_NAAM: Record<string, TranslationKey> = {
+  'klok-heel': 'set.klok-heel',
+  'klok-half': 'set.klok-half',
+  'klok-kwart': 'set.klok-kwart',
+  'klok-vijf': 'set.klok-vijf',
+  [KLOK_MIX_ID]: 'set.klok-mix',
+};
+
+function klokOnderdeel(set: { readonly id: string; readonly items: readonly Schedulable[] }) {
+  return {
+    moduleId: 'klok' as const,
+    setId: set.id,
+    naam: KLOK_NAAM[set.id] ?? null,
+    literalNaam: null,
+    kortNaam: null,
+    mix: set.id === KLOK_MIX_ID,
+    items: set.items,
+    roundSize: ROUND_SIZE.klok,
+  };
+}
+
+function klokOnderdelen(): Onderdeel[] {
+  return loadKlokSets().map((set) => klokOnderdeel(set));
+}
+
+/**
+ * Every face at once.
+ *
+ * The same items under a second name rather than a fifth set of them, so half
+ * past seven answered here moves the box it moves anywhere else. It is not
+ * counted as part of the module's total anywhere, because that total would then
+ * count every face twice (`onderdelen` leaves the mixes out).
+ */
+function klokMix(): Onderdeel | null {
+  const mix = loadKlokSet(KLOK_MIX_ID);
+  return mix ? klokOnderdeel(mix) : null;
+}
+
+/**
+ * Klokkijken's subjects: four steps and a mix of them, one set each.
+ *
+ * The shape topografie's Nederland row has rather than rekenen's: no subject
+ * here holds thirteen sets, so there is no second question to ask and no row of
+ * chips under the tiles. "Hele uren" is one thing to practise and it is twelve
+ * faces, the way "Provincies" is one thing and twelve provinces.
+ *
+ * No regions, so the page draws no region row and numbers its steps from one —
+ * which is what `ModuleScreen` works out for itself rather than being told.
+ */
+function klokOnderwerpen(): Onderwerp[] {
+  const sets = klokOnderdelen();
+  const van = (id: string) => sets.filter((deel) => deel.setId === id);
+  const mix = klokMix();
+
+  const vakken: Onderwerp[] = [
+    {
+      moduleId: 'klok',
+      id: 'hele-uren',
+      naam: 'onderwerp.heleUren',
+      uitleg: 'onderwerp.heleUren.uitleg',
+      keuze: null,
+      regio: null,
+      sets: van('klok-heel'),
+    },
+    {
+      moduleId: 'klok',
+      id: 'halve-uren',
+      naam: 'onderwerp.halveUren',
+      uitleg: 'onderwerp.halveUren.uitleg',
+      keuze: null,
+      regio: null,
+      sets: van('klok-half'),
+    },
+    {
+      moduleId: 'klok',
+      id: 'kwartieren',
+      naam: 'onderwerp.kwartieren',
+      uitleg: 'onderwerp.kwartieren.uitleg',
+      keuze: null,
+      regio: null,
+      sets: van('klok-kwart'),
+    },
+    {
+      moduleId: 'klok',
+      id: 'vijf-minuten',
+      naam: 'onderwerp.vijfMinuten',
+      uitleg: 'onderwerp.vijfMinuten.uitleg',
+      keuze: null,
+      regio: null,
+      sets: van('klok-vijf'),
+    },
+    {
+      moduleId: 'klok',
+      id: KLOK_MIX_ID,
+      naam: 'onderwerp.klokmix',
+      uitleg: 'set.klok-mix.uitleg',
+      keuze: null,
+      regio: null,
+      sets: mix === null ? [] : [mix],
+    },
+  ];
+
+  // A subject with nothing in it is a card that opens onto nothing.
+  return vakken.filter((vak) => vak.sets.length > 0);
+}
+
+// ---------------------------------------------------------------------------
 
 /**
  * Every set that is a set of its own: the unit progress is counted over.
@@ -259,12 +381,20 @@ function rekenMixen(): Onderdeel[] {
  * sums in rekenen and that they remember four hundred of a set of ten.
  */
 export function onderdelen(): Onderdeel[] {
-  return [...topoOnderdelen(), ...rekenOnderdelen()];
+  return [...topoOnderdelen(), ...rekenOnderdelen(), ...klokOnderdelen()];
 }
 
 /** Every set a round can be started on, mixes included. Used to name a round. */
 export function startbareOnderdelen(): Onderdeel[] {
-  return [...topoOnderdelen(), topoMix(), ...rekenOnderdelen(), ...rekenMixen()];
+  const klok = klokMix();
+  return [
+    ...topoOnderdelen(),
+    topoMix(),
+    ...rekenOnderdelen(),
+    ...rekenMixen(),
+    ...klokOnderdelen(),
+    ...(klok === null ? [] : [klok]),
+  ];
 }
 
 /**
@@ -272,13 +402,15 @@ export function startbareOnderdelen(): Onderdeel[] {
  *
  * Topography is five sets and a mix of them, one subject each. Rekenen is four
  * kinds of sum and a mix of all four, and two of those four hold thirteen sets
- * apiece.
+ * apiece. Klokkijken is four steps and a mix, one subject each — the shape
+ * topography has rather than the shape rekenen has.
  */
 export function onderwerpenVan(
   moduleId: Module['id'],
   known: ReadonlyMap<string, ItemState> = new Map(),
 ): Onderwerp[] {
   if (moduleId === 'topo') return topoOnderwerpen();
+  if (moduleId === 'klok') return klokOnderwerpen();
 
   if (moduleId !== 'tafels') return [];
 
@@ -722,6 +854,13 @@ const SUM_MODES: readonly ModeId[] = [
   'overleven',
   'tafeldiploma',
 ];
+const KLOK_MODES: readonly ModeId[] = [
+  'klok-meerkeuze',
+  'klok-welke-klok',
+  'klok-typen',
+  'bliksemronde',
+  'overleven',
+];
 
 export function asPracticeMode(mode: ModeId): PracticeMode {
   return PRACTICE_MODES.includes(mode) ? (mode as PracticeMode) : 'wijs-aan';
@@ -729,4 +868,8 @@ export function asPracticeMode(mode: ModeId): PracticeMode {
 
 export function asSumMode(mode: ModeId): SumMode {
   return SUM_MODES.includes(mode) ? (mode as SumMode) : 'som-typen';
+}
+
+export function asKlokMode(mode: ModeId): KlokMode {
+  return KLOK_MODES.includes(mode) ? (mode as KlokMode) : 'klok-meerkeuze';
 }

@@ -10,9 +10,12 @@ import {
   FreezerIcon,
   GlobeIcon,
   GridIcon,
+  HalfUurIcon,
   type IconProps,
+  KwartierIcon,
   LandIcon,
   MinIcon,
+  MinuutIcon,
   MixIcon,
   NoordAmerikaIcon,
   OceanieIcon,
@@ -21,6 +24,7 @@ import {
   PlusIcon,
   ProvincieIcon,
   StadIcon,
+  UurIcon,
   WaterIcon,
   WrongIcon,
   ZuidAmerikaIcon,
@@ -68,6 +72,10 @@ const TEGELMERKEN: readonly (readonly [string, ComponentType<Omit<IconProps, 'ch
   ['Plus', PlusIcon],
   ['Min', MinIcon],
   ['Fouten', WrongIcon],
+  ['Hele uren', UurIcon],
+  ['Halve uren', HalfUurIcon],
+  ['Kwartieren', KwartierIcon],
+  ['Vijf minuten', MinuutIcon],
 ];
 
 export function Gallery() {

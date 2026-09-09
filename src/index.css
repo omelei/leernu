@@ -992,6 +992,111 @@
     color: var(--ink);
   }
 
+  /* ---- The clock, and the stage it stands on ----------------------------
+   * What `.tk-sum` is to rekenen and the canvas is to topografie: the thing
+   * being asked about, given the whole of the space under the question card.
+   *
+   * It scales with the box rather than with a type step, because it is a
+   * drawing and not a line of text — and it is capped, because a clock face
+   * two feet across on a Chromebook is not more readable, only louder.
+   *
+   * Ink, not the module accent. A module colours three things (ADR-039) and
+   * the thing a child has to read is not one of them — the same call
+   * `.tk-sum` makes.
+   */
+  .tk-klok {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: min(100%, 30rem);
+    margin-inline: auto;
+  }
+  .tk-klok-rand {
+    fill: var(--paper);
+    stroke: var(--ink);
+    stroke-width: 2.5;
+  }
+  /* The twelve marks. Secondary ink, because they are the ruler and the hands
+   * are the reading — and they are what lets the numerals come off the small
+   * faces without the hand pointing at nothing. */
+  .tk-klok-streep {
+    stroke: var(--ink-2);
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+  .tk-klok-cijfer {
+    fill: var(--ink);
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  /* Short and thick against long and thin, which is the whole of how a child
+   * tells the two hands apart — and the mistake the distractors are built
+   * from when they cannot (`klokDistractors`). */
+  .tk-klok-uurwijzer {
+    stroke: var(--ink);
+    stroke-width: 5;
+    stroke-linecap: round;
+  }
+  .tk-klok-minuutwijzer {
+    stroke: var(--ink);
+    stroke-width: 3;
+    stroke-linecap: round;
+  }
+  .tk-klok-as {
+    fill: var(--ink);
+  }
+
+  /* Four faces to choose between, on the mode that asks the other way round.
+   * Two by two at every size: four clocks in a row are four clocks too small
+   * to read on anything narrower than a desk. */
+  .tk-klok-keuze {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    width: 100%;
+    max-width: 32rem;
+    margin-inline: auto;
+  }
+  .tk-klok-optie {
+    display: block;
+    padding: 8px;
+    border: var(--stroke-hair) solid var(--line-strong);
+    border-radius: var(--radius-card);
+    background: var(--paper);
+    cursor: pointer;
+  }
+  .tk-klok-optie:hover {
+    background: var(--surface);
+    border-color: var(--ink-3);
+  }
+  .tk-klok-optie .tk-klok {
+    max-width: 8rem;
+  }
+
+  /* The times still to practise, on the result screen. Shown as well as told:
+   * a clock can be pointed at, and a child who has just misread half past
+   * seven should see the hands that say it. */
+  .tk-klok-lijst {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+  }
+  .tk-klok-gemist {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: var(--touch);
+    padding: 8px 12px;
+    border: var(--stroke-hair) solid var(--line-strong);
+    border-radius: var(--radius-field);
+    font-weight: 600;
+  }
+  .tk-klok-gemist .tk-klok {
+    width: 40px;
+    flex: 0 0 40px;
+  }
+
   /* ---- Multiple choice, K5 ---------------------------------------------
    * Two by two where there is width, one under the other where there is not,
    * so no option is ever the odd one at the end of a row. `auto-fit` with a

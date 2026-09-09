@@ -35,7 +35,10 @@ describe('the addresses', () => {
     // Not a redirect to the home screen. The child asked a question by typing
     // an address, and showing them something else instead of answering is how
     // an app teaches you not to trust its addresses.
-    const route = routeFor('/klokkijken');
+    //
+    // This used to be klokkijken, which is now built — the assertion moving to
+    // the next unbuilt module is the plan doing what ADR-051 says it does.
+    const route = routeFor('/woordjes');
     expect(route).toMatchObject({ name: 'soon' });
   });
 
@@ -79,7 +82,45 @@ describe('the addresses', () => {
     expect(routeFor('/tafels')).toMatchObject({ name: 'module' });
 
     // And the clock keeps its own address, beside rekenen rather than under it.
-    expect(routeFor('/klokkijken')).toMatchObject({ name: 'soon' });
+    // Telling the time is not arithmetic, so it is not a set of /rekenen and
+    // never was, and now that it is built that address opens the clock itself.
+    const klok = routeFor('/klokkijken');
+    expect(klok).toMatchObject({ name: 'module' });
+    if (klok.name !== 'module') throw new Error('expected a module');
+    expect(klok.module.id).toBe('klok');
+  });
+
+  it('lets the clock answer to the word a child says as well', () => {
+    // The rail says "Klok" and nobody types "klokkijken" twice. Same shape as
+    // /rekenen beside /tafels one level up: a word people use and a word the
+    // product uses, both landing in the same place.
+    const kort = routeFor('/klok');
+    expect(kort).toMatchObject({ name: 'module' });
+    if (kort.name !== 'module') throw new Error('expected a module');
+    expect(kort.module.id).toBe('klok');
+
+    // A set under the short word too, because that is what somebody writes on
+    // a note. What `pathFor` writes back is still the module's own slug.
+    expect(routeFor('/klok/halve-uren')).toMatchObject({ name: 'module', setId: 'klok-half' });
+    expect(pathFor(routeFor('/klok/halve-uren'))).toMatch(/\/klokkijken\/halve-uren$/);
+  });
+
+  it('gives every step of the clock an address, and the mix the same word', () => {
+    // "Mix" in all three modules rather than "klok-mix", "nl-mix" and
+    // "rekenmix": those are ids, and an id is not what a parent writes down.
+    for (const [pad, setId] of [
+      ['/klokkijken/hele-uren', 'klok-heel'],
+      ['/klokkijken/halve-uren', 'klok-half'],
+      ['/klokkijken/kwartieren', 'klok-kwart'],
+      ['/klokkijken/vijf-minuten', 'klok-vijf'],
+      ['/klokkijken/mix', 'klok-mix'],
+    ] as const) {
+      expect(routeFor(pad), pad).toMatchObject({ name: 'module', setId });
+      expect(pathFor(routeFor(pad)), pad).toMatch(new RegExp(`${pad}$`));
+    }
+
+    // And a step nobody offers opens the clock rather than an empty round.
+    expect(routeFor('/klokkijken/seconden')).toMatchObject({ name: 'module', setId: null });
   });
 
   it('gives a set an address of its own, and the word a parent types', () => {

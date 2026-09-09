@@ -66,9 +66,10 @@ test('the rail is the map of the product, not a list of what is finished', async
   }
 
   // And a door that is not open says so rather than opening onto nothing,
-  // which is the half of ADR-037 that survives.
-  await rail.getByRole('button', { name: 'Klok', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'Klok' })).toBeVisible();
+  // which is the half of ADR-037 that survives. Klokkijken used to be the
+  // example here and is open now, so this asks the next one along.
+  await rail.getByRole('button', { name: 'Taal', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Taal' })).toBeVisible();
 });
 
 test('the front door lists every module, at every size', async ({ page }) => {

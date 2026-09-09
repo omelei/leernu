@@ -741,6 +741,70 @@ export function DeelIcon(props: Omit<IconProps, 'children'>) {
   );
 }
 
+/**
+ * The four steps of the clock, as four faces.
+ *
+ * A subject tile is a mark and a word (ADR-089), and the mark is the only thing
+ * that tells two of them apart before the word is read. For klokkijken that
+ * mark can *be* the subject: whole hours, half hours and quarters differ by
+ * exactly where the big hand points, so the icon points it there. A child who
+ * cannot yet read "kwartieren" can still see which tile is the one with the
+ * hand on the three.
+ *
+ * They share the circle with `ClockIcon`, which is the module's own mark, and
+ * §E allows that for the same reason it allows the diamond inside `StampIcon`:
+ * what may not be shared is the silhouette, and four different hand positions
+ * are four different silhouettes. It is also the honest relationship — these
+ * are the module's mark, saying four particular times.
+ *
+ * Whole hours: the big hand straight up, the little one on the three.
+ */
+export function UurIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M12 12V6M12 12h4.5" />
+    </Icon>
+  );
+}
+
+/** Half hours: the big hand straight down, which is what "half" looks like. */
+export function HalfUurIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M12 12v6M12 12l-4-2.5" />
+    </Icon>
+  );
+}
+
+/** Quarters: the big hand on the three, and the little one just past twelve. */
+export function KwartierIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M12 12h6M12 12V8" />
+    </Icon>
+  );
+}
+
+/**
+ * Five minutes: the marks round the rim, which is what a child counts.
+ *
+ * The one of the four that is not a hand position, because the subject is not a
+ * position — it is the eight of them that are left over, and what they have in
+ * common is that you get to them by counting round.
+ */
+export function MinuutIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M12 3.5v2M20.5 12h-2M12 20.5v-2M3.5 12h2" />
+      <path d="M12 12l3.5-3" />
+    </Icon>
+  );
+}
+
 /** Plussommen: the sign, drawn at the size a mark gets rather than a glyph. */
 export function PlusIcon(props: Omit<IconProps, 'children'>) {
   return (

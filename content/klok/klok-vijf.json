@@ -1,0 +1,489 @@
+{
+  "_gegenereerd": "tools/content/build-klok.mjs — gegenereerd, niet met de hand bewerken.",
+  "id": "klok-vijf",
+  "stap": 5,
+  "niveau": 3,
+  "contentVersie": "2026-09-09",
+  "items": [
+    {
+      "id": "klok-01-05",
+      "uur": 1,
+      "minuut": 5
+    },
+    {
+      "id": "klok-01-10",
+      "uur": 1,
+      "minuut": 10
+    },
+    {
+      "id": "klok-01-20",
+      "uur": 1,
+      "minuut": 20
+    },
+    {
+      "id": "klok-01-25",
+      "uur": 1,
+      "minuut": 25
+    },
+    {
+      "id": "klok-01-35",
+      "uur": 1,
+      "minuut": 35
+    },
+    {
+      "id": "klok-01-40",
+      "uur": 1,
+      "minuut": 40
+    },
+    {
+      "id": "klok-01-50",
+      "uur": 1,
+      "minuut": 50
+    },
+    {
+      "id": "klok-01-55",
+      "uur": 1,
+      "minuut": 55
+    },
+    {
+      "id": "klok-02-05",
+      "uur": 2,
+      "minuut": 5
+    },
+    {
+      "id": "klok-02-10",
+      "uur": 2,
+      "minuut": 10
+    },
+    {
+      "id": "klok-02-20",
+      "uur": 2,
+      "minuut": 20
+    },
+    {
+      "id": "klok-02-25",
+      "uur": 2,
+      "minuut": 25
+    },
+    {
+      "id": "klok-02-35",
+      "uur": 2,
+      "minuut": 35
+    },
+    {
+      "id": "klok-02-40",
+      "uur": 2,
+      "minuut": 40
+    },
+    {
+      "id": "klok-02-50",
+      "uur": 2,
+      "minuut": 50
+    },
+    {
+      "id": "klok-02-55",
+      "uur": 2,
+      "minuut": 55
+    },
+    {
+      "id": "klok-03-05",
+      "uur": 3,
+      "minuut": 5
+    },
+    {
+      "id": "klok-03-10",
+      "uur": 3,
+      "minuut": 10
+    },
+    {
+      "id": "klok-03-20",
+      "uur": 3,
+      "minuut": 20
+    },
+    {
+      "id": "klok-03-25",
+      "uur": 3,
+      "minuut": 25
+    },
+    {
+      "id": "klok-03-35",
+      "uur": 3,
+      "minuut": 35
+    },
+    {
+      "id": "klok-03-40",
+      "uur": 3,
+      "minuut": 40
+    },
+    {
+      "id": "klok-03-50",
+      "uur": 3,
+      "minuut": 50
+    },
+    {
+      "id": "klok-03-55",
+      "uur": 3,
+      "minuut": 55
+    },
+    {
+      "id": "klok-04-05",
+      "uur": 4,
+      "minuut": 5
+    },
+    {
+      "id": "klok-04-10",
+      "uur": 4,
+      "minuut": 10
+    },
+    {
+      "id": "klok-04-20",
+      "uur": 4,
+      "minuut": 20
+    },
+    {
+      "id": "klok-04-25",
+      "uur": 4,
+      "minuut": 25
+    },
+    {
+      "id": "klok-04-35",
+      "uur": 4,
+      "minuut": 35
+    },
+    {
+      "id": "klok-04-40",
+      "uur": 4,
+      "minuut": 40
+    },
+    {
+      "id": "klok-04-50",
+      "uur": 4,
+      "minuut": 50
+    },
+    {
+      "id": "klok-04-55",
+      "uur": 4,
+      "minuut": 55
+    },
+    {
+      "id": "klok-05-05",
+      "uur": 5,
+      "minuut": 5
+    },
+    {
+      "id": "klok-05-10",
+      "uur": 5,
+      "minuut": 10
+    },
+    {
+      "id": "klok-05-20",
+      "uur": 5,
+      "minuut": 20
+    },
+    {
+      "id": "klok-05-25",
+      "uur": 5,
+      "minuut": 25
+    },
+    {
+      "id": "klok-05-35",
+      "uur": 5,
+      "minuut": 35
+    },
+    {
+      "id": "klok-05-40",
+      "uur": 5,
+      "minuut": 40
+    },
+    {
+      "id": "klok-05-50",
+      "uur": 5,
+      "minuut": 50
+    },
+    {
+      "id": "klok-05-55",
+      "uur": 5,
+      "minuut": 55
+    },
+    {
+      "id": "klok-06-05",
+      "uur": 6,
+      "minuut": 5
+    },
+    {
+      "id": "klok-06-10",
+      "uur": 6,
+      "minuut": 10
+    },
+    {
+      "id": "klok-06-20",
+      "uur": 6,
+      "minuut": 20
+    },
+    {
+      "id": "klok-06-25",
+      "uur": 6,
+      "minuut": 25
+    },
+    {
+      "id": "klok-06-35",
+      "uur": 6,
+      "minuut": 35
+    },
+    {
+      "id": "klok-06-40",
+      "uur": 6,
+      "minuut": 40
+    },
+    {
+      "id": "klok-06-50",
+      "uur": 6,
+      "minuut": 50
+    },
+    {
+      "id": "klok-06-55",
+      "uur": 6,
+      "minuut": 55
+    },
+    {
+      "id": "klok-07-05",
+      "uur": 7,
+      "minuut": 5
+    },
+    {
+      "id": "klok-07-10",
+      "uur": 7,
+      "minuut": 10
+    },
+    {
+      "id": "klok-07-20",
+      "uur": 7,
+      "minuut": 20
+    },
+    {
+      "id": "klok-07-25",
+      "uur": 7,
+      "minuut": 25
+    },
+    {
+      "id": "klok-07-35",
+      "uur": 7,
+      "minuut": 35
+    },
+    {
+      "id": "klok-07-40",
+      "uur": 7,
+      "minuut": 40
+    },
+    {
+      "id": "klok-07-50",
+      "uur": 7,
+      "minuut": 50
+    },
+    {
+      "id": "klok-07-55",
+      "uur": 7,
+      "minuut": 55
+    },
+    {
+      "id": "klok-08-05",
+      "uur": 8,
+      "minuut": 5
+    },
+    {
+      "id": "klok-08-10",
+      "uur": 8,
+      "minuut": 10
+    },
+    {
+      "id": "klok-08-20",
+      "uur": 8,
+      "minuut": 20
+    },
+    {
+      "id": "klok-08-25",
+      "uur": 8,
+      "minuut": 25
+    },
+    {
+      "id": "klok-08-35",
+      "uur": 8,
+      "minuut": 35
+    },
+    {
+      "id": "klok-08-40",
+      "uur": 8,
+      "minuut": 40
+    },
+    {
+      "id": "klok-08-50",
+      "uur": 8,
+      "minuut": 50
+    },
+    {
+      "id": "klok-08-55",
+      "uur": 8,
+      "minuut": 55
+    },
+    {
+      "id": "klok-09-05",
+      "uur": 9,
+      "minuut": 5
+    },
+    {
+      "id": "klok-09-10",
+      "uur": 9,
+      "minuut": 10
+    },
+    {
+      "id": "klok-09-20",
+      "uur": 9,
+      "minuut": 20
+    },
+    {
+      "id": "klok-09-25",
+      "uur": 9,
+      "minuut": 25
+    },
+    {
+      "id": "klok-09-35",
+      "uur": 9,
+      "minuut": 35
+    },
+    {
+      "id": "klok-09-40",
+      "uur": 9,
+      "minuut": 40
+    },
+    {
+      "id": "klok-09-50",
+      "uur": 9,
+      "minuut": 50
+    },
+    {
+      "id": "klok-09-55",
+      "uur": 9,
+      "minuut": 55
+    },
+    {
+      "id": "klok-10-05",
+      "uur": 10,
+      "minuut": 5
+    },
+    {
+      "id": "klok-10-10",
+      "uur": 10,
+      "minuut": 10
+    },
+    {
+      "id": "klok-10-20",
+      "uur": 10,
+      "minuut": 20
+    },
+    {
+      "id": "klok-10-25",
+      "uur": 10,
+      "minuut": 25
+    },
+    {
+      "id": "klok-10-35",
+      "uur": 10,
+      "minuut": 35
+    },
+    {
+      "id": "klok-10-40",
+      "uur": 10,
+      "minuut": 40
+    },
+    {
+      "id": "klok-10-50",
+      "uur": 10,
+      "minuut": 50
+    },
+    {
+      "id": "klok-10-55",
+      "uur": 10,
+      "minuut": 55
+    },
+    {
+      "id": "klok-11-05",
+      "uur": 11,
+      "minuut": 5
+    },
+    {
+      "id": "klok-11-10",
+      "uur": 11,
+      "minuut": 10
+    },
+    {
+      "id": "klok-11-20",
+      "uur": 11,
+      "minuut": 20
+    },
+    {
+      "id": "klok-11-25",
+      "uur": 11,
+      "minuut": 25
+    },
+    {
+      "id": "klok-11-35",
+      "uur": 11,
+      "minuut": 35
+    },
+    {
+      "id": "klok-11-40",
+      "uur": 11,
+      "minuut": 40
+    },
+    {
+      "id": "klok-11-50",
+      "uur": 11,
+      "minuut": 50
+    },
+    {
+      "id": "klok-11-55",
+      "uur": 11,
+      "minuut": 55
+    },
+    {
+      "id": "klok-12-05",
+      "uur": 12,
+      "minuut": 5
+    },
+    {
+      "id": "klok-12-10",
+      "uur": 12,
+      "minuut": 10
+    },
+    {
+      "id": "klok-12-20",
+      "uur": 12,
+      "minuut": 20
+    },
+    {
+      "id": "klok-12-25",
+      "uur": 12,
+      "minuut": 25
+    },
+    {
+      "id": "klok-12-35",
+      "uur": 12,
+      "minuut": 35
+    },
+    {
+      "id": "klok-12-40",
+      "uur": 12,
+      "minuut": 40
+    },
+    {
+      "id": "klok-12-50",
+      "uur": 12,
+      "minuut": 50
+    },
+    {
+      "id": "klok-12-55",
+      "uur": 12,
+      "minuut": 55
+    }
+  ]
+}

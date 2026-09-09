@@ -14,7 +14,13 @@ import { ModuleSoon } from '@/features/shell/ModuleSoon';
 import { CategoryScreen } from '@/features/shell/CategoryScreen';
 import { ModuleScreen } from '@/features/module/ModuleScreen';
 import { SumScreen } from '@/features/sums/SumScreen';
-import { asPracticeMode, asSumMode, type Onderdeel } from '@/features/module/onderdelen';
+import { KlokScreen } from '@/features/klok/KlokScreen';
+import {
+  asKlokMode,
+  asPracticeMode,
+  asSumMode,
+  type Onderdeel,
+} from '@/features/module/onderdelen';
 import { ProfileScreen } from '@/features/player/ProfileScreen';
 import { ReisScreen } from '@/features/reis/ReisScreen';
 import type { Route } from '@/features/shell/routes';
@@ -27,6 +33,7 @@ import {
   type SetId,
 } from '@/features/practice/useRound';
 import type { SumMode } from '@/features/sums/useSumRound';
+import type { KlokMode } from '@/features/klok/useKlokRound';
 import type { ProfileRecord } from '@/store/db';
 
 type Screen =
@@ -46,11 +53,18 @@ type Screen =
       sumMode: SumMode;
       aantal: number | null;
       toetsstand: boolean;
+    }
+  | {
+      name: 'klok';
+      setId: string;
+      klokMode: KlokMode;
+      aantal: number | null;
+      toetsstand: boolean;
     };
 type Boot = { status: 'loading' } | { status: 'ready'; profile: ProfileRecord | null };
 
 /**
- * Seven screens and a router of about sixty lines.
+ * Eight screens and a router of about sixty lines.
  *
  * This comment used to say a router would be furniture until there was more
  * than one module. There still is one; the reason changed. A module has an
@@ -119,6 +133,11 @@ export default function App() {
   ) => {
     setVisit(visit + 1);
 
+    if (deel.moduleId === 'klok') {
+      const klokMode = asKlokMode(mode);
+      setScreen({ name: 'klok', setId: deel.setId, klokMode, aantal, toetsstand });
+      return;
+    }
     if (deel.moduleId !== 'topo') {
       setScreen({ name: 'sums', setId: deel.setId, sumMode: asSumMode(mode), aantal, toetsstand });
       return;
@@ -199,6 +218,20 @@ export default function App() {
         key={`${screen.setId}-${screen.sumMode}-${screen.aantal ?? 0}-${visit}`}
         setId={screen.setId}
         mode={screen.sumMode}
+        aantal={screen.aantal}
+        toetsstand={screen.toetsstand}
+        onHome={goHome}
+        onAgain={() => setVisit(visit + 1)}
+      />
+    );
+  }
+
+  if (screen.name === 'klok') {
+    return (
+      <KlokScreen
+        key={`${screen.setId}-${screen.klokMode}-${screen.aantal ?? 0}-${visit}`}
+        setId={screen.setId}
+        mode={screen.klokMode}
         aantal={screen.aantal}
         toetsstand={screen.toetsstand}
         onHome={goHome}
@@ -318,6 +351,10 @@ export default function App() {
         onStartSum={(setId, sumMode) => {
           setVisit(visit + 1);
           setScreen({ name: 'sums', setId, sumMode, aantal: null, toetsstand: false });
+        }}
+        onStartKlok={(setId, klokMode) => {
+          setVisit(visit + 1);
+          setScreen({ name: 'klok', setId, klokMode, aantal: null, toetsstand: false });
         }}
         onModule={goModule}
       />

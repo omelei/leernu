@@ -6,6 +6,7 @@ export * from './map';
 export * from './retention';
 export * from './grade';
 export * from './sums';
+export * from './klok';
 export * from './streak';
 export * from './rewards';
 export * from './collection';

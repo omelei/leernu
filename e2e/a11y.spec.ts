@@ -98,11 +98,12 @@ test('the home screen has no violations', async ({ page }) => {
 /**
  * The three shapes a page inside the shell takes: a module whose subjects are
  * one set each, a module whose subjects hold thirteen sets behind a row of
- * chips, and a module that does not exist yet. All three carry the same frame
+ * chips, a module with neither a region row nor chips, and a module that does
+ * not exist yet. All three carry the same frame
  * and the child's own column, and the last one is the easiest to get wrong
  * precisely because nobody looks at it.
  */
-test('the module pages have no violations, in each of their three shapes', async ({ page }) => {
+test('the module pages have no violations, in each of their four shapes', async ({ page }) => {
   await signIn(page, 'Nour');
 
   await page.goto('/topografie');
@@ -117,7 +118,13 @@ test('the module pages have no violations, in each of their three shapes', async
   expect((await scan(page)).violations).toEqual([]);
 
   await page.goto('/klokkijken');
-  await expect(page.getByRole('heading', { name: 'Klok' })).toBeVisible();
+  // The clock's step 1: four subjects and a mix, one set each — the shape
+  // topografie's Nederland row has, with no chips underneath.
+  await expect(page.getByRole('button', { name: /^Halve uren/ })).toBeVisible();
+  expect((await scan(page)).violations).toEqual([]);
+
+  await page.goto('/woordjes');
+  await expect(page.getByRole('heading', { name: 'Taal' })).toBeVisible();
   expect((await scan(page)).violations).toEqual([]);
 });
 

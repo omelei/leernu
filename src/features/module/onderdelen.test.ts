@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   meestGeoefend,
+  onderdelen,
   onderwerpenVan,
   POPULAR_SHOWN,
   starters,
@@ -152,5 +153,63 @@ describe('what topography offers', () => {
     // set name and the row would be two sentences wide.
     expect(steden?.sets.every((set) => set.kortNaam !== null)).toBe(true);
     expect(steden?.keuze).not.toBeNull();
+  });
+});
+
+/**
+ * Klokkijken's subjects: the shape topography's Nederland row has rather than
+ * the shape rekenen has. Four steps and a mix, one set each, no second question
+ * underneath and no region row above — which is what makes the module page
+ * number its steps one and two rather than one, two and three.
+ */
+describe('what the clock offers', () => {
+  const vakken = onderwerpenVan('klok');
+
+  it('offers the four steps a classroom teaches, and a mix of them', () => {
+    expect(vakken.map((vak) => vak.id)).toEqual([
+      'hele-uren',
+      'halve-uren',
+      'kwartieren',
+      'vijf-minuten',
+      'klok-mix',
+    ]);
+  });
+
+  it('gives every subject exactly one set, so there is nothing to choose under it', () => {
+    for (const vak of vakken) {
+      expect(vak.sets.length, vak.id).toBe(1);
+      expect(vak.keuze, vak.id).toBeNull();
+      // No regions: a clock is not anywhere.
+      expect(vak.regio, vak.id).toBeNull();
+    }
+  });
+
+  it('never puts more than six cards in front of a child at once', () => {
+    expect(vakken.length).toBeLessThanOrEqual(6);
+  });
+
+  it('counts every face once over the four steps, and never the mix as well', () => {
+    // The mix holds all hundred and forty-four; the four steps hold them
+    // between them. A total that added both would tell a child there are two
+    // hundred and eighty-eight times on a clock.
+    const stappen = vakken.filter((vak) => vak.id !== 'klok-mix');
+    const faces = stappen.flatMap((vak) => vak.sets.flatMap((deel) => deel.items));
+
+    expect(faces).toHaveLength(144);
+    expect(new Set(faces.map((item) => item.id)).size).toBe(144);
+    expect(vakken.find((vak) => vak.id === 'klok-mix')?.sets[0]?.mix).toBe(true);
+  });
+
+  it('leaves the mix out of what progress is counted over', () => {
+    const klok = onderdelen().filter((deel) => deel.moduleId === 'klok');
+    expect(klok.map((deel) => deel.setId)).toEqual([
+      'klok-heel',
+      'klok-half',
+      'klok-kwart',
+      'klok-vijf',
+    ]);
+
+    // And it is startable all the same, because it has an address and a tile.
+    expect(startbareOnderdelen().map((deel) => deel.setId)).toContain('klok-mix');
   });
 });
