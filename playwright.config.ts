@@ -30,8 +30,7 @@ export default defineConfig({
    * of them and a green suite takes ten minutes; a broken one takes half an
    * hour, because every failure is thirty seconds three times over.
    *
-   * With four workers a green suite is about four minutes, and CI splits it
-   * across three runners on top of that (`--shard`, see ci.yml), which is what
+     * across three runners on top of that (`--shard`, see ci.yml), which is what
    * takes the path to production from six minutes to under three. Sharding is
    * the only lever of the three that does not buy speed by looking at less.
    *

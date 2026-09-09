@@ -81,10 +81,12 @@ jobs:
       - run: npm test
       - run: npm run build
 
-  # Both of these wait for `check`. They used to run beside it, so one commit
-  # that did not compile produced three failing jobs and three notifications,
-  # and spent eight minutes of runner time proving the same thing three times.
   # ---- The one job on the critical path that is worth splitting -------------
+  #
+  # This and `lighthouse` both wait for `check`. They used to run beside it, so
+  # one commit that did not compile produced three failing jobs and three
+  # notifications, and spent eight minutes of runner time proving the same
+  # thing three times. With three e2e runners it would now be five.
   #
   # Measured on the deploy of 830ad64, in seconds of the run's own clock:
   #
@@ -99,18 +101,34 @@ jobs:
   # none of that is waste — it is the check that finds the bugs this build has
   # actually shipped.
   #
-  # So it is divided rather than reduced. Three runners take a third of the
-  # tests each, which costs nothing but runners and is the only lever here that
-  # does not buy speed by looking at less. `fail-fast: false` because a failure
-  # on the iPad and a failure on Android are two different bugs, and stopping
-  # the other shards hides the second one until the first is fixed.
+  # So it is divided rather than reduced. Not by `--shard`, which was tried
+  # first and does not work here: it balances by counting tests, and these
+  # tests are nothing like equal — one screenshot test photographs six screens
+  # and an assertion test presses a button. Measured, that gave 127s, 149s and
+  # 258s, so the run still waited on 258 and the whole exercise bought forty
+  # seconds.
+  #
+  # By project it balances by construction. Every project runs the identical
+  # list, so two of the six is two sixths of the work whichever two they are —
+  # and pairing one Chromium size with one WebKit size on each runner keeps the
+  # slower engine from piling up on one of them.
+  #
+  # `fail-fast: false` because a failure on the iPad and a failure on Android
+  # are two different bugs, and stopping the others hides the second one until
+  # the first is fixed.
   e2e:
     needs: [check]
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3]
+        include:
+          - group: laptop-en-ipad-staand
+            projects: --project=chromebook --project=ipad-portrait
+          - group: desktop-en-iphone
+            projects: --project=desktop-1440 --project=iphone
+          - group: android-en-ipad-liggend
+            projects: --project=android --project=ipad-landscape
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -118,7 +136,7 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
-      # The browsers are 36 seconds of every shard and they change only when
+      # The browsers are 36 seconds of every runner and they change only when
       # the pinned Playwright version does, so the version is the key. A miss
       # installs them exactly as before; there is no path where this is wrong,
       # only one where it is slow.
@@ -139,11 +157,11 @@ jobs:
         if: steps.playwright-cache.outputs.cache-hit != 'true'
       - run: npx playwright install-deps chromium webkit
         if: steps.playwright-cache.outputs.cache-hit == 'true'
-      - run: npm run test:e2e -- --shard=${{ matrix.shard }}/3
+      - run: npm run test:e2e -- ${{ matrix.projects }}
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: playwright-report-${{ matrix.shard }}
+          name: playwright-report-${{ matrix.group }}
           path: playwright-report/
           retention-days: 7
       # Spec section 8: the screens at every size the app claims to work at.
@@ -157,7 +175,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: screenshots-${{ matrix.shard }}
+          name: screenshots-${{ matrix.group }}
           path: screenshots/
           retention-days: 7
 
