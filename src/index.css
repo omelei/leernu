@@ -2277,6 +2277,70 @@
     cursor: default;
   }
 
+  /* One row per animal that arrived, and the drawing in its own material — the
+   * colour is the reward here, so this is the one place it leads. The words
+   * beside it are ink, for the reason .tk-animal-name is: a material is
+   * measured against what a drawing needs, not what a word does. */
+  .tk-unwraps {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0;
+    list-style: none;
+  }
+  .tk-unwrap-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: var(--ink);
+  }
+  .tk-unwrap {
+    position: relative;
+    display: inline-flex;
+    flex: none;
+    width: 72px;
+    height: 72px;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-full);
+    background: var(--surface);
+  }
+  .tk-unwrap-row[data-reeks='brons'] .tk-unwrap {
+    color: var(--reeks-brons);
+  }
+  .tk-unwrap-row[data-reeks='zilver'] .tk-unwrap {
+    color: var(--reeks-zilver);
+  }
+  .tk-unwrap-row[data-reeks='goud'] .tk-unwrap {
+    color: var(--reeks-goud);
+  }
+  .tk-unwrap-row[data-reeks='platina'] .tk-unwrap {
+    color: var(--reeks-platina);
+  }
+  .tk-unwrap-row[data-reeks='ultra'] .tk-unwrap {
+    color: var(--reeks-ultra);
+  }
+  .tk-unwrap-parcel,
+  .tk-unwrap-dier {
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  /* Gone unless the animation puts it back, which is what makes the static
+   * state the animal rather than a parcel that never opens. */
+  .tk-unwrap-parcel {
+    opacity: 0;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .tk-unwrap-parcel {
+      animation: tk-unwrap-out 340ms ease-in both;
+    }
+    .tk-unwrap-dier {
+      animation: tk-unwrap-in 420ms 280ms ease-out both;
+    }
+  }
+
   .tk-sr-only {
     position: absolute;
     width: 1px;
@@ -2287,6 +2351,42 @@
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border-width: 0;
+  }
+}
+
+/* ---- The parcel, opened -------------------------------------------------
+ * The one moment of movement in this product that is a reward rather than a
+ * lesson, and it is allowed because the thing it animates is a thing that only
+ * happens every twenty-five correct answers (ADR-084). The travelling dot below
+ * teaches; this one hands something over.
+ *
+ * The static state is the animal, plainly. The animation is the parcel on top
+ * of it going away, and it only runs where movement is welcome — so a reader
+ * who has asked for less motion gets the animal and no flicker, rather than a
+ * parcel that vanishes after a delay the reduced-motion rule cannot reach.
+ */
+@keyframes tk-unwrap-out {
+  from {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.5) rotate(-12deg);
+  }
+}
+@keyframes tk-unwrap-in {
+  from {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.12);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 

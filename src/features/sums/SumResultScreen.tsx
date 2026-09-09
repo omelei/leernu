@@ -1,6 +1,7 @@
 import { t } from '@/i18n';
 import { sumText } from '@/game-core';
 import type { SumRoundState } from './useSumRound';
+import { NieuweDieren } from '@/features/reis/NieuwDier';
 
 /**
  * K8 for the tables.
@@ -48,6 +49,10 @@ export function SumResultScreen({
           </p>
         ) : null}
       </div>
+
+      {/* What the round handed over, if it handed anything over. See the map's
+          result screen: same block, same place, same argument. */}
+      <NieuweDieren plekken={state.reward?.dieren ?? []} />
 
       {state.missed.length > 0 ? (
         <section className="flex flex-col gap-3" aria-label={t('sums.practiceMore')}>

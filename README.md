@@ -106,7 +106,10 @@ next to it ([ADR-071](docs/DECISIONS.md), [ADR-076](docs/DECISIONS.md)). What it
 does not say is what the next animal _is_: an animal not yet earned is drawn as
 a parcel with its price on it, so a child can aim at the next rung without
 having read the whole collection off the screen on their first afternoon
-([ADR-081](docs/DECISIONS.md)). Nothing on that page can be bought, won by
+([ADR-081](docs/DECISIONS.md)). The parcel is opened at the end of the round
+that earned it — the one moment of movement in this product that is a reward
+rather than a lesson, and one that happens a handful of times a month
+([ADR-084](docs/DECISIONS.md)). Nothing on that page can be bought, won by
 chance or reached by waiting, and nothing on it mentions a date.
 
 The forecast — "69%, weet je hier over drie weken nog van" — is the number the

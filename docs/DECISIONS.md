@@ -3364,6 +3364,43 @@ two questions the page is; they were set at the size a caption gets.
 
 ---
 
+## ADR-084 — The parcel is opened where the work was done
+
+**Status:** accepted — 2026-09-09. Completes ADR-081.
+
+ADR-081 stopped the collection from saying what is inside a cell before it is
+earned, and bought a surprise. What it did not do is give the surprise a moment
+to happen in: an animal still arrived silently, on a page a child has to go and
+open, and now they could not even read its name in advance to know it was
+coming.
+
+So it is handed over at the end of the round that earned it, on the result
+screen, as an unwrapping — the same parcel from the collection, going away, and
+the animal underneath it.
+
+Three things it says. **What it is**, drawn at heading size in its material.
+**Which reeks**, because that is what makes one animal rarer than another.
+And **which level handed it over**, because a reward nobody can explain is a
+riddle — the rule the reisstempels have followed since ADR-040.
+
+What it does not say is "goed gedaan". The product reports what happened; what
+to feel about it is the child's.
+
+**It is absent almost every time**, which is the whole of why it is allowed to
+move. Twenty-five correct answers buy the second animal and two hundred buy the
+fifth, so this card appears a handful of times a month; a block that appeared
+after every round would be furniture inside a week, and a moving one would be
+furniture that twitches.
+
+The animation is the second in the product, after the dot that travels from a
+wrong answer to the right one. That one teaches — the distance is the lesson.
+This one does not, and that is the exception being made: a thing that is handed
+over should arrive like a thing being handed over. It runs only under
+`prefers-reduced-motion: no-preference`, and the static state is the animal
+plainly, so asking for less motion costs nothing but the flourish.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because
