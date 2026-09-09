@@ -2,28 +2,32 @@
  * The collection: twelve animals, five times over.
  *
  * A level hands out one animal. Twelve of them make a **reeks**, and when a
- * reeks is full the next one starts in a new material — ink, bronze, silver,
- * gold, diamond. Sixty in all, and the last of them is a long way off on
+ * reeks is full the next one starts in a new material — bronze, silver, gold,
+ * platinum, ultra. Sixty in all, and the last of them is a long way off on
  * purpose: a collection a child fills in a fortnight is a collection they stop
  * looking at in three weeks (ADR-071).
+ *
+ * The five were ink, bronze, silver, gold and diamond, and two of those five
+ * were doing no work. "Ink" is the product's own colour and named nothing a
+ * child could rank; "diamond" is precious but it is not a rung anybody counts
+ * from. Bronze to ultra is the ladder every ten-year-old already reads off
+ * every game they play, which means the order needs no legend (ADR-080).
  *
  * Three animals arrive at level one rather than one, which is ADR-059's point
  * surviving into a ladder: a child who cannot change anything about an app they
  * are told to use can at least decide what it looks like, and a choice between
  * one thing is not a choice.
  *
- * Materials rather than "colours". A ladder of ink, bronze, silver, gold and
- * diamond is one every ten-year-old already knows from every game they play,
- * and each rung is told apart by name as well as by hue — which is the rule
- * §A applies to everything else in this product and there is no reason a
- * reward should be the exception.
+ * Materials rather than "colours". Each rung is told apart by name as well as
+ * by hue — which is the rule §A applies to everything else in this product and
+ * there is no reason a reward should be the exception.
  *
  * This is pure and lives in game-core: it decides what has been earned, never
  * what it looks like. The drawings are `components/Stickers.tsx` and the
  * materials are five tokens in `index.css`.
  */
 
-export const REEKSEN = ['inkt', 'brons', 'zilver', 'goud', 'diamant'] as const;
+export const REEKSEN = ['brons', 'zilver', 'goud', 'platina', 'ultra'] as const;
 export type Reeks = (typeof REEKSEN)[number];
 
 /** How many animals one reeks holds. The number of drawings there are. */

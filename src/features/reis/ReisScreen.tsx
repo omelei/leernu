@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from 'react';
-import { DiplomaIcon, StampIcon } from '@/components/Icon';
+import { DiplomaIcon, MysteryIcon, RankIcon, StampIcon } from '@/components/Icon';
 import { ProgressBar } from '@/components/ProgressBar';
 import { STICKERS, stickerById } from '@/components/stickerSet';
 import {
@@ -38,10 +38,11 @@ const TAFELS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
  * sit today. The **reisstempels** are ten, each with its criterion written
  * next to it — a reward nobody can explain is a riddle.
  *
- * Everything not yet earned is shown rather than hidden, and every one of them
- * says what it costs. That is the difference between a collection and a
- * mystery, and it is the same argument the diploma wall makes on the rekenen
- * page: a gap a child can aim at is worth more than a surprise.
+ * Everything not yet earned has a cell of its own and every one of them says
+ * what it costs — but not what it is. A parcel stands where the animal will
+ * go, so a child can aim at the next rung without being able to read the whole
+ * collection off the screen on their first afternoon (ADR-081). The price is
+ * the part you can plan around; the face is the part worth arriving for.
  *
  * **It never says when.** No dates, no "kom morgen terug", no counter that
  * moves by waiting. Everything on this page is bought with correct answers and
@@ -229,18 +230,25 @@ function Rij({
 
   return (
     <div className="flex flex-col gap-2">
-      <p className="tk-label">
-        {t('reis.reeksHave', { reeks: naam, aantal: held, totaal: PER_REEKS })}
+      {/* The rung, with the chevrons on it and the count beside them. A row of
+          twelve drawings needed a name that reads as a tier rather than as a
+          heading: "zilver 5 van de 12" in mono was a caption, and a caption is
+          not a thing you collect. */}
+      <p className="tk-reeks" data-reeks={reeks}>
+        <RankIcon size={20} />
+        <span className="tk-reeks-name">
+          {t('reis.reeksHave', { reeks: naam, aantal: held, totaal: PER_REEKS })}
+        </span>
       </p>
 
       <div className="tk-animals" data-reeks={reeks}>
         {STICKERS.map((sticker, plek) => {
           const Draw = sticker.draw;
           const open = isEarned(level, { reeks, plek });
-          // Only the ink row can be worn: it is the one whose drawings are the
-          // avatar in the app bar, and an avatar that changed material would
-          // need a second drawing in every place the first one is used.
-          const kiesbaar = open && reeks === 'inkt';
+          // Only the first row can be worn: it is the one whose drawings are
+          // the avatar in the app bar, and an avatar that changed material
+          // would need a second drawing in every place the first one is used.
+          const kiesbaar = open && reeks === REEKSEN[0];
 
           // Which level hands this one out: its place in the whole sixty,
           // counted from one.
@@ -261,10 +269,16 @@ function Rij({
                 aria-label={
                   open
                     ? t('reis.animalHave', { dier: t(sticker.name), reeks: naam })
-                    : t('reis.animalWant', { dier: t(sticker.name), reeks: naam, niveau: opNiveau })
+                    : t('reis.animalWant', { reeks: naam, niveau: opNiveau })
                 }
               >
-                <Draw size={28} />
+                {/* Not the animal, where it has not been earned. The page used
+                    to draw all sixty faded, which meant a child could read the
+                    whole collection off the screen on their first afternoon and
+                    then spend forty levels arriving at things they had already
+                    seen. A parcel keeps the one thing a collection is for
+                    (ADR-081). */}
+                {open ? <Draw size={28} /> : <MysteryIcon size={28} />}
                 {/* What it costs, not "nog niet". Nine cells saying the same
                     two words tell a child nothing; nine saying niveau 4, 5, 6
                     are a ladder they can read off the page. */}

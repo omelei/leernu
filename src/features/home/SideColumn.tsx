@@ -3,11 +3,12 @@ import type { ComponentType } from 'react';
 import { Dot } from '@/components/Dot';
 import type { IconProps } from '@/components/Icon';
 import { ProgressBar } from '@/components/ProgressBar';
-import { STICKERS, stickerById } from '@/components/stickerSet';
-import { NextIcon } from '@/components/Icon';
+import { stickerById } from '@/components/stickerSet';
+import { MysteryIcon, NextIcon, RankIcon } from '@/components/Icon';
 import {
   correctToNextLevel,
   earnedAt,
+  huidigeReeks,
   levelFor,
   levelProgress,
   nextPlek,
@@ -83,7 +84,7 @@ export function SideColumn({
 }
 
 /**
- * The journey: which level, what is left of it, and who arrives next.
+ * Progress: which level, which rung of the ladder, and what is still wrapped up.
  *
  * Everything on this card is worked out from one number the product has been
  * keeping since the first release and has never once shown: ten XP for a
@@ -119,10 +120,10 @@ function Reis({
   // and a child picks between them; drawing whichever the list happens to end
   // on would be this card telling them they are somebody else.
   const nu = stickerById(sticker);
+  const reeks = huidigeReeks(level);
   const volgende = nextPlek(level);
   const teGaan = correctToNextLevel(goed);
   const Nu = nu.draw;
-  const Volgende = volgende === null ? null : (STICKERS[volgende.plek]?.draw ?? null);
 
   return (
     <section className="tk-card flex flex-col gap-3" aria-label={t('home.journeyTitle')}>
@@ -147,6 +148,16 @@ function Reis({
         </div>
       </div>
 
+      {/* Which rung of the ladder this is, as the chevrons every game a child
+          plays uses for a tier, in that material's own colour. The word is
+          beside it and not instead of it: §A never lets a colour carry a
+          meaning on its own, and "platina" is also the half a child says out
+          loud to a friend. */}
+      <p className="tk-reeks" data-reeks={reeks}>
+        <RankIcon size={20} />
+        <span className="tk-reeks-name">{t(`reeks.${reeks}` as TranslationKey)}</span>
+      </p>
+
       <ProgressBar
         value={levelProgress(goed)}
         showDot={false}
@@ -163,16 +174,20 @@ function Reis({
               : t('home.journeyToGo', { aantal: teGaan, niveau: level + 1 })}
           </p>
 
-          {/* Who is waiting there. Shown rather than hidden, because a ladder
-              whose next rung is a surprise is not a ladder a child can aim at
-              — and because a silhouette is what tells them it is not theirs
-              yet without a padlock and the word "locked". */}
+          {/* What is coming, wrapped. It used to name the animal — "Hierna: vos
+              in zwart" — which is a ladder with the answers printed on it: by
+              the time a child got there they had known for a week what it was.
+              A parcel in the next material's colour says exactly as much as a
+              child needs to aim at it, and not one word more (ADR-081).
+
+              The parcel is a drawing and the sentence beside it is the label,
+              so the two together are one line rather than two things saying
+              the same thing twice. */}
           <p className="flex items-center gap-3 text-ink-2">
             <span className="tk-sticker-next" data-reeks={volgende.reeks} aria-hidden="true">
-              {Volgende === null ? null : <Volgende size={28} />}
+              <MysteryIcon size={28} />
             </span>
             {t('home.journeyNext', {
-              dier: t(STICKERS[volgende.plek]?.name ?? 'sticker.kat'),
               reeks: t(`reeks.${volgende.reeks}` as TranslationKey),
             })}
           </p>
@@ -180,7 +195,7 @@ function Reis({
       )}
 
       {/* The way to the whole of it. The card can only ever show the animal a
-          child has and the one arriving next; sixty of them, twelve diplomas
+          child has and the parcel arriving next; sixty of them, twelve diplomas
           and ten stamps need a page (ADR-076). */}
       <button type="button" className="tk-card-link" onClick={onReis}>
         {t('home.journeyAll')}

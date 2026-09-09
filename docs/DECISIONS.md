@@ -3249,6 +3249,121 @@ test is set in.
 
 ---
 
+## ADR-080 — The collection's five materials are brons, zilver, goud, platina, ultra
+
+**Status:** accepted — 2026-09-09. Amends ADR-071.
+
+Five materials, and two of them were doing no work. "Inkt" was the product's own
+colour rather than a rung — a child could not say whether it came before bronze
+or after gold — and "diamant" is precious without being a step anybody counts
+from. The row a child saw first was called **zwart**, which reads as "no colour
+yet".
+
+Bronze, silver, gold, platinum, ultra is the ladder every ten-year-old already
+knows from the games they play outside this product. It needs no legend, the
+order is not something the interface has to teach, and "ultra" is a word that
+says "this is the end of it" without a sentence explaining so.
+
+What does not change: sixty animals, twelve to a reeks, one per level, nothing
+behind money, chance or waiting. Only the names and two of the five hexes.
+
+The first row is bronze rather than ink, so the animals a child can wear as
+their avatar are drawn in bronze. Every material still clears 3:1 against paper
+in both themes and each is a distinct value — `contrast.test.ts` asserts both.
+
+---
+
+## ADR-081 — What has not been earned is a parcel, not a faded animal
+
+**Status:** accepted — 2026-09-09. Reverses half of ADR-076.
+
+ADR-076 put the whole collection on one page and showed everything not yet
+earned as a faded drawing with its price under it, on the argument that "a gap a
+child can aim at is worth more than a surprise".
+
+Half of that is right and stays: **the price is always visible.** "Niveau 34" on
+a cell is the thing a child can plan around, and nothing in this product is ever
+earned by chance or by waiting.
+
+The other half was wrong. A child could read the entire collection off the
+screen on their first afternoon — all sixty animals, in order, by name — and
+then spend forty levels arriving at things they had already seen. The card in
+the right-hand column made it worse by naming the next one: "Hierna: vos in
+zwart" is a week's notice of a surprise.
+
+So an animal that has not been earned is drawn as a **parcel** and its name is
+not given. The cell keeps its place in the row, keeps its level, and keeps its
+accessible name — "Nog onbekend dier in platina, vanaf niveau 34" — which says
+exactly what a child needs to aim at it and nothing more.
+
+A parcel and not a padlock. A lock says "you may not"; a parcel says "not opened
+yet", and those are two different sentences to say to a child.
+
+---
+
+## ADR-082 — The front door offers what is played most, not what we would pick
+
+**Status:** accepted — 2026-09-09.
+
+Between the test block and the log stood one card: the set the product had
+decided to offer next, with its size, its number of rounds, a "Ga verder" button
+and an "Andere manieren" button beside it. It answered a question the child had
+not asked yet, in a card that reported before it offered.
+
+It is replaced by **four tiles: the exercises this child has played most, with
+how often.** "12 keer gespeeld" is a fact about them that no mark and no bar
+tells them, and every tile is one press back into the round it names.
+
+The count is this device's own and nothing else. There is no backend and nothing
+leaves the machine (ADR-015), so "most popular with everyone" is not a number
+this product has, and inventing one — "3.412 keer gespeeld" — would be putting a
+fabricated figure in front of a child on a page whose whole claim is that it
+does not track them.
+
+A profile with no rounds behind it gets four to start with, at nought rather
+than at a guess, under the heading that says so.
+
+The greeting above it changed with the same argument. "Vandaag oefen je 10
+vragen" named a ceiling the product does not have; nothing stops after ten. What
+it says now is what is true of every session: practise as long as you like, and
+what you had before comes back on purpose.
+
+---
+
+## ADR-083 — Topography asks where before it asks what, in one word each
+
+**Status:** accepted — 2026-09-09. Extends ADR-062.
+
+Step 1 on /topografie was five cards named after their sets: "Provincies van
+Nederland", "Hoofdsteden van de provincies", "Steden van Nederland", "Zeeën en
+meren", "De Waddeneilanden". Three of the five ended in the same two words, and
+every one of them was a phrase where a button wanted a word.
+
+The page now asks the coarsest question first — **Wereld, Europa, Nederland** —
+and the subjects under it are one word each: **Provincies, Steden, Wateren,
+Eilanden, Mix.** The region says where, so the cards do not have to.
+
+The two city sets become one subject with two chips under it, which is the shape
+ADR-062 already gives the twelve tables: the twelve capitals and the eighty
+cities are the same question at two sizes, and a child who wants "steden" should
+not have to know which of two cards means which. Both keep their own address.
+
+**Wereld and Europa are shown and cannot be pressed.** There are no maps behind
+them and there is no pretending otherwise — the same promise the rail makes
+about klokkijken and vlaggen (ADR-051). A child who can see that the countries
+of Europe are coming is reading a plan; a chooser that hid them would make the
+product look like it is only about the Netherlands.
+
+The step numbers moved out of the copy and into the page, because topography now
+has three steps and rekenen still has two: a "1 ·" written into "Kies een
+onderwerp" would be the wrong number on one of the two pages. The headings also
+lost their caption — step 2 read "Hoe wil je oefenen? van makkelijk naar
+moeilijk", which is eight words where four are the question — and both step
+headings moved from the 11px mono label to the display face at h3. They are the
+two questions the page is; they were set at the size a caption gets.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because

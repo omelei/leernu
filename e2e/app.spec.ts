@@ -6,26 +6,51 @@ import { expect, test, type Page } from '@playwright/test';
  * account.
  */
 
+/** The three topography sets these flows use, as the path through step 1. */
+const PROVINCIES: Keuze = [/^Provincies/];
+const HOOFDSTEDEN: Keuze = [/^Steden/, /^Hoofdsteden van de provincies$/];
+const STEDEN: Keuze = [/^Steden/, /^Steden van Nederland$/];
+
+/**
+ * Step 1 of K2, which is two decisions where a subject holds more than one set.
+ *
+ * Topography's subjects are one word each now, and where on the map is asked
+ * above them (ADR-083): "Provincies" rather than "Provincies van Nederland",
+ * and the twelve capitals and the eighty cities are two chips under one card
+ * called "Steden". So the path to a set is a card, and sometimes a chip after
+ * it — which is exactly the path a child takes.
+ */
+type Keuze = readonly [RegExp] | readonly [RegExp, RegExp];
+
+async function kiesOnderwerp(page: Page, [vak, chip]: Keuze) {
+  const what = page.getByRole('region', { name: /Kies een onderwerp/ });
+
+  // First rather than exact: after the card is pressed its chips are in the
+  // same region, and a chip's accessible name is the set's full name.
+  await what.getByRole('button', { name: vak }).first().click();
+  if (chip) await what.getByRole('button', { name: chip }).click();
+}
+
 /**
  * Into a round, through K2.
  *
- * The front door no longer carries a card per set: K1 gives it one thing to
- * continue and a list of modules, and choosing which set is step 1 of K2. So a
- * test that wants a particular set goes where a child goes.
+ * The front door no longer carries a card per set: K1 gives it the tests, the
+ * exercises this child goes back to, and a list of modules — choosing which set
+ * is step 1 of K2. So a test that wants a particular set goes where a child
+ * goes.
  *
- * The two steps are named regions and the queries are scoped to them, because
- * the set name is on the start button as well — which is what K2 puts it there
- * for.
+ * The steps are named regions and the queries are scoped to them, because the
+ * set name is on the start button as well — which is what K2 puts it there for.
  */
-async function startRound(page: Page, set: RegExp, way: RegExp) {
+async function startRound(page: Page, set: Keuze, way: RegExp) {
   await page.goto('/topografie');
   await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
 
-  const what = page.getByRole('region', { name: /Kies een onderwerp/ });
-  const how = page.getByRole('region', { name: /Hoe wil je/ });
-
-  await what.getByRole('button', { name: set }).click();
-  await how.getByRole('button', { name: way }).click();
+  await kiesOnderwerp(page, set);
+  await page
+    .getByRole('region', { name: /Hoe wil je/ })
+    .getByRole('button', { name: way })
+    .click();
   await start(page);
 }
 
@@ -72,7 +97,7 @@ async function turnTheClockOn(page: Page) {
  * in the product were the only two nobody read a description of first.
  */
 async function startChallenge(page: Page, naam: string) {
-  await startRound(page, /Provincies van Nederland/, new RegExp(`^${naam}\\b`));
+  await startRound(page, PROVINCIES, new RegExp(`^${naam}\\b`));
 }
 
 async function signIn(page: Page, naam: string) {
@@ -126,30 +151,35 @@ test('greets the child by name on the front door', async ({ page }) => {
 });
 
 /**
- * The subject of the soonest test is not decoration: it decides what "Ga
- * verder" carries on with. A child practising for Tuesday's tables should be
- * offered tables, whatever they happened to do last night.
+ * The subject of the soonest test is not decoration: it is the subject the
+ * front door's one accented block is about, and the block wears that module's
+ * accent to say so.
  *
- * There can be more than one test now (ADR-077), so this also checks the thing
- * that makes a list a plan rather than a calendar: the soonest one wins.
+ * There can be more than one test (ADR-077), so this also checks the thing that
+ * makes a list a plan rather than a calendar: the soonest one wins.
+ *
+ * It used to be asserted through "Ga verder met Rekenen", the card that stood
+ * between the test block and the log. That card is gone (ADR-082) and the rule
+ * it demonstrated is not, so the assertion moved to where the rule still shows.
  */
-test('the subject of the soonest test decides what to carry on with', async ({ page }) => {
+test('the soonest test decides what the block on the front door is about', async ({ page }) => {
   await signIn(page, 'Tijn');
+  const toetsblok = page.locator('.tk-card-accented');
 
-  // With no test set, it is the set touched most recently — and on a first
-  // visit that is the way in the content calls the way in.
-  await expect(page.getByRole('button', { name: 'Ga verder met Topo' })).toBeVisible();
+  // With no test set there is no subject, so the block takes no accent at all
+  // rather than guessing at one.
+  await expect(toetsblok).not.toHaveAttribute('data-module', /\w/);
 
   await addTest(page, '2099-01-10', 'tafels');
-  await expect(page.getByRole('button', { name: 'Ga verder met Rekenen' })).toBeVisible();
+  await expect(toetsblok).toHaveAttribute('data-module', 'tafels');
 
   // A second test, earlier than the first. The plan follows the soonest one.
   await addTest(page, '2099-01-05', 'topo');
-  await expect(page.getByRole('button', { name: 'Ga verder met Topo' })).toBeVisible();
+  await expect(toetsblok).toHaveAttribute('data-module', 'topo');
 
   // And it is a device setting, so it survives the page rather than the render.
   await page.reload();
-  await expect(page.getByRole('button', { name: 'Ga verder met Topo' })).toBeVisible();
+  await expect(toetsblok).toHaveAttribute('data-module', 'topo');
 
   // Both are on the list, and taking the soonest one off puts the other back
   // in charge — which is the whole of what makes a list a plan.
@@ -159,7 +189,7 @@ test('the subject of the soonest test decides what to carry on with', async ({ p
     .getByRole('button', { name: /^Haal de toets weg/ })
     .first()
     .click();
-  await expect(page.getByRole('button', { name: 'Ga verder met Rekenen' })).toBeVisible();
+  await expect(toetsblok).toHaveAttribute('data-module', 'tafels');
 });
 
 /** One test, through the block that is now a list with a form under it. */
@@ -185,7 +215,7 @@ test('logs the round that was just played, with its mark', async ({ page }) => {
     favourites.getByText('Nog geen favorieten. Wat je vaak oefent, komt hier te staan.'),
   ).toBeVisible();
 
-  await startRound(page, /Provincies van Nederland/, /Aanwijzen/);
+  await startRound(page, PROVINCIES, /Aanwijzen/);
   await page.getByRole('button', { name: 'Limburg' }).click();
   await expect(page.getByRole('button', { name: 'Volgende vraag' })).toBeVisible();
 
@@ -217,7 +247,7 @@ test('logs the round that was just played, with its mark', async ({ page }) => {
  */
 test('the animal a child picks is theirs, and follows them', async ({ page }) => {
   await signIn(page, 'Puk');
-  await page.goto('/ontdekkingsreis');
+  await page.goto('/voortgang');
 
   const dieren = page.getByRole('region', { name: 'Dieren' });
   await dieren.getByRole('button', { name: 'Vos', exact: true }).click();
@@ -226,12 +256,12 @@ test('the animal a child picks is theirs, and follows them', async ({ page }) =>
     'true',
   );
 
-  // Level one, so the dragon is not hidden — it is there, faded, saying what it
-  // costs. A collection with an invisible end is a mystery, not a ladder. It is
-  // not a button either: a control a child cannot use is a question they have to
-  // ask somebody about.
+  // Level one, so the ninth cell of the first row is a parcel: it has a place,
+  // it says what it costs, and it does not say what is in it (ADR-081). It is
+  // not a button either — a control a child cannot use is a question they have
+  // to ask somebody about.
   await expect(dieren.getByRole('button', { name: /^Draak/ })).toHaveCount(0);
-  await expect(dieren.getByLabel(/Draak in zwart, vanaf niveau \d+/)).toBeVisible();
+  await expect(dieren.getByLabel(/Nog onbekend dier in brons, vanaf niveau \d+/).first()).toBeVisible();
 
   // It belongs to the child, not to the page: it survives a reload.
   await page.reload();
@@ -242,7 +272,7 @@ test('the animal a child picks is theirs, and follows them', async ({ page }) =>
 
 test('plays a round: question, map, answer, feedback', async ({ page }) => {
   await signIn(page, 'Noor');
-  await startRound(page, /Provincies van Nederland/, /Aanwijzen/);
+  await startRound(page, PROVINCIES, /Aanwijzen/);
 
   // The question arrives with the map, not before it.
   await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
@@ -262,7 +292,7 @@ test('plays a round: question, map, answer, feedback', async ({ page }) => {
 
 test('announces the question and the outcome to a screen reader', async ({ page }) => {
   await signIn(page, 'Fatima');
-  await startRound(page, /Provincies van Nederland/, /Aanwijzen/);
+  await startRound(page, PROVINCIES, /Aanwijzen/);
 
   const live = page.getByRole('status');
   await expect(live).toContainText('Waar ligt');
@@ -283,7 +313,7 @@ test('every button meets the 48px touch target', async ({ page }) => {
 
 test('asks about every province, and lets a child stop early', async ({ page }) => {
   await signIn(page, 'Jesse');
-  await startRound(page, /Provincies van Nederland/, /Aanwijzen/);
+  await startRound(page, PROVINCIES, /Aanwijzen/);
 
   // Twelve provinces means twelve questions, not a sample of ten. The dots say
   // so, and say it to a screen reader too.
@@ -298,7 +328,7 @@ test('asks about every province, and lets a child stop early', async ({ page }) 
 
 test('practises the capitals as points on the map', async ({ page }) => {
   await signIn(page, 'Amir');
-  await startRound(page, /Hoofdsteden van de provincies/, /Aanwijzen/);
+  await startRound(page, HOOFDSTEDEN, /Aanwijzen/);
 
   await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
   // Cities are points, and each one carries a 48px target of its own.
@@ -314,7 +344,7 @@ test('practises the capitals as points on the map', async ({ page }) => {
  */
 test('multiple choice offers four names, three of them wrong', async ({ page }) => {
   await signIn(page, 'Daan');
-  await startRound(page, /Provincies van Nederland/, /Kies uit vier namen/);
+  await startRound(page, PROVINCIES, /Kies uit vier namen/);
 
   await expect(page.getByRole('heading', { name: 'Hoe heet dit gebied?' })).toBeVisible();
 
@@ -333,7 +363,7 @@ test('multiple choice offers four names, three of them wrong', async ({ page }) 
 
 test('typing a name: a real place from elsewhere is a near miss, not a cross', async ({ page }) => {
   await signIn(page, 'Roos');
-  await startRound(page, /Provincies van Nederland/, /Typ de naam/);
+  await startRound(page, PROVINCIES, /Typ de naam/);
 
   // The map shows which area is meant; it does not say its name.
   await expect(page.getByRole('heading', { name: 'Hoe heet dit gebied?' })).toBeVisible();
@@ -359,7 +389,7 @@ test('typing a name: a real place from elsewhere is a near miss, not a cross', a
  */
 test('cities: draws only points that are far enough apart to hit', async ({ page }) => {
   await signIn(page, 'Bram');
-  await startRound(page, /Steden van Nederland/, /Aanwijzen/);
+  await startRound(page, STEDEN, /Aanwijzen/);
 
   await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
 
@@ -388,7 +418,7 @@ test('cities: draws only points that are far enough apart to hit', async ({ page
 /** A round of eighty would be twenty minutes. It is capped, and the counter says so. */
 test('cities: asks a round a child can finish', async ({ page }) => {
   await signIn(page, 'Fenna');
-  await startRound(page, /Steden van Nederland/, /Aanwijzen/);
+  await startRound(page, STEDEN, /Aanwijzen/);
 
   // Fifteen questions, not eighty: a set larger than a round is sampled from
   // (ADR-022), and the dots are what say how many are coming.
@@ -403,7 +433,7 @@ test('cities: asks a round a child can finish', async ({ page }) => {
  */
 test('explore names a city, places it, and scores nothing', async ({ page }) => {
   await signIn(page, 'Joris');
-  await startRound(page, /Steden van Nederland/, /Ontdek/);
+  await startRound(page, STEDEN, /Ontdek/);
 
   // Scoped to main: the live region for screen readers carries the same words,
   // and it should — that is how a child who cannot see the panel hears it.
@@ -421,7 +451,8 @@ test('explore names a city, places it, and scores nothing', async ({ page }) => 
   await page.goto('/topografie');
   const steden = page
     .getByRole('region', { name: /Kies een onderwerp/ })
-    .getByRole('button', { name: /Steden van Nederland/ });
+    .getByRole('button', { name: /^Steden/ })
+    .first();
   await expect(steden).toContainText('nog niet geoefend');
 });
 
@@ -460,7 +491,7 @@ test('bliksemronde runs a clock and moves on by itself', async ({ page }) => {
  */
 test('a child can say they do not know, and is shown the answer', async ({ page }) => {
   await signIn(page, 'Pim');
-  await startRound(page, /Provincies van Nederland/, /Aanwijzen/);
+  await startRound(page, PROVINCIES, /Aanwijzen/);
   await expect(page.getByRole('button', { name: 'Limburg' })).toBeVisible();
 
   await page.getByRole('button', { name: 'Ik weet het niet' }).click();

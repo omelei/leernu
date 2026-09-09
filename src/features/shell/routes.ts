@@ -130,7 +130,15 @@ export const YOU_SLUG = 'jij';
  * organised around. A fifth tab would have made it look like a section of the
  * app rather than what it is: the long view of one card.
  */
-export const REIS_SLUG = 'ontdekkingsreis';
+export const REIS_SLUG = 'voortgang';
+/**
+ * What the collection used to be called, and still answers to.
+ *
+ * "Jouw ontdekkingsreis" became "Jouw voortgang", and a rename that breaks the
+ * address a parent wrote on the fridge is a rename that costs somebody a page
+ * that will not open. The old word still resolves; nothing links to it.
+ */
+export const REIS_SLUG_OUD = 'ontdekkingsreis';
 
 /**
  * Vite serves from `/` on a domain of our own and from `/<repo>/` on Pages
@@ -170,7 +178,7 @@ export function routeFor(pathname: string): Route {
   if (slug === '') return { name: 'home' };
   if (slug === RETENTION_SLUG) return { name: 'retention' };
   if (slug === YOU_SLUG) return { name: 'you' };
-  if (slug === REIS_SLUG) return { name: 'reis' };
+  if (slug === REIS_SLUG || slug === REIS_SLUG_OUD) return { name: 'reis' };
 
   const [head = '', tail] = slug.split('/');
 

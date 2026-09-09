@@ -1,15 +1,8 @@
 import { useEffect, useState } from 'react';
 import type { ComponentType } from 'react';
-import {
-  countMastered,
-  formatGrade,
-  grade,
-  roundPreview,
-  type ItemState,
-  type ModeId,
-} from '@/game-core';
+import { countMastered, formatGrade, grade, type ItemState, type ModeId } from '@/game-core';
 import { ProgressBar } from '@/components/ProgressBar';
-import { GoIcon, type IconProps } from '@/components/Icon';
+import { type IconProps } from '@/components/Icon';
 import { RAIL_MODULES, type Module } from '@/features/shell/modules';
 import { MODULE_ICON } from '@/features/shell/moduleIcons';
 import { t, type TranslationKey } from '@/i18n';
@@ -22,12 +15,14 @@ import {
   asPracticeMode,
   asSumMode,
   geplaatst,
-  laatstGeoefend,
+  meestGeoefend,
   naamVan,
   onderdelen,
+  starters,
   startbareOnderdelen,
   type Gespeeld,
   type Onderdeel,
+  type Populair,
 } from '@/features/module/onderdelen';
 import type { PracticeMode, SetId } from '@/features/practice/useRound';
 import type { SumMode } from '@/features/sums/useSumRound';
@@ -42,9 +37,18 @@ import type { SumMode } from '@/features/sums/useSumRound';
  * thing on the screen they get to choose.
  *
  * The screen argues for the product in the order it puts things. First the
- * child's own name; then what today asks and why some of it is a repeat; then
- * the test, which is the reason any of it is happening this week; then what was
- * just practised and how it went; then everything else there is.
+ * child's own name; then what practising here is like, which is the sentence
+ * that admits the part that looks like a mistake; then the test, which is the
+ * reason any of it is happening this week; then the exercises this child keeps
+ * coming back to; then what was just practised and how it went; then
+ * everything else there is.
+ *
+ * **The block between the test and the log is a way in, not a report.** It
+ * held one set with its size, its number of rounds and two buttons — a card
+ * that explained a decision the child had not asked to make yet. What stands
+ * there now is four exercises with the number of times each was played, which
+ * is the same question answered in the form a child actually uses: not "here
+ * is what we suggest", but "here is where you keep going" (ADR-082).
  *
  * Two things it deliberately does not do. **It does not forecast.** "Wat
  * onthoud je" is K9's and it stays there: it is the number the product argues
@@ -61,35 +65,6 @@ import type { SumMode } from '@/features/sums/useSumRound';
 /** How many rounds the history shows. */
 const RECENT_SHOWN = 3;
 
-/**
- * What "verder" means.
- *
- * The subject of the test comes first, and that is the whole reason the test
- * block asks for one. A child practising for Tuesday's topography test should
- * not be offered last night's tables because those were touched more recently:
- * the plan outranks the history.
- *
- * Within a subject, and with no subject set, it is the set touched most
- * recently. Not a guess about what a child wants next — the honest answer to
- * "where was I".
- */
-function verderMet(
-  alles: readonly Onderdeel[],
-  known: ReadonlyMap<string, ItemState>,
-  subject: Module['id'] | null,
-): Onderdeel | null {
-  const binnenVak = subject === null ? alles : alles.filter((deel) => deel.moduleId === subject);
-  const lijst = binnenVak.length > 0 ? binnenVak : alles;
-
-  const laatste = lijst.reduce<{ deel: Onderdeel; at: string } | null>((best, deel) => {
-    const at = laatstGeoefend(deel, known);
-    if (at === null) return best;
-    return best === null || at > best.at ? { deel, at } : best;
-  }, null);
-
-  return laatste?.deel ?? lijst[0] ?? null;
-}
-
 export interface HomeScreenProps {
   /** Whose front door this is. K1 opens by saying so. */
   readonly naam: string;
@@ -100,12 +75,6 @@ export interface HomeScreenProps {
   readonly onStart: (setId: SetId, practiceMode: PracticeMode) => void;
   /** A table, in a chosen way. */
   readonly onStartSum: (setId: string, sumMode: SumMode) => void;
-  /**
-   * Every other way of practising, which is K2's job — and K2 belongs to a
-   * module, so this carries which one. Sending a child who was doing tables to
-   * the topography chooser is the bug this parameter exists to make impossible.
-   */
-  readonly onChoose: (moduleId: Module['id']) => void;
   readonly onModule?: ((id: Module['id']) => void) | undefined;
 }
 
@@ -115,7 +84,6 @@ export function HomeScreen({
   onReis,
   onStart,
   onStartSum,
-  onChoose,
   onModule,
 }: HomeScreenProps) {
   const [states, setStates] = useState<Map<string, ItemState> | null>(null);
@@ -130,15 +98,10 @@ export function HomeScreen({
   const known = states ?? new Map<string, ItemState>();
   const now = new Date();
 
-  const alles = onderdelen();
-  const verder = verderMet(alles, known, plan.subject);
   // Over every set a round can be started on, mixes included: a round of the
   // Rekenmix that could not be placed would drop out of the history entirely.
   const gespeeld = geplaatst(played, startbareOnderdelen());
-
-  const vooruitblik = verder
-    ? roundPreview({ items: verder.items, states: known, size: verder.roundSize, now })
-    : { total: 0, seen: 0 };
+  const populair = meestGeoefend(gespeeld);
 
   /** One way into a round, wherever on this screen it is pressed. */
   const begin = (deel: Onderdeel, mode: ModeId) => {
@@ -155,9 +118,7 @@ export function HomeScreen({
             was on purpose. */}
         <div>
           <h1 className="tk-display text-h1 font-semibold">{t('home.welcome', { naam })}</h1>
-          <p className="mt-1 text-body text-ink-2">
-            {`${countLine(vooruitblik.total)} ${repeatLine(vooruitblik.seen)}`}
-          </p>
+          <p className="mt-1 text-body text-ink-2">{t('home.todayOpen')}</p>
         </div>
 
         {/* The one block with a surface and a border, and it is about the
@@ -170,96 +131,93 @@ export function HomeScreen({
             an iPad in a classroom — the screenshots caught the whole block
             absent: the reason the child is here, missing for as long as the
             read took, and then pushing everything under it down. */}
-        <section
-          className="tk-card tk-card-accented"
-          data-module={plan.subject ?? verder?.moduleId}
-        >
+        <section className="tk-card tk-card-accented" data-module={plan.subject ?? undefined}>
           <TestDate plan={plan} now={now} />
         </section>
 
-        {/* And the way on, out from under it. Same place on the page, its own
-            block, and the second question answered on its own. */}
-        {verder ? <Verder deel={verder} onBegin={begin} onChoose={onChoose} /> : null}
+        {/* And the ways on, out from under it: where this child actually goes,
+            with the count that says so. */}
+        <Populairst populair={populair} onBegin={begin} />
       </div>
 
       <SideColumn sticker={sticker} onReis={onReis} onBegin={begin} />
 
       <div className="tk-home-more">
         <Recent gespeeld={gespeeld} onBegin={begin} />
-        <VerderOefenen known={known} verder={verder} onOpen={onModule} />
+        <VerderOefenen known={known} onOpen={onModule} />
       </div>
     </div>
   );
 }
 
-function countLine(total: number): string {
-  return total === 1 ? t('home.todayCountOne') : t('home.todayCount', { aantal: total });
-}
-
-function repeatLine(seen: number): string {
-  if (seen === 0) return t('home.todayFresh');
-  if (seen === 1) return t('home.todayRepeatOne');
-  return t('home.todayRepeats', { aantal: seen });
-}
-
 /**
- * The way in, inside the test block.
+ * Where this child keeps going, as four tiles with the count on them.
  *
- * One primary button, which is K1's rule: the shortest way into a round is
- * pointing, and every other choice lives on K2 rather than as five more buttons
- * here. The set is named because the button is about to start it, and nothing
- * else is said about it — how it is going belongs under "recent geoefend" and
- * in the column on the right.
+ * The tiles are the shape the rail uses for a module and the foot of the page
+ * uses for the ones that are coming, which is deliberate: a tile in this
+ * product is a door, and these are doors. What is different is the line at the
+ * bottom — "12 keer gespeeld" — and that line is the whole point of the block.
+ * A child who has played the provinces twelve times knows something about
+ * themselves that no bar and no mark tells them.
+ *
+ * **The count is this device's own.** There is no backend and nothing leaves
+ * the machine (ADR-015), so there is no "most popular with everyone" to report
+ * and no honest way to invent one. On a profile with no rounds behind it the
+ * block says so and offers four to start with, at nought rather than at a
+ * number that would be a guess.
  */
-function Verder({
-  deel,
+function Populairst({
+  populair,
   onBegin,
-  onChoose,
 }: {
-  readonly deel: Onderdeel;
+  readonly populair: readonly Populair[];
   readonly onBegin: (deel: Onderdeel, mode: ModeId) => void;
-  readonly onChoose: (moduleId: Module['id']) => void;
 }) {
-  const moduleNaam = t(`module.${deel.moduleId}` as TranslationKey);
-  const rondes = Math.max(1, Math.ceil(deel.items.length / deel.roundSize));
+  const leeg = populair.length === 0;
+  const lijst = leeg ? starters() : populair;
+  if (lijst.length === 0) return null;
 
   return (
-    <div className="flex flex-col gap-4">
-      <div>
-        <h3 className="tk-display text-h3 font-semibold">{naamVan(deel)}</h3>
-        <p className="text-ink-2">
-          {rondes === 1
-            ? t('home.setsOverOne', { onderdelen: deel.items.length })
-            : t('home.setsOver', { onderdelen: deel.items.length, rondes })}
-        </p>
+    <section className="flex flex-col gap-3" aria-label={t('home.popularTitle')}>
+      <div className="flex flex-wrap items-baseline gap-x-3">
+        <h2 className="tk-label">{t('home.popularTitle')}</h2>
+        <p className="text-ink-2">{leeg ? t('home.popularNew') : t('home.popularIntro')}</p>
       </div>
 
-      {/* The way on sits at the end of the line, and the alternative before it
-          — the same shape the module page's start row has (ADR-066). A child
-          who has learned where the button is on one page should find it in the
-          same place on the other. */}
-      <div className="tk-choose-start">
-        <button
-          type="button"
-          className="tk-button tk-button-secondary"
-          onClick={() => onChoose(deel.moduleId)}
-        >
-          {t('home.moreWays')}
-        </button>
-        {/* One primary way in per module: pointing on a map, typing a sum. Both
-            are the way that module starts, and both are one press away. */}
-        <button
-          type="button"
-          className="tk-button tk-button-go"
-          onClick={() => onBegin(deel, deel.moduleId === 'topo' ? 'wijs-aan' : 'som-typen')}
-        >
-          <span className="tk-button-label">
-            {t('home.continueWith', { module: moduleNaam })}
-            <GoIcon size={24} />
-          </span>
-        </button>
+      <div className="tk-tiles">
+        {lijst.map(({ deel, mode, keer }) => {
+          const ModuleIcon: ComponentType<Omit<IconProps, 'children'>> = MODULE_ICON[deel.moduleId];
+
+          return (
+            <button
+              key={`${deel.setId}-${mode}`}
+              type="button"
+              data-module={deel.moduleId}
+              className="tk-tile"
+              onClick={() => onBegin(deel, mode)}
+            >
+              <span className="tk-tile-head">
+                <ModuleIcon size={24} />
+                <span className="tk-display text-h3 font-semibold">{naamVan(deel)}</span>
+              </span>
+
+              <span className="text-ink-2">{t(`mode.${mode}` as TranslationKey)}</span>
+
+              {/* The count, which is the reason the block exists. Nought is a
+                  sentence rather than a nought: "0 keer gespeeld" reads as a
+                  score on a child who has done nothing wrong. */}
+              <span className="tk-tile-count">
+                {keer === 0
+                  ? t('home.popularNone')
+                  : keer === 1
+                    ? t('home.popularOnce')
+                    : t('home.popularTimes', { aantal: keer })}
+              </span>
+            </button>
+          );
+        })}
       </div>
-    </div>
+    </section>
   );
 }
 
@@ -342,11 +300,9 @@ function Recent({
  */
 function VerderOefenen({
   known,
-  verder,
   onOpen,
 }: {
   readonly known: ReadonlyMap<string, ItemState>;
-  readonly verder: Onderdeel | null;
   readonly onOpen?: ((id: Module['id']) => void) | undefined;
 }) {
   const alles = onderdelen();
@@ -356,7 +312,7 @@ function VerderOefenen({
       <h2 className="tk-label">{t('home.practiceMore')}</h2>
 
       <div className="tk-tiles">
-        {RAIL_MODULES.filter((module) => module.id !== verder?.moduleId).map((module) => {
+        {RAIL_MODULES.map((module) => {
           const ids = alles
             .filter((deel) => deel.moduleId === module.id)
             .flatMap((deel) => deel.items.map((item) => item.id));

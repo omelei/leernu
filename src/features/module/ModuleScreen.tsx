@@ -1,7 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Button } from '@/components/Button';
 import { Dot } from '@/components/Dot';
-import { GoIcon } from '@/components/Icon';
+import { GlobeIcon, GoIcon } from '@/components/Icon';
 import { countMastered, type ItemState, type ModeId } from '@/game-core';
 import { t } from '@/i18n';
 import { loadItemStates } from '@/store/progress';
@@ -19,6 +19,7 @@ import {
   type Onderdeel,
   type Onderwerp,
 } from './onderdelen';
+import { eersteRegio, regiosVan } from './regios';
 import {
   formsFor,
   minutesFor,
@@ -41,6 +42,14 @@ import {
  * neither is a reason for a second screen.
  *
  * Four things it does that the two screens it replaces did not.
+ *
+ * **Topography asks where before it asks what.** Wereld, Europa, Nederland,
+ * and then one word per subject underneath — Provincies, Steden, Wateren,
+ * Eilanden, Mix. Five cards that each ended in "van Nederland" said the same
+ * thing five times and left no room for the countries of Europe to arrive
+ * beside them; the region row says it once and the cards get their word back
+ * (ADR-083). Rekenen has no region and draws no row, which is why the steps
+ * are numbered by the page rather than written into the copy.
  *
  * **Step 1 offers subjects, not sets.** Twelve tables were twelve cards, and
  * with division, plus and minus beside them rekenen would have had thirty-six.
@@ -88,6 +97,8 @@ export function ModuleScreen({
 }) {
   const [states, setStates] = useState<Map<string, ItemState> | null>(null);
   const [formId, setFormId] = useState<ModeId | null>(null);
+  /** Where on the map, for the module that has a where. Null follows the set. */
+  const [regio, setRegio] = useState<string | null>(null);
   /** How long the child wants the round, or null for the round's own length. */
   const [aantal, setAantal] = useState<number | null>(null);
   const prefs = usePreferences();
@@ -100,13 +111,24 @@ export function ModuleScreen({
   const known = states ?? new Map<string, ItemState>();
   const now = new Date();
 
-  const onderwerpen = onderwerpenVan(module.id, known);
-  const alleSets = onderwerpen.flatMap((vak) => vak.sets);
+  const alleOnderwerpen = onderwerpenVan(module.id, known);
+  const alleSets = alleOnderwerpen.flatMap((vak) => vak.sets);
 
   // An address that names a set nobody has heard of opens the module rather
   // than an error: the child asked for topography and got topography.
   const chosen = alleSets.find((deel) => deel.setId === setId) ?? alleSets[0] ?? null;
-  const onderwerp = chosen ? onderwerpVan(onderwerpen, chosen.setId) : null;
+  const onderwerp = chosen ? onderwerpVan(alleOnderwerpen, chosen.setId) : null;
+
+  // The region follows the open set unless the child has said otherwise, so
+  // leer.nu/topografie/provincies opens on Nederland without the address
+  // having to carry the word.
+  const regios = regiosVan(module.id);
+  const hier = regio ?? onderwerp?.regio ?? eersteRegio(regios);
+  const onderwerpen =
+    regios.length === 0 ? alleOnderwerpen : alleOnderwerpen.filter((vak) => vak.regio === hier);
+
+  /** How many steps this page has, so the numbers are the page's own. */
+  const stap = regios.length >= 2 ? { regio: 1, wat: 2, hoe: 3 } : { regio: 0, wat: 1, hoe: 2 };
 
   const forms = offeredForms(formsFor(module.id), prefs.timer, chosen?.setId ?? null);
   const form = forms.find((candidate) => candidate.id === formId) ?? forms[0] ?? null;
@@ -151,8 +173,39 @@ export function ModuleScreen({
           <Rol onderwerpen={onderwerpen} chosen={chosen} known={known} now={now} onSet={onSet} />
         </div>
 
+        {/* Where on the map, and only where there is more than one answer. A
+            row of one region is a label a child cannot press, which is the
+            same rule the tab bar and the rail already follow. */}
+        {regios.length >= 2 ? (
+          <section className="flex flex-col gap-3" aria-label={t('regio.title')}>
+            <Stap nummer={stap.regio} label={t('regio.title')} />
+
+            <div className="tk-regios">
+              {regios.map((kandidaat) => (
+                <button
+                  key={kandidaat.id}
+                  type="button"
+                  className="tk-regio"
+                  aria-pressed={kandidaat.built ? kandidaat.id === hier : undefined}
+                  disabled={!kandidaat.built}
+                  data-soon={kandidaat.built ? undefined : 'ja'}
+                  onClick={() => setRegio(kandidaat.id)}
+                >
+                  <GlobeIcon size={20} />
+                  <span className="font-semibold">{t(kandidaat.naam)}</span>
+                  {/* A region the plan has and the product does not says so on
+                      its own face rather than opening onto nothing (ADR-051). */}
+                  {kandidaat.built ? null : (
+                    <span className="tk-label">{t('regio.soon')}</span>
+                  )}
+                </button>
+              ))}
+            </div>
+          </section>
+        ) : null}
+
         <section className="flex flex-col gap-3" aria-label={t('choose.stepWhat')}>
-          <h2 className="tk-label">{t('choose.stepWhat')}</h2>
+          <Stap nummer={stap.wat} label={t('choose.stepWhat')} />
 
           <div className="tk-sets">
             {onderwerpen.map((vak) => {
@@ -242,9 +295,11 @@ export function ModuleScreen({
         </section>
 
         <section className="flex flex-col gap-3" aria-label={t('choose.stepHow')}>
-          {/* The order is the argument, so it is written down rather than left
-              to be inferred from the sequence. */}
-          <h2 className="tk-label">{t('choose.stepHow')}</h2>
+          {/* The order of the six is the argument, and each one says its own
+              reason on its own card. The heading used to carry "van makkelijk
+              naar moeilijk" as well, which was a caption on a question: eight
+              words where four were the question, and two lines on a phone. */}
+          <Stap nummer={stap.hoe} label={t('choose.stepHow')} />
 
           <div className="tk-forms">
             {forms.map((candidate) => {
@@ -345,6 +400,25 @@ export function ModuleScreen({
 
       {aside}
     </div>
+  );
+}
+
+/**
+ * One of the page's numbered questions.
+ *
+ * The number is drawn here rather than written into the copy, because the two
+ * modules do not have the same number of them: topography asks where before it
+ * asks what, and rekenen does not. A "1 ·" baked into "Kies een onderwerp"
+ * would be right on one page and wrong on the other.
+ *
+ * It is the display face at h3 — bigger than everything under it, smaller than
+ * the one heading the page has. See .tk-step.
+ */
+function Stap({ nummer, label }: { readonly nummer: number; readonly label: string }) {
+  return (
+    <h2 className="tk-step">
+      <span className="tabular-nums">{nummer}</span> · {label}
+    </h2>
   );
 }
 

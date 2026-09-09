@@ -44,7 +44,7 @@ test('never asks a third party for anything', async ({ page, baseURL }) => {
   await page.goto('/topografie');
   await page
     .getByRole('region', { name: /Kies een onderwerp/ })
-    .getByRole('button', { name: /Provincies van Nederland/ })
+    .getByRole('button', { name: /^Provincies/ })
     .click();
   await page
     .getByRole('region', { name: /Hoe wil je/ })
