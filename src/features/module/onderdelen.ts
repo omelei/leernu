@@ -40,6 +40,11 @@ export const SET_NAME_KEY: Record<SetId, TranslationKey> = {
   'nl-wateren': 'set.nl-wateren',
   'nl-steden': 'set.nl-steden',
   'europa-landen': 'set.europa-landen',
+  'afrika-landen': 'set.afrika-landen',
+  'azie-landen': 'set.azie-landen',
+  'noord-amerika-landen': 'set.noord-amerika-landen',
+  'zuid-amerika-landen': 'set.zuid-amerika-landen',
+  'oceanie-landen': 'set.oceanie-landen',
   'wereld-landen': 'set.wereld-landen',
 };
 
