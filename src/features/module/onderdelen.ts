@@ -41,6 +41,16 @@ export const ROUND_SIZE = { topo: 15, tafels: 10 } as const;
 /** How many favourites the column on the right holds. */
 export const FAVOURITES_SHOWN = 4;
 
+/**
+ * How many sums a child has to have got wrong before "oefen je fouten" appears.
+ *
+ * Below this it is not a subject, it is a list — and a card offering three sums
+ * is a card that is finished in twenty seconds and then sits there empty. It
+ * also spares a child their very first mistake being turned into a heading
+ * about them.
+ */
+export const MIN_FOUTEN = 5;
+
 export interface Onderdeel {
   readonly moduleId: Module['id'];
   readonly setId: string;
@@ -149,7 +159,20 @@ function rekenNaam(setId: string): { naam: string; kort: string } {
 
   if (setId === 'tafels-alle') return { naam: t('sums.allTables'), kort: t('sums.allShort') };
   if (setId === 'deel-alle') return { naam: t('sums.allDivides'), kort: t('sums.allShort') };
-  return { naam: t('sums.mix'), kort: t('sums.mix') };
+  if (setId === 'fouten') return { naam: t('sums.mistakes'), kort: t('sums.mistakes') };
+
+  // The Rekenmix in three difficulties and an everything. The level is the one
+  // every set already carried and nothing else ever read out loud: one is a
+  // rule you can say, three is the tables that get learned last (ADR-073).
+  const mixNiveau = /^rekenmix-(\d)$/.exec(setId)?.[1];
+  if (mixNiveau) {
+    return {
+      naam: t(`sums.mixLevel${mixNiveau}` as TranslationKey),
+      kort: t(`sums.mixLevel${mixNiveau}.kort` as TranslationKey),
+    };
+  }
+
+  return { naam: t('sums.mix'), kort: t('sums.allShort') };
 }
 
 function rekenOnderdeel(setId: string): Onderdeel | null {
@@ -204,7 +227,10 @@ export function startbareOnderdelen(): Onderdeel[] {
  * kinds of sum and a mix of all four, and two of those four hold thirteen sets
  * apiece.
  */
-export function onderwerpenVan(moduleId: Module['id']): Onderwerp[] {
+export function onderwerpenVan(
+  moduleId: Module['id'],
+  known: ReadonlyMap<string, ItemState> = new Map(),
+): Onderwerp[] {
   if (moduleId === 'topo') {
     const enkel: Onderwerp[] = topoOnderdelen().map((deel) => ({
       moduleId: 'topo' as const,
@@ -273,8 +299,48 @@ export function onderwerpenVan(moduleId: Module['id']): Onderwerp[] {
       id: 'rekenmix',
       naam: 'onderwerp.rekenmix',
       uitleg: 'onderwerp.rekenmix.uitleg',
+      keuze: 'onderwerp.rekenmix.keuze',
+      sets: [
+        ...mixMet('rekenmix-1'),
+        ...mixMet('rekenmix-2'),
+        ...mixMet('rekenmix-3'),
+        ...mixMet('rekenmix'),
+      ],
+    },
+    // Last, and only when there is something in it. It is not a kind of sum —
+    // it is this child's own list, and it belongs after the four kinds and the
+    // mix rather than competing with them for the way in (ADR-078).
+    ...foutenOnderwerp(known),
+  ];
+}
+
+/**
+ * "Oefen je fouten": the sums this child has got wrong, as a subject.
+ *
+ * The Leitner scheduler has always put what a child keeps missing at the front
+ * of a round. What it could not do is be asked: a child who knows perfectly
+ * well which sums they keep getting wrong had no way to say so. This is that
+ * button, and it is the only subject in the product that is different for every
+ * child.
+ *
+ * Absent rather than empty when there is nothing in it, and absent until the
+ * boxes have been read — a card that says "0 sommen" is a card about nothing.
+ */
+function foutenOnderwerp(known: ReadonlyMap<string, ItemState>): Onderwerp[] {
+  const alles = rekenOnderdeel('fouten');
+  if (!alles) return [];
+
+  const fout = alles.items.filter((item) => (known.get(item.id)?.foutCount ?? 0) > 0);
+  if (fout.length < MIN_FOUTEN) return [];
+
+  return [
+    {
+      moduleId: 'tafels',
+      id: 'fouten',
+      naam: 'onderwerp.fouten',
+      uitleg: 'onderwerp.fouten.uitleg',
       keuze: null,
-      sets: mixMet('rekenmix'),
+      sets: [{ ...alles, items: fout }],
     },
   ];
 }

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   STAMPS,
   COINS_PERFECT_ROUND,
+  correctForLevel,
   correctToNextLevel,
   diplomaFor,
   levelFor,
@@ -9,7 +10,6 @@ import {
   newStamps,
   rewardForRound,
   tableOfDiploma,
-  xpForLevel,
   XP_COMBO_BONUS,
   XP_PER_CORRECT,
   type RewardSnapshot,
@@ -49,42 +49,44 @@ describe('the stamps the challenge modes earn', () => {
   });
 });
 
+/**
+ * The ladder runs on correct answers rather than on XP (ADR-070). What the card
+ * says and what the level counts are the same number, which is the whole reason
+ * it moved: "nog 6 goede antwoorden" used to be a division by ten with a combo
+ * bonus quietly making it wrong by one.
+ */
 describe('levels', () => {
   it('starts everyone at one', () => {
     expect(levelFor(0)).toBe(1);
-    expect(xpForLevel(1)).toBe(0);
+    expect(correctForLevel(1)).toBe(0);
   });
 
-  /**
-   * The first level costs 150 and every one after it a hundred more than the
-   * last, so the totals run 150, 400, 750. A perfect round of fifteen is 205 XP:
-   * the first level lands at the end of a good round rather than halfway
-   * through one, which is the whole reason the first step is not 100.
-   */
-  it('asks a whole round for the first level, then a hundred more each time', () => {
-    expect(xpForLevel(2)).toBe(150);
-    expect(xpForLevel(3)).toBe(400);
-    expect(xpForLevel(4)).toBe(750);
+  it('doubles three times and then settles at two hundred', () => {
+    expect(correctForLevel(2)).toBe(25);
+    expect(correctForLevel(3)).toBe(75);
+    expect(correctForLevel(4)).toBe(175);
+    expect(correctForLevel(5)).toBe(375);
+    expect(correctForLevel(6)).toBe(575);
   });
 
-  it('levels up exactly on the threshold, not a point later', () => {
-    expect(levelFor(149)).toBe(1);
-    expect(levelFor(150)).toBe(2);
-    expect(levelFor(399)).toBe(2);
-    expect(levelFor(400)).toBe(3);
+  it('levels up exactly on the threshold, not an answer later', () => {
+    expect(levelFor(24)).toBe(1);
+    expect(levelFor(25)).toBe(2);
+    expect(levelFor(74)).toBe(2);
+    expect(levelFor(75)).toBe(3);
   });
 
   it('reports progress through the current level', () => {
-    expect(levelProgress(150)).toBe(0);
-    // Level two spans 150 to 400, so halfway is 275.
-    expect(levelProgress(275)).toBeCloseTo(0.5, 6);
-    expect(levelProgress(399)).toBeCloseTo(0.996, 3);
+    expect(levelProgress(25)).toBe(0);
+    // Level two spans 25 to 75, so halfway is 50.
+    expect(levelProgress(50)).toBeCloseTo(0.5, 6);
+    expect(levelProgress(74)).toBeCloseTo(0.98, 2);
   });
 
-  it('never goes backwards as xp rises', () => {
+  it('never goes backwards as the answers add up', () => {
     let previous = 0;
-    for (let xp = 0; xp < 5000; xp += 37) {
-      const level = levelFor(xp);
+    for (let goed = 0; goed < 5000; goed += 37) {
+      const level = levelFor(goed);
       expect(level).toBeGreaterThanOrEqual(previous);
       previous = level;
     }
@@ -210,28 +212,22 @@ describe('stamps', () => {
  * do. "Nog 340 XP" is a currency nobody counts in (ADR-065).
  */
 describe('how far the next level is', () => {
-  it('counts in correct answers, not in points', () => {
-    // The first level costs 150, which is fifteen correct answers from nothing.
-    expect(correctToNextLevel(0)).toBe(Math.ceil(xpForLevel(2) / XP_PER_CORRECT));
-    expect(correctToNextLevel(0)).toBe(15);
-  });
-
-  it('rounds up, so it never promises a level a whole answer early', () => {
-    // Five XP short of a level is still one more answer, not nought.
-    expect(correctToNextLevel(xpForLevel(2) - 5)).toBe(1);
-    expect(correctToNextLevel(xpForLevel(2) - 1)).toBe(1);
+  it('is a subtraction, in the unit the card says out loud', () => {
+    expect(correctToNextLevel(0)).toBe(25);
+    expect(correctToNextLevel(19)).toBe(6);
+    expect(correctToNextLevel(24)).toBe(1);
   });
 
   it('never says nought, at any point on the curve', () => {
-    for (let xp = 0; xp < 8000; xp += 7) {
-      expect(correctToNextLevel(xp), `${xp}`).toBeGreaterThanOrEqual(1);
+    for (let goed = 0; goed < 12000; goed += 7) {
+      expect(correctToNextLevel(goed), `${goed}`).toBeGreaterThanOrEqual(1);
     }
   });
 
   it('agrees with the level it is counting towards', () => {
-    for (let xp = 0; xp < 4000; xp += 13) {
-      const naNog = xp + correctToNextLevel(xp) * XP_PER_CORRECT;
-      expect(levelFor(naNog), `${xp}`).toBeGreaterThan(levelFor(xp));
+    for (let goed = 0; goed < 4000; goed += 13) {
+      const naNog = goed + correctToNextLevel(goed);
+      expect(levelFor(naNog), `${goed}`).toBeGreaterThan(levelFor(goed));
     }
   });
 });

@@ -126,26 +126,49 @@ test('greets the child by name on the front door', async ({ page }) => {
 });
 
 /**
- * The subject of the test is not decoration: it decides what "Ga verder"
- * carries on with. A child practising for Tuesday's tables should be offered
- * tables, whatever they happened to do last night.
+ * The subject of the soonest test is not decoration: it decides what "Ga
+ * verder" carries on with. A child practising for Tuesday's tables should be
+ * offered tables, whatever they happened to do last night.
+ *
+ * There can be more than one test now (ADR-077), so this also checks the thing
+ * that makes a list a plan rather than a calendar: the soonest one wins.
  */
-test('the subject of the test decides what to carry on with', async ({ page }) => {
+test('the subject of the soonest test decides what to carry on with', async ({ page }) => {
   await signIn(page, 'Tijn');
 
   // With no test set, it is the set touched most recently — and on a first
   // visit that is the way in the content calls the way in.
   await expect(page.getByRole('button', { name: 'Ga verder met Topo' })).toBeVisible();
 
-  await page.getByRole('button', { name: 'Toets instellen' }).click();
-  await page.getByLabel('Voor welk vak?').selectOption('tafels');
-
+  await addTest(page, '2099-01-10', 'tafels');
   await expect(page.getByRole('button', { name: 'Ga verder met Rekenen' })).toBeVisible();
+
+  // A second test, earlier than the first. The plan follows the soonest one.
+  await addTest(page, '2099-01-05', 'topo');
+  await expect(page.getByRole('button', { name: 'Ga verder met Topo' })).toBeVisible();
 
   // And it is a device setting, so it survives the page rather than the render.
   await page.reload();
+  await expect(page.getByRole('button', { name: 'Ga verder met Topo' })).toBeVisible();
+
+  // Both are on the list, and taking the soonest one off puts the other back
+  // in charge — which is the whole of what makes a list a plan.
+  await expect(page.getByRole('button', { name: /^Haal de toets weg/ })).toHaveCount(2);
+
+  await page
+    .getByRole('button', { name: /^Haal de toets weg/ })
+    .first()
+    .click();
   await expect(page.getByRole('button', { name: 'Ga verder met Rekenen' })).toBeVisible();
 });
+
+/** One test, through the block that is now a list with a form under it. */
+async function addTest(page: Page, date: string, subject: string) {
+  await page.getByRole('button', { name: 'Toets toevoegen' }).click();
+  await page.getByLabel('Wanneer is de toets?').fill(date);
+  await page.getByLabel('Voor welk vak?').selectOption(subject);
+  await page.getByRole('button', { name: 'Toevoegen', exact: true }).click();
+}
 
 test('logs the round that was just played, with its mark', async ({ page }) => {
   await signIn(page, 'Jamie');
@@ -194,26 +217,26 @@ test('logs the round that was just played, with its mark', async ({ page }) => {
  */
 test('the animal a child picks is theirs, and follows them', async ({ page }) => {
   await signIn(page, 'Puk');
-  await page.goto('/jij');
+  await page.goto('/ontdekkingsreis');
 
-  const dieren = page.getByRole('region', { name: 'Jouw dieren' });
+  const dieren = page.getByRole('region', { name: 'Dieren' });
   await dieren.getByRole('button', { name: 'Vos', exact: true }).click();
   await expect(dieren.getByRole('button', { name: 'Vos', exact: true })).toHaveAttribute(
     'aria-pressed',
     'true',
   );
 
-  // Level one, so the dragon is not hidden — it is there, greyed, saying what
-  // it costs. A collection with an invisible end is a mystery, not a ladder.
-  const draak = dieren.getByRole('button', { name: /Draak, vanaf niveau \d+/ });
-  await expect(draak).toBeDisabled();
+  // Level one, so the dragon is not hidden — it is there, faded, saying what it
+  // costs. A collection with an invisible end is a mystery, not a ladder. It is
+  // not a button either: a control a child cannot use is a question they have to
+  // ask somebody about.
+  await expect(dieren.getByRole('button', { name: /^Draak/ })).toHaveCount(0);
+  await expect(dieren.getByLabel(/Draak in zwart, vanaf niveau \d+/)).toBeVisible();
 
   // It belongs to the child, not to the page: it survives a reload.
   await page.reload();
   await expect(
-    page
-      .getByRole('region', { name: 'Jouw dieren' })
-      .getByRole('button', { name: 'Vos', exact: true }),
+    page.getByRole('region', { name: 'Dieren' }).getByRole('button', { name: 'Vos', exact: true }),
   ).toHaveAttribute('aria-pressed', 'true');
 });
 

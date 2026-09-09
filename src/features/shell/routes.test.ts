@@ -107,6 +107,10 @@ describe('the addresses', () => {
       ['/rekenen/alle-tafels', 'tafels-alle'],
       ['/rekenen/alle-deelsommen', 'deel-alle'],
       ['/rekenen/mix', 'rekenmix'],
+      ['/rekenen/mix-makkelijk', 'rekenmix-1'],
+      ['/rekenen/mix-gemiddeld', 'rekenmix-2'],
+      ['/rekenen/mix-pittig', 'rekenmix-3'],
+      ['/rekenen/fouten', 'fouten'],
       ['/topografie/mix', 'nl-mix'],
     ] as const) {
       expect(routeFor(pad), pad).toMatchObject({ name: 'module', setId });
@@ -124,6 +128,13 @@ describe('the addresses', () => {
     // And a range nobody offers. "Tot 50" is a plausible thing to type and
     // there is no such set, so it opens rekenen rather than an empty round.
     expect(routeFor('/rekenen/plus-50')).toMatchObject({ name: 'module', setId: null });
+  });
+
+  it('gives the collection an address, and keeps it out of the tab bar', () => {
+    // A place a child goes on purpose, from the card that says where their
+    // journey is — not a fifth section of the product (ADR-076).
+    expect(routeFor('/ontdekkingsreis')).toEqual({ name: 'reis' });
+    expect(pathFor({ name: 'reis' })).toMatch(/\/ontdekkingsreis$/);
   });
 
   it('keeps the retention screen at a word a child could type', () => {

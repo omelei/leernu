@@ -1,8 +1,8 @@
 import { t, type TranslationKey } from '@/i18n';
 import type { GeoSet } from '@/content/loadGeo';
 import type { AnswerLayer } from './MapCanvas';
-import type { StampId } from '@/game-core';
 import { isMixSet, type RoundState } from './useRound';
+import { STAMP_NAME } from '@/features/reis/stampNames';
 
 /**
  * The screen after a round. Spec section 4.6 asks for exactly three things and
@@ -206,21 +206,7 @@ function StreakLine({ state }: { readonly state: RoundState }) {
  * What the round earned. Below the score and the streak, in that order: the
  * number that matters is what the child learned, and points that lead the
  * screen turn a lesson into a scoreboard.
- */
-const STAMP_NAME: Record<StampId, TranslationKey> = {
-  'provincies-foutloos': 'stamp.provincies-foutloos',
-  'hoofdsteden-foutloos': 'stamp.hoofdsteden-foutloos',
-  'eilanden-foutloos': 'stamp.eilanden-foutloos',
-  'week-op-rij': 'stamp.week-op-rij',
-  'set-onthouden': 'stamp.set-onthouden',
-  'wateren-foutloos': 'stamp.wateren-foutloos',
-  'steden-foutloos': 'stamp.steden-foutloos',
-  'tafel-foutloos': 'stamp.tafel-foutloos',
-  'bliksem-tien': 'stamp.bliksem-tien',
-  'overleven-vijftien': 'stamp.overleven-vijftien',
-};
-
-/**
+ *
  * Coins are earned and stored on every round, and deliberately not shown.
  *
  * There is nothing to spend them on yet. A currency with no shop is a promise

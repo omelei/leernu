@@ -27,8 +27,31 @@ const somModules = import.meta.glob<{ default: SumSet }>('../../content/sommen/*
   eager: true,
 });
 
-/** The ids of the sets that are unions rather than files. */
-export const MIX_IDS = ['tafels-alle', 'deel-alle', 'rekenmix'] as const;
+/**
+ * The ids of the sets that are unions rather than files.
+ *
+ * The Rekenmix comes in three difficulties and an everything, and they are not
+ * a new idea: every set already carries a `niveau`, which decided the order the
+ * tables are offered in and nothing else. It decides this too now — a mix of
+ * level one is the tables with a rule you can say out loud, plus and minus to
+ * twenty, and the divisions that mirror those tables (ADR-073). A child who
+ * picks "makkelijk" gets sums they can do; a child who picks "pittig" asked
+ * for it.
+ */
+export const MIX_IDS = [
+  'tafels-alle',
+  'deel-alle',
+  'rekenmix-1',
+  'rekenmix-2',
+  'rekenmix-3',
+  'rekenmix',
+  // Everything, narrowed at the moment a round starts to the sums this child
+  // has actually got wrong (ADR-078). It holds them all here because a set is
+  // a list of sums and a child's mistakes are not a property of the content —
+  // `useSumRound` reads the boxes and filters, which is also the only way the
+  // list can be right rather than as right as it was when the page loaded.
+  'fouten',
+] as const;
 export type MixId = (typeof MIX_IDS)[number];
 
 function bestanden(): SumSet[] {
@@ -75,6 +98,10 @@ function unie(id: MixId, sets: readonly SumSet[]): SumSet {
 function mixLeden(id: MixId, alles: readonly SumSet[]): SumSet[] {
   if (id === 'tafels-alle') return alles.filter((set) => set.op === 'keer');
   if (id === 'deel-alle') return alles.filter((set) => set.op === 'delen');
+
+  const niveau = /^rekenmix-(\d)$/.exec(id)?.[1];
+  if (niveau) return alles.filter((set) => set.niveau === Number(niveau));
+
   return [...alles];
 }
 

@@ -22,53 +22,65 @@ export const COINS_PER_CORRECT = 1;
 export const COINS_PERFECT_ROUND = 5;
 
 /**
- * The first level costs 150 XP; every one after that costs 100 more than the
- * one before. So 150, 250, 350, and the totals run 150, 400, 750.
+ * The ladder runs on correct answers, not on XP (ADR-070).
  *
- * The first step used to be 100, which a good round passed halfway through — a
- * level you reach while still working is a level that arrives for free. 150 is
- * a whole round for a child answering well and early in the second for a child
- * still finding their feet, which is where the first one belongs.
+ * It ran on XP for one release, and the card that showed it had to translate
+ * back — "nog 6 goede antwoorden" was a division by ten with a combo bonus
+ * quietly making it wrong by one now and then. A level is a promise about work
+ * a child can count themselves, so it is counted in the thing they count:
+ * questions they got right, over everything they have ever practised.
  *
- * A curve rather than a constant, so early levels arrive fast and later ones
- * mean something, and simple enough that a child can be told the rule and work
- * out the next one themselves.
+ * XP and coins are untouched and still earned on every round. They are for the
+ * avatar shop that does not exist yet (spec §4.5), and merging them into this
+ * would have meant a child who spends coins losing their level.
+ *
+ * **25, 50, 100, 200, and 200 from there on.** Doubling three times and then
+ * settling, which is the shape a child can be told out loud: the first one is a
+ * few days, the fourth is a few weeks, and none of them is ever out of reach.
+ * Pure doubling would have put level 10 at nearly thirteen thousand answers —
+ * three years at ten a day — and a rung nobody can reach is not a rung.
  */
-export const XP_FIRST_LEVEL = 150;
-export const XP_STEP = 100;
+export const LEVEL_STEPS: readonly number[] = [25, 50, 100, 200];
+/** What every step past the fourth costs. */
+export const LEVEL_STEP = 200;
 
-export function xpForLevel(level: number): number {
-  if (level <= 1) return 0;
-  const climbed = level - 1;
-  return XP_FIRST_LEVEL * climbed + (XP_STEP * (climbed - 1) * climbed) / 2;
+/** What one step from `level` to the next costs. */
+export function stepToLevel(level: number): number {
+  return LEVEL_STEPS[level - 1] ?? LEVEL_STEP;
 }
 
-export function levelFor(xp: number): number {
+/** Correct answers needed in total to stand on `level`. */
+export function correctForLevel(level: number): number {
+  let total = 0;
+  for (let at = 1; at < level; at++) total += stepToLevel(at);
+  return total;
+}
+
+export function levelFor(correct: number): number {
   let level = 1;
-  while (xpForLevel(level + 1) <= xp) level++;
+  while (correctForLevel(level + 1) <= correct) level++;
   return level;
 }
 
 /** How much of the current level is done, 0 to 1. Drives a progress bar. */
-export function levelProgress(xp: number): number {
-  const level = levelFor(xp);
-  const start = xpForLevel(level);
-  const next = xpForLevel(level + 1);
+export function levelProgress(correct: number): number {
+  const level = levelFor(correct);
+  const start = correctForLevel(level);
+  const next = correctForLevel(level + 1);
   if (next === start) return 1;
-  return (xp - start) / (next - start);
+  return (correct - start) / (next - start);
 }
 
 /**
  * How many more correct answers there are between here and the next level.
  *
- * The one number on the front door written in what a child actually does. "Nog
- * 340 XP" is a currency nobody counts in; "nog 6 goede antwoorden" is a thing
- * you can decide to do, and it is exact rather than a rounding — a combo can
- * only make it arrive sooner (ADR-065).
+ * The one number on the front door written in what a child actually does. It is
+ * now a subtraction rather than a conversion, which is the whole reason the
+ * ladder moved off XP: what the card says and what the ladder counts are the
+ * same thing (ADR-070).
  */
-export function correctToNextLevel(xp: number): number {
-  const next = xpForLevel(levelFor(xp) + 1);
-  return Math.max(1, Math.ceil((next - xp) / XP_PER_CORRECT));
+export function correctToNextLevel(correct: number): number {
+  return Math.max(1, correctForLevel(levelFor(correct) + 1) - correct);
 }
 
 export interface RoundReward {

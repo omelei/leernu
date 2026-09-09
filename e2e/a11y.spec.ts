@@ -93,6 +93,20 @@ test('the module pages have no violations, in each of their three shapes', async
   expect((await scan(page)).violations).toEqual([]);
 });
 
+/**
+ * The collection: sixty animals, twelve diplomas and ten stamps, most of them
+ * not earned yet. It is the densest page in the product and the one where the
+ * temptation to say "not yet" with a colour alone is strongest, so it is worth
+ * a scan of its own (ADR-076).
+ */
+test('the collection page has no violations', async ({ page }) => {
+  await signIn(page, 'Lieve');
+
+  await page.goto('/ontdekkingsreis');
+  await expect(page.getByRole('heading', { name: 'Jouw ontdekkingsreis' })).toBeVisible();
+  expect((await scan(page)).violations).toEqual([]);
+});
+
 test('the map has no violations while asking, and none while showing the answer', async ({
   page,
 }) => {

@@ -28,16 +28,19 @@ import type { TranslationKey } from '@/i18n';
 export interface Sticker {
   readonly id: string;
   readonly name: TranslationKey;
-  /**
-   * The level at which this one arrives. One is the first, which every child
-   * has from the first minute.
-   */
-  readonly level: number;
   readonly draw: ComponentType<Omit<IconProps, 'children'>>;
 }
 
 /**
- * In the order they arrive: three from the first minute, then one per level.
+ * In the order they arrive: three from the first minute, then one per level,
+ * twelve to a reeks and five reeksen of them (ADR-071).
+ *
+ * **The order is all this file knows about earning them.** Which level hands
+ * out which one, how many a child has, and which material a row is drawn in
+ * are `game-core/collection.ts` — pure, testable without React, and the only
+ * place that arithmetic exists. This list carried a `level` field of its own
+ * for one release, which was a second copy of the same rule and exactly how
+ * two of them come to disagree.
  *
  * **Three at level one, not one.** ADR-059's real point was that a child who
  * cannot change anything about an app they are told to use can at least decide
@@ -60,18 +63,18 @@ export interface Sticker {
  * next one, and you know exactly what it costs.
  */
 export const STICKERS: readonly Sticker[] = [
-  { id: 'kat', name: 'sticker.kat', level: 1, draw: CatSticker },
-  { id: 'uil', name: 'sticker.uil', level: 1, draw: OwlSticker },
-  { id: 'vos', name: 'sticker.vos', level: 1, draw: FoxSticker },
-  { id: 'beer', name: 'sticker.beer', level: 2, draw: BearSticker },
-  { id: 'haas', name: 'sticker.haas', level: 3, draw: HareSticker },
-  { id: 'vis', name: 'sticker.vis', level: 4, draw: FishSticker },
-  { id: 'egel', name: 'sticker.egel', level: 5, draw: HedgehogSticker },
-  { id: 'kikker', name: 'sticker.kikker', level: 6, draw: FrogSticker },
-  { id: 'eekhoorn', name: 'sticker.eekhoorn', level: 7, draw: SquirrelSticker },
-  { id: 'pinguin', name: 'sticker.pinguin', level: 8, draw: PenguinSticker },
-  { id: 'olifant', name: 'sticker.olifant', level: 9, draw: ElephantSticker },
-  { id: 'draak', name: 'sticker.draak', level: 10, draw: DragonSticker },
+  { id: 'kat', name: 'sticker.kat', draw: CatSticker },
+  { id: 'uil', name: 'sticker.uil', draw: OwlSticker },
+  { id: 'vos', name: 'sticker.vos', draw: FoxSticker },
+  { id: 'beer', name: 'sticker.beer', draw: BearSticker },
+  { id: 'haas', name: 'sticker.haas', draw: HareSticker },
+  { id: 'vis', name: 'sticker.vis', draw: FishSticker },
+  { id: 'egel', name: 'sticker.egel', draw: HedgehogSticker },
+  { id: 'kikker', name: 'sticker.kikker', draw: FrogSticker },
+  { id: 'eekhoorn', name: 'sticker.eekhoorn', draw: SquirrelSticker },
+  { id: 'pinguin', name: 'sticker.pinguin', draw: PenguinSticker },
+  { id: 'olifant', name: 'sticker.olifant', draw: ElephantSticker },
+  { id: 'draak', name: 'sticker.draak', draw: DragonSticker },
 ];
 
 /** The first one, which is what a child who has never chosen is shown. */
@@ -86,14 +89,4 @@ export const DEFAULT_STICKER = STICKERS[0] as Sticker;
  */
 export function stickerById(id: string | undefined): Sticker {
   return STICKERS.find((sticker) => sticker.id === id) ?? DEFAULT_STICKER;
-}
-
-/** The ones a child has reached. Never empty: the first arrives at level one. */
-export function unlockedStickers(level: number): Sticker[] {
-  return STICKERS.filter((sticker) => sticker.level <= level);
-}
-
-/** The next one to arrive, or null once a child has all twelve. */
-export function nextSticker(level: number): Sticker | null {
-  return STICKERS.find((sticker) => sticker.level > level) ?? null;
 }

@@ -2941,6 +2941,314 @@ added.
 
 ---
 
+## ADR-070 — The ladder counts correct answers, not XP
+
+**Status:** accepted — 2026-09-09. Amends ADR-065.
+
+### Context
+
+ADR-065 surfaced a level the product had been computing since the first release
+and never showing, and put one line on it that made it worth showing: "nog 6
+goede antwoorden tot niveau 5". That line was a conversion. Levels ran on XP —
+ten a correct answer, five more inside a combo — so the card divided by ten and
+rounded up, and a child in a combo reached the level one answer sooner than the
+card had said.
+
+It was also the wrong unit to promise in. XP is a currency for the avatar shop
+that does not exist yet; a level is a promise about work.
+
+### Decision
+
+The ladder runs on **correct answers over everything, ever** — the number
+`loadAccuracy()` has always returned and the front door has always shown. The
+line beside the bar is now a subtraction rather than a conversion, and what the
+card says and what the level counts are the same thing.
+
+The curve is **25, 50, 100, 200, and 200 from there**. Doubling three times and
+then settling: the first level is a few days, the fourth a few weeks, and none
+of them is ever out of reach. Pure doubling would have put level ten at nearly
+thirteen thousand answers — three years at ten a day — and a rung nobody can
+reach is not a rung.
+
+XP and coins are untouched and still earned on every round. Merging them into
+this would have meant a child who spends coins losing their level.
+
+---
+
+## ADR-071 — Twelve animals, five times over, in five materials
+
+**Status:** accepted — 2026-09-09. Extends ADR-067.
+
+### Context
+
+ADR-067 made the twelve animals a ladder, one per level. Twelve is about ten
+months of practice and then the ladder stops, which is a long time to a
+ten-year-old and no time at all to a product that means to be used for years.
+
+The owner asked for what every game they play does next: the same collection
+again, in a better material.
+
+### Decision
+
+**Five reeksen of twelve.** A level hands out one animal; when twelve are held
+the next twelve start in a new material. Ink, then bronze, silver, gold,
+diamond. Sixty in all: the last arrives at level 58, which is 10,975 correct
+answers.
+
+Materials rather than "colours". A ladder of ink, bronze, silver, gold and
+diamond is one a child already knows, and each rung is told apart by **name** as
+well as by hue — the rule §A applies to everything else in this product, and a
+reward is not the place to make an exception.
+
+Four colour tokens, and they sit outside both existing scales: a material is not
+a module accent (§B allows those on exactly three things) and not a semantic.
+Each is one value for both themes, because a material that changed hue between
+light and dark would stop being a material, and each clears 3:1 on both grounds
+— they carry a drawing, and three is §A's floor for one. `contrast.test.ts`
+measures all four in both themes.
+
+The first reeks is the theme's own ink, so the row every child has from the
+first minute costs nothing to read and needs no fifth colour.
+
+### Consequences
+
+The arithmetic lives in `game-core/collection.ts`, pure and tested. It used to
+be a `level` field on each entry in `stickerSet.ts`; that was a second copy of
+the same rule, which is how two of them come to disagree. The list of animals
+now knows only the order they arrive in.
+
+---
+
+## ADR-072 — A second streak, for answers rather than days
+
+**Status:** accepted — 2026-09-09.
+
+### Context
+
+The day streak is designed not to punish (spec §4.3, ADR-031): holidays cannot
+break it, a missed day spends a rest day rather than resetting. That is right
+for what it measures — turning up — and it means the product has no number that
+answers "how well am I doing right now".
+
+### Decision
+
+A run of **correct answers in a row**, with its best alongside it, under the
+figure it belongs beside in the child's own column.
+
+It is the only number in this product that a single wrong answer takes away, and
+that is exactly why it is second: a child meets the slow, forgiving one first.
+Losing it costs nothing else — no coins, no level, no stamp, no rest day. "Ik
+weet het niet" ends it like any other wrong answer, because the run is about
+knowing.
+
+It runs across rounds and across modules. "Twaalf goed op rij" is a thing a
+child says about themselves, not about one round of one table.
+
+Counted in `saveAnswer`, which every answer in the product already passes
+through — counting it in the two round hooks would be two places to forget the
+third module. Stored on the streak row: both are one number per child about how
+the practising is going, and a second object store for two integers would be a
+schema version nobody needed.
+
+---
+
+## ADR-073 — The Rekenmix has three difficulties, from the level the content already carried
+
+**Status:** accepted — 2026-09-09.
+
+### Context
+
+The Rekenmix (ADR-062) shuffles all five hundred and ten sums. That is right for
+a child who knows their tables and wrong for one who has just met the table of
+two: "845 − 140" in the middle of a mix is not a challenge, it is a wall.
+
+### Decision
+
+Three difficulties and an everything, and the difficulty is not a new idea. Every
+set has carried a `niveau` since the tables shipped, and it decided the order the
+sets were offered in and nothing else. It decides this too now.
+
+It divides evenly, which is worth noticing rather than relying on: level one is
+the tables with a rule you can say out loud (1, 2, 5, 10), their divisions and
+plus and minus to twenty — a hundred and seventy sums. Level two is the tables
+with a doubling to lean on and the range to a hundred. Level three is the four
+tables that get learned last and the range to a thousand.
+
+A child who picks "makkelijk" gets sums they can do. A child who picks "pittig"
+asked for it.
+
+---
+
+## ADR-074 — A round is as long as the child says
+
+**Status:** accepted — 2026-09-09.
+
+### Context
+
+A round has been ten questions since the tables shipped, and fifteen on the map.
+That was the right number when a set _was_ ten. The Rekenmix holds five hundred
+and ten sums and the Topomix a hundred and fifteen, and ten of five hundred is a
+child who never finishes anything.
+
+### Decision
+
+**Ten, twenty-five, fifty or a hundred**, chosen beside the line that says how
+long the round will take — which is the thing it changes. Ten stays the default,
+so nothing moves for a child who does not choose.
+
+Only the lengths that fit are offered, and the row is absent when fewer than two
+do. Fifty questions of a table of ten is a button that lies: the round would ask
+ten and the estimate beside it would have said six minutes.
+
+Offered only where a round has a number of questions at all. A lightning round
+ends on the clock, a survival round on three lives, and a tafeldiploma is the
+whole table or it is not a diploma.
+
+Not a numbered step. Steps one and two are what to practise and how; the length
+is a property of the round those two have already chosen, and a third heading
+would have made the flow look longer than it is.
+
+---
+
+## ADR-075 — The diploma wall belongs to the tables, not to the page
+
+**Status:** accepted — 2026-09-09. Amends ADR-064.
+
+ADR-064 put the twelve diplomas at the foot of leer.nu/rekenen. With four kinds
+of sum on that page (ADR-062), the foot of the page is under the plus sums as
+often as under the tables, and a wall about tables has nothing to say to a child
+who is practising subtraction.
+
+It moves under the **Tafels** subject, and appears only when that subject is
+open. Everything else about it stands: the gaps are the point, and pressing one
+chooses that table and the diploma at once.
+
+---
+
+## ADR-076 — The collection has a page
+
+**Status:** accepted — 2026-09-09.
+
+### Context
+
+The card in the child's own column shows the level, the animal they wear and the
+one arriving next. It cannot show sixty animals, twelve diplomas and ten stamps,
+and a child who wants to know _what else is there_ had nowhere to look. The
+stamps were the worst of it: ten of them, awarded silently at the end of a round,
+and no screen in the product that listed them.
+
+### Decision
+
+**leer.nu/ontdekkingsreis**, reached from that card and by its own address.
+
+Everything collectable is on it, in the order of how long it takes: the sixty
+animals in five rows, the twelve tafeldiploma's, the ten reisstempels with their
+criteria. Everything not yet earned is shown rather than hidden, and every one of
+them says what it costs — the same argument the diploma wall makes, at the scale
+of the whole product.
+
+It never says _when_. No dates, no "come back tomorrow", no counter that moves by
+waiting. Everything on the page is bought with correct answers and nothing else,
+which is the promise ADR-067 makes and the one thing this page could quietly
+break.
+
+**Not a fifth tab.** The tab bar has four destinations the product is organised
+around; this is the long view of one card, and a tab would have made it look
+like a section.
+
+### Consequences
+
+The animal picker moved here from "Jij", which is where it went when it left the
+front door (ADR-067). Picking is choosing from a collection, and the collection
+is here. Only the ink row can be worn: those drawings are the avatar in the app
+bar, and a material there would need a second drawing in every place the first
+one is used.
+
+---
+
+## ADR-077 — More than one test, and a block that holds only tests
+
+**Status:** accepted — 2026-09-09. Amends ADR-054.
+
+### Context
+
+Two things were wrong with the one block on the front door that has a border.
+
+**It held one test.** A child has topography on Tuesday and the tables the Friday
+after, and a block with room for one date made them choose which of the two to
+plan for.
+
+**It held the way into a round as well.** "Ga verder met rekenen" sat under the
+date, inside the same border, so one block answered two questions: when is the
+test, and what shall I do now.
+
+### Decision
+
+A **list** of tests, soonest first, each with its subject and a way to take it
+off. A form under it adds one — a form rather than fields that save as you touch
+them, because adding is a thing with an end and a half-typed date would otherwise
+become a row.
+
+The soonest test decides what the front door offers to carry on with, which is
+what makes the list a plan rather than a calendar.
+
+And **nothing else in the block**. The way on moved out from under it, into its
+own block in the same place on the page. The second question is still answered,
+and it is answered on its own.
+
+Tests that have been are dropped rather than shown: a test in the past is not
+part of a plan. The one test a device already had is carried over on read.
+
+---
+
+## ADR-078 — "Oefen je fouten"
+
+**Status:** accepted — 2026-09-09.
+
+### Context
+
+The Leitner scheduler has put what a child keeps missing at the front of every
+round since the first release, and `foutCount` has been written on every wrong
+answer and read by nothing. What the product could not do is be _asked_. A child
+who knows perfectly well which sums they keep getting wrong had no way to say so.
+
+### Decision
+
+A subject on leer.nu/rekenen, last in the list and present only when there is
+something in it: the sums this child has got wrong at least once, most-missed
+first.
+
+It is the only subject in the product that is different for every child, and the
+only one whose contents are read at the moment the round starts rather than when
+the page loaded — a child who has just put one right should not be asked it again
+because a card was stale.
+
+Five is the floor. Below that it is not a subject, it is a list, and a card
+offering three sums is finished in twenty seconds. It also spares a child their
+very first mistake being turned into a heading about them.
+
+---
+
+## ADR-079 — One block on "Jij" for the adult in the room
+
+**Status:** accepted — 2026-09-09.
+
+"Jij" is the one screen in this product a parent opens, and it told them their
+child's name and two switches.
+
+It now opens with **the week**: how many rounds, on how many days, how many
+questions, what it came to, what was practised most, and when the next test is.
+
+Deliberately not a report on the child. No forecast, no percentage of what they
+remember, no comparison — those belong to the child, on Onthouden. A parent
+reading a projection about their ten-year-old on a settings page is the start of
+a conversation nobody wanted. What this says is what happened.
+
+Seven days, because a week is the unit a parent thinks in and the unit a school
+test is set in.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because

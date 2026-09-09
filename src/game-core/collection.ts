@@ -1,0 +1,94 @@
+/**
+ * The collection: twelve animals, five times over.
+ *
+ * A level hands out one animal. Twelve of them make a **reeks**, and when a
+ * reeks is full the next one starts in a new material — ink, bronze, silver,
+ * gold, diamond. Sixty in all, and the last of them is a long way off on
+ * purpose: a collection a child fills in a fortnight is a collection they stop
+ * looking at in three weeks (ADR-071).
+ *
+ * Three animals arrive at level one rather than one, which is ADR-059's point
+ * surviving into a ladder: a child who cannot change anything about an app they
+ * are told to use can at least decide what it looks like, and a choice between
+ * one thing is not a choice.
+ *
+ * Materials rather than "colours". A ladder of ink, bronze, silver, gold and
+ * diamond is one every ten-year-old already knows from every game they play,
+ * and each rung is told apart by name as well as by hue — which is the rule
+ * §A applies to everything else in this product and there is no reason a
+ * reward should be the exception.
+ *
+ * This is pure and lives in game-core: it decides what has been earned, never
+ * what it looks like. The drawings are `components/Stickers.tsx` and the
+ * materials are five tokens in `index.css`.
+ */
+
+export const REEKSEN = ['inkt', 'brons', 'zilver', 'goud', 'diamant'] as const;
+export type Reeks = (typeof REEKSEN)[number];
+
+/** How many animals one reeks holds. The number of drawings there are. */
+export const PER_REEKS = 12;
+/** How many a child has before they have answered anything. */
+export const AT_LEVEL_ONE = 3;
+/** Sixty, and the last one is level 58. */
+export const COLLECTION_SIZE = REEKSEN.length * PER_REEKS;
+
+/** One place in the collection: which reeks, and which animal in it. */
+export interface Plek {
+  readonly reeks: Reeks;
+  /** 0 to 11, the animal's own place in the order they arrive. */
+  readonly plek: number;
+}
+
+/**
+ * How many animals a child standing on this level has.
+ *
+ * Level one is three, and every level after it is one more, until the
+ * collection runs out. It never goes down.
+ */
+export function earnedAt(level: number): number {
+  const earned = AT_LEVEL_ONE + Math.max(0, level - 1);
+  return Math.min(COLLECTION_SIZE, Math.max(0, earned));
+}
+
+/** Which level hands out the nth animal, counting from one. */
+export function levelForEarned(nth: number): number {
+  return Math.max(1, nth - AT_LEVEL_ONE + 1);
+}
+
+/** Where the nth animal sits, counting from one. */
+export function plekOf(nth: number): Plek {
+  const index = Math.max(1, nth) - 1;
+  const reeks = REEKSEN[Math.floor(index / PER_REEKS)] ?? REEKSEN[REEKSEN.length - 1];
+  return { reeks: reeks as Reeks, plek: index % PER_REEKS };
+}
+
+/** Whether the animal at this place has been earned by this level. */
+export function isEarned(level: number, plek: Plek): boolean {
+  const reeksAt = REEKSEN.indexOf(plek.reeks);
+  if (reeksAt < 0) return false;
+  return reeksAt * PER_REEKS + plek.plek < earnedAt(level);
+}
+
+/**
+ * The one that arrives next, or null once all sixty are held.
+ *
+ * Shown as a silhouette beside the level. A ladder whose next rung is a
+ * surprise is not a ladder a child can aim at.
+ */
+export function nextPlek(level: number): Plek | null {
+  const earned = earnedAt(level);
+  return earned >= COLLECTION_SIZE ? null : plekOf(earned + 1);
+}
+
+/** Which reeks a child is filling now: the one the next animal belongs to. */
+export function huidigeReeks(level: number): Reeks {
+  return (nextPlek(level) ?? plekOf(COLLECTION_SIZE)).reeks;
+}
+
+/** How many of one reeks are held. Drives the count under each row. */
+export function inReeks(level: number, reeks: Reeks): number {
+  const at = REEKSEN.indexOf(reeks);
+  if (at < 0) return 0;
+  return Math.min(PER_REEKS, Math.max(0, earnedAt(level) - at * PER_REEKS));
+}

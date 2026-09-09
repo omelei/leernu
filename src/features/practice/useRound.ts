@@ -297,7 +297,16 @@ export interface RoundState {
   readonly error: string | null;
 }
 
-export function useRound(setId: RoundSetId, practiceMode: PracticeMode) {
+/**
+ * @param aantal how many questions the child asked for, or null for the
+ *   round's own length. Ignored by the rounds that end on a clock or on lives,
+ *   which have no number of questions to change (ADR-074).
+ */
+export function useRound(
+  setId: RoundSetId,
+  practiceMode: PracticeMode,
+  aantal: number | null = null,
+) {
   const [geo, setGeo] = useState<GeoSet | null>(null);
   /** One layer per set the round can reach. A single set leaves one entry. */
   const [layers, setLayers] = useState<ReadonlyMap<SetId, AnswerLayer>>(new Map());
@@ -328,7 +337,13 @@ export function useRound(setId: RoundSetId, practiceMode: PracticeMode) {
   const [answeredCount, setAnswered] = useState(0);
   const [combo, setCombo] = useState(0);
   const [missed, setMissed] = useState<Item[]>([]);
-  const rule = ROUND_RULE[practiceMode];
+  // Memoised, and that is not a micro-optimisation: `rule` is a dependency of
+  // the effect that composes the round, so a fresh object every render would
+  // start a new round on every render.
+  const rule = useMemo<RoundRule>(() => {
+    const base = ROUND_RULE[practiceMode];
+    return aantal !== null && base.kind === 'fixed' ? { kind: 'fixed', aantal } : base;
+  }, [practiceMode, aantal]);
   const [secondsLeft, setSecondsLeft] = useState(rule.kind === 'tijd' ? rule.seconden : 0);
   const [livesLeft, setLivesLeft] = useState(rule.kind === 'levens' ? rule.levens : 0);
   const [verdict, setVerdict] = useState<AnswerVerdict | null>(null);

@@ -19,7 +19,14 @@ import {
   type Onderdeel,
   type Onderwerp,
 } from './onderdelen';
-import { formsFor, minutesFor, offeredForms, questionCount, startLabel } from './forms';
+import {
+  formsFor,
+  minutesFor,
+  offeredForms,
+  questionChoices,
+  questionCount,
+  startLabel,
+} from './forms';
 
 /**
  * A module's own page — leer.nu/topografie, leer.nu/rekenen — and the one flow
@@ -75,12 +82,14 @@ export function ModuleScreen({
   /** Which set the address names, or null for the module's own way in. */
   readonly setId: string | null;
   readonly onSet: (setId: string) => void;
-  readonly onStart: (deel: Onderdeel, mode: ModeId) => void;
+  readonly onStart: (deel: Onderdeel, mode: ModeId, aantal: number | null) => void;
   /** The child's own column, the same one the front door carries. */
   readonly aside: ReactNode;
 }) {
   const [states, setStates] = useState<Map<string, ItemState> | null>(null);
   const [formId, setFormId] = useState<ModeId | null>(null);
+  /** How long the child wants the round, or null for the round's own length. */
+  const [aantal, setAantal] = useState<number | null>(null);
   const prefs = usePreferences();
   const plan = useTestPlan();
 
@@ -91,7 +100,7 @@ export function ModuleScreen({
   const known = states ?? new Map<string, ItemState>();
   const now = new Date();
 
-  const onderwerpen = onderwerpenVan(module.id);
+  const onderwerpen = onderwerpenVan(module.id, known);
   const alleSets = onderwerpen.flatMap((vak) => vak.sets);
 
   // An address that names a set nobody has heard of opens the module rather
@@ -105,7 +114,12 @@ export function ModuleScreen({
   const ModuleIcon = MODULE_ICON[module.id];
 
   const setSize = chosen?.items.length ?? 0;
-  const vragen = form === null ? null : questionCount(form, setSize);
+  const lengtes = form === null ? [] : questionChoices(form, setSize);
+  // A length that no longer fits — twenty-five questions of the table of seven,
+  // after the child moved from the Rekenmix to a table — falls back to the
+  // round's own rather than quietly asking for something impossible.
+  const gekozen = aantal !== null && lengtes.includes(aantal) ? aantal : null;
+  const vragen = form === null ? null : questionCount(form, setSize, gekozen);
   const minuten = form === null ? null : minutesFor(form, vragen);
 
   return (
@@ -258,10 +272,38 @@ export function ModuleScreen({
         {/* What was chosen, in words, and then the way on. Full width and
             stacked on a phone; one line ending in the button everywhere else.
             See .tk-choose-start. */}
+        {/* How long, where there is more than one honest answer. Not a numbered
+            step: it is a property of the round the two steps above have already
+            chosen, and it sits against the line that reports how long that
+            round will take — which is the thing it changes (ADR-074). */}
+        {chosen && form && lengtes.length > 0 ? (
+          <div className="tk-variant">
+            <p className="tk-label">{t('choose.howMany')}</p>
+            <div className="tk-variant-row">
+              {lengtes.map((count) => (
+                <button
+                  key={count}
+                  type="button"
+                  className="tk-variant-chip"
+                  aria-label={t('choose.howManyOne', { aantal: count })}
+                  aria-pressed={count === vragen}
+                  onClick={() => setAantal(count)}
+                >
+                  <span aria-hidden="true" className="tabular-nums">
+                    {count}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        ) : null}
+
         {chosen && form ? (
           <div className="tk-choose-start">
             <p className="tk-choose-said">
-              <span className="font-semibold">{startLabel(form, naamVan(chosen), setSize)}</span>
+              <span className="font-semibold">
+                {startLabel(form, naamVan(chosen), setSize, gekozen)}
+              </span>
               {minuten === null ? null : (
                 <span className="block text-ink-2">
                   {minuten === 1 ? t('choose.minuteOne') : t('choose.minutes', { aantal: minuten })}
@@ -271,8 +313,10 @@ export function ModuleScreen({
 
             <Button
               className="tk-button-go"
-              aria-label={t('choose.goLabel', { wat: startLabel(form, naamVan(chosen), setSize) })}
-              onClick={() => onStart(chosen, form.id)}
+              aria-label={t('choose.goLabel', {
+                wat: startLabel(form, naamVan(chosen), setSize, gekozen),
+              })}
+              onClick={() => onStart(chosen, form.id, gekozen)}
             >
               {t('choose.go')}
               <GoIcon size={24} />
@@ -280,15 +324,16 @@ export function ModuleScreen({
           </div>
         ) : null}
 
-        {/* Twelve diplomas, on the page the tables live on and nowhere else.
-            Absent for every other module, because it is not a general idea
-            about progress — it is the tafeltoets, and it is only that.
+        {/* Twelve diplomas, under the tables and nowhere else — not under
+            deelsommen, not under plussommen, and not on the page as a whole.
+            It is the tafeltoets, it is only that, and a child looking at
+            plussommen has no use for a wall about tables (ADR-075).
 
             Pressing a gap answers both steps at once: that table, and the
             diploma. A child who presses "9" on a wall of diplomas has said
             what they want to do, and making them go back up the page to say it
             again in two more presses is the product not listening. */}
-        {module.id === 'tafels' ? (
+        {onderwerp?.id === 'tafels' ? (
           <Tafeldiplomas
             onKies={(gekozen) => {
               onSet(gekozen);

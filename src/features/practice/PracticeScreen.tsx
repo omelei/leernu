@@ -68,16 +68,19 @@ const TYPE_LABEL: Record<Noemer, TranslationKey> = {
 export function PracticeScreen({
   setId,
   practiceMode,
+  aantal = null,
   onHome,
   onAgain,
 }: {
   readonly setId: RoundSetId;
   readonly practiceMode: PracticeMode;
+  /** How many questions the child asked for, or null for the round's own. */
+  readonly aantal?: number | null;
   readonly onHome: () => void;
   /** Another round of the same thing: K8's one primary button. */
   readonly onAgain: () => void;
 }) {
-  const { state, pick, choose, submit, giveUp, next, stop } = useRound(setId, practiceMode);
+  const { state, pick, choose, submit, giveUp, next, stop } = useRound(setId, practiceMode, aantal);
   const prefs = usePreferences();
   const nextButton = useRef<HTMLButtonElement>(null);
 

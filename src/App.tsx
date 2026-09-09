@@ -16,6 +16,7 @@ import { ModuleScreen } from '@/features/module/ModuleScreen';
 import { SumScreen } from '@/features/sums/SumScreen';
 import { asPracticeMode, asSumMode, type Onderdeel } from '@/features/module/onderdelen';
 import { ProfileScreen } from '@/features/player/ProfileScreen';
+import { ReisScreen } from '@/features/reis/ReisScreen';
 import type { Route } from '@/features/shell/routes';
 import { getProfile, setSticker } from '@/store/profile';
 import type { ModeId } from '@/game-core';
@@ -31,9 +32,9 @@ import type { ProfileRecord } from '@/store/db';
 type Screen =
   | { name: 'home' }
   | { name: 'retention' }
-  | { name: 'practice'; setId: RoundSetId; practiceMode: PracticeMode }
+  | { name: 'practice'; setId: RoundSetId; practiceMode: PracticeMode; aantal: number | null }
   | { name: 'explore'; setId: SetId }
-  | { name: 'sums'; setId: string; sumMode: SumMode };
+  | { name: 'sums'; setId: string; sumMode: SumMode; aantal: number | null };
 type Boot = { status: 'loading' } | { status: 'ready'; profile: ProfileRecord | null };
 
 /**
@@ -98,11 +99,11 @@ export default function App() {
    * the page's job is to say what was chosen and this is the thing that knows
    * what a screen is.
    */
-  const beginRonde = (deel: Onderdeel, mode: ModeId) => {
+  const beginRonde = (deel: Onderdeel, mode: ModeId, aantal: number | null = null) => {
     setVisit(visit + 1);
 
     if (deel.moduleId !== 'topo') {
-      setScreen({ name: 'sums', setId: deel.setId, sumMode: asSumMode(mode) });
+      setScreen({ name: 'sums', setId: deel.setId, sumMode: asSumMode(mode), aantal });
       return;
     }
     // Exploring is one set's own layer, so the mix has no way of exploring and
@@ -116,6 +117,7 @@ export default function App() {
       name: 'practice',
       setId: deel.setId as RoundSetId,
       practiceMode: asPracticeMode(mode),
+      aantal,
     });
   };
 
@@ -176,9 +178,10 @@ export default function App() {
   if (screen.name === 'sums') {
     return (
       <SumScreen
-        key={`${screen.setId}-${screen.sumMode}-${visit}`}
+        key={`${screen.setId}-${screen.sumMode}-${screen.aantal ?? 0}-${visit}`}
         setId={screen.setId}
         mode={screen.sumMode}
+        aantal={screen.aantal}
         onHome={goHome}
         onAgain={() => setVisit(visit + 1)}
       />
@@ -188,19 +191,39 @@ export default function App() {
   if (screen.name === 'practice') {
     return (
       <PracticeScreen
-        key={`${screen.setId}-${screen.practiceMode}-${visit}`}
+        key={`${screen.setId}-${screen.practiceMode}-${screen.aantal ?? 0}-${visit}`}
         setId={screen.setId}
         practiceMode={screen.practiceMode}
+        aantal={screen.aantal}
         onHome={goHome}
         onAgain={() => setVisit(visit + 1)}
       />
     );
   }
 
+  /** The way to the collection, from the card that says where the journey is. */
+  const goReis = () => go({ name: 'reis' });
+
   /** The child's own column, which every screen inside the shell carries. */
   const eigenKolom = (
-    <SideColumn sticker={boot.profile.avatarConfig.sticker} onBegin={beginRonde} />
+    <SideColumn sticker={boot.profile.avatarConfig.sticker} onReis={goReis} onBegin={beginRonde} />
   );
+
+  // Everything there is to collect: sixty animals, twelve diplomas, ten stamps,
+  // and what each of them costs. Reached from the journey card and by its own
+  // address, never from the tab bar — it is the long view of one card rather
+  // than a fifth section of the product (ADR-076).
+  if (route.name === 'reis') {
+    return (
+      <Shell bar={bar} onNavigate={goTo} onModule={goModule}>
+        <ReisScreen
+          sticker={boot.profile.avatarConfig.sticker}
+          onSticker={chooseSticker}
+          aside={eigenKolom}
+        />
+      </Shell>
+    );
+  }
 
   // A word a parent looks for, holding more than one module. Unreachable while
   // rekenen is the only category and the tables are the whole of it — that
@@ -249,7 +272,7 @@ export default function App() {
   if (route.name === 'you') {
     return (
       <Shell bar={bar} current="jij" onNavigate={goTo} onModule={goModule}>
-        <ProfileScreen profile={boot.profile} onSticker={chooseSticker} aside={eigenKolom} />
+        <ProfileScreen profile={boot.profile} aside={eigenKolom} />
       </Shell>
     );
   }
@@ -267,13 +290,14 @@ export default function App() {
       <HomeScreen
         naam={boot.profile.naam}
         sticker={boot.profile.avatarConfig.sticker}
+        onReis={goReis}
         onStart={(setId, practiceMode) => {
           setVisit(visit + 1);
-          setScreen({ name: 'practice', setId, practiceMode });
+          setScreen({ name: 'practice', setId, practiceMode, aantal: null });
         }}
         onStartSum={(setId, sumMode) => {
           setVisit(visit + 1);
-          setScreen({ name: 'sums', setId, sumMode });
+          setScreen({ name: 'sums', setId, sumMode, aantal: null });
         }}
         onChoose={goModule}
         onModule={goModule}

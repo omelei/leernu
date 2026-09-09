@@ -167,6 +167,41 @@ describe('the mixes', () => {
     expect(loadSumSet('deel-alle')?.items).toHaveLength(120);
     expect(loadSumSet('rekenmix')?.items).toHaveLength(510);
   });
+
+  it('splits the Rekenmix by the level every set already carried', () => {
+    // Ten sets each and a hundred and seventy sums each, which is not a
+    // coincidence worth relying on but is worth noticing: the content was
+    // levelled evenly long before anything read the level out loud (ADR-073).
+    for (const [id, niveau] of [
+      ['rekenmix-1', 1],
+      ['rekenmix-2', 2],
+      ['rekenmix-3', 3],
+    ] as const) {
+      const mix = loadSumSet(id);
+      expect(mix?.items, id).toHaveLength(170);
+
+      // Every sum in it comes from a set of that level and no other.
+      const ids = new Set(
+        sets.filter((set) => set.niveau === niveau).flatMap((set) => set.items.map((s) => s.id)),
+      );
+      for (const sum of mix?.items ?? []) expect(ids.has(sum.id), `${id}: ${sum.id}`).toBe(true);
+    }
+
+    // And together they are the whole of it: no sum is in two levels, none is
+    // in none.
+    const perLevel = [1, 2, 3].reduce(
+      (total, niveau) => total + (loadSumSet(`rekenmix-${niveau}`)?.items.length ?? 0),
+      0,
+    );
+    expect(perLevel).toBe(510);
+  });
+
+  it('carries every sum in the mistakes set, and narrows it in the round', () => {
+    // It holds them all here because a set is a list of sums and a child's
+    // mistakes are not a property of the content. `useSumRound` reads the
+    // boxes and filters (ADR-078).
+    expect(loadSumSet('fouten')?.items).toHaveLength(510);
+  });
 });
 
 describe('the pool a timed round draws from', () => {
