@@ -147,6 +147,18 @@ jobs:
         with:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ steps.playwright-version.outputs.value }}
+      # Google's Chrome apt source ships with the runner image and we do not
+      # read a single package from it: Playwright brings its own Chromium, and
+      # `--with-deps` wants Ubuntu's system libraries. It was still on the
+      # critical path, because `apt-get update` fails the whole install when any
+      # one source is broken — and on 2026-09-09 that source answered "Hash Sum
+      # mismatch" twice in a row, exit 100, three jobs red and no deploy, for a
+      # repository this project has never used.
+      #
+      # So it goes. Not a workaround for a bad afternoon: a dependency we never
+      # had a reason to carry, taken off the path to production.
+      - name: Take Google's Chrome apt source off the critical path
+        run: sudo rm -f /etc/apt/sources.list.d/google-chrome.list /etc/apt/sources.list.d/google-chrome.sources
       # WebKit as well as Chromium: an iPad in a classroom is Safari, and the
       # layout problems that only WebKit shows are exactly the ones a school
       # would hit first. Chromium in an iPad-sized viewport would not find them.
