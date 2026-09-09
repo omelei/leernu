@@ -95,3 +95,71 @@ export function makeProjector(allLonLat, size = 1000, padding = 10, centre = RD_
     },
   };
 }
+
+// ---------------------------------------------------------------------------
+// Beyond the Netherlands
+//
+// One projection cannot serve a country, a continent and a globe. The
+// stereographic above is right for the Netherlands because RD is, and it stays
+// right for a continent as long as it is re-centred; it is useless for a world
+// map, where a whole hemisphere would run off to infinity.
+//
+// So there are two, both written out in closed form for the reason the file
+// opens with: a projection that is subtly wrong makes a map that looks
+// plausible and teaches a child something false, and that is the failure nobody
+// catches in review. Every formula here can be checked against its definition
+// on one line.
+
+/**
+ * The centre for a map of Europe: 52° N, 15° E.
+ *
+ * Roughly western Poland, which is the middle of the landmass rather than the
+ * middle of the European Union — Iceland, Portugal and the Urals all have to
+ * fit, and centring on Brussels would have put half the distortion budget in
+ * the Atlantic.
+ */
+export const EUROPE_CENTRE = { lat: 52, lon: 15 };
+
+/**
+ * Miller cylindrical, for the world.
+ *
+ *   x = λ
+ *   y = 1.25 · ln( tan( π/4 + 0.4·φ ) )
+ *
+ * Mercator with the latitude scaled to four fifths before the projection and
+ * back up by five fourths after it, which is exactly what Miller published in
+ * 1942 and the whole of what it is. Straight meridians, straight parallels, and
+ * no direction is right except north — a compromise, and the compromise every
+ * schoolroom wall map makes.
+ *
+ * Mercator itself is what a child already knows from a phone, and it is the one
+ * we may not use: it draws Greenland the size of Africa, and this product
+ * exists to teach where things are and how big they are. Equirectangular is
+ * honest and unrecognisable — the poles smear into bands as wide as the
+ * equator. Miller is between them and is a real projection rather than a
+ * fudge.
+ *
+ * Latitudes are clamped just short of the poles, where the logarithm runs away.
+ * Nothing in a set of countries reaches 89°.
+ */
+export function miller(lon, lat) {
+  const phi = Math.max(-89.5, Math.min(89.5, lat)) * RAD;
+  return [lon * RAD, 1.25 * Math.log(Math.tan(Math.PI / 4 + 0.4 * phi))];
+}
+
+/**
+ * A projector for a region, given the projection it should use.
+ *
+ * The same shape `makeProjector` returns, so the geometry builds do not have to
+ * know which projection they are standing on — only which one to ask for.
+ */
+export function makeProjectorWith(project, allLonLat, size = 1000, padding = 10) {
+  const projected = allLonLat.map(([lon, lat]) => project(lon, lat));
+  const fit = fitToViewBox(projected, size, padding);
+  return {
+    ...fit,
+    project([lon, lat]) {
+      return fit.toViewBox(project(lon, lat));
+    },
+  };
+}

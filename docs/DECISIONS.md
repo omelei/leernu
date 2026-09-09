@@ -3446,6 +3446,69 @@ on. It chooses rather than starts, exactly like the line about today's list
 
 ---
 
+## ADR-086 — Europe and the world, and what counts as a country
+
+**Status:** accepted — 2026-09-09. Completes ADR-083.
+
+ADR-083 put a region row on /topografie with Wereld and Europa on it, marked
+"binnenkort" and not pressable. They exist now: forty-six countries of Europe
+and a hundred and sixty-seven of the world, from Natural Earth, built by
+`tools/content/build-countries.mjs`.
+
+Four things had to be decided and every one of them is written down in the code
+that acts on it.
+
+**A background belongs to a set, not to a round.** Every round drew the
+provinces and put its answer layer on top; that was one region's arrangement
+written into the round. `SETS` now carries the region and the background file
+per set, which is also the only thing that has to be true for a fourth region
+to be a row in a table rather than a branch in a hook.
+
+**A mix is one map.** The Topomix was "every set there is". It is the Dutch five
+now, because a round that changed its own background halfway through is not a
+round, it is two.
+
+**Two projections.** RD's stereographic is right for the Netherlands and stays
+right for a continent re-centred on 52° N, 15° E. It is useless for a globe, so
+the world map is Miller cylindrical — a compromise, and the compromise every
+schoolroom wall map makes. Mercator is what a child knows from a phone and the
+one we may not use: it draws Greenland the size of Africa, on a product that
+exists to teach how big things are. Both are closed-form and written out in
+`projection.mjs`, for the reason that file has always given: a projection that
+is subtly wrong makes a map that looks plausible and teaches something false.
+
+Europe is clipped to a window in degrees before it is projected. Russia reaches
+the Bering Strait; in a stereographic centred on Poland that is a hundred and
+sixty degrees from the centre, and the map would have been of the northern
+hemisphere or of nothing. Clipping is what a printed atlas does when it stops at
+the Urals, made explicit.
+
+**What counts as a country is the source's own answer, twice over.** Natural
+Earth's admin-0 layer holds sovereign states, dependencies, crown dependencies
+and disputed territories in one file, and choosing between them is where a map
+for children quietly becomes a political statement. A feature is a country here
+when it is its own sovereign (`ADMIN` equals `SOVEREIGNT`) **and** it has an ISO
+3166 code. The first keeps the Netherlands, France and Kosovo and drops Jersey,
+the Faroes and Puerto Rico; the second drops Northern Cyprus and Somaliland,
+which govern themselves and which the standards body has not listed. A product
+for ten-year-olds does not settle that question. Cyprus is the one named
+exception in the other direction: Natural Earth files it under Asia and every
+Dutch atlas prints it on the Europe page.
+
+The Dutch names come from the data (`NAME_NL`), never from us. Two of them are
+corrected because the country renamed itself and the source has not caught up —
+Eswatini in 2018, Belarus when Buitenlandse Zaken moved — and both keep the old
+name as an alias, so a child writing what their older brother learned is not
+told they are wrong.
+
+**One subject per region, and that is not a placeholder.** A continent has one
+thing on it a child is asked to find and it is the countries. Rivers and
+mountains would be a second subject and a second licensed source; neither
+exists, and a card for one that does not would be the product promising
+something.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because

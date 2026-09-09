@@ -1,0 +1,1345 @@
+{
+  "_gegenereerd": "tools/content/build-neighbours.mjs — gegenereerd, niet met de hand bewerken.",
+  "_regel": "Gebieden die een grens delen, de langste grens eerst, daarna de dichtstbijzijnde.",
+  "setId": "wereld-landen",
+  "contentVersie": "2026-09-09",
+  "regel": "grens",
+  "buren": {
+    "wl-land-afghanistan": [
+      "wl-land-pakistan",
+      "wl-land-tadzjikistan",
+      "wl-land-turkmenistan",
+      "wl-land-iran",
+      "wl-land-oezbekistan",
+      "wl-land-kirgizie"
+    ],
+    "wl-land-albanie": [
+      "wl-land-griekenland",
+      "wl-land-montenegro",
+      "wl-land-noord-macedonie",
+      "wl-land-kosovo",
+      "wl-land-servie",
+      "wl-land-bosnie-en-herzegovina"
+    ],
+    "wl-land-algerije": [
+      "wl-land-marokko",
+      "wl-land-libie",
+      "wl-land-tunesie",
+      "wl-land-mali",
+      "wl-land-niger",
+      "wl-land-mauritanie"
+    ],
+    "wl-land-angola": [
+      "wl-land-congo-kinshasa",
+      "wl-land-namibie",
+      "wl-land-zambia",
+      "wl-land-congo-brazzaville",
+      "wl-land-gabon",
+      "wl-land-botswana"
+    ],
+    "wl-land-argentinie": [
+      "wl-land-chili",
+      "wl-land-paraguay",
+      "wl-land-brazilie",
+      "wl-land-bolivia",
+      "wl-land-uruguay",
+      "wl-land-peru"
+    ],
+    "wl-land-armenie": [
+      "wl-land-azerbeidzjan",
+      "wl-land-turkije",
+      "wl-land-iran",
+      "wl-land-georgie",
+      "wl-land-irak",
+      "wl-land-syrie"
+    ],
+    "wl-land-australie": [
+      "wl-land-oost-timor",
+      "wl-land-papoea-nieuw-guinea",
+      "wl-land-indonesie",
+      "wl-land-salomonseilanden",
+      "wl-land-maleisie",
+      "wl-land-brunei"
+    ],
+    "wl-land-azerbeidzjan": [
+      "wl-land-armenie",
+      "wl-land-iran",
+      "wl-land-georgie",
+      "wl-land-rusland",
+      "wl-land-irak",
+      "wl-land-turkije"
+    ],
+    "wl-land-bahama-s": [
+      "wl-land-cuba",
+      "wl-land-jamaica",
+      "wl-land-haiti",
+      "wl-land-dominicaanse-republiek",
+      "wl-land-belize",
+      "wl-land-honduras"
+    ],
+    "wl-land-bangladesh": [
+      "wl-land-india",
+      "wl-land-myanmar",
+      "wl-land-bhutan",
+      "wl-land-nepal",
+      "wl-land-laos",
+      "wl-land-thailand"
+    ],
+    "wl-land-belarus": [
+      "wl-land-litouwen",
+      "wl-land-letland",
+      "wl-land-oekraine",
+      "wl-land-estland",
+      "wl-land-moldavie",
+      "wl-land-polen"
+    ],
+    "wl-land-belgie": [
+      "wl-land-frankrijk",
+      "wl-land-nederland",
+      "wl-land-luxemburg",
+      "wl-land-duitsland",
+      "wl-land-zwitserland",
+      "wl-land-verenigd-koninkrijk"
+    ],
+    "wl-land-belize": [
+      "wl-land-mexico",
+      "wl-land-guatemala",
+      "wl-land-el-salvador",
+      "wl-land-honduras",
+      "wl-land-nicaragua",
+      "wl-land-costa-rica"
+    ],
+    "wl-land-benin": [
+      "wl-land-nigeria",
+      "wl-land-togo",
+      "wl-land-burkina-faso",
+      "wl-land-niger",
+      "wl-land-ghana",
+      "wl-land-ivoorkust"
+    ],
+    "wl-land-bhutan": [
+      "wl-land-india",
+      "wl-land-bangladesh",
+      "wl-land-nepal",
+      "wl-land-myanmar",
+      "wl-land-laos",
+      "wl-land-thailand"
+    ],
+    "wl-land-bolivia": [
+      "wl-land-brazilie",
+      "wl-land-peru",
+      "wl-land-chili",
+      "wl-land-paraguay",
+      "wl-land-argentinie",
+      "wl-land-uruguay"
+    ],
+    "wl-land-bosnie-en-herzegovina": [
+      "wl-land-kroatie",
+      "wl-land-servie",
+      "wl-land-montenegro",
+      "wl-land-kosovo",
+      "wl-land-slovenie",
+      "wl-land-albanie"
+    ],
+    "wl-land-botswana": [
+      "wl-land-zuid-afrika",
+      "wl-land-namibie",
+      "wl-land-zimbabwe",
+      "wl-land-zambia",
+      "wl-land-eswatini",
+      "wl-land-lesotho"
+    ],
+    "wl-land-brazilie": [
+      "wl-land-bolivia",
+      "wl-land-peru",
+      "wl-land-venezuela",
+      "wl-land-guyana",
+      "wl-land-colombia",
+      "wl-land-paraguay"
+    ],
+    "wl-land-brunei": [
+      "wl-land-maleisie",
+      "wl-land-indonesie",
+      "wl-land-filipijnen",
+      "wl-land-cambodja",
+      "wl-land-vietnam",
+      "wl-land-thailand"
+    ],
+    "wl-land-bulgarije": [
+      "wl-land-roemenie",
+      "wl-land-servie",
+      "wl-land-griekenland",
+      "wl-land-noord-macedonie",
+      "wl-land-turkije",
+      "wl-land-kosovo"
+    ],
+    "wl-land-burkina-faso": [
+      "wl-land-mali",
+      "wl-land-ghana",
+      "wl-land-ivoorkust",
+      "wl-land-niger",
+      "wl-land-benin",
+      "wl-land-togo"
+    ],
+    "wl-land-burundi": [
+      "wl-land-tanzania",
+      "wl-land-rwanda",
+      "wl-land-congo-kinshasa",
+      "wl-land-oeganda",
+      "wl-land-kenia",
+      "wl-land-zambia"
+    ],
+    "wl-land-cambodja": [
+      "wl-land-vietnam",
+      "wl-land-thailand",
+      "wl-land-laos",
+      "wl-land-myanmar",
+      "wl-land-brunei",
+      "wl-land-maleisie"
+    ],
+    "wl-land-canada": [
+      "wl-land-verenigde-staten",
+      "wl-land-bahama-s",
+      "wl-land-mexico",
+      "wl-land-cuba",
+      "wl-land-belize",
+      "wl-land-jamaica"
+    ],
+    "wl-land-centraal-afrikaanse-republiek": [
+      "wl-land-congo-kinshasa",
+      "wl-land-tsjaad",
+      "wl-land-kameroen",
+      "wl-land-soedan",
+      "wl-land-zuid-soedan",
+      "wl-land-congo-brazzaville"
+    ],
+    "wl-land-chili": [
+      "wl-land-argentinie",
+      "wl-land-bolivia",
+      "wl-land-peru",
+      "wl-land-uruguay",
+      "wl-land-paraguay",
+      "wl-land-brazilie"
+    ],
+    "wl-land-china": [
+      "wl-land-mongolie",
+      "wl-land-bhutan",
+      "wl-land-myanmar",
+      "wl-land-laos",
+      "wl-land-bangladesh",
+      "wl-land-taiwan"
+    ],
+    "wl-land-colombia": [
+      "wl-land-venezuela",
+      "wl-land-brazilie",
+      "wl-land-peru",
+      "wl-land-ecuador",
+      "wl-land-panama",
+      "wl-land-trinidad-en-tobago"
+    ],
+    "wl-land-congo-brazzaville": [
+      "wl-land-congo-kinshasa",
+      "wl-land-gabon",
+      "wl-land-centraal-afrikaanse-republiek",
+      "wl-land-kameroen",
+      "wl-land-angola",
+      "wl-land-equatoriaal-guinea"
+    ],
+    "wl-land-congo-kinshasa": [
+      "wl-land-angola",
+      "wl-land-zambia",
+      "wl-land-congo-brazzaville",
+      "wl-land-centraal-afrikaanse-republiek",
+      "wl-land-oeganda",
+      "wl-land-zuid-soedan"
+    ],
+    "wl-land-costa-rica": [
+      "wl-land-nicaragua",
+      "wl-land-panama",
+      "wl-land-honduras",
+      "wl-land-el-salvador",
+      "wl-land-guatemala",
+      "wl-land-belize"
+    ],
+    "wl-land-cuba": [
+      "wl-land-bahama-s",
+      "wl-land-jamaica",
+      "wl-land-haiti",
+      "wl-land-dominicaanse-republiek",
+      "wl-land-honduras",
+      "wl-land-belize"
+    ],
+    "wl-land-cyprus": [
+      "wl-land-libanon",
+      "wl-land-israel",
+      "wl-land-syrie",
+      "wl-land-turkije",
+      "wl-land-jordanie",
+      "wl-land-egypte"
+    ],
+    "wl-land-denemarken": [
+      "wl-land-duitsland",
+      "wl-land-nederland",
+      "wl-land-belgie",
+      "wl-land-luxemburg",
+      "wl-land-tsjechie",
+      "wl-land-polen"
+    ],
+    "wl-land-djibouti": [
+      "wl-land-ethiopie",
+      "wl-land-eritrea",
+      "wl-land-jemen",
+      "wl-land-somalie",
+      "wl-land-kenia",
+      "wl-land-saoedi-arabie"
+    ],
+    "wl-land-dominicaanse-republiek": [
+      "wl-land-haiti",
+      "wl-land-jamaica",
+      "wl-land-bahama-s",
+      "wl-land-cuba",
+      "wl-land-venezuela",
+      "wl-land-trinidad-en-tobago"
+    ],
+    "wl-land-duitsland": [
+      "wl-land-oostenrijk",
+      "wl-land-tsjechie",
+      "wl-land-polen",
+      "wl-land-nederland",
+      "wl-land-frankrijk",
+      "wl-land-zwitserland"
+    ],
+    "wl-land-ecuador": [
+      "wl-land-peru",
+      "wl-land-colombia",
+      "wl-land-panama",
+      "wl-land-costa-rica",
+      "wl-land-venezuela",
+      "wl-land-nicaragua"
+    ],
+    "wl-land-egypte": [
+      "wl-land-libie",
+      "wl-land-soedan",
+      "wl-land-israel",
+      "wl-land-jordanie",
+      "wl-land-libanon",
+      "wl-land-cyprus"
+    ],
+    "wl-land-el-salvador": [
+      "wl-land-honduras",
+      "wl-land-guatemala",
+      "wl-land-belize",
+      "wl-land-nicaragua",
+      "wl-land-costa-rica",
+      "wl-land-panama"
+    ],
+    "wl-land-equatoriaal-guinea": [
+      "wl-land-gabon",
+      "wl-land-kameroen",
+      "wl-land-congo-brazzaville",
+      "wl-land-nigeria",
+      "wl-land-benin",
+      "wl-land-centraal-afrikaanse-republiek"
+    ],
+    "wl-land-eritrea": [
+      "wl-land-ethiopie",
+      "wl-land-soedan",
+      "wl-land-djibouti",
+      "wl-land-jemen",
+      "wl-land-saoedi-arabie",
+      "wl-land-zuid-soedan"
+    ],
+    "wl-land-estland": [
+      "wl-land-rusland",
+      "wl-land-letland",
+      "wl-land-litouwen",
+      "wl-land-belarus",
+      "wl-land-finland",
+      "wl-land-zweden"
+    ],
+    "wl-land-eswatini": [
+      "wl-land-lesotho",
+      "wl-land-zuid-afrika",
+      "wl-land-zimbabwe",
+      "wl-land-botswana",
+      "wl-land-mozambique",
+      "wl-land-malawi"
+    ],
+    "wl-land-ethiopie": [
+      "wl-land-kenia",
+      "wl-land-eritrea",
+      "wl-land-soedan",
+      "wl-land-zuid-soedan",
+      "wl-land-djibouti",
+      "wl-land-somalie"
+    ],
+    "wl-land-fiji": [
+      "wl-land-vanuatu",
+      "wl-land-salomonseilanden",
+      "wl-land-nieuw-zeeland",
+      "wl-land-papoea-nieuw-guinea",
+      "wl-land-australie",
+      "wl-land-oost-timor"
+    ],
+    "wl-land-filipijnen": [
+      "wl-land-taiwan",
+      "wl-land-brunei",
+      "wl-land-maleisie",
+      "wl-land-vietnam",
+      "wl-land-cambodja",
+      "wl-land-indonesie"
+    ],
+    "wl-land-finland": [
+      "wl-land-rusland",
+      "wl-land-noorwegen",
+      "wl-land-zweden",
+      "wl-land-estland",
+      "wl-land-letland",
+      "wl-land-litouwen"
+    ],
+    "wl-land-frankrijk": [
+      "wl-land-brazilie",
+      "wl-land-zwitserland",
+      "wl-land-belgie",
+      "wl-land-italie",
+      "wl-land-suriname",
+      "wl-land-spanje"
+    ],
+    "wl-land-gabon": [
+      "wl-land-congo-brazzaville",
+      "wl-land-kameroen",
+      "wl-land-equatoriaal-guinea",
+      "wl-land-centraal-afrikaanse-republiek",
+      "wl-land-nigeria",
+      "wl-land-congo-kinshasa"
+    ],
+    "wl-land-gambia": [
+      "wl-land-senegal",
+      "wl-land-guinee-bissau",
+      "wl-land-guinee",
+      "wl-land-sierra-leone",
+      "wl-land-mauritanie",
+      "wl-land-liberia"
+    ],
+    "wl-land-georgie": [
+      "wl-land-rusland",
+      "wl-land-azerbeidzjan",
+      "wl-land-turkije",
+      "wl-land-armenie",
+      "wl-land-syrie",
+      "wl-land-irak"
+    ],
+    "wl-land-ghana": [
+      "wl-land-togo",
+      "wl-land-burkina-faso",
+      "wl-land-ivoorkust",
+      "wl-land-benin",
+      "wl-land-mali",
+      "wl-land-liberia"
+    ],
+    "wl-land-griekenland": [
+      "wl-land-bulgarije",
+      "wl-land-noord-macedonie",
+      "wl-land-albanie",
+      "wl-land-turkije",
+      "wl-land-kosovo",
+      "wl-land-montenegro"
+    ],
+    "wl-land-guatemala": [
+      "wl-land-mexico",
+      "wl-land-el-salvador",
+      "wl-land-honduras",
+      "wl-land-belize",
+      "wl-land-nicaragua",
+      "wl-land-costa-rica"
+    ],
+    "wl-land-guinee": [
+      "wl-land-mali",
+      "wl-land-sierra-leone",
+      "wl-land-ivoorkust",
+      "wl-land-guinee-bissau",
+      "wl-land-liberia",
+      "wl-land-senegal"
+    ],
+    "wl-land-guinee-bissau": [
+      "wl-land-guinee",
+      "wl-land-senegal",
+      "wl-land-gambia",
+      "wl-land-sierra-leone",
+      "wl-land-mauritanie",
+      "wl-land-liberia"
+    ],
+    "wl-land-guyana": [
+      "wl-land-brazilie",
+      "wl-land-suriname",
+      "wl-land-venezuela",
+      "wl-land-trinidad-en-tobago",
+      "wl-land-colombia",
+      "wl-land-dominicaanse-republiek"
+    ],
+    "wl-land-haiti": [
+      "wl-land-dominicaanse-republiek",
+      "wl-land-jamaica",
+      "wl-land-cuba",
+      "wl-land-bahama-s",
+      "wl-land-panama",
+      "wl-land-venezuela"
+    ],
+    "wl-land-honduras": [
+      "wl-land-nicaragua",
+      "wl-land-el-salvador",
+      "wl-land-guatemala",
+      "wl-land-belize",
+      "wl-land-costa-rica",
+      "wl-land-panama"
+    ],
+    "wl-land-hongarije": [
+      "wl-land-slowakije",
+      "wl-land-kroatie",
+      "wl-land-oostenrijk",
+      "wl-land-roemenie",
+      "wl-land-servie",
+      "wl-land-oekraine"
+    ],
+    "wl-land-ierland": [
+      "wl-land-verenigd-koninkrijk",
+      "wl-land-belgie",
+      "wl-land-nederland",
+      "wl-land-frankrijk",
+      "wl-land-luxemburg",
+      "wl-land-spanje"
+    ],
+    "wl-land-ijsland": [
+      "wl-land-ierland",
+      "wl-land-verenigd-koninkrijk",
+      "wl-land-nederland",
+      "wl-land-denemarken",
+      "wl-land-belgie",
+      "wl-land-luxemburg"
+    ],
+    "wl-land-india": [
+      "wl-land-bangladesh",
+      "wl-land-pakistan",
+      "wl-land-myanmar",
+      "wl-land-nepal",
+      "wl-land-bhutan",
+      "wl-land-sri-lanka"
+    ],
+    "wl-land-indonesie": [
+      "wl-land-maleisie",
+      "wl-land-oost-timor",
+      "wl-land-papoea-nieuw-guinea",
+      "wl-land-brunei",
+      "wl-land-cambodja",
+      "wl-land-filipijnen"
+    ],
+    "wl-land-irak": [
+      "wl-land-iran",
+      "wl-land-syrie",
+      "wl-land-saoedi-arabie",
+      "wl-land-turkije",
+      "wl-land-koeweit",
+      "wl-land-jordanie"
+    ],
+    "wl-land-iran": [
+      "wl-land-irak",
+      "wl-land-azerbeidzjan",
+      "wl-land-turkmenistan",
+      "wl-land-afghanistan",
+      "wl-land-pakistan",
+      "wl-land-turkije"
+    ],
+    "wl-land-israel": [
+      "wl-land-jordanie",
+      "wl-land-libanon",
+      "wl-land-syrie",
+      "wl-land-egypte",
+      "wl-land-cyprus",
+      "wl-land-turkije"
+    ],
+    "wl-land-italie": [
+      "wl-land-zwitserland",
+      "wl-land-frankrijk",
+      "wl-land-oostenrijk",
+      "wl-land-slovenie",
+      "wl-land-kroatie",
+      "wl-land-bosnie-en-herzegovina"
+    ],
+    "wl-land-ivoorkust": [
+      "wl-land-guinee",
+      "wl-land-liberia",
+      "wl-land-mali",
+      "wl-land-burkina-faso",
+      "wl-land-ghana",
+      "wl-land-sierra-leone"
+    ],
+    "wl-land-jamaica": [
+      "wl-land-cuba",
+      "wl-land-haiti",
+      "wl-land-bahama-s",
+      "wl-land-dominicaanse-republiek",
+      "wl-land-nicaragua",
+      "wl-land-honduras"
+    ],
+    "wl-land-japan": [
+      "wl-land-zuid-korea",
+      "wl-land-noord-korea",
+      "wl-land-taiwan",
+      "wl-land-filipijnen",
+      "wl-land-china",
+      "wl-land-mongolie"
+    ],
+    "wl-land-jemen": [
+      "wl-land-saoedi-arabie",
+      "wl-land-oman",
+      "wl-land-djibouti",
+      "wl-land-eritrea",
+      "wl-land-ethiopie",
+      "wl-land-somalie"
+    ],
+    "wl-land-jordanie": [
+      "wl-land-saoedi-arabie",
+      "wl-land-israel",
+      "wl-land-syrie",
+      "wl-land-irak",
+      "wl-land-libanon",
+      "wl-land-cyprus"
+    ],
+    "wl-land-kameroen": [
+      "wl-land-nigeria",
+      "wl-land-tsjaad",
+      "wl-land-centraal-afrikaanse-republiek",
+      "wl-land-congo-brazzaville",
+      "wl-land-gabon",
+      "wl-land-niger"
+    ],
+    "wl-land-kazachstan": [
+      "wl-land-rusland",
+      "wl-land-oezbekistan",
+      "wl-land-kirgizie",
+      "wl-land-turkmenistan",
+      "wl-land-tadzjikistan",
+      "wl-land-afghanistan"
+    ],
+    "wl-land-kenia": [
+      "wl-land-ethiopie",
+      "wl-land-oeganda",
+      "wl-land-tanzania",
+      "wl-land-somalie",
+      "wl-land-zuid-soedan",
+      "wl-land-rwanda"
+    ],
+    "wl-land-kirgizie": [
+      "wl-land-kazachstan",
+      "wl-land-oezbekistan",
+      "wl-land-tadzjikistan",
+      "wl-land-afghanistan",
+      "wl-land-pakistan",
+      "wl-land-turkmenistan"
+    ],
+    "wl-land-koeweit": [
+      "wl-land-saoedi-arabie",
+      "wl-land-irak",
+      "wl-land-qatar",
+      "wl-land-iran",
+      "wl-land-verenigde-arabische-emiraten",
+      "wl-land-jordanie"
+    ],
+    "wl-land-kosovo": [
+      "wl-land-servie",
+      "wl-land-noord-macedonie",
+      "wl-land-albanie",
+      "wl-land-montenegro",
+      "wl-land-bosnie-en-herzegovina",
+      "wl-land-bulgarije"
+    ],
+    "wl-land-kroatie": [
+      "wl-land-bosnie-en-herzegovina",
+      "wl-land-slovenie",
+      "wl-land-hongarije",
+      "wl-land-servie",
+      "wl-land-montenegro",
+      "wl-land-italie"
+    ],
+    "wl-land-laos": [
+      "wl-land-thailand",
+      "wl-land-vietnam",
+      "wl-land-cambodja",
+      "wl-land-myanmar",
+      "wl-land-bangladesh",
+      "wl-land-bhutan"
+    ],
+    "wl-land-lesotho": [
+      "wl-land-zuid-afrika",
+      "wl-land-eswatini",
+      "wl-land-botswana",
+      "wl-land-zimbabwe",
+      "wl-land-namibie",
+      "wl-land-mozambique"
+    ],
+    "wl-land-letland": [
+      "wl-land-litouwen",
+      "wl-land-estland",
+      "wl-land-rusland",
+      "wl-land-belarus",
+      "wl-land-polen",
+      "wl-land-zweden"
+    ],
+    "wl-land-libanon": [
+      "wl-land-syrie",
+      "wl-land-israel",
+      "wl-land-jordanie",
+      "wl-land-cyprus",
+      "wl-land-turkije",
+      "wl-land-egypte"
+    ],
+    "wl-land-liberia": [
+      "wl-land-ivoorkust",
+      "wl-land-guinee",
+      "wl-land-sierra-leone",
+      "wl-land-mali",
+      "wl-land-ghana",
+      "wl-land-guinee-bissau"
+    ],
+    "wl-land-libie": [
+      "wl-land-algerije",
+      "wl-land-tunesie",
+      "wl-land-egypte",
+      "wl-land-niger",
+      "wl-land-soedan",
+      "wl-land-tsjaad"
+    ],
+    "wl-land-litouwen": [
+      "wl-land-letland",
+      "wl-land-rusland",
+      "wl-land-polen",
+      "wl-land-belarus",
+      "wl-land-estland",
+      "wl-land-slowakije"
+    ],
+    "wl-land-luxemburg": [
+      "wl-land-belgie",
+      "wl-land-duitsland",
+      "wl-land-frankrijk",
+      "wl-land-nederland",
+      "wl-land-zwitserland",
+      "wl-land-oostenrijk"
+    ],
+    "wl-land-madagaskar": [
+      "wl-land-mozambique",
+      "wl-land-malawi",
+      "wl-land-tanzania",
+      "wl-land-zimbabwe",
+      "wl-land-eswatini",
+      "wl-land-zambia"
+    ],
+    "wl-land-malawi": [
+      "wl-land-mozambique",
+      "wl-land-zambia",
+      "wl-land-tanzania",
+      "wl-land-zimbabwe",
+      "wl-land-burundi",
+      "wl-land-rwanda"
+    ],
+    "wl-land-maleisie": [
+      "wl-land-indonesie",
+      "wl-land-brunei",
+      "wl-land-thailand",
+      "wl-land-cambodja",
+      "wl-land-filipijnen",
+      "wl-land-vietnam"
+    ],
+    "wl-land-mali": [
+      "wl-land-guinee",
+      "wl-land-burkina-faso",
+      "wl-land-mauritanie",
+      "wl-land-ivoorkust",
+      "wl-land-algerije",
+      "wl-land-niger"
+    ],
+    "wl-land-marokko": [
+      "wl-land-algerije",
+      "wl-land-mauritanie",
+      "wl-land-portugal",
+      "wl-land-spanje",
+      "wl-land-mali",
+      "wl-land-senegal"
+    ],
+    "wl-land-mauritanie": [
+      "wl-land-mali",
+      "wl-land-senegal",
+      "wl-land-algerije",
+      "wl-land-gambia",
+      "wl-land-guinee-bissau",
+      "wl-land-guinee"
+    ],
+    "wl-land-mexico": [
+      "wl-land-guatemala",
+      "wl-land-belize",
+      "wl-land-el-salvador",
+      "wl-land-honduras",
+      "wl-land-verenigde-staten",
+      "wl-land-nicaragua"
+    ],
+    "wl-land-moldavie": [
+      "wl-land-oekraine",
+      "wl-land-roemenie",
+      "wl-land-bulgarije",
+      "wl-land-belarus",
+      "wl-land-servie",
+      "wl-land-hongarije"
+    ],
+    "wl-land-mongolie": [
+      "wl-land-rusland",
+      "wl-land-china",
+      "wl-land-noord-korea",
+      "wl-land-zuid-korea",
+      "wl-land-bhutan",
+      "wl-land-nepal"
+    ],
+    "wl-land-montenegro": [
+      "wl-land-servie",
+      "wl-land-albanie",
+      "wl-land-bosnie-en-herzegovina",
+      "wl-land-kosovo",
+      "wl-land-kroatie",
+      "wl-land-noord-macedonie"
+    ],
+    "wl-land-mozambique": [
+      "wl-land-malawi",
+      "wl-land-zimbabwe",
+      "wl-land-tanzania",
+      "wl-land-zuid-afrika",
+      "wl-land-zambia",
+      "wl-land-eswatini"
+    ],
+    "wl-land-myanmar": [
+      "wl-land-thailand",
+      "wl-land-india",
+      "wl-land-bangladesh",
+      "wl-land-laos",
+      "wl-land-vietnam",
+      "wl-land-bhutan"
+    ],
+    "wl-land-namibie": [
+      "wl-land-angola",
+      "wl-land-botswana",
+      "wl-land-zuid-afrika",
+      "wl-land-zambia",
+      "wl-land-zimbabwe",
+      "wl-land-lesotho"
+    ],
+    "wl-land-nederland": [
+      "wl-land-belgie",
+      "wl-land-duitsland",
+      "wl-land-luxemburg",
+      "wl-land-denemarken",
+      "wl-land-frankrijk",
+      "wl-land-zwitserland"
+    ],
+    "wl-land-nepal": [
+      "wl-land-india",
+      "wl-land-bhutan",
+      "wl-land-bangladesh",
+      "wl-land-myanmar",
+      "wl-land-pakistan",
+      "wl-land-tadzjikistan"
+    ],
+    "wl-land-nicaragua": [
+      "wl-land-honduras",
+      "wl-land-costa-rica",
+      "wl-land-el-salvador",
+      "wl-land-belize",
+      "wl-land-guatemala",
+      "wl-land-panama"
+    ],
+    "wl-land-nieuw-zeeland": [
+      "wl-land-fiji",
+      "wl-land-vanuatu",
+      "wl-land-salomonseilanden",
+      "wl-land-australie",
+      "wl-land-papoea-nieuw-guinea",
+      "wl-land-oost-timor"
+    ],
+    "wl-land-niger": [
+      "wl-land-nigeria",
+      "wl-land-tsjaad",
+      "wl-land-mali",
+      "wl-land-burkina-faso",
+      "wl-land-algerije",
+      "wl-land-benin"
+    ],
+    "wl-land-nigeria": [
+      "wl-land-niger",
+      "wl-land-kameroen",
+      "wl-land-benin",
+      "wl-land-togo",
+      "wl-land-equatoriaal-guinea",
+      "wl-land-ghana"
+    ],
+    "wl-land-noord-korea": [
+      "wl-land-zuid-korea",
+      "wl-land-rusland",
+      "wl-land-japan",
+      "wl-land-taiwan",
+      "wl-land-china",
+      "wl-land-mongolie"
+    ],
+    "wl-land-noord-macedonie": [
+      "wl-land-griekenland",
+      "wl-land-albanie",
+      "wl-land-kosovo",
+      "wl-land-bulgarije",
+      "wl-land-servie",
+      "wl-land-montenegro"
+    ],
+    "wl-land-noorwegen": [
+      "wl-land-zweden",
+      "wl-land-finland",
+      "wl-land-rusland",
+      "wl-land-estland",
+      "wl-land-letland",
+      "wl-land-denemarken"
+    ],
+    "wl-land-oeganda": [
+      "wl-land-congo-kinshasa",
+      "wl-land-kenia",
+      "wl-land-zuid-soedan",
+      "wl-land-tanzania",
+      "wl-land-rwanda",
+      "wl-land-burundi"
+    ],
+    "wl-land-oekraine": [
+      "wl-land-rusland",
+      "wl-land-moldavie",
+      "wl-land-roemenie",
+      "wl-land-polen",
+      "wl-land-hongarije",
+      "wl-land-slowakije"
+    ],
+    "wl-land-oezbekistan": [
+      "wl-land-kazachstan",
+      "wl-land-turkmenistan",
+      "wl-land-tadzjikistan",
+      "wl-land-kirgizie",
+      "wl-land-afghanistan",
+      "wl-land-pakistan"
+    ],
+    "wl-land-oman": [
+      "wl-land-verenigde-arabische-emiraten",
+      "wl-land-saoedi-arabie",
+      "wl-land-jemen",
+      "wl-land-qatar",
+      "wl-land-koeweit",
+      "wl-land-iran"
+    ],
+    "wl-land-oost-timor": [
+      "wl-land-indonesie",
+      "wl-land-maleisie",
+      "wl-land-australie",
+      "wl-land-brunei",
+      "wl-land-papoea-nieuw-guinea",
+      "wl-land-filipijnen"
+    ],
+    "wl-land-oostenrijk": [
+      "wl-land-duitsland",
+      "wl-land-tsjechie",
+      "wl-land-italie",
+      "wl-land-hongarije",
+      "wl-land-slovenie",
+      "wl-land-zwitserland"
+    ],
+    "wl-land-pakistan": [
+      "wl-land-afghanistan",
+      "wl-land-india",
+      "wl-land-iran",
+      "wl-land-tadzjikistan",
+      "wl-land-oezbekistan",
+      "wl-land-kirgizie"
+    ],
+    "wl-land-panama": [
+      "wl-land-costa-rica",
+      "wl-land-colombia",
+      "wl-land-nicaragua",
+      "wl-land-honduras",
+      "wl-land-jamaica",
+      "wl-land-el-salvador"
+    ],
+    "wl-land-papoea-nieuw-guinea": [
+      "wl-land-indonesie",
+      "wl-land-salomonseilanden",
+      "wl-land-oost-timor",
+      "wl-land-australie",
+      "wl-land-vanuatu",
+      "wl-land-maleisie"
+    ],
+    "wl-land-paraguay": [
+      "wl-land-brazilie",
+      "wl-land-argentinie",
+      "wl-land-bolivia",
+      "wl-land-uruguay",
+      "wl-land-chili",
+      "wl-land-peru"
+    ],
+    "wl-land-peru": [
+      "wl-land-brazilie",
+      "wl-land-colombia",
+      "wl-land-ecuador",
+      "wl-land-bolivia",
+      "wl-land-chili",
+      "wl-land-venezuela"
+    ],
+    "wl-land-polen": [
+      "wl-land-tsjechie",
+      "wl-land-slowakije",
+      "wl-land-duitsland",
+      "wl-land-oekraine",
+      "wl-land-litouwen",
+      "wl-land-rusland"
+    ],
+    "wl-land-portugal": [
+      "wl-land-spanje",
+      "wl-land-marokko",
+      "wl-land-frankrijk",
+      "wl-land-algerije",
+      "wl-land-ierland",
+      "wl-land-zwitserland"
+    ],
+    "wl-land-qatar": [
+      "wl-land-saoedi-arabie",
+      "wl-land-verenigde-arabische-emiraten",
+      "wl-land-koeweit",
+      "wl-land-oman",
+      "wl-land-iran",
+      "wl-land-jemen"
+    ],
+    "wl-land-roemenie": [
+      "wl-land-oekraine",
+      "wl-land-servie",
+      "wl-land-bulgarije",
+      "wl-land-moldavie",
+      "wl-land-hongarije",
+      "wl-land-kosovo"
+    ],
+    "wl-land-rusland": [
+      "wl-land-kazachstan",
+      "wl-land-mongolie",
+      "wl-land-oekraine",
+      "wl-land-finland",
+      "wl-land-georgie",
+      "wl-land-azerbeidzjan"
+    ],
+    "wl-land-rwanda": [
+      "wl-land-congo-kinshasa",
+      "wl-land-tanzania",
+      "wl-land-burundi",
+      "wl-land-oeganda",
+      "wl-land-kenia",
+      "wl-land-zuid-soedan"
+    ],
+    "wl-land-salomonseilanden": [
+      "wl-land-vanuatu",
+      "wl-land-papoea-nieuw-guinea",
+      "wl-land-fiji",
+      "wl-land-australie",
+      "wl-land-oost-timor",
+      "wl-land-nieuw-zeeland"
+    ],
+    "wl-land-saoedi-arabie": [
+      "wl-land-jemen",
+      "wl-land-jordanie",
+      "wl-land-irak",
+      "wl-land-verenigde-arabische-emiraten",
+      "wl-land-koeweit",
+      "wl-land-oman"
+    ],
+    "wl-land-senegal": [
+      "wl-land-gambia",
+      "wl-land-mauritanie",
+      "wl-land-guinee",
+      "wl-land-mali",
+      "wl-land-guinee-bissau",
+      "wl-land-sierra-leone"
+    ],
+    "wl-land-servie": [
+      "wl-land-kosovo",
+      "wl-land-roemenie",
+      "wl-land-bulgarije",
+      "wl-land-bosnie-en-herzegovina",
+      "wl-land-montenegro",
+      "wl-land-hongarije"
+    ],
+    "wl-land-sierra-leone": [
+      "wl-land-guinee",
+      "wl-land-liberia",
+      "wl-land-guinee-bissau",
+      "wl-land-ivoorkust",
+      "wl-land-gambia",
+      "wl-land-senegal"
+    ],
+    "wl-land-slovenie": [
+      "wl-land-kroatie",
+      "wl-land-oostenrijk",
+      "wl-land-hongarije",
+      "wl-land-italie",
+      "wl-land-bosnie-en-herzegovina",
+      "wl-land-tsjechie"
+    ],
+    "wl-land-slowakije": [
+      "wl-land-hongarije",
+      "wl-land-tsjechie",
+      "wl-land-polen",
+      "wl-land-oekraine",
+      "wl-land-oostenrijk",
+      "wl-land-slovenie"
+    ],
+    "wl-land-soedan": [
+      "wl-land-zuid-soedan",
+      "wl-land-tsjaad",
+      "wl-land-ethiopie",
+      "wl-land-centraal-afrikaanse-republiek",
+      "wl-land-eritrea",
+      "wl-land-egypte"
+    ],
+    "wl-land-somalie": [
+      "wl-land-ethiopie",
+      "wl-land-kenia",
+      "wl-land-djibouti",
+      "wl-land-jemen",
+      "wl-land-eritrea",
+      "wl-land-oeganda"
+    ],
+    "wl-land-spanje": [
+      "wl-land-portugal",
+      "wl-land-frankrijk",
+      "wl-land-marokko",
+      "wl-land-algerije",
+      "wl-land-zwitserland",
+      "wl-land-luxemburg"
+    ],
+    "wl-land-sri-lanka": [
+      "wl-land-india",
+      "wl-land-bangladesh",
+      "wl-land-myanmar",
+      "wl-land-thailand",
+      "wl-land-nepal",
+      "wl-land-bhutan"
+    ],
+    "wl-land-suriname": [
+      "wl-land-guyana",
+      "wl-land-brazilie",
+      "wl-land-frankrijk",
+      "wl-land-trinidad-en-tobago",
+      "wl-land-venezuela",
+      "wl-land-colombia"
+    ],
+    "wl-land-syrie": [
+      "wl-land-turkije",
+      "wl-land-irak",
+      "wl-land-libanon",
+      "wl-land-israel",
+      "wl-land-jordanie",
+      "wl-land-cyprus"
+    ],
+    "wl-land-tadzjikistan": [
+      "wl-land-afghanistan",
+      "wl-land-oezbekistan",
+      "wl-land-kirgizie",
+      "wl-land-pakistan",
+      "wl-land-kazachstan",
+      "wl-land-turkmenistan"
+    ],
+    "wl-land-taiwan": [
+      "wl-land-filipijnen",
+      "wl-land-zuid-korea",
+      "wl-land-vietnam",
+      "wl-land-laos",
+      "wl-land-noord-korea",
+      "wl-land-japan"
+    ],
+    "wl-land-tanzania": [
+      "wl-land-mozambique",
+      "wl-land-burundi",
+      "wl-land-congo-kinshasa",
+      "wl-land-kenia",
+      "wl-land-malawi",
+      "wl-land-rwanda"
+    ],
+    "wl-land-thailand": [
+      "wl-land-myanmar",
+      "wl-land-laos",
+      "wl-land-maleisie",
+      "wl-land-cambodja",
+      "wl-land-vietnam",
+      "wl-land-bangladesh"
+    ],
+    "wl-land-togo": [
+      "wl-land-ghana",
+      "wl-land-benin",
+      "wl-land-burkina-faso",
+      "wl-land-ivoorkust",
+      "wl-land-nigeria",
+      "wl-land-mali"
+    ],
+    "wl-land-trinidad-en-tobago": [
+      "wl-land-venezuela",
+      "wl-land-guyana",
+      "wl-land-suriname",
+      "wl-land-dominicaanse-republiek",
+      "wl-land-colombia",
+      "wl-land-haiti"
+    ],
+    "wl-land-tsjaad": [
+      "wl-land-centraal-afrikaanse-republiek",
+      "wl-land-soedan",
+      "wl-land-kameroen",
+      "wl-land-niger",
+      "wl-land-libie",
+      "wl-land-nigeria"
+    ],
+    "wl-land-tsjechie": [
+      "wl-land-duitsland",
+      "wl-land-polen",
+      "wl-land-slowakije",
+      "wl-land-oostenrijk",
+      "wl-land-hongarije",
+      "wl-land-slovenie"
+    ],
+    "wl-land-tunesie": [
+      "wl-land-algerije",
+      "wl-land-libie",
+      "wl-land-italie",
+      "wl-land-albanie",
+      "wl-land-montenegro",
+      "wl-land-kroatie"
+    ],
+    "wl-land-turkije": [
+      "wl-land-syrie",
+      "wl-land-iran",
+      "wl-land-armenie",
+      "wl-land-irak",
+      "wl-land-griekenland",
+      "wl-land-bulgarije"
+    ],
+    "wl-land-turkmenistan": [
+      "wl-land-oezbekistan",
+      "wl-land-afghanistan",
+      "wl-land-iran",
+      "wl-land-kazachstan",
+      "wl-land-azerbeidzjan",
+      "wl-land-tadzjikistan"
+    ],
+    "wl-land-uruguay": [
+      "wl-land-brazilie",
+      "wl-land-argentinie",
+      "wl-land-paraguay",
+      "wl-land-chili",
+      "wl-land-bolivia",
+      "wl-land-peru"
+    ],
+    "wl-land-vanuatu": [
+      "wl-land-salomonseilanden",
+      "wl-land-fiji",
+      "wl-land-papoea-nieuw-guinea",
+      "wl-land-nieuw-zeeland",
+      "wl-land-australie",
+      "wl-land-oost-timor"
+    ],
+    "wl-land-venezuela": [
+      "wl-land-colombia",
+      "wl-land-brazilie",
+      "wl-land-guyana",
+      "wl-land-trinidad-en-tobago",
+      "wl-land-suriname",
+      "wl-land-dominicaanse-republiek"
+    ],
+    "wl-land-verenigd-koninkrijk": [
+      "wl-land-ierland",
+      "wl-land-belgie",
+      "wl-land-nederland",
+      "wl-land-luxemburg",
+      "wl-land-frankrijk",
+      "wl-land-denemarken"
+    ],
+    "wl-land-verenigde-arabische-emiraten": [
+      "wl-land-oman",
+      "wl-land-saoedi-arabie",
+      "wl-land-qatar",
+      "wl-land-koeweit",
+      "wl-land-iran",
+      "wl-land-jemen"
+    ],
+    "wl-land-verenigde-staten": [
+      "wl-land-bahama-s",
+      "wl-land-cuba",
+      "wl-land-mexico",
+      "wl-land-belize",
+      "wl-land-guatemala",
+      "wl-land-jamaica"
+    ],
+    "wl-land-vietnam": [
+      "wl-land-laos",
+      "wl-land-cambodja",
+      "wl-land-thailand",
+      "wl-land-myanmar",
+      "wl-land-brunei",
+      "wl-land-maleisie"
+    ],
+    "wl-land-zambia": [
+      "wl-land-congo-kinshasa",
+      "wl-land-angola",
+      "wl-land-zimbabwe",
+      "wl-land-malawi",
+      "wl-land-namibie",
+      "wl-land-tanzania"
+    ],
+    "wl-land-zimbabwe": [
+      "wl-land-mozambique",
+      "wl-land-botswana",
+      "wl-land-zambia",
+      "wl-land-zuid-afrika",
+      "wl-land-malawi",
+      "wl-land-eswatini"
+    ],
+    "wl-land-zuid-afrika": [
+      "wl-land-botswana",
+      "wl-land-lesotho",
+      "wl-land-namibie",
+      "wl-land-mozambique",
+      "wl-land-zimbabwe",
+      "wl-land-eswatini"
+    ],
+    "wl-land-zuid-korea": [
+      "wl-land-noord-korea",
+      "wl-land-japan",
+      "wl-land-taiwan",
+      "wl-land-china",
+      "wl-land-filipijnen",
+      "wl-land-mongolie"
+    ],
+    "wl-land-zuid-soedan": [
+      "wl-land-soedan",
+      "wl-land-ethiopie",
+      "wl-land-centraal-afrikaanse-republiek",
+      "wl-land-congo-kinshasa",
+      "wl-land-oeganda",
+      "wl-land-kenia"
+    ],
+    "wl-land-zweden": [
+      "wl-land-noorwegen",
+      "wl-land-finland",
+      "wl-land-estland",
+      "wl-land-denemarken",
+      "wl-land-letland",
+      "wl-land-litouwen"
+    ],
+    "wl-land-zwitserland": [
+      "wl-land-italie",
+      "wl-land-frankrijk",
+      "wl-land-oostenrijk",
+      "wl-land-duitsland",
+      "wl-land-luxemburg",
+      "wl-land-belgie"
+    ]
+  }
+}

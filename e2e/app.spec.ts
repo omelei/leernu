@@ -238,6 +238,60 @@ test('logs the round that was just played, with its mark', async ({ page }) => {
 });
 
 /**
+ * Europe, which is the first round in this product that is not about the
+ * Netherlands (ADR-086).
+ *
+ * Two things it proves that no unit test can. The region row is a way in and
+ * not a label — pressing Europa changes what step 2 offers — and the round that
+ * follows draws a different map: the countries of Europe rather than the
+ * provinces with something on top of them.
+ */
+test('a round of Europe draws Europe, not the Netherlands', async ({ page }) => {
+  await signIn(page, 'Mees');
+  await page.goto('/topografie');
+
+  await page.getByRole('button', { name: /^Europa/ }).click();
+
+  const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
+  await expect(wat.getByRole('button', { name: /^Landen/ })).toBeVisible();
+  // And the Dutch subjects are gone: a region is a filter, not a heading.
+  await expect(wat.getByRole('button', { name: /^Provincies/ })).toHaveCount(0);
+
+  await wat.getByRole('button', { name: /^Landen/ }).click();
+  await page
+    .getByRole('region', { name: /Hoe wil je/ })
+    .getByRole('button', { name: /Aanwijzen/ })
+    .click();
+  await start(page);
+
+  // A country on the map, asked for in the words a country is asked for in.
+  await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
+  await expect(page.getByText('Wijs het land aan')).toBeVisible();
+  await expect(page.locator('svg').getByRole('button', { name: 'Spanje' })).toBeVisible();
+  // The provinces are not underneath it.
+  await expect(page.locator('svg').getByRole('button', { name: 'Limburg' })).toHaveCount(0);
+});
+
+/**
+ * An address for a map that is not the Netherlands, which is the whole reason
+ * a set has one: a parent can send a child to the countries of the world.
+ */
+test('the countries of the world have an address of their own', async ({ page }) => {
+  await signIn(page, 'Noor');
+  await page.goto('/topografie/wereld');
+
+  const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
+  await expect(wat.getByRole('button', { name: /^Landen/ })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
+  await expect(page.getByRole('button', { name: /^Wereld/ })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
+});
+
+/**
  * The toetsstand: a round that does not answer back until the end (ADR-085).
  *
  * Two halves, and both matter. **Nothing in between** — no Volgende button, no

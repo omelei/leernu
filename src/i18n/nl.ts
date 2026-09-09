@@ -191,6 +191,11 @@ export const nl = {
   'set.nl-waddeneilanden': 'De Waddeneilanden',
   'set.nl-wateren': 'Zeeën en meren',
   'set.nl-steden': 'Steden van Nederland',
+  // De landen. De naam draagt de kaart mee, want "Landen" alleen zegt niet
+  // welke - en deze naam staat op de startknop en in het logboek, waar de
+  // regiorij van de kieslijst niet meekomt.
+  'set.europa-landen': 'Landen van Europa',
+  'set.wereld-landen': 'Landen van de wereld',
   // De mix. Geen zesde set maar dezelfde items onder één naam, zodat een
   // provincie die je hier goed hebt hetzelfde doosje opschuift als altijd.
   'set.nl-mix': 'Topomix',
@@ -221,6 +226,9 @@ export const nl = {
   'onderwerp.wateren': 'Wateren',
   'onderwerp.eilanden': 'Eilanden',
   'onderwerp.topomix': 'Mix',
+  'onderwerp.landen': 'Landen',
+  'onderwerp.landen.europa': 'Alle landen van Europa',
+  'onderwerp.landen.wereld': 'Alle landen van de wereld',
 
   // Modes
   'mode.wijs-aan': 'Aanwijzen',
@@ -353,6 +361,8 @@ export const nl = {
   'practice.kindTypeIsland': 'Hoe heet dit eiland?',
   'practice.kindTypeArea': 'Hoe heet dit gebied?',
   'practice.kindTypeCity': 'Hoe heet deze stad?',
+  'practice.kindCountry': 'Wijs het land aan',
+  'practice.kindTypeCountry': 'Hoe heet dit land?',
   'practice.typeQuestion': 'Typ de naam',
   'practice.chooseQuestion': 'Kies de naam',
   'practice.dontKnow': 'Ik weet het niet',

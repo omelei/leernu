@@ -32,9 +32,15 @@ practises one of five sets:
 | **Zeeën en meren**                | 6     | the large bodies of water           |
 | **Steden van Nederland**          | 80    | cities, and the province each is in |
 
+Beyond the Netherlands there are two more maps: **46 landen van Europa** and
+**167 landen van de wereld**, from Natural Earth, projected offline like
+everything else — the continent on the same stereographic re-centred, the globe
+on Miller, because Mercator draws Greenland the size of Africa and this product
+exists to teach how big things are ([ADR-086](docs/DECISIONS.md)).
+
 On /topografie they are offered as **where** and then **what**: Wereld, Europa,
-Nederland — the first two shown and not yet openable — and then Provincies,
-Steden, Wateren, Eilanden, Mix, one word each ([ADR-083](docs/DECISIONS.md)).
+Nederland, and then Provincies, Steden, Wateren, Eilanden, Mix — or Landen, one
+word each ([ADR-083](docs/DECISIONS.md)).
 
 In six ways. **Wijs aan** points at the map; **meerkeuze** offers four names,
 three of them places that border the right one; **typ de naam** names what is

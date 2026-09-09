@@ -48,7 +48,13 @@ import type { AnswerLayer } from './MapCanvas';
 const MAX_ROUND = 15;
 
 export type SetId =
-  'nl-provincies' | 'nl-hoofdsteden' | 'nl-waddeneilanden' | 'nl-wateren' | 'nl-steden';
+  | 'nl-provincies'
+  | 'nl-hoofdsteden'
+  | 'nl-waddeneilanden'
+  | 'nl-wateren'
+  | 'nl-steden'
+  | 'europa-landen'
+  | 'wereld-landen';
 
 /**
  * How a child answers. Pointing tests where something is; naming it is a
@@ -138,7 +144,27 @@ function optionDealer(all: readonly Item[]): (item: Item) => Item[] {
   };
 }
 
+/** Every set a round can be started on, in the order a child meets them. */
 export const SET_IDS: readonly SetId[] = [
+  'nl-provincies',
+  'nl-hoofdsteden',
+  'nl-waddeneilanden',
+  'nl-wateren',
+  'nl-steden',
+  'europa-landen',
+  'wereld-landen',
+];
+
+/**
+ * The five the Topomix holds.
+ *
+ * Not `SET_IDS` any more, and the difference is the whole reason this constant
+ * exists: a mix is one round on one map, and the countries of Europe are a
+ * different map from the provinces of the Netherlands. A mix that reached
+ * across them would be a round that changes its own background halfway
+ * through, which is not a round — it is two.
+ */
+export const NL_SET_IDS: readonly SetId[] = [
   'nl-provincies',
   'nl-hoofdsteden',
   'nl-waddeneilanden',
@@ -173,7 +199,7 @@ export function isMixSet(id: string): id is typeof MIX_SET_ID {
 
 /** Which sets a round draws from. One, or all five. */
 export function setsInRound(id: RoundSetId): readonly SetId[] {
-  return isMixSet(id) ? SET_IDS : [id];
+  return isMixSet(id) ? NL_SET_IDS : [id];
 }
 
 /**
@@ -182,21 +208,35 @@ export function setsInRound(id: RoundSetId): readonly SetId[] {
  * aan" are different sentences. Naming it per set beats inferring it, which is
  * how the water case ended up as a special case in the screen.
  */
-export type Noemer = 'gebied' | 'stad' | 'eiland' | 'water';
+export type Noemer = 'gebied' | 'stad' | 'eiland' | 'water' | 'land';
 
 /**
  * Written out per member rather than as `{ noemer } & (…)`, so narrowing on
  * `answers` needs nothing clever from the compiler.
  */
+type SetBase = {
+  /**
+   * Which folder under `public/geo` this set's maps live in, and which file in
+   * it is the map a round draws behind the question.
+   *
+   * Both used to be constants: one region, one background, `provincies` at
+   * `region` detail, written into the round. A second and a third region make
+   * that a property of the set instead — which is also the only thing that has
+   * to be true for a fourth to be a row in a table (ADR-086).
+   */
+  readonly regio: string;
+  readonly achtergrond: string;
+  readonly noemer: Noemer;
+};
+
 export type SetShape =
-  | { readonly answers: 'background'; readonly noemer: Noemer }
-  | { readonly answers: 'points'; readonly bestand: string; readonly noemer: Noemer }
-  | {
+  | ({ readonly answers: 'background' } & SetBase)
+  | ({ readonly answers: 'points'; readonly bestand: string } & SetBase)
+  | ({
       readonly answers: 'shapes';
       readonly bestand: string;
       readonly niveau: Detailniveau;
-      readonly noemer: Noemer;
-    };
+    } & SetBase);
 
 /**
  * Names live in i18n; only the map behaviour belongs here. `answers` says what
@@ -204,17 +244,34 @@ export type SetShape =
  * of it, or a layer of points — and carries the file that layer comes from, so
  * adding a set is one entry here rather than a branch at the load site.
  */
+const NL = { regio: 'nl', achtergrond: 'provincies' } as const;
+
 export const SETS: Record<SetId, SetShape> = {
-  'nl-provincies': { answers: 'background', noemer: 'gebied' },
-  'nl-hoofdsteden': { answers: 'points', bestand: 'hoofdsteden', noemer: 'stad' },
+  'nl-provincies': { ...NL, answers: 'background', noemer: 'gebied' },
+  'nl-hoofdsteden': { ...NL, answers: 'points', bestand: 'hoofdsteden', noemer: 'stad' },
   'nl-waddeneilanden': {
+    ...NL,
     answers: 'shapes',
     bestand: 'waddeneilanden',
     niveau: 'detail',
     noemer: 'eiland',
   },
-  'nl-wateren': { answers: 'points', bestand: 'wateren', noemer: 'water' },
-  'nl-steden': { answers: 'points', bestand: 'steden', noemer: 'stad' },
+  'nl-wateren': { ...NL, answers: 'points', bestand: 'wateren', noemer: 'water' },
+  'nl-steden': { ...NL, answers: 'points', bestand: 'steden', noemer: 'stad' },
+  // The countries are their own background, exactly as the provinces are: what
+  // a child points at is the map itself rather than a layer on top of it.
+  'europa-landen': {
+    regio: 'europa',
+    achtergrond: 'landen',
+    answers: 'background',
+    noemer: 'land',
+  },
+  'wereld-landen': {
+    regio: 'wereld',
+    achtergrond: 'landen',
+    answers: 'background',
+    noemer: 'land',
+  },
 };
 
 /** One switch, so a new set cannot forget to load its own layer. */
@@ -223,9 +280,9 @@ export async function loadAnswerLayer(shape: SetShape): Promise<AnswerLayer> {
     case 'background':
       return { kind: 'background' };
     case 'points':
-      return { kind: 'points', set: await loadPointSet(shape.bestand) };
+      return { kind: 'points', set: await loadPointSet(shape.bestand, shape.regio) };
     case 'shapes':
-      return { kind: 'shapes', set: await loadGeoSet(shape.bestand, shape.niveau) };
+      return { kind: 'shapes', set: await loadGeoSet(shape.bestand, shape.niveau, shape.regio) };
   }
 }
 
@@ -394,8 +451,14 @@ export function useRound(
         );
         if (sets.length === 0) throw new Error(`Onbekende set: ${setId}`);
 
+        // The background belongs to the set now rather than to the round: the
+        // provinces behind a Dutch question, the countries of Europe behind a
+        // European one. Every set a round can reach is in one region, which is
+        // what `setsInRound` guarantees, so the first one decides for all.
+        const achtergrond = SETS[sets[0]?.id as SetId];
+
         const [loadedGeo, loadedLayers, loadedStates] = await Promise.all([
-          loadGeoSet('provincies', 'region'),
+          loadGeoSet(achtergrond.achtergrond, 'region', achtergrond.regio),
           Promise.all(sets.map((set) => loadAnswerLayer(SETS[set.id as SetId]))),
           loadItemStates(),
         ]);

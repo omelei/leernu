@@ -4,7 +4,13 @@ import { isMix, loadSumSet, loadSumSets, MIX_IDS } from '@/content/loadSums';
 import { t, type TranslationKey } from '@/i18n';
 import type { Module } from '@/features/shell/modules';
 import type { PlayedRound } from '@/store/progress';
-import { MIX_SET_ID, SET_IDS, type PracticeMode, type SetId } from '@/features/practice/useRound';
+import {
+  MIX_SET_ID,
+  NL_SET_IDS,
+  SET_IDS,
+  type PracticeMode,
+  type SetId,
+} from '@/features/practice/useRound';
 import type { SumMode } from '@/features/sums/useSumRound';
 
 /**
@@ -33,6 +39,8 @@ export const SET_NAME_KEY: Record<SetId, TranslationKey> = {
   'nl-waddeneilanden': 'set.nl-waddeneilanden',
   'nl-wateren': 'set.nl-wateren',
   'nl-steden': 'set.nl-steden',
+  'europa-landen': 'set.europa-landen',
+  'wereld-landen': 'set.wereld-landen',
 };
 
 /** What one round of this set asks. Topography samples large sets; a table is whole. */
@@ -155,7 +163,11 @@ function topoOnderdelen(): Onderdeel[] {
  * count every province twice (`onderdelen` leaves the mixes out).
  */
 function topoMix(): Onderdeel {
-  const items = topoOnderdelen().flatMap((deel) => deel.items);
+  // The Dutch five, not every set there is. A mix is one round on one map, and
+  // the countries of Europe are a different map (see NL_SET_IDS).
+  const items = topoOnderdelen()
+    .filter((deel) => NL_SET_IDS.includes(deel.setId as SetId))
+    .flatMap((deel) => deel.items);
 
   return {
     moduleId: 'topo',
@@ -399,6 +411,29 @@ function topoOnderwerpen(): Onderwerp[] {
       keuze: null,
       regio: 'nederland',
       sets: [topoMix()],
+    },
+    // Europe and the world are one subject each, and that is not a placeholder:
+    // a continent has one thing on it a child is asked to find, and it is the
+    // countries. Rivers and mountains would be a second subject and a second
+    // licensed source; neither exists yet, and a card for one that does not
+    // would be the product promising something (ADR-086).
+    {
+      moduleId: 'topo',
+      id: 'europa-landen',
+      naam: 'onderwerp.landen',
+      uitleg: 'onderwerp.landen.europa',
+      keuze: null,
+      regio: 'europa',
+      sets: van('europa-landen'),
+    },
+    {
+      moduleId: 'topo',
+      id: 'wereld-landen',
+      naam: 'onderwerp.landen',
+      uitleg: 'onderwerp.landen.wereld',
+      keuze: null,
+      regio: 'wereld',
+      sets: van('wereld-landen'),
     },
   ];
 

@@ -1,0 +1,377 @@
+{
+  "_gegenereerd": "tools/content/build-neighbours.mjs — gegenereerd, niet met de hand bewerken.",
+  "_regel": "Gebieden die een grens delen, de langste grens eerst, daarna de dichtstbijzijnde.",
+  "setId": "europa-landen",
+  "contentVersie": "2026-09-09",
+  "regel": "grens",
+  "buren": {
+    "eu-land-albanie": [
+      "eu-land-griekenland",
+      "eu-land-montenegro",
+      "eu-land-noord-macedonie",
+      "eu-land-kosovo",
+      "eu-land-servie",
+      "eu-land-bosnie-en-herzegovina"
+    ],
+    "eu-land-andorra": [
+      "eu-land-spanje",
+      "eu-land-frankrijk",
+      "eu-land-monaco",
+      "eu-land-zwitserland",
+      "eu-land-liechtenstein",
+      "eu-land-portugal"
+    ],
+    "eu-land-belarus": [
+      "eu-land-litouwen",
+      "eu-land-letland",
+      "eu-land-estland",
+      "eu-land-oekraine",
+      "eu-land-polen",
+      "eu-land-moldavie"
+    ],
+    "eu-land-belgie": [
+      "eu-land-frankrijk",
+      "eu-land-nederland",
+      "eu-land-luxemburg",
+      "eu-land-duitsland",
+      "eu-land-zwitserland",
+      "eu-land-liechtenstein"
+    ],
+    "eu-land-bosnie-en-herzegovina": [
+      "eu-land-kroatie",
+      "eu-land-servie",
+      "eu-land-montenegro",
+      "eu-land-kosovo",
+      "eu-land-slovenie",
+      "eu-land-hongarije"
+    ],
+    "eu-land-bulgarije": [
+      "eu-land-griekenland",
+      "eu-land-servie",
+      "eu-land-roemenie",
+      "eu-land-noord-macedonie",
+      "eu-land-kosovo",
+      "eu-land-albanie"
+    ],
+    "eu-land-cyprus": [
+      "eu-land-griekenland",
+      "eu-land-bulgarije",
+      "eu-land-noord-macedonie",
+      "eu-land-albanie",
+      "eu-land-kosovo",
+      "eu-land-roemenie"
+    ],
+    "eu-land-denemarken": [
+      "eu-land-duitsland",
+      "eu-land-nederland",
+      "eu-land-belgie",
+      "eu-land-luxemburg",
+      "eu-land-zweden",
+      "eu-land-polen"
+    ],
+    "eu-land-duitsland": [
+      "eu-land-oostenrijk",
+      "eu-land-tsjechie",
+      "eu-land-nederland",
+      "eu-land-polen",
+      "eu-land-frankrijk",
+      "eu-land-zwitserland"
+    ],
+    "eu-land-estland": [
+      "eu-land-rusland",
+      "eu-land-letland",
+      "eu-land-litouwen",
+      "eu-land-belarus",
+      "eu-land-zweden",
+      "eu-land-finland"
+    ],
+    "eu-land-finland": [
+      "eu-land-rusland",
+      "eu-land-noorwegen",
+      "eu-land-zweden",
+      "eu-land-estland",
+      "eu-land-letland",
+      "eu-land-litouwen"
+    ],
+    "eu-land-frankrijk": [
+      "eu-land-spanje",
+      "eu-land-belgie",
+      "eu-land-zwitserland",
+      "eu-land-italie",
+      "eu-land-duitsland",
+      "eu-land-luxemburg"
+    ],
+    "eu-land-griekenland": [
+      "eu-land-bulgarije",
+      "eu-land-albanie",
+      "eu-land-noord-macedonie",
+      "eu-land-kosovo",
+      "eu-land-montenegro",
+      "eu-land-servie"
+    ],
+    "eu-land-hongarije": [
+      "eu-land-roemenie",
+      "eu-land-slowakije",
+      "eu-land-oostenrijk",
+      "eu-land-kroatie",
+      "eu-land-oekraine",
+      "eu-land-servie"
+    ],
+    "eu-land-ierland": [
+      "eu-land-verenigd-koninkrijk",
+      "eu-land-belgie",
+      "eu-land-nederland",
+      "eu-land-frankrijk",
+      "eu-land-luxemburg",
+      "eu-land-denemarken"
+    ],
+    "eu-land-ijsland": [
+      "eu-land-ierland",
+      "eu-land-noorwegen",
+      "eu-land-verenigd-koninkrijk",
+      "eu-land-zweden",
+      "eu-land-denemarken",
+      "eu-land-nederland"
+    ],
+    "eu-land-italie": [
+      "eu-land-zwitserland",
+      "eu-land-frankrijk",
+      "eu-land-oostenrijk",
+      "eu-land-slovenie",
+      "eu-land-san-marino",
+      "eu-land-vaticaanstad"
+    ],
+    "eu-land-kosovo": [
+      "eu-land-servie",
+      "eu-land-noord-macedonie",
+      "eu-land-albanie",
+      "eu-land-montenegro",
+      "eu-land-bosnie-en-herzegovina",
+      "eu-land-bulgarije"
+    ],
+    "eu-land-kroatie": [
+      "eu-land-bosnie-en-herzegovina",
+      "eu-land-slovenie",
+      "eu-land-servie",
+      "eu-land-hongarije",
+      "eu-land-montenegro",
+      "eu-land-san-marino"
+    ],
+    "eu-land-letland": [
+      "eu-land-litouwen",
+      "eu-land-estland",
+      "eu-land-rusland",
+      "eu-land-belarus",
+      "eu-land-polen",
+      "eu-land-zweden"
+    ],
+    "eu-land-liechtenstein": [
+      "eu-land-oostenrijk",
+      "eu-land-zwitserland",
+      "eu-land-luxemburg",
+      "eu-land-monaco",
+      "eu-land-san-marino",
+      "eu-land-slovenie"
+    ],
+    "eu-land-litouwen": [
+      "eu-land-letland",
+      "eu-land-rusland",
+      "eu-land-polen",
+      "eu-land-belarus",
+      "eu-land-estland",
+      "eu-land-slowakije"
+    ],
+    "eu-land-luxemburg": [
+      "eu-land-belgie",
+      "eu-land-duitsland",
+      "eu-land-frankrijk",
+      "eu-land-nederland",
+      "eu-land-zwitserland",
+      "eu-land-liechtenstein"
+    ],
+    "eu-land-malta": [
+      "eu-land-vaticaanstad",
+      "eu-land-albanie",
+      "eu-land-griekenland",
+      "eu-land-italie",
+      "eu-land-montenegro",
+      "eu-land-noord-macedonie"
+    ],
+    "eu-land-moldavie": [
+      "eu-land-oekraine",
+      "eu-land-roemenie",
+      "eu-land-bulgarije",
+      "eu-land-servie",
+      "eu-land-slowakije",
+      "eu-land-hongarije"
+    ],
+    "eu-land-monaco": [
+      "eu-land-frankrijk",
+      "eu-land-zwitserland",
+      "eu-land-italie",
+      "eu-land-san-marino",
+      "eu-land-liechtenstein",
+      "eu-land-vaticaanstad"
+    ],
+    "eu-land-montenegro": [
+      "eu-land-bosnie-en-herzegovina",
+      "eu-land-albanie",
+      "eu-land-servie",
+      "eu-land-kosovo",
+      "eu-land-kroatie",
+      "eu-land-noord-macedonie"
+    ],
+    "eu-land-nederland": [
+      "eu-land-duitsland",
+      "eu-land-belgie",
+      "eu-land-luxemburg",
+      "eu-land-denemarken",
+      "eu-land-liechtenstein",
+      "eu-land-zwitserland"
+    ],
+    "eu-land-noord-macedonie": [
+      "eu-land-griekenland",
+      "eu-land-albanie",
+      "eu-land-kosovo",
+      "eu-land-bulgarije",
+      "eu-land-servie",
+      "eu-land-montenegro"
+    ],
+    "eu-land-noorwegen": [
+      "eu-land-zweden",
+      "eu-land-finland",
+      "eu-land-rusland",
+      "eu-land-estland",
+      "eu-land-denemarken",
+      "eu-land-letland"
+    ],
+    "eu-land-oekraine": [
+      "eu-land-rusland",
+      "eu-land-moldavie",
+      "eu-land-roemenie",
+      "eu-land-polen",
+      "eu-land-hongarije",
+      "eu-land-slowakije"
+    ],
+    "eu-land-oostenrijk": [
+      "eu-land-duitsland",
+      "eu-land-hongarije",
+      "eu-land-tsjechie",
+      "eu-land-italie",
+      "eu-land-slovenie",
+      "eu-land-zwitserland"
+    ],
+    "eu-land-polen": [
+      "eu-land-tsjechie",
+      "eu-land-slowakije",
+      "eu-land-duitsland",
+      "eu-land-oekraine",
+      "eu-land-litouwen",
+      "eu-land-rusland"
+    ],
+    "eu-land-portugal": [
+      "eu-land-spanje",
+      "eu-land-andorra",
+      "eu-land-frankrijk",
+      "eu-land-monaco",
+      "eu-land-zwitserland",
+      "eu-land-ierland"
+    ],
+    "eu-land-roemenie": [
+      "eu-land-servie",
+      "eu-land-oekraine",
+      "eu-land-hongarije",
+      "eu-land-moldavie",
+      "eu-land-bulgarije",
+      "eu-land-kosovo"
+    ],
+    "eu-land-rusland": [
+      "eu-land-oekraine",
+      "eu-land-finland",
+      "eu-land-estland",
+      "eu-land-letland",
+      "eu-land-noorwegen",
+      "eu-land-litouwen"
+    ],
+    "eu-land-san-marino": [
+      "eu-land-italie",
+      "eu-land-vaticaanstad",
+      "eu-land-slovenie",
+      "eu-land-kroatie",
+      "eu-land-monaco",
+      "eu-land-oostenrijk"
+    ],
+    "eu-land-servie": [
+      "eu-land-roemenie",
+      "eu-land-bulgarije",
+      "eu-land-bosnie-en-herzegovina",
+      "eu-land-kosovo",
+      "eu-land-kroatie",
+      "eu-land-hongarije"
+    ],
+    "eu-land-slovenie": [
+      "eu-land-kroatie",
+      "eu-land-oostenrijk",
+      "eu-land-italie",
+      "eu-land-hongarije",
+      "eu-land-san-marino",
+      "eu-land-bosnie-en-herzegovina"
+    ],
+    "eu-land-slowakije": [
+      "eu-land-polen",
+      "eu-land-hongarije",
+      "eu-land-tsjechie",
+      "eu-land-oostenrijk",
+      "eu-land-oekraine",
+      "eu-land-kroatie"
+    ],
+    "eu-land-spanje": [
+      "eu-land-portugal",
+      "eu-land-frankrijk",
+      "eu-land-andorra",
+      "eu-land-monaco",
+      "eu-land-zwitserland",
+      "eu-land-luxemburg"
+    ],
+    "eu-land-tsjechie": [
+      "eu-land-duitsland",
+      "eu-land-polen",
+      "eu-land-oostenrijk",
+      "eu-land-slowakije",
+      "eu-land-hongarije",
+      "eu-land-slovenie"
+    ],
+    "eu-land-vaticaanstad": [
+      "eu-land-italie",
+      "eu-land-san-marino",
+      "eu-land-monaco",
+      "eu-land-kroatie",
+      "eu-land-slovenie",
+      "eu-land-bosnie-en-herzegovina"
+    ],
+    "eu-land-verenigd-koninkrijk": [
+      "eu-land-ierland",
+      "eu-land-nederland",
+      "eu-land-belgie",
+      "eu-land-luxemburg",
+      "eu-land-denemarken",
+      "eu-land-frankrijk"
+    ],
+    "eu-land-zweden": [
+      "eu-land-noorwegen",
+      "eu-land-finland",
+      "eu-land-estland",
+      "eu-land-letland",
+      "eu-land-denemarken",
+      "eu-land-litouwen"
+    ],
+    "eu-land-zwitserland": [
+      "eu-land-italie",
+      "eu-land-frankrijk",
+      "eu-land-duitsland",
+      "eu-land-oostenrijk",
+      "eu-land-liechtenstein",
+      "eu-land-monaco"
+    ]
+  }
+}

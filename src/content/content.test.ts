@@ -283,6 +283,103 @@ describe('geometry references', () => {
   });
 });
 
+/**
+ * The countries, which arrived with a hundred times as many items as anything
+ * before them and a build that wrote them rather than a person (ADR-086).
+ *
+ * Everything here is the same question the provinces answer, asked of a file
+ * nobody read line by line: does every question have a shape, is every shape a
+ * question, and can a finger land on the small ones.
+ */
+describe('the countries of Europe and of the world', () => {
+  const regios = [
+    { regio: 'europa', set: 'europa-landen', minstens: 40 },
+    { regio: 'wereld', set: 'wereld-landen', minstens: 150 },
+  ] as const;
+
+  function landenGeo(regio: string, niveau: Detailniveau): GeoSet {
+    const path = join(process.cwd(), 'public', 'geo', regio, `landen.${niveau}.json`);
+    return JSON.parse(readFileSync(path, 'utf8')) as GeoSet;
+  }
+
+  it.each(regios)('asks about enough of $regio to be worth the name', ({ set, minstens }) => {
+    expect(itemsOfSet(set).length).toBeGreaterThanOrEqual(minstens);
+  });
+
+  it.each(regios)('resolves every question in $regio to a shape, at every level', ({
+    regio,
+    set,
+  }) => {
+    for (const niveau of NIVEAUS) {
+      const shapes = new Set(landenGeo(regio, niveau).vormen.map((vorm) => vorm.id));
+      const dangling = itemsOfSet(set)
+        .filter((item) => !shapes.has(item.geometrieRef ?? ''))
+        .map((item) => item.id);
+
+      // Every level, not only the one the round draws. A country simplified out
+      // of existence at `overview` is a shape a child could be asked to point
+      // at and could not see — which is what the build's "kept its largest
+      // ring" fallback exists to prevent.
+      expect(dangling, `${set} at ${niveau}`).toEqual([]);
+    }
+  });
+
+  it.each(regios)('draws nothing in $regio that is not a question', ({ regio, set }) => {
+    const asked = new Set(itemsOfSet(set).map((item) => item.geometrieRef));
+    const orphans = landenGeo(regio, 'region')
+      .vormen.filter((vorm) => !asked.has(vorm.id))
+      .map((vorm) => vorm.id);
+
+    // The map is the answer layer here, the way the provinces are: a shape a
+    // child can press that answers no question is a shape that can only ever
+    // be wrong.
+    expect(orphans).toEqual([]);
+  });
+
+  it.each(regios)('gives every country in $regio a target a finger can land on', ({ regio }) => {
+    // A Chromebook, which is the smallest map in spec section 8.
+    const geo = landenGeo(regio, 'region');
+    const fit = fitView(geo.viewBox[3], 700);
+
+    for (const vorm of geo.vormen) {
+      const help = helpTargetFor(vorm.bbox, fit, vorm.punt);
+      const reachable = help !== null || !needsHelpTarget(vorm.bbox, fit);
+      expect(reachable, vorm.bronnaam).toBe(true);
+    }
+  });
+
+  it.each(regios)('lets every country in $regio win its own question', ({ set }) => {
+    // The whole region, which is what a round passes: an answer must not be
+    // right or wrong depending on which exercise a child is doing (ADR-017).
+    const catalogue = itemsOfSet(set);
+    const failures: string[] = [];
+
+    for (const item of catalogue) {
+      if (judgeAnswer(item.naam, item, catalogue).kind !== 'correct') {
+        failures.push(`${item.naam} does not win its own question`);
+      }
+      for (const alias of item.aliassen) {
+        if (judgeAnswer(alias, item, catalogue).kind !== 'correct') {
+          failures.push(`alias ${alias} of ${item.naam} is rejected`);
+        }
+      }
+    }
+
+    expect(failures).toEqual([]);
+  });
+
+  it('keeps the names Natural Earth has not caught up with', () => {
+    // The two corrections the build makes, and the old names it keeps as
+    // aliases. A child writing what their older brother learned is not wrong.
+    const wereld = itemsOfSet('wereld-landen');
+    const eswatini = wereld.find((item) => item.naam === 'Eswatini');
+    const belarus = wereld.find((item) => item.naam === 'Belarus');
+
+    expect(eswatini?.aliassen).toContain('Swaziland');
+    expect(belarus?.aliassen).toContain('Wit-Rusland');
+  });
+});
+
 describe('typed answers against the real content', () => {
   // Everything in the region, which is what the app passes (ADR-017): an answer
   // must not be right or wrong depending on which exercise a child is doing.
@@ -387,15 +484,20 @@ describe('the map file every set actually asks for', () => {
   it('exists for every set a child can practise', () => {
     const missing: string[] = [];
 
-    // The background, which every round draws whatever it is asking about.
-    if (!existsSync(onDisk(geoUrl('provincies', 'region'))))
-      missing.push(geoUrl('provincies', 'region'));
-
     for (const setId of SET_IDS) {
       const shape = SETS[setId];
+
+      // The background, which every round draws whatever it is asking about.
+      // It belongs to the set now that there is more than one region, so it is
+      // checked per set rather than once (ADR-086).
+      const achtergrond = geoUrl(shape.achtergrond, 'region', shape.regio);
+      if (!existsSync(onDisk(achtergrond))) missing.push(`${setId} → ${achtergrond}`);
+
       if (shape.answers === 'background') continue;
       const url =
-        shape.answers === 'points' ? pointUrl(shape.bestand) : geoUrl(shape.bestand, shape.niveau);
+        shape.answers === 'points'
+          ? pointUrl(shape.bestand, shape.regio)
+          : geoUrl(shape.bestand, shape.niveau, shape.regio);
       if (!existsSync(onDisk(url))) missing.push(`${setId} → ${url}`);
     }
 
