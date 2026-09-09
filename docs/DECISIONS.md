@@ -3086,7 +3086,7 @@ asked for it.
 ### Context
 
 A round has been ten questions since the tables shipped, and fifteen on the map.
-That was the right number when a set *was* ten. The Rekenmix holds five hundred
+That was the right number when a set _was_ ten. The Rekenmix holds five hundred
 and ten sums and the Topomix a hundred and fifteen, and ten of five hundred is a
 child who never finishes anything.
 
@@ -3133,7 +3133,7 @@ chooses that table and the diploma at once.
 
 The card in the child's own column shows the level, the animal they wear and the
 one arriving next. It cannot show sixty animals, twelve diplomas and ten stamps,
-and a child who wants to know *what else is there* had nowhere to look. The
+and a child who wants to know _what else is there_ had nowhere to look. The
 stamps were the worst of it: ten of them, awarded silently at the end of a round,
 and no screen in the product that listed them.
 
@@ -3147,7 +3147,7 @@ criteria. Everything not yet earned is shown rather than hidden, and every one o
 them says what it costs — the same argument the diploma wall makes, at the scale
 of the whole product.
 
-It never says *when*. No dates, no "come back tomorrow", no counter that moves by
+It never says _when_. No dates, no "come back tomorrow", no counter that moves by
 waiting. Everything on the page is bought with correct answers and nothing else,
 which is the promise ADR-067 makes and the one thing this page could quietly
 break.
@@ -3209,7 +3209,7 @@ part of a plan. The one test a device already had is carried over on read.
 
 The Leitner scheduler has put what a child keeps missing at the front of every
 round since the first release, and `foutCount` has been written on every wrong
-answer and read by nothing. What the product could not do is be *asked*. A child
+answer and read by nothing. What the product could not do is be _asked_. A child
 who knows perfectly well which sums they keep getting wrong had no way to say so.
 
 ### Decision

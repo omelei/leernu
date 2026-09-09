@@ -155,7 +155,10 @@ test('the subject of the soonest test decides what to carry on with', async ({ p
   // in charge — which is the whole of what makes a list a plan.
   await expect(page.getByRole('button', { name: /^Haal de toets weg/ })).toHaveCount(2);
 
-  await page.getByRole('button', { name: /^Haal de toets weg/ }).first().click();
+  await page
+    .getByRole('button', { name: /^Haal de toets weg/ })
+    .first()
+    .click();
   await expect(page.getByRole('button', { name: 'Ga verder met Rekenen' })).toBeVisible();
 });
 

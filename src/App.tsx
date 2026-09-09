@@ -206,11 +206,7 @@ export default function App() {
 
   /** The child's own column, which every screen inside the shell carries. */
   const eigenKolom = (
-    <SideColumn
-      sticker={boot.profile.avatarConfig.sticker}
-      onReis={goReis}
-      onBegin={beginRonde}
-    />
+    <SideColumn sticker={boot.profile.avatarConfig.sticker} onReis={goReis} onBegin={beginRonde} />
   );
 
   // Everything there is to collect: sixty animals, twelve diplomas, ten stamps,

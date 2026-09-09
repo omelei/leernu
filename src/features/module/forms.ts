@@ -272,9 +272,8 @@ export function questionCount(
   chosen: number | null = null,
 ): number | null {
   if (form.rule === null || form.rule.kind !== 'fixed') return null;
-  const wanted = chosen !== null && questionChoices(form, setSize).includes(chosen)
-    ? chosen
-    : form.rule.aantal;
+  const wanted =
+    chosen !== null && questionChoices(form, setSize).includes(chosen) ? chosen : form.rule.aantal;
   return Math.min(setSize, wanted);
 }
 

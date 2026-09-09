@@ -80,11 +80,7 @@ export function PracticeScreen({
   /** Another round of the same thing: K8's one primary button. */
   readonly onAgain: () => void;
 }) {
-  const { state, pick, choose, submit, giveUp, next, stop } = useRound(
-    setId,
-    practiceMode,
-    aantal,
-  );
+  const { state, pick, choose, submit, giveUp, next, stop } = useRound(setId, practiceMode, aantal);
   const prefs = usePreferences();
   const nextButton = useRef<HTMLButtonElement>(null);
 
