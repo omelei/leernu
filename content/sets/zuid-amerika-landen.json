@@ -14,10 +14,7 @@
       "regioSet": "zuid-amerika",
       "geometrieRef": "za-land-argentinie",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "za-land-bolivia",
@@ -27,10 +24,7 @@
       "regioSet": "zuid-amerika",
       "geometrieRef": "za-land-bolivia",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "za-land-brazilie",
@@ -40,10 +34,7 @@
       "regioSet": "zuid-amerika",
       "geometrieRef": "za-land-brazilie",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "za-land-chili",
@@ -53,10 +44,7 @@
       "regioSet": "zuid-amerika",
       "geometrieRef": "za-land-chili",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "za-land-colombia",
@@ -66,10 +54,7 @@
       "regioSet": "zuid-amerika",
       "geometrieRef": "za-land-colombia",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "za-land-ecuador",
@@ -79,10 +64,7 @@
       "regioSet": "zuid-amerika",
       "geometrieRef": "za-land-ecuador",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "za-land-guyana",
@@ -92,10 +74,7 @@
       "regioSet": "zuid-amerika",
       "geometrieRef": "za-land-guyana",
       "niveau": 3,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "za-land-paraguay",
@@ -105,10 +84,7 @@
       "regioSet": "zuid-amerika",
       "geometrieRef": "za-land-paraguay",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "za-land-peru",
@@ -118,10 +94,7 @@
       "regioSet": "zuid-amerika",
       "geometrieRef": "za-land-peru",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "za-land-suriname",
@@ -131,10 +104,7 @@
       "regioSet": "zuid-amerika",
       "geometrieRef": "za-land-suriname",
       "niveau": 3,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "za-land-uruguay",
@@ -144,10 +114,7 @@
       "regioSet": "zuid-amerika",
       "geometrieRef": "za-land-uruguay",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "za-land-venezuela",
@@ -157,10 +124,7 @@
       "regioSet": "zuid-amerika",
       "geometrieRef": "za-land-venezuela",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     }
   ]
 }

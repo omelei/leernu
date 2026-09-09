@@ -145,11 +145,7 @@ export function ModuleScreen({
   // the way in becomes multiple choice — the map lights a country up and the
   // child answers in words, which is also what a Dutch topografietoets asks
   // (ADR-087). Pointing is still on the page, at the end of the row.
-  const krap = teDrukOmAanTeWijzen(
-    chosen?.setId ?? null,
-    chosen?.items.length ?? 0,
-    kleinScherm,
-  );
+  const krap = teDrukOmAanTeWijzen(chosen?.setId ?? null, chosen?.items.length ?? 0, kleinScherm);
   const forms = offeredForms(formsFor(module.id), prefs.timer, chosen?.setId ?? null, krap);
   const form = forms.find((candidate) => candidate.id === formId) ?? forms[0] ?? null;
 

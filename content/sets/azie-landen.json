@@ -14,10 +14,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-afghanistan",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-armenie",
@@ -27,10 +24,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-armenie",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-azerbeidzjan",
@@ -40,10 +34,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-azerbeidzjan",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-bahrein",
@@ -53,10 +44,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-bahrein",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-bangladesh",
@@ -66,10 +54,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-bangladesh",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-bhutan",
@@ -79,10 +64,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-bhutan",
       "niveau": 3,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-brunei",
@@ -92,10 +74,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-brunei",
       "niveau": 3,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-cambodja",
@@ -105,25 +84,17 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-cambodja",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-china",
       "type": "land",
       "naam": "China",
-      "aliassen": [
-        "Volksrepubliek China"
-      ],
+      "aliassen": ["Volksrepubliek China"],
       "regioSet": "azie",
       "geometrieRef": "az-land-china",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-cyprus",
@@ -133,10 +104,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-cyprus",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-filipijnen",
@@ -146,10 +114,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-filipijnen",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-georgie",
@@ -159,10 +124,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-georgie",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-india",
@@ -172,10 +134,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-india",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-indonesie",
@@ -185,10 +144,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-indonesie",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-irak",
@@ -198,10 +154,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-irak",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-iran",
@@ -211,10 +164,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-iran",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-israel",
@@ -224,10 +174,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-israel",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-japan",
@@ -237,10 +184,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-japan",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-jemen",
@@ -250,10 +194,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-jemen",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-jordanie",
@@ -263,10 +204,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-jordanie",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-kazachstan",
@@ -276,10 +214,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-kazachstan",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-kirgizie",
@@ -289,10 +224,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-kirgizie",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-koeweit",
@@ -302,10 +234,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-koeweit",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-laos",
@@ -315,10 +244,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-laos",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-libanon",
@@ -328,10 +254,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-libanon",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-maleisie",
@@ -341,10 +264,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-maleisie",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-mongolie",
@@ -354,10 +274,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-mongolie",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-myanmar",
@@ -367,10 +284,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-myanmar",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-nepal",
@@ -380,10 +294,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-nepal",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-noord-korea",
@@ -393,10 +304,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-noord-korea",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-oezbekistan",
@@ -406,10 +314,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-oezbekistan",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-oman",
@@ -419,10 +324,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-oman",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-oost-timor",
@@ -432,10 +334,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-oost-timor",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-pakistan",
@@ -445,10 +344,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-pakistan",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-qatar",
@@ -458,10 +354,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-qatar",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-saoedi-arabie",
@@ -471,10 +364,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-saoedi-arabie",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-singapore",
@@ -484,10 +374,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-singapore",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-sri-lanka",
@@ -497,10 +384,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-sri-lanka",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-syrie",
@@ -510,10 +394,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-syrie",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-tadzjikistan",
@@ -523,10 +404,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-tadzjikistan",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-taiwan",
@@ -536,10 +414,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-taiwan",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-thailand",
@@ -549,10 +424,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-thailand",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-turkije",
@@ -562,10 +434,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-turkije",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-turkmenistan",
@@ -575,10 +444,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-turkmenistan",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-verenigde-arabische-emiraten",
@@ -588,10 +454,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-verenigde-arabische-emiraten",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-vietnam",
@@ -601,10 +464,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-vietnam",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     },
     {
       "id": "az-land-zuid-korea",
@@ -614,10 +474,7 @@
       "regioSet": "azie",
       "geometrieRef": "az-land-zuid-korea",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
     }
   ]
 }

@@ -6,80 +6,56 @@
       "id": "ak-nl-provincies-aanwijzen",
       "code": "AK.NL.P1",
       "omschrijving": "De leerling wijst de twaalf provincies van Nederland aan op een kaart.",
-      "leerjaar": [
-        "groep6",
-        "groep7"
-      ],
+      "leerjaar": ["groep6", "groep7"],
       "kerndoelRefs": []
     },
     {
       "id": "ak-nl-provincies-benoemen",
       "code": "AK.NL.P2",
       "omschrijving": "De leerling noemt bij een aangewezen provincie de juiste naam.",
-      "leerjaar": [
-        "groep6",
-        "groep7"
-      ],
+      "leerjaar": ["groep6", "groep7"],
       "kerndoelRefs": []
     },
     {
       "id": "ak-nl-hoofdsteden-aanwijzen",
       "code": "AK.NL.H1",
       "omschrijving": "De leerling wijst de hoofdstad van elke provincie aan op een kaart.",
-      "leerjaar": [
-        "groep7",
-        "groep8"
-      ],
+      "leerjaar": ["groep7", "groep8"],
       "kerndoelRefs": []
     },
     {
       "id": "ak-nl-hoofdsteden-benoemen",
       "code": "AK.NL.H2",
       "omschrijving": "De leerling noemt bij een provincie de juiste hoofdstad.",
-      "leerjaar": [
-        "groep7",
-        "groep8"
-      ],
+      "leerjaar": ["groep7", "groep8"],
       "kerndoelRefs": []
     },
     {
       "id": "ak-nl-waddeneilanden",
       "code": "AK.NL.W1",
       "omschrijving": "De leerling wijst de vijf Waddeneilanden aan en noemt ze van west naar oost.",
-      "leerjaar": [
-        "groep7",
-        "groep8"
-      ],
+      "leerjaar": ["groep7", "groep8"],
       "kerndoelRefs": []
     },
     {
       "id": "ak-nl-wateren",
       "code": "AK.NL.Z1",
       "omschrijving": "De leerling wijst de grote zeeën en meren van Nederland aan op een kaart.",
-      "leerjaar": [
-        "groep7",
-        "groep8"
-      ],
+      "leerjaar": ["groep7", "groep8"],
       "kerndoelRefs": []
     },
     {
       "id": "ak-nl-steden",
       "code": "AK.NL.S1",
       "omschrijving": "De leerling wijst tachtig Nederlandse steden aan en noemt de provincie waarin een stad ligt.",
-      "leerjaar": [
-        "groep7",
-        "groep8"
-      ],
+      "leerjaar": ["groep7", "groep8"],
       "kerndoelRefs": []
     },
     {
       "id": "ak-nl-ligging",
       "code": "AK.NL.L1",
       "omschrijving": "De leerling beschrijft waar een provincie ligt ten opzichte van andere provincies, de zee en de buurlanden.",
-      "leerjaar": [
-        "groep7",
-        "groep8"
-      ],
+      "leerjaar": ["groep7", "groep8"],
       "kerndoelRefs": []
     },
     {
@@ -87,39 +63,27 @@
       "code": "AK.WL.L1",
       "omschrijving": "De leerling wijst landen van de wereld aan op een wereldkaart.",
       "kerndoelRefs": [],
-      "leerjaar": [
-        "groep7",
-        "groep8"
-      ]
+      "leerjaar": ["groep7", "groep8"]
     },
     {
       "id": "ak-wereld-landen-benoemen",
       "code": "AK.WL.L2",
       "omschrijving": "De leerling noemt landen van de wereld bij naam.",
       "kerndoelRefs": [],
-      "leerjaar": [
-        "groep7",
-        "groep8"
-      ]
+      "leerjaar": ["groep7", "groep8"]
     },
     {
       "id": "ak-werelddelen-landen-aanwijzen",
       "code": "AK.WD.L1",
       "omschrijving": "De leerling wijst de landen van een werelddeel aan op een kaart.",
-      "leerjaar": [
-        "groep7",
-        "groep8"
-      ],
+      "leerjaar": ["groep7", "groep8"],
       "kerndoelRefs": []
     },
     {
       "id": "ak-werelddelen-landen-benoemen",
       "code": "AK.WD.L2",
       "omschrijving": "De leerling noemt de landen van een werelddeel bij naam.",
-      "leerjaar": [
-        "groep7",
-        "groep8"
-      ],
+      "leerjaar": ["groep7", "groep8"],
       "kerndoelRefs": []
     }
   ]

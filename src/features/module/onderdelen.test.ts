@@ -127,7 +127,10 @@ describe('what topography offers', () => {
       'oceanie',
       'wereld',
     ]) {
-      expect(per(regio).map((vak) => vak.id), regio).toEqual([`${regio}-landen`]);
+      expect(
+        per(regio).map((vak) => vak.id),
+        regio,
+      ).toEqual([`${regio}-landen`]);
     }
   });
 
