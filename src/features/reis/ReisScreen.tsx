@@ -84,7 +84,9 @@ export function ReisScreen({
           <p className="mt-1 text-ink-2">{t('reis.intro')}</p>
         </div>
 
-        <section className="tk-card flex flex-col gap-3" aria-label={t('home.journeyTitle')}>
+        {/* Its own name rather than the card's in the column beside it: two
+            landmarks with one label is two places called the same thing. */}
+        <section className="tk-card flex flex-col gap-3" aria-label={t('reis.level')}>
           <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
             <p className="tk-display text-h2 font-bold">
               {t('home.journeyLevel', { niveau: level })}
@@ -145,6 +147,7 @@ export function ReisScreen({
                 key={tafel}
                 className="tk-diploma"
                 data-gehaald={diplomas.has(tafel) ? 'ja' : undefined}
+                role="img"
                 aria-label={
                   diplomas.has(tafel)
                     ? t('rekenen.diplomaHave', { tafel })
@@ -246,6 +249,11 @@ function Rij({
                 className="tk-animal"
                 data-open={open ? 'ja' : undefined}
                 data-next={volgend === plek ? 'ja' : undefined}
+                // A drawing with a caption under it, which is what an image is.
+                // Without a role, `aria-label` on a span is prohibited and is
+                // dropped on the floor — the cell would have been announced as
+                // its two words of visible text and nothing else.
+                role="img"
                 aria-label={
                   open
                     ? t('reis.animalHave', { dier: t(sticker.name), reeks: naam })

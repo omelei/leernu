@@ -423,6 +423,7 @@ export const nl = {
   // Nergens staat wanneer — alles hier koop je met goede antwoorden.
   'reis.title': 'Jouw ontdekkingsreis',
   'reis.intro': 'Alles wat je kunt halen, en wat het kost.',
+  'reis.level': 'Jouw niveau',
   'reis.answered': '{aantal} goede antwoorden',
   'reis.animals': 'Dieren',
   'reis.animalsHave': '{aantal} van de {totaal}',

@@ -237,7 +237,7 @@ test('the animal a child picks is theirs, and follows them', async ({ page }) =>
   await page.reload();
   await expect(
     page
-      .getByRole('region', { name: 'Jouw dieren' })
+      .getByRole('region', { name: 'Dieren' })
       .getByRole('button', { name: 'Vos', exact: true }),
   ).toHaveAttribute('aria-pressed', 'true');
 });
