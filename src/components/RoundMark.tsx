@@ -17,13 +17,7 @@ import { t } from '@/i18n';
  * Over what was answered rather than what was asked, the same as everywhere
  * else: a round stopped early asked questions nobody got wrong.
  */
-export function RoundMark({
-  goed,
-  totaal,
-}: {
-  readonly goed: number;
-  readonly totaal: number;
-}) {
+export function RoundMark({ goed, totaal }: { readonly goed: number; readonly totaal: number }) {
   const cijfer = grade(goed, totaal);
   if (cijfer === null) return null;
 
