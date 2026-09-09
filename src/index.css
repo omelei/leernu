@@ -939,10 +939,22 @@
     background: var(--surface);
     color: var(--ink);
   }
+  /* The word under the drawing is ink, never the material.
+   *
+   * A material is a colour for a *drawing*: §A's floor for a graphical object
+   * is 3:1 and that is what these five were measured against (ADR-071). Text
+   * needs 4.5, and bronze on the pressed cell's surface is 4.28 — which is what
+   * axe found the moment the first reeks stopped being ink. So the animal takes
+   * the material and its name takes the ink, which is also the honest division:
+   * the colour says which reeks, the word says which animal. */
   .tk-animal-name {
     font-size: var(--type-label);
     line-height: var(--type-label-lh);
     text-align: center;
+    color: var(--ink-2);
+  }
+  .tk-animal[data-open] .tk-animal-name {
+    color: var(--ink);
   }
 
   /* ---- The sum ----------------------------------------------------------
@@ -1575,12 +1587,17 @@
   .tk-reeks[data-reeks='ultra'] {
     color: var(--reeks-ultra);
   }
+  /* Ink, for the same reason `.tk-animal-name` is: a material is measured
+   * against the 3:1 a drawing needs, and silver on paper is 4.32 — fine for the
+   * chevrons and the ring, short of the 4.5 a word needs. The badge keeps the
+   * material in its border and its icon. */
   .tk-reeks-name {
     font-family: 'IBM Plex Mono', ui-monospace, monospace;
     font-size: 11px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     font-weight: 500;
+    color: var(--ink);
   }
 
   /* Who arrives at the next level, drawn quietly. Not a padlock and not the

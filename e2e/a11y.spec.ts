@@ -127,7 +127,9 @@ test('the collection page has no violations', async ({ page }) => {
   await signIn(page, 'Lieve');
 
   await page.goto('/voortgang');
-  await expect(page.getByRole('heading', { name: 'Jouw voortgang' })).toBeVisible();
+  // Level one: the card in the column beside it carries the same name, which
+  // is right — it is the short view of this page and links to it.
+  await expect(page.getByRole('heading', { name: 'Jouw voortgang', level: 1 })).toBeVisible();
   expect((await scan(page)).violations).toEqual([]);
 });
 

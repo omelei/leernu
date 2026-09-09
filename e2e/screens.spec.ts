@@ -71,7 +71,7 @@ test('the front door, the chooser and the profile', async ({ page }, testInfo) =
   // has to survive being mostly empty: a child on level one has three of sixty
   // animals, no diplomas and no stamps (ADR-076).
   await page.goto('/voortgang');
-  await expect(page.getByRole('heading', { name: 'Jouw voortgang' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Jouw voortgang', level: 1 })).toBeVisible();
   await shoot(page, size, '12-voortgang');
 });
 
