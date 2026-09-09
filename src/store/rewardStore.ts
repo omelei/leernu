@@ -1,13 +1,17 @@
 import {
   diplomaFor,
+  levelFor,
   newStamps,
+  nieuwePlekken,
   rewardForRound,
   tableOfDiploma,
+  type Plek,
   type RewardSnapshot,
   type StampId,
 } from '@/game-core';
 import { getDb } from './db';
 import { activeChildId, ensureProgressPerChild } from './children';
+import { loadAccuracy } from './progress';
 
 /**
  * XP, coins and travel stamps, on the device.
@@ -32,6 +36,14 @@ export interface RoundOutcome {
   readonly stamps: readonly StampId[];
   /** The table this round earned a diploma for, or null. */
   readonly diploma: number | null;
+  /**
+   * The animals this round pushed over the line, in the order they arrive.
+   *
+   * Almost always empty. When it is not, it is the one thing on the result
+   * screen a child cannot have seen coming — the collection hides what is
+   * inside a parcel until it is opened (ADR-081), and this is the opening.
+   */
+  readonly dieren: readonly Plek[];
 }
 
 export async function loadStamps(): Promise<Set<string>> {
@@ -106,5 +118,24 @@ export async function applyRoundRewards(params: {
     totalXp,
     stamps: earned,
     diploma: diplomaId === null ? null : tableOfDiploma(diplomaId),
+    dieren: await dierenVanDezeRonde(params.correct),
   };
+}
+
+/**
+ * Which animals this round earned, worked out from the ladder either side of it.
+ *
+ * The ladder runs on correct answers over everything ever (ADR-070), and every
+ * one of this round's answers is already written by the time a round finishes.
+ * So the total afterwards is read from the store and the round's own correct
+ * count is subtracted back off it to get the total before — which is exact
+ * however many rounds were played today, and cannot drift from the number the
+ * column on the right shows, because it is that number.
+ */
+async function dierenVanDezeRonde(correct: number): Promise<readonly Plek[]> {
+  if (correct === 0) return [];
+
+  const na = (await loadAccuracy()).correct;
+  const voor = Math.max(0, na - correct);
+  return nieuwePlekken(levelFor(voor), levelFor(na));
 }

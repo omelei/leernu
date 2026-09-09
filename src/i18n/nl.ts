@@ -422,6 +422,19 @@ export const nl = {
   'result.streakSaved': 'Je rustdag heeft je streak gered.',
   'result.restDayEarned': 'Je hebt er een rustdag bij verdiend.',
   'result.newStamp': 'Nieuwe reisstempel: {naam}',
+
+  // Het pakje dat opengaat. Alleen te zien op het scherm na een ronde, en
+  // alleen als er echt iets uit kwam - een kaart die er elke keer staat is
+  // binnen een week meubilair. Geen "goed gedaan": het product zegt wat er
+  // gebeurd is, niet wat je ervan moet vinden.
+  'result.newAnimalTitle': 'Een nieuw dier',
+  'result.newAnimalOne': 'Je hebt een nieuw dier!',
+  'result.newAnimalMany': 'Je hebt {aantal} nieuwe dieren!',
+  'result.newAnimalIn': '{dier} in {reeks}',
+  // Waarvoor je hem kreeg staat erbij, net als bij een reisstempel. Een
+  // beloning die je niet kunt uitleggen is een raadsel, en dan kun je er ook
+  // geen tweede met opzet verdienen.
+  'result.newAnimalLevel': 'Je haalde niveau {niveau}.',
   // K8. De score staat er, maar wat er veranderd is, is het product: het enige
   // op dit scherm dat een kind niet zelf had kunnen uitrekenen.
   'result.changed': 'Wat er is veranderd',

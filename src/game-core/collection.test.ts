@@ -8,6 +8,7 @@ import {
   isEarned,
   levelForEarned,
   nextPlek,
+  nieuwePlekken,
   PER_REEKS,
   plekOf,
   REEKSEN,
@@ -63,6 +64,27 @@ describe('the collection', () => {
       // the start and have no earlier level to check.
       if (level > 1) expect(isEarned(level - 1, plek), `${nth} at level ${level - 1}`).toBe(false);
     }
+  });
+
+  /**
+   * What a round handed over, which is the whole of what the result screen
+   * needs to know. Almost always nothing; sometimes one; and more than one
+   * where a long round crossed two levels at once.
+   */
+  it('names the animals that arrive between two levels', () => {
+    expect(nieuwePlekken(1, 1)).toEqual([]);
+    expect(nieuwePlekken(1, 2)).toEqual([{ reeks: 'brons', plek: 3 }]);
+    expect(nieuwePlekken(1, 3)).toEqual([
+      { reeks: 'brons', plek: 3 },
+      { reeks: 'brons', plek: 4 },
+    ]);
+
+    // Across the seam between two reeksen: level 10 holds the twelfth bronze
+    // animal, so level 11 is the first silver one.
+    expect(nieuwePlekken(10, 11)).toEqual([{ reeks: 'zilver', plek: 0 }]);
+
+    // And past the end, where there is nothing left to hand over.
+    expect(nieuwePlekken(58, 60)).toEqual([]);
   });
 
   it('never says a place in a later reeks is held', () => {

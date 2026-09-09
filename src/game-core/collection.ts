@@ -85,6 +85,25 @@ export function nextPlek(level: number): Plek | null {
   return earned >= COLLECTION_SIZE ? null : plekOf(earned + 1);
 }
 
+/**
+ * The animals that arrive between two levels, in the order they arrive.
+ *
+ * A round can cross more than one level — a hundred questions of the Rekenmix
+ * at level three will — so this is a list rather than one place. Empty where
+ * nothing was crossed, which is every round but a few.
+ *
+ * Pure, and it takes levels rather than answer counts so that the arithmetic
+ * from correct answers to a level stays in one place (`rewards.ts`).
+ */
+export function nieuwePlekken(vanLevel: number, naarLevel: number): Plek[] {
+  const van = earnedAt(vanLevel);
+  const naar = earnedAt(naarLevel);
+
+  const plekken: Plek[] = [];
+  for (let nth = van + 1; nth <= naar; nth++) plekken.push(plekOf(nth));
+  return plekken;
+}
+
 /** Which reeks a child is filling now: the one the next animal belongs to. */
 export function huidigeReeks(level: number): Reeks {
   return (nextPlek(level) ?? plekOf(COLLECTION_SIZE)).reeks;
