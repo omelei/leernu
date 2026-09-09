@@ -252,21 +252,21 @@ export function ModuleScreen({
                 const RegioIcon = regioIcon(kandidaat.id);
 
                 return (
-                <button
-                  key={kandidaat.id}
-                  type="button"
-                  className="tk-regio"
-                  aria-pressed={kandidaat.built ? kandidaat.id === hier : undefined}
-                  disabled={!kandidaat.built}
-                  data-soon={kandidaat.built ? undefined : 'ja'}
-                  onClick={() => setRegio(kandidaat.id)}
-                >
-                  <RegioIcon size={20} />
-                  {t(kandidaat.naam)}
-                  {/* A region the plan has and the product does not says so on
+                  <button
+                    key={kandidaat.id}
+                    type="button"
+                    className="tk-regio"
+                    aria-pressed={kandidaat.built ? kandidaat.id === hier : undefined}
+                    disabled={!kandidaat.built}
+                    data-soon={kandidaat.built ? undefined : 'ja'}
+                    onClick={() => setRegio(kandidaat.id)}
+                  >
+                    <RegioIcon size={20} />
+                    {t(kandidaat.naam)}
+                    {/* A region the plan has and the product does not says so on
                       its own face rather than opening onto nothing (ADR-051). */}
-                  {kandidaat.built ? null : <span className="tk-label">{t('regio.soon')}</span>}
-                </button>
+                    {kandidaat.built ? null : <span className="tk-label">{t('regio.soon')}</span>}
+                  </button>
                 );
               })}
             </div>
@@ -324,31 +324,31 @@ export function ModuleScreen({
             <Stap nummer={stap.keuze} label={t(onderwerp.keuze)} />
 
             <div className="tk-variant-row">
-                {onderwerp.sets.map((deel) => {
-                  const ids = deel.items.map((item) => item.id);
-                  const mastered = countMastered(known, ids);
+              {onderwerp.sets.map((deel) => {
+                const ids = deel.items.map((item) => item.id);
+                const mastered = countMastered(known, ids);
 
-                  return (
-                    <button
-                      key={deel.setId}
-                      type="button"
-                      className="tk-variant-chip"
-                      // The full name, because "7" is not a sentence and this
-                      // is the one control on the page whose visible label is
-                      // deliberately shorter than what it means.
-                      aria-label={naamVan(deel)}
-                      aria-pressed={deel.setId === chosen?.setId}
-                      onClick={() => onSet(deel.setId)}
-                    >
-                      <span aria-hidden="true">{deel.kortNaam ?? naamVan(deel)}</span>
-                      <Dot
-                        size={10}
-                        fill={ids.length === 0 ? 0 : mastered / ids.length}
-                        className="tk-variant-dot"
-                      />
-                    </button>
-                  );
-                })}
+                return (
+                  <button
+                    key={deel.setId}
+                    type="button"
+                    className="tk-variant-chip"
+                    // The full name, because "7" is not a sentence and this
+                    // is the one control on the page whose visible label is
+                    // deliberately shorter than what it means.
+                    aria-label={naamVan(deel)}
+                    aria-pressed={deel.setId === chosen?.setId}
+                    onClick={() => onSet(deel.setId)}
+                  >
+                    <span aria-hidden="true">{deel.kortNaam ?? naamVan(deel)}</span>
+                    <Dot
+                      size={10}
+                      fill={ids.length === 0 ? 0 : mastered / ids.length}
+                      className="tk-variant-dot"
+                    />
+                  </button>
+                );
+              })}
             </div>
           </section>
         ) : null}
