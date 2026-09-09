@@ -107,6 +107,49 @@ export function Gallery() {
         Nog niet beschikbaar
       </button>
 
+      {/* The tile a module page is made of: an icon and a word or two, sized to
+          what it says. Four classes share the face, so they belong on one line
+          here — the last time they drifted apart, nothing in this gallery put
+          them side by side and it went unnoticed.
+
+          The three fills are not decoration. Below 21px the dot stops drawing a
+          fill and becomes a solid core (dotGeometry.ts), which is a shape that
+          says nothing about progress — and three of them at 0, 40 and 100
+          percent is how you see that in one glance rather than in a
+          screenshot. */}
+      <h2 className={HEADING}>Keuzetegel — één gezicht, vier rijen</h2>
+      <div className="tk-sets">
+        <button type="button" className="tk-subject">
+          <Dot size={24} fill={0} />
+          Leeg
+        </button>
+        <button type="button" className="tk-subject" aria-pressed="true">
+          <Dot size={24} fill={0.4} />
+          Gekozen
+        </button>
+        <button type="button" className="tk-subject">
+          <Dot size={24} fill={1} />
+          Vol
+        </button>
+      </div>
+      <div className="tk-regios mt-3">
+        <button type="button" className="tk-regio">
+          <FreezerIcon size={20} />
+          Regio
+        </button>
+        <button type="button" className="tk-regio" disabled data-soon="ja">
+          <FreezerIcon size={20} />
+          Binnenkort
+        </button>
+        <button type="button" className="tk-switch">
+          <FreezerIcon size={20} />
+          Schakelaar
+        </button>
+      </div>
+      <p className="tk-said">
+        De regel onder een rij, over de tegel die gekozen is — bij label-maat.
+      </p>
+
       <h2 className={HEADING}>Voortgang</h2>
       <ProgressBar value={0} label="Leeg" />
       <ProgressBar value={0.35} label="Ruim een derde" className="mt-3" />

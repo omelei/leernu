@@ -1400,6 +1400,14 @@
     background: var(--surface);
     padding: 0 15px;
   }
+  /* The switch is the only one of its kind on its row, and its row is a column
+   * — .tk-variant stacks its label above it — so it stretched to the full
+   * measure while every other tile sized to its own words. A tile that is one
+   * of one is still a tile. */
+  .tk-switch {
+    align-self: flex-start;
+  }
+
   /* A region the plan has and the product does not. Hatched and dashed, which
    * is what the front door already draws for a module that is coming — a shape
    * rather than a colour, so "not yet" is legible to a child who cannot tell

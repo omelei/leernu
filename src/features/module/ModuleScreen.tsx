@@ -277,7 +277,14 @@ export function ModuleScreen({
                     if (!open) onSet(vak.sets[0]?.setId ?? '');
                   }}
                 >
-                  <Dot size={20} fill={ids.length === 0 ? 0 : mastered / ids.length} />
+                  {/* 24 and not the 20 the other tiles give their pictogram.
+                      Below 21 the dot stops drawing a fill and becomes a solid
+                      core (§A, dotGeometry.ts), and on this row the dot is the
+                      only thing left carrying how far along a subject is — at
+                      20 all five of them looked identical. A pictogram can
+                      shrink because it is a picture of a word; this one is
+                      data. */}
+                  <Dot size={24} fill={ids.length === 0 ? 0 : mastered / ids.length} />
                   {t(vak.naam)}
                 </button>
               );
