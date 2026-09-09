@@ -195,9 +195,7 @@ export function ModuleScreen({
                   <span className="font-semibold">{t(kandidaat.naam)}</span>
                   {/* A region the plan has and the product does not says so on
                       its own face rather than opening onto nothing (ADR-051). */}
-                  {kandidaat.built ? null : (
-                    <span className="tk-label">{t('regio.soon')}</span>
-                  )}
+                  {kandidaat.built ? null : <span className="tk-label">{t('regio.soon')}</span>}
                 </button>
               ))}
             </div>

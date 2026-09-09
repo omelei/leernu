@@ -103,7 +103,7 @@ The whole of it is at **leer.nu/voortgang**: sixty animals in five materials —
 brons, zilver, goud, platina, ultra ([ADR-080](docs/DECISIONS.md)) — twelve
 tafeldiploma's and ten reisstempels, with what every one of them costs written
 next to it ([ADR-071](docs/DECISIONS.md), [ADR-076](docs/DECISIONS.md)). What it
-does not say is what the next animal *is*: an animal not yet earned is drawn as
+does not say is what the next animal _is_: an animal not yet earned is drawn as
 a parcel with its price on it, so a child can aim at the next rung without
 having read the whole collection off the screen on their first afternoon
 ([ADR-081](docs/DECISIONS.md)). Nothing on that page can be bought, won by

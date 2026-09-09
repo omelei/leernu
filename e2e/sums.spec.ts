@@ -384,10 +384,7 @@ test('the topomix asks about more than one kind of thing in one round', async ({
   await page.goto('/topografie/mix');
 
   const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
-  await expect(wat.getByRole('button', { name: /^Mix/ })).toHaveAttribute(
-    'aria-pressed',
-    'true',
-  );
+  await expect(wat.getByRole('button', { name: /^Mix/ })).toHaveAttribute('aria-pressed', 'true');
 
   // Exploring is one set's own layer and is not offered here — a mix is not
   // where anybody meets a set for the first time.

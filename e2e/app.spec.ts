@@ -261,7 +261,9 @@ test('the animal a child picks is theirs, and follows them', async ({ page }) =>
   // not a button either — a control a child cannot use is a question they have
   // to ask somebody about.
   await expect(dieren.getByRole('button', { name: /^Draak/ })).toHaveCount(0);
-  await expect(dieren.getByLabel(/Nog onbekend dier in brons, vanaf niveau \d+/).first()).toBeVisible();
+  await expect(
+    dieren.getByLabel(/Nog onbekend dier in brons, vanaf niveau \d+/).first(),
+  ).toBeVisible();
 
   // It belongs to the child, not to the page: it survives a reload.
   await page.reload();
