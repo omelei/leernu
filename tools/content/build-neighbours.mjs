@@ -185,7 +185,7 @@ function byDistance(opdracht) {
   const plekken = (geo.punten ?? geo.vormen).map((plek) => ({ id: plek.id, punt: plek.punt }));
 
   const ontbreekt = plekken.find((plek) => !plek.punt);
-  if (ontbreekt) throw new Error(`${bestand}: ${ontbreekt.id} has no label point`);
+  if (ontbreekt) throw new Error(`${opdracht.geo}: ${ontbreekt.id} has no label point`);
 
   return new Map(
     plekken.map((plek) => [
