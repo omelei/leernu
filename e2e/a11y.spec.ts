@@ -52,7 +52,11 @@ async function kiesOnderwerp(page: Page, [vak, chip]: Keuze) {
   // First rather than exact: after the card is pressed its chips are in the
   // same region, and a chip's accessible name is the set's full name.
   await what.getByRole('button', { name: vak }).first().click();
-  if (chip) await what.getByRole('button', { name: chip }).click();
+  // The chips are a numbered step of their own now, not a caption inside step
+  // 1, so they are no longer in that region. The chip patterns are anchored at
+  // both ends, which is what keeps them off the start button — that one names
+  // the set too, inside a longer sentence.
+  if (chip) await page.getByRole('button', { name: chip }).click();
 }
 
 /**
@@ -152,7 +156,7 @@ test('the map has no violations while asking, and none while showing the answer'
 
 test('the typing mode has no violations', async ({ page }) => {
   await signIn(page, 'Sem');
-  await startRound(page, PROVINCIES, /Typ de naam/);
+  await startRound(page, PROVINCIES, /Zelf typen/);
   await expect(page.getByPlaceholder('Naam')).toBeVisible();
 
   expect((await scan(page)).violations).toEqual([]);

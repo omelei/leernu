@@ -234,8 +234,8 @@ export const nl = {
   'onderwerp.steden.kortHoofd': 'Hoofdsteden',
   'onderwerp.steden.kortAlle': 'Alle',
   'onderwerp.wateren': 'Wateren',
-  'onderwerp.eilanden': 'Eilanden',
-  'onderwerp.topomix': 'Mix',
+  'onderwerp.eilanden': 'Waddeneilanden',
+  'onderwerp.topomix': 'Topo-mix',
   'onderwerp.landen': 'Landen',
   // Het aantal staat erbij, want dat is wat een kind wil weten voordat het
   // begint: zestien landen is een middag, honderdzevenenzestig is een jaar.
@@ -249,7 +249,7 @@ export const nl = {
 
   // Modes
   'mode.wijs-aan': 'Aanwijzen',
-  'mode.hoe-heet-dit': 'Typ de naam',
+  'mode.hoe-heet-dit': 'Zelf typen',
   'mode.ontdekken': 'Ontdekken',
   'mode.bliksemronde': 'Bliksemronde',
   'mode.overleven': 'Overleven',
@@ -313,9 +313,9 @@ export const nl = {
   // staat, want het is hetzelfde soort ding - een eigenschap van de ronde die
   // de twee stappen erboven al gekozen hebben.
   'choose.testModeLabel': 'Zoals op school',
-  'choose.testMode': 'Toetsstand',
+  'choose.testMode': 'Oefentoets',
   'choose.testModeWhy': 'Je ziet pas aan het eind wat goed was, en je krijgt een cijfer.',
-  'choose.startTest': '{wat} · toetsstand',
+  'choose.startTest': '{wat} · oefentoets',
   'choose.likeTheTest': 'Oefen zoals de toets',
   'choose.howMany': 'Hoeveel vragen?',
   'choose.howManyOne': '{aantal} vragen',
@@ -426,8 +426,8 @@ export const nl = {
   'sums.wrongSub': 'Jij zei {gegeven}.',
   'sums.dontKnowSub': 'Deze komt zo weer langs.',
   'sums.practiceMore': 'Deze sommen moet je nog oefenen',
-  'mode.som-typen': 'Typ het antwoord',
-  'mode.som-meerkeuze': 'Kies uit vier',
+  'mode.som-typen': 'Zelf typen',
+  'mode.som-meerkeuze': 'Meerkeuze',
   // De tafeltoets die een kind van school kent, zonder de stopwatch: op de
   // instellingenpagina staat dat haast het onthouden niet helpt, en dat zetten
   // we niet uit voor de ene oefening waar een kind het het meest zou voelen.

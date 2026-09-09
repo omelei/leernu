@@ -28,7 +28,11 @@ async function kiesOnderwerp(page: Page, [vak, chip]: Keuze) {
   // First rather than exact: after the card is pressed its chips are in the
   // same region, and a chip's accessible name is the set's full name.
   await what.getByRole('button', { name: vak }).first().click();
-  if (chip) await what.getByRole('button', { name: chip }).click();
+  // The chips are a numbered step of their own now, not a caption inside step
+  // 1, so they are no longer in that region. The chip patterns are anchored at
+  // both ends, which is what keeps them off the start button — that one names
+  // the set too, inside a longer sentence.
+  if (chip) await page.getByRole('button', { name: chip }).click();
 }
 
 /**
@@ -51,7 +55,7 @@ async function startRound(page: Page, set: Keuze, way: RegExp, toetsstand = fals
     .getByRole('region', { name: /Hoe wil je/ })
     .getByRole('button', { name: way })
     .click();
-  if (toetsstand) await page.getByRole('button', { name: /^Toetsstand/ }).click();
+  if (toetsstand) await page.getByRole('button', { name: /^Oefentoets/ }).click();
   await start(page);
 }
 
@@ -453,7 +457,7 @@ test('multiple choice offers four names, three of them wrong', async ({ page }) 
 
 test('typing a name: a real place from elsewhere is a near miss, not a cross', async ({ page }) => {
   await signIn(page, 'Roos');
-  await startRound(page, PROVINCIES, /Typ de naam/);
+  await startRound(page, PROVINCIES, /Zelf typen/);
 
   // The map shows which area is meant; it does not say its name.
   await expect(page.getByRole('heading', { name: 'Hoe heet dit gebied?' })).toBeVisible();
@@ -543,7 +547,11 @@ test('explore names a city, places it, and scores nothing', async ({ page }) => 
     .getByRole('region', { name: /Kies een onderwerp/ })
     .getByRole('button', { name: /^Steden/ })
     .first();
-  await expect(steden).toContainText('nog niet geoefend');
+  // The accessible name and not the visible text: a subject tile shows an icon
+  // and a word, and how the subject is going follows it in the label and in the
+  // line under the row for whichever subject is chosen. Steden is not the one
+  // that is chosen here, so the label is where the fact lives.
+  await expect(steden).toHaveAccessibleName(/nog niet geoefend/);
 });
 
 /** Answers the current province question wrongly, whatever it happens to be. */
