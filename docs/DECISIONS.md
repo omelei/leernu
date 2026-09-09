@@ -3523,6 +3523,88 @@ honest failure of the two.
 
 ---
 
+## ADR-087 — Six werelddelen, and pointing stops leading where pointing cannot work
+
+**Status:** accepted — 2026-09-09. Completes ADR-086.
+
+Three things were looked at before anything was built: what other geography apps
+do, what a Dutch school test actually asks, and — once the first two suggested an
+answer — whether the numbers agreed.
+
+**What other apps do.** Seterra, World Geography Games and Lizard Point all
+organise themselves per continent and keep the world map as the thing you work
+towards; Lizard Point additionally puts fixed magnifying glasses on the world map
+that open an enlarged region. The Seterra app offers free pinch-zoom, which is
+also where its reviews complain: picking the smallest countries on a phone stays
+hard. Some apps draw a dot where a country is too small, and players object that
+it teaches you to recognise the dot rather than the shape.
+
+**What a Dutch test asks.** A blank map with numbers, and the child writes the
+names underneath. Pointing is how topography *begins* in this product; it is not
+how a world topography test works.
+
+**What the numbers said.** For every map, count the countries that end up with
+neither a usable help ring (ADR-086) nor enough of their own area for a
+fingertip:
+
+| regio | landen | laptop | tablet | telefoon |
+| --- | --- | --- | --- | --- |
+| Zuid-Amerika | 12 | 0 | 0 | 1 |
+| Oceanië | 9 | 1 | 1 | 1 |
+| Noord-Amerika | 23 | 12 | 13 | 20 |
+| Europa | 46 | 4 | 7 | 21 |
+| Azië | 47 | 5 | 9 | 29 |
+| Afrika | 52 | 5 | 9 | 19 |
+| Wereld | 167 | 90 | 106 | 160 |
+
+That table changed the plan. **Werelddelen fix the laptop and the tablet** —
+Europe goes from unusable to four hard countries out of forty-six — and they do
+not fix the phone, where a map gets about two hundred pixels of height and
+nothing short of zooming would.
+
+So both halves are built.
+
+**Six werelddelen** join Europa and the wereld in the region row: Afrika, Azië,
+Noord-Amerika, Zuid-Amerika, Oceanië. Five more rows in the build's table, which
+is what ADR-086 said a region would cost, and it was true.
+
+**Pointing stops leading where pointing cannot work.** Past fifteen answerable
+shapes a map is not pointable on a phone; past a hundred it is not pointable
+anywhere, which is the world map and only the world map. There, "aanwijzen" moves
+to the end of step 2 and **meerkeuze leads**: the map lights a country up and the
+child answers in words, which needs no precision and is the direction the school
+test asks in.
+
+Moved, never removed. On a digibord a class points at the world map together, and
+a rule about phones has no business taking that away.
+
+Point sets are exempt: a city is already drawn as a marker sized for a finger, so
+eighty cities are eighty targets. This rule is about hitting a coastline.
+
+**And a ring says which one.** Choosing and typing ask a child to *find* the
+country before they name it, and three pixels of coastline is as hard to find as
+to hit. In those two modes the asked-about shape gets a ring in the accent — not
+a target, since nothing is pressable there, and the one mark on the map that is
+about the question.
+
+**A view box follows its countries, never its window.** It followed the window
+for one release, on the argument that a frame stopping at the last Russian vertex
+would leave the cut visible as a gap. Wrong twice: a clipped edge is the extreme
+point, so it lands on the frame either way — and a rectangle in degrees is,
+through any of these projections, a curved region whose bounding box is larger
+than what it holds. Asia and North America were drawn at about six tenths of the
+size they could have been, which is six tenths of a touch target on exactly the
+maps where that is the problem.
+
+**What is not built.** Free pinch-zoom, which is what most apps reach for and
+what their users complain about most on a phone; here it would also mean a
+keyboard equivalent and a tab order over a map whose every country is a button.
+And insets for the Caribbean, which is the one place a werelddeel map does not
+fix (twelve of Noord-Amerika's twenty-three are hard even on a laptop). Both stay
+open.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because
