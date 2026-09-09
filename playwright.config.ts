@@ -30,16 +30,19 @@ export default defineConfig({
    * of them and a green suite takes ten minutes; a broken one takes half an
    * hour, because every failure is thirty seconds three times over.
    *
-   * across three runners on top of that (`--shard`, see ci.yml), which is what
-   * takes the path to production from six minutes to under three. Sharding is
-   * the only lever of the three that does not buy speed by looking at less.
+   * With four workers a green suite is about four minutes, and CI divides the
+   * six projects over three runners on top of that (see ci.yml). By project
+   * and not by `--shard`: sharding balances on the number of tests, and a test
+   * that photographs six screens is not the same size as one that presses a
+   * button. Dividing the work is the only lever of the three that does not buy
+   * speed by looking at less.
    *
    * `maxFailures` is the part that matters. A suite that is broken is broken
    * after a handful of failures, and grinding through the remaining two hundred
    * proves nothing the first few did not — it only decides whether the answer
    * arrives in four minutes or in twenty-five. It is four rather than ten
-   * because it now applies per shard: ten each would be thirty across the run,
-   * which is not "stop early", it is stopping three times as late.
+   * because it now applies per runner: ten each would be thirty across the
+   * run, which is not "stop early", it is stopping three times as late.
    */
   // Spread rather than `workers: … : undefined`: under
   // exactOptionalPropertyTypes an absent option and one set to undefined are
