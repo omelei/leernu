@@ -66,6 +66,13 @@ test('the front door, the chooser and the profile', async ({ page }, testInfo) =
   await page.goto('/jij');
   await expect(page.getByRole('heading', { name: 'Jij', exact: true })).toBeVisible();
   await shoot(page, size, '04-jij');
+
+  // The collection, which is the longest page in the product and the one that
+  // has to survive being mostly empty: a child on level one has three of sixty
+  // animals, no diplomas and no stamps (ADR-076).
+  await page.goto('/ontdekkingsreis');
+  await expect(page.getByRole('heading', { name: 'Jouw ontdekkingsreis' })).toBeVisible();
+  await shoot(page, size, '12-ontdekkingsreis');
 });
 
 /**
