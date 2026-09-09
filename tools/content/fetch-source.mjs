@@ -115,7 +115,8 @@ SOURCES.push({
  * names a child reads are sourced rather than typed out from memory, which is
  * the same rule the provinces follow.
  */
-const NATURAL_EARTH = 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson';
+const NATURAL_EARTH =
+  'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson';
 
 SOURCES.push(
   {

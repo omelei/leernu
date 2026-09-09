@@ -306,23 +306,23 @@ describe('the countries of Europe and of the world', () => {
     expect(itemsOfSet(set).length).toBeGreaterThanOrEqual(minstens);
   });
 
-  it.each(regios)('resolves every question in $regio to a shape, at every level', ({
-    regio,
-    set,
-  }) => {
-    for (const niveau of NIVEAUS) {
-      const shapes = new Set(landenGeo(regio, niveau).vormen.map((vorm) => vorm.id));
-      const dangling = itemsOfSet(set)
-        .filter((item) => !shapes.has(item.geometrieRef ?? ''))
-        .map((item) => item.id);
+  it.each(regios)(
+    'resolves every question in $regio to a shape, at every level',
+    ({ regio, set }) => {
+      for (const niveau of NIVEAUS) {
+        const shapes = new Set(landenGeo(regio, niveau).vormen.map((vorm) => vorm.id));
+        const dangling = itemsOfSet(set)
+          .filter((item) => !shapes.has(item.geometrieRef ?? ''))
+          .map((item) => item.id);
 
-      // Every level, not only the one the round draws. A country simplified out
-      // of existence at `overview` is a shape a child could be asked to point
-      // at and could not see — which is what the build's "kept its largest
-      // ring" fallback exists to prevent.
-      expect(dangling, `${set} at ${niveau}`).toEqual([]);
-    }
-  });
+        // Every level, not only the one the round draws. A country simplified out
+        // of existence at `overview` is a shape a child could be asked to point
+        // at and could not see — which is what the build's "kept its largest
+        // ring" fallback exists to prevent.
+        expect(dangling, `${set} at ${niveau}`).toEqual([]);
+      }
+    },
+  );
 
   it.each(regios)('draws nothing in $regio that is not a question', ({ regio, set }) => {
     const asked = new Set(itemsOfSet(set).map((item) => item.geometrieRef));

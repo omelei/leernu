@@ -14,10 +14,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-albanie",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-andorra",
@@ -27,25 +24,17 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-andorra",
       "niveau": 3,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-belarus",
       "type": "land",
       "naam": "Belarus",
-      "aliassen": [
-        "Wit-Rusland"
-      ],
+      "aliassen": ["Wit-Rusland"],
       "regioSet": "europa",
       "geometrieRef": "eu-land-belarus",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-belgie",
@@ -55,10 +44,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-belgie",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-bosnie-en-herzegovina",
@@ -68,10 +54,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-bosnie-en-herzegovina",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-bulgarije",
@@ -81,10 +64,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-bulgarije",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-cyprus",
@@ -94,10 +74,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-cyprus",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-denemarken",
@@ -107,10 +84,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-denemarken",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-duitsland",
@@ -120,10 +94,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-duitsland",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-estland",
@@ -133,10 +104,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-estland",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-finland",
@@ -146,10 +114,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-finland",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-frankrijk",
@@ -159,10 +124,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-frankrijk",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-griekenland",
@@ -172,10 +134,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-griekenland",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-hongarije",
@@ -185,10 +144,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-hongarije",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-ierland",
@@ -198,10 +154,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-ierland",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-ijsland",
@@ -211,10 +164,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-ijsland",
       "niveau": 3,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-italie",
@@ -224,10 +174,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-italie",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-kosovo",
@@ -237,10 +184,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-kosovo",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-kroatie",
@@ -250,10 +194,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-kroatie",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-letland",
@@ -263,10 +204,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-letland",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-liechtenstein",
@@ -276,10 +214,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-liechtenstein",
       "niveau": 3,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-litouwen",
@@ -289,10 +224,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-litouwen",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-luxemburg",
@@ -302,10 +234,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-luxemburg",
       "niveau": 3,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-malta",
@@ -315,10 +244,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-malta",
       "niveau": 3,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-moldavie",
@@ -328,10 +254,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-moldavie",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-monaco",
@@ -341,10 +264,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-monaco",
       "niveau": 3,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-montenegro",
@@ -354,10 +274,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-montenegro",
       "niveau": 3,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-nederland",
@@ -367,10 +284,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-nederland",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-noord-macedonie",
@@ -380,10 +294,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-noord-macedonie",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-noorwegen",
@@ -393,10 +304,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-noorwegen",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-oekraine",
@@ -406,10 +314,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-oekraine",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-oostenrijk",
@@ -419,10 +324,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-oostenrijk",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-polen",
@@ -432,10 +334,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-polen",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-portugal",
@@ -445,10 +344,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-portugal",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-roemenie",
@@ -458,10 +354,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-roemenie",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-rusland",
@@ -471,10 +364,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-rusland",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-san-marino",
@@ -484,10 +374,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-san-marino",
       "niveau": 3,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-servie",
@@ -497,10 +384,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-servie",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-slovenie",
@@ -510,10 +394,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-slovenie",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-slowakije",
@@ -523,10 +404,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-slowakije",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-spanje",
@@ -536,10 +414,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-spanje",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-tsjechie",
@@ -549,10 +424,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-tsjechie",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-vaticaanstad",
@@ -562,10 +434,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-vaticaanstad",
       "niveau": 3,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-verenigd-koninkrijk",
@@ -575,10 +444,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-verenigd-koninkrijk",
       "niveau": 1,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-zweden",
@@ -588,10 +454,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-zweden",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     },
     {
       "id": "eu-land-zwitserland",
@@ -601,10 +464,7 @@
       "regioSet": "europa",
       "geometrieRef": "eu-land-zwitserland",
       "niveau": 2,
-      "leerdoelen": [
-        "ak-europa-landen-aanwijzen",
-        "ak-europa-landen-benoemen"
-      ]
+      "leerdoelen": ["ak-europa-landen-aanwijzen", "ak-europa-landen-benoemen"]
     }
   ]
 }

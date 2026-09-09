@@ -48,13 +48,11 @@ export function ExploreScreen({
     void Promise.all([
       loadGeoSet(shape.achtergrond, 'region', shape.regio),
       loadAnswerLayer(shape),
-    ]).then(
-      ([loadedGeo, loadedAnswers]) => {
-        if (cancelled) return;
-        setGeo(loadedGeo);
-        setAnswers(loadedAnswers);
-      },
-    );
+    ]).then(([loadedGeo, loadedAnswers]) => {
+      if (cancelled) return;
+      setGeo(loadedGeo);
+      setAnswers(loadedAnswers);
+    });
     return () => {
       cancelled = true;
     };

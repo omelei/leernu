@@ -359,12 +359,7 @@ for (const regio of REGIOS) {
     for (const land of landen) for (const ring of land.rings) frame.push(...ring);
   }
 
-  const projector = makeProjectorWith(
-    (lon, lat) => regio.project(lon, lat),
-    frame,
-    SIZE,
-    PADDING,
-  );
+  const projector = makeProjectorWith((lon, lat) => regio.project(lon, lat), frame, SIZE, PADDING);
 
   const projected = landen.map((land) => ({
     ...naamVan(land.properties.NAME_NL),
