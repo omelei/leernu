@@ -712,6 +712,7 @@ const PRACTICE_MODES: readonly ModeId[] = [
   'wijs-aan',
   'meerkeuze',
   'hoe-heet-dit',
+  'tijdrit',
   'bliksemronde',
   'overleven',
 ];

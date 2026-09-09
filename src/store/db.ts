@@ -41,8 +41,14 @@ export const DB_NAME = 'leernu';
  * later, in ordinary transactions where a failure can be seen and retried,
  * rather than inside a version-change transaction that cannot be tested from
  * here and whose failure mode is a child's progress becoming unreachable.
+ *
+ * 5 since ADR-090, which added the tijdrit and with it the first thing this
+ * product stores that is not about what a child knows: how fast they knew it.
+ * A new store and nothing else — no row already written is read, moved or
+ * rewritten, which is the only kind of migration worth shipping to a device
+ * nobody can debug.
  */
-export const DB_VERSION = 4;
+export const DB_VERSION = 5;
 
 /**
  * The first child's id, and what the settings and streak stores were keyed by
@@ -145,6 +151,27 @@ interface LegacyStreakRecord {
   vriezerWeek?: string | null;
 }
 
+/**
+ * A best time, for one child on one track.
+ *
+ * The track is the set and the number of questions (`baanVan` in game-core):
+ * twenty seconds over twelve provinces and twenty seconds over a hundred
+ * countries are not the same achievement, and one row per set would have
+ * rewarded whoever picked the shortest round.
+ *
+ * One row per track and no history. A list of every attempt would be a table
+ * that grows for as long as a child practises, to say something no screen asks:
+ * what a record is for is the number to beat.
+ */
+export interface RecordRecord {
+  kindId: string;
+  /** `<setId>:<aantal vragen>`. */
+  baan: string;
+  /** The time, in milliseconds, penalties included. */
+  ms: number;
+  behaaldOp: string;
+}
+
 export interface BadgeRecord {
   badgeId: string;
   behaaldOp: string;
@@ -188,6 +215,8 @@ interface TopoDB extends DBSchema {
   streak: { key: string; value: StreakRecord };
   badges: { key: string; value: BadgeRecord };
   stamps: { key: string; value: StampRecord };
+  /** Version 5: one best time per child per track. */
+  records: { key: [string, string]; value: RecordRecord };
   settings: { key: string; value: SettingRecord };
 }
 
@@ -240,6 +269,12 @@ export function getDb(): Promise<IDBPDatabase<TopoDB>> {
       if (oldVersion < 4) {
         db.createObjectStore('progress', { keyPath: ['kindId', 'itemId'] });
         db.createObjectStore('kindBadges', { keyPath: ['kindId', 'badgeId'] });
+      }
+
+      // ADR-090: the tijdrit's best times. Keyed by child from the first day,
+      // because the mistake ADR-046 had to correct was a store that was not.
+      if (oldVersion < 5) {
+        db.createObjectStore('records', { keyPath: ['kindId', 'baan'] });
       }
 
       // ADR-040: "eerste-ronde" was earned by taking part and no longer exists;

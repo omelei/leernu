@@ -57,8 +57,15 @@ device itself.
 
 // object store: badges        { badgeId, behaaldOp }
 // object store: stamps        { regioSet, behaaldOp }
+// object store: records       { kindId, baan, ms, behaaldOp } — best times, ADR-090
 // object store: settings      { key, value } — device preferences, not player data
 ```
+
+`records.baan` is the set and the round length together — `nl-provincies:12` —
+because a best time over ten questions and one over a hundred are not the same
+achievement. One row per track and no history: what a record is for is the number
+to beat. It has no counterpart in part B and is not queued for one; a time
+uploaded to a server is a leaderboard, and spec §10 rules that out.
 
 `rustdagWeek` is the ISO week in which the last rest day was earned, so a week of
 practice yields exactly one. It is not in part B's `streaks` table because part B

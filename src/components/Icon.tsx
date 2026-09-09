@@ -396,6 +396,25 @@ export function ExploreIcon(props: Omit<IconProps, 'children'>) {
   );
 }
 
+/**
+ * The tijdrit: a stopwatch, which is a clock with a button on it.
+ *
+ * It has to be told from the clock in this same set at 20px, and the difference
+ * a child reads first is the crown: the plain clock is a circle with hands, and
+ * this one has a stem on top, which is the thing you press. Its hand points
+ * straight up rather than at ten past two, because a stopwatch at rest does and
+ * because the two drawings must not converge.
+ */
+export function StopwatchIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <circle cx="12" cy="13.5" r="7.5" />
+      <path d="M12 13.5V8.5" />
+      <path d="M9.5 3h5" />
+    </Icon>
+  );
+}
+
 /** The lightning round: a bolt. Sixty seconds, drawn as the thing it is named after. */
 export function BoltIcon(props: Omit<IconProps, 'children'>) {
   return (

@@ -251,6 +251,7 @@ export const nl = {
   'mode.wijs-aan': 'Aanwijzen',
   'mode.hoe-heet-dit': 'Zelf typen',
   'mode.ontdekken': 'Ontdekken',
+  'mode.tijdrit': 'Tijdrit',
   'mode.bliksemronde': 'Bliksemronde',
   'mode.overleven': 'Overleven',
   'mode.meerkeuze': 'Meerkeuze',
@@ -263,6 +264,10 @@ export const nl = {
   'way.meerkeuze': 'Kies uit vier namen — de instap naar typen',
   'way.hoe-heet-dit': 'Schrijf het zelf op — voor de toets',
   'way.ontdekken': 'Rondkijken, geen vragen',
+  // De tijdrit staat vóór de bliksemronde en de levens: hij neemt niets weg,
+  // hij meet alleen. "Record" is hier je eigen tijd en die van niemand anders —
+  // er is geen ranglijst en er komt er geen (spec §10).
+  'way.tijdrit': 'Zo snel mogelijk aanwijzen — jaag op je eigen record',
   'way.bliksemronde': 'Zo veel mogelijk in een minuut — voor als het al zit',
   'way.overleven': 'Doorgaan tot je levens op zijn — voor als het al zit',
   // Bij naam, net als de begroeting op de voordeur. "Wat wil je oefenen?" aan
@@ -388,6 +393,20 @@ export const nl = {
   'practice.loading': 'Kaart wordt geladen…',
   'practice.mapFailed': 'De kaart kon niet geladen worden.',
 
+  // De wereldronde tekent de kaart van het werelddeel waar het land in ligt
+  // (ADR-091). De kaart wisselt dus tussen vragen, en het scherm zegt welke —
+  // anders verandert de achtergrond zonder dat iemand het aankondigt, en een
+  // schermlezer merkt er helemaal niets van.
+  'practice.onMap': 'op de kaart van {regio}',
+
+  // De tijdrit. De klok telt op in plaats van af, dus "tijd" is hier hoe lang
+  // je bezig bent en niet hoeveel je nog hebt.
+  'practice.counterElapsed': 'tijd',
+  'practice.answerTime': '{seconden} seconden',
+  // Vijf strafseconden per fout antwoord. Ze staan er als wat ze zijn: tijd
+  // erbij, en verder niets — geen munten, geen levens, geen streak (ADR-090).
+  'practice.penalty': '+{aantal} strafseconden',
+
   // Result
   // "Ronde klaar" and not "Klaar!" (K8). The exclamation mark congratulated the
   // child for stopping, which is the one thing on this screen that is not an
@@ -484,6 +503,23 @@ export const nl = {
   'result.gainedMany': '{aantal} vragen meer die je nu onthoudt.',
   'result.gainedNone': 'Nog niets erbij. Deze komen morgen terug.',
   'result.again': 'Nog een ronde',
+
+  // De tijdrit (ADR-090). De tijd staat er als tijd en niet als cijfer: hij
+  // zegt hoe snel je het wist, niet hoe goed je bent. En het record is je
+  // eigen record — er is niemand anders om je mee te vergelijken.
+  'result.timeLabel': 'jouw tijd',
+  'result.timeOf': '{aantal} vragen, {tijd} aan antwoorden.',
+  'result.timePenalty': '{aantal} fout, dat is {seconden} strafseconden erbij.',
+  'result.timePenaltyOne': 'Eén fout, dat is {seconden} strafseconden erbij.',
+  'result.timeClean': 'Alles goed, dus geen strafseconden erbij.',
+  'result.recordNew': 'Nieuw record!',
+  'result.recordBeat': 'Je oude record was {tijd}.',
+  'result.recordFirst': 'Je eerste tijd op deze ronde. Nu heb je iets om te verslaan.',
+  'result.recordStands': 'Je record staat op {tijd}.',
+  'result.recordShort': 'Deze rit telt niet voor je record: je stopte eerder.',
+  // Op de modulepagina, naast de startknop: wat er te verslaan valt, voordat
+  // je begint. Zonder record is er niets te melden en staat er niets.
+  'choose.record': 'Je record: {tijd}',
 
   // K10. Twee schakelaars in plaats van drie: de leesmodus verviel (ADR-025).
   // School en woonplaats staan er niet en komen er niet — dat zijn de twee

@@ -2,9 +2,10 @@ import { useEffect, useState, type ReactNode } from 'react';
 import { Button } from '@/components/Button';
 import { Dot } from '@/components/Dot';
 import { GoIcon, PaperIcon } from '@/components/Icon';
-import { countMastered, type ItemState, type ModeId } from '@/game-core';
+import { baanVan, countMastered, tijdInBeeld, type ItemState, type ModeId } from '@/game-core';
 import { t } from '@/i18n';
 import { loadItemStates } from '@/store/progress';
+import { loadRecords } from '@/store/recordStore';
 import { MODULE_ICON } from '@/features/shell/moduleIcons';
 import type { Module } from '@/features/shell/modules';
 import { usePreferences } from '@/features/player/settings';
@@ -114,6 +115,8 @@ export function ModuleScreen({
   readonly aside: ReactNode;
 }) {
   const [states, setStates] = useState<Map<string, ItemState> | null>(null);
+  /** The best times this child has ridden, by track. Empty until they have one. */
+  const [records, setRecords] = useState<ReadonlyMap<string, number>>(new Map());
   const [formId, setFormId] = useState<ModeId | null>(null);
   /** Where on the map, for the module that has a where. Null follows the set. */
   const [regio, setRegio] = useState<string | null>(null);
@@ -127,6 +130,7 @@ export function ModuleScreen({
 
   useEffect(() => {
     void loadItemStates().then(setStates);
+    void loadRecords().then(setRecords);
   }, []);
 
   const known = states ?? new Map<string, ItemState>();
@@ -185,6 +189,17 @@ export function ModuleScreen({
   // the answers there would hide nothing and take away the one thing that
   // makes the wall of diplomas legible.
   const toetsbaar = form !== null && form.rule !== null && form.id !== 'tafeldiploma';
+  /**
+   * The time to beat, for exactly the round about to be started.
+   *
+   * Keyed by set *and* length, the same way the record itself is: a child who
+   * moves from ten questions to twenty-five is on a different track and would
+   * otherwise be shown a time they cannot compare themselves with.
+   */
+  const record =
+    chosen && form?.id === 'tijdrit' && vragen !== null
+      ? (records.get(baanVan(chosen.setId, vragen)) ?? null)
+      : null;
   /** Everything this module holds, under one name. What a test asks about. */
   const mix = mixVan(alleOnderwerpen);
   const zin =
@@ -451,6 +466,16 @@ export function ModuleScreen({
               {minuten === null ? null : (
                 <span className="block text-ink-2">
                   {minuten === 1 ? t('choose.minuteOne') : t('choose.minutes', { aantal: minuten })}
+                </span>
+              )}
+              {/* And on a tijdrit, the time there is to beat — before the round
+                  rather than after it, because that is the thing a child is
+                  choosing this way of practising in order to do (ADR-090). It
+                  is absent on a track never ridden: there is nothing to say,
+                  and "geen record" is a line about an absence. */}
+              {record === null ? null : (
+                <span className="block text-ink-2 tabular-nums">
+                  {t('choose.record', { tijd: tijdInBeeld(record) })}
                 </span>
               )}
             </p>

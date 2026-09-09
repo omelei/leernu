@@ -583,6 +583,84 @@ test('bliksemronde runs a clock and moves on by itself', async ({ page }) => {
 });
 
 /**
+ * The tijdrit: the same pointing, against a clock that counts up (ADR-090).
+ *
+ * Three things no unit test can show. It is offered without the clock setting
+ * being touched — which is the line ADR-090 draws between a stopwatch and a
+ * time limit. The counter runs while the child is being timed. And a finished
+ * round ends on a time, with a record that was not there before.
+ *
+ * Twelve provinces answered wrongly on purpose: what is being tested is the
+ * clock and the record, and a test that had to know where Drenthe is would be
+ * testing the map.
+ */
+test('a tijdrit runs a stopwatch and leaves a record behind', async ({ page }) => {
+  await signIn(page, 'Bram');
+  // No visit to /jij: the stopwatch is not behind K10's switch, and a test that
+  // turned the clock on first could not tell whether that was why it appeared.
+  await startRound(page, PROVINCIES, /^Tijdrit/);
+
+  await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
+  // Counting up, and to a tenth, so two attempts a week apart can differ.
+  await expect(page.getByText(/^\d:[0-5]\d,\d$/)).toBeVisible();
+
+  // All twelve, and every one of them wrong. Five strafseconden apiece, which
+  // is what the result screen has to add up.
+  for (let vraag = 0; vraag < 12; vraag++) {
+    await answerWrongly(page);
+    await expect(page.getByText(/strafseconden/)).toBeVisible();
+    const volgende = page.getByRole('button', { name: 'Volgende vraag' });
+    if (await volgende.isVisible()) await volgende.click();
+  }
+
+  await expect(page.getByRole('heading', { name: 'Wat er is veranderd' })).toBeVisible();
+  await expect(page.getByText('jouw tijd')).toBeVisible();
+  // A first time on this track is a record, and it says which it was.
+  await expect(page.getByText(/Nieuw record/)).toBeVisible();
+  await expect(page.getByText(/12 fout/)).toBeVisible();
+
+  // And the record is on the page that offers the round, before the next one.
+  await page.goto('/topografie/provincies');
+  await page
+    .getByRole('region', { name: /Hoe wil je/ })
+    .getByRole('button', { name: /^Tijdrit/ })
+    .click();
+  await expect(page.locator('.tk-choose-start')).toContainText('Je record:');
+});
+
+/**
+ * The world, asked on the map of a werelddeel (ADR-091).
+ *
+ * The whole point of the decision, and the only place it can be seen: a round
+ * started on "Wereld" draws a map that is not the world. What proves it is a
+ * country that is on one werelddeel map and not on the others — every question
+ * in the round is answered on a map with at most fifty-two countries on it,
+ * where the globe had a hundred and sixty-seven.
+ */
+test('a round of the world draws the werelddeel, not the globe', async ({ page }) => {
+  await signIn(page, 'Julia');
+  await page.goto('/topografie/wereld');
+
+  await page
+    .getByRole('region', { name: /Hoe wil je/ })
+    .getByRole('button', { name: /^Aanwijzen/ })
+    .click();
+  await start(page);
+
+  await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
+  // The screen says which map it put up, because the map changes per question
+  // and nothing else would announce it.
+  await expect(page.getByText(/^op de kaart van /)).toBeVisible();
+
+  // And the map is one werelddeel rather than all of them: whichever it is,
+  // Australië and Spanje cannot both be on it.
+  const kaart = page.locator('svg');
+  const australie = await kaart.getByRole('button', { name: 'Australië' }).count();
+  const spanje = await kaart.getByRole('button', { name: 'Spanje' }).count();
+  expect(australie + spanje).toBeLessThan(2);
+});
+
+/**
  * "Ik weet het niet", drawn on K3 at every size. It is the one control that
  * lets a child stop guessing, so what matters is that it shows the answer and
  * that pressing it is cheaper than a guess — see ADR-048 for why.

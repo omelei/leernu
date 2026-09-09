@@ -58,6 +58,18 @@ export const TOPO_REGIOS: readonly Regio[] = [
 ];
 
 /**
+ * The name of a region by id.
+ *
+ * For the one screen that has to name a region nobody pressed: a round of the
+ * world draws the map of the werelddeel each country is in, and the question
+ * says which (ADR-091). Everywhere else the region is on a tile the child
+ * chose, and a tile carries its own name.
+ */
+export function regioNaam(id: string): TranslationKey | null {
+  return TOPO_REGIOS.find((regio) => regio.id === id)?.naam ?? null;
+}
+
+/**
  * The regions a module divides its subjects by, or none.
  *
  * Only topography has any, and the shape is a list rather than a flag so that

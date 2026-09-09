@@ -83,6 +83,7 @@ export type ModeId =
   | 'wijs-aan'
   | 'meerkeuze'
   | 'hoe-heet-dit'
+  | 'tijdrit'
   | 'bliksemronde'
   | 'overleven'
   | 'ontdekken'

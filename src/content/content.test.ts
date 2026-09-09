@@ -430,6 +430,77 @@ describe('the countries of Europe and of the world', () => {
     expect(failures).toEqual([]);
   });
 
+  /**
+   * The relation that lets a question about the world be asked on a map a child
+   * can actually point at (ADR-091).
+   *
+   * Written by the build from what the six werelddeel builds produced, which is
+   * the only source that can be right about it: membership of a continent is
+   * half the question and surviving that continent's window is the other half.
+   * A relation pointing at a shape the clip removed is a blank map in a
+   * classroom, which is the failure this whole file exists to prevent.
+   */
+  describe('every country of the world, on the map of its werelddeel', () => {
+    const wereld = itemsOfSet('wereld-landen');
+
+    it('gives every one of them a werelddeel and a shape there', () => {
+      const zonder = wereld
+        .filter((item) => !item.relaties?.werelddeel || !item.relaties.vormInWerelddeel)
+        .map((item) => item.naam);
+
+      expect(zonder, 'these would fall back to a map of 167 countries').toEqual([]);
+    });
+
+    it('resolves that shape in that werelddeel, at every level', () => {
+      const problems: string[] = [];
+
+      for (const niveau of NIVEAUS) {
+        const shapes = new Map<string, Set<string>>(
+          regios
+            .filter((regio) => regio.regio !== 'wereld')
+            .map((regio) => [
+              regio.regio,
+              new Set(landenGeo(regio.regio, niveau).vormen.map((vorm) => vorm.id)),
+            ]),
+        );
+
+        for (const item of wereld) {
+          const regio = item.relaties?.werelddeel ?? '';
+          const vorm = item.relaties?.vormInWerelddeel ?? '';
+          if (!shapes.get(regio)?.has(vorm)) problems.push(`${item.naam} -> ${regio}/${vorm}`);
+        }
+      }
+
+      expect(problems).toEqual([]);
+    });
+
+    it('names the same country on both maps', () => {
+      // The relation is matched on the name the child is shown, so a rename
+      // that reached one build and not the other would silently point a
+      // question at the country next door.
+      const perWerelddeel = new Map<string, string>(
+        regios
+          .filter((regio) => regio.regio !== 'wereld')
+          .flatMap(({ set }) =>
+            itemsOfSet(set).map((item): [string, string] => [item.geometrieRef ?? '', item.naam]),
+          ),
+      );
+
+      const anders = wereld
+        .filter((item) => perWerelddeel.get(item.relaties?.vormInWerelddeel ?? '') !== item.naam)
+        .map((item) => item.naam);
+
+      expect(anders).toEqual([]);
+    });
+
+    it('puts Cyprus on the Europe page, where a Dutch atlas puts it', () => {
+      // The one country in two werelddeel sets, and the one place the build
+      // has to choose. It chooses the same way `hoortErbij` does.
+      const cyprus = wereld.find((item) => item.naam === 'Cyprus');
+      expect(cyprus?.relaties?.werelddeel).toBe('europa');
+    });
+  });
+
   it('keeps the names Natural Earth has not caught up with', () => {
     // The two corrections the build makes, and the old names it keeps as
     // aliases. A child writing what their older brother learned is not wrong.

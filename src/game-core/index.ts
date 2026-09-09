@@ -7,5 +7,6 @@ export * from './retention';
 export * from './grade';
 export * from './sums';
 export * from './streak';
+export * from './tijdrit';
 export * from './rewards';
 export * from './collection';

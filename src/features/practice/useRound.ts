@@ -7,11 +7,15 @@ import {
   emptyState,
   judgeAnswer,
   review,
+  baanVan,
+  teltAlsRit,
+  tijdritTijd,
   type AnswerVerdict,
   type Item,
   type RoundRule,
   type ItemState,
   type StreakChange,
+  type Tijdrit,
 } from '@/game-core';
 import { loadGeoSet, loadPointSet, type Detailniveau, type GeoSet } from '@/content/loadGeo';
 import { loadAllItems, loadItemSets } from '@/content/loadSets';
@@ -19,6 +23,7 @@ import { loadNeighbours } from '@/content/loadNeighbours';
 import { finishSession, loadItemStates, saveAnswer, startSession } from '@/store/progress';
 import { recordRoundFinished } from '@/store/streakStore';
 import { applyRoundRewards, type RoundOutcome } from '@/store/rewardStore';
+import { saveRecord, type RecordUitslag } from '@/store/recordStore';
 import type { AnswerLayer } from './MapCanvas';
 
 /**
@@ -67,7 +72,13 @@ export type SetId =
  * the step in between, where the answer is on the screen and the child has to
  * know which of the four it is.
  */
-export type PracticeMode = 'wijs-aan' | 'meerkeuze' | 'hoe-heet-dit' | 'bliksemronde' | 'overleven';
+export type PracticeMode =
+  | 'wijs-aan'
+  | 'meerkeuze'
+  | 'hoe-heet-dit'
+  | 'tijdrit'
+  | 'bliksemronde'
+  | 'overleven';
 
 /*
  * The split between practising and practising under pressure used to be two
@@ -97,9 +108,25 @@ export const ROUND_RULE: Record<PracticeMode, RoundRule> = {
   'wijs-aan': { kind: 'fixed', aantal: MAX_ROUND },
   meerkeuze: { kind: 'fixed', aantal: MAX_ROUND },
   'hoe-heet-dit': { kind: 'fixed', aantal: MAX_ROUND },
+  // A list of questions, exactly like pointing — the stopwatch is the whole
+  // difference, and it does not decide when the round ends. That is what keeps
+  // it out from behind the setting the bliksemronde sits behind (ADR-090).
+  tijdrit: { kind: 'fixed', aantal: MAX_ROUND },
   bliksemronde: { kind: 'tijd', seconden: 60 },
   overleven: { kind: 'levens', levens: 3 },
 };
+
+/**
+ * Whether the round is being timed for a record.
+ *
+ * Beside `typesTheAnswer` and `choosesTheAnswer` because it is the same kind of
+ * fact: it says what this mode does to the screen, not what it does to the
+ * round. A tijdrit points at the map exactly as wijs-aan does — what it adds is
+ * a clock that counts up, a time per answer, and a best time to beat.
+ */
+export function racesTheClock(mode: PracticeMode): boolean {
+  return mode === 'tijdrit';
+}
 
 /**
  * Which way a child answers. One mode types, one chooses, the rest point. Kept
@@ -237,6 +264,21 @@ type SetBase = {
   readonly regio: string;
   readonly achtergrond: string;
   readonly noemer: Noemer;
+  /**
+   * Where the map comes from when it does not come from the set.
+   *
+   * One set has this and it is the world: a question about Brazilië is asked on
+   * the map of Zuid-Amerika, not on a globe with a hundred and sixty-seven
+   * countries on it (ADR-091). So the region above is what the set is *of*, and
+   * this says the map is chosen per question instead — from the werelddeel the
+   * item carries, which the content build wrote there from what the six
+   * werelddeel maps actually drew.
+   *
+   * A string rather than a boolean because it names the relation it reads. A
+   * second set that wanted this would say which link its items carry, and the
+   * answer to "which map?" would still be in one place.
+   */
+  readonly kaartPerItem?: 'werelddeel';
 };
 
 export type SetShape =
@@ -311,8 +353,126 @@ export const SETS: Record<SetId, SetShape> = {
     achtergrond: 'landen',
     answers: 'background',
     noemer: 'land',
+    // And the one set whose map is not its own. See `kaartPerItem`.
+    kaartPerItem: 'werelddeel',
   },
 };
+
+/**
+ * The six maps a question about the world is asked on.
+ *
+ * They are the werelddeel sets, and they are named here because a world round
+ * draws their maps and therefore needs their names: a screen reader on the map
+ * of Europe should hear "Spanje" for every shape on it, not only for the one
+ * being asked about, and the round's own items are spelled `wl-land-spanje`.
+ */
+export const WERELDDEEL_SET_IDS: readonly SetId[] = [
+  'europa-landen',
+  'afrika-landen',
+  'azie-landen',
+  'noord-amerika-landen',
+  'zuid-amerika-landen',
+  'oceanie-landen',
+];
+
+/** One map, and the shape on it that answers one question. */
+export interface Vraagkaart {
+  readonly regio: string;
+  readonly achtergrond: string;
+  readonly vormId: string;
+}
+
+/**
+ * Which map a question is drawn on, and what answers it there.
+ *
+ * The set's own map for everything but the world, where it is the map of the
+ * item's werelddeel and the shape that werelddeel draws it as.
+ *
+ * Falls back to the set's own map when the relation is missing rather than
+ * failing. A country of the world with no werelddeel behind it is a content
+ * problem the build already warns about and a test already catches; what it
+ * must not be is a question a child cannot answer.
+ */
+export function kaartVoor(item: Item, shape: SetShape): Vraagkaart {
+  const eigen = {
+    regio: shape.regio,
+    achtergrond: shape.achtergrond,
+    vormId: item.geometrieRef ?? '',
+  };
+  if (shape.kaartPerItem !== 'werelddeel') return eigen;
+
+  const regio = item.relaties?.werelddeel;
+  const vormId = item.relaties?.vormInWerelddeel;
+  return regio && vormId ? { regio, achtergrond: shape.achtergrond, vormId } : eigen;
+}
+
+/** Which sets name the shapes on the maps a round of this set draws. */
+export function kaartSets(setId: RoundSetId): readonly SetId[] {
+  const sets = setsInRound(setId);
+  return sets.some((id) => SETS[id].kaartPerItem === 'werelddeel') ? WERELDDEEL_SET_IDS : sets;
+}
+
+/**
+ * Whether a round of this set draws one map from beginning to end.
+ *
+ * The result screen asks: a review map can only light up the misses that are on
+ * it, and a round that changed maps between questions has misses on several.
+ * The list beside it names all of them, which is the same trade the Topomix
+ * makes.
+ */
+export function tekentEenKaart(setId: RoundSetId): boolean {
+  return !isMixSet(setId) && SETS[setId].kaartPerItem === undefined;
+}
+
+/**
+ * The shape that answers an item on the map the question in front of the child
+ * is drawn on.
+ *
+ * Not `item.geometrieRef`, and the difference is the world: there that field is
+ * the shape in the globe, and the map on screen is the werelddeel. Two things
+ * need it and both are the same gesture — a wrong multiple-choice pick and a
+ * near miss travel to the place the child named — and both would travel to
+ * nothing without it.
+ *
+ * Off the question rather than off the item, because it is the question that
+ * decides which map is up. In the Topomix that is a different set every turn
+ * and none of them redraws its shapes, so it comes to the same thing there.
+ */
+function vormVan(item: Item, question: RoundQuestion | null): string {
+  const shape = question ? SETS[question.setId] : null;
+  return shape ? kaartVoor(item, shape).vormId : (item.geometrieRef ?? '');
+}
+
+/** One map, as one key: which region, and which file in it. */
+function kaartSleutel(kaart: { readonly regio: string; readonly achtergrond: string }): string {
+  return `${kaart.regio}/${kaart.achtergrond}`;
+}
+
+/**
+ * A name for every shape a round can draw, keyed by the id that map uses.
+ *
+ * Normally that is the round's own items: a province is drawn as the shape its
+ * item points at, so one pass over the items covers the map. A world round
+ * draws the werelddeel maps instead, whose shapes are spelled `eu-land-spanje`
+ * where the round's items are spelled `wl-land-spanje` — so the names come
+ * from the sets those maps belong to, and every country on the map has one
+ * rather than only the ones being asked about.
+ *
+ * It matters for exactly one reader: a screen reader announces every shape it
+ * can reach, and without this it would read out the spelling Natural Earth
+ * happened to use.
+ */
+function namenVan(setIds: readonly SetId[], eigen: readonly Item[]): Map<string, string> {
+  const byId = new Map(loadItemSets().map((set) => [set.id, set] as const));
+  const namen = new Map<string, string>();
+
+  // The round's own items last, so a question that fell back to its set's own
+  // map — a country of the world with no werelddeel behind it — is still named.
+  for (const item of [...setIds.flatMap((id) => byId.get(id)?.items ?? []), ...eigen]) {
+    if (item.geometrieRef) namen.set(item.geometrieRef, item.naam);
+  }
+  return namen;
+}
 
 /** One switch, so a new set cannot forget to load its own layer. */
 export async function loadAnswerLayer(shape: SetShape): Promise<AnswerLayer> {
@@ -330,7 +490,12 @@ export interface RoundQuestion {
   readonly item: Item;
   /** Which set it came from, which decides the layer it is answered on. */
   readonly setId: SetId;
-  /** The shape or point that answers it. */
+  /**
+   * Which map it is drawn on. The set's own for all but the world, where it is
+   * the map of the country's werelddeel (ADR-091).
+   */
+  readonly kaart: Vraagkaart;
+  /** The shape or point that answers it, on that map. */
   readonly answerId: string;
   /**
    * Meerkeuze only: the four names to choose between, in the order they are
@@ -359,8 +524,16 @@ export interface RoundState {
   /** How this round ends. The result screen needs it: "9 van 60" is a lie in a
    * round that was never going to ask sixty. */
   readonly rule: RoundRule;
-  /** The provinces, always: the country a child orients by. */
+  /** The map behind the question on screen: the country a child orients by. */
   readonly geo: GeoSet | null;
+  /**
+   * Which region that map is of, when the round did not choose it — the
+   * werelddeel a country of the world turned out to be in (ADR-091). Null
+   * everywhere else, including the Topomix: that round draws one map from
+   * beginning to end and only changes the layer on top of it, so naming the
+   * map every question would be the screen saying "Nederland" fifteen times.
+   */
+  readonly kaartRegio: string | null;
   /** What is being answered, ready for the canvas. */
   readonly answers: AnswerLayer | null;
   readonly namesById: ReadonlyMap<string, string>;
@@ -387,6 +560,35 @@ export interface RoundState {
   readonly secondsLeft: number | null;
   /** Overleven only: lives remaining, or null in every other mode. */
   readonly livesLeft: number | null;
+  /**
+   * Tijdrit only: the clock. Null in every other mode, which is what tells the
+   * screen whether there is a stopwatch to draw at all.
+   *
+   * It runs while the round runs — the question on screen is being timed and
+   * the counter says so — and stands still between questions, because the
+   * feedback is not the child's to hurry through (see `tijdritTijd`).
+   */
+  readonly tijd: Tijdrit | null;
+  /**
+   * What the answer just given took, in milliseconds.
+   *
+   * On the round rather than worked out on the screen from the total, because
+   * the screen would have to remember the previous total to do it — and a
+   * component that keeps a running copy of state it is being handed is a second
+   * copy to get out of step.
+   */
+  readonly laatsteAntwoordMs: number;
+  /**
+   * Whether this round counts as a ride at all: a tijdrit, answered to the end.
+   *
+   * Separate from `record`, which is written to the device and arrives a moment
+   * later. Without it the result screen could not tell "this did not count" from
+   * "this has not been saved yet", and it would say the first while waiting for
+   * the second — on every round, for as long as the write took.
+   */
+  readonly ritTelt: boolean;
+  /** Set once a tijdrit ends on its last question: the time, against the best. */
+  readonly record: RecordUitslag | null;
   /** Set once the round ends: the streak after this round, and how it got there. */
   readonly streak: StreakChange | null;
   /** Set once the round ends: what it earned. */
@@ -425,9 +627,15 @@ export function useRound(
   aantal: number | null = null,
   toetsstand = false,
 ) {
-  const [geo, setGeo] = useState<GeoSet | null>(null);
+  /**
+   * One map per map this round draws, by region and file. A single entry for
+   * every set but the world, which draws the werelddeel each question is in.
+   */
+  const [kaarten, setKaarten] = useState<ReadonlyMap<string, GeoSet>>(new Map());
   /** One layer per set the round can reach. A single set leaves one entry. */
   const [layers, setLayers] = useState<ReadonlyMap<SetId, AnswerLayer>>(new Map());
+  /** A name for every shape on every map this round draws. See `namenVan`. */
+  const [namen, setNamen] = useState<ReadonlyMap<string, string>>(new Map());
   const [items, setItems] = useState<Item[]>([]);
   /**
    * Everything in the same region, not just this round's set. ADR-017 is
@@ -465,6 +673,13 @@ export function useRound(
   const [secondsLeft, setSecondsLeft] = useState(rule.kind === 'tijd' ? rule.seconden : 0);
   const [livesLeft, setLivesLeft] = useState(rule.kind === 'levens' ? rule.levens : 0);
   const [verdict, setVerdict] = useState<AnswerVerdict | null>(null);
+  /** Tijdrit: milliseconds spent on the questions already answered. */
+  const [antwoordMs, setAntwoordMs] = useState(0);
+  /** Tijdrit: milliseconds spent on the question in front of the child. */
+  const [lopendMs, setLopendMs] = useState(0);
+  /** Tijdrit: what the answer just given took, for the line under the feedback. */
+  const [laatsteMs, setLaatsteMs] = useState(0);
+  const [record, setRecord] = useState<RecordUitslag | null>(null);
   const [streak, setStreak] = useState<StreakChange | null>(null);
   const [reward, setReward] = useState<RoundOutcome | null>(null);
   /** Correct answers given while five or more were already right in a row. */
@@ -497,8 +712,7 @@ export function useRound(
         // what `setsInRound` guarantees, so the first one decides for all.
         const achtergrond = SETS[sets[0]?.id as SetId];
 
-        const [loadedGeo, loadedLayers, loadedStates] = await Promise.all([
-          loadGeoSet(achtergrond.achtergrond, 'region', achtergrond.regio),
+        const [loadedLayers, loadedStates] = await Promise.all([
           Promise.all(sets.map((set) => loadAnswerLayer(SETS[set.id as SetId]))),
           loadItemStates(),
         ]);
@@ -541,15 +755,44 @@ export function useRound(
             )
           : null;
 
-        const round = picked.map((item) => {
+        const round: RoundQuestion[] = picked.map((item) => {
           const from = setOfItem.get(item.id) as SetId;
+          const kaart = kaartVoor(item, SETS[from]);
           return {
             item,
             setId: from,
-            answerId: item.geometrieRef as string,
+            kaart,
+            answerId: kaart.vormId,
             options: dealers ? (dealers.get(from)?.(item) ?? null) : null,
           };
         });
+
+        /**
+         * The maps this round actually asks for, fetched after it is composed
+         * rather than before.
+         *
+         * For every set but one that is a single file and the order costs
+         * nothing: reading the Leitner boxes is a local read of a few
+         * milliseconds. For the world it is the whole point — fifteen questions
+         * reach four or five werelddelen, and loading all six would be a
+         * quarter of a megabyte of maps nobody is asked about.
+         */
+        // A round with no questions still draws one: the result screen opens on
+        // it, and a set that cannot be composed is not a set that cannot be seen.
+        const gevraagd = round.length > 0 ? round.map((question) => question.kaart) : [achtergrond];
+        const nodig = [...new Set(gevraagd.map(kaartSleutel))];
+
+        const geladen = await Promise.all(
+          nodig.map((sleutel) => {
+            const [regio = '', bestand = ''] = sleutel.split('/');
+            return loadGeoSet(bestand, 'region', regio);
+          }),
+        );
+        if (cancelled) return;
+
+        const kaarten = new Map<string, GeoSet>(
+          nodig.map((sleutel, at) => [sleutel, geladen[at] as GeoSet]),
+        );
 
         sessionId.current = await startSession(
           practiceMode,
@@ -558,7 +801,8 @@ export function useRound(
         );
         if (cancelled) return;
 
-        setGeo(loadedGeo);
+        setKaarten(kaarten);
+        setNamen(namenVan(kaartSets(setId), all));
         setLayers(layerBySet);
         setItems([...all]);
         setCatalogue(loadAllItems().filter((item) => item.regioSet === sets[0]?.regioSet));
@@ -581,17 +825,6 @@ export function useRound(
       cancelled = true;
     };
   }, [setId, rule, practiceMode]);
-
-  const namesById = useMemo(() => {
-    const map = new Map<string, string>();
-    for (const item of items) {
-      if (item.geometrieRef) map.set(item.geometrieRef, item.naam);
-    }
-    // In points mode the provinces are still drawn, and a screen reader should
-    // not read a dimmed background shape as if it were an answer — but a name
-    // is better than a source spelling if it ever does.
-    return map;
-  }, [items]);
 
   const question = questions[index] ?? null;
 
@@ -619,6 +852,11 @@ export function useRound(
 
       setChosen(params.chosenForMap);
       setVerdict(params.judged);
+      // The clock stops here and starts again in `next`. What is between the
+      // two is the feedback, and a child reading a weetje is not on the clock.
+      setAntwoordMs(antwoordMs + responseMs);
+      setLaatsteMs(responseMs);
+      setLopendMs(0);
       setLastCorrect(correct);
       setPhase('revealed');
       const nextCombo = correct ? combo + 1 : 0;
@@ -650,6 +888,7 @@ export function useRound(
       comboAnswers,
       correctCount,
       answeredCount,
+      antwoordMs,
       missed,
       rule,
       livesLeft,
@@ -690,7 +929,7 @@ export function useRound(
 
       settle({
         correct,
-        chosenForMap: chosen?.geometrieRef ?? null,
+        chosenForMap: chosen ? vormVan(chosen, question) : null,
         recorded: correct ? null : itemId,
         judged: null,
         spendsALife: true,
@@ -739,7 +978,7 @@ export function useRound(
       // On a near miss the map travels from the place they named to the right
       // one, which is the same lesson the pointing mode gives for free.
       const confused =
-        judged.kind === 'near-miss' ? (judged.confusedWith.geometrieRef ?? null) : null;
+        judged.kind === 'near-miss' ? vormVan(judged.confusedWith, question) : null;
 
       settle({
         correct,
@@ -763,6 +1002,15 @@ export function useRound(
     if (phase === 'finished') return;
     setPhase('finished');
     if (sessionId.current) void finishSession(sessionId.current, correctCount, answeredCount);
+
+    // The time, and only for a round that was actually ridden to the end. A
+    // round stopped early keeps everything it answered (ADR-052) and sets no
+    // record, because three questions of fifteen would be a time nothing could
+    // ever beat.
+    if (racesTheClock(practiceMode) && teltAlsRit(answeredCount, questions.length)) {
+      const rit = tijdritTijd(antwoordMs, answeredCount - correctCount);
+      void saveRecord(baanVan(setId, questions.length), rit.totaalMs).then(setRecord);
+    }
 
     // A round counts for the day even when it was stopped early: the child
     // turned up and did the work, which is the only thing a streak measures.
@@ -792,6 +1040,7 @@ export function useRound(
     phase,
     correctCount,
     answeredCount,
+    antwoordMs,
     comboAnswers,
     items,
     questions.length,
@@ -814,8 +1063,28 @@ export function useRound(
     setChosen(null);
     setVerdict(null);
     setPhase('asking');
+    setLopendMs(0);
     askedAt.current = performance.now();
   }, [phase, index, questions.length, finish, rule, livesLeft]);
+
+  /**
+   * The stopwatch of a tijdrit, which counts up rather than down.
+   *
+   * Four times a second, off `askedAt` rather than by adding to a total, for
+   * the reason the bliksemronde reads its deadline: a busy frame must not cost
+   * a child time they did not take. It runs only while a question is on screen,
+   * so nothing ticks while the feedback is being read — and it needs no
+   * dependency on which question that is, because the interval reads the ref
+   * every tick and the phase leaves `asking` between any two of them.
+   */
+  useEffect(() => {
+    if (!racesTheClock(practiceMode) || phase !== 'asking') return;
+
+    const tick = () => setLopendMs(performance.now() - askedAt.current);
+    tick();
+    const id = setInterval(tick, 250);
+    return () => clearInterval(id);
+  }, [practiceMode, phase]);
 
   /**
    * The clock. Ticks four times a second so the number on screen is not up to a
@@ -877,15 +1146,22 @@ export function useRound(
     noemer: SETS[question?.setId ?? (isMixSet(setId) ? 'nl-provincies' : setId)].noemer,
     practiceMode,
     rule,
-    geo,
-    // The layer the question on screen is answered on. Falls back to the last
-    // question rather than to nothing, because the result screen draws a map
-    // after the questions have run out and a null layer there is a blank one.
+    // The map the question on screen is drawn on, and the layer it is answered
+    // on. Both fall back to the last question rather than to nothing, because
+    // the result screen draws a map after the questions have run out and a null
+    // one there is a blank square.
+    geo: (() => {
+      const op = question ?? questions[questions.length - 1] ?? null;
+      const sleutel = op === null ? [...kaarten.keys()][0] : kaartSleutel(op.kaart);
+      return (sleutel === undefined ? undefined : kaarten.get(sleutel)) ?? null;
+    })(),
+    kaartRegio:
+      question && SETS[question.setId].kaartPerItem !== undefined ? question.kaart.regio : null,
     answers: (() => {
       const op = question ?? questions[questions.length - 1] ?? null;
       return op === null ? null : (layers.get(op.setId) ?? null);
     })(),
-    namesById,
+    namesById: namen,
     question,
     index,
     total: questions.length,
@@ -905,6 +1181,15 @@ export function useRound(
     answeredCount,
     secondsLeft: rule.kind === 'tijd' ? secondsLeft : null,
     livesLeft: rule.kind === 'levens' ? livesLeft : null,
+    // The question on screen is being timed, so its own seconds are in the
+    // total: a counter that only moved between questions would sit still for
+    // exactly as long as the child is being measured.
+    tijd: racesTheClock(practiceMode)
+      ? tijdritTijd(antwoordMs + (phase === 'asking' ? lopendMs : 0), answeredCount - correctCount)
+      : null,
+    laatsteAntwoordMs: laatsteMs,
+    ritTelt: racesTheClock(practiceMode) && teltAlsRit(answeredCount, questions.length),
+    record,
     streak,
     reward,
     toetsstand,

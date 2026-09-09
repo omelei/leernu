@@ -7,6 +7,7 @@ import {
   KeyboardIcon,
   PointIcon,
   ShieldIcon,
+  StopwatchIcon,
   type IconProps,
 } from '@/components/Icon';
 import type { ModeId, RoundRule } from '@/game-core';
@@ -67,8 +68,21 @@ export interface PracticeForm {
   readonly geldtVoor?: (setId: string) => boolean;
 }
 
-/** One glance, not a scroll. See the note above. */
-export const MAX_FORMS = 6;
+/**
+ * One glance, not a scroll. See the note above.
+ *
+ * Seven since ADR-090, and the number moved because the drawing did. Six was
+ * the ceiling on a **grid of cards**, each with a name and a line under it;
+ * ADR-089 replaced those with chips — a mark and a word, sized to what they say,
+ * wrapping onto the next line when the row runs out — and the region row
+ * directly above this one has held eight of exactly that chip ever since.
+ *
+ * So the ceiling still means what it meant: as many ways as a child can take in
+ * at a glance, on the row as it is actually drawn. What it may never become is
+ * a number nobody has to argue with. A module that wants an eighth has the same
+ * question to answer here that a seventh had.
+ */
+export const MAX_FORMS = 7;
 
 /**
  * Topography: the four that teach, then the two that put pressure on what is
@@ -78,6 +92,12 @@ export const MAX_FORMS = 6;
  * first time. Multiple choice narrows the field to four and is the step up to
  * typing rather than a way around it. Typing asks for the name unaided, which
  * is what a test will ask. Exploring asks nothing at all.
+ *
+ * Then the three that put pressure on what is already taught, mildest first: a
+ * **tijdrit** times the same pointing and keeps the best time, a
+ * **bliksemronde** puts sixty seconds on it, and **overleven** gives three
+ * lives. The first of those takes nothing away and the other two do, which is
+ * both the order and the reason only one of them is behind K10's switch.
  */
 export const TOPO_FORMS: readonly PracticeForm[] = [
   {
@@ -116,6 +136,33 @@ export const TOPO_FORMS: readonly PracticeForm[] = [
     seconds: null,
     needsClock: false,
     geldtVoor: (setId) => !isMixSet(setId),
+  },
+  {
+    /*
+     * The tijdrit: the same pointing, against the clock, for a record.
+     *
+     * First of the three that put pressure on, because it is the mildest of
+     * them: nothing is taken away and nothing runs out. The round is the same
+     * list of questions wijs-aan asks and waits exactly as long as the child
+     * needs — what it adds is that it says afterwards how long that was.
+     *
+     * **Not behind the clock setting, and that is the line worth being able to
+     * defend.** K10 switches off the *time limit*: a bliksemronde ends when its
+     * sixty seconds do, so a child who was thinking loses the question they
+     * were thinking about, and a settings page that says haste does not help
+     * you remember cannot leave that on by default. A stopwatch takes nothing.
+     * It measures something a child is already doing and reports it, which is
+     * the difference between a clock that answers for you and one that watches
+     * (ADR-090).
+     */
+    id: 'tijdrit',
+    name: 'mode.tijdrit',
+    reason: 'way.tijdrit',
+    icon: StopwatchIcon,
+    rule: ROUND_RULE.tijdrit,
+    // Faster than pointing, by design and by the whole point of it.
+    seconds: 6,
+    needsClock: false,
   },
   {
     id: 'bliksemronde',
@@ -234,10 +281,17 @@ export function offeredForms(
   // is still offered — see `teDrukOmAanTeWijzen` for why it is moved and not
   // removed — and what leads instead is multiple choice, where the map lights a
   // country up and the child answers in words.
+  //
+  // Both ways of pointing move, in the order they were in. A tijdrit is
+  // pointing with a stopwatch on it, and asking a child to hit a coastline
+  // three pixels wide *quickly* is the same rule failing twice over.
   if (!krap) return offered;
-  const wijzen = offered.filter((form) => form.id === 'wijs-aan');
-  return [...offered.filter((form) => form.id !== 'wijs-aan'), ...wijzen];
+  const wijzen = offered.filter((form) => AANWIJZEN.includes(form.id));
+  return [...offered.filter((form) => !AANWIJZEN.includes(form.id)), ...wijzen];
 }
+
+/** The ways of practising that ask a child to hit something on the map. */
+const AANWIJZEN: readonly ModeId[] = ['wijs-aan', 'tijdrit'];
 
 /**
  * How many shapes a map may hold before pointing at it is worth offering first.
@@ -276,6 +330,20 @@ export function offeredForms(
 export const KRAP_OP_EEN_TELEFOON = 15;
 export const KRAP_OVERAL = 100;
 
+/**
+ * How many shapes the world set now puts in front of a child at once.
+ *
+ * Not a hundred and sixty-seven. A question about the world is asked on the map
+ * of the country's werelddeel (ADR-091), so the map that has to be pointed at
+ * is Afrika at its largest — the biggest of the six, from the table above — and
+ * the world's own row in that table describes a map this round no longer draws.
+ *
+ * Which flips the laptop case and leaves the phone case exactly where it was:
+ * fifty-two countries are pointable on a laptop and are not pointable on a
+ * phone, the same as every other werelddeel.
+ */
+export const GROOTSTE_WERELDDEEL = 52;
+
 export function teDrukOmAanTeWijzen(
   setId: string | null,
   aantalVormen: number,
@@ -287,7 +355,10 @@ export function teDrukOmAanTeWijzen(
   // own outlines. Neither is what this rule is about.
   if (!shape || shape.answers === 'points') return false;
 
-  return aantalVormen > (kleinScherm ? KRAP_OP_EEN_TELEFOON : KRAP_OVERAL);
+  // What is on the map, which is not always what is in the set. See above.
+  const opDeKaart = shape.kaartPerItem === 'werelddeel' ? GROOTSTE_WERELDDEEL : aantalVormen;
+
+  return opDeKaart > (kleinScherm ? KRAP_OP_EEN_TELEFOON : KRAP_OVERAL);
 }
 
 /**

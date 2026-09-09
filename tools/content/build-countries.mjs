@@ -34,6 +34,14 @@ import { ringArea, simplifyRings } from './simplify.mjs';
  *
  * The Dutch names come from the data (`NAME_NL`), never from us.
  *
+ * **And the world's questions know which werelddeel they are on.** A question
+ * about a country of the world is asked on the map of its werelddeel rather than
+ * on the globe (ADR-091), so each item in the world set carries the region it was
+ * drawn in and the shape that draws it there. It is written from what the six
+ * werelddeel builds produced rather than from `CONTINENT` alone, because a
+ * country also has to survive its werelddeel's window — which is why the world is
+ * built last, and why that is asserted rather than assumed.
+ *
  * Output: `public/geo/<regio>/landen.*.json` for the shapes, and
  * `content/sets/<regio>-landen.json` for the questions. Both are generated,
  * like `content/tafels`: a hand correction here is lost at the next run.
@@ -200,6 +208,22 @@ const REGIOS = [
     },
   },
 ];
+
+/**
+ * The world is built last, and that is a rule rather than an accident of the
+ * order above.
+ *
+ * A question about a country of the world is asked on the map of its werelddeel
+ * (ADR-091), so every item in the world set carries the werelddeel it belongs
+ * to and the shape that answers it there. That relation is written from what
+ * the six werelddeel builds actually produced — not from Natural Earth's
+ * `CONTINENT` field alone — because membership is only half of it: a country
+ * also has to survive its werelddeel's window, and a relation pointing at a
+ * shape the clip removed would be a blank map in a classroom.
+ */
+if (REGIOS[REGIOS.length - 1]?.id !== 'wereld') {
+  throw new Error('De wereld hoort als laatste gebouwd te worden: zie de opmerking hierboven.');
+}
 
 /**
  * Whether Natural Earth's own fields say this feature is a country.
@@ -403,6 +427,19 @@ function niveauVan(p) {
 
 // ---------------------------------------------------------------------------
 
+/**
+ * Where each country was drawn as part of a werelddeel: the region id and the
+ * shape that answers it there, by the name a child is shown.
+ *
+ * By name rather than by ISO code, because the name is what the two builds
+ * already agree on — both take it from `NAME_NL` through the same corrections,
+ * and the shape ids are that name slugged. The first werelddeel to claim a
+ * country keeps it, which decides the one country that is in two: Cyprus is on
+ * the Europe page of a Dutch atlas and Europe is built first, so that is the
+ * map a question about Cyprus is asked on.
+ */
+const werelddeelVanLand = new Map();
+
 for (const regio of REGIOS) {
   const sourcePath = join(SOURCE_DIR, `${regio.bron}.json`);
   let source;
@@ -521,6 +558,8 @@ for (const regio of REGIOS) {
   // them. Generated for the same reason the tables are: forty-five countries is
   // a file nobody would keep correct by hand, and every field in it is either
   // in the source or is a rule written above.
+  const zonderWerelddeel = [];
+
   const set = {
     id: regio.setId,
     naam: regio.setNaam,
@@ -530,25 +569,56 @@ for (const regio of REGIOS) {
       'Geschreven door tools/content/build-countries.mjs. Handmatige wijzigingen gaan bij de volgende run verloren.',
     _geometrie: `geometrieRef verwijst naar een vorm-id in public/geo/${regio.id}/landen.*.json.`,
     items: projected
-      .map((land) => ({
-        id: `${regio.prefix}-${slug(land.naam)}`,
-        type: 'land',
-        naam: land.naam,
-        aliassen: land.aliassen,
-        regioSet: regio.id,
-        geometrieRef: `${regio.prefix}-${slug(land.naam)}`,
-        niveau: land.niveau,
-        // One pair of goals for every werelddeel and a separate pair for the
-        // world. "Wijst de landen van een werelddeel aan" is one thing a child
-        // learns, not seven — and seven near-identical goals is a curriculum
-        // document nobody would read twice.
-        leerdoelen:
-          regio.id === 'wereld'
-            ? ['ak-wereld-landen-aanwijzen', 'ak-wereld-landen-benoemen']
-            : ['ak-werelddelen-landen-aanwijzen', 'ak-werelddelen-landen-benoemen'],
-      }))
+      .map((land) => {
+        const id = `${regio.prefix}-${slug(land.naam)}`;
+        // Where this country is drawn as part of a werelddeel, so a question
+        // about it can be asked on that map instead of on the globe (ADR-091).
+        // Only the world needs it: a werelddeel is already the map it is asked
+        // on, and a relation saying so would repeat the set's own name.
+        const op = regio.id === 'wereld' ? werelddeelVanLand.get(land.naam) : undefined;
+        if (regio.id === 'wereld' && !op) zonderWerelddeel.push(land.naam);
+
+        return {
+          id,
+          type: 'land',
+          naam: land.naam,
+          aliassen: land.aliassen,
+          regioSet: regio.id,
+          geometrieRef: id,
+          niveau: land.niveau,
+          // One pair of goals for every werelddeel and a separate pair for the
+          // world. "Wijst de landen van een werelddeel aan" is one thing a child
+          // learns, not seven — and seven near-identical goals is a curriculum
+          // document nobody would read twice.
+          leerdoelen:
+            regio.id === 'wereld'
+              ? ['ak-wereld-landen-aanwijzen', 'ak-wereld-landen-benoemen']
+              : ['ak-werelddelen-landen-aanwijzen', 'ak-werelddelen-landen-benoemen'],
+          ...(op ? { relaties: { werelddeel: op.regio, vormInWerelddeel: op.vorm } } : {}),
+        };
+      })
       .sort((a, b) => a.naam.localeCompare(b.naam, 'nl')),
   };
+
+  // Remembered for the world, which is built last. Not overwritten: the first
+  // werelddeel to claim a country keeps it, which is what puts Cyprus on the
+  // Europe page rather than the Asia one. See `werelddeelVanLand`.
+  if (regio.id !== 'wereld') {
+    for (const land of projected) {
+      const naam = land.naam;
+      if (!werelddeelVanLand.has(naam)) {
+        werelddeelVanLand.set(naam, { regio: regio.id, vorm: `${regio.prefix}-${slug(naam)}` });
+      }
+    }
+  }
+
+  // Loud rather than silent. A country of the world with no werelddeel behind
+  // it still works — the round falls back to the world map — but it is a hole
+  // in the thing ADR-091 promises, and it is a hole nobody would find by
+  // playing, because it is one question in a hundred and sixty-seven.
+  if (zonderWerelddeel.length > 0) {
+    console.warn(`  ! no werelddeel for: ${zonderWerelddeel.join(', ')}`);
+  }
 
   const setPath = join(ROOT, 'content', 'sets', `${regio.setId}.json`);
   writeFileSync(setPath, `${JSON.stringify(set, null, 2)}\n`);

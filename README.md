@@ -43,19 +43,35 @@ On /topografie they are offered as **where** and then **what**: the world, a
 werelddeel, or Nederland — and then Provincies, Steden, Wateren, Eilanden, Mix,
 or simply Landen, one word each ([ADR-083](docs/DECISIONS.md)).
 
-**And the way of practising follows the map.** Pointing at a country is fine on
-a map of Zuid-Amerika and hopeless on a map of the world: measured over every map
-at three screen sizes, ninety of the world's 167 countries cannot be hit even on
-a laptop. So past fifteen shapes on a phone, and past a hundred anywhere,
-pointing moves to the end of step 2 and **meerkeuze leads** — the map lights a
-country up and the child answers in words, which is also what a Dutch
-topografietoets asks ([ADR-087](docs/DECISIONS.md)).
+**And the wereldopdracht is played on a werelddeel.** A child asked where
+Paraguay is does not need a picture of the whole world; they need Zuid-Amerika,
+which is what an atlas gives them. So a question about a country of the world
+draws the map of the werelddeel it is in — Brazilië on Zuid-Amerika, Kenia on
+Afrika — written into the content by the same build that draws those six maps,
+and never guessed at runtime ([ADR-091](docs/DECISIONS.md)).
 
-In six ways. **Wijs aan** points at the map; **meerkeuze** offers four names,
+**And the way of practising follows the map.** Pointing at a country is fine on
+a map of Zuid-Amerika and hopeless on a map of 167: measured over every map at
+three screen sizes, ninety of the world's countries cannot be hit even on a
+laptop. So past fifteen shapes on a phone, and past a hundred anywhere, pointing
+moves to the end of step 2 and **meerkeuze leads** — the map lights a country up
+and the child answers in words, which is also what a Dutch topografietoets asks
+([ADR-087](docs/DECISIONS.md)). The world is measured by the map it now draws
+rather than by the set behind it, which is at most Afrika's 52.
+
+In seven ways. **Wijs aan** points at the map; **meerkeuze** offers four names,
 three of them places that border the right one; **typ de naam** names what is
 highlighted; **ontdekken** asks nothing at all and exists so a child's first
-meeting with an item is not a question they get wrong; **bliksemronde** puts
-sixty seconds on it and **overleven** gives three lives.
+meeting with an item is not a question they get wrong; **tijdrit** times the
+same pointing and keeps the best time; **bliksemronde** puts sixty seconds on it
+and **overleven** gives three lives.
+
+The tijdrit is the one that measures how fast a child knows something rather
+than whether they do, which is the difference between having learned Drenthe and
+working it out from the shape of the country each time. A wrong answer costs
+five seconds and nothing else; a record is per set and per round length, kept on
+the device, and compared with nobody — there is no leaderboard and there is no
+server to put one on ([ADR-090](docs/DECISIONS.md)).
 
 Rekenen is four kinds of sum: the twelve tables, the division facts that mirror
 them, and addition and subtraction in three ranges each — five hundred and ten

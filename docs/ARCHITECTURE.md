@@ -142,12 +142,20 @@ interface GameMode {
 }
 ```
 
-Built: wijs aan, hoe heet dit, ontdekmodus, bliksemronde, overleven. The spec
+Built: wijs aan, meerkeuze, hoe heet dit, ontdekmodus, tijdrit, bliksemronde,
+overleven. The spec
 also listed a sleepronde; it was dropped rather than deferred, because WCAG
 2.5.7 forces a tap alternative that duplicates wijs aan and dragging measures aim
 alongside knowledge (ADR-023).
 Deferred with accounts: duel and klassenstrijd — both need a second player who
 exists somewhere other than this device.
+
+**The tijdrit changes what is measured, not what is asked.** It is wijs aan
+with a stopwatch: the same questions, the same map, the same scheduler, and a
+clock that counts up while a question is on screen and stops while the feedback
+is read. A wrong answer adds five seconds to the total and costs nothing else. A
+best time is kept per set and per round length, on the device, for one child —
+there is no server to rank on and there will not be one for this (ADR-090).
 
 **Bliksemronde and overleven change one thing only: when a round ends.** The
 map, the judging and the scheduler are identical, so the difference is a value
@@ -186,13 +194,16 @@ never be the only carrier of meaning:
   announced through a live region.
 - Read-aloud uses the browser's own SpeechSynthesis. A cloud TTS would be an
   external request and a subprocessor, and this architecture has neither.
-- The bliksemronde clock is the one time limit in the product. WCAG 2.2.1 asks
-  that limits be adjustable, with an exception where the limit is essential to
-  the activity — and here it is the activity: a bliksemronde without a clock is
-  wijs aan. Nothing a child needs is behind it, because the same content is in
-  four untimed modes. The clock is text, never a bar or a colour alone, and it
-  is not in a live region: announcing every second would make the round unusable
-  with a screen reader rather than more accessible.
+- The bliksemronde clock is still the one time _limit_ in the product, and the
+  tijdrit's stopwatch is deliberately not one: it ends nothing, takes no question
+  away, and the round waits as long as the child needs. That is why it is offered
+  without K10's clock setting and the bliksemronde is not (ADR-090).
+  WCAG 2.2.1 asks that limits be adjustable, with an exception where the limit
+  is essential to the activity — and there it is the activity: a bliksemronde
+  without a clock is wijs aan. Nothing a child needs is behind it, because the
+  same content is in five untimed modes. Both clocks are text, never a bar or a
+  colour alone, and neither is in a live region: announcing every second would
+  make a round unusable with a screen reader rather than more accessible.
 - `prefers-reduced-motion` is honoured, and that path removes movement, not
   feedback: a wrong answer still shows the line to the right place, it just
   stops travelling along it.

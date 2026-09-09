@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { t, type TranslationKey } from '@/i18n';
-import type { Item } from '@/game-core';
+import { secondenInBeeld, STRAFSECONDEN, tijdInBeeld, type Item } from '@/game-core';
 import { SpeakButton } from '@/components/SpeakButton';
 import { usePreferences } from '@/features/player/settings';
+import { regioNaam } from '@/features/module/regios';
 import { MapCanvas } from './MapCanvas';
 import { RoundProgress } from './RoundProgress';
 import { StopButton } from './StopButton';
@@ -144,6 +145,16 @@ export function PracticeScreen({
   const label = reading ? t(instruction) : t(PICK_LABEL[noemer]);
   const vraag = reading ? t(TYPE_LABEL[noemer]) : t('practice.question', { naam });
 
+  // Which map this question is on, where the round did not choose it: a round
+  // of the world draws the werelddeel the country is in, and the map changes
+  // between questions (ADR-091). Saying so is not decoration — the background
+  // would otherwise be replaced with no warning, and a child working through
+  // this with a screen reader would have no way of knowing at all.
+  const regioSleutel = state.kaartRegio === null ? null : regioNaam(state.kaartRegio);
+  const opKaart = regioSleutel === null ? '' : t('practice.onMap', { regio: t(regioSleutel) });
+  /** The whole question, for the two things that say it rather than draw it. */
+  const voorlezen = opKaart === '' ? vraag : `${vraag} ${opKaart}`;
+
   const chosenName = state.chosenId === null ? '' : (state.namesById.get(state.chosenId) ?? '');
   const nearMiss = state.verdict?.kind === 'near-miss';
 
@@ -176,12 +187,20 @@ export function PracticeScreen({
           />
         ) : null}
 
-        {prefs.readAloud ? <SpeakButton text={vraag} /> : null}
+        {prefs.readAloud ? <SpeakButton text={voorlezen} /> : null}
 
         <div className="ml-auto flex items-center gap-4 md:gap-6">
           {/* What is running out, or how far along you are — never both, because
-              in a timed round the question number counts towards nothing. */}
-          {state.secondsLeft !== null ? (
+              in a timed round the question number counts towards nothing.
+              A tijdrit's clock is the third case and the only one that counts
+              up: nothing is running out, so it is never urgent and the dots
+              stay, because the round still has an end you can see coming. */}
+          {state.tijd !== null ? (
+            <Counter
+              label={t('practice.counterElapsed')}
+              value={tijdInBeeld(state.tijd.totaalMs)}
+            />
+          ) : state.secondsLeft !== null ? (
             <Counter
               label={t('practice.counterTime')}
               value={klok(state.secondsLeft)}
@@ -211,7 +230,7 @@ export function PracticeScreen({
       {/* Announced separately from the heading so a screen reader hears the new
           question on every turn, not only on the first. */}
       <p className="tk-sr-only" role="status" aria-live="polite">
-        {revealed ? feedbackSentence(state, naam, chosenName) : vraag}
+        {revealed ? feedbackSentence(state, naam, chosenName) : voorlezen}
       </p>
 
       <div className="tk-round-body">
@@ -237,6 +256,20 @@ export function PracticeScreen({
                         : t('practice.wrong', { naam })}
                   </p>
                   <p className="text-body text-ink-2">{feedbackDetail(state, naam, chosenName)}</p>
+                  {/* What that one took, in a round that is being timed. Per
+                      answer rather than only at the end, because the thing a
+                      child is trying to change is this number and they cannot
+                      aim at a total they only meet once. */}
+                  {state.tijd !== null ? (
+                    <p className="tk-label">
+                      {t('practice.answerTime', {
+                        seconden: secondenInBeeld(state.laatsteAntwoordMs),
+                      })}
+                      {state.lastCorrect
+                        ? ''
+                        : ` · ${t('practice.penalty', { aantal: STRAFSECONDEN })}`}
+                    </p>
+                  ) : null}
                 </div>
               </div>
 
@@ -252,6 +285,7 @@ export function PracticeScreen({
             <>
               <p className="tk-label">{label}</p>
               <h1 className="tk-display mt-1 text-h1 font-semibold">{vraag}</h1>
+              {opKaart === '' ? null : <p className="text-body text-ink-2">{opKaart}</p>}
               {typing ? <AnswerField key={state.index} onSubmit={submit} /> : null}
               {choosing && state.question.options ? (
                 <OptionList key={state.index} options={state.question.options} onChoose={choose} />

@@ -3666,6 +3666,170 @@ neither is a bug to be found later.
 
 ---
 
+## ADR-090 — De tijdrit: een klok die meet, naast de klok die afloopt
+
+**Status:** accepted — 2026-09-09. Adds a seventh way of practising to ADR-061
+and moves the ceiling ADR-085 leaned on.
+
+### Context
+
+Five ways of practising ask whether a child knows where something is. None of
+them asks how _fast_ they know it, and that is a real difference rather than a
+sporting one: a child who has learned Drenthe answers in a second, and a child
+who works it out from the shape of the country takes eight. Both are counted
+correct everywhere in this product, both should be, and the second one is not
+finished learning. Nothing on any screen could say so.
+
+### Decision
+
+A **tijdrit** is the pointing round wijs-aan already asks, with a stopwatch on it
+and a best time kept.
+
+**The time is answer time, not wall-clock time.** The clock runs from the moment
+a name appears to the moment the child answers it, and stops in between. A round
+has feedback between its questions — the name, the weetje under it — and charging
+a child for reading that would make the fastest round the one where nothing was
+read.
+
+**A wrong answer costs five seconds and nothing else.** Without a penalty the
+fastest round is the one where nobody looked, and a game that rewards guessing
+teaches guessing. It costs nothing outside the round: the same coins, the same
+streak, the same Leitner box as a wrong answer anywhere else. "Ik weet het niet"
+costs the same five, because it is the same outcome for the scheduler and because
+a free way past a question would otherwise be the quickest route through.
+
+**A record is one number, per set and per round length, on this device.** Not per
+set alone: ADR-074 lets a child choose ten, twenty-five, fifty or a hundred
+questions, and a single best time would have rewarded whoever picked the
+shortest. Only a round ridden to the end sets one — a round can be stopped early
+and keep what it answered (ADR-052), and three questions of fifteen would be a
+time nothing could ever beat. The result screen says which of those happened,
+rather than leaving a child to notice that nothing appeared.
+
+**And it is not behind K10's switch.** This is the line worth being able to
+defend, because the settings page says in as many words that haste does not help
+you remember, and this is a way of practising with a clock on it.
+
+What that switch turns off is a **time limit**. A bliksemronde ends when its sixty
+seconds do, so a child who is thinking loses the question they were thinking
+about; that is content taken away by a clock, it is what WCAG 2.2.1 is about, and
+it is why it is off by default. A stopwatch takes nothing. The round waits exactly
+as long as the child needs, every question is asked and answered, and the clock
+only reports afterwards. A clock that answers for you and a clock that watches are
+not the same object, and this product should not treat them as one because they
+are both round.
+
+**Nothing is ranked against anybody.** Spec §10, and there is no server to rank
+on. A record here is the number this child has to beat, which is the only
+comparison that gets a ten-year-old to practise the same twelve provinces a
+fourth time.
+
+### The ceiling, which had to move
+
+ADR-061 caps step 2 at six ways, and ADR-085 declined to be a seventh card on
+exactly that ground. Seven is the number now, and the reason is that the drawing
+changed underneath the rule: six was a ceiling on a **grid of cards** with a name
+and a line under each, and ADR-089 replaced those with chips — a mark and a word,
+wrapping onto the next line when the row runs out. The region row directly above
+holds eight of that same chip, and has since ADR-083.
+
+So the ceiling still means what it meant: as many ways as a child takes in at a
+glance, on the row as it is actually drawn. What it must not become is a number
+nobody has to argue with, and a module that wants an eighth has the same question
+to answer here that this one had.
+
+### Consequences
+
+A new object store, `records`, and database version 5. Additive: it creates one
+store and reads nothing that already holds a child's work, which is the only kind
+of migration worth shipping to a device nobody can debug. Keyed by child from the
+first row, because the mistake ADR-046 had to correct was a store that was not.
+
+On a map too crowded to point at, the tijdrit moves to the end of the row beside
+wijs-aan (ADR-087). Asking a child to hit three pixels of coastline _quickly_ is
+that rule failing twice over.
+
+It is offered on every subject topography has, mixes included, and on nothing in
+rekenen: a sum is not a place, and "wijs het zo snel mogelijk aan" has nothing to
+point at.
+
+---
+
+## ADR-091 — De wereldopdracht speelt zich af op de kaart van het werelddeel
+
+**Status:** accepted — 2026-09-09. Completes ADR-087 and revises what its table
+says about the world.
+
+### Context
+
+ADR-086 built the world map and ADR-087 measured what it costs: of its hundred
+and sixty-seven countries, ninety cannot be hit on a laptop and a hundred and
+sixty cannot be hit on a phone. The answer then was to demote pointing on that map
+and lead with multiple choice — the map lights a country up, the child answers in
+words.
+
+That is a fair answer to "how do we ask about this map". It is the wrong answer to
+"which map should be on the screen". A child asked where Paraguay is does not need
+a picture of the whole world; they need Zuid-Amerika, which is what an atlas gives
+them and what a teacher points at. The globe was up because the _set_ is called
+"de wereld", which is a fact about our file layout and not about geography.
+
+### Decision
+
+**A question about a country of the world is asked on the map of its
+werelddeel.** Brazilië on Zuid-Amerika, Kenia on Afrika, Nederland on Europa. The
+set stays what it is — one Leitner box per country, one address, one round that
+can reach all hundred and sixty-seven — and the map under the question follows the
+country instead of the set.
+
+**The relation is content, and the build writes it.**
+`tools/content/build-countries.mjs` already builds the six werelddelen before it
+builds the world, so every country of the world carries the werelddeel it was
+actually drawn in and the shape that draws it there. Taken from what those builds
+produced rather than from Natural Earth's `CONTINENT` field alone, because
+membership is only half of it: a country must also survive its werelddeel's
+window, and a relation pointing at a shape the clip removed is a blank map in a
+classroom. All hundred and sixty-seven resolve today, and a test fails on the day
+one stops.
+
+**Cyprus goes to Europa.** It is the one country in two werelddeel sets, Europe is
+built first, and that is the page a Dutch atlas prints it on — the same named
+exception `hoortErbij` already makes, in the same direction.
+
+**The screen says which map it put up.** The map changes between questions and
+nothing else would announce it; without that line a child working through this
+with a screen reader would never know the background had been replaced. It is the
+same reason the names of every country on that map come from the werelddeel sets
+rather than from the round's own items, which are spelled `wl-land-spanje` where
+the map on screen says `eu-land-spanje`.
+
+**Only the maps a round asks for are fetched.** Fifteen questions reach four or
+five werelddelen; loading all six would be a quarter of a megabyte of maps nobody
+is asked about. So the round is composed first and its maps come after it, which
+costs one local read of the Leitner boxes and no network time.
+
+### Consequences
+
+**Pointing leads on the world again.** ADR-087's rule now measures what is on the
+screen rather than what is in the set, and what is on the screen is at most
+Afrika's fifty-two — so the world behaves like every other werelddeel: pointable
+on a laptop, not on a phone. The table in `forms.ts` keeps its world row and says
+what that row now describes.
+
+**The result screen draws no review map after a world round**, for the reason a
+Topomix draws none: a map can light up the misses that are on it, and this round's
+misses are on six different maps. The list beside it names all of them.
+
+**Ontdekken still shows the globe.** Exploring is not a question, so there is no
+country to take a werelddeel from, and a child wandering the world map is doing
+the one thing that map is good for.
+
+What stays open is what ADR-087 left open: the Caribbean, where twelve of
+Noord-Amerika's twenty-three are hard to hit even on a laptop. A werelddeel map
+does not fix that one; an inset would.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because

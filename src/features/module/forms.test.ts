@@ -30,6 +30,11 @@ describe('the ways of practising', () => {
       'meerkeuze',
       'hoe-heet-dit',
       'ontdekken',
+      // Then the three that put pressure on, mildest first. A tijdrit takes
+      // nothing away — the round waits as long as the child needs and the
+      // stopwatch reports — where the other two end on a clock and on lives
+      // (ADR-090).
+      'tijdrit',
       'bliksemronde',
       'overleven',
     ]);
@@ -64,12 +69,27 @@ describe('the ways of practising', () => {
     }
   });
 
-  it('never offers more than six, whatever a module holds', () => {
-    // A drawing rule, not a limit on the product: past six the grid stops being
-    // one glance. A module with a seventh way has a question to answer here.
+  it('never offers more than the row can hold at a glance', () => {
+    // A drawing rule, not a limit on the product. It was six while step 2 was a
+    // grid of cards with a line under each; it is seven now that ADR-089 made
+    // them chips and the region row above holds eight of the same shape. A
+    // module that wants an eighth has a question to answer here (ADR-090).
     expect(offeredForms(TOPO_FORMS, true, 'nl-provincies').length).toBeLessThanOrEqual(MAX_FORMS);
+    expect(TOPO_FORMS.length).toBeLessThanOrEqual(MAX_FORMS);
+    expect(SUM_FORMS.length).toBeLessThanOrEqual(MAX_FORMS);
     expect(formsFor('topo')).toBe(TOPO_FORMS);
     expect(formsFor('tafels')).toBe(SUM_FORMS);
+  });
+
+  it('offers the tijdrit whether or not the clock is switched on', () => {
+    // K10 switches off the time *limit*, and a stopwatch is not one: nothing is
+    // taken away, no question is cut short, and the round ends when the
+    // questions do. The line is drawn in forms.ts and this is what it means.
+    for (const klok of [false, true]) {
+      expect(offeredForms(TOPO_FORMS, klok, 'nl-provincies').map((form) => form.id)).toContain(
+        'tijdrit',
+      );
+    }
   });
 
   it('does not offer the clock while the clock is switched off', () => {
@@ -217,10 +237,14 @@ describe('a map too crowded to point at', () => {
     expect(teDrukOmAanTeWijzen('europa-landen', 46, true)).toBe(true);
   });
 
-  it('demotes pointing on the world map everywhere', () => {
-    // Ninety of its hundred and sixty-seven countries are unreachable on a
-    // laptop, so a screen wide enough does not make it a pointing exercise.
-    expect(teDrukOmAanTeWijzen('wereld-landen', 167, false)).toBe(true);
+  it('measures the world by the werelddeel it draws, not by the globe', () => {
+    // The world round no longer draws a hundred and sixty-seven countries at
+    // once: a question is asked on the map of the country's werelddeel, and the
+    // largest of those is Afrika's fifty-two (ADR-091). So it behaves like
+    // every other werelddeel — pointable on a laptop, not on a phone — and the
+    // number of items in the set no longer decides.
+    expect(teDrukOmAanTeWijzen('wereld-landen', 167, false)).toBe(false);
+    expect(teDrukOmAanTeWijzen('wereld-landen', 167, true)).toBe(true);
   });
 
   it('leaves the cities alone: a marker is already a target', () => {
@@ -230,12 +254,14 @@ describe('a map too crowded to point at', () => {
     expect(teDrukOmAanTeWijzen('nl-steden', 80, true)).toBe(false);
   });
 
-  it('moves pointing to the end of the row rather than off it', () => {
+  it('moves both ways of pointing to the end of the row rather than off it', () => {
     const krap = offeredForms(TOPO_FORMS, false, 'wereld-landen', true);
     const ids = krap.map((form) => form.id);
 
-    expect(ids).toContain('wijs-aan');
-    expect(ids[ids.length - 1]).toBe('wijs-aan');
+    // A tijdrit is pointing with a stopwatch on it, so it moves with pointing:
+    // asking a child to hit three pixels of coastline *quickly* is the same
+    // rule failing twice.
+    expect(ids.slice(-2)).toEqual(['wijs-aan', 'tijdrit']);
     // And what leads is the one that needs no pointing at all: the map lights a
     // country up and the child chooses between four names.
     expect(ids[0]).toBe('meerkeuze');

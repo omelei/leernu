@@ -1,7 +1,8 @@
 import { t, type TranslationKey } from '@/i18n';
+import { STRAFSECONDEN, tijdInBeeld } from '@/game-core';
 import type { GeoSet } from '@/content/loadGeo';
 import type { AnswerLayer } from './MapCanvas';
-import { isMixSet, type RoundState } from './useRound';
+import { tekentEenKaart, type RoundState } from './useRound';
 import { STAMP_NAME } from '@/features/reis/stampNames';
 import { NieuweDieren } from '@/features/reis/NieuwDier';
 import { RoundMark } from '@/components/RoundMark';
@@ -64,6 +65,12 @@ export function ResultScreen({
         <RoundMark goed={state.correctCount} totaal={state.answeredCount} />
       ) : null}
 
+      {/* And the time, on the one round that was against the clock. Above the
+          list of misses, because on a tijdrit it is the thing the child came
+          for — and under what was learned, because that is still what the round
+          was about (ADR-090). */}
+      <TijdritLine state={state} />
+
       {/* What the round handed over, if it handed anything over. Above the
           list of what is still missing, because it is the only thing on this
           screen that is not about this round — and under the score, because the
@@ -86,12 +93,13 @@ export function ResultScreen({
             </ul>
           </section>
 
-          {/* The map is absent after a Topomix, and that is the honest thing.
-              A mix asks about provinces, capitals, islands and seas in one
-              round; one map can light up one of those layers, so a review map
-              here would show a child four of their eight misses and quietly
-              drop the rest. The list beside it names all of them. */}
-          {state.geo !== null && !isMixSet(state.setId) && (
+          {/* The map is absent after a round that drew more than one, and that
+              is the honest thing. A Topomix asks about provinces, capitals,
+              islands and seas in one round and a round of the world asks about
+              six werelddelen (ADR-091); one map can light up one of those, so a
+              review map here would show a child four of their eight misses and
+              quietly drop the rest. The list beside it names all of them. */}
+          {state.geo !== null && tekentEenKaart(state.setId) && (
             <section className="md:w-1/2" aria-label={t('result.mapLabel')}>
               <div className="tk-card flex justify-center">
                 <ReviewMap background={state.geo} answers={state.answers} highlighted={missedIds} />
@@ -113,6 +121,70 @@ export function ResultScreen({
         </button>
       </div>
     </main>
+  );
+}
+
+/**
+ * The time a tijdrit took, and what it did to the record.
+ *
+ * Three things in one block, in the order a child reads them: what it took,
+ * what of that was penalties, and whether it beat the standing time. Nothing
+ * here is a mark and nothing is compared with anybody else — a record in this
+ * product is a number one child has to beat, on one device (spec §10).
+ *
+ * A round stopped early says so instead of quietly not counting. Finding out
+ * that a time did not count by it not appearing is the kind of silence that
+ * makes a child think the app is broken.
+ */
+function TijdritLine({ state }: { readonly state: RoundState }) {
+  if (state.tijd === null) return null;
+  const { tijd } = state;
+  const fout = tijd.fout;
+
+  return (
+    <div className="tk-card">
+      <p className="tk-label">{t('result.timeLabel')}</p>
+      <p className="tk-display text-h1 font-semibold tabular-nums">{tijdInBeeld(tijd.totaalMs)}</p>
+      <p className="text-ink-2">
+        {t('result.timeOf', { tijd: tijdInBeeld(tijd.antwoordMs), aantal: state.answeredCount })}
+      </p>
+      <p className="text-ink-2">
+        {fout === 0
+          ? t('result.timeClean')
+          : fout === 1
+            ? t('result.timePenaltyOne', { seconden: STRAFSECONDEN })
+            : t('result.timePenalty', { aantal: fout, seconden: fout * STRAFSECONDEN })}
+      </p>
+      <RecordLine state={state} />
+    </div>
+  );
+}
+
+/** What the time was worth: a first, a beaten record, or one that still stands. */
+function RecordLine({ state }: { readonly state: RoundState }) {
+  const { record } = state;
+  // A round that was stopped early sets no time, and is told so rather than
+  // left to wonder. `teltAlsRit` in game-core decides which it was.
+  if (!state.ritTelt) return <p className="text-ink-2">{t('result.recordShort')}</p>;
+  // Finished, and the write has not landed yet. Nothing, for the moment it
+  // takes — never the sentence above, which would be wrong.
+  if (record === null) return null;
+
+  if (record.nieuw) {
+    return (
+      <p className="text-body font-semibold">
+        {t('result.recordNew')}{' '}
+        {record.vorige === null
+          ? t('result.recordFirst')
+          : t('result.recordBeat', { tijd: tijdInBeeld(record.vorige) })}
+      </p>
+    );
+  }
+
+  return (
+    <p className="text-ink-2">
+      {t('result.recordStands', { tijd: tijdInBeeld(record.vorige ?? record.ms) })}
+    </p>
   );
 }
 
