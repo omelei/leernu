@@ -4,6 +4,7 @@ import {
   helpTargetFor,
   keyboardOrder,
   MIN_TOUCH_PX,
+  needsHelpTarget,
   reachablePoints,
   type ViewFit,
 } from '@/game-core';
@@ -73,6 +74,15 @@ export interface MapCanvasProps {
   readonly verdict?: 'correct' | 'near' | 'wrong' | undefined;
   readonly onPick: (id: string) => void;
 }
+
+/**
+ * How much of a map may be given help targets before they stop being help.
+ *
+ * A quarter. Below it they are a handful of rings round the specks; above it
+ * they are the map, they overlap, and the shape under each one has stopped
+ * being pressable. See `helpAllowed`.
+ */
+const MAX_HELP_SHARE = 0.25;
 
 /** The map's rendered box in CSS pixels, so touch targets can be real. */
 function useRenderedSize(ref: React.RefObject<SVGSVGElement | null>): {
@@ -181,6 +191,31 @@ export function MapCanvas({
 
   const clickable = interaction !== 'show' && !revealed;
 
+  /**
+   * Whether a shape too small to hit may be given a circle to be hit with.
+   *
+   * The help target is for the exception. Ameland is a streak of land beside
+   * eleven provinces and a ring round it is exactly right — it says "there is
+   * more room here than the coastline suggests" and nothing else on the map is
+   * near enough for the ring to reach.
+   *
+   * On a map of the world on a phone, almost every country is too small by that
+   * measure, and a hundred rings is not help. They overlap, so a child aiming
+   * at Togo lands inside Ghana's; they cover the map, so the map cannot be
+   * read; and the shape underneath each one stops being pressable, which is the
+   * part that turns clutter into wrong answers.
+   *
+   * So above a quarter of the map, the rings go and the coastlines stay
+   * pressable. A small country on a small screen is then genuinely hard to hit
+   * — which is true of a paper map too, and is the honest failure of the two
+   * (ADR-086).
+   */
+  const helpAllowed = useMemo(() => {
+    if (!clickable || answerShapes.length === 0) return true;
+    const needing = answerShapes.filter((shape) => needsHelpTarget(shape.bbox, fit)).length;
+    return needing / answerShapes.length <= MAX_HELP_SHARE;
+  }, [clickable, answerShapes, fit]);
+
   // Every point that is drawn must be hittable, including the ones the child
   // does not want. See reachablePoints: with eighty cities in the set, drawing
   // them all would put answers six pixels apart.
@@ -247,6 +282,7 @@ export function MapCanvas({
           state={stateOf(shape.id, targetId, chosenId, revealed, interaction, verdict)}
           dimmedWhenOpen={interaction === 'show'}
           clickable={clickable}
+          helpAllowed={helpAllowed}
           fit={fit}
           onPick={() => clickable && onPick(shape.id)}
           onKeyDown={(event) => clickable && handleKey(event, shape.id)}
@@ -380,6 +416,7 @@ function AnswerShape({
   state,
   dimmedWhenOpen,
   clickable,
+  helpAllowed,
   fit,
   onPick,
   onKeyDown,
@@ -389,6 +426,8 @@ function AnswerShape({
   readonly state: AnswerState;
   readonly dimmedWhenOpen: boolean;
   readonly clickable: boolean;
+  /** See the note on `helpAllowed` in MapCanvas. */
+  readonly helpAllowed: boolean;
   readonly fit: ViewFit;
   readonly onPick: () => void;
   readonly onKeyDown: (event: KeyboardEvent<Element>) => void;
@@ -396,7 +435,7 @@ function AnswerShape({
   // Ameland is 72 units long and 16 wide: judged on its long side it looks like
   // a comfortable target, and a finger disagrees. Anything too narrow to land on
   // gets a circle it can actually be hit with.
-  const help = clickable ? helpTargetFor(shape.bbox, fit, shape.punt) : null;
+  const help = clickable && helpAllowed ? helpTargetFor(shape.bbox, fit, shape.punt) : null;
   const pathIsTheTarget = clickable && help === null;
 
   return (

@@ -3507,6 +3507,17 @@ mountains would be a second subject and a second licensed source; neither
 exists, and a card for one that does not would be the product promising
 something.
 
+**A help ring is for the exception.** A shape too small to hit gets a circle it
+can be hit with, and on the Wadden islands that is exactly right: one ring round
+a streak of land among eleven provinces. On a map of the world on a phone almost
+every country is too small by the same measure, and a hundred rings is not help
+— they overlap, so a child aiming at Togo lands inside Ghana's; they cover the
+map; and the shape under each one stops being pressable, which is what turns
+clutter into wrong answers. Above a quarter of a map the rings go and the
+coastlines stay pressable. A small country on a small screen is then genuinely
+hard to hit, which is true of a paper map too and is the honest failure of the
+two.
+
 ---
 
 ## Deferred with accounts and commerce (ADR-014)

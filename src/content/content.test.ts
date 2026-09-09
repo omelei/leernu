@@ -348,6 +348,30 @@ describe('the countries of Europe and of the world', () => {
     }
   });
 
+  /**
+   * And how many of them need one, which is the number that decides whether the
+   * rings are drawn at all (`MAX_HELP_SHARE` in MapCanvas).
+   *
+   * Europe on a laptop is a handful of specks among forty countries, which is
+   * what a help ring is for. The world on a phone is nearly all of them, which
+   * is what the cap is for. Both are asserted, because the day one of them
+   * crosses the line is the day the map either fills with rings or loses the
+   * ones it needed — and neither shows up in a screenshot anybody reads.
+   */
+  it('needs help rings for a handful of Europe and for most of the world on a phone', () => {
+    const share = (regio: string, px: number) => {
+      const geo = landenGeo(regio, 'region');
+      const fit = fitView(geo.viewBox[3], px);
+      const needing = geo.vormen.filter((vorm) => needsHelpTarget(vorm.bbox, fit)).length;
+      return needing / geo.vormen.length;
+    };
+
+    // A laptop, where Europe is drawn big: the microstates and nothing else.
+    expect(share('europa', 700)).toBeLessThan(0.25);
+    // A phone, where the world is 190 pixels tall: almost every country.
+    expect(share('wereld', 190)).toBeGreaterThan(0.25);
+  });
+
   it.each(regios)('lets every country in $regio win its own question', ({ set }) => {
     // The whole region, which is what a round passes: an answer must not be
     // right or wrong depending on which exercise a child is doing (ADR-017).
