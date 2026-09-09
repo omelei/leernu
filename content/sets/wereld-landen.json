@@ -14,7 +14,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-afghanistan",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-albanie",
@@ -24,7 +27,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-albanie",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-algerije",
@@ -34,7 +40,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-algerije",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-angola",
@@ -44,7 +53,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-angola",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-argentinie",
@@ -54,7 +66,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-argentinie",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-armenie",
@@ -64,7 +79,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-armenie",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-australie",
@@ -74,7 +92,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-australie",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-azerbeidzjan",
@@ -84,7 +105,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-azerbeidzjan",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-bahama-s",
@@ -94,7 +118,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-bahama-s",
       "niveau": 3,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-bangladesh",
@@ -104,17 +131,25 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-bangladesh",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-belarus",
       "type": "land",
       "naam": "Belarus",
-      "aliassen": ["Wit-Rusland"],
+      "aliassen": [
+        "Wit-Rusland"
+      ],
       "regioSet": "wereld",
       "geometrieRef": "wl-land-belarus",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-belgie",
@@ -124,7 +159,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-belgie",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-belize",
@@ -134,7 +172,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-belize",
       "niveau": 3,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-benin",
@@ -144,7 +185,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-benin",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-bhutan",
@@ -154,7 +198,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-bhutan",
       "niveau": 3,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-bolivia",
@@ -164,7 +211,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-bolivia",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-bosnie-en-herzegovina",
@@ -174,7 +224,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-bosnie-en-herzegovina",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-botswana",
@@ -184,7 +237,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-botswana",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-brazilie",
@@ -194,7 +250,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-brazilie",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-brunei",
@@ -204,7 +263,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-brunei",
       "niveau": 3,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-bulgarije",
@@ -214,7 +276,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-bulgarije",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-burkina-faso",
@@ -224,7 +289,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-burkina-faso",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-burundi",
@@ -234,7 +302,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-burundi",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-cambodja",
@@ -244,7 +315,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-cambodja",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-canada",
@@ -254,7 +328,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-canada",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-centraal-afrikaanse-republiek",
@@ -264,7 +341,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-centraal-afrikaanse-republiek",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-chili",
@@ -274,17 +354,25 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-chili",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-china",
       "type": "land",
       "naam": "China",
-      "aliassen": ["Volksrepubliek China"],
+      "aliassen": [
+        "Volksrepubliek China"
+      ],
       "regioSet": "wereld",
       "geometrieRef": "wl-land-china",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-colombia",
@@ -294,7 +382,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-colombia",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-congo-brazzaville",
@@ -304,7 +395,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-congo-brazzaville",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-congo-kinshasa",
@@ -314,7 +408,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-congo-kinshasa",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-costa-rica",
@@ -324,7 +421,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-costa-rica",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-cuba",
@@ -334,7 +434,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-cuba",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-cyprus",
@@ -344,7 +447,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-cyprus",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-denemarken",
@@ -354,7 +460,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-denemarken",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-djibouti",
@@ -364,7 +473,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-djibouti",
       "niveau": 3,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-dominicaanse-republiek",
@@ -374,7 +486,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-dominicaanse-republiek",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-duitsland",
@@ -384,7 +499,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-duitsland",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-ecuador",
@@ -394,7 +512,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-ecuador",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-egypte",
@@ -404,7 +525,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-egypte",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-el-salvador",
@@ -414,7 +538,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-el-salvador",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-equatoriaal-guinea",
@@ -424,7 +551,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-equatoriaal-guinea",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-eritrea",
@@ -434,7 +564,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-eritrea",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-estland",
@@ -444,17 +577,25 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-estland",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-eswatini",
       "type": "land",
       "naam": "Eswatini",
-      "aliassen": ["Swaziland"],
+      "aliassen": [
+        "Swaziland"
+      ],
       "regioSet": "wereld",
       "geometrieRef": "wl-land-eswatini",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-ethiopie",
@@ -464,7 +605,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-ethiopie",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-fiji",
@@ -474,7 +618,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-fiji",
       "niveau": 3,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-filipijnen",
@@ -484,7 +631,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-filipijnen",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-finland",
@@ -494,7 +644,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-finland",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-frankrijk",
@@ -504,7 +657,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-frankrijk",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-gabon",
@@ -514,7 +670,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-gabon",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-gambia",
@@ -524,7 +683,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-gambia",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-georgie",
@@ -534,7 +696,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-georgie",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-ghana",
@@ -544,7 +709,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-ghana",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-griekenland",
@@ -554,7 +722,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-griekenland",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-guatemala",
@@ -564,7 +735,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-guatemala",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-guinee",
@@ -574,7 +748,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-guinee",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-guinee-bissau",
@@ -584,7 +761,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-guinee-bissau",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-guyana",
@@ -594,7 +774,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-guyana",
       "niveau": 3,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-haiti",
@@ -604,7 +787,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-haiti",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-honduras",
@@ -614,7 +800,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-honduras",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-hongarije",
@@ -624,7 +813,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-hongarije",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-ierland",
@@ -634,7 +826,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-ierland",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-ijsland",
@@ -644,7 +839,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-ijsland",
       "niveau": 3,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-india",
@@ -654,7 +852,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-india",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-indonesie",
@@ -664,7 +865,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-indonesie",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-irak",
@@ -674,7 +878,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-irak",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-iran",
@@ -684,7 +891,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-iran",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-israel",
@@ -694,7 +904,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-israel",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-italie",
@@ -704,7 +917,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-italie",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-ivoorkust",
@@ -714,7 +930,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-ivoorkust",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-jamaica",
@@ -724,7 +943,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-jamaica",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-japan",
@@ -734,7 +956,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-japan",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-jemen",
@@ -744,7 +969,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-jemen",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-jordanie",
@@ -754,7 +982,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-jordanie",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-kameroen",
@@ -764,7 +995,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-kameroen",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-kazachstan",
@@ -774,7 +1008,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-kazachstan",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-kenia",
@@ -784,7 +1021,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-kenia",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-kirgizie",
@@ -794,7 +1034,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-kirgizie",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-koeweit",
@@ -804,7 +1047,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-koeweit",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-kosovo",
@@ -814,7 +1060,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-kosovo",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-kroatie",
@@ -824,7 +1073,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-kroatie",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-laos",
@@ -834,7 +1086,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-laos",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-lesotho",
@@ -844,7 +1099,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-lesotho",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-letland",
@@ -854,7 +1112,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-letland",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-libanon",
@@ -864,7 +1125,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-libanon",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-liberia",
@@ -874,7 +1138,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-liberia",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-libie",
@@ -884,7 +1151,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-libie",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-litouwen",
@@ -894,7 +1164,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-litouwen",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-luxemburg",
@@ -904,7 +1177,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-luxemburg",
       "niveau": 3,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-madagaskar",
@@ -914,7 +1190,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-madagaskar",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-malawi",
@@ -924,7 +1203,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-malawi",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-maleisie",
@@ -934,7 +1216,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-maleisie",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-mali",
@@ -944,7 +1229,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-mali",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-marokko",
@@ -954,7 +1242,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-marokko",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-mauritanie",
@@ -964,7 +1255,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-mauritanie",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-mexico",
@@ -974,7 +1268,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-mexico",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-moldavie",
@@ -984,7 +1281,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-moldavie",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-mongolie",
@@ -994,7 +1294,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-mongolie",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-montenegro",
@@ -1004,7 +1307,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-montenegro",
       "niveau": 3,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-mozambique",
@@ -1014,7 +1320,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-mozambique",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-myanmar",
@@ -1024,7 +1333,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-myanmar",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-namibie",
@@ -1034,7 +1346,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-namibie",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-nederland",
@@ -1044,7 +1359,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-nederland",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-nepal",
@@ -1054,7 +1372,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-nepal",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-nicaragua",
@@ -1064,7 +1385,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-nicaragua",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-nieuw-zeeland",
@@ -1074,7 +1398,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-nieuw-zeeland",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-niger",
@@ -1084,7 +1411,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-niger",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-nigeria",
@@ -1094,7 +1424,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-nigeria",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-noord-korea",
@@ -1104,7 +1437,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-noord-korea",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-noord-macedonie",
@@ -1114,7 +1450,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-noord-macedonie",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-noorwegen",
@@ -1124,7 +1463,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-noorwegen",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-oeganda",
@@ -1134,7 +1476,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-oeganda",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-oekraine",
@@ -1144,7 +1489,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-oekraine",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-oezbekistan",
@@ -1154,7 +1502,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-oezbekistan",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-oman",
@@ -1164,7 +1515,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-oman",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-oost-timor",
@@ -1174,7 +1528,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-oost-timor",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-oostenrijk",
@@ -1184,7 +1541,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-oostenrijk",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-pakistan",
@@ -1194,7 +1554,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-pakistan",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-panama",
@@ -1204,7 +1567,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-panama",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-papoea-nieuw-guinea",
@@ -1214,7 +1580,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-papoea-nieuw-guinea",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-paraguay",
@@ -1224,7 +1593,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-paraguay",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-peru",
@@ -1234,7 +1606,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-peru",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-polen",
@@ -1244,7 +1619,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-polen",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-portugal",
@@ -1254,7 +1632,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-portugal",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-qatar",
@@ -1264,7 +1645,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-qatar",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-roemenie",
@@ -1274,7 +1658,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-roemenie",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-rusland",
@@ -1284,7 +1671,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-rusland",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-rwanda",
@@ -1294,7 +1684,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-rwanda",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-salomonseilanden",
@@ -1304,7 +1697,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-salomonseilanden",
       "niveau": 3,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-saoedi-arabie",
@@ -1314,7 +1710,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-saoedi-arabie",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-senegal",
@@ -1324,7 +1723,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-senegal",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-servie",
@@ -1334,7 +1736,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-servie",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-sierra-leone",
@@ -1344,7 +1749,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-sierra-leone",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-slovenie",
@@ -1354,7 +1762,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-slovenie",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-slowakije",
@@ -1364,7 +1775,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-slowakije",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-soedan",
@@ -1374,7 +1788,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-soedan",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-somalie",
@@ -1384,7 +1801,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-somalie",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-spanje",
@@ -1394,7 +1814,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-spanje",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-sri-lanka",
@@ -1404,7 +1827,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-sri-lanka",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-suriname",
@@ -1414,7 +1840,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-suriname",
       "niveau": 3,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-syrie",
@@ -1424,7 +1853,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-syrie",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-tadzjikistan",
@@ -1434,7 +1866,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-tadzjikistan",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-taiwan",
@@ -1444,7 +1879,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-taiwan",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-tanzania",
@@ -1454,7 +1892,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-tanzania",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-thailand",
@@ -1464,7 +1905,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-thailand",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-togo",
@@ -1474,7 +1918,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-togo",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-trinidad-en-tobago",
@@ -1484,7 +1931,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-trinidad-en-tobago",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-tsjaad",
@@ -1494,7 +1944,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-tsjaad",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-tsjechie",
@@ -1504,7 +1957,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-tsjechie",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-tunesie",
@@ -1514,7 +1970,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-tunesie",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-turkije",
@@ -1524,7 +1983,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-turkije",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-turkmenistan",
@@ -1534,7 +1996,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-turkmenistan",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-uruguay",
@@ -1544,7 +2009,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-uruguay",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-vanuatu",
@@ -1554,7 +2022,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-vanuatu",
       "niveau": 3,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-venezuela",
@@ -1564,7 +2035,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-venezuela",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-verenigd-koninkrijk",
@@ -1574,7 +2048,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-verenigd-koninkrijk",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-verenigde-arabische-emiraten",
@@ -1584,17 +2061,27 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-verenigde-arabische-emiraten",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-verenigde-staten",
       "type": "land",
       "naam": "Verenigde Staten",
-      "aliassen": ["Verenigde Staten van Amerika", "Amerika", "VS"],
+      "aliassen": [
+        "Verenigde Staten van Amerika",
+        "Amerika",
+        "VS"
+      ],
       "regioSet": "wereld",
       "geometrieRef": "wl-land-verenigde-staten",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-vietnam",
@@ -1604,7 +2091,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-vietnam",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-zambia",
@@ -1614,7 +2104,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-zambia",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-zimbabwe",
@@ -1624,7 +2117,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-zimbabwe",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-zuid-afrika",
@@ -1634,7 +2130,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-zuid-afrika",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-zuid-korea",
@@ -1644,7 +2143,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-zuid-korea",
       "niveau": 1,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-zuid-soedan",
@@ -1654,7 +2156,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-zuid-soedan",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-zweden",
@@ -1664,7 +2169,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-zweden",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     },
     {
       "id": "wl-land-zwitserland",
@@ -1674,7 +2182,10 @@
       "regioSet": "wereld",
       "geometrieRef": "wl-land-zwitserland",
       "niveau": 2,
-      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+      "leerdoelen": [
+        "ak-wereld-landen-aanwijzen",
+        "ak-wereld-landen-benoemen"
+      ]
     }
   ]
 }

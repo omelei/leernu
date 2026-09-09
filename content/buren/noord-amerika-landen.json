@@ -1,0 +1,193 @@
+{
+  "_gegenereerd": "tools/content/build-neighbours.mjs — gegenereerd, niet met de hand bewerken.",
+  "_regel": "Gebieden die een grens delen, de langste grens eerst, daarna de dichtstbijzijnde.",
+  "setId": "noord-amerika-landen",
+  "contentVersie": "2026-09-09",
+  "regel": "grens",
+  "buren": {
+    "na-land-antigua-en-barbuda": [
+      "na-land-saint-kitts-en-nevis",
+      "na-land-dominica",
+      "na-land-saint-lucia",
+      "na-land-saint-vincent-en-de-grenadines",
+      "na-land-barbados",
+      "na-land-grenada"
+    ],
+    "na-land-bahama-s": [
+      "na-land-cuba",
+      "na-land-jamaica",
+      "na-land-haiti",
+      "na-land-dominicaanse-republiek",
+      "na-land-belize",
+      "na-land-honduras"
+    ],
+    "na-land-barbados": [
+      "na-land-saint-lucia",
+      "na-land-saint-vincent-en-de-grenadines",
+      "na-land-grenada",
+      "na-land-dominica",
+      "na-land-trinidad-en-tobago",
+      "na-land-antigua-en-barbuda"
+    ],
+    "na-land-belize": [
+      "na-land-mexico",
+      "na-land-guatemala",
+      "na-land-el-salvador",
+      "na-land-honduras",
+      "na-land-nicaragua",
+      "na-land-costa-rica"
+    ],
+    "na-land-canada": [
+      "na-land-verenigde-staten",
+      "na-land-mexico",
+      "na-land-bahama-s",
+      "na-land-cuba",
+      "na-land-belize",
+      "na-land-jamaica"
+    ],
+    "na-land-costa-rica": [
+      "na-land-panama",
+      "na-land-nicaragua",
+      "na-land-honduras",
+      "na-land-el-salvador",
+      "na-land-guatemala",
+      "na-land-belize"
+    ],
+    "na-land-cuba": [
+      "na-land-bahama-s",
+      "na-land-jamaica",
+      "na-land-haiti",
+      "na-land-dominicaanse-republiek",
+      "na-land-honduras",
+      "na-land-belize"
+    ],
+    "na-land-dominica": [
+      "na-land-saint-lucia",
+      "na-land-antigua-en-barbuda",
+      "na-land-saint-vincent-en-de-grenadines",
+      "na-land-saint-kitts-en-nevis",
+      "na-land-barbados",
+      "na-land-grenada"
+    ],
+    "na-land-dominicaanse-republiek": [
+      "na-land-haiti",
+      "na-land-jamaica",
+      "na-land-saint-kitts-en-nevis",
+      "na-land-cuba",
+      "na-land-antigua-en-barbuda",
+      "na-land-bahama-s"
+    ],
+    "na-land-el-salvador": [
+      "na-land-honduras",
+      "na-land-guatemala",
+      "na-land-belize",
+      "na-land-nicaragua",
+      "na-land-costa-rica",
+      "na-land-panama"
+    ],
+    "na-land-grenada": [
+      "na-land-saint-vincent-en-de-grenadines",
+      "na-land-trinidad-en-tobago",
+      "na-land-saint-lucia",
+      "na-land-barbados",
+      "na-land-dominica",
+      "na-land-antigua-en-barbuda"
+    ],
+    "na-land-guatemala": [
+      "na-land-mexico",
+      "na-land-el-salvador",
+      "na-land-honduras",
+      "na-land-belize",
+      "na-land-nicaragua",
+      "na-land-costa-rica"
+    ],
+    "na-land-haiti": [
+      "na-land-dominicaanse-republiek",
+      "na-land-jamaica",
+      "na-land-cuba",
+      "na-land-bahama-s",
+      "na-land-saint-kitts-en-nevis",
+      "na-land-antigua-en-barbuda"
+    ],
+    "na-land-honduras": [
+      "na-land-nicaragua",
+      "na-land-el-salvador",
+      "na-land-guatemala",
+      "na-land-belize",
+      "na-land-costa-rica",
+      "na-land-panama"
+    ],
+    "na-land-jamaica": [
+      "na-land-cuba",
+      "na-land-haiti",
+      "na-land-dominicaanse-republiek",
+      "na-land-bahama-s",
+      "na-land-nicaragua",
+      "na-land-honduras"
+    ],
+    "na-land-mexico": [
+      "na-land-guatemala",
+      "na-land-belize",
+      "na-land-el-salvador",
+      "na-land-verenigde-staten",
+      "na-land-honduras",
+      "na-land-nicaragua"
+    ],
+    "na-land-nicaragua": [
+      "na-land-honduras",
+      "na-land-costa-rica",
+      "na-land-el-salvador",
+      "na-land-belize",
+      "na-land-guatemala",
+      "na-land-panama"
+    ],
+    "na-land-panama": [
+      "na-land-costa-rica",
+      "na-land-nicaragua",
+      "na-land-honduras",
+      "na-land-jamaica",
+      "na-land-el-salvador",
+      "na-land-guatemala"
+    ],
+    "na-land-saint-kitts-en-nevis": [
+      "na-land-antigua-en-barbuda",
+      "na-land-dominica",
+      "na-land-saint-lucia",
+      "na-land-saint-vincent-en-de-grenadines",
+      "na-land-barbados",
+      "na-land-grenada"
+    ],
+    "na-land-saint-lucia": [
+      "na-land-saint-vincent-en-de-grenadines",
+      "na-land-dominica",
+      "na-land-barbados",
+      "na-land-grenada",
+      "na-land-antigua-en-barbuda",
+      "na-land-trinidad-en-tobago"
+    ],
+    "na-land-saint-vincent-en-de-grenadines": [
+      "na-land-saint-lucia",
+      "na-land-grenada",
+      "na-land-barbados",
+      "na-land-dominica",
+      "na-land-trinidad-en-tobago",
+      "na-land-antigua-en-barbuda"
+    ],
+    "na-land-trinidad-en-tobago": [
+      "na-land-grenada",
+      "na-land-saint-vincent-en-de-grenadines",
+      "na-land-barbados",
+      "na-land-saint-lucia",
+      "na-land-dominica",
+      "na-land-antigua-en-barbuda"
+    ],
+    "na-land-verenigde-staten": [
+      "na-land-bahama-s",
+      "na-land-mexico",
+      "na-land-cuba",
+      "na-land-belize",
+      "na-land-guatemala",
+      "na-land-jamaica"
+    ]
+  }
+}

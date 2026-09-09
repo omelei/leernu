@@ -1,0 +1,127 @@
+{
+  "id": "oceanie-landen",
+  "naam": "De landen van Oceanië",
+  "regioSet": "oceanie",
+  "contentVersie": "2026-09-09",
+  "_generated": "Geschreven door tools/content/build-countries.mjs. Handmatige wijzigingen gaan bij de volgende run verloren.",
+  "_geometrie": "geometrieRef verwijst naar een vorm-id in public/geo/oceanie/landen.*.json.",
+  "items": [
+    {
+      "id": "oc-land-australie",
+      "type": "land",
+      "naam": "Australië",
+      "aliassen": [],
+      "regioSet": "oceanie",
+      "geometrieRef": "oc-land-australie",
+      "niveau": 1,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "oc-land-fiji",
+      "type": "land",
+      "naam": "Fiji",
+      "aliassen": [],
+      "regioSet": "oceanie",
+      "geometrieRef": "oc-land-fiji",
+      "niveau": 3,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "oc-land-kiribati",
+      "type": "land",
+      "naam": "Kiribati",
+      "aliassen": [],
+      "regioSet": "oceanie",
+      "geometrieRef": "oc-land-kiribati",
+      "niveau": 3,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "oc-land-nauru",
+      "type": "land",
+      "naam": "Nauru",
+      "aliassen": [],
+      "regioSet": "oceanie",
+      "geometrieRef": "oc-land-nauru",
+      "niveau": 3,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "oc-land-nieuw-zeeland",
+      "type": "land",
+      "naam": "Nieuw-Zeeland",
+      "aliassen": [],
+      "regioSet": "oceanie",
+      "geometrieRef": "oc-land-nieuw-zeeland",
+      "niveau": 2,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "oc-land-papoea-nieuw-guinea",
+      "type": "land",
+      "naam": "Papoea-Nieuw-Guinea",
+      "aliassen": [],
+      "regioSet": "oceanie",
+      "geometrieRef": "oc-land-papoea-nieuw-guinea",
+      "niveau": 2,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "oc-land-salomonseilanden",
+      "type": "land",
+      "naam": "Salomonseilanden",
+      "aliassen": [],
+      "regioSet": "oceanie",
+      "geometrieRef": "oc-land-salomonseilanden",
+      "niveau": 3,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "oc-land-tuvalu",
+      "type": "land",
+      "naam": "Tuvalu",
+      "aliassen": [],
+      "regioSet": "oceanie",
+      "geometrieRef": "oc-land-tuvalu",
+      "niveau": 3,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "oc-land-vanuatu",
+      "type": "land",
+      "naam": "Vanuatu",
+      "aliassen": [],
+      "regioSet": "oceanie",
+      "geometrieRef": "oc-land-vanuatu",
+      "niveau": 3,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    }
+  ]
+}

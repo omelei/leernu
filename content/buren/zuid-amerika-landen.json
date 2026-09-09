@@ -1,0 +1,105 @@
+{
+  "_gegenereerd": "tools/content/build-neighbours.mjs — gegenereerd, niet met de hand bewerken.",
+  "_regel": "Gebieden die een grens delen, de langste grens eerst, daarna de dichtstbijzijnde.",
+  "setId": "zuid-amerika-landen",
+  "contentVersie": "2026-09-09",
+  "regel": "grens",
+  "buren": {
+    "za-land-argentinie": [
+      "za-land-chili",
+      "za-land-paraguay",
+      "za-land-brazilie",
+      "za-land-bolivia",
+      "za-land-uruguay",
+      "za-land-peru"
+    ],
+    "za-land-bolivia": [
+      "za-land-brazilie",
+      "za-land-peru",
+      "za-land-chili",
+      "za-land-argentinie",
+      "za-land-paraguay",
+      "za-land-uruguay"
+    ],
+    "za-land-brazilie": [
+      "za-land-bolivia",
+      "za-land-peru",
+      "za-land-colombia",
+      "za-land-venezuela",
+      "za-land-guyana",
+      "za-land-paraguay"
+    ],
+    "za-land-chili": [
+      "za-land-argentinie",
+      "za-land-bolivia",
+      "za-land-peru",
+      "za-land-uruguay",
+      "za-land-paraguay",
+      "za-land-brazilie"
+    ],
+    "za-land-colombia": [
+      "za-land-venezuela",
+      "za-land-brazilie",
+      "za-land-peru",
+      "za-land-ecuador",
+      "za-land-guyana",
+      "za-land-suriname"
+    ],
+    "za-land-ecuador": [
+      "za-land-peru",
+      "za-land-colombia",
+      "za-land-venezuela",
+      "za-land-bolivia",
+      "za-land-guyana",
+      "za-land-suriname"
+    ],
+    "za-land-guyana": [
+      "za-land-brazilie",
+      "za-land-suriname",
+      "za-land-venezuela",
+      "za-land-colombia",
+      "za-land-peru",
+      "za-land-ecuador"
+    ],
+    "za-land-paraguay": [
+      "za-land-brazilie",
+      "za-land-argentinie",
+      "za-land-bolivia",
+      "za-land-uruguay",
+      "za-land-chili",
+      "za-land-peru"
+    ],
+    "za-land-peru": [
+      "za-land-brazilie",
+      "za-land-ecuador",
+      "za-land-colombia",
+      "za-land-bolivia",
+      "za-land-chili",
+      "za-land-venezuela"
+    ],
+    "za-land-suriname": [
+      "za-land-guyana",
+      "za-land-brazilie",
+      "za-land-venezuela",
+      "za-land-colombia",
+      "za-land-peru",
+      "za-land-bolivia"
+    ],
+    "za-land-uruguay": [
+      "za-land-brazilie",
+      "za-land-argentinie",
+      "za-land-paraguay",
+      "za-land-chili",
+      "za-land-bolivia",
+      "za-land-peru"
+    ],
+    "za-land-venezuela": [
+      "za-land-colombia",
+      "za-land-brazilie",
+      "za-land-guyana",
+      "za-land-suriname",
+      "za-land-ecuador",
+      "za-land-peru"
+    ]
+  }
+}

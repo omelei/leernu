@@ -54,6 +54,11 @@ export type SetId =
   | 'nl-wateren'
   | 'nl-steden'
   | 'europa-landen'
+  | 'afrika-landen'
+  | 'azie-landen'
+  | 'noord-amerika-landen'
+  | 'zuid-amerika-landen'
+  | 'oceanie-landen'
   | 'wereld-landen';
 
 /**
@@ -152,6 +157,11 @@ export const SET_IDS: readonly SetId[] = [
   'nl-wateren',
   'nl-steden',
   'europa-landen',
+  'afrika-landen',
+  'azie-landen',
+  'noord-amerika-landen',
+  'zuid-amerika-landen',
+  'oceanie-landen',
   'wereld-landen',
 ];
 
@@ -262,6 +272,36 @@ export const SETS: Record<SetId, SetShape> = {
   // a child points at is the map itself rather than a layer on top of it.
   'europa-landen': {
     regio: 'europa',
+    achtergrond: 'landen',
+    answers: 'background',
+    noemer: 'land',
+  },
+  'afrika-landen': {
+    regio: 'afrika',
+    achtergrond: 'landen',
+    answers: 'background',
+    noemer: 'land',
+  },
+  'azie-landen': {
+    regio: 'azie',
+    achtergrond: 'landen',
+    answers: 'background',
+    noemer: 'land',
+  },
+  'noord-amerika-landen': {
+    regio: 'noord-amerika',
+    achtergrond: 'landen',
+    answers: 'background',
+    noemer: 'land',
+  },
+  'zuid-amerika-landen': {
+    regio: 'zuid-amerika',
+    achtergrond: 'landen',
+    answers: 'background',
+    noemer: 'land',
+  },
+  'oceanie-landen': {
+    regio: 'oceanie',
     achtergrond: 'landen',
     answers: 'background',
     noemer: 'land',

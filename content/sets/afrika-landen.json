@@ -1,18 +1,44 @@
 {
-  "id": "europa-landen",
-  "naam": "De landen van Europa",
-  "regioSet": "europa",
+  "id": "afrika-landen",
+  "naam": "De landen van Afrika",
+  "regioSet": "afrika",
   "contentVersie": "2026-09-09",
   "_generated": "Geschreven door tools/content/build-countries.mjs. Handmatige wijzigingen gaan bij de volgende run verloren.",
-  "_geometrie": "geometrieRef verwijst naar een vorm-id in public/geo/europa/landen.*.json.",
+  "_geometrie": "geometrieRef verwijst naar een vorm-id in public/geo/afrika/landen.*.json.",
   "items": [
     {
-      "id": "eu-land-albanie",
+      "id": "af-land-algerije",
       "type": "land",
-      "naam": "Albanië",
+      "naam": "Algerije",
       "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-albanie",
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-algerije",
+      "niveau": 1,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "af-land-angola",
+      "type": "land",
+      "naam": "Angola",
+      "aliassen": [],
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-angola",
+      "niveau": 1,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "af-land-benin",
+      "type": "land",
+      "naam": "Benin",
+      "aliassen": [],
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-benin",
       "niveau": 2,
       "leerdoelen": [
         "ak-werelddelen-landen-aanwijzen",
@@ -20,12 +46,64 @@
       ]
     },
     {
-      "id": "eu-land-andorra",
+      "id": "af-land-botswana",
       "type": "land",
-      "naam": "Andorra",
+      "naam": "Botswana",
       "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-andorra",
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-botswana",
+      "niveau": 2,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "af-land-burkina-faso",
+      "type": "land",
+      "naam": "Burkina Faso",
+      "aliassen": [],
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-burkina-faso",
+      "niveau": 1,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "af-land-burundi",
+      "type": "land",
+      "naam": "Burundi",
+      "aliassen": [],
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-burundi",
+      "niveau": 2,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "af-land-centraal-afrikaanse-republiek",
+      "type": "land",
+      "naam": "Centraal-Afrikaanse Republiek",
+      "aliassen": [],
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-centraal-afrikaanse-republiek",
+      "niveau": 2,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "af-land-comoren",
+      "type": "land",
+      "naam": "Comoren",
+      "aliassen": [],
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-comoren",
       "niveau": 3,
       "leerdoelen": [
         "ak-werelddelen-landen-aanwijzen",
@@ -33,14 +111,92 @@
       ]
     },
     {
-      "id": "eu-land-belarus",
+      "id": "af-land-congo-brazzaville",
       "type": "land",
-      "naam": "Belarus",
+      "naam": "Congo-Brazzaville",
+      "aliassen": [],
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-congo-brazzaville",
+      "niveau": 2,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "af-land-congo-kinshasa",
+      "type": "land",
+      "naam": "Congo-Kinshasa",
+      "aliassen": [],
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-congo-kinshasa",
+      "niveau": 1,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "af-land-djibouti",
+      "type": "land",
+      "naam": "Djibouti",
+      "aliassen": [],
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-djibouti",
+      "niveau": 3,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "af-land-egypte",
+      "type": "land",
+      "naam": "Egypte",
+      "aliassen": [],
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-egypte",
+      "niveau": 1,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "af-land-equatoriaal-guinea",
+      "type": "land",
+      "naam": "Equatoriaal-Guinea",
+      "aliassen": [],
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-equatoriaal-guinea",
+      "niveau": 2,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "af-land-eritrea",
+      "type": "land",
+      "naam": "Eritrea",
+      "aliassen": [],
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-eritrea",
+      "niveau": 2,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "af-land-eswatini",
+      "type": "land",
+      "naam": "Eswatini",
       "aliassen": [
-        "Wit-Rusland"
+        "Swaziland"
       ],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-belarus",
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-eswatini",
       "niveau": 2,
       "leerdoelen": [
         "ak-werelddelen-landen-aanwijzen",
@@ -48,77 +204,12 @@
       ]
     },
     {
-      "id": "eu-land-belgie",
+      "id": "af-land-ethiopie",
       "type": "land",
-      "naam": "België",
+      "naam": "Ethiopië",
       "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-belgie",
-      "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
-    },
-    {
-      "id": "eu-land-bosnie-en-herzegovina",
-      "type": "land",
-      "naam": "Bosnië en Herzegovina",
-      "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-bosnie-en-herzegovina",
-      "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
-    },
-    {
-      "id": "eu-land-bulgarije",
-      "type": "land",
-      "naam": "Bulgarije",
-      "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-bulgarije",
-      "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
-    },
-    {
-      "id": "eu-land-cyprus",
-      "type": "land",
-      "naam": "Cyprus",
-      "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-cyprus",
-      "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
-    },
-    {
-      "id": "eu-land-denemarken",
-      "type": "land",
-      "naam": "Denemarken",
-      "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-denemarken",
-      "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
-    },
-    {
-      "id": "eu-land-duitsland",
-      "type": "land",
-      "naam": "Duitsland",
-      "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-duitsland",
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-ethiopie",
       "niveau": 1,
       "leerdoelen": [
         "ak-werelddelen-landen-aanwijzen",
@@ -126,12 +217,12 @@
       ]
     },
     {
-      "id": "eu-land-estland",
+      "id": "af-land-gabon",
       "type": "land",
-      "naam": "Estland",
+      "naam": "Gabon",
       "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-estland",
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-gabon",
       "niveau": 2,
       "leerdoelen": [
         "ak-werelddelen-landen-aanwijzen",
@@ -139,12 +230,12 @@
       ]
     },
     {
-      "id": "eu-land-finland",
+      "id": "af-land-gambia",
       "type": "land",
-      "naam": "Finland",
+      "naam": "Gambia",
       "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-finland",
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-gambia",
       "niveau": 2,
       "leerdoelen": [
         "ak-werelddelen-landen-aanwijzen",
@@ -152,12 +243,12 @@
       ]
     },
     {
-      "id": "eu-land-frankrijk",
+      "id": "af-land-ghana",
       "type": "land",
-      "naam": "Frankrijk",
+      "naam": "Ghana",
       "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-frankrijk",
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-ghana",
       "niveau": 1,
       "leerdoelen": [
         "ak-werelddelen-landen-aanwijzen",
@@ -165,12 +256,12 @@
       ]
     },
     {
-      "id": "eu-land-griekenland",
+      "id": "af-land-guinee",
       "type": "land",
-      "naam": "Griekenland",
+      "naam": "Guinee",
       "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-griekenland",
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-guinee",
       "niveau": 2,
       "leerdoelen": [
         "ak-werelddelen-landen-aanwijzen",
@@ -178,12 +269,12 @@
       ]
     },
     {
-      "id": "eu-land-hongarije",
+      "id": "af-land-guinee-bissau",
       "type": "land",
-      "naam": "Hongarije",
+      "naam": "Guinee-Bissau",
       "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-hongarije",
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-guinee-bissau",
       "niveau": 2,
       "leerdoelen": [
         "ak-werelddelen-landen-aanwijzen",
@@ -191,38 +282,12 @@
       ]
     },
     {
-      "id": "eu-land-ierland",
+      "id": "af-land-ivoorkust",
       "type": "land",
-      "naam": "Ierland",
+      "naam": "Ivoorkust",
       "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-ierland",
-      "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
-    },
-    {
-      "id": "eu-land-ijsland",
-      "type": "land",
-      "naam": "IJsland",
-      "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-ijsland",
-      "niveau": 3,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
-    },
-    {
-      "id": "eu-land-italie",
-      "type": "land",
-      "naam": "Italië",
-      "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-italie",
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-ivoorkust",
       "niveau": 1,
       "leerdoelen": [
         "ak-werelddelen-landen-aanwijzen",
@@ -230,51 +295,12 @@
       ]
     },
     {
-      "id": "eu-land-kosovo",
+      "id": "af-land-kaapverdie",
       "type": "land",
-      "naam": "Kosovo",
+      "naam": "Kaapverdië",
       "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-kosovo",
-      "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
-    },
-    {
-      "id": "eu-land-kroatie",
-      "type": "land",
-      "naam": "Kroatië",
-      "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-kroatie",
-      "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
-    },
-    {
-      "id": "eu-land-letland",
-      "type": "land",
-      "naam": "Letland",
-      "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-letland",
-      "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
-    },
-    {
-      "id": "eu-land-liechtenstein",
-      "type": "land",
-      "naam": "Liechtenstein",
-      "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-liechtenstein",
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-kaapverdie",
       "niveau": 3,
       "leerdoelen": [
         "ak-werelddelen-landen-aanwijzen",
@@ -282,129 +308,12 @@
       ]
     },
     {
-      "id": "eu-land-litouwen",
+      "id": "af-land-kameroen",
       "type": "land",
-      "naam": "Litouwen",
+      "naam": "Kameroen",
       "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-litouwen",
-      "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
-    },
-    {
-      "id": "eu-land-luxemburg",
-      "type": "land",
-      "naam": "Luxemburg",
-      "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-luxemburg",
-      "niveau": 3,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
-    },
-    {
-      "id": "eu-land-malta",
-      "type": "land",
-      "naam": "Malta",
-      "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-malta",
-      "niveau": 3,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
-    },
-    {
-      "id": "eu-land-moldavie",
-      "type": "land",
-      "naam": "Moldavië",
-      "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-moldavie",
-      "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
-    },
-    {
-      "id": "eu-land-monaco",
-      "type": "land",
-      "naam": "Monaco",
-      "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-monaco",
-      "niveau": 3,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
-    },
-    {
-      "id": "eu-land-montenegro",
-      "type": "land",
-      "naam": "Montenegro",
-      "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-montenegro",
-      "niveau": 3,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
-    },
-    {
-      "id": "eu-land-nederland",
-      "type": "land",
-      "naam": "Nederland",
-      "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-nederland",
-      "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
-    },
-    {
-      "id": "eu-land-noord-macedonie",
-      "type": "land",
-      "naam": "Noord-Macedonië",
-      "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-noord-macedonie",
-      "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
-    },
-    {
-      "id": "eu-land-noorwegen",
-      "type": "land",
-      "naam": "Noorwegen",
-      "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-noorwegen",
-      "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
-    },
-    {
-      "id": "eu-land-oekraine",
-      "type": "land",
-      "naam": "Oekraïne",
-      "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-oekraine",
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-kameroen",
       "niveau": 1,
       "leerdoelen": [
         "ak-werelddelen-landen-aanwijzen",
@@ -412,25 +321,12 @@
       ]
     },
     {
-      "id": "eu-land-oostenrijk",
+      "id": "af-land-kenia",
       "type": "land",
-      "naam": "Oostenrijk",
+      "naam": "Kenia",
       "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-oostenrijk",
-      "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
-    },
-    {
-      "id": "eu-land-polen",
-      "type": "land",
-      "naam": "Polen",
-      "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-polen",
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-kenia",
       "niveau": 1,
       "leerdoelen": [
         "ak-werelddelen-landen-aanwijzen",
@@ -438,12 +334,12 @@
       ]
     },
     {
-      "id": "eu-land-portugal",
+      "id": "af-land-lesotho",
       "type": "land",
-      "naam": "Portugal",
+      "naam": "Lesotho",
       "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-portugal",
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-lesotho",
       "niveau": 2,
       "leerdoelen": [
         "ak-werelddelen-landen-aanwijzen",
@@ -451,12 +347,12 @@
       ]
     },
     {
-      "id": "eu-land-roemenie",
+      "id": "af-land-liberia",
       "type": "land",
-      "naam": "Roemenië",
+      "naam": "Liberia",
       "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-roemenie",
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-liberia",
       "niveau": 2,
       "leerdoelen": [
         "ak-werelddelen-landen-aanwijzen",
@@ -464,12 +360,25 @@
       ]
     },
     {
-      "id": "eu-land-rusland",
+      "id": "af-land-libie",
       "type": "land",
-      "naam": "Rusland",
+      "naam": "Libië",
       "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-rusland",
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-libie",
+      "niveau": 2,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "af-land-madagaskar",
+      "type": "land",
+      "naam": "Madagaskar",
+      "aliassen": [],
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-madagaskar",
       "niveau": 1,
       "leerdoelen": [
         "ak-werelddelen-landen-aanwijzen",
@@ -477,12 +386,142 @@
       ]
     },
     {
-      "id": "eu-land-san-marino",
+      "id": "af-land-malawi",
       "type": "land",
-      "naam": "San Marino",
+      "naam": "Malawi",
       "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-san-marino",
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-malawi",
+      "niveau": 2,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "af-land-mali",
+      "type": "land",
+      "naam": "Mali",
+      "aliassen": [],
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-mali",
+      "niveau": 2,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "af-land-marokko",
+      "type": "land",
+      "naam": "Marokko",
+      "aliassen": [],
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-marokko",
+      "niveau": 1,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "af-land-mauritanie",
+      "type": "land",
+      "naam": "Mauritanië",
+      "aliassen": [],
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-mauritanie",
+      "niveau": 2,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "af-land-mozambique",
+      "type": "land",
+      "naam": "Mozambique",
+      "aliassen": [],
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-mozambique",
+      "niveau": 1,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "af-land-namibie",
+      "type": "land",
+      "naam": "Namibië",
+      "aliassen": [],
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-namibie",
+      "niveau": 2,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "af-land-niger",
+      "type": "land",
+      "naam": "Niger",
+      "aliassen": [],
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-niger",
+      "niveau": 1,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "af-land-nigeria",
+      "type": "land",
+      "naam": "Nigeria",
+      "aliassen": [],
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-nigeria",
+      "niveau": 1,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "af-land-oeganda",
+      "type": "land",
+      "naam": "Oeganda",
+      "aliassen": [],
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-oeganda",
+      "niveau": 1,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "af-land-rwanda",
+      "type": "land",
+      "naam": "Rwanda",
+      "aliassen": [],
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-rwanda",
+      "niveau": 2,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "af-land-sao-tome-en-principe",
+      "type": "land",
+      "naam": "Sao Tomé en Principe",
+      "aliassen": [],
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-sao-tome-en-principe",
       "niveau": 3,
       "leerdoelen": [
         "ak-werelddelen-landen-aanwijzen",
@@ -490,12 +529,12 @@
       ]
     },
     {
-      "id": "eu-land-servie",
+      "id": "af-land-senegal",
       "type": "land",
-      "naam": "Servië",
+      "naam": "Senegal",
       "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-servie",
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-senegal",
       "niveau": 2,
       "leerdoelen": [
         "ak-werelddelen-landen-aanwijzen",
@@ -503,12 +542,12 @@
       ]
     },
     {
-      "id": "eu-land-slovenie",
+      "id": "af-land-sierra-leone",
       "type": "land",
-      "naam": "Slovenië",
+      "naam": "Sierra Leone",
       "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-slovenie",
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-sierra-leone",
       "niveau": 2,
       "leerdoelen": [
         "ak-werelddelen-landen-aanwijzen",
@@ -516,25 +555,12 @@
       ]
     },
     {
-      "id": "eu-land-slowakije",
+      "id": "af-land-soedan",
       "type": "land",
-      "naam": "Slowakije",
+      "naam": "Soedan",
       "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-slowakije",
-      "niveau": 2,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
-    },
-    {
-      "id": "eu-land-spanje",
-      "type": "land",
-      "naam": "Spanje",
-      "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-spanje",
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-soedan",
       "niveau": 1,
       "leerdoelen": [
         "ak-werelddelen-landen-aanwijzen",
@@ -542,12 +568,12 @@
       ]
     },
     {
-      "id": "eu-land-tsjechie",
+      "id": "af-land-somalie",
       "type": "land",
-      "naam": "Tsjechië",
+      "naam": "Somalië",
       "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-tsjechie",
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-somalie",
       "niveau": 2,
       "leerdoelen": [
         "ak-werelddelen-landen-aanwijzen",
@@ -555,25 +581,12 @@
       ]
     },
     {
-      "id": "eu-land-vaticaanstad",
+      "id": "af-land-tanzania",
       "type": "land",
-      "naam": "Vaticaanstad",
+      "naam": "Tanzania",
       "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-vaticaanstad",
-      "niveau": 3,
-      "leerdoelen": [
-        "ak-werelddelen-landen-aanwijzen",
-        "ak-werelddelen-landen-benoemen"
-      ]
-    },
-    {
-      "id": "eu-land-verenigd-koninkrijk",
-      "type": "land",
-      "naam": "Verenigd Koninkrijk",
-      "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-verenigd-koninkrijk",
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-tanzania",
       "niveau": 1,
       "leerdoelen": [
         "ak-werelddelen-landen-aanwijzen",
@@ -581,12 +594,12 @@
       ]
     },
     {
-      "id": "eu-land-zweden",
+      "id": "af-land-togo",
       "type": "land",
-      "naam": "Zweden",
+      "naam": "Togo",
       "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-zweden",
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-togo",
       "niveau": 2,
       "leerdoelen": [
         "ak-werelddelen-landen-aanwijzen",
@@ -594,12 +607,77 @@
       ]
     },
     {
-      "id": "eu-land-zwitserland",
+      "id": "af-land-tsjaad",
       "type": "land",
-      "naam": "Zwitserland",
+      "naam": "Tsjaad",
       "aliassen": [],
-      "regioSet": "europa",
-      "geometrieRef": "eu-land-zwitserland",
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-tsjaad",
+      "niveau": 2,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "af-land-tunesie",
+      "type": "land",
+      "naam": "Tunesië",
+      "aliassen": [],
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-tunesie",
+      "niveau": 2,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "af-land-zambia",
+      "type": "land",
+      "naam": "Zambia",
+      "aliassen": [],
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-zambia",
+      "niveau": 2,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "af-land-zimbabwe",
+      "type": "land",
+      "naam": "Zimbabwe",
+      "aliassen": [],
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-zimbabwe",
+      "niveau": 2,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "af-land-zuid-afrika",
+      "type": "land",
+      "naam": "Zuid-Afrika",
+      "aliassen": [],
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-zuid-afrika",
+      "niveau": 1,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "af-land-zuid-soedan",
+      "type": "land",
+      "naam": "Zuid-Soedan",
+      "aliassen": [],
+      "regioSet": "afrika",
+      "geometrieRef": "af-land-zuid-soedan",
       "niveau": 2,
       "leerdoelen": [
         "ak-werelddelen-landen-aanwijzen",

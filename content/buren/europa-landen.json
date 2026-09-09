@@ -66,8 +66,8 @@
       "eu-land-nederland",
       "eu-land-belgie",
       "eu-land-luxemburg",
-      "eu-land-zweden",
-      "eu-land-polen"
+      "eu-land-tsjechie",
+      "eu-land-zweden"
     ],
     "eu-land-duitsland": [
       "eu-land-oostenrijk",
@@ -170,8 +170,8 @@
       "eu-land-zwitserland",
       "eu-land-luxemburg",
       "eu-land-monaco",
-      "eu-land-san-marino",
-      "eu-land-slovenie"
+      "eu-land-duitsland",
+      "eu-land-san-marino"
     ],
     "eu-land-litouwen": [
       "eu-land-letland",
@@ -193,8 +193,8 @@
       "eu-land-vaticaanstad",
       "eu-land-albanie",
       "eu-land-griekenland",
-      "eu-land-italie",
       "eu-land-montenegro",
+      "eu-land-italie",
       "eu-land-noord-macedonie"
     ],
     "eu-land-moldavie": [
@@ -226,8 +226,8 @@
       "eu-land-belgie",
       "eu-land-luxemburg",
       "eu-land-denemarken",
-      "eu-land-liechtenstein",
-      "eu-land-zwitserland"
+      "eu-land-zwitserland",
+      "eu-land-liechtenstein"
     ],
     "eu-land-noord-macedonie": [
       "eu-land-griekenland",
@@ -323,7 +323,7 @@
       "eu-land-tsjechie",
       "eu-land-oostenrijk",
       "eu-land-oekraine",
-      "eu-land-kroatie"
+      "eu-land-slovenie"
     ],
     "eu-land-spanje": [
       "eu-land-portugal",

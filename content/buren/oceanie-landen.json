@@ -1,0 +1,81 @@
+{
+  "_gegenereerd": "tools/content/build-neighbours.mjs — gegenereerd, niet met de hand bewerken.",
+  "_regel": "Gebieden die een grens delen, de langste grens eerst, daarna de dichtstbijzijnde.",
+  "setId": "oceanie-landen",
+  "contentVersie": "2026-09-09",
+  "regel": "grens",
+  "buren": {
+    "oc-land-australie": [
+      "oc-land-papoea-nieuw-guinea",
+      "oc-land-salomonseilanden",
+      "oc-land-vanuatu",
+      "oc-land-nieuw-zeeland",
+      "oc-land-nauru",
+      "oc-land-fiji"
+    ],
+    "oc-land-fiji": [
+      "oc-land-tuvalu",
+      "oc-land-vanuatu",
+      "oc-land-kiribati",
+      "oc-land-salomonseilanden",
+      "oc-land-nauru",
+      "oc-land-nieuw-zeeland"
+    ],
+    "oc-land-kiribati": [
+      "oc-land-nauru",
+      "oc-land-tuvalu",
+      "oc-land-vanuatu",
+      "oc-land-salomonseilanden",
+      "oc-land-fiji",
+      "oc-land-papoea-nieuw-guinea"
+    ],
+    "oc-land-nauru": [
+      "oc-land-kiribati",
+      "oc-land-salomonseilanden",
+      "oc-land-vanuatu",
+      "oc-land-tuvalu",
+      "oc-land-fiji",
+      "oc-land-papoea-nieuw-guinea"
+    ],
+    "oc-land-nieuw-zeeland": [
+      "oc-land-fiji",
+      "oc-land-vanuatu",
+      "oc-land-salomonseilanden",
+      "oc-land-australie",
+      "oc-land-tuvalu",
+      "oc-land-papoea-nieuw-guinea"
+    ],
+    "oc-land-papoea-nieuw-guinea": [
+      "oc-land-salomonseilanden",
+      "oc-land-australie",
+      "oc-land-vanuatu",
+      "oc-land-nauru",
+      "oc-land-kiribati",
+      "oc-land-fiji"
+    ],
+    "oc-land-salomonseilanden": [
+      "oc-land-vanuatu",
+      "oc-land-nauru",
+      "oc-land-papoea-nieuw-guinea",
+      "oc-land-kiribati",
+      "oc-land-tuvalu",
+      "oc-land-fiji"
+    ],
+    "oc-land-tuvalu": [
+      "oc-land-kiribati",
+      "oc-land-fiji",
+      "oc-land-vanuatu",
+      "oc-land-nauru",
+      "oc-land-salomonseilanden",
+      "oc-land-papoea-nieuw-guinea"
+    ],
+    "oc-land-vanuatu": [
+      "oc-land-salomonseilanden",
+      "oc-land-fiji",
+      "oc-land-tuvalu",
+      "oc-land-nauru",
+      "oc-land-kiribati",
+      "oc-land-papoea-nieuw-guinea"
+    ]
+  }
+}

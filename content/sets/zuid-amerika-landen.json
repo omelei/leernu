@@ -1,0 +1,166 @@
+{
+  "id": "zuid-amerika-landen",
+  "naam": "De landen van Zuid-Amerika",
+  "regioSet": "zuid-amerika",
+  "contentVersie": "2026-09-09",
+  "_generated": "Geschreven door tools/content/build-countries.mjs. Handmatige wijzigingen gaan bij de volgende run verloren.",
+  "_geometrie": "geometrieRef verwijst naar een vorm-id in public/geo/zuid-amerika/landen.*.json.",
+  "items": [
+    {
+      "id": "za-land-argentinie",
+      "type": "land",
+      "naam": "Argentinië",
+      "aliassen": [],
+      "regioSet": "zuid-amerika",
+      "geometrieRef": "za-land-argentinie",
+      "niveau": 1,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "za-land-bolivia",
+      "type": "land",
+      "naam": "Bolivia",
+      "aliassen": [],
+      "regioSet": "zuid-amerika",
+      "geometrieRef": "za-land-bolivia",
+      "niveau": 2,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "za-land-brazilie",
+      "type": "land",
+      "naam": "Brazilië",
+      "aliassen": [],
+      "regioSet": "zuid-amerika",
+      "geometrieRef": "za-land-brazilie",
+      "niveau": 1,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "za-land-chili",
+      "type": "land",
+      "naam": "Chili",
+      "aliassen": [],
+      "regioSet": "zuid-amerika",
+      "geometrieRef": "za-land-chili",
+      "niveau": 2,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "za-land-colombia",
+      "type": "land",
+      "naam": "Colombia",
+      "aliassen": [],
+      "regioSet": "zuid-amerika",
+      "geometrieRef": "za-land-colombia",
+      "niveau": 1,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "za-land-ecuador",
+      "type": "land",
+      "naam": "Ecuador",
+      "aliassen": [],
+      "regioSet": "zuid-amerika",
+      "geometrieRef": "za-land-ecuador",
+      "niveau": 2,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "za-land-guyana",
+      "type": "land",
+      "naam": "Guyana",
+      "aliassen": [],
+      "regioSet": "zuid-amerika",
+      "geometrieRef": "za-land-guyana",
+      "niveau": 3,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "za-land-paraguay",
+      "type": "land",
+      "naam": "Paraguay",
+      "aliassen": [],
+      "regioSet": "zuid-amerika",
+      "geometrieRef": "za-land-paraguay",
+      "niveau": 2,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "za-land-peru",
+      "type": "land",
+      "naam": "Peru",
+      "aliassen": [],
+      "regioSet": "zuid-amerika",
+      "geometrieRef": "za-land-peru",
+      "niveau": 1,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "za-land-suriname",
+      "type": "land",
+      "naam": "Suriname",
+      "aliassen": [],
+      "regioSet": "zuid-amerika",
+      "geometrieRef": "za-land-suriname",
+      "niveau": 3,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "za-land-uruguay",
+      "type": "land",
+      "naam": "Uruguay",
+      "aliassen": [],
+      "regioSet": "zuid-amerika",
+      "geometrieRef": "za-land-uruguay",
+      "niveau": 2,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    },
+    {
+      "id": "za-land-venezuela",
+      "type": "land",
+      "naam": "Venezuela",
+      "aliassen": [],
+      "regioSet": "zuid-amerika",
+      "geometrieRef": "za-land-venezuela",
+      "niveau": 1,
+      "leerdoelen": [
+        "ak-werelddelen-landen-aanwijzen",
+        "ak-werelddelen-landen-benoemen"
+      ]
+    }
+  ]
+}

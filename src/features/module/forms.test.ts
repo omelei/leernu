@@ -9,6 +9,7 @@ import {
   questionChoices,
   questionCount,
   startLabel,
+  teDrukOmAanTeWijzen,
 } from './forms';
 
 /**
@@ -192,5 +193,57 @@ describe('how many questions', () => {
   it('puts the chosen length on the start button', () => {
     expect(startLabel(point, 'Rekenmix', 510, 50)).toContain('50 vragen');
     expect(startLabel(point, 'Rekenmix', 510, null)).toContain('15 vragen');
+  });
+});
+
+/**
+ * Which way of practising leads, on a map too crowded to point at.
+ *
+ * The numbers behind the two thresholds are in `forms.ts`; this is the rule
+ * they add up to, and the three cases that would each be a bug on their own.
+ */
+describe('a map too crowded to point at', () => {
+  it('leaves the small maps alone, on any screen', () => {
+    // Twelve provinces and twelve countries of South America: pointing is the
+    // way in, and stays the way in on a phone.
+    for (const klein of [false, true]) {
+      expect(teDrukOmAanTeWijzen('nl-provincies', 12, klein)).toBe(false);
+      expect(teDrukOmAanTeWijzen('zuid-amerika-landen', 12, klein)).toBe(false);
+    }
+  });
+
+  it('demotes pointing on a werelddeel, but only on a phone', () => {
+    expect(teDrukOmAanTeWijzen('europa-landen', 46, false)).toBe(false);
+    expect(teDrukOmAanTeWijzen('europa-landen', 46, true)).toBe(true);
+  });
+
+  it('demotes pointing on the world map everywhere', () => {
+    // Ninety of its hundred and sixty-seven countries are unreachable on a
+    // laptop, so a screen wide enough does not make it a pointing exercise.
+    expect(teDrukOmAanTeWijzen('wereld-landen', 167, false)).toBe(true);
+  });
+
+  it('leaves the cities alone: a marker is already a target', () => {
+    // Eighty cities, and every one of them is drawn as a dot sized for a
+    // finger. The rule is about hitting a coastline, not about how many
+    // answers there are.
+    expect(teDrukOmAanTeWijzen('nl-steden', 80, true)).toBe(false);
+  });
+
+  it('moves pointing to the end of the row rather than off it', () => {
+    const krap = offeredForms(TOPO_FORMS, false, 'wereld-landen', true);
+    const ids = krap.map((form) => form.id);
+
+    expect(ids).toContain('wijs-aan');
+    expect(ids[ids.length - 1]).toBe('wijs-aan');
+    // And what leads is the one that needs no pointing at all: the map lights a
+    // country up and the child chooses between four names.
+    expect(ids[0]).toBe('meerkeuze');
+    // Same forms, same number of them.
+    expect([...ids].sort()).toEqual(
+      offeredForms(TOPO_FORMS, false, 'wereld-landen', false)
+        .map((form) => form.id)
+        .sort(),
+    );
   });
 });

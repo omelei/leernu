@@ -27,7 +27,9 @@ import {
   questionChoices,
   questionCount,
   startLabel,
+  teDrukOmAanTeWijzen,
 } from './forms';
+import { useSmallScreen } from '@/features/shell/useSmallScreen';
 
 /**
  * A module's own page — leer.nu/topografie, leer.nu/rekenen — and the one flow
@@ -110,6 +112,7 @@ export function ModuleScreen({
   const [toetsstand, setToetsstand] = useState(false);
   const prefs = usePreferences();
   const plan = useTestPlan();
+  const kleinScherm = useSmallScreen();
 
   useEffect(() => {
     void loadItemStates().then(setStates);
@@ -137,7 +140,17 @@ export function ModuleScreen({
   /** How many steps this page has, so the numbers are the page's own. */
   const stap = regios.length >= 2 ? { regio: 1, wat: 2, hoe: 3 } : { regio: 0, wat: 1, hoe: 2 };
 
-  const forms = offeredForms(formsFor(module.id), prefs.timer, chosen?.setId ?? null);
+  // A map of a hundred and sixty-seven countries is not something a child can
+  // point at, and on a phone neither is a map of forty-six. Where that is true
+  // the way in becomes multiple choice — the map lights a country up and the
+  // child answers in words, which is also what a Dutch topografietoets asks
+  // (ADR-087). Pointing is still on the page, at the end of the row.
+  const krap = teDrukOmAanTeWijzen(
+    chosen?.setId ?? null,
+    chosen?.items.length ?? 0,
+    kleinScherm,
+  );
+  const forms = offeredForms(formsFor(module.id), prefs.timer, chosen?.setId ?? null, krap);
   const form = forms.find((candidate) => candidate.id === formId) ?? forms[0] ?? null;
 
   const ModuleIcon = MODULE_ICON[module.id];

@@ -51,6 +51,11 @@ const SET_SLUG: Record<string, string> = {
   // module is topography and the address already says so, so the second
   // segment only has to say which map.
   'europa-landen': 'europa',
+  'afrika-landen': 'afrika',
+  'azie-landen': 'azie',
+  'noord-amerika-landen': 'noord-amerika',
+  'zuid-amerika-landen': 'zuid-amerika',
+  'oceanie-landen': 'oceanie',
   'wereld-landen': 'wereld',
   // The mix, on both modules, under the word a child would say. It is not a
   // file in either of them (ADR-062, ADR-063) and it still has an address,

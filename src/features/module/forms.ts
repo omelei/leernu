@@ -11,7 +11,7 @@ import {
 } from '@/components/Icon';
 import type { ModeId, RoundRule } from '@/game-core';
 import { t, type TranslationKey } from '@/i18n';
-import { isMixSet, ROUND_RULE } from '@/features/practice/useRound';
+import { isMixSet, ROUND_RULE, SETS, type SetId } from '@/features/practice/useRound';
 import { SUM_ROUND_RULE } from '@/features/sums/useSumRound';
 
 /**
@@ -223,11 +223,71 @@ export function offeredForms(
   forms: readonly PracticeForm[],
   clock: boolean,
   setId: string | null,
+  krap = false,
 ): readonly PracticeForm[] {
-  return forms
+  const offered = forms
     .filter((form) => clock || !form.needsClock)
     .filter((form) => setId === null || !form.geldtVoor || form.geldtVoor(setId))
     .slice(0, MAX_FORMS);
+
+  // On a map too crowded to point at, pointing goes last rather than first. It
+  // is still offered — see `teDrukOmAanTeWijzen` for why it is moved and not
+  // removed — and what leads instead is multiple choice, where the map lights a
+  // country up and the child answers in words.
+  if (!krap) return offered;
+  const wijzen = offered.filter((form) => form.id === 'wijs-aan');
+  return [...offered.filter((form) => form.id !== 'wijs-aan'), ...wijzen];
+}
+
+/**
+ * How many shapes a map may hold before pointing at it is worth offering first.
+ *
+ * Measured rather than guessed. For each map the build makes, count the
+ * countries that end up with neither a usable help ring nor enough of their own
+ * area for a fingertip — the ones a child simply cannot hit:
+ *
+ * ```
+ * regio           landen   laptop   tablet   telefoon
+ * Zuid-Amerika        12        0        0          1
+ * Oceanië              9        1        1          1
+ * Noord-Amerika       23       12       13         20
+ * Europa              46        4        7         21
+ * Azië                47        5        9         29
+ * Afrika              52        5        9         19
+ * Wereld             167       90      106        160
+ * ```
+ *
+ * Two lines fall out of that table and both are here as numbers rather than as
+ * a feeling. **Past fifteen shapes a map is no longer pointable on a phone**,
+ * where it gets about two hundred pixels of height — Zuid-Amerika and Oceanië
+ * stay, everything larger goes. **Past a hundred it is not pointable
+ * anywhere**, which is the world map and only the world map: ninety of its
+ * hundred and sixty-seven countries are unreachable on a laptop.
+ *
+ * Point sets are exempt. A city is already drawn as a marker sized for a finger
+ * (`reachablePoints`), so eighty cities are eighty targets; it is *shapes* that
+ * ask a child to hit a coastline.
+ *
+ * Moved, never removed. On a digibord a class points at the world map together,
+ * and a rule about phones has no business taking that away — what it may do is
+ * stop handing a ten-year-old on a bus the one way of practising that will not
+ * work for them (ADR-087).
+ */
+export const KRAP_OP_EEN_TELEFOON = 15;
+export const KRAP_OVERAL = 100;
+
+export function teDrukOmAanTeWijzen(
+  setId: string | null,
+  aantalVormen: number,
+  kleinScherm: boolean,
+): boolean {
+  if (setId === null) return false;
+  const shape = SETS[setId as SetId];
+  // A set the map does not know, or one answered on markers rather than on its
+  // own outlines. Neither is what this rule is about.
+  if (!shape || shape.answers === 'points') return false;
+
+  return aantalVormen > (kleinScherm ? KRAP_OP_EEN_TELEFOON : KRAP_OVERAL);
 }
 
 /**

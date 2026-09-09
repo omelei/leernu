@@ -1,0 +1,385 @@
+{
+  "_gegenereerd": "tools/content/build-neighbours.mjs — gegenereerd, niet met de hand bewerken.",
+  "_regel": "Gebieden die een grens delen, de langste grens eerst, daarna de dichtstbijzijnde.",
+  "setId": "azie-landen",
+  "contentVersie": "2026-09-09",
+  "regel": "grens",
+  "buren": {
+    "az-land-afghanistan": [
+      "az-land-pakistan",
+      "az-land-tadzjikistan",
+      "az-land-iran",
+      "az-land-turkmenistan",
+      "az-land-oezbekistan",
+      "az-land-kirgizie"
+    ],
+    "az-land-armenie": [
+      "az-land-azerbeidzjan",
+      "az-land-turkije",
+      "az-land-georgie",
+      "az-land-iran",
+      "az-land-irak",
+      "az-land-syrie"
+    ],
+    "az-land-azerbeidzjan": [
+      "az-land-armenie",
+      "az-land-iran",
+      "az-land-georgie",
+      "az-land-turkije",
+      "az-land-irak",
+      "az-land-turkmenistan"
+    ],
+    "az-land-bahrein": [
+      "az-land-qatar",
+      "az-land-koeweit",
+      "az-land-verenigde-arabische-emiraten",
+      "az-land-saoedi-arabie",
+      "az-land-oman",
+      "az-land-iran"
+    ],
+    "az-land-bangladesh": [
+      "az-land-india",
+      "az-land-myanmar",
+      "az-land-bhutan",
+      "az-land-nepal",
+      "az-land-laos",
+      "az-land-thailand"
+    ],
+    "az-land-bhutan": [
+      "az-land-india",
+      "az-land-bangladesh",
+      "az-land-nepal",
+      "az-land-myanmar",
+      "az-land-laos",
+      "az-land-china"
+    ],
+    "az-land-brunei": [
+      "az-land-maleisie",
+      "az-land-indonesie",
+      "az-land-singapore",
+      "az-land-cambodja",
+      "az-land-filipijnen",
+      "az-land-vietnam"
+    ],
+    "az-land-cambodja": [
+      "az-land-vietnam",
+      "az-land-thailand",
+      "az-land-laos",
+      "az-land-myanmar",
+      "az-land-singapore",
+      "az-land-brunei"
+    ],
+    "az-land-china": [
+      "az-land-mongolie",
+      "az-land-noord-korea",
+      "az-land-zuid-korea",
+      "az-land-bhutan",
+      "az-land-taiwan",
+      "az-land-laos"
+    ],
+    "az-land-cyprus": [
+      "az-land-libanon",
+      "az-land-israel",
+      "az-land-syrie",
+      "az-land-turkije",
+      "az-land-jordanie",
+      "az-land-irak"
+    ],
+    "az-land-filipijnen": [
+      "az-land-taiwan",
+      "az-land-brunei",
+      "az-land-maleisie",
+      "az-land-vietnam",
+      "az-land-cambodja",
+      "az-land-indonesie"
+    ],
+    "az-land-georgie": [
+      "az-land-azerbeidzjan",
+      "az-land-turkije",
+      "az-land-armenie",
+      "az-land-irak",
+      "az-land-syrie",
+      "az-land-libanon"
+    ],
+    "az-land-india": [
+      "az-land-pakistan",
+      "az-land-bangladesh",
+      "az-land-nepal",
+      "az-land-myanmar",
+      "az-land-bhutan",
+      "az-land-sri-lanka"
+    ],
+    "az-land-indonesie": [
+      "az-land-maleisie",
+      "az-land-oost-timor",
+      "az-land-brunei",
+      "az-land-singapore",
+      "az-land-cambodja",
+      "az-land-filipijnen"
+    ],
+    "az-land-irak": [
+      "az-land-iran",
+      "az-land-syrie",
+      "az-land-turkije",
+      "az-land-saoedi-arabie",
+      "az-land-koeweit",
+      "az-land-jordanie"
+    ],
+    "az-land-iran": [
+      "az-land-irak",
+      "az-land-turkmenistan",
+      "az-land-afghanistan",
+      "az-land-pakistan",
+      "az-land-turkije",
+      "az-land-azerbeidzjan"
+    ],
+    "az-land-israel": [
+      "az-land-jordanie",
+      "az-land-syrie",
+      "az-land-libanon",
+      "az-land-cyprus",
+      "az-land-turkije",
+      "az-land-irak"
+    ],
+    "az-land-japan": [
+      "az-land-zuid-korea",
+      "az-land-noord-korea",
+      "az-land-taiwan",
+      "az-land-china",
+      "az-land-filipijnen",
+      "az-land-mongolie"
+    ],
+    "az-land-jemen": [
+      "az-land-saoedi-arabie",
+      "az-land-oman",
+      "az-land-qatar",
+      "az-land-bahrein",
+      "az-land-verenigde-arabische-emiraten",
+      "az-land-koeweit"
+    ],
+    "az-land-jordanie": [
+      "az-land-saoedi-arabie",
+      "az-land-israel",
+      "az-land-syrie",
+      "az-land-irak",
+      "az-land-libanon",
+      "az-land-cyprus"
+    ],
+    "az-land-kazachstan": [
+      "az-land-oezbekistan",
+      "az-land-kirgizie",
+      "az-land-turkmenistan",
+      "az-land-tadzjikistan",
+      "az-land-afghanistan",
+      "az-land-azerbeidzjan"
+    ],
+    "az-land-kirgizie": [
+      "az-land-oezbekistan",
+      "az-land-tadzjikistan",
+      "az-land-kazachstan",
+      "az-land-afghanistan",
+      "az-land-pakistan",
+      "az-land-turkmenistan"
+    ],
+    "az-land-koeweit": [
+      "az-land-irak",
+      "az-land-saoedi-arabie",
+      "az-land-bahrein",
+      "az-land-qatar",
+      "az-land-iran",
+      "az-land-verenigde-arabische-emiraten"
+    ],
+    "az-land-laos": [
+      "az-land-vietnam",
+      "az-land-thailand",
+      "az-land-cambodja",
+      "az-land-myanmar",
+      "az-land-bangladesh",
+      "az-land-bhutan"
+    ],
+    "az-land-libanon": [
+      "az-land-syrie",
+      "az-land-israel",
+      "az-land-jordanie",
+      "az-land-cyprus",
+      "az-land-turkije",
+      "az-land-irak"
+    ],
+    "az-land-maleisie": [
+      "az-land-indonesie",
+      "az-land-brunei",
+      "az-land-thailand",
+      "az-land-singapore",
+      "az-land-cambodja",
+      "az-land-filipijnen"
+    ],
+    "az-land-mongolie": [
+      "az-land-china",
+      "az-land-noord-korea",
+      "az-land-kirgizie",
+      "az-land-zuid-korea",
+      "az-land-bhutan",
+      "az-land-nepal"
+    ],
+    "az-land-myanmar": [
+      "az-land-thailand",
+      "az-land-india",
+      "az-land-bangladesh",
+      "az-land-laos",
+      "az-land-vietnam",
+      "az-land-bhutan"
+    ],
+    "az-land-nepal": [
+      "az-land-india",
+      "az-land-bhutan",
+      "az-land-bangladesh",
+      "az-land-pakistan",
+      "az-land-myanmar",
+      "az-land-tadzjikistan"
+    ],
+    "az-land-noord-korea": [
+      "az-land-zuid-korea",
+      "az-land-japan",
+      "az-land-china",
+      "az-land-taiwan",
+      "az-land-mongolie",
+      "az-land-filipijnen"
+    ],
+    "az-land-oezbekistan": [
+      "az-land-kazachstan",
+      "az-land-turkmenistan",
+      "az-land-kirgizie",
+      "az-land-tadzjikistan",
+      "az-land-afghanistan",
+      "az-land-pakistan"
+    ],
+    "az-land-oman": [
+      "az-land-verenigde-arabische-emiraten",
+      "az-land-saoedi-arabie",
+      "az-land-jemen",
+      "az-land-qatar",
+      "az-land-bahrein",
+      "az-land-koeweit"
+    ],
+    "az-land-oost-timor": [
+      "az-land-indonesie",
+      "az-land-maleisie",
+      "az-land-brunei",
+      "az-land-singapore",
+      "az-land-filipijnen",
+      "az-land-cambodja"
+    ],
+    "az-land-pakistan": [
+      "az-land-india",
+      "az-land-afghanistan",
+      "az-land-iran",
+      "az-land-tadzjikistan",
+      "az-land-oezbekistan",
+      "az-land-kirgizie"
+    ],
+    "az-land-qatar": [
+      "az-land-saoedi-arabie",
+      "az-land-bahrein",
+      "az-land-verenigde-arabische-emiraten",
+      "az-land-koeweit",
+      "az-land-oman",
+      "az-land-iran"
+    ],
+    "az-land-saoedi-arabie": [
+      "az-land-jemen",
+      "az-land-oman",
+      "az-land-verenigde-arabische-emiraten",
+      "az-land-jordanie",
+      "az-land-irak",
+      "az-land-koeweit"
+    ],
+    "az-land-singapore": [
+      "az-land-indonesie",
+      "az-land-cambodja",
+      "az-land-brunei",
+      "az-land-maleisie",
+      "az-land-thailand",
+      "az-land-vietnam"
+    ],
+    "az-land-sri-lanka": [
+      "az-land-india",
+      "az-land-bangladesh",
+      "az-land-myanmar",
+      "az-land-nepal",
+      "az-land-thailand",
+      "az-land-bhutan"
+    ],
+    "az-land-syrie": [
+      "az-land-turkije",
+      "az-land-libanon",
+      "az-land-irak",
+      "az-land-jordanie",
+      "az-land-israel",
+      "az-land-cyprus"
+    ],
+    "az-land-tadzjikistan": [
+      "az-land-oezbekistan",
+      "az-land-afghanistan",
+      "az-land-kirgizie",
+      "az-land-pakistan",
+      "az-land-turkmenistan",
+      "az-land-kazachstan"
+    ],
+    "az-land-taiwan": [
+      "az-land-filipijnen",
+      "az-land-zuid-korea",
+      "az-land-vietnam",
+      "az-land-laos",
+      "az-land-china",
+      "az-land-noord-korea"
+    ],
+    "az-land-thailand": [
+      "az-land-myanmar",
+      "az-land-laos",
+      "az-land-cambodja",
+      "az-land-maleisie",
+      "az-land-vietnam",
+      "az-land-singapore"
+    ],
+    "az-land-turkije": [
+      "az-land-iran",
+      "az-land-syrie",
+      "az-land-irak",
+      "az-land-georgie",
+      "az-land-armenie",
+      "az-land-azerbeidzjan"
+    ],
+    "az-land-turkmenistan": [
+      "az-land-oezbekistan",
+      "az-land-iran",
+      "az-land-afghanistan",
+      "az-land-kazachstan",
+      "az-land-azerbeidzjan",
+      "az-land-tadzjikistan"
+    ],
+    "az-land-verenigde-arabische-emiraten": [
+      "az-land-oman",
+      "az-land-saoedi-arabie",
+      "az-land-qatar",
+      "az-land-bahrein",
+      "az-land-koeweit",
+      "az-land-iran"
+    ],
+    "az-land-vietnam": [
+      "az-land-laos",
+      "az-land-cambodja",
+      "az-land-thailand",
+      "az-land-myanmar",
+      "az-land-brunei",
+      "az-land-singapore"
+    ],
+    "az-land-zuid-korea": [
+      "az-land-noord-korea",
+      "az-land-japan",
+      "az-land-taiwan",
+      "az-land-china",
+      "az-land-mongolie",
+      "az-land-filipijnen"
+    ]
+  }
+}

@@ -94,6 +94,96 @@ const REGIOS = [
       opmerking: 'Hetzelfde soort projectie als de provincies, opnieuw gecentreerd.',
     },
   },
+  // The other five werelddelen. Each is the same three fields as Europe: which
+  // continent Natural Earth files a country under, where the page stops, and
+  // where the projection is centred. Nothing else about the build changes,
+  // which is what "a region is a row in a table" was supposed to mean
+  // (ADR-086) and is now true rather than claimed.
+  //
+  // The windows are where a printed atlas stops, and each one is chosen to hold
+  // the whole continent with as little empty ocean as the shape allows: an
+  // atlas page that is half water is a map drawn half the size it could be.
+  {
+    id: 'afrika',
+    setId: 'afrika-landen',
+    setNaam: 'De landen van Afrika',
+    prefix: 'af-land',
+    bron: 'ne-landen-50m',
+    hoortErbij: (p) => p.CONTINENT === 'Africa',
+    venster: { west: -26, oost: 52, zuid: -36, noord: 38 },
+    project: (lon, lat) => stereographic(lon, lat, { lat: 2, lon: 18 }),
+    projectie: {
+      type: 'oblique-stereographic',
+      centrum: { lat: 2, lon: 18 },
+      opmerking: 'Gecentreerd op de evenaar, waar Afrika zelf zijn midden heeft.',
+    },
+  },
+  {
+    id: 'azie',
+    setId: 'azie-landen',
+    setNaam: 'De landen van Azië',
+    prefix: 'az-land',
+    bron: 'ne-landen-50m',
+    hoortErbij: (p) => p.CONTINENT === 'Asia',
+    // Cyprus is on the Europe page as well; it is a member of both lists on
+    // purpose, and the ids differ, so answering it in one does not answer it in
+    // the other. Russia is absent: Natural Earth files it under Europe, which
+    // is where the atlas prints it too.
+    venster: { west: 25, oost: 150, zuid: -11, noord: 56 },
+    project: (lon, lat) => stereographic(lon, lat, { lat: 30, lon: 85 }),
+    projectie: {
+      type: 'oblique-stereographic',
+      centrum: { lat: 30, lon: 85 },
+      opmerking: 'Gecentreerd boven de Himalaya, tussen de twee helften in.',
+    },
+  },
+  {
+    id: 'noord-amerika',
+    setId: 'noord-amerika-landen',
+    setNaam: 'De landen van Noord-Amerika',
+    prefix: 'na-land',
+    bron: 'ne-landen-50m',
+    hoortErbij: (p) => p.CONTINENT === 'North America',
+    venster: { west: -172, oost: -52, zuid: 6, noord: 72 },
+    project: (lon, lat) => stereographic(lon, lat, { lat: 45, lon: -100 }),
+    projectie: {
+      type: 'oblique-stereographic',
+      centrum: { lat: 45, lon: -100 },
+      opmerking: 'Midden-Amerika en de Caraïben horen erbij; Groenland niet.',
+    },
+  },
+  {
+    id: 'zuid-amerika',
+    setId: 'zuid-amerika-landen',
+    setNaam: 'De landen van Zuid-Amerika',
+    prefix: 'za-land',
+    bron: 'ne-landen-50m',
+    hoortErbij: (p) => p.CONTINENT === 'South America',
+    venster: { west: -82, oost: -34, zuid: -56, noord: 13 },
+    project: (lon, lat) => stereographic(lon, lat, { lat: -20, lon: -60 }),
+    projectie: {
+      type: 'oblique-stereographic',
+      centrum: { lat: -20, lon: -60 },
+      opmerking: 'Twaalf landen, en de enige kaart hier die op een telefoon past.',
+    },
+  },
+  {
+    id: 'oceanie',
+    setId: 'oceanie-landen',
+    setNaam: 'De landen van Oceanië',
+    prefix: 'oc-land',
+    bron: 'ne-landen-50m',
+    hoortErbij: (p) => p.CONTINENT === 'Oceania',
+    // Stops at the date line. Fiji straddles it and keeps its western islands,
+    // which is what a page of an atlas shows of Fiji as well.
+    venster: { west: 110, oost: 180, zuid: -48, noord: 0 },
+    project: (lon, lat) => stereographic(lon, lat, { lat: -25, lon: 145 }),
+    projectie: {
+      type: 'oblique-stereographic',
+      centrum: { lat: -25, lon: 145 },
+      opmerking: 'Australië beslaat de kaart; de eilandstaten liggen eromheen.',
+    },
+  },
   {
     id: 'wereld',
     setId: 'wereld-landen',
@@ -340,24 +430,20 @@ for (const regio of REGIOS) {
   console.log(`  ${landen.length} countries after the sovereignty rule and the window`);
 
   /**
-   * The view box follows the window where there is one, and the data where
-   * there is not.
+   * The view box follows the countries, never the window.
    *
-   * Fitting Europe to its own countries would let Iceland and Cyprus decide the
-   * frame, which is very nearly the same box — but Russia's clipped edge is a
-   * straight line at 50° E, and a frame that stopped at the last Russian vertex
-   * rather than at the window would leave the cut visible as a gap. The window's
-   * own outline is sampled rather than cornered, because in a stereographic a
-   * straight line in degrees is a curve on the page.
+   * It followed the window's own outline for one release, on the argument that
+   * a frame stopping at the last Russian vertex would leave the cut visible as
+   * a gap. That was wrong twice over. Russia's cut edge *is* the eastmost thing
+   * on the map, so it lands on the frame either way — and a window is a
+   * rectangle in degrees, which through any of these projections is a curved
+   * region whose bounding box is bigger than what is in it. Asia and North
+   * America were drawn at about six tenths of the size they could have been,
+   * which is six tenths of a touch target on a map where that is the whole
+   * problem (ADR-087).
    */
   const frame = [];
-  if (regio.venster) {
-    const { west, oost, zuid, noord } = regio.venster;
-    for (let lon = west; lon <= oost; lon += 1) frame.push([lon, zuid], [lon, noord]);
-    for (let lat = zuid; lat <= noord; lat += 1) frame.push([west, lat], [oost, lat]);
-  } else {
-    for (const land of landen) for (const ring of land.rings) frame.push(...ring);
-  }
+  for (const land of landen) for (const ring of land.rings) frame.push(...ring);
 
   const projector = makeProjectorWith((lon, lat) => regio.project(lon, lat), frame, SIZE, PADDING);
 
@@ -452,7 +538,14 @@ for (const regio of REGIOS) {
         regioSet: regio.id,
         geometrieRef: `${regio.prefix}-${slug(land.naam)}`,
         niveau: land.niveau,
-        leerdoelen: [`ak-${regio.id}-landen-aanwijzen`, `ak-${regio.id}-landen-benoemen`],
+        // One pair of goals for every werelddeel and a separate pair for the
+        // world. "Wijst de landen van een werelddeel aan" is one thing a child
+        // learns, not seven — and seven near-identical goals is a curriculum
+        // document nobody would read twice.
+        leerdoelen:
+          regio.id === 'wereld'
+            ? ['ak-wereld-landen-aanwijzen', 'ak-wereld-landen-benoemen']
+            : ['ak-werelddelen-landen-aanwijzen', 'ak-werelddelen-landen-benoemen'],
       }))
       .sort((a, b) => a.naam.localeCompare(b.naam, 'nl')),
   };
