@@ -8,3 +8,4 @@ export * from './grade';
 export * from './sums';
 export * from './streak';
 export * from './rewards';
+export * from './collection';

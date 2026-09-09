@@ -44,8 +44,9 @@ sums in all. A round is ten of them. Typing the answer comes before choosing
 between four, which is the opposite of the map and for a reason
 ([ADR-049](docs/DECISIONS.md)).
 
-Both modules offer a **mix**: the Rekenmix shuffles all four operations, the
-Topomix shuffles all five map sets. Neither is a set of its own — they hold the
+Both modules offer a **mix**: the Rekenmix shuffles all four operations — in
+three difficulties, from the level every set has always carried
+([ADR-073](docs/DECISIONS.md)) — and the Topomix shuffles all five map sets. Neither is a set of its own — they hold the
 same items under one name, so a sum answered in a mix moves the box it moves
 anywhere else ([ADR-062](docs/DECISIONS.md), [ADR-063](docs/DECISIONS.md)).
 
@@ -53,8 +54,9 @@ And rekenen has the exercise a Dutch child already knows: a **tafeldiploma**.
 The whole table, ten sums in order, every one right, one mistake and you sit it
 again. No stopwatch — the settings page says haste does not help you remember,
 and we do not switch that off for the one exercise where it would be felt most
-([ADR-064](docs/DECISIONS.md)). Twelve of them hang on the rekenen page with the
-gaps showing.
+([ADR-064](docs/DECISIONS.md)). Twelve of them hang under the tables with the
+gaps showing. And a child who knows which sums they keep getting wrong can ask
+for exactly those ([ADR-078](docs/DECISIONS.md)).
 
 Every module has a page of its own at the word a parent would type — leer.nu
 /topografie, /rekenen, /klokkijken — and one flow on it: what you want to
@@ -64,7 +66,9 @@ decision, then a smaller one, instead of thirty-six of equal weight
 ([ADR-062](docs/DECISIONS.md)). The ways of practising are in order of weight
 with a line and an icon each, six at most ([ADR-061](docs/DECISIONS.md)). The
 chosen combination is spelled out beside the start button, and the button says
-Start ([ADR-066](docs/DECISIONS.md)). A set has an address too, so
+Start ([ADR-066](docs/DECISIONS.md)). Where a set is big enough for the question
+to mean anything, the child says how long the round is: ten, twenty-five, fifty
+or a hundred ([ADR-074](docs/DECISIONS.md)). A set has an address too, so
 leer.nu/topografie/provincies is a place a child can be sent.
 
 A round covers the whole set where the set is small enough — twelve of twelve —
@@ -73,19 +77,25 @@ twenty minutes with no stopping point. Order comes from a Leitner scheduler, so
 what a child keeps missing comes round first. Answers are judged, saved and
 scheduled locally; a round can be stopped early and what was answered is kept.
 
-The home screen greets a child by name and then does three things. It asks when
-the test is and what it is about, and offers the one thing to carry on with.
+The home screen greets a child by name and then does three things. It holds the
+tests that are coming — as many as there are, each with its subject, and nothing
+else in that block ([ADR-077](docs/DECISIONS.md)) — and under it offers the one
+thing to carry on with, which is the soonest test's subject.
 It logs the rounds just played with the mark each came to — "cijfer 8,4", over
 what was answered and not over what was asked ([ADR-053](docs/DECISIONS.md)).
 And down the right it keeps what is the child's own — on every screen inside
 the frame, not only here: the journey first, then everything answered correctly
-so far, then the exercises they keep going back to. The journey is the level a
-child has reached and one line saying what the next one costs, in the only unit
-that means anything to them: "nog 6 goede antwoorden"
-([ADR-065](docs/DECISIONS.md)). Three of twelve animals are there from the first
-minute and the other nine arrive a level at a time; choosing between the ones
-reached happens on **Jij** ([ADR-067](docs/DECISIONS.md)). Nothing on that ladder can be bought, won by
-chance or reached by waiting.
+so far with the run of correct answers under it, then the exercises they keep
+going back to. The journey is the level a child has reached and one line saying
+what the next one costs, in the only unit that means anything to them: "nog 6
+goede antwoorden" ([ADR-070](docs/DECISIONS.md)).
+
+The whole of it is at **leer.nu/ontdekkingsreis**: sixty animals in five
+materials — ink, bronze, silver, gold, diamond — twelve tafeldiploma's and ten
+reisstempels, with what every one of them costs written next to it
+([ADR-071](docs/DECISIONS.md), [ADR-076](docs/DECISIONS.md)). Nothing on that
+page can be bought, won by chance or reached by waiting, and nothing on it
+mentions a date.
 
 The forecast — "69%, weet je hier over drie weken nog van" — is the number the
 product argues from and it lives on **Onthouden**, one screen along. On the

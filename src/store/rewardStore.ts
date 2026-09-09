@@ -34,19 +34,6 @@ export interface RoundOutcome {
   readonly diploma: number | null;
 }
 
-/**
- * The XP this child has, which is the whole of what the level ladder runs on.
- *
- * Read here rather than taken from the profile the app booted with: a round
- * adds to it, and a card that showed the figure from before the round would
- * tell a child their answers had counted for nothing.
- */
-export async function loadXp(): Promise<number> {
-  const db = await getDb();
-  const profile = await db.get('profile', await activeChildId());
-  return profile?.xp ?? 0;
-}
-
 export async function loadStamps(): Promise<Set<string>> {
   await ensureProgressPerChild();
 

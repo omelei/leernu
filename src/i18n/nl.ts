@@ -68,8 +68,15 @@ export const nl = {
   'home.journeyBar': 'Op weg naar niveau {niveau}',
   'home.journeyToGo': 'Nog {aantal} goede antwoorden tot niveau {niveau}.',
   'home.journeyOneToGo': 'Nog één goed antwoord tot niveau {niveau}.',
-  'home.journeyNext': 'Hierna: {dier}',
+  'home.journeyNext': 'Hierna: {dier} in {reeks}',
   'home.journeyComplete': 'Je hebt alle dieren. Je niveau blijft stijgen.',
+  'home.journeyAll': 'Bekijk alles wat je kunt halen',
+
+  // De andere streak: goede antwoorden op rij, zonder dag ertussen. Hij staat
+  // onder het percentage en niet erboven, want het is het enige getal in het
+  // product dat één fout antwoord meteen afpakt.
+  'home.runLabel': 'Foutloos op rij',
+  'home.runBest': 'beste {aantal}',
   'sticker.kat': 'Kat',
   'sticker.uil': 'Uil',
   'sticker.vos': 'Vos',
@@ -127,13 +134,17 @@ export const nl = {
   // rand, want het is de reden dat het kind vandaag oefent.
   'home.testLabel': 'toets',
   'home.testNone': 'Nog geen toetsdatum',
+  // Meer dan één, want een periode is nooit één toets: topografie op dinsdag en
+  // de tafels de vrijdag erna. Het blok toont ze allemaal en verder niets.
+  'home.testTitle': 'Je toetsen',
   'home.testToday': 'De toets is vandaag',
   'home.testTomorrow': 'De toets is morgen',
   'home.testInDays': 'Toets over {aantal} dagen',
-  'home.testPast': 'De toets is geweest',
   'home.testPick': 'Wanneer is de toets?',
-  'home.testSet': 'Toets instellen',
-  'home.testChange': 'Toets aanpassen',
+  'home.testAdd': 'Toets toevoegen',
+  'home.testSave': 'Toevoegen',
+  'home.testRemove': 'Weg',
+  'home.testRemoveOne': 'Haal de toets weg: {wanneer}',
   // Het vak erbij, want een datum zonder vak plant niets. Alleen vakken die
   // bestaan: een toets voor klokkijken instellen belooft oefenstof die er niet
   // is. Het gekozen vak bepaalt waarmee "Ga verder" verdergaat.
@@ -225,6 +236,11 @@ export const nl = {
   // hele ding, want dat staat in het label.
   'choose.go': 'Start',
   'choose.goLabel': 'Start: {wat}',
+  // Hoe lang de ronde duurt, waar er meer dan één eerlijk antwoord is. Tien is
+  // wat een ronde altijd was en blijft de standaard; de rest bestaat omdat de
+  // Rekenmix vijfhonderd sommen heeft.
+  'choose.howMany': 'Hoeveel vragen?',
+  'choose.howManyOne': '{aantal} vragen',
 
   // De onderwerpen van rekenen. Vier soorten sommen en een mix ervan; de tafels
   // en het delen hebben er dertien elk, en die staan als knopjes onder de kaart
@@ -244,6 +260,11 @@ export const nl = {
   // dat op deze kaart drukt hoort te weten wat het krijgt.
   'onderwerp.rekenmix': 'Rekenmix',
   'onderwerp.rekenmix.uitleg': 'Keer, delen, plus en min door elkaar',
+  'onderwerp.rekenmix.keuze': 'Hoe moeilijk?',
+  // Het enige onderwerp dat voor elk kind anders is. Hij staat er alleen als er
+  // iets in zit: een kaart met nul sommen is een kaart over niets.
+  'onderwerp.fouten': 'Oefen je fouten',
+  'onderwerp.fouten.uitleg': 'De sommen die je eerder fout had',
 
   // Explore
   'explore.kind': 'Ontdek de kaart',
@@ -307,6 +328,15 @@ export const nl = {
   // en de reden dat spraakbediening 'druk op door elkaar' begrijpt.
   'sums.allShort': 'Door elkaar',
   'sums.mix': 'Rekenmix',
+  'sums.mistakes': 'Jouw fouten',
+  // De drie moeilijkheden van de Rekenmix. Het niveau stond al op elke set en
+  // bepaalde alleen de volgorde; nu bepaalt het ook wat er in de mix zit.
+  'sums.mixLevel1': 'Rekenmix makkelijk',
+  'sums.mixLevel1.kort': 'Makkelijk',
+  'sums.mixLevel2': 'Rekenmix gemiddeld',
+  'sums.mixLevel2.kort': 'Gemiddeld',
+  'sums.mixLevel3': 'Rekenmix pittig',
+  'sums.mixLevel3.kort': 'Pittig',
   'sums.prompt': 'Hoeveel is het?',
   'sums.typeQuestion': 'Typ het antwoord',
   'sums.chooseQuestion': 'Kies het antwoord',
@@ -370,14 +400,15 @@ export const nl = {
   'you.add': 'Toevoegen',
   'you.childExplain':
     'Ieder kind heeft een eigen voortgang. Wat de een oefent, telt niet mee voor de ander.',
-  // De twaalf dieren, en welke dit kind al heeft. De dieren die er nog niet
-  // zijn staan er wel, grijs en met het niveau erbij: dat is het verschil
-  // tussen een verzameling en een raadsel. Er staat nergens wanneer — door
-  // wachten komt hier niets bij.
-  'you.animals': 'Jouw dieren',
-  'you.animalsHave': '{aantal} van de {totaal}',
-  'you.animalLocked': '{dier}, vanaf niveau {niveau}',
-  'you.animalLevel': 'niveau {niveau}',
+  // Het blok voor de volwassene. Nadrukkelijk geen rapport over het kind: geen
+  // voorspelling, geen percentage, geen vergelijking. Wat er staat is wat er
+  // gebeurd is — rondes, en waar ze op uitkwamen.
+  'you.week': 'Deze week',
+  'you.weekNone': 'Deze week nog niet geoefend.',
+  'you.weekRounds': '{rondes} rondes op {dagen} dagen, samen {vragen} vragen.',
+  'you.weekGrade': 'Gemiddeld cijfer {cijfer}.',
+  'you.weekNoGrade': 'Nog geen cijfer deze week.',
+  'you.weekMost': 'Het meest geoefend: {set}.',
   'you.settings': 'Instellingen',
   'you.readAloud': 'Vragen voorlezen',
   'you.readAloudWhy': 'Je kunt elke vraag laten voorlezen.',
@@ -386,6 +417,29 @@ export const nl = {
   'you.on': 'aan',
   'you.off': 'uit',
   'you.stays': 'Wat je oefent blijft op dit apparaat.',
+
+  // De verzamelpagina: alles wat er te halen valt en wat het kost. De kaart in
+  // de rechterkolom kan er maar één tegelijk laten zien; dit is het geheel.
+  // Nergens staat wanneer — alles hier koop je met goede antwoorden.
+  'reis.title': 'Jouw ontdekkingsreis',
+  'reis.intro': 'Alles wat je kunt halen, en wat het kost.',
+  'reis.answered': '{aantal} goede antwoorden',
+  'reis.animals': 'Dieren',
+  'reis.animalsHave': '{aantal} van de {totaal}',
+  'reis.reeksHave': '{reeks} · {aantal} van de {totaal}',
+  'reis.animalHave': '{dier} in {reeks}',
+  'reis.animalWant': '{dier} in {reeks}, vanaf niveau {niveau}',
+  'reis.locked': 'nog niet',
+  'reis.stamps': 'Reisstempels',
+  'reis.stampsHave': '{aantal} van de {totaal}',
+
+  // De vijf reeksen. Kleine letter, want ze staan midden in een zin — en in een
+  // kop zet de opmaak ze zelf al in kapitalen.
+  'reeks.inkt': 'zwart',
+  'reeks.brons': 'brons',
+  'reeks.zilver': 'zilver',
+  'reeks.goud': 'goud',
+  'reeks.diamant': 'diamant',
 
   // Reisstempels. Elk criterium staat erbij, want een stempel die je niet kunt
   // uitleggen is een raadsel in plaats van een beloning — en een kind dat niet

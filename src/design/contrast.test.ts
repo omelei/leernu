@@ -280,6 +280,30 @@ describe('palette contrast', () => {
    * load-bearing. They stay two tokens with two names, and this test states
    * the fact so that whoever moves one of them meets it deliberately.
    */
+  /**
+   * The collection's five materials (ADR-071).
+   *
+   * They carry a drawing rather than text, so §A's floor for them is three, and
+   * they are one value each rather than a light and a dark — a material that
+   * changed hue between themes would stop being a material. That makes both
+   * themes worth measuring: it is the same colour standing on two very
+   * different grounds.
+   */
+  it.each([['brons'], ['zilver'], ['goud'], ['diamant']])(
+    'draws %s legibly on paper in both themes',
+    (reeks) => {
+      expect(contrastRatio(token(`reeks-${reeks}`), paper), 'light').toBeGreaterThanOrEqual(3);
+      expect(contrastRatio(token(`reeks-${reeks}`), darkPaper), 'dark').toBeGreaterThanOrEqual(3);
+    },
+  );
+
+  it('gives the first reeks the ink of whichever theme is on', () => {
+    // Ink rather than a fifth colour: the row every child has from the first
+    // minute is the product's own, and it is legible by definition.
+    expect(token('reeks-inkt')).toBe(token('ink'));
+    expect(token('reeks-inkt', 'dark')).toBe(token('ink', 'dark'));
+  });
+
   it('keeps the semantic and accent scales separate, collision and all', () => {
     expect(token('good-text')).toBe(token('tafels-text'));
   });

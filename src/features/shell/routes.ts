@@ -54,6 +54,10 @@ const SET_SLUG: Record<string, string> = {
   rekenmix: 'mix',
   'tafels-alle': 'alle-tafels',
   'deel-alle': 'alle-deelsommen',
+  'rekenmix-1': 'mix-makkelijk',
+  'rekenmix-2': 'mix-gemiddeld',
+  'rekenmix-3': 'mix-pittig',
+  fouten: 'fouten',
 };
 
 /**
@@ -84,13 +88,21 @@ export function setSlug(setId: string): string {
   return SET_SLUG[setId] ?? setId;
 }
 
+/** The rekenen slugs that are not a set id: the mixes and the child's own list. */
+const REKENEN_MIX: Record<string, string> = {
+  mix: 'rekenmix',
+  'mix-makkelijk': 'rekenmix-1',
+  'mix-gemiddeld': 'rekenmix-2',
+  'mix-pittig': 'rekenmix-3',
+  'alle-tafels': 'tafels-alle',
+  'alle-deelsommen': 'deel-alle',
+  fouten: 'fouten',
+};
+
 function setIdFor(module: Module, slug: string): string | null {
   if (module.id === 'tafels') {
     if (REKENEN_SLUG.test(slug)) return slug;
-    if (slug === 'mix') return 'rekenmix';
-    if (slug === 'alle-tafels') return 'tafels-alle';
-    if (slug === 'alle-deelsommen') return 'deel-alle';
-    return null;
+    return REKENEN_MIX[slug] ?? null;
   }
   return SLUG_SET.get(slug) ?? null;
 }
@@ -99,6 +111,8 @@ export type Route =
   | { readonly name: 'home' }
   | { readonly name: 'retention' }
   | { readonly name: 'you' }
+  /** The collection: every animal, diploma and stamp there is to get. */
+  | { readonly name: 'reis' }
   /** A module that exists, opened on one of its sets or on its own first. */
   | { readonly name: 'module'; readonly module: Module; readonly setId: string | null }
   /** A module the plan has but the product does not yet. */
@@ -108,6 +122,15 @@ export type Route =
 
 export const RETENTION_SLUG = 'onthouden';
 export const YOU_SLUG = 'jij';
+/**
+ * The collection has an address of its own rather than a tab in the bar.
+ *
+ * It is a place a child goes on purpose, from the card in their own column
+ * that says where the journey is — not one of the four places the product is
+ * organised around. A fifth tab would have made it look like a section of the
+ * app rather than what it is: the long view of one card.
+ */
+export const REIS_SLUG = 'ontdekkingsreis';
 
 /**
  * Vite serves from `/` on a domain of our own and from `/<repo>/` on Pages
@@ -147,6 +170,7 @@ export function routeFor(pathname: string): Route {
   if (slug === '') return { name: 'home' };
   if (slug === RETENTION_SLUG) return { name: 'retention' };
   if (slug === YOU_SLUG) return { name: 'you' };
+  if (slug === REIS_SLUG) return { name: 'reis' };
 
   const [head = '', tail] = slug.split('/');
 
@@ -170,6 +194,7 @@ function slugFor(route: Route): string {
   if (route.name === 'home') return '';
   if (route.name === 'retention') return RETENTION_SLUG;
   if (route.name === 'you') return YOU_SLUG;
+  if (route.name === 'reis') return REIS_SLUG;
   if (route.name === 'category') return route.category.id;
   if (route.name === 'soon') return MODULE_SLUG[route.module.id];
 

@@ -230,10 +230,52 @@ export function offeredForms(
     .slice(0, MAX_FORMS);
 }
 
-/** How many questions this way of practising asks of this set, where it is knowable. */
-export function questionCount(form: PracticeForm, setSize: number): number | null {
+/**
+ * How long a round may be made, when a child wants to say.
+ *
+ * Ten is what a round has always been and stays the default. The other three
+ * exist because the sets stopped being ten: the Rekenmix holds five hundred
+ * sums and the Topomix a hundred and fifteen, and "oefen tien" of five hundred
+ * is a child who never finishes anything (ADR-074).
+ *
+ * Only the ones that fit are offered. Choosing fifty of a table of ten is a
+ * button that lies — the round would ask ten and the estimate beside it would
+ * have said six minutes.
+ */
+export const QUESTION_CHOICES: readonly number[] = [10, 25, 50, 100];
+
+/**
+ * The lengths worth offering for this way of practising on this set, or none.
+ *
+ * Empty where there is nothing to choose: a round that ends on a clock or on
+ * three lives has no number of questions, a diploma is the whole table by
+ * definition, and a set of ten has one honest answer.
+ */
+export function questionChoices(form: PracticeForm, setSize: number): number[] {
+  if (form.rule === null || form.rule.kind !== 'fixed') return [];
+  const fits = QUESTION_CHOICES.filter((count) => count <= setSize);
+  return fits.length > 1 ? fits : [];
+}
+
+/**
+ * How many questions this way of practising asks of this set, where it is
+ * knowable — the child's choice if they made one, and the round's own length
+ * if they did not.
+ *
+ * Capped at the set either way. A set cannot be asked more questions than it
+ * holds without repeating itself inside one round, which teaches a child that
+ * the app has run out rather than that they have.
+ */
+export function questionCount(
+  form: PracticeForm,
+  setSize: number,
+  chosen: number | null = null,
+): number | null {
   if (form.rule === null || form.rule.kind !== 'fixed') return null;
-  return Math.min(setSize, form.rule.aantal);
+  const wanted = chosen !== null && questionChoices(form, setSize).includes(chosen)
+    ? chosen
+    : form.rule.aantal;
+  return Math.min(setSize, wanted);
 }
 
 /**
@@ -261,7 +303,12 @@ export function minutesFor(form: PracticeForm, questions: number | null): number
  * The measure comes from the rule rather than from the copy, so a round whose
  * clock is changed cannot end up with a button still promising sixty seconds.
  */
-export function startLabel(form: PracticeForm, setNaam: string, setSize: number): string {
+export function startLabel(
+  form: PracticeForm,
+  setNaam: string,
+  setSize: number,
+  chosen: number | null = null,
+): string {
   const hoe = t(form.name).toLocaleLowerCase('nl-NL');
 
   if (form.rule === null) return t('choose.startOpen', { set: setNaam, hoe });
@@ -271,5 +318,9 @@ export function startLabel(form: PracticeForm, setNaam: string, setSize: number)
   if (form.rule.kind === 'levens') {
     return t('choose.startLives', { set: setNaam, hoe, aantal: form.rule.levens });
   }
-  return t('choose.start', { set: setNaam, hoe, aantal: Math.min(setSize, form.rule.aantal) });
+  return t('choose.start', {
+    set: setNaam,
+    hoe,
+    aantal: questionCount(form, setSize, chosen) ?? form.rule.aantal,
+  });
 }

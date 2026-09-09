@@ -1,7 +1,10 @@
 import {
   currentStreak,
+  emptyRun,
   emptyStreak,
   recordActivity,
+  recordAnswerRun,
+  type FlawlessRun,
   type HolidayPeriod,
   type StreakChange,
   type StreakState,
@@ -56,4 +59,30 @@ export async function recordRoundFinished(now = new Date()): Promise<StreakChang
 /** What the streak is worth today, without recording anything. */
 export async function readStreak(now = new Date()): Promise<number> {
   return currentStreak(await loadStreak(), now, HOLIDAYS);
+}
+
+/**
+ * The run of correct answers, which lives on the same row as the day streak.
+ *
+ * Read and written separately from `StreakState` because they change at
+ * different moments: a day streak moves once when a round ends, a run moves on
+ * every single answer. Sharing a read-modify-write between the two would mean
+ * the last answer of a round racing the round's own save.
+ */
+export async function loadRun(): Promise<FlawlessRun> {
+  const db = await getDb();
+  const row = await db.get('streak', await activeChildId());
+  if (!row) return emptyRun();
+  return { nu: row.foutloosNu ?? 0, beste: row.foutloosBeste ?? 0 };
+}
+
+/** One answer, counted into the run. Returns the run as it now stands. */
+export async function recordAnswerFlawless(correct: boolean): Promise<FlawlessRun> {
+  const db = await getDb();
+  const id = await activeChildId();
+  const row = (await db.get('streak', id)) ?? { id, ...emptyStreak() };
+  const run = recordAnswerRun({ nu: row.foutloosNu ?? 0, beste: row.foutloosBeste ?? 0 }, correct);
+
+  await db.put('streak', { ...row, id, foutloosNu: run.nu, foutloosBeste: run.beste });
+  return run;
 }

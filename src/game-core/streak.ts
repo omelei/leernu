@@ -219,3 +219,43 @@ export function currentStreak(
   const missed = missedSchoolDays(state.laatsteActieveDag, today, holidays);
   return missed <= state.rustdagen ? state.huidigeStreak : 0;
 }
+
+// ---------------------------------------------------------------------------
+
+/**
+ * The other streak: correct answers in a row, with no day in it.
+ *
+ * The day streak above measures turning up. This one measures getting it right,
+ * and it is the only number in the product that a single wrong answer takes
+ * away — which is exactly why it is not allowed to be the one a child is shown
+ * first (ADR-072). It sits under the day streak in the child's own column, it
+ * keeps its best alongside its current, and losing it costs nothing else: no
+ * coins, no level, no stamp.
+ *
+ * It runs across rounds and across modules on purpose. "Twaalf goed op rij" is
+ * a thing a child says about themselves, not about one round of one table, and
+ * a counter that reset at the end of every round would be reporting the round.
+ */
+export interface FlawlessRun {
+  /** How many correct answers in a row, right now. */
+  readonly nu: number;
+  /** The longest run there has ever been. Never goes down. */
+  readonly beste: number;
+}
+
+export function emptyRun(): FlawlessRun {
+  return { nu: 0, beste: 0 };
+}
+
+/**
+ * One answer, counted.
+ *
+ * "Ik weet het niet" is a wrong answer here, the same as any other: the run is
+ * about knowing, and ADR-048 makes not knowing cheap everywhere it costs
+ * something real — a life, a box, a mark. A run is none of those.
+ */
+export function recordAnswerRun(run: FlawlessRun, correct: boolean): FlawlessRun {
+  if (!correct) return { nu: 0, beste: run.beste };
+  const nu = run.nu + 1;
+  return { nu, beste: Math.max(nu, run.beste) };
+}

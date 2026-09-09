@@ -25,15 +25,18 @@ import { SumResultScreen } from './SumResultScreen';
 export function SumScreen({
   setId,
   mode,
+  aantal = null,
   onHome,
   onAgain,
 }: {
   readonly setId: string;
   readonly mode: SumMode;
+  /** How many sums the child asked for, or null for the round's own. */
+  readonly aantal?: number | null;
   readonly onHome: () => void;
   readonly onAgain: () => void;
 }) {
-  const { state, submit, choose, giveUp, next, stop } = useSumRound(setId, mode);
+  const { state, submit, choose, giveUp, next, stop } = useSumRound(setId, mode, aantal);
   const prefs = usePreferences();
   const nextButton = useRef<HTMLButtonElement>(null);
 

@@ -118,6 +118,18 @@ export interface StreakRecord {
   rustdagen: number;
   /** ISO week in which the last rest day was earned, so one week gives one. */
   rustdagWeek: string | null;
+  /**
+   * Correct answers in a row, and the longest run there has been (ADR-072).
+   *
+   * On this row rather than in a store of their own: both are one number per
+   * child about how the practising is going, they are read together and
+   * written a few milliseconds apart, and a second object store for two
+   * integers would be a schema version nobody needed. Absent on rows written
+   * before, where they read back as nought — which is what a child who has
+   * never been counted has.
+   */
+  foutloosNu?: number;
+  foutloosBeste?: number;
 }
 
 /**

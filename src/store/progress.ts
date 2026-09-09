@@ -1,6 +1,7 @@
 import type { ItemState, ModeId } from '@/game-core';
 import { getDb, SINGLETON_KEY, type AttemptRecord, type SessionRecord } from './db';
 import { activeChildId, ensureProgressPerChild } from './children';
+import { recordAnswerFlawless } from './streakStore';
 
 /**
  * Reading and writing what a child has learned.
@@ -185,4 +186,8 @@ export async function saveAnswer(params: {
     tijdstip: new Date().toISOString(),
   });
   await saveItemState(params.nextState);
+  // Every answer in the product passes through here, which is why the run of
+  // correct answers is counted here and not in the two round hooks (ADR-072).
+  // Counting it in both would be two places to forget the third module.
+  await recordAnswerFlawless(params.correct);
 }

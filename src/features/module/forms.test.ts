@@ -6,6 +6,7 @@ import {
   formsFor,
   minutesFor,
   offeredForms,
+  questionChoices,
   questionCount,
   startLabel,
 } from './forms';
@@ -156,5 +157,40 @@ describe('roughly how long it takes', () => {
     // no end at all. A figure there would be a number we made up.
     expect(minutesFor(survive, null)).toBeNull();
     expect(minutesFor(explore, null)).toBeNull();
+  });
+});
+
+/**
+ * How long a round may be made. Ten is what a round has always been and stays
+ * the default; the rest exists because the sets stopped being ten (ADR-074).
+ */
+describe('how many questions', () => {
+  const point = vorm('wijs-aan');
+  const lightning = vorm('bliksemronde');
+  const diploma = vorm('tafeldiploma');
+
+  it('offers only the lengths the set can actually fill', () => {
+    // A table of ten has one honest answer, so there is nothing to choose.
+    expect(questionChoices(point, 10)).toEqual([]);
+    expect(questionChoices(point, 45)).toEqual([10, 25]);
+    expect(questionChoices(point, 510)).toEqual([10, 25, 50, 100]);
+  });
+
+  it('offers nothing where a round has no number of questions', () => {
+    // A minute is a minute and a diploma is the whole table.
+    expect(questionChoices(lightning, 510)).toEqual([]);
+    expect(questionChoices(diploma, 10)).toEqual([]);
+  });
+
+  it('asks for what was chosen, capped at the set', () => {
+    expect(questionCount(point, 510, 100)).toBe(100);
+    expect(questionCount(point, 510, null)).toBe(15);
+    // A length that does not fit falls back rather than promising it.
+    expect(questionCount(point, 12, 100)).toBe(12);
+  });
+
+  it('puts the chosen length on the start button', () => {
+    expect(startLabel(point, 'Rekenmix', 510, 50)).toContain('50 vragen');
+    expect(startLabel(point, 'Rekenmix', 510, null)).toContain('15 vragen');
   });
 });

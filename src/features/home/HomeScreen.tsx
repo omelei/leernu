@@ -95,6 +95,8 @@ export interface HomeScreenProps {
   readonly naam: string;
   /** Which animal they chose. This screen only passes it on to their column. */
   readonly sticker: string | undefined;
+  /** The way to the collection, which their column links to. */
+  readonly onReis: () => void;
   readonly onStart: (setId: SetId, practiceMode: PracticeMode) => void;
   /** A table, in a chosen way. */
   readonly onStartSum: (setId: string, sumMode: SumMode) => void;
@@ -110,6 +112,7 @@ export interface HomeScreenProps {
 export function HomeScreen({
   naam,
   sticker,
+  onReis,
   onStart,
   onStartSum,
   onChoose,
@@ -157,27 +160,29 @@ export function HomeScreen({
           </p>
         </div>
 
-        {/* The one block with a surface and a border, and it is about the test.
-            When it is, what it is for, and the way in — and nothing else. A
-            mark or a bar here would turn the reason to start into a report on
-            the child. */}
-        {verder ? (
-          <section
-            className="tk-card tk-card-accented flex flex-col gap-6"
-            data-module={verder.moduleId}
-          >
-            {/* Nothing in this card waits for IndexedDB. It did, and on WebKit
-                — an iPad in a classroom — the screenshots caught the whole
-                block absent: the one thing on the front door a child is meant
-                to press, missing for as long as the read took, and then
-                pushing the button down when it landed. */}
-            <TestDate plan={plan} now={now} />
-            <Verder deel={verder} onBegin={begin} onChoose={onChoose} />
-          </section>
-        ) : null}
+        {/* The one block with a surface and a border, and it is about the
+            tests. When they are and what they are about — and nothing else
+            (ADR-077). The way into a round used to be inside this border too,
+            which made one block answer two questions: when is the test, and
+            what shall I do now.
+
+            Nothing in this card waits for IndexedDB. It did, and on WebKit —
+            an iPad in a classroom — the screenshots caught the whole block
+            absent: the reason the child is here, missing for as long as the
+            read took, and then pushing everything under it down. */}
+        <section
+          className="tk-card tk-card-accented"
+          data-module={plan.subject ?? verder?.moduleId}
+        >
+          <TestDate plan={plan} now={now} />
+        </section>
+
+        {/* And the way on, out from under it. Same place on the page, its own
+            block, and the second question answered on its own. */}
+        {verder ? <Verder deel={verder} onBegin={begin} onChoose={onChoose} /> : null}
       </div>
 
-      <SideColumn sticker={sticker} onBegin={begin} />
+      <SideColumn sticker={sticker} onReis={onReis} onBegin={begin} />
 
       <div className="tk-home-more">
         <Recent gespeeld={gespeeld} onBegin={begin} />

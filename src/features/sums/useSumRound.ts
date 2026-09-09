@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   COMBO_THRESHOLD,
   composeRound,
@@ -129,6 +129,23 @@ export interface SumRoundState {
   readonly error: string | null;
 }
 
+/**
+ * The sums this child has got wrong at least once, hardest first.
+ *
+ * `foutCount` is on the Leitner state and has been since the first release,
+ * written on every wrong answer and never read by anything. This is what it was
+ * for: the one list in the product that is about a particular child rather than
+ * about the content.
+ */
+function metFouten(
+  items: readonly SumItem[],
+  states: ReadonlyMap<string, ItemState>,
+): readonly SumItem[] {
+  return items
+    .filter((sum) => (states.get(sum.id)?.foutCount ?? 0) > 0)
+    .sort((a, b) => (states.get(b.id)?.foutCount ?? 0) - (states.get(a.id)?.foutCount ?? 0));
+}
+
 /** Four options: the answer and three wrong ones, dealt once. */
 function optionsFor(sum: SumItem, rng: () => number): number[] {
   const all = [sum.antwoord, ...sumDistractors(sum)];
@@ -142,7 +159,11 @@ function optionsFor(sum: SumItem, rng: () => number): number[] {
   return all;
 }
 
-export function useSumRound(setId: string, mode: SumMode) {
+/**
+ * @param aantal how many sums the child asked for, or null for the round's own
+ *   length. A diploma ignores it: it is the whole table or it is not a diploma.
+ */
+export function useSumRound(setId: string, mode: SumMode, aantal: number | null = null) {
   const [set, setSet] = useState<SumSet | null>(null);
   const [questions, setQuestions] = useState<SumQuestion[]>([]);
   const [states, setStates] = useState<Map<string, ItemState>>(new Map());
@@ -159,7 +180,13 @@ export function useSumRound(setId: string, mode: SumMode) {
   const [reward, setReward] = useState<RoundOutcome | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const rule = SUM_ROUND_RULE[mode];
+  // Memoised: `rule` is a dependency of the effect that composes the round, so
+  // a fresh object every render would start a new round on every render.
+  const rule = useMemo<RoundRule>(() => {
+    const base = SUM_ROUND_RULE[mode];
+    if (mode === 'tafeldiploma') return base;
+    return aantal !== null && base.kind === 'fixed' ? { kind: 'fixed', aantal } : base;
+  }, [mode, aantal]);
   const [secondsLeft, setSecondsLeft] = useState(rule.kind === 'tijd' ? rule.seconden : 0);
   const [livesLeft, setLivesLeft] = useState(rule.kind === 'levens' ? rule.levens : 0);
 
@@ -190,7 +217,13 @@ export function useSumRound(setId: string, mode: SumMode) {
         // clock is one who already knows a table, not one still learning this
         // one. What it does not do is reach across kinds: a minute of tables
         // stays a minute of tables (`sumPool`).
-        const pool = rule.kind === 'fixed' ? loaded.items : sumPool(setId);
+        const alles = rule.kind === 'fixed' ? loaded.items : sumPool(setId);
+        // "Oefen je fouten" is every sum this child has ever had wrong, in the
+        // scheduler's order, which puts the ones they keep missing first. Read
+        // from the boxes at the moment the round starts rather than from a list
+        // made when the page loaded: a child who has just put one right should
+        // not be asked it again because a card was stale (ADR-078).
+        const pool = setId === 'fouten' ? metFouten(alles, loadedStates) : alles;
 
         // In the order the scheduler wants it: what a child keeps missing comes
         // round first, even inside ten sums. A diploma is the exception and

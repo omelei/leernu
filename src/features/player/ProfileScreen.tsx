@@ -1,11 +1,12 @@
 import { useEffect, useState, type FormEvent, type ReactNode } from 'react';
 import { t } from '@/i18n';
 import { FamilyIcon, PupilIcon } from '@/components/Icon';
-import { STICKERS, stickerById, unlockedStickers } from '@/components/stickerSet';
-import { levelFor } from '@/game-core';
+import { dayKey, grade, formatGrade } from '@/game-core';
 import { createChild, listChildren, switchChild } from '@/store/children';
 import type { ProfileRecord } from '@/store/db';
-import { loadXp } from '@/store/rewardStore';
+import { loadPlayedRounds, type PlayedRound } from '@/store/progress';
+import { geplaatst, naamVan, startbareOnderdelen } from '@/features/module/onderdelen';
+import { useTestPlan, daysUntil } from '@/features/home/testPlan';
 import { DEFAULT_PREFERENCES, loadPreferences, savePreference, type Preferences } from './settings';
 
 /**
@@ -26,11 +27,9 @@ import { DEFAULT_PREFERENCES, loadPreferences, savePreference, type Preferences 
  */
 export function ProfileScreen({
   profile,
-  onSticker,
   aside,
 }: {
   readonly profile: ProfileRecord;
-  readonly onSticker: (id: string) => void;
   readonly aside: ReactNode;
 }) {
   const [prefs, setPrefs] = useState<Preferences>(DEFAULT_PREFERENCES);
@@ -62,7 +61,7 @@ export function ProfileScreen({
           <p className="mt-1 text-ink-2">{t('you.nameIs', { naam: profile.naam })}</p>
         </div>
 
-        <Dieren chosen={profile.avatarConfig.sticker} onChoose={onSticker} />
+        <Week />
 
         <Children active={profile} />
 
@@ -91,86 +90,6 @@ export function ProfileScreen({
 
       {aside}
     </div>
-  );
-}
-
-/**
- * The twelve animals, and which of them this child has reached.
- *
- * The picking used to be on the front door, in the column on the right, where
- * six of them were all unlocked from the first day (ADR-059). It is here now
- * because the six became twelve and a ladder (ADR-067), and because this is
- * where the rest of what a child owns already lives — their name, their turn,
- * their switches.
- *
- * The ones not reached yet are shown rather than hidden, greyed and with the
- * level on them. That is the whole difference between a collection and a
- * mystery: a child can see there are twelve, see which one is next, and know
- * what it costs. What none of them says is when — nothing here arrives by
- * waiting, and the number on a locked one is a level, never a date.
- */
-function Dieren({
-  chosen,
-  onChoose,
-}: {
-  readonly chosen: string | undefined;
-  readonly onChoose: (id: string) => void;
-}) {
-  const [xp, setXp] = useState<number | null>(null);
-
-  useEffect(() => {
-    void loadXp().then(setXp);
-  }, []);
-
-  if (xp === null) return null;
-
-  const level = levelFor(xp);
-  const current = stickerById(chosen);
-
-  return (
-    <section className="flex flex-col gap-3" aria-label={t('you.animals')}>
-      <h2 className="tk-label">{t('you.animals')}</h2>
-      <p className="text-ink-2">
-        {t('you.animalsHave', {
-          aantal: unlockedStickers(level).length,
-          totaal: STICKERS.length,
-        })}
-      </p>
-
-      <div className="tk-animals">
-        {STICKERS.map((sticker) => {
-          const Draw = sticker.draw;
-          const open = sticker.level <= level;
-
-          return (
-            // The name is on the button and not on the drawing inside it. A
-            // <title> in an SVG is an accessible name in Chromium and is not
-            // one in WebKit, which is where these are read out loud: axe called
-            // all six of them buttons with no discernible text, on the browser
-            // an iPad in a classroom runs.
-            <button
-              key={sticker.id}
-              type="button"
-              className="tk-animal"
-              data-open={open ? 'ja' : undefined}
-              aria-label={
-                open
-                  ? t(sticker.name)
-                  : t('you.animalLocked', { dier: t(sticker.name), niveau: sticker.level })
-              }
-              aria-pressed={open ? sticker.id === current.id : undefined}
-              disabled={!open}
-              onClick={() => onChoose(sticker.id)}
-            >
-              <Draw size={28} />
-              <span aria-hidden="true" className="tk-animal-name">
-                {open ? t(sticker.name) : t('you.animalLevel', { niveau: sticker.level })}
-              </span>
-            </button>
-          );
-        })}
-      </div>
-    </section>
   );
 }
 
@@ -293,5 +212,85 @@ function Switch({
         <span className="tk-label flex-none">{on ? t('you.on') : t('you.off')}</span>
       </span>
     </button>
+  );
+}
+
+/**
+ * The week, for the adult in the room.
+ *
+ * "Jij" is the one screen in this product a parent opens, and until now it told
+ * them their child's name and two switches. What a parent actually wants is
+ * three sentences: has there been any practice this week, how did it go, and is
+ * there a test coming (ADR-079).
+ *
+ * It is deliberately not a report on the child. No forecast, no percentage of
+ * anything, no comparison — those live on Onthouden where they belong to the
+ * child, and a parent reading a grade about their ten-year-old on a settings
+ * page is the beginning of a conversation nobody wanted. What it says is what
+ * happened: rounds, and what each came to.
+ *
+ * Seven days rather than "recently", because a week is the unit a parent thinks
+ * in and it is the unit a school test is set in.
+ */
+function Week({ now = new Date() }: { readonly now?: Date }) {
+  const [rondes, setRondes] = useState<readonly PlayedRound[] | null>(null);
+  const plan = useTestPlan(now);
+
+  useEffect(() => {
+    void loadPlayedRounds().then(setRondes);
+  }, []);
+
+  if (rondes === null) return null;
+
+  const week = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 6);
+  const grens = dayKey(week);
+  const deze = rondes.filter((ronde) => ronde.at.slice(0, 10) >= grens);
+  const gespeeld = geplaatst(deze, startbareOnderdelen());
+
+  const beantwoord = deze.reduce((total, ronde) => total + ronde.answered, 0);
+  const goed = deze.reduce((total, ronde) => total + ronde.correct, 0);
+  const dagen = new Set(deze.map((ronde) => ronde.at.slice(0, 10))).size;
+  const cijfer = grade(goed, beantwoord);
+
+  // What was practised most, which is the sentence a parent repeats back.
+  const perSet = new Map<string, number>();
+  for (const { deel, ronde } of gespeeld) {
+    perSet.set(naamVan(deel), (perSet.get(naamVan(deel)) ?? 0) + ronde.answered);
+  }
+  const meest = [...perSet.entries()].sort((a, b) => b[1] - a[1])[0] ?? null;
+
+  const toets = plan.toetsen[0] ?? null;
+  const dagenTot = toets === null ? null : daysUntil(toets.date, now);
+
+  return (
+    <section className="flex flex-col gap-3" aria-label={t('you.week')}>
+      <h2 className="tk-label">{t('you.week')}</h2>
+
+      {deze.length === 0 ? (
+        <p className="text-ink-2">{t('you.weekNone')}</p>
+      ) : (
+        <>
+          <p className="text-body">
+            {t('you.weekRounds', { rondes: deze.length, dagen, vragen: beantwoord })}
+          </p>
+          <p className="text-ink-2">
+            {cijfer === null
+              ? t('you.weekNoGrade')
+              : t('you.weekGrade', { cijfer: formatGrade(cijfer) })}
+          </p>
+          {meest ? <p className="text-ink-2">{t('you.weekMost', { set: meest[0] })}</p> : null}
+        </>
+      )}
+
+      {toets !== null && dagenTot !== null ? (
+        <p className="text-ink-2">
+          {dagenTot === 0
+            ? t('home.testToday')
+            : dagenTot === 1
+              ? t('home.testTomorrow')
+              : t('home.testInDays', { aantal: dagenTot })}
+        </p>
+      ) : null}
+    </section>
   );
 }

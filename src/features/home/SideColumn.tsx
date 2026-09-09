@@ -3,13 +3,23 @@ import type { ComponentType } from 'react';
 import { Dot } from '@/components/Dot';
 import type { IconProps } from '@/components/Icon';
 import { ProgressBar } from '@/components/ProgressBar';
-import { nextSticker, stickerById, STICKERS, unlockedStickers } from '@/components/stickerSet';
-import { correctToNextLevel, levelFor, levelProgress, type ModeId } from '@/game-core';
+import { STICKERS, stickerById } from '@/components/stickerSet';
+import { NextIcon } from '@/components/Icon';
+import {
+  correctToNextLevel,
+  earnedAt,
+  levelFor,
+  levelProgress,
+  nextPlek,
+  COLLECTION_SIZE,
+  type FlawlessRun,
+  type ModeId,
+} from '@/game-core';
 import { MODULE_ICON } from '@/features/shell/moduleIcons';
 import { t, type TranslationKey } from '@/i18n';
 import { loadAccuracy, loadPlayedRounds } from '@/store/progress';
 import type { Accuracy } from '@/store/progress';
-import { loadXp } from '@/store/rewardStore';
+import { loadRun } from '@/store/streakStore';
 import {
   favorieten,
   geplaatst,
@@ -44,26 +54,29 @@ import {
  */
 export function SideColumn({
   sticker,
+  onReis,
   onBegin,
 }: {
   /** Which animal this child chose, so the journey shows theirs. */
   readonly sticker: string | undefined;
+  /** The way to the collection, which is what the journey card leads to. */
+  readonly onReis: () => void;
   readonly onBegin: (deel: Onderdeel, mode: ModeId) => void;
 }) {
   const [accuracy, setAccuracy] = useState<Accuracy | null>(null);
   const [gespeeld, setGespeeld] = useState<readonly Gespeeld[]>([]);
-  const [xp, setXp] = useState<number | null>(null);
+  const [run, setRun] = useState<FlawlessRun | null>(null);
 
   useEffect(() => {
     void loadAccuracy().then(setAccuracy);
-    void loadXp().then(setXp);
+    void loadRun().then(setRun);
     void loadPlayedRounds().then((rondes) => setGespeeld(geplaatst(rondes, startbareOnderdelen())));
   }, []);
 
   return (
     <aside className="tk-home-aside">
-      <Reis xp={xp} sticker={sticker} />
-      <Goed accuracy={accuracy} />
+      <Reis goed={accuracy?.correct ?? null} sticker={sticker} onReis={onReis} />
+      <Goed accuracy={accuracy} run={run} />
       <Favorieten gespeeld={gespeeld} onBegin={onBegin} />
     </aside>
   );
@@ -88,26 +101,28 @@ export function SideColumn({
  * to come back for the coming back rather than for the work.
  */
 function Reis({
-  xp,
+  goed,
   sticker,
+  onReis,
 }: {
-  readonly xp: number | null;
+  /** Correct answers over everything, ever. What the ladder runs on. */
+  readonly goed: number | null;
   readonly sticker: string | undefined;
+  readonly onReis: () => void;
 }) {
   // Nothing until it is known. A card that says level one and then changes its
   // mind has told a child something about themselves that was not true.
-  if (xp === null) return null;
+  if (goed === null) return null;
 
-  const level = levelFor(xp);
+  const level = levelFor(goed);
   // Theirs, not the newest one the ladder handed out. Three arrive at level one
   // and a child picks between them; drawing whichever the list happens to end
   // on would be this card telling them they are somebody else.
   const nu = stickerById(sticker);
-  const behaald = unlockedStickers(level);
-  const volgende = nextSticker(level);
-  const teGaan = correctToNextLevel(xp);
+  const volgende = nextPlek(level);
+  const teGaan = correctToNextLevel(goed);
   const Nu = nu.draw;
-  const Volgende = volgende?.draw ?? null;
+  const Volgende = volgende === null ? null : (STICKERS[volgende.plek]?.draw ?? null);
 
   return (
     <section className="tk-card flex flex-col gap-3" aria-label={t('home.journeyTitle')}>
@@ -127,13 +142,13 @@ function Reis({
             {t('home.journeyLevel', { niveau: level })}
           </p>
           <p className="text-ink-2">
-            {t('home.journeyHave', { aantal: behaald.length, totaal: STICKERS.length })}
+            {t('home.journeyHave', { aantal: earnedAt(level), totaal: COLLECTION_SIZE })}
           </p>
         </div>
       </div>
 
       <ProgressBar
-        value={levelProgress(xp)}
+        value={levelProgress(goed)}
         showDot={false}
         label={t('home.journeyBar', { niveau: level + 1 })}
       />
@@ -153,13 +168,24 @@ function Reis({
               — and because a silhouette is what tells them it is not theirs
               yet without a padlock and the word "locked". */}
           <p className="flex items-center gap-3 text-ink-2">
-            <span className="tk-sticker-next" aria-hidden="true">
+            <span className="tk-sticker-next" data-reeks={volgende.reeks} aria-hidden="true">
               {Volgende === null ? null : <Volgende size={28} />}
             </span>
-            {t('home.journeyNext', { dier: t(volgende.name) })}
+            {t('home.journeyNext', {
+              dier: t(STICKERS[volgende.plek]?.name ?? 'sticker.kat'),
+              reeks: t(`reeks.${volgende.reeks}` as TranslationKey),
+            })}
           </p>
         </>
       )}
+
+      {/* The way to the whole of it. The card can only ever show the animal a
+          child has and the one arriving next; sixty of them, twelve diplomas
+          and ten stamps need a page (ADR-076). */}
+      <button type="button" className="tk-card-link" onClick={onReis}>
+        {t('home.journeyAll')}
+        <NextIcon size={20} />
+      </button>
     </section>
   );
 }
@@ -172,7 +198,13 @@ function Reis({
  * has been. It moves slowly, it never resets, and it is the only number in this
  * column about the whole of the work rather than about this week.
  */
-function Goed({ accuracy }: { readonly accuracy: Accuracy | null }) {
+function Goed({
+  accuracy,
+  run,
+}: {
+  readonly accuracy: Accuracy | null;
+  readonly run: FlawlessRun | null;
+}) {
   // Nothing until it is known. A card that says nought percent and then changes
   // its mind has told a child something about themselves that was not true.
   if (accuracy === null) return null;
@@ -197,6 +229,18 @@ function Goed({ accuracy }: { readonly accuracy: Accuracy | null }) {
           </div>
         </div>
       )}
+
+      {/* The other streak: correct answers in a row, with no day in it. Under
+          the fraction and not above it, because it is the one number in this
+          product a single wrong answer takes away, and a child should meet the
+          slow one first (ADR-072). Absent until there is a run to report. */}
+      {run !== null && run.beste > 0 ? (
+        <p className="flex flex-wrap items-baseline gap-x-3 border-t border-line pt-3">
+          <span className="tk-label">{t('home.runLabel')}</span>
+          <span className="tk-display font-bold tabular-nums">{run.nu}</span>
+          <span className="text-ink-2">{t('home.runBest', { aantal: run.beste })}</span>
+        </p>
+      ) : null}
     </section>
   );
 }

@@ -109,6 +109,27 @@
     --attention-text: #855a00; /* --aandachtTekst on paper 5.80:1 — the one that may be text */
     --neutral: #5c6b7a; /* --neutraal      paper on it 5.23:1 */
 
+    /* ---- The collection's five materials, ADR-071 -------------------------
+     * Outside both scales above and deliberately so: a material is not a module
+     * and not a semantic. It says which reeks of the collection an animal
+     * belongs to — ink, then bronze, silver, gold, diamond — and it is the only
+     * place in this product where a colour is a reward.
+     *
+     * Every one of them clears 3:1 against paper *and* against the dark paper,
+     * because they carry a drawing rather than text and §A's floor for a
+     * graphical object is three. One value each rather than a light and a dark:
+     * a material that changed hue between themes would stop being a material.
+     * Measured in contrast.test.ts.
+     *
+     * Ink is the theme's own, so the first reeks is the product's own colour and
+     * costs nothing to read in either theme.
+     */
+    --reeks-inkt: var(--ink);
+    --reeks-brons: #a4602a; /* 4.69:1 on paper, 3.82:1 on dark */
+    --reeks-zilver: #6b7883; /* 4.33:1, 4.14:1 */
+    --reeks-goud: #8f8213; /* 3.74:1, 4.79:1 */
+    --reeks-diamant: #1d7f93; /* 4.45:1, 4.02:1 */
+
     /* ---- Module accents, styleguide §B and ADR-028 ------------------------
      * One ring: lightness 0.55, chroma 0.125, only the hue differs — measured
      * exactly so for four of the seven. Tafels sits at C 0.116, tijdvakken at
@@ -725,6 +746,74 @@
     opacity: 0.75;
   }
 
+  /* The way out of a card, at the foot of it. A link that needs a hit target,
+   * which on a touch screen is every link — so it is a button, drawn as the
+   * sentence it is rather than as a third weight of control. */
+  .tk-card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    align-self: flex-start;
+    min-height: var(--touch-min);
+    margin-top: -4px;
+    color: var(--ink);
+    font-size: var(--type-label);
+    line-height: var(--type-label-lh);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+  .tk-card-link:hover {
+    color: var(--ink-2);
+  }
+
+  /* ---- One test in the plan ---------------------------------------------
+   * A row rather than a card: the block around it is already the one surface
+   * on the front door, and a card inside a card is a border nobody reads.
+   */
+  .tk-toets {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    border-top: var(--stroke-hair) solid var(--line);
+  }
+
+  /* ---- The ten stamps, named and explained ------------------------------
+   * On the collection page, where the ones not yet earned are shown as well —
+   * which is the whole difference between a collection and a mystery. The ones
+   * not held are quieter, and the drawing is what fades rather than the words:
+   * the criterion is the point of the row.
+   */
+  .tk-stamps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
+    gap: 12px;
+    padding: 0;
+    list-style: none;
+  }
+  .tk-stamp {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: var(--card-padding);
+    border: var(--stroke-hair) solid var(--line);
+    border-radius: var(--card-radius);
+    color: var(--ink-2);
+  }
+  .tk-stamp[data-gehaald] {
+    border-color: var(--ink);
+    border-width: var(--stroke-active);
+    padding: calc(var(--card-padding) - 1px);
+    background: var(--surface);
+    color: var(--ink);
+  }
+  .tk-stamp:not([data-gehaald]) svg {
+    opacity: 0.4;
+  }
+
   /* ---- The wall of diplomas --------------------------------------------
    * Twelve tables with the gaps showing, on the rekenen page and nowhere else.
    * The one place in this product where something not yet earned is drawn on
@@ -805,6 +894,30 @@
   }
   .tk-animal[data-open] {
     cursor: pointer;
+  }
+  /* Which reeks this row is. The drawings are `currentColor` and nothing else
+   * (§E), so the material is the row's text colour and the animal takes it —
+   * one declaration per material rather than sixty coloured drawings. */
+  .tk-animals[data-reeks='inkt'] .tk-animal[data-open] {
+    color: var(--reeks-inkt);
+  }
+  .tk-animals[data-reeks='brons'] .tk-animal[data-open] {
+    color: var(--reeks-brons);
+  }
+  .tk-animals[data-reeks='zilver'] .tk-animal[data-open] {
+    color: var(--reeks-zilver);
+  }
+  .tk-animals[data-reeks='goud'] .tk-animal[data-open] {
+    color: var(--reeks-goud);
+  }
+  .tk-animals[data-reeks='diamant'] .tk-animal[data-open] {
+    color: var(--reeks-diamant);
+  }
+  /* The one arriving next, marked with a rule rather than a colour: it is not
+   * earned yet, and a material it has not got would say it was. */
+  .tk-animal[data-next] {
+    border-color: var(--ink-3);
+    border-style: dashed;
   }
   .tk-animal[data-open]:hover {
     background: var(--surface);
@@ -1351,6 +1464,19 @@
     border-radius: var(--radius-full);
     background: var(--surface);
     color: var(--ink-3);
+    opacity: 0.75;
+  }
+  .tk-sticker-next[data-reeks='brons'] {
+    color: var(--reeks-brons);
+  }
+  .tk-sticker-next[data-reeks='zilver'] {
+    color: var(--reeks-zilver);
+  }
+  .tk-sticker-next[data-reeks='goud'] {
+    color: var(--reeks-goud);
+  }
+  .tk-sticker-next[data-reeks='diamant'] {
+    color: var(--reeks-diamant);
   }
 
   /* ---- Badges ----------------------------------------------------------
