@@ -269,20 +269,26 @@ test('a subject with many sets asks which, instead of showing all of them', asyn
 
   const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
 
-  // Twelve tables and "alle tafels", as chips under the card. Twelve cards is
+  // Scoped to step 1: the same chip says how long the round is (ADR-074), and
+  // an unscoped count would be counting the answers to two questions at once.
+  const chips = wat.locator('.tk-variant-chip');
+
+  // Twelve tables and "door elkaar", as chips under the card. Twelve cards is
   // the page this replaced, and it pushed step 2 off the screen.
   await wat.getByRole('button', { name: /^Tafels/ }).click();
-  await expect(page.locator('.tk-variant-chip')).toHaveCount(13);
+  await expect(chips).toHaveCount(13);
 
   // Plus has three ranges, and they are offered smallest first. Sorted as
   // numbers: "1000" falls between "100" and "20" in every alphabet there is.
   await wat.getByRole('button', { name: /^Plussommen/ }).click();
-  await expect(page.locator('.tk-variant-chip')).toHaveCount(3);
-  await expect(page.locator('.tk-variant-chip')).toHaveText(['tot 20', 'tot 100', 'tot 1000']);
+  await expect(chips).toHaveCount(3);
+  await expect(chips).toHaveText(['tot 20', 'tot 100', 'tot 1000']);
 
-  // The mix is one thing, so there is nothing to ask.
+  // The Rekenmix has three difficulties and an everything, out of the level
+  // every set already carried (ADR-073).
   await wat.getByRole('button', { name: /^Rekenmix/ }).click();
-  await expect(page.locator('.tk-variant-chip')).toHaveCount(0);
+  await expect(chips).toHaveCount(4);
+  await expect(chips).toHaveText(['Makkelijk', 'Gemiddeld', 'Pittig', 'Door elkaar']);
 });
 
 test('a plus sum is a plus sum, and a division is a division', async ({ page }) => {
