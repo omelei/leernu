@@ -35,6 +35,20 @@ const ALLOWED_SELECTORS: ReadonlyMap<string, string> = new Map([
   ['.tk-module-card', 'the module entrance'],
   ['.tk-module-card:hover', 'the module entrance'],
   ['.tk-module-card:disabled', 'the module entrance'],
+  // The fourth thing, added deliberately and argued in ADR-089: the answer a
+  // child has already given, on a page that is nothing but questions. A module
+  // page asks where, what, which one, how, and whether the answers wait — and
+  // the chosen tile in each row is the only thing on it worth finding again
+  // after looking away. In ink it was one slightly darker rule among twenty.
+  //
+  // Only the last selector of the list is what this file's parser records, so
+  // the other three are here to be read rather than to be matched. The rule
+  // they share also doubles the border weight, because §A does not let a hue
+  // carry a state on its own and this one does not.
+  [".tk-regio[aria-pressed='true']", 'the answer already given'],
+  [".tk-subject[aria-pressed='true']", 'the answer already given'],
+  [".tk-form[aria-pressed='true']", 'the answer already given'],
+  [".tk-switch[aria-pressed='true']", 'the answer already given'],
   // The rail is where the module entrance does most of its work: a column of
   // seven accents is the only place in the product that shows them together.
   [".tk-rail-item[aria-current='page']", 'the module entrance, in the rail'],

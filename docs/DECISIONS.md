@@ -3605,6 +3605,67 @@ open.
 
 ---
 
+## ADR-089 — A tile is a mark and a name, and the answer already given is coloured
+
+**Status:** accepted — 2026-09-09. Reshapes step 1 and step 2 of ADR-061 and
+ADR-062, and adds the fourth thing §B lets an accent paint.
+
+A module page is a chain of questions: where on the map, which subject, which
+one of those, how, and whether the answers wait until the end. Only the first
+of them was drawn as a row of tiles. The rest were cards — a name, a second
+line under it, twenty-four pixels of padding all round — and step 1 and step 2
+together took about six hundred pixels of a tablet's height. A child could see
+the question and not the answer to it without scrolling.
+
+**All of them are tiles now.** An icon and a name of a word or two, sized to
+what it says, wrapping when the row runs out. The same two steps are about a
+hundred and thirty pixels, and the whole flow including the start button fits
+on a laptop screen.
+
+**The sublines are gone.** "Nog niet geoefend", "alles van de kaart door
+elkaar", "rondkijken, geen vragen". They were tried once under the row instead
+of on the tile, about the chosen one only, and that was still five paragraphs
+back on a page whose whole change was to take them off. What the six ways of
+practising are for still reaches a screen reader, in each tile's label, which
+is what ADR-061 actually needs — it asks that a child can tell the six apart,
+not that a sentence is printed six times.
+
+**Every tile has its own mark.** Eight regions shared one ruled globe and every
+subject shared the progress dot, so a row of eight tiles had one drawing
+between them. The werelddelen are deliberately not silhouettes: §E's rule is
+that a real map shape comes from the topography source, because a continent at
+24px is a continent drawn wrong. They share one globe with a dot at one of six
+compass points, which is true, small, and the same question the row is asking.
+Nederland is a pin, because it is the one entry on that row that is a country.
+
+**The answer already given wears the module's colour.** This is the fourth
+thing §B lets an accent paint, after the highlight, the progress bar and the
+module entrance, and it is the first time one has been added since. The
+argument is that this page is nothing but questions, and the answer to each is
+the only thing on it worth finding again after looking away — in ink it was one
+slightly darker rule among twenty. The rule also doubles in weight, because §A
+does not let a hue carry a state on its own, and a child who cannot separate
+the tint from the paper still sees which tile is chosen.
+
+**Four names changed.** Eilanden became **Waddeneilanden** and Mix became
+**Topo-mix**, both of which say which thing they are rather than leaving the
+row above to say it. Toetsstand became **Oefentoets**, which is the word a
+Dutch child hears at school for the thing it is. And "Typ de naam" and "Typ het
+antwoord" both became **Zelf typen** while "Kies uit vier" became
+**Meerkeuze** — three words do not fit in a tile, and the two modules now name
+the same act the same way. Every address is untouched: /topografie/mix still
+opens the Topo-mix, because a rename that breaks a link a parent wrote down
+costs somebody a page that will not open.
+
+**What this costs.** How far along each subject is has left the page — it was a
+figure on every tile and it is now only in the tile's label and in the
+right-hand column, which is where a child reads progress rather than chooses.
+And the six werelddeel marks are a family rather than six recognisable things:
+the dot says roughly where, and nothing more. Both were accepted deliberately;
+neither is a bug to be found later.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because

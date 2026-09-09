@@ -539,3 +539,220 @@ export function PaperIcon(props: Omit<IconProps, 'children'>) {
     </Icon>
   );
 }
+
+// ---------------------------------------------------------------------------
+// The tiles on a module page
+//
+// A tile is an icon and a word, so the icon is the only thing telling two of
+// them apart at a glance — which is a job it did not have while every subject
+// carried the same progress dot and every region the same globe.
+//
+// All of them are built from §E's four primitives and nothing else. Nothing
+// curves, nothing is filled except the 6px dot where the dot is the meaning,
+// and no two share a silhouette. Where a shape would have to be a picture of a
+// real place, it is not drawn: §E's rule is that the map shape comes from the
+// topography source, because a continent at 24px is a continent drawn wrong.
+
+/**
+ * The six werelddelen: one globe, and a dot where that part of it is.
+ *
+ * Not a silhouette of the continent. Six blobs at 24px are six blobs, and §E
+ * forbids drawing a place as an icon for exactly that reason. What this says
+ * instead is true and small: the same world, and roughly where on it — which is
+ * also the question the row is asking. `Wereld` keeps the ruled globe, because
+ * it is the whole of it and has no part to point at.
+ */
+function WerelddeelIcon({
+  cx,
+  cy,
+  ...props
+}: Omit<IconProps, 'children'> & { readonly cx: number; readonly cy: number }) {
+  return (
+    <Icon {...props}>
+      <circle cx="12" cy="12" r="8.5" />
+      <circle cx={cx} cy={cy} r="3" fill="currentColor" />
+    </Icon>
+  );
+}
+
+export function AfrikaIcon(props: Omit<IconProps, 'children'>) {
+  return <WerelddeelIcon {...props} cx={12} cy={16.6} />;
+}
+
+export function AzieIcon(props: Omit<IconProps, 'children'>) {
+  return <WerelddeelIcon {...props} cx={15.4} cy={9} />;
+}
+
+export function EuropaIcon(props: Omit<IconProps, 'children'>) {
+  return <WerelddeelIcon {...props} cx={12} cy={7.4} />;
+}
+
+export function NoordAmerikaIcon(props: Omit<IconProps, 'children'>) {
+  return <WerelddeelIcon {...props} cx={8.6} cy={9} />;
+}
+
+export function ZuidAmerikaIcon(props: Omit<IconProps, 'children'>) {
+  return <WerelddeelIcon {...props} cx={8.6} cy={15} />;
+}
+
+export function OceanieIcon(props: Omit<IconProps, 'children'>) {
+  return <WerelddeelIcon {...props} cx={15.4} cy={15} />;
+}
+
+/**
+ * Nederland: a pin, because it is the one entry on that row that is not a
+ * werelddeel and not the world.
+ *
+ * A seventh globe with a dot on it would have put the country in the same
+ * family as the six continents and at the same size, which is the one thing a
+ * row about how big the map is should not say. A pin means "here" and says
+ * nothing about area.
+ *
+ * Told apart from `PointIcon` by being symmetrical: that one is a cursor and
+ * leans, this one hangs straight down from its head.
+ */
+export function PinIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <path d="M12 3l6 7-6 11-6-11z" strokeLinejoin="round" />
+      <circle cx="12" cy="9.5" r="2" />
+    </Icon>
+  );
+}
+
+/**
+ * Provincies: topography's own diamond, cut in two.
+ *
+ * The module pictogram is a whole diamond (`AreaIcon`), and a province is a
+ * part of the area that mark stands for — so this is that shape with its
+ * horizontal diagonal drawn, which is the smallest true statement about it.
+ */
+export function ProvincieIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <path d="M12 3l9 9-9 9-9-9z" strokeLinejoin="round" />
+      <path d="M3 12h18" />
+    </Icon>
+  );
+}
+
+/** Steden: two buildings on a ground line, at different heights. */
+export function StadIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <path d="M3 20h18" />
+      <path d="M6 20v-8h5v8" strokeLinejoin="round" />
+      <path d="M13 20v-12h5v12" strokeLinejoin="round" />
+    </Icon>
+  );
+}
+
+/**
+ * Wateren: two ruled waves.
+ *
+ * Zigzag rather than curved, which is §E's constraint and is also what stays
+ * legible at 20px. Told apart from `FreezerIcon`'s three flat stripes by having
+ * a direction, and from it again by there being two rather than three.
+ */
+export function WaterIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <path d="M3 10l4.5 3 4.5-3 4.5 3 4.5-3" />
+      <path d="M3 16l4.5 3 4.5-3 4.5 3 4.5-3" />
+    </Icon>
+  );
+}
+
+/** De Waddeneilanden: land above a water line, in more than one piece. */
+export function EilandIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <path d="M3 18h18" />
+      <path d="M4.5 18l3-5 3 5z" strokeLinejoin="round" />
+      <path d="M13.5 18l2.5-4 2.5 4z" strokeLinejoin="round" />
+    </Icon>
+  );
+}
+
+/**
+ * The mix, in both modules: two paths that cross.
+ *
+ * One drawing for one idea. Topo-mix and Rekenmix are the same thing said about
+ * different content and they are never on a page together, so a second shape
+ * would be a second thing to recognise for no second meaning.
+ */
+export function MixIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <path d="M3 7h4l9 10h4" strokeLinejoin="round" />
+      <path d="M3 17h4l9-10h4" strokeLinejoin="round" />
+      <path d="M17 4l3 3-3 3" strokeLinejoin="round" />
+      <path d="M17 14l3 3-3 3" strokeLinejoin="round" />
+    </Icon>
+  );
+}
+
+/**
+ * Landen: two areas and the border between them.
+ *
+ * The border kinks, which is the whole of what tells this apart from a grid —
+ * `GridIcon` is ruled square and regular, and a frontier is neither.
+ */
+export function LandIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <path d="M4 5h16v14H4z" strokeLinejoin="round" />
+      <path d="M13 5l-3 5 3 4-2 5" strokeLinejoin="round" />
+    </Icon>
+  );
+}
+
+/** Tafels: the times table, which is a grid before it is anything else. */
+export function GridIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <path d="M4 4h16v16H4z" strokeLinejoin="round" />
+      <path d="M4 9.33h16M4 14.67h16" />
+      <path d="M9.33 4v16M14.67 4v16" />
+    </Icon>
+  );
+}
+
+/**
+ * Deelsommen: the colon, which is the sign a Dutch primary school divides with.
+ *
+ * Never the obelus. The sums themselves are written "56 : 7" and an icon that
+ * used ÷ would be teaching a second notation on the tile that opens them.
+ */
+export function DeelIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <circle cx="12" cy="7.5" r="2" fill="currentColor" />
+      <circle cx="12" cy="16.5" r="2" fill="currentColor" />
+    </Icon>
+  );
+}
+
+/** Plussommen: the sign, drawn at the size a mark gets rather than a glyph. */
+export function PlusIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <path d="M12 5v14M5 12h14" />
+    </Icon>
+  );
+}
+
+/**
+ * Minsommen: the sign.
+ *
+ * One line, and the only icon in this set that is one line — `FreezerIcon` is
+ * three and `WaterIcon` is two that bend. Beside a plus, in a row of four kinds
+ * of sum, it is not something anyone has to work out.
+ */
+export function MinIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <path d="M5 12h14" />
+    </Icon>
+  );
+}

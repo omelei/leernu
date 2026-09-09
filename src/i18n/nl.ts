@@ -234,8 +234,8 @@ export const nl = {
   'onderwerp.steden.kortHoofd': 'Hoofdsteden',
   'onderwerp.steden.kortAlle': 'Alle',
   'onderwerp.wateren': 'Wateren',
-  'onderwerp.eilanden': 'Eilanden',
-  'onderwerp.topomix': 'Mix',
+  'onderwerp.eilanden': 'Waddeneilanden',
+  'onderwerp.topomix': 'Topo-mix',
   'onderwerp.landen': 'Landen',
   // Het aantal staat erbij, want dat is wat een kind wil weten voordat het
   // begint: zestien landen is een middag, honderdzevenenzestig is een jaar.
@@ -313,9 +313,9 @@ export const nl = {
   // staat, want het is hetzelfde soort ding - een eigenschap van de ronde die
   // de twee stappen erboven al gekozen hebben.
   'choose.testModeLabel': 'Zoals op school',
-  'choose.testMode': 'Toetsstand',
+  'choose.testMode': 'Oefentoets',
   'choose.testModeWhy': 'Je ziet pas aan het eind wat goed was, en je krijgt een cijfer.',
-  'choose.startTest': '{wat} · toetsstand',
+  'choose.startTest': '{wat} · oefentoets',
   'choose.likeTheTest': 'Oefen zoals de toets',
   'choose.howMany': 'Hoeveel vragen?',
   'choose.howManyOne': '{aantal} vragen',

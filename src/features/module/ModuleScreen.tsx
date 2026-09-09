@@ -1,7 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Button } from '@/components/Button';
 import { Dot } from '@/components/Dot';
-import { GlobeIcon, GoIcon, PaperIcon } from '@/components/Icon';
+import { GoIcon, PaperIcon } from '@/components/Icon';
 import { countMastered, type ItemState, type ModeId } from '@/game-core';
 import { t } from '@/i18n';
 import { loadItemStates } from '@/store/progress';
@@ -20,6 +20,7 @@ import {
   type Onderwerp,
 } from './onderdelen';
 import { eersteRegio, regiosVan } from './regios';
+import { onderwerpIcon, regioIcon } from './tegelIcons';
 import {
   formsFor,
   minutesFor,
@@ -43,26 +44,36 @@ import { useSmallScreen } from '@/features/shell/useSmallScreen';
  * between two modules is the list of subjects and the list of ways — data — and
  * neither is a reason for a second screen.
  *
- * Four things it does that the two screens it replaces did not.
+ * Five things it does that the two screens it replaces did not.
  *
- * **Topography asks where before it asks what.** Wereld, Europa, Nederland,
- * and then one word per subject underneath — Provincies, Steden, Wateren,
- * Eilanden, Mix. Five cards that each ended in "van Nederland" said the same
- * thing five times and left no room for the countries of Europe to arrive
- * beside them; the region row says it once and the cards get their word back
- * (ADR-083). Rekenen has no region and draws no row, which is why the steps
- * are numbered by the page rather than written into the copy.
+ * **Every question on it is a row of tiles, and a tile is a mark and a name.**
+ * An icon and a word or two, sized to what it says, wrapping onto the next
+ * line when the row runs out — the shape the region row has always had, now
+ * the shape of all of them (ADR-089). Nothing carries a second line: the
+ * sublines are gone, the marks are unique, and the answer already given wears
+ * the module's own colour, which is the one place on this page an accent
+ * earns its keep.
  *
- * **Step 1 offers subjects, not sets.** Twelve tables were twelve cards, and
- * with division, plus and minus beside them rekenen would have had thirty-six.
- * So a subject is a card and the sets under it are a row of chips that appears
- * once the subject is chosen — one decision, then a smaller one, instead of
- * thirty-six of equal weight (ADR-062). Six subjects at most in a section, the
- * same ceiling step 2 has had since ADR-061.
+ * **Topography asks where before it asks what.** Wereld, the six werelddelen,
+ * Nederland, and then one word per subject underneath — Provincies, Steden,
+ * Wateren, Waddeneilanden, Topo-mix. Five cards that each ended in "van
+ * Nederland" said the same thing five times and left no room for the countries
+ * of Europe to arrive beside them; the region row says it once and the tiles
+ * get their word back (ADR-083). Rekenen has no region and draws no row, which
+ * is why the steps are numbered by the page rather than written into the copy.
  *
- * **Every way of practising is in step 2, with a face.** Six at most; see
- * `forms.ts` for why the clock and the lives are in the list now rather than
- * beside it, and why a diploma is offered on a table and not on a mix.
+ * **Step 1 offers subjects, not sets, and which one is a step of its own.**
+ * Twelve tables were twelve cards, and with division, plus and minus beside
+ * them rekenen would have had thirty-six. So a subject is a tile and the sets
+ * under it are a row of chips — one decision, then a smaller one, instead of
+ * thirty-six of equal weight (ADR-062). "Welke tafel?" used to be a mono
+ * caption under the subjects, which is the size a label gets; on rekenen it is
+ * the press that decides what the round contains, so it is numbered like the
+ * questions either side of it.
+ *
+ * **Every way of practising is a tile too.** Six at most; see `forms.ts` for
+ * why the clock and the lives are in the list now rather than beside it, and
+ * why a diploma is offered on a table and not on a mix.
  *
  * **A set has an address.** leer.nu/topografie/provincies is a place a parent
  * can send a child, and the page opens on it — on the chip and on the subject
@@ -138,7 +149,17 @@ export function ModuleScreen({
     regios.length === 0 ? alleOnderwerpen : alleOnderwerpen.filter((vak) => vak.regio === hier);
 
   /** How many steps this page has, so the numbers are the page's own. */
-  const stap = regios.length >= 2 ? { regio: 1, wat: 2, hoe: 3 } : { regio: 0, wat: 1, hoe: 2 };
+  const heeftRegio = regios.length >= 2;
+  const heeftKeuze = onderwerp?.keuze != null && onderwerp.sets.length > 1;
+  const regioStap = heeftRegio ? 1 : 0;
+  const watStap = regioStap + 1;
+  const keuzeStap = heeftKeuze ? watStap + 1 : 0;
+  const stap = {
+    regio: regioStap,
+    wat: watStap,
+    keuze: keuzeStap,
+    hoe: (keuzeStap === 0 ? watStap : keuzeStap) + 1,
+  };
 
   // A map of a hundred and sixty-seven countries is not something a child can
   // point at, and on a phone neither is a map of forty-six. Where that is true
@@ -227,7 +248,10 @@ export function ModuleScreen({
             <Stap nummer={stap.regio} label={t('regio.title')} />
 
             <div className="tk-regios">
-              {regios.map((kandidaat) => (
+              {regios.map((kandidaat) => {
+                const RegioIcon = regioIcon(kandidaat.id);
+
+                return (
                 <button
                   key={kandidaat.id}
                   type="button"
@@ -237,13 +261,14 @@ export function ModuleScreen({
                   data-soon={kandidaat.built ? undefined : 'ja'}
                   onClick={() => setRegio(kandidaat.id)}
                 >
-                  <GlobeIcon size={20} />
+                  <RegioIcon size={20} />
                   {t(kandidaat.naam)}
                   {/* A region the plan has and the product does not says so on
                       its own face rather than opening onto nothing (ADR-051). */}
                   {kandidaat.built ? null : <span className="tk-label">{t('regio.soon')}</span>}
                 </button>
-              ))}
+                );
+              })}
             </div>
           </section>
         ) : null}
@@ -253,20 +278,20 @@ export function ModuleScreen({
 
           <div className="tk-sets">
             {onderwerpen.map((vak) => {
-              const ids = itemsVan(vak);
-              const mastered = countMastered(known, ids);
               const open = vak.id === onderwerp?.id;
+              const VakIcon = onderwerpIcon(vak.id);
 
               return (
                 <button
                   key={vak.id}
                   type="button"
                   className="tk-subject"
-                  // The tile shows a word and the dot beside it. A screen
-                  // reader still hears how the subject is going, because a
-                  // label that is deliberately shorter than what it means gets
-                  // the long version here — the same trade .tk-variant-chip
-                  // has always made.
+                  // The tile shows a mark and a word. How the subject is going
+                  // is not on it any more, and it is still here: a label that
+                  // is deliberately shorter than what it means carries the long
+                  // version, which is the trade .tk-variant-chip has always
+                  // made. The right-hand column is where a child reads
+                  // progress; this row is where they choose.
                   aria-label={`${t(vak.naam)}. ${vorderingVan(vak, known, now)}`}
                   aria-pressed={open}
                   // The subject's first set, and only when the subject is not
@@ -277,40 +302,28 @@ export function ModuleScreen({
                     if (!open) onSet(vak.sets[0]?.setId ?? '');
                   }}
                 >
-                  {/* 24 and not the 20 the other tiles give their pictogram.
-                      Below 21 the dot stops drawing a fill and becomes a solid
-                      core (§A, dotGeometry.ts), and on this row the dot is the
-                      only thing left carrying how far along a subject is — at
-                      20 all five of them looked identical. A pictogram can
-                      shrink because it is a picture of a word; this one is
-                      data. */}
-                  <Dot size={24} fill={ids.length === 0 ? 0 : mastered / ids.length} />
+                  <VakIcon size={20} />
                   {t(vak.naam)}
                 </button>
               );
             })}
           </div>
+        </section>
 
-          {/* How the chosen subject is going, and what is in it where the name
-              does not say — "Deelsommen" is a word a child may not have met,
-              and "de tafels andersom: 56 : 7" is the same thing with an
-              example on it. One line about the one that was chosen, rather
-              than the same two lines on all six. */}
-          {onderwerp ? (
-            <p className="tk-said">
-              {vorderingVan(onderwerp, known, now)}
-              {onderwerp.uitleg ? ` · ${t(onderwerp.uitleg)}` : ''}
-            </p>
-          ) : null}
+        {/* The second, smaller decision, and only where there is one — but a
+            question of its own, numbered like the others. "Welke tafel?" was a
+            mono caption tucked under the subjects, which is the size a label
+            gets, and it is not a label: on rekenen it is the press that decides
+            what the round actually contains.
 
-          {/* The second, smaller decision, and only where there is one. Chips
-              rather than a dropdown: a menu hides eleven of twelve tables
-              behind a control a child has to open, and the whole point of this
-              block is that the one they want is already on the screen. */}
-          {onderwerp && onderwerp.keuze && onderwerp.sets.length > 1 ? (
-            <div className="tk-variant">
-              <p className="tk-label">{t(onderwerp.keuze)}</p>
-              <div className="tk-variant-row">
+            Chips rather than a dropdown. A menu hides eleven of twelve tables
+            behind a control a child has to open, and the whole point of this
+            block is that the one they want is already on the screen. */}
+        {onderwerp && onderwerp.keuze && onderwerp.sets.length > 1 ? (
+          <section className="flex flex-col gap-3" aria-label={t(onderwerp.keuze)}>
+            <Stap nummer={stap.keuze} label={t(onderwerp.keuze)} />
+
+            <div className="tk-variant-row">
                 {onderwerp.sets.map((deel) => {
                   const ids = deel.items.map((item) => item.id);
                   const mastered = countMastered(known, ids);
@@ -336,17 +349,17 @@ export function ModuleScreen({
                     </button>
                   );
                 })}
-              </div>
             </div>
-          ) : null}
-        </section>
+          </section>
+        ) : null}
 
         <section className="flex flex-col gap-3" aria-label={t('choose.stepHow')}>
-          {/* The order of the six is the argument. The reason each one exists
-              is still on the page and is no longer on all six at once: it sits
-              under the row, about the one that is chosen. The heading used to
-              carry "van makkelijk naar moeilijk" as well, which was a caption
-              on a question: eight words where four were the question. */}
+          {/* The order of the six is the argument, and the tile is the name.
+              The line each one used to carry — "tik het gebied aan, voor de
+              eerste keer" — is off the page now and still in the label, so a
+              screen reader keeps the thing that tells the six apart (ADR-061).
+              The heading used to carry "van makkelijk naar moeilijk" as well,
+              which was a caption on a question. */}
           <Stap nummer={stap.hoe} label={t('choose.stepHow')} />
 
           <div className="tk-forms">
@@ -371,8 +384,6 @@ export function ModuleScreen({
               );
             })}
           </div>
-
-          {form ? <p className="tk-said">{t(form.reason)}</p> : null}
         </section>
 
         {/* What was chosen, in words, and then the way on. Full width and
@@ -421,11 +432,6 @@ export function ModuleScreen({
               <PaperIcon size={20} />
               {t('choose.testMode')}
             </button>
-            {/* What it does, under the control rather than inside it. Unlike
-                the two rows above, this one says it whether the switch is on
-                or off: a child has to know what they are turning on before
-                they turn it on. */}
-            <p className="tk-said">{t('choose.testModeWhy')}</p>
           </div>
         ) : null}
 

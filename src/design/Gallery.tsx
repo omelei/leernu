@@ -1,6 +1,30 @@
+import type { ComponentType } from 'react';
 import { Button } from '@/components/Button';
 import { Dot } from '@/components/Dot';
-import { FreezerIcon } from '@/components/Icon';
+import {
+  AfrikaIcon,
+  AzieIcon,
+  DeelIcon,
+  EilandIcon,
+  EuropaIcon,
+  FreezerIcon,
+  GlobeIcon,
+  GridIcon,
+  type IconProps,
+  LandIcon,
+  MinIcon,
+  MixIcon,
+  NoordAmerikaIcon,
+  OceanieIcon,
+  PaperIcon,
+  PinIcon,
+  PlusIcon,
+  ProvincieIcon,
+  StadIcon,
+  WaterIcon,
+  WrongIcon,
+  ZuidAmerikaIcon,
+} from '@/components/Icon';
 import { ProgressBar } from '@/components/ProgressBar';
 import { StatusLabel } from '@/components/StatusLabel';
 import { Wordmark } from '@/components/Wordmark';
@@ -22,6 +46,29 @@ import { Wordmark } from '@/components/Wordmark';
 
 const HEADING = 'tk-label mt-8 mb-3';
 const ROW = 'flex flex-wrap items-center gap-4';
+
+/** Every mark a tile on a module page can carry, in the order they appear. */
+const TEGELMERKEN: readonly (readonly [string, ComponentType<Omit<IconProps, 'children'>>])[] = [
+  ['Wereld', GlobeIcon],
+  ['Afrika', AfrikaIcon],
+  ['Azië', AzieIcon],
+  ['Europa', EuropaIcon],
+  ['Noord', NoordAmerikaIcon],
+  ['Zuid', ZuidAmerikaIcon],
+  ['Oceanië', OceanieIcon],
+  ['Nederland', PinIcon],
+  ['Provincies', ProvincieIcon],
+  ['Steden', StadIcon],
+  ['Wateren', WaterIcon],
+  ['Wadden', EilandIcon],
+  ['Landen', LandIcon],
+  ['Mix', MixIcon],
+  ['Tafels', GridIcon],
+  ['Delen', DeelIcon],
+  ['Plus', PlusIcon],
+  ['Min', MinIcon],
+  ['Fouten', WrongIcon],
+];
 
 export function Gallery() {
   return (
@@ -107,48 +154,49 @@ export function Gallery() {
         Nog niet beschikbaar
       </button>
 
-      {/* The tile a module page is made of: an icon and a word or two, sized to
-          what it says. Four classes share the face, so they belong on one line
-          here — the last time they drifted apart, nothing in this gallery put
-          them side by side and it went unnoticed.
+      {/* The tile a module page is made of: an icon and a word, sized to what
+          it says. Four classes share the face — region, subject, way of
+          practising, switch — so they belong on one line here. The last time
+          they drifted apart, nothing in this gallery put them side by side and
+          it went unnoticed for a release.
 
-          The three fills are not decoration. Below 21px the dot stops drawing a
-          fill and becomes a solid core (dotGeometry.ts), which is a shape that
-          says nothing about progress — and three of them at 0, 40 and 100
-          percent is how you see that in one glance rather than in a
-          screenshot. */}
-      <h2 className={HEADING}>Keuzetegel — één gezicht, vier rijen</h2>
+          The pressed one is the only place a module accent is allowed outside
+          the three §B names (ADR-089), so this is where to look at it: the
+          gallery carries no data-module, which means it draws in topography's
+          blue, the default in :root. */}
+      <h2 className={HEADING}>Keuzetegel — één gezicht, en het accent op de gekozene</h2>
       <div className="tk-sets">
         <button type="button" className="tk-subject">
-          <Dot size={24} fill={0} />
-          Leeg
+          <ProvincieIcon size={20} />
+          Rust
         </button>
         <button type="button" className="tk-subject" aria-pressed="true">
-          <Dot size={24} fill={0.4} />
+          <StadIcon size={20} />
           Gekozen
         </button>
-        <button type="button" className="tk-subject">
-          <Dot size={24} fill={1} />
-          Vol
-        </button>
-      </div>
-      <div className="tk-regios mt-3">
-        <button type="button" className="tk-regio">
-          <FreezerIcon size={20} />
-          Regio
-        </button>
         <button type="button" className="tk-regio" disabled data-soon="ja">
-          <FreezerIcon size={20} />
+          <PinIcon size={20} />
           Binnenkort
         </button>
         <button type="button" className="tk-switch">
-          <FreezerIcon size={20} />
+          <PaperIcon size={20} />
           Schakelaar
         </button>
       </div>
-      <p className="tk-said">
-        De regel onder een rij, over de tegel die gekozen is — bij label-maat.
-      </p>
+
+      {/* Every mark a tile can carry, at the size a tile carries it. Two rows
+          rather than a list, because the thing worth checking is not that each
+          one draws — it is that no two of them are the same drawing, and that
+          is a question you can only answer by seeing them together. */}
+      <h2 className={HEADING}>Tegelmerken — geen twee hetzelfde</h2>
+      <div className="tk-regios">
+        {TEGELMERKEN.map(([naam, Merk]) => (
+          <span key={naam} className="tk-regio" aria-hidden="true">
+            <Merk size={20} />
+            {naam}
+          </span>
+        ))}
+      </div>
 
       <h2 className={HEADING}>Voortgang</h2>
       <ProgressBar value={0} label="Leeg" />

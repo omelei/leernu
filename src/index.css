@@ -1389,15 +1389,28 @@
     background: var(--surface);
     border-color: var(--ink-3);
   }
-  /* Chosen: ink and weight, never a hue on its own. One pixel of padding goes
-   * back for the second pixel of rule, so nothing beside it moves. */
+  /* Chosen: the module's own colour, and a rule at double weight.
+   *
+   * This is the fourth thing §B lets an accent paint and it was argued for on
+   * its own (ADR-089). A module page is one long chain of choices — where,
+   * what, which one, how, and a switch — and the answer to each of them is the
+   * only thing on the page a child needs to find again after looking away. In
+   * ink it was a slightly darker rule among twenty; in the module's colour it
+   * is the one coloured thing in a section.
+   *
+   * The weight change stays, and it is not decoration: §A's rule is that
+   * colour never carries a state on its own, so the rule doubles as well as
+   * turns. A child who cannot tell the hue from the paper still sees which one
+   * is chosen. One pixel of padding goes back for that second pixel, so nothing
+   * beside it moves.
+   */
   .tk-regio[aria-pressed='true'],
   .tk-subject[aria-pressed='true'],
   .tk-form[aria-pressed='true'],
   .tk-switch[aria-pressed='true'] {
-    border-color: var(--ink);
+    border-color: var(--accent);
     border-width: var(--stroke-active);
-    background: var(--surface);
+    background: var(--accent-tint);
     padding: 0 15px;
   }
   /* The switch is the only one of its kind on its row, and its row is a column
@@ -1419,20 +1432,14 @@
     cursor: not-allowed;
   }
 
-  /* What the chosen tile no longer has room to say, under its own row.
-   *
-   * At label size, because §C says metadata in PO is set at the label step, and
-   * this is metadata about a choice rather than a line of the page's argument.
-   * It does not repeat the name: the tile above it is already carrying the ink
-   * rule and the surface ground, and a caption that names its own figure twice
-   * is how a compact row stops being compact.
+  /*
+   * There was a .tk-said here for one release: the line under a row, carrying
+   * what the tile no longer had room for — "nog niet geoefend", "rondkijken,
+   * geen vragen". It is gone. A tile is its name, the rows are a chain of five
+   * questions, and a sentence under each of them put five paragraphs back on a
+   * page whose whole change was to take them off. What the six ways of
+   * practising are for still reaches a screen reader, in each tile's label.
    */
-  .tk-said {
-    color: var(--ink-2);
-    font-size: var(--type-label);
-    line-height: var(--type-label-lh);
-    text-wrap: pretty;
-  }
 
   /* The cijfer, after a toetsstand and nowhere else. The number gets the score
    * size because on this screen it is the thing the round was for; the word
