@@ -267,7 +267,7 @@ test('the toetsstand asks without answering, and marks at the end', async ({ pag
   // One answer, and it was wrong on purpose, so the mark is the lowest there
   // is. What is being checked is that there is one at all.
   await expect(page.getByText('Zonder hulp onderweg, net als op school.')).toBeVisible();
-  await expect(page.locator('.tk-mark')).toContainText(/1,0|10,0/);
+  await expect(page.locator('.tk-cijfer')).toContainText(/1,0|10,0/);
 });
 
 /**

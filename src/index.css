@@ -1482,16 +1482,21 @@
     padding-left: calc(var(--card-padding) - 7px);
   }
 
-  /* The mark, after a toetsstand and nowhere else. The number gets the score
+  /* The cijfer, after a toetsstand and nowhere else. The number gets the score
    * size because on this screen it is the thing the round was for; the word
-   * before it and the reason after it are the label and the caveat. */
-  .tk-mark {
+   * before it and the reason after it are the label and the caveat.
+   *
+   * `.tk-cijfer` and not `.tk-mark`: a mark in this stylesheet is the tick or
+   * the cross drawn on an answer, and answerStates.test.ts holds that one to a
+   * rule about which colour it may take. Two things called the same name in one
+   * file is how a test ends up measuring the wrong one. */
+  .tk-cijfer {
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
     gap: 4px 12px;
   }
-  .tk-mark-why {
+  .tk-cijfer-why {
     color: var(--ink-2);
     flex-basis: 100%;
   }

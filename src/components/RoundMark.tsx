@@ -22,10 +22,10 @@ export function RoundMark({ goed, totaal }: { readonly goed: number; readonly to
   if (cijfer === null) return null;
 
   return (
-    <p className="tk-mark">
+    <p className="tk-cijfer">
       <span className="tk-label">{t('result.markLabel')}</span>
       <span className="tk-display text-score font-bold tabular-nums">{formatGrade(cijfer)}</span>
-      <span className="tk-mark-why">{t('result.markWhy')}</span>
+      <span className="tk-cijfer-why">{t('result.markWhy')}</span>
     </p>
   );
 }
