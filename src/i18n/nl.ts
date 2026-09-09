@@ -249,7 +249,7 @@ export const nl = {
 
   // Modes
   'mode.wijs-aan': 'Aanwijzen',
-  'mode.hoe-heet-dit': 'Typ de naam',
+  'mode.hoe-heet-dit': 'Zelf typen',
   'mode.ontdekken': 'Ontdekken',
   'mode.bliksemronde': 'Bliksemronde',
   'mode.overleven': 'Overleven',
@@ -426,8 +426,8 @@ export const nl = {
   'sums.wrongSub': 'Jij zei {gegeven}.',
   'sums.dontKnowSub': 'Deze komt zo weer langs.',
   'sums.practiceMore': 'Deze sommen moet je nog oefenen',
-  'mode.som-typen': 'Typ het antwoord',
-  'mode.som-meerkeuze': 'Kies uit vier',
+  'mode.som-typen': 'Zelf typen',
+  'mode.som-meerkeuze': 'Meerkeuze',
   // De tafeltoets die een kind van school kent, zonder de stopwatch: op de
   // instellingenpagina staat dat haast het onthouden niet helpt, en dat zetten
   // we niet uit voor de ene oefening waar een kind het het meest zou voelen.

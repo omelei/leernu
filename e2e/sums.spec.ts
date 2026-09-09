@@ -145,7 +145,7 @@ test('a set has an address, and the page opens on it', async ({ page }) => {
 
 test('typing a table: right, wrong, and not knowing', async ({ page }) => {
   await signIn(page, 'Fenna');
-  await startTable(page, 2, /Typ het antwoord/);
+  await startTable(page, 2, /Zelf typen/);
 
   const answer = page.getByPlaceholder('Antwoord');
   await expect(answer).toBeFocused();
@@ -179,7 +179,7 @@ test('choosing a table: four numbers, one of them right', async ({ page }) => {
 
 test('a finished table says what changed, not only what was scored', async ({ page }) => {
   await signIn(page, 'Mila');
-  await startTable(page, 1, /Typ het antwoord/);
+  await startTable(page, 1, /Zelf typen/);
 
   // The table of one, so every answer is the multiplier itself and the round
   // can be finished honestly rather than by guessing.
@@ -303,7 +303,7 @@ test('a plus sum is a plus sum, and a division is a division', async ({ page }) 
 
   await page
     .getByRole('region', { name: /Hoe wil je/ })
-    .getByRole('button', { name: /Typ het antwoord/ })
+    .getByRole('button', { name: /Zelf typen/ })
     .click();
   await start(page);
 
@@ -312,7 +312,7 @@ test('a plus sum is a plus sum, and a division is a division', async ({ page }) 
   await page.goto('/rekenen/deel-7');
   await page
     .getByRole('region', { name: /Hoe wil je/ })
-    .getByRole('button', { name: /Typ het antwoord/ })
+    .getByRole('button', { name: /Zelf typen/ })
     .click();
   await start(page);
 

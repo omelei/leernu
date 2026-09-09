@@ -152,7 +152,7 @@ test('the map has no violations while asking, and none while showing the answer'
 
 test('the typing mode has no violations', async ({ page }) => {
   await signIn(page, 'Sem');
-  await startRound(page, PROVINCIES, /Typ de naam/);
+  await startRound(page, PROVINCIES, /Zelf typen/);
   await expect(page.getByPlaceholder('Naam')).toBeVisible();
 
   expect((await scan(page)).violations).toEqual([]);

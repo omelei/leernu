@@ -164,7 +164,7 @@ test('the round: typing the name', async ({ page }, testInfo) => {
   const size = testInfo.project.name;
 
   await signIn(page, 'Stijn');
-  await chooseAndStart(page, /Typ de naam/);
+  await chooseAndStart(page, /Zelf typen/);
 
   await expect(page.getByPlaceholder('Naam')).toBeVisible(READY);
   await shoot(page, size, '09-typen');

@@ -238,7 +238,7 @@ export function ModuleScreen({
                   onClick={() => setRegio(kandidaat.id)}
                 >
                   <GlobeIcon size={20} />
-                  <span className="font-semibold">{t(kandidaat.naam)}</span>
+                  {t(kandidaat.naam)}
                   {/* A region the plan has and the product does not says so on
                       its own face rather than opening onto nothing (ADR-051). */}
                   {kandidaat.built ? null : <span className="tk-label">{t('regio.soon')}</span>}
@@ -255,16 +255,19 @@ export function ModuleScreen({
             {onderwerpen.map((vak) => {
               const ids = itemsVan(vak);
               const mastered = countMastered(known, ids);
-              const due = vak.sets
-                .filter((deel) => !deel.mix || vak.sets.length === 1)
-                .reduce((most, deel) => Math.max(most, opDeRol(deel, known, now)), 0);
               const open = vak.id === onderwerp?.id;
 
               return (
                 <button
                   key={vak.id}
                   type="button"
-                  className="tk-module-card w-full"
+                  className="tk-subject"
+                  // The tile shows a word and the dot beside it. A screen
+                  // reader still hears how the subject is going, because a
+                  // label that is deliberately shorter than what it means gets
+                  // the long version here — the same trade .tk-variant-chip
+                  // has always made.
+                  aria-label={`${t(vak.naam)}. ${vorderingVan(vak, known, now)}`}
                   aria-pressed={open}
                   // The subject's first set, and only when the subject is not
                   // already the open one: a child who has chosen the table of
@@ -274,31 +277,24 @@ export function ModuleScreen({
                     if (!open) onSet(vak.sets[0]?.setId ?? '');
                   }}
                 >
-                  <Dot size={24} fill={ids.length === 0 ? 0 : mastered / ids.length} />
-                  <span className="flex min-w-0 flex-col">
-                    {/* The name and how it is going share a baseline, which is
-                        what K2 draws. They wrap to two lines on a phone, where
-                        the name alone is most of the width. */}
-                    <span className="flex min-w-0 flex-wrap items-baseline gap-x-3">
-                      <span className="font-semibold">{t(vak.naam)}</span>
-                      <span className="text-ink-2">
-                        {mastered === 0 && due === 0
-                          ? t('home.setNew')
-                          : t('home.setMastered', { goed: mastered, totaal: ids.length })}
-                        {due > 0 ? ` · ${t('choose.dueToday', { aantal: due })}` : ''}
-                      </span>
-                    </span>
-
-                    {/* What is in it, where the name does not say. "Deelsommen"
-                        is a word a child may not have met; "de tafels
-                        andersom: 56 : 7" is the same thing with an example on
-                        it, and an example is what makes a subject choosable. */}
-                    {vak.uitleg ? <span className="text-ink-2">{t(vak.uitleg)}</span> : null}
-                  </span>
+                  <Dot size={20} fill={ids.length === 0 ? 0 : mastered / ids.length} />
+                  {t(vak.naam)}
                 </button>
               );
             })}
           </div>
+
+          {/* How the chosen subject is going, and what is in it where the name
+              does not say — "Deelsommen" is a word a child may not have met,
+              and "de tafels andersom: 56 : 7" is the same thing with an
+              example on it. One line about the one that was chosen, rather
+              than the same two lines on all six. */}
+          {onderwerp ? (
+            <p className="tk-said">
+              {vorderingVan(onderwerp, known, now)}
+              {onderwerp.uitleg ? ` · ${t(onderwerp.uitleg)}` : ''}
+            </p>
+          ) : null}
 
           {/* The second, smaller decision, and only where there is one. Chips
               rather than a dropdown: a menu hides eleven of twelve tables
@@ -339,10 +335,11 @@ export function ModuleScreen({
         </section>
 
         <section className="flex flex-col gap-3" aria-label={t('choose.stepHow')}>
-          {/* The order of the six is the argument, and each one says its own
-              reason on its own card. The heading used to carry "van makkelijk
-              naar moeilijk" as well, which was a caption on a question: eight
-              words where four were the question, and two lines on a phone. */}
+          {/* The order of the six is the argument. The reason each one exists
+              is still on the page and is no longer on all six at once: it sits
+              under the row, about the one that is chosen. The heading used to
+              carry "van makkelijk naar moeilijk" as well, which was a caption
+              on a question: eight words where four were the question. */}
           <Stap nummer={stap.hoe} label={t('choose.stepHow')} />
 
           <div className="tk-forms">
@@ -354,18 +351,21 @@ export function ModuleScreen({
                   key={candidate.id}
                   type="button"
                   className="tk-form"
+                  // The reason follows the name here as well as under the row,
+                  // so tabbing the six never costs a child the thing that
+                  // tells them apart (ADR-061).
+                  aria-label={`${t(candidate.name)}. ${t(candidate.reason)}`}
                   aria-pressed={candidate.id === form?.id}
                   onClick={() => setFormId(candidate.id)}
                 >
-                  <FormIcon size={24} />
-                  <span className="min-w-0">
-                    <span className="block font-semibold">{t(candidate.name)}</span>
-                    <span className="block text-ink-2">{t(candidate.reason)}</span>
-                  </span>
+                  <FormIcon size={20} />
+                  {t(candidate.name)}
                 </button>
               );
             })}
           </div>
+
+          {form ? <p className="tk-said">{t(form.reason)}</p> : null}
         </section>
 
         {/* What was chosen, in words, and then the way on. Full width and
@@ -407,15 +407,18 @@ export function ModuleScreen({
             <button
               type="button"
               className="tk-switch"
+              aria-label={`${t('choose.testMode')}. ${t('choose.testModeWhy')}`}
               aria-pressed={toetsstand}
               onClick={() => setToetsstand(!toetsstand)}
             >
-              <PaperIcon size={24} />
-              <span className="min-w-0">
-                <span className="block font-semibold">{t('choose.testMode')}</span>
-                <span className="block text-ink-2">{t('choose.testModeWhy')}</span>
-              </span>
+              <PaperIcon size={20} />
+              {t('choose.testMode')}
             </button>
+            {/* What it does, under the control rather than inside it. Unlike
+                the two rows above, this one says it whether the switch is on
+                or off: a child has to know what they are turning on before
+                they turn it on. */}
+            <p className="tk-said">{t('choose.testModeWhy')}</p>
           </div>
         ) : null}
 
@@ -466,6 +469,30 @@ export function ModuleScreen({
       {aside}
     </div>
   );
+}
+
+/**
+ * How a subject is going, in the words the tile no longer has room for.
+ *
+ * One string, built once and used twice: it is the line under the row for the
+ * chosen subject, and it is the tail of every tile's accessible name. Two
+ * copies of this sentence would be two places for it to drift, and the whole
+ * point of moving it off the tile is that it says the same thing in both.
+ */
+function vorderingVan(vak: Onderwerp, known: ReadonlyMap<string, ItemState>, now: Date): string {
+  const ids = itemsVan(vak);
+  const mastered = countMastered(known, ids);
+  // Never over a mix on its own: a mix holds every item there is, so it is due
+  // more often than anything else by definition.
+  const due = vak.sets
+    .filter((deel) => !deel.mix || vak.sets.length === 1)
+    .reduce((most, deel) => Math.max(most, opDeRol(deel, known, now)), 0);
+  const stand =
+    mastered === 0 && due === 0
+      ? t('home.setNew')
+      : t('home.setMastered', { goed: mastered, totaal: ids.length });
+
+  return due > 0 ? `${stand} · ${t('choose.dueToday', { aantal: due })}` : stand;
 }
 
 /**
