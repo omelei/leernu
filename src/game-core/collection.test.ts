@@ -35,14 +35,14 @@ describe('the collection', () => {
   });
 
   it('fills a reeks of twelve before the next one starts', () => {
-    // Three at level one, so the twelfth arrives at level ten and the bronze
+    // Three at level one, so the twelfth arrives at level ten and the silver
     // row opens at eleven. That is the pacing the whole ladder is built on.
     expect(earnedAt(10)).toBe(PER_REEKS);
-    expect(huidigeReeks(9)).toBe('inkt');
-    expect(huidigeReeks(10)).toBe('brons');
-    expect(inReeks(10, 'inkt')).toBe(PER_REEKS);
-    expect(inReeks(10, 'brons')).toBe(0);
-    expect(inReeks(11, 'brons')).toBe(1);
+    expect(huidigeReeks(9)).toBe('brons');
+    expect(huidigeReeks(10)).toBe('zilver');
+    expect(inReeks(10, 'brons')).toBe(PER_REEKS);
+    expect(inReeks(10, 'zilver')).toBe(0);
+    expect(inReeks(11, 'zilver')).toBe(1);
   });
 
   it('ends at sixty, and stays there', () => {
@@ -67,7 +67,7 @@ describe('the collection', () => {
 
   it('never says a place in a later reeks is held', () => {
     expect(isEarned(1, { reeks: 'goud', plek: 0 })).toBe(false);
-    expect(isEarned(58, { reeks: 'diamant', plek: PER_REEKS - 1 })).toBe(true);
+    expect(isEarned(58, { reeks: 'ultra', plek: PER_REEKS - 1 })).toBe(true);
   });
 });
 

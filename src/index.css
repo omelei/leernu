@@ -112,23 +112,25 @@
     /* ---- The collection's five materials, ADR-071 -------------------------
      * Outside both scales above and deliberately so: a material is not a module
      * and not a semantic. It says which reeks of the collection an animal
-     * belongs to — ink, then bronze, silver, gold, diamond — and it is the only
+     * belongs to — bronze, silver, gold, platinum, ultra — and it is the only
      * place in this product where a colour is a reward.
+     *
+     * The ladder is the one every ten-year-old already knows from the games
+     * they play outside this product, which is the whole reason it was renamed:
+     * "zwart" and "diamant" were two words that said nothing about how far
+     * along you were, and "platina" and "ultra" say it without a legend.
      *
      * Every one of them clears 3:1 against paper *and* against the dark paper,
      * because they carry a drawing rather than text and §A's floor for a
      * graphical object is three. One value each rather than a light and a dark:
      * a material that changed hue between themes would stop being a material.
      * Measured in contrast.test.ts.
-     *
-     * Ink is the theme's own, so the first reeks is the product's own colour and
-     * costs nothing to read in either theme.
      */
-    --reeks-inkt: var(--ink);
     --reeks-brons: #a4602a; /* 4.69:1 on paper, 3.82:1 on dark */
     --reeks-zilver: #6b7883; /* 4.33:1, 4.14:1 */
     --reeks-goud: #8f8213; /* 3.74:1, 4.79:1 */
-    --reeks-diamant: #1d7f93; /* 4.45:1, 4.02:1 */
+    --reeks-platina: #3f7f8f; /* 4.32:1, 4.14:1 */
+    --reeks-ultra: #8a4fc9; /* 4.97:1, 3.61:1 */
 
     /* ---- Module accents, styleguide §B and ADR-028 ------------------------
      * One ring: lightness 0.55, chroma 0.125, only the hue differs — measured
@@ -885,33 +887,48 @@
     color: var(--ink-2);
     cursor: not-allowed;
   }
-  /* Not reached yet, said with the drawing rather than with the words. The
-   * level on it — "niveau 7" — is the whole point of showing it at all, so it
-   * stays at full legibility; the animal behind it fades, which is what a
-   * silhouette is for. */
+  /* Not reached yet, said with the drawing rather than with the words — and
+   * the drawing is a parcel rather than the animal, because the animal is the
+   * surprise (ADR-081). The level on it — "niveau 7" — is the whole point of
+   * showing the cell at all, so it stays at full legibility, and the parcel
+   * sits back a little without disappearing: a wrapper you cannot see is not
+   * an invitation to open it. */
   .tk-animal:not([data-open]) svg {
-    opacity: 0.4;
+    opacity: 0.65;
   }
+  /* Earned: ringed in its own material, so a full row reads as a shelf of
+   * things you have rather than as twelve drawings. The colour comes from the
+   * row below, and the ring takes it with `currentColor` — one declaration for
+   * all five materials. */
   .tk-animal[data-open] {
+    border-color: currentColor;
     cursor: pointer;
   }
   /* Which reeks this row is. The drawings are `currentColor` and nothing else
-   * (§E), so the material is the row's text colour and the animal takes it —
-   * one declaration per material rather than sixty coloured drawings. */
-  .tk-animals[data-reeks='inkt'] .tk-animal[data-open] {
-    color: var(--reeks-inkt);
-  }
-  .tk-animals[data-reeks='brons'] .tk-animal[data-open] {
+   * (§E), so the material is the row's colour and both the animal and the
+   * parcel take it — one declaration per material rather than sixty coloured
+   * drawings.
+   *
+   * The parcels take it too, and that is the point: a row of ultra is a row a
+   * child can see is worth more before they can reach any of it. They are told
+   * apart from what has been earned by three other things — the shape is a
+   * parcel, the caption is a level rather than a name, and the ring round an
+   * earned cell is the material where a waiting one keeps the hairline. The
+   * words in these cells are ink either way; see .tk-animal-name. */
+  .tk-animals[data-reeks='brons'] .tk-animal {
     color: var(--reeks-brons);
   }
-  .tk-animals[data-reeks='zilver'] .tk-animal[data-open] {
+  .tk-animals[data-reeks='zilver'] .tk-animal {
     color: var(--reeks-zilver);
   }
-  .tk-animals[data-reeks='goud'] .tk-animal[data-open] {
+  .tk-animals[data-reeks='goud'] .tk-animal {
     color: var(--reeks-goud);
   }
-  .tk-animals[data-reeks='diamant'] .tk-animal[data-open] {
-    color: var(--reeks-diamant);
+  .tk-animals[data-reeks='platina'] .tk-animal {
+    color: var(--reeks-platina);
+  }
+  .tk-animals[data-reeks='ultra'] .tk-animal {
+    color: var(--reeks-ultra);
   }
   /* The one arriving next, marked with a rule rather than a colour: it is not
    * earned yet, and a material it has not got would say it was. */
@@ -930,10 +947,22 @@
     background: var(--surface);
     color: var(--ink);
   }
+  /* The word under the drawing is ink, never the material.
+   *
+   * A material is a colour for a *drawing*: §A's floor for a graphical object
+   * is 3:1 and that is what these five were measured against (ADR-071). Text
+   * needs 4.5, and bronze on the pressed cell's surface is 4.28 — which is what
+   * axe found the moment the first reeks stopped being ink. So the animal takes
+   * the material and its name takes the ink, which is also the honest division:
+   * the colour says which reeks, the word says which animal. */
   .tk-animal-name {
     font-size: var(--type-label);
     line-height: var(--type-label-lh);
     text-align: center;
+    color: var(--ink-2);
+  }
+  .tk-animal[data-open] .tk-animal-name {
+    color: var(--ink);
   }
 
   /* ---- The sum ----------------------------------------------------------
@@ -1284,6 +1313,75 @@
     font-weight: 600;
   }
 
+  /* ---- The two steps on a module page ------------------------------------
+   * "1 · Kies een onderwerp" and "2 · Hoe wil je oefenen?" were set in the
+   * 11px mono label, which is the size a caption gets. They are not captions:
+   * they are the two questions the page is, and a child scanning the page has
+   * to find them before anything under them means something.
+   *
+   * So they take the display face at h3 — bigger than everything they sit
+   * above, and deliberately smaller than "Wat wil je oefenen, Fem?", which is
+   * still the one heading on the page. The step number stays part of the
+   * string: it is the order, and the order is the argument.
+   */
+  .tk-step {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-size: var(--type-h3);
+    line-height: var(--type-h3-lh);
+    letter-spacing: -0.02em;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  /* ---- Where on the map -------------------------------------------------
+   * Topography's first question, as a row of three. Wider than a chip and
+   * flatter than a card: it is the coarsest choice on the page, so it reads as
+   * one band across the top of the flow rather than as three more cards
+   * competing with the subjects under it.
+   *
+   * They wrap on a phone rather than shrinking, because "Nederland" at 393px
+   * in three columns is six characters and an ellipsis.
+   */
+  .tk-regios {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .tk-regio {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: var(--touch-min);
+    padding: 0 16px;
+    border: var(--stroke-hair) solid var(--line-strong);
+    border-radius: var(--radius-field);
+    background: var(--paper);
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .tk-regio:hover:not(:disabled) {
+    background: var(--surface);
+    border-color: var(--ink-3);
+  }
+  /* Chosen: ink and weight, the same two changes every other chosen control on
+   * this page makes, and never a hue on its own. */
+  .tk-regio[aria-pressed='true'] {
+    border-color: var(--ink);
+    border-width: var(--stroke-active);
+    background: var(--surface);
+    padding: 0 15px;
+  }
+  /* A region the plan has and the product does not. Hatched and dashed, which
+   * is what the front door already draws for a module that is coming — a shape
+   * rather than a colour, so "not yet" is legible to a child who cannot tell
+   * two greys apart. */
+  .tk-regio[data-soon] {
+    border-style: dashed;
+    background: repeating-linear-gradient(135deg, var(--paper) 0 7px, var(--surface) 7px 14px);
+    color: var(--ink-2);
+    cursor: not-allowed;
+  }
+
   /* ---- Step 1, when there are twelve of them ---------------------------
    * Five named sets are a list and read as one. Twelve tables in a column are
    * a page a child scrolls past rather than reads, so above the phone they lay
@@ -1389,12 +1487,36 @@
     /* Compensate the border so nothing beside it moves. */
     padding: calc(var(--card-padding) - 1px);
   }
+  /* The mark and the name of what the tile opens.
+   *
+   * Top-aligned rather than centred, because a set's full name — "Hoofdsteden
+   * van de provincies" — is three lines in a tile of twelve rem, and a centred
+   * mark then floats beside the middle line as though it belonged to it. The
+   * offset puts it on the first line's optical centre instead, and it is
+   * computed from the line height so a phone's smaller h3 needs no second rule.
+   */
   .tk-tile-head {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
     color: var(--accent-text);
   }
+  .tk-tile-head > svg {
+    flex: none;
+    margin-top: calc((var(--type-h3-lh) - 24px) / 2);
+  }
+  /* How often this exercise was played, on the front door's "meest geoefend"
+   * row. Mono and tabular, because it is a count and counts line up; at the
+   * foot of the tile, because it is the answer to a question the name above it
+   * has already asked. */
+  .tk-tile-count {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: var(--type-label);
+    line-height: var(--type-label-lh);
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+  }
+
   /* A module the plan has and the product does not. Hatched and dashed, which
    * is what K1 draws — a shape rather than a colour, so that "not yet" is
    * legible to a child who cannot tell the two greys apart. */
@@ -1450,6 +1572,54 @@
     background: var(--surface);
     color: var(--ink);
   }
+  /* ---- The rung of the ladder -------------------------------------------
+   * Which material a child is filling now, drawn as the chevrons every game
+   * they play uses for a tier and coloured in that material. A pill rather
+   * than a line of text: it is a badge, and a badge is a thing you have.
+   *
+   * The word is inside it as well as the colour. §A: a colour never carries a
+   * meaning on its own, and this is the one place in the product where a
+   * colour *is* the reward, so it is also the place it would be tempting to
+   * let it stand alone.
+   */
+  .tk-reeks {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: 8px;
+    padding: 4px 12px 4px 8px;
+    border: var(--stroke-hair) solid currentColor;
+    border-radius: var(--radius-full);
+    color: var(--ink-2);
+  }
+  .tk-reeks[data-reeks='brons'] {
+    color: var(--reeks-brons);
+  }
+  .tk-reeks[data-reeks='zilver'] {
+    color: var(--reeks-zilver);
+  }
+  .tk-reeks[data-reeks='goud'] {
+    color: var(--reeks-goud);
+  }
+  .tk-reeks[data-reeks='platina'] {
+    color: var(--reeks-platina);
+  }
+  .tk-reeks[data-reeks='ultra'] {
+    color: var(--reeks-ultra);
+  }
+  /* Ink, for the same reason `.tk-animal-name` is: a material is measured
+   * against the 3:1 a drawing needs, and silver on paper is 4.32 — fine for the
+   * chevrons and the ring, short of the 4.5 a word needs. The badge keeps the
+   * material in its border and its icon. */
+  .tk-reeks-name {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
   /* Who arrives at the next level, drawn quietly. Not a padlock and not the
    * word "locked": a lighter version of the same animal says "not yet" without
    * saying "no", and it is the same drawing a child will see filled in when
@@ -1475,8 +1645,11 @@
   .tk-sticker-next[data-reeks='goud'] {
     color: var(--reeks-goud);
   }
-  .tk-sticker-next[data-reeks='diamant'] {
-    color: var(--reeks-diamant);
+  .tk-sticker-next[data-reeks='platina'] {
+    color: var(--reeks-platina);
+  }
+  .tk-sticker-next[data-reeks='ultra'] {
+    color: var(--reeks-ultra);
   }
 
   /* ---- Badges ----------------------------------------------------------

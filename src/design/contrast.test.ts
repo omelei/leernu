@@ -289,7 +289,7 @@ describe('palette contrast', () => {
    * themes worth measuring: it is the same colour standing on two very
    * different grounds.
    */
-  it.each([['brons'], ['zilver'], ['goud'], ['diamant']])(
+  it.each([['brons'], ['zilver'], ['goud'], ['platina'], ['ultra']])(
     'draws %s legibly on paper in both themes',
     (reeks) => {
       expect(contrastRatio(token(`reeks-${reeks}`), paper), 'light').toBeGreaterThanOrEqual(3);
@@ -297,11 +297,14 @@ describe('palette contrast', () => {
     },
   );
 
-  it('gives the first reeks the ink of whichever theme is on', () => {
-    // Ink rather than a fifth colour: the row every child has from the first
-    // minute is the product's own, and it is legible by definition.
-    expect(token('reeks-inkt')).toBe(token('ink'));
-    expect(token('reeks-inkt', 'dark')).toBe(token('ink', 'dark'));
+  it('gives every rung of the ladder a colour of its own', () => {
+    // Five materials, five hexes. Two rungs that resolved to the same value
+    // would make the ladder look four long, which is the failure a name alone
+    // does not catch: "platina" and "ultra" read as different words either way.
+    const waarden = ['brons', 'zilver', 'goud', 'platina', 'ultra'].map((reeks) =>
+      token(`reeks-${reeks}`),
+    );
+    expect(new Set(waarden).size).toBe(waarden.length);
   });
 
   it('keeps the semantic and accent scales separate, collision and all', () => {

@@ -41,6 +41,28 @@ export const ROUND_SIZE = { topo: 15, tafels: 10 } as const;
 /** How many favourites the column on the right holds. */
 export const FAVOURITES_SHOWN = 4;
 
+/** How many tiles the front door's "meest geoefend" row holds. */
+export const POPULAR_SHOWN = 4;
+
+/**
+ * What a child who has never played anything is offered instead.
+ *
+ * Four sets and the way each of them begins. Not a guess at what is popular
+ * with anybody else — there is no anybody else to ask, because there is no
+ * backend and nothing is sent anywhere (ADR-015). A number like "3.412 keer
+ * gespeeld" would have to be invented, and this product does not put invented
+ * numbers in front of children.
+ *
+ * So they are named as what they are: the ones to start with. Two from each
+ * built module, and the two that a Dutch child meets first in each.
+ */
+const STARTERS: readonly { readonly setId: string; readonly mode: ModeId }[] = [
+  { setId: 'nl-provincies', mode: 'wijs-aan' },
+  { setId: 'tafel-2', mode: 'som-typen' },
+  { setId: 'nl-hoofdsteden', mode: 'wijs-aan' },
+  { setId: 'plus-20', mode: 'som-typen' },
+];
+
 /**
  * How many sums a child has to have got wrong before "oefen je fouten" appears.
  *
@@ -89,6 +111,14 @@ export interface Onderwerp {
   readonly uitleg: TranslationKey | null;
   /** The question above the chips. Null for a subject that is one set. */
   readonly keuze: TranslationKey | null;
+  /**
+   * Where on the map this subject is, for the modules that have a where.
+   *
+   * Null everywhere except topography, and it is a plain string rather than
+   * `Regio['id']` so that `regios.ts` can import from here without this file
+   * importing back (ADR-083).
+   */
+  readonly regio: string | null;
   readonly sets: readonly Onderdeel[];
 }
 
@@ -231,28 +261,7 @@ export function onderwerpenVan(
   moduleId: Module['id'],
   known: ReadonlyMap<string, ItemState> = new Map(),
 ): Onderwerp[] {
-  if (moduleId === 'topo') {
-    const enkel: Onderwerp[] = topoOnderdelen().map((deel) => ({
-      moduleId: 'topo' as const,
-      id: deel.setId,
-      naam: deel.naam as TranslationKey,
-      uitleg: null,
-      keuze: null,
-      sets: [deel],
-    }));
-
-    return [
-      ...enkel,
-      {
-        moduleId: 'topo',
-        id: MIX_SET_ID,
-        naam: 'set.nl-mix',
-        uitleg: 'set.nl-mix.uitleg',
-        keuze: null,
-        sets: [topoMix()],
-      },
-    ];
-  }
+  if (moduleId === 'topo') return topoOnderwerpen();
 
   if (moduleId !== 'tafels') return [];
 
@@ -268,6 +277,7 @@ export function onderwerpenVan(
       naam: 'onderwerp.tafels',
       uitleg: 'onderwerp.tafels.uitleg',
       keuze: 'onderwerp.tafels.keuze',
+      regio: null,
       sets: [...van('tafel-'), ...mixMet('tafels-alle')],
     },
     {
@@ -276,6 +286,7 @@ export function onderwerpenVan(
       naam: 'onderwerp.delen',
       uitleg: 'onderwerp.delen.uitleg',
       keuze: 'onderwerp.delen.keuze',
+      regio: null,
       sets: [...van('deel-'), ...mixMet('deel-alle')],
     },
     {
@@ -284,6 +295,7 @@ export function onderwerpenVan(
       naam: 'onderwerp.plus',
       uitleg: 'onderwerp.plus.uitleg',
       keuze: 'onderwerp.bereik.keuze',
+      regio: null,
       sets: van('plus-'),
     },
     {
@@ -292,6 +304,7 @@ export function onderwerpenVan(
       naam: 'onderwerp.min',
       uitleg: 'onderwerp.min.uitleg',
       keuze: 'onderwerp.bereik.keuze',
+      regio: null,
       sets: van('min-'),
     },
     {
@@ -300,6 +313,7 @@ export function onderwerpenVan(
       naam: 'onderwerp.rekenmix',
       uitleg: 'onderwerp.rekenmix.uitleg',
       keuze: 'onderwerp.rekenmix.keuze',
+      regio: null,
       sets: [
         ...mixMet('rekenmix-1'),
         ...mixMet('rekenmix-2'),
@@ -312,6 +326,86 @@ export function onderwerpenVan(
     // mix rather than competing with them for the way in (ADR-078).
     ...foutenOnderwerp(known),
   ];
+}
+
+/**
+ * Topography's subjects, in one word each and under the region they belong to.
+ *
+ * Five sets became five subjects named after themselves — "Provincies van
+ * Nederland", "Hoofdsteden van de provincies" — which said where they were
+ * three times on one page. The region row above says it once, so the cards can
+ * be the word a child would use: **Provincies, Steden, Wateren, Eilanden,
+ * Mix** (ADR-083).
+ *
+ * The two city sets are one subject with a choice under it, which is the shape
+ * `onderwerpenVan` already uses for the twelve tables: the twelve capitals and
+ * the eighty cities are the same question at two sizes, and a child who wants
+ * "steden" should not have to know which of two cards means which.
+ */
+function topoOnderwerpen(): Onderwerp[] {
+  const sets = topoOnderdelen();
+  const van = (id: string) => sets.filter((deel) => deel.setId === id);
+
+  const steden = [...van('nl-hoofdsteden'), ...van('nl-steden')].map((deel) => ({
+    ...deel,
+    kortNaam:
+      deel.setId === 'nl-hoofdsteden'
+        ? t('onderwerp.steden.kortHoofd')
+        : t('onderwerp.steden.kortAlle'),
+  }));
+
+  const vakken: Onderwerp[] = [
+    {
+      moduleId: 'topo',
+      id: 'provincies',
+      naam: 'onderwerp.provincies',
+      uitleg: null,
+      keuze: null,
+      regio: 'nederland',
+      sets: van('nl-provincies'),
+    },
+    {
+      moduleId: 'topo',
+      id: 'steden',
+      naam: 'onderwerp.steden',
+      uitleg: 'onderwerp.steden.uitleg',
+      keuze: 'onderwerp.steden.keuze',
+      regio: 'nederland',
+      sets: steden,
+    },
+    {
+      moduleId: 'topo',
+      id: 'wateren',
+      naam: 'onderwerp.wateren',
+      uitleg: null,
+      keuze: null,
+      regio: 'nederland',
+      sets: van('nl-wateren'),
+    },
+    {
+      moduleId: 'topo',
+      id: 'eilanden',
+      naam: 'onderwerp.eilanden',
+      uitleg: null,
+      keuze: null,
+      regio: 'nederland',
+      sets: van('nl-waddeneilanden'),
+    },
+    {
+      moduleId: 'topo',
+      id: MIX_SET_ID,
+      naam: 'onderwerp.topomix',
+      uitleg: 'set.nl-mix.uitleg',
+      keuze: null,
+      regio: 'nederland',
+      sets: [topoMix()],
+    },
+  ];
+
+  // A subject with nothing in it is a card that opens onto nothing. Only the
+  // mix is guaranteed to hold something; the rest depend on the content files
+  // being there.
+  return vakken.filter((vak) => vak.sets.length > 0);
 }
 
 /**
@@ -340,6 +434,7 @@ function foutenOnderwerp(known: ReadonlyMap<string, ItemState>): Onderwerp[] {
       naam: 'onderwerp.fouten',
       uitleg: 'onderwerp.fouten.uitleg',
       keuze: null,
+      regio: null,
       sets: [{ ...alles, items: fout }],
     },
   ];
@@ -451,6 +546,73 @@ export function favorieten(gespeeld: readonly Gespeeld[]): Favoriet[] {
   return [...byKey.values()]
     .sort((a, b) => b.keer - a.keer || b.at.localeCompare(a.at))
     .slice(0, FAVOURITES_SHOWN);
+}
+
+/**
+ * The exercises this child goes back to most, with how often.
+ *
+ * One entry per set rather than per set and way — which is the difference
+ * between this and `favorieten`, and the reason both exist. The column on the
+ * right is a shortcut back into exactly what you did: provincies *aanwijzen*
+ * and provincies *typen* are two shortcuts, because they are two different
+ * afternoons. A tile on the front door is about the exercise, so the twelve
+ * provinces are one tile however they were answered, and the way in is
+ * whichever way this child chose most.
+ *
+ * The count is over this device and nothing else, and it is the honest one:
+ * every round that was placed, mixes included.
+ */
+export interface Populair {
+  readonly deel: Onderdeel;
+  readonly mode: ModeId;
+  readonly keer: number;
+  readonly at: string;
+}
+
+export function meestGeoefend(
+  gespeeld: readonly Gespeeld[],
+  hoeveel: number = POPULAR_SHOWN,
+): Populair[] {
+  const perSet = new Map<string, Populair & { readonly perMode: Map<ModeId, number> }>();
+
+  for (const { deel, ronde } of gespeeld) {
+    const seen = perSet.get(deel.setId);
+    const perMode = seen?.perMode ?? new Map<ModeId, number>();
+    const vanDezeMode = (perMode.get(ronde.mode) ?? 0) + 1;
+    perMode.set(ronde.mode, vanDezeMode);
+
+    perSet.set(deel.setId, {
+      deel,
+      // The way this set was answered most often. Ties keep the one already
+      // holding it, which is the earlier — and therefore more recent — round.
+      mode:
+        seen === undefined || vanDezeMode > (perMode.get(seen.mode) ?? 0) ? ronde.mode : seen.mode,
+      keer: (seen?.keer ?? 0) + 1,
+      // The list arrives newest first, so the first sighting is the latest one.
+      at: seen?.at ?? ronde.at,
+      perMode,
+    });
+  }
+
+  return [...perSet.values()]
+    .sort((a, b) => b.keer - a.keer || b.at.localeCompare(a.at))
+    .slice(0, hoeveel)
+    .map(({ deel, mode, keer, at }) => ({ deel, mode, keer, at }));
+}
+
+/**
+ * The four to start with, for a child who has played nothing yet.
+ *
+ * Returned with a count of zero rather than with a made-up one, so the tile can
+ * say "nog niet geoefend" and mean it.
+ */
+export function starters(): Populair[] {
+  const alles = startbareOnderdelen();
+
+  return STARTERS.flatMap(({ setId, mode }) => {
+    const deel = alles.find((kandidaat) => kandidaat.setId === setId);
+    return deel ? [{ deel, mode, keer: 0, at: '' }] : [];
+  });
 }
 
 /**

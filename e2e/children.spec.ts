@@ -28,7 +28,7 @@ async function answerOne(page: Page) {
   await page.goto('/topografie');
   await page
     .getByRole('region', { name: /Kies een onderwerp/ })
-    .getByRole('button', { name: /Provincies van Nederland/ })
+    .getByRole('button', { name: /^Provincies/ })
     .click();
   await page
     .getByRole('region', { name: /Hoe wil je/ })

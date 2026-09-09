@@ -299,7 +299,6 @@ export default function App() {
           setVisit(visit + 1);
           setScreen({ name: 'sums', setId, sumMode, aantal: null });
         }}
-        onChoose={goModule}
         onModule={goModule}
       />
     </Shell>

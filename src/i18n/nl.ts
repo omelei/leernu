@@ -22,18 +22,26 @@ export const nl = {
   // K1, de landingspagina. De begroeting zet het kind bovenaan het scherm; de
   // zin eronder zegt hardop wat op een fout lijkt: dat je vragen terugkrijgt
   // die je al had. Dat is precies de belofte.
+  //
+  // Wat die zin niet meer doet is een aantal noemen. "Vandaag oefen je 10
+  // vragen" las als een opdracht met een plafond: tien, en dan ben je klaar.
+  // Niets in het product stopt na tien, dus zegt de zin nu wat er wel waar is
+  // - je oefent zolang je wilt, en wat je eerder had komt terug omdat het zo
+  // blijft hangen.
   'home.welcome': 'Welkom {naam}!',
-  'home.todayCount': 'Vandaag oefen je {aantal} vragen.',
-  // Dutch needs the word rather than the digit here, the same way "één ronde"
-  // does: "1 vragen" is the small wrongness a ten-year-old spots at once.
-  'home.todayCountOne': 'Vandaag oefen je één vraag.',
-  'home.todayRepeats': '{aantal} daarvan heb je eerder gehad. Dat is de bedoeling.',
-  'home.todayRepeatOne': 'Eén daarvan heb je eerder gehad. Dat is de bedoeling.',
-  'home.todayFresh': 'Allemaal nieuw. Vanaf morgen komen ze terug.',
-  'home.continueWith': 'Ga verder met {module}',
-  'home.setsOver': '{onderdelen} onderdelen, verdeeld over {rondes} rondes.',
-  'home.setsOverOne': '{onderdelen} onderdelen, in één ronde.',
+  'home.todayOpen':
+    'Oefen zolang je wilt. Vragen die je eerder had komen terug, want zo onthoud je ze.',
   'home.practiceMore': 'Verder oefenen',
+  // De tegels tussen het toetsblok en het logboek: waar je zelf het vaakst
+  // naar teruggaat, met het aantal keer erbij. Dat getal komt van dit apparaat
+  // en van niets anders - er is geen server die meekijkt, dus er is ook geen
+  // "3.412 keer gespeeld" te tonen dat waar zou zijn.
+  'home.popularTitle': 'Meest geoefend',
+  'home.popularIntro': 'Waar je het vaakst naar teruggaat.',
+  'home.popularNew': 'Hier begin je mee.',
+  'home.popularTimes': '{aantal} keer gespeeld',
+  'home.popularOnce': '1 keer gespeeld',
+  'home.popularNone': 'nog niet geoefend',
   // De voorspelling stond hier en staat nu alleen nog op K9. Weg in plaats van
   // ongebruikt blijven staan: copy die nergens meer verschijnt is copy die
   // niemand nog leest en die bij de volgende ronde toch wordt meegewogen.
@@ -62,13 +70,18 @@ export const nl = {
   // waarin niemand rekent, "nog 6 goede antwoorden" is iets wat je vanmiddag
   // kunt gaan doen. Nergens staat hoe lang of hoe vaak: door wachten gebeurt
   // hier niets.
-  'home.journeyTitle': 'Jouw ontdekkingsreis',
+  'home.journeyTitle': 'Jouw voortgang',
   'home.journeyLevel': 'Niveau {niveau}',
   'home.journeyHave': '{aantal} van de {totaal} dieren',
   'home.journeyBar': 'Op weg naar niveau {niveau}',
   'home.journeyToGo': 'Nog {aantal} goede antwoorden tot niveau {niveau}.',
   'home.journeyOneToGo': 'Nog één goed antwoord tot niveau {niveau}.',
-  'home.journeyNext': 'Hierna: {dier} in {reeks}',
+  // Wat hierna komt is een verrassing, en de regel zegt dat ook. Hij noemde
+  // het dier bij naam - "Hierna: vos in zwart" - en daarmee was het geen
+  // verrassing meer maar een vooraankondiging. Wat er nu staat is wat je wel
+  // mag weten: in welke reeks hij valt, en dus hoe zeldzaam hij is. Het
+  // silhouet ernaast doet de rest.
+  'home.journeyNext': 'Hierna: een nieuw dier in {reeks}',
   'home.journeyComplete': 'Je hebt alle dieren. Je niveau blijft stijgen.',
   'home.journeyAll': 'Bekijk alles wat je kunt halen',
 
@@ -94,7 +107,6 @@ export const nl = {
   'home.retention': 'weet je hier over drie weken nog van',
   'home.setMastered': '{goed} van de {totaal} onthoud je',
   'home.setNew': 'nog niet geoefend',
-  'home.moreWays': 'Andere manieren',
 
   // The frame. Module order is ADR-029; only the ones with content are shown,
   // so six of these seven are written down before they are needed rather than
@@ -186,6 +198,30 @@ export const nl = {
   // opnoemen maakte die tegel twee keer zo hoog als de rest van de rij.
   'set.nl-mix.uitleg': 'Alles van de kaart door elkaar',
 
+  // Topografie in drie stappen: eerst waar op de wereld, dan wat, dan hoe.
+  // De regio staat vooraan omdat het de grofste keuze is die er te maken valt
+  // — en omdat een kind dat de provincies zoekt niet langs de landen van
+  // Europa hoeft. Wereld en Europa staan er wel en zijn nog niet te openen,
+  // dezelfde afspraak die de linkerbalk maakt over modules die nog komen.
+  'regio.title': 'Waar op de kaart?',
+  'regio.wereld': 'Wereld',
+  'regio.europa': 'Europa',
+  'regio.nederland': 'Nederland',
+  'regio.soon': 'binnenkort',
+
+  // Eén woord per onderwerp. "Provincies van Nederland" zei twee keer waar je
+  // bent — de regio erboven zegt het al — en las op een tegel als een zin in
+  // plaats van als een knop.
+  'onderwerp.provincies': 'Provincies',
+  'onderwerp.steden': 'Steden',
+  'onderwerp.steden.uitleg': 'De hoofdsteden, of alle tachtig',
+  'onderwerp.steden.keuze': 'Welke steden?',
+  'onderwerp.steden.kortHoofd': 'Hoofdsteden',
+  'onderwerp.steden.kortAlle': 'Alle',
+  'onderwerp.wateren': 'Wateren',
+  'onderwerp.eilanden': 'Eilanden',
+  'onderwerp.topomix': 'Mix',
+
   // Modes
   'mode.wijs-aan': 'Aanwijzen',
   'mode.hoe-heet-dit': 'Typ de naam',
@@ -210,8 +246,15 @@ export const nl = {
   'choose.title': 'Wat wil je oefenen, {naam}?',
   // "Waarover" was een woord dat niemand van tien hardop zegt. Deze zegt wat
   // de stap van je vraagt in plaats van waar hij over gaat.
-  'choose.stepWhat': '1 · Kies een onderwerp',
-  'choose.stepHow': '2 · Hoe wil je oefenen? van makkelijk naar moeilijk',
+  // De nummers staan niet meer in de tekst: de pagina telt zelf, want
+  // topografie heeft een stap meer dan rekenen en één vaste "1 ·" in de copy
+  // zou op één van de twee pagina's het verkeerde getal zijn.
+  'choose.stepWhat': 'Kies een onderwerp',
+  // "Van makkelijk naar moeilijk" stond in de kop en is eruit. Het was een
+  // toelichting op de volgorde, niet de vraag zelf, en het maakte van een kop
+  // van vier woorden een zin van acht — op een telefoon twee regels lang.
+  // De volgorde blijft; wat weg is, is het bijschrift erop.
+  'choose.stepHow': 'Hoe wil je oefenen?',
   'choose.dueToday': '{aantal} vandaag op de rol',
   'choose.testSubject': 'Hier gaat je toets over.',
 
@@ -421,26 +464,34 @@ export const nl = {
   // De verzamelpagina: alles wat er te halen valt en wat het kost. De kaart in
   // de rechterkolom kan er maar één tegelijk laten zien; dit is het geheel.
   // Nergens staat wanneer — alles hier koop je met goede antwoorden.
-  'reis.title': 'Jouw ontdekkingsreis',
-  'reis.intro': 'Alles wat je kunt halen, en wat het kost.',
+  'reis.title': 'Jouw voortgang',
+  'reis.intro': 'Alles wat je kunt halen, en wat het kost. Wat het wordt, zie je als je het haalt.',
   'reis.level': 'Jouw niveau',
   'reis.answered': '{aantal} goede antwoorden',
   'reis.animals': 'Dieren',
   'reis.animalsHave': '{aantal} van de {totaal}',
   'reis.reeksHave': '{reeks} · {aantal} van de {totaal}',
   'reis.animalHave': '{dier} in {reeks}',
-  'reis.animalWant': '{dier} in {reeks}, vanaf niveau {niveau}',
+  // Niet-gehaalde dieren houden hun naam voor zich. Wat erbij staat is wat je
+  // ervoor moet doen, want daar kun je op mikken; wie het wordt is de
+  // verrassing die het halen de moeite waard maakt.
+  'reis.animalWant': 'Nog onbekend dier in {reeks}, vanaf niveau {niveau}',
   'reis.lockedLevel': 'niveau {niveau}',
   'reis.stamps': 'Reisstempels',
   'reis.stampsHave': '{aantal} van de {totaal}',
 
   // De vijf reeksen. Kleine letter, want ze staan midden in een zin — en in een
   // kop zet de opmaak ze zelf al in kapitalen.
-  'reeks.inkt': 'zwart',
+  //
+  // Brons, zilver, goud, platina, ultra: de ladder die elk kind al kent uit de
+  // spellen die ze buiten dit product spelen. "Zwart" en "diamant" zeiden
+  // niets over hoe ver je was; deze vijf wel, en "ultra" is een woord dat een
+  // kind meteen als het einde van de ladder leest.
   'reeks.brons': 'brons',
   'reeks.zilver': 'zilver',
   'reeks.goud': 'goud',
-  'reeks.diamant': 'diamant',
+  'reeks.platina': 'platina',
+  'reeks.ultra': 'ultra',
 
   // Reisstempels. Elk criterium staat erbij, want een stempel die je niet kunt
   // uitleggen is een raadsel in plaats van een beloning — en een kind dat niet

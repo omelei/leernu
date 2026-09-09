@@ -133,8 +133,14 @@ describe('the addresses', () => {
   it('gives the collection an address, and keeps it out of the tab bar', () => {
     // A place a child goes on purpose, from the card that says where their
     // journey is — not a fifth section of the product (ADR-076).
+    expect(routeFor('/voortgang')).toEqual({ name: 'reis' });
+    expect(pathFor({ name: 'reis' })).toMatch(/\/voortgang$/);
+  });
+
+  it('still answers to the word the collection used to be called', () => {
+    // "Jouw ontdekkingsreis" became "Jouw voortgang". An address somebody
+    // wrote down keeps working; nothing links to it any more.
     expect(routeFor('/ontdekkingsreis')).toEqual({ name: 'reis' });
-    expect(pathFor({ name: 'reis' })).toMatch(/\/ontdekkingsreis$/);
   });
 
   it('keeps the retention screen at a word a child could type', () => {

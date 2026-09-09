@@ -130,8 +130,14 @@ test('a set has an address, and the page opens on it', async ({ page }) => {
     'true',
   );
 
+  // Topography's cities are one subject with two chips under it now, so an
+  // address for one of them has to open the card as well as press the chip
+  // (ADR-083).
   await page.goto('/topografie/hoofdsteden');
-  await expect(wat.getByRole('button', { name: /Hoofdsteden/ })).toHaveAttribute(
+  await expect(
+    wat.getByRole('button', { name: 'Hoofdsteden van de provincies', exact: true }),
+  ).toHaveAttribute('aria-pressed', 'true');
+  await expect(wat.getByRole('button', { name: /^Steden/ }).first()).toHaveAttribute(
     'aria-pressed',
     'true',
   );
@@ -378,10 +384,7 @@ test('the topomix asks about more than one kind of thing in one round', async ({
   await page.goto('/topografie/mix');
 
   const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
-  await expect(wat.getByRole('button', { name: /Topomix/ })).toHaveAttribute(
-    'aria-pressed',
-    'true',
-  );
+  await expect(wat.getByRole('button', { name: /^Mix/ })).toHaveAttribute('aria-pressed', 'true');
 
   // Exploring is one set's own layer and is not offered here — a mix is not
   // where anybody meets a set for the first time.

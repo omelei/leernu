@@ -32,6 +32,10 @@ practises one of five sets:
 | **Zeeën en meren**                | 6     | the large bodies of water           |
 | **Steden van Nederland**          | 80    | cities, and the province each is in |
 
+On /topografie they are offered as **where** and then **what**: Wereld, Europa,
+Nederland — the first two shown and not yet openable — and then Provincies,
+Steden, Wateren, Eilanden, Mix, one word each ([ADR-083](docs/DECISIONS.md)).
+
 In six ways. **Wijs aan** points at the map; **meerkeuze** offers four names,
 three of them places that border the right one; **typ de naam** names what is
 highlighted; **ontdekken** asks nothing at all and exists so a child's first
@@ -63,7 +67,8 @@ Every module has a page of its own at the word a parent would type — leer.nu
 practise, then how, then a button. Step 1 offers **subjects**, six at most, and
 a subject that holds many sets asks which as a row of chips underneath: one
 decision, then a smaller one, instead of thirty-six of equal weight
-([ADR-062](docs/DECISIONS.md)). The ways of practising are in order of weight
+([ADR-062](docs/DECISIONS.md)). Topography asks where on the map before that,
+which is why its subjects are one word ([ADR-083](docs/DECISIONS.md)). The ways of practising are in order of weight
 with a line and an icon each, six at most ([ADR-061](docs/DECISIONS.md)). The
 chosen combination is spelled out beside the start button, and the button says
 Start ([ADR-066](docs/DECISIONS.md)). Where a set is big enough for the question
@@ -79,23 +84,30 @@ scheduled locally; a round can be stopped early and what was answered is kept.
 
 The home screen greets a child by name and then does three things. It holds the
 tests that are coming — as many as there are, each with its subject, and nothing
-else in that block ([ADR-077](docs/DECISIONS.md)) — and under it offers the one
-thing to carry on with, which is the soonest test's subject.
+else in that block ([ADR-077](docs/DECISIONS.md)) — and under it, four tiles for
+the exercises this child goes back to most, with how many times each was played.
+That count comes from the device and nowhere else; there is no server to ask
+what is popular, and a figure we invented would be a fabrication on a page whose
+whole claim is that it does not track anybody ([ADR-082](docs/DECISIONS.md)).
 It logs the rounds just played with the mark each came to — "cijfer 8,4", over
 what was answered and not over what was asked ([ADR-053](docs/DECISIONS.md)).
 And down the right it keeps what is the child's own — on every screen inside
-the frame, not only here: the journey first, then everything answered correctly
-so far with the run of correct answers under it, then the exercises they keep
-going back to. The journey is the level a child has reached and one line saying
-what the next one costs, in the only unit that means anything to them: "nog 6
-goede antwoorden" ([ADR-070](docs/DECISIONS.md)).
+the frame, not only here: their progress first, then everything answered
+correctly so far with the run of correct answers under it, then the exercises
+they keep going back to. "Jouw voortgang" is the level a child has reached, the
+rung of the ladder they are on, and one line saying what the next one costs, in
+the only unit that means anything to them: "nog 6 goede antwoorden"
+([ADR-070](docs/DECISIONS.md)).
 
-The whole of it is at **leer.nu/ontdekkingsreis**: sixty animals in five
-materials — ink, bronze, silver, gold, diamond — twelve tafeldiploma's and ten
-reisstempels, with what every one of them costs written next to it
-([ADR-071](docs/DECISIONS.md), [ADR-076](docs/DECISIONS.md)). Nothing on that
-page can be bought, won by chance or reached by waiting, and nothing on it
-mentions a date.
+The whole of it is at **leer.nu/voortgang**: sixty animals in five materials —
+brons, zilver, goud, platina, ultra ([ADR-080](docs/DECISIONS.md)) — twelve
+tafeldiploma's and ten reisstempels, with what every one of them costs written
+next to it ([ADR-071](docs/DECISIONS.md), [ADR-076](docs/DECISIONS.md)). What it
+does not say is what the next animal _is_: an animal not yet earned is drawn as
+a parcel with its price on it, so a child can aim at the next rung without
+having read the whole collection off the screen on their first afternoon
+([ADR-081](docs/DECISIONS.md)). Nothing on that page can be bought, won by
+chance or reached by waiting, and nothing on it mentions a date.
 
 The forecast — "69%, weet je hier over drie weken nog van" — is the number the
 product argues from and it lives on **Onthouden**, one screen along. On the
