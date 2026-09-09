@@ -1,7 +1,14 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { fitView, findNearMisses, helpTargetFor, judgeAnswer, needsHelpTarget } from '@/game-core';
+import {
+  fitView,
+  findNearMisses,
+  helpTargetFor,
+  helpTargets,
+  judgeAnswer,
+  needsHelpTarget,
+} from '@/game-core';
 import { loadAllItems, loadItemSets } from './loadSets';
 import { geoUrl, pointUrl } from './loadGeo';
 import { SET_IDS, SETS } from '@/features/practice/useRound';
@@ -349,27 +356,56 @@ describe('the countries of Europe and of the world', () => {
   });
 
   /**
-   * And how many of them need one, which is the number that decides whether the
-   * rings are drawn at all (`MAX_HELP_SHARE` in MapCanvas).
+   * And which of them actually get a ring, which is not the same question.
    *
-   * Europe on a laptop is a handful of specks among forty countries, which is
-   * what a help ring is for. The world on a phone is nearly all of them, which
-   * is what the cap is for. Both are asserted, because the day one of them
-   * crosses the line is the day the map either fills with rings or loses the
-   * ones it needed — and neither shows up in a screenshot anybody reads.
+   * A ring takes over as the target from the shape under it, so two that
+   * overlap are two ways to hit the wrong country. `helpTargets` shrinks them
+   * until none touch and drops what shrinking ruined — and both ends of that
+   * are worth pinning, because neither shows up in a screenshot anybody reads.
    */
-  it('needs help rings for a handful of Europe and for most of the world on a phone', () => {
-    const share = (regio: string, px: number) => {
+  it('rings the microstates of Europe on a laptop, and almost nothing on a world phone', () => {
+    const ringen = (regio: string, px: number) => {
       const geo = landenGeo(regio, 'region');
       const fit = fitView(geo.viewBox[3], px);
-      const needing = geo.vormen.filter((vorm) => needsHelpTarget(vorm.bbox, fit)).length;
-      return needing / geo.vormen.length;
+      return helpTargets(geo.vormen, fit, (vorm) => vorm.punt);
     };
 
-    // A laptop, where Europe is drawn big: the microstates and nothing else.
-    expect(share('europa', 700)).toBeLessThan(0.25);
-    // A phone, where the world is 190 pixels tall: almost every country.
-    expect(share('wereld', 190)).toBeGreaterThan(0.25);
+    // A laptop. Vaticaanstad is 0.2 view units across — a fifth of a pixel — and
+    // it still has to be reachable, which is the whole reason a ring shrinks
+    // rather than gives up when San Marino is close by.
+    const europa = ringen('europa', 700);
+    for (const id of ['eu-land-vaticaanstad', 'eu-land-san-marino', 'eu-land-monaco']) {
+      expect([...europa.keys()], id).toContain(id);
+    }
+
+    // A phone, where the world is 190 pixels tall: every ring would reach its
+    // neighbours, so shrinking leaves nothing a finger could use and the
+    // coastlines are the targets again.
+    expect(ringen('wereld', 190).size).toBeLessThan(5);
+  });
+
+  it('never lets two rings reach each other', () => {
+    // The rule the whole thing exists for: a child aiming at one country must
+    // not land inside another one's target.
+    for (const [regio, px] of [
+      ['europa', 700],
+      ['europa', 190],
+      ['wereld', 700],
+      ['wereld', 190],
+    ] as const) {
+      const geo = landenGeo(regio, 'region');
+      const ringen = [...helpTargets(geo.vormen, fitView(geo.viewBox[3], px), (v) => v.punt)];
+
+      for (const [idA, a] of ringen) {
+        for (const [idB, b] of ringen) {
+          if (idA === idB) continue;
+          const gap = Math.hypot(a.cx - b.cx, a.cy - b.cy);
+          expect(gap, `${regio}@${px}: ${idA} and ${idB} overlap`).toBeGreaterThanOrEqual(
+            a.r + b.r - 0.001,
+          );
+        }
+      }
+    }
   });
 
   it.each(regios)('lets every country in $regio win its own question', ({ set }) => {

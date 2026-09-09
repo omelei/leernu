@@ -174,3 +174,69 @@ export function reachablePoints<
   const order = new Map(points.map((point, index) => [point.id, index]));
   return kept.sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
 }
+
+/**
+ * The help targets a map may actually draw: shrunk so that no two of them
+ * touch, and dropped where shrinking left nothing worth pressing.
+ *
+ * A ring round a shape too small to hit does two things at once. It says "there
+ * is more room here than the coastline suggests", and it *takes over* as the
+ * target — the shape underneath stops being pressable, because two overlapping
+ * hit areas would be worse than one small one.
+ *
+ * That is exactly right on the Wadden islands: five specks, far apart, each with
+ * a ring of its own reaching nothing else. It goes wrong the moment the specks
+ * are crowded. On a map of the world on a phone almost every country is too
+ * small by the same measure, and full-size rings would pack together — a child
+ * aiming at Togo landing inside Ghana's, which is a wrong answer the map handed
+ * them.
+ *
+ * Two rules, in this order.
+ *
+ * **Shrink, do not drop.** Each ring is pulled in to half the distance to its
+ * nearest neighbour, so the Vatican and San Marino end up with a ring each at
+ * two thirds size rather than one overlapping pair or nothing at all. A smaller
+ * target is still a hundred times the Vatican's own outline.
+ *
+ * **Then drop what shrinking ruined.** Below half the minimum touch size a ring
+ * is no longer something a finger can aim at, and the shape's own coastline is
+ * as good — so it goes, and the outline becomes the target again. On a world
+ * map at phone size that is nearly all of them, which is the honest answer: a
+ * country three pixels wide is hard to hit, exactly as it is on paper
+ * (ADR-086).
+ *
+ * Keyed by shape id, so a caller looks up rather than recomputes.
+ */
+export function helpTargets<T extends { readonly id: string; readonly bbox: BoundingBox }>(
+  shapes: readonly T[],
+  fit: ViewFit,
+  labelOf: (shape: T) => readonly [number, number] | null | undefined,
+  minPx = MIN_TOUCH_PX,
+): Map<string, HelpTarget> {
+  const wanted: HelpTarget[] = [];
+  const ids: string[] = [];
+  for (const shape of shapes) {
+    const target = helpTargetFor(shape.bbox, fit, labelOf(shape), minPx);
+    if (target !== null) {
+      wanted.push(target);
+      ids.push(shape.id);
+    }
+  }
+
+  const floor = (minPx / 2) * fit.unitsPerPixel;
+
+  const kept = new Map<string, HelpTarget>();
+  for (let i = 0; i < wanted.length; i++) {
+    const mine = wanted[i] as HelpTarget;
+    let r = mine.r;
+    for (let k = 0; k < wanted.length; k++) {
+      if (k === i) continue;
+      const other = wanted[k] as HelpTarget;
+      r = Math.min(r, Math.hypot(other.cx - mine.cx, other.cy - mine.cy) / 2);
+    }
+    // The diameter, against half the minimum: a ring narrower than that is not
+    // a target, it is a decoration on top of one.
+    if (r * 2 >= floor) kept.set(ids[i] as string, { cx: mine.cx, cy: mine.cy, r });
+  }
+  return kept;
+}
