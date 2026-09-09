@@ -1,7 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Button } from '@/components/Button';
 import { Dot } from '@/components/Dot';
-import { GlobeIcon, GoIcon } from '@/components/Icon';
+import { GlobeIcon, GoIcon, PaperIcon } from '@/components/Icon';
 import { countMastered, type ItemState, type ModeId } from '@/game-core';
 import { t } from '@/i18n';
 import { loadItemStates } from '@/store/progress';
@@ -91,7 +91,12 @@ export function ModuleScreen({
   /** Which set the address names, or null for the module's own way in. */
   readonly setId: string | null;
   readonly onSet: (setId: string) => void;
-  readonly onStart: (deel: Onderdeel, mode: ModeId, aantal: number | null) => void;
+  readonly onStart: (
+    deel: Onderdeel,
+    mode: ModeId,
+    aantal: number | null,
+    toetsstand: boolean,
+  ) => void;
   /** The child's own column, the same one the front door carries. */
   readonly aside: ReactNode;
 }) {
@@ -101,6 +106,8 @@ export function ModuleScreen({
   const [regio, setRegio] = useState<string | null>(null);
   /** How long the child wants the round, or null for the round's own length. */
   const [aantal, setAantal] = useState<number | null>(null);
+  /** Whether the round should keep its answers until the end (ADR-085). */
+  const [toetsstand, setToetsstand] = useState(false);
   const prefs = usePreferences();
   const plan = useTestPlan();
 
@@ -143,6 +150,19 @@ export function ModuleScreen({
   const gekozen = aantal !== null && lengtes.includes(aantal) ? aantal : null;
   const vragen = form === null ? null : questionCount(form, setSize, gekozen);
   const minuten = form === null ? null : minutesFor(form, vragen);
+  // Not offered where there is nothing to withhold. Exploring asks no
+  // questions, and a tafeldiploma already stops at the first mistake — hiding
+  // the answers there would hide nothing and take away the one thing that
+  // makes the wall of diplomas legible.
+  const toetsbaar = form !== null && form.rule !== null && form.id !== 'tafeldiploma';
+  /** Everything this module holds, under one name. What a test asks about. */
+  const mix = mixVan(alleOnderwerpen);
+  const zin =
+    chosen === null || form === null
+      ? ''
+      : toetsstand && toetsbaar
+        ? t('choose.startTest', { wat: startLabel(form, naamVan(chosen), setSize, gekozen) })
+        : startLabel(form, naamVan(chosen), setSize, gekozen);
 
   return (
     <div className="tk-page" data-module={module.id}>
@@ -167,6 +187,23 @@ export function ModuleScreen({
             <p className="flex flex-wrap items-center gap-3">
               <span className="tk-badge">{t('home.testLabel')}</span>
               <span className="text-ink-2">{t('choose.testSubject')}</span>
+              {/* One press that answers this page the way the test will ask it:
+                  everything the subject holds, and no answers until the end.
+                  It chooses rather than starts — the same thing the line about
+                  today's list does, and for the same reason. How is still the
+                  child's to say, and the start button still says what it is
+                  about to do (ADR-085). */}
+              {mix === null ? null : (
+                <Button
+                  variant="tertiary"
+                  onClick={() => {
+                    onSet(mix);
+                    setToetsstand(true);
+                  }}
+                >
+                  {t('choose.likeTheTest')}
+                </Button>
+              )}
             </p>
           ) : null}
 
@@ -351,12 +388,35 @@ export function ModuleScreen({
           </div>
         ) : null}
 
+        {/* Whether the answers wait. Not a numbered step and not a seventh way
+            of practising: it is a property of the round the steps above have
+            already chosen, which is exactly where "hoeveel vragen" sits and for
+            the same reason (ADR-074, ADR-085). */}
+        {chosen && toetsbaar ? (
+          <div className="tk-variant">
+            <p className="tk-label">{t('choose.testModeLabel')}</p>
+            <button
+              type="button"
+              className="tk-switch"
+              aria-pressed={toetsstand}
+              onClick={() => setToetsstand(!toetsstand)}
+            >
+              <PaperIcon size={24} />
+              <span className="min-w-0">
+                <span className="block font-semibold">{t('choose.testMode')}</span>
+                <span className="block text-ink-2">{t('choose.testModeWhy')}</span>
+              </span>
+            </button>
+          </div>
+        ) : null}
+
         {chosen && form ? (
           <div className="tk-choose-start">
+            {/* The sentence carries the switch as well as the two steps. A
+                child who turned the answers off and then read a button that
+                said nothing about it would find out by playing. */}
             <p className="tk-choose-said">
-              <span className="font-semibold">
-                {startLabel(form, naamVan(chosen), setSize, gekozen)}
-              </span>
+              <span className="font-semibold">{zin}</span>
               {minuten === null ? null : (
                 <span className="block text-ink-2">
                   {minuten === 1 ? t('choose.minuteOne') : t('choose.minutes', { aantal: minuten })}
@@ -366,10 +426,8 @@ export function ModuleScreen({
 
             <Button
               className="tk-button-go"
-              aria-label={t('choose.goLabel', {
-                wat: startLabel(form, naamVan(chosen), setSize, gekozen),
-              })}
-              onClick={() => onStart(chosen, form.id, gekozen)}
+              aria-label={t('choose.goLabel', { wat: zin })}
+              onClick={() => onStart(chosen, form.id, gekozen, toetsstand && toetsbaar)}
             >
               {t('choose.go')}
               <GoIcon size={24} />
@@ -399,6 +457,18 @@ export function ModuleScreen({
       {aside}
     </div>
   );
+}
+
+/**
+ * The subject that holds everything this module has, if it has one.
+ *
+ * The mix, in both modules. It is what "the way the test will ask" means: a
+ * test does not come one set at a time, and neither should the round that
+ * practises for it.
+ */
+function mixVan(onderwerpen: readonly Onderwerp[]): string | null {
+  const mix = onderwerpen.find((vak) => vak.sets.length === 1 && vak.sets[0]?.mix === true);
+  return mix?.sets[0]?.setId ?? null;
 }
 
 /**

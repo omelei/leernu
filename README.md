@@ -73,7 +73,11 @@ with a line and an icon each, six at most ([ADR-061](docs/DECISIONS.md)). The
 chosen combination is spelled out beside the start button, and the button says
 Start ([ADR-066](docs/DECISIONS.md)). Where a set is big enough for the question
 to mean anything, the child says how long the round is: ten, twenty-five, fifty
-or a hundred ([ADR-074](docs/DECISIONS.md)). A set has an address too, so
+or a hundred ([ADR-074](docs/DECISIONS.md)). And one switch sits under the two
+steps: **toetsstand**, which stops the round answering back until the end and
+gives a mark for it — the only round in the product that gets one, because it is
+the only one where nothing helped on the way
+([ADR-085](docs/DECISIONS.md)). A set has an address too, so
 leer.nu/topografie/provincies is a place a child can be sent.
 
 A round covers the whole set where the set is small enough — twelve of twelve —

@@ -69,6 +69,7 @@ export function PracticeScreen({
   setId,
   practiceMode,
   aantal = null,
+  toetsstand = false,
   onHome,
   onAgain,
 }: {
@@ -76,11 +77,25 @@ export function PracticeScreen({
   readonly practiceMode: PracticeMode;
   /** How many questions the child asked for, or null for the round's own. */
   readonly aantal?: number | null;
+  /**
+   * Whether the round keeps its answers until the end (ADR-085).
+   *
+   * Nothing on this screen tests for it. It does not have to: a round in
+   * toetsstand never rests in the revealed phase — the hook moves on before the
+   * frame is painted — so every branch below that draws feedback is simply
+   * never reached, and there is no second copy of the rule to keep in step.
+   */
+  readonly toetsstand?: boolean;
   readonly onHome: () => void;
   /** Another round of the same thing: K8's one primary button. */
   readonly onAgain: () => void;
 }) {
-  const { state, pick, choose, submit, giveUp, next, stop } = useRound(setId, practiceMode, aantal);
+  const { state, pick, choose, submit, giveUp, next, stop } = useRound(
+    setId,
+    practiceMode,
+    aantal,
+    toetsstand,
+  );
   const prefs = usePreferences();
   const nextButton = useRef<HTMLButtonElement>(null);
 

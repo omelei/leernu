@@ -26,6 +26,7 @@ export function SumScreen({
   setId,
   mode,
   aantal = null,
+  toetsstand = false,
   onHome,
   onAgain,
 }: {
@@ -33,10 +34,24 @@ export function SumScreen({
   readonly mode: SumMode;
   /** How many sums the child asked for, or null for the round's own. */
   readonly aantal?: number | null;
+  /**
+   * Whether the round keeps its answers until the end (ADR-085).
+   *
+   * Nothing on this screen tests for it, and it does not have to: a round in
+   * toetsstand never rests in the revealed phase — the hook moves on before the
+   * frame is painted — so every branch below that draws feedback is simply
+   * never reached, and there is no second copy of the rule to keep in step.
+   */
+  readonly toetsstand?: boolean;
   readonly onHome: () => void;
   readonly onAgain: () => void;
 }) {
-  const { state, submit, choose, giveUp, next, stop } = useSumRound(setId, mode, aantal);
+  const { state, submit, choose, giveUp, next, stop } = useSumRound(
+    setId,
+    mode,
+    aantal,
+    toetsstand,
+  );
   const prefs = usePreferences();
   const nextButton = useRef<HTMLButtonElement>(null);
 

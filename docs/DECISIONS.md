@@ -3401,6 +3401,51 @@ plainly, so asking for less motion costs nothing but the flourish.
 
 ---
 
+## ADR-085 — Toetsstand is a switch on a round, not a seventh way of practising
+
+**Status:** accepted — 2026-09-09.
+
+Every round in this product answers back. A shape turns green, a wrong pick
+travels to the right one, a sum shows what it was, and the child is told before
+they move on. That is the teaching and it is right almost everywhere.
+
+It is not what a test does. A child who has only ever practised with the answer
+arriving half a second later has practised something the test will not ask of
+them: recalling twelve things in a row with nothing coming back in between.
+
+**Toetsstand** turns the answering off. The round asks, takes what it is given,
+and goes straight to the next question — before the frame is painted, so there
+is not even a flash of the state that would have shown. At the end it lists what
+was missed, as every result screen does, and it gives **a mark**.
+
+**The mark is only here.** Every round is scored and every round is logged with a
+cijfer on the front door; no round screen has ever handed one over, because a
+mark for a round where the app corrected you after every question is a number
+about the app. A toetsstand is the one round where nothing helped, so it is the
+one round whose mark says something about the child — and it is the number they
+can hold next to the one they get at school, which is the whole reason for
+practising this way.
+
+**A switch and not a card.** Step 2 holds six ways at most (ADR-061), and
+topography already offers six. A seventh card would have pushed one off the page
+to say something that contradicts none of them: "the answers come at the end"
+can be done to pointing, to choosing and to typing alike. So it sits where
+"hoeveel vragen?" sits — a property of the round the two steps above have
+already chosen (ADR-074) — and the sentence beside the start button carries it,
+because a child who turned the answers off and read a button that did not say so
+would find out by playing.
+
+Not offered where there is nothing to withhold: **ontdekken** asks no questions,
+and a **tafeldiploma** already ends at the first mistake.
+
+And one press that sets the whole thing up. Where the plan says this module has
+a test, the line that says so carries "Oefen zoals de toets": it selects the mix
+— because a test does not come one set at a time — and switches the toetsstand
+on. It chooses rather than starts, exactly like the line about today's list
+(ADR-061 again): how is still the child's to say.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because

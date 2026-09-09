@@ -1447,6 +1447,60 @@
     padding-left: calc(var(--card-padding) - 7px);
   }
 
+  /* ---- The switch on a round ---------------------------------------------
+   * One control, drawn like a way of practising because that is what it is a
+   * property of — same card, same thickened leading edge when it is on. It is
+   * not one of the six, and it is not shaped like a chip either: a chip is one
+   * of several and this is the only one of its kind on the page.
+   */
+  .tk-switch {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 32rem;
+    min-height: var(--control-height);
+    padding: var(--card-padding);
+    border: var(--stroke-hair) solid var(--line-strong);
+    border-radius: var(--card-radius);
+    background: var(--paper);
+    color: var(--ink);
+    text-align: left;
+    cursor: pointer;
+  }
+  .tk-switch:hover {
+    border-color: var(--ink-2);
+    border-width: var(--stroke-active);
+    padding: calc(var(--card-padding) - 1px);
+  }
+  .tk-switch[aria-pressed='true'] {
+    border-color: var(--ink);
+    border-width: var(--stroke-active);
+    border-left-width: 8px;
+    background: var(--surface);
+    padding: calc(var(--card-padding) - 1px);
+    padding-left: calc(var(--card-padding) - 7px);
+  }
+
+  /* The cijfer, after a toetsstand and nowhere else. The number gets the score
+   * size because on this screen it is the thing the round was for; the word
+   * before it and the reason after it are the label and the caveat.
+   *
+   * `.tk-cijfer` and not `.tk-mark`: a mark in this stylesheet is the tick or
+   * the cross drawn on an answer, and answerStates.test.ts holds that one to a
+   * rule about which colour it may take. Two things called the same name in one
+   * file is how a test ends up measuring the wrong one. */
+  .tk-cijfer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 12px;
+  }
+  .tk-cijfer-why {
+    color: var(--ink-2);
+    flex-basis: 100%;
+  }
+
   /* ---- Tiles -----------------------------------------------------------
    * The foot of K1: every other module, as one row of equal things.
    *

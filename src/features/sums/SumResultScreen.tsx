@@ -2,6 +2,7 @@ import { t } from '@/i18n';
 import { sumText } from '@/game-core';
 import type { SumRoundState } from './useSumRound';
 import { NieuweDieren } from '@/features/reis/NieuwDier';
+import { RoundMark } from '@/components/RoundMark';
 
 /**
  * K8 for the tables.
@@ -50,8 +51,13 @@ export function SumResultScreen({
         ) : null}
       </div>
 
-      {/* What the round handed over, if it handed anything over. See the map's
-          result screen: same block, same place, same argument. */}
+      {/* The mark, on the one round that has earned one. See the map's result
+          screen: same block, same place, same argument. */}
+      {state.toetsstand ? (
+        <RoundMark goed={state.correctCount} totaal={state.answeredCount} />
+      ) : null}
+
+      {/* What the round handed over, if it handed anything over. */}
       <NieuweDieren plekken={state.reward?.dieren ?? []} />
 
       {state.missed.length > 0 ? (
