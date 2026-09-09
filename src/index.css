@@ -905,21 +905,29 @@
     cursor: pointer;
   }
   /* Which reeks this row is. The drawings are `currentColor` and nothing else
-   * (§E), so the material is the row's text colour and the animal takes it —
-   * one declaration per material rather than sixty coloured drawings. */
-  .tk-animals[data-reeks='brons'] .tk-animal[data-open] {
+   * (§E), so the material is the row's colour and both the animal and the
+   * parcel take it — one declaration per material rather than sixty coloured
+   * drawings.
+   *
+   * The parcels take it too, and that is the point: a row of ultra is a row a
+   * child can see is worth more before they can reach any of it. They are told
+   * apart from what has been earned by three other things — the shape is a
+   * parcel, the caption is a level rather than a name, and the ring round an
+   * earned cell is the material where a waiting one keeps the hairline. The
+   * words in these cells are ink either way; see .tk-animal-name. */
+  .tk-animals[data-reeks='brons'] .tk-animal {
     color: var(--reeks-brons);
   }
-  .tk-animals[data-reeks='zilver'] .tk-animal[data-open] {
+  .tk-animals[data-reeks='zilver'] .tk-animal {
     color: var(--reeks-zilver);
   }
-  .tk-animals[data-reeks='goud'] .tk-animal[data-open] {
+  .tk-animals[data-reeks='goud'] .tk-animal {
     color: var(--reeks-goud);
   }
-  .tk-animals[data-reeks='platina'] .tk-animal[data-open] {
+  .tk-animals[data-reeks='platina'] .tk-animal {
     color: var(--reeks-platina);
   }
-  .tk-animals[data-reeks='ultra'] .tk-animal[data-open] {
+  .tk-animals[data-reeks='ultra'] .tk-animal {
     color: var(--reeks-ultra);
   }
   /* The one arriving next, marked with a rule rather than a colour: it is not
@@ -1479,11 +1487,23 @@
     /* Compensate the border so nothing beside it moves. */
     padding: calc(var(--card-padding) - 1px);
   }
+  /* The mark and the name of what the tile opens.
+   *
+   * Top-aligned rather than centred, because a set's full name — "Hoofdsteden
+   * van de provincies" — is three lines in a tile of twelve rem, and a centred
+   * mark then floats beside the middle line as though it belonged to it. The
+   * offset puts it on the first line's optical centre instead, and it is
+   * computed from the line height so a phone's smaller h3 needs no second rule.
+   */
   .tk-tile-head {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
     color: var(--accent-text);
+  }
+  .tk-tile-head > svg {
+    flex: none;
+    margin-top: calc((var(--type-h3-lh) - 24px) / 2);
   }
   /* How often this exercise was played, on the front door's "meest geoefend"
    * row. Mono and tabular, because it is a count and counts line up; at the
