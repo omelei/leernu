@@ -312,7 +312,6 @@ export const nl = {
   // met aanwijzen, met kiezen en met typen. Hij staat waar "hoeveel vragen?"
   // staat, want het is hetzelfde soort ding - een eigenschap van de ronde die
   // de twee stappen erboven al gekozen hebben.
-  'choose.testModeLabel': 'Zoals op school',
   'choose.testMode': 'Oefentoets',
   'choose.testModeWhy': 'Je ziet pas aan het eind wat goed was, en je krijgt een cijfer.',
   'choose.startTest': '{wat} · oefentoets',

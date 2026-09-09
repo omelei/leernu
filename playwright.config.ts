@@ -30,16 +30,25 @@ export default defineConfig({
    * of them and a green suite takes ten minutes; a broken one takes half an
    * hour, because every failure is thirty seconds three times over.
    *
+   * With four workers a green suite is about four minutes, and CI divides the
+   * six projects over three runners on top of that (see ci.yml). By project
+   * and not by `--shard`: sharding balances on the number of tests, and a test
+   * that photographs six screens is not the same size as one that presses a
+   * button. Dividing the work is the only lever of the three that does not buy
+   * speed by looking at less.
+   *
    * `maxFailures` is the part that matters. A suite that is broken is broken
-   * after ten failures, and grinding through the remaining two hundred proves
-   * nothing that the first ten did not — it only decides whether the answer
-   * arrives in four minutes or in twenty-five.
+   * after a handful of failures, and grinding through the remaining two hundred
+   * proves nothing the first few did not — it only decides whether the answer
+   * arrives in four minutes or in twenty-five. It is four rather than ten
+   * because it now applies per runner: ten each would be thirty across the
+   * run, which is not "stop early", it is stopping three times as late.
    */
   // Spread rather than `workers: … : undefined`: under
   // exactOptionalPropertyTypes an absent option and one set to undefined are
   // different things, and only the first means "use your own default".
   ...(process.env.CI ? { workers: 4 } : {}),
-  maxFailures: process.env.CI ? 10 : 0,
+  maxFailures: process.env.CI ? 4 : 0,
   // `open: 'never'` because the HTML reporter otherwise starts a server and
   // waits after a failure, which in a Codespace looks exactly like a hung test
   // run. The report is still written; open it yourself with `npx playwright

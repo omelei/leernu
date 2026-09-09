@@ -81,12 +81,54 @@ jobs:
       - run: npm test
       - run: npm run build
 
-  # Both of these wait for `check`. They used to run beside it, so one commit
-  # that did not compile produced three failing jobs and three notifications,
-  # and spent eight minutes of runner time proving the same thing three times.
+  # ---- The one job on the critical path that is worth splitting -------------
+  #
+  # This and `lighthouse` both wait for `check`. They used to run beside it, so
+  # one commit that did not compile produced three failing jobs and three
+  # notifications, and spent eight minutes of runner time proving the same
+  # thing three times. With three e2e runners it would now be five.
+  #
+  # Measured on the deploy of 830ad64, in seconds of the run's own clock:
+  #
+  #   check       44   lint, typecheck, Prettier, 447 unit tests, build
+  #   lighthouse  89   runs beside e2e, so it is never the long pole
+  #   e2e        303   36 of it installing browsers, 252 running the suite
+  #   deploy      24
+  #
+  # The path to production is check -> e2e -> deploy, so six minutes of the app
+  # being fixed and not yet fixed is 252 seconds of Playwright and about two of
+  # everything else. Six sizes in two engines is what makes it that long, and
+  # none of that is waste — it is the check that finds the bugs this build has
+  # actually shipped.
+  #
+  # So it is divided rather than reduced. Not by `--shard`, which was tried
+  # first and does not work here: it balances by counting tests, and these
+  # tests are nothing like equal — one screenshot test photographs six screens
+  # and an assertion test presses a button. Measured, that gave 127s, 149s and
+  # 258s, so the run still waited on 258 and the whole exercise bought forty
+  # seconds.
+  #
+  # By project it balances by construction. Every project runs the identical
+  # list, so two of the six is two sixths of the work whichever two they are —
+  # and pairing one Chromium size with one WebKit size on each runner keeps the
+  # slower engine from piling up on one of them.
+  #
+  # `fail-fast: false` because a failure on the iPad and a failure on Android
+  # are two different bugs, and stopping the others hides the second one until
+  # the first is fixed.
   e2e:
     needs: [check]
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - group: laptop-en-ipad-staand
+            projects: --project=chromebook --project=ipad-portrait
+          - group: desktop-en-iphone
+            projects: --project=desktop-1440 --project=iphone
+          - group: android-en-ipad-liggend
+            projects: --project=android --project=ipad-landscape
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -94,26 +136,62 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
+      # The browsers are 36 seconds of every runner and they change only when
+      # the pinned Playwright version does, so the version is the key. A miss
+      # installs them exactly as before; there is no path where this is wrong,
+      # only one where it is slow.
+      - id: playwright-version
+        run: echo "value=$(node -p "require('./package-lock.json').packages['node_modules/@playwright/test'].version")" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright-version.outputs.value }}
       # WebKit as well as Chromium: an iPad in a classroom is Safari, and the
       # layout problems that only WebKit shows are exactly the ones a school
       # would hit first. Chromium in an iPad-sized viewport would not find them.
+      #
+      # `--with-deps` installs system libraries outside the cached directory, so
+      # it runs either way; only the browser download is skipped on a hit.
       - run: npx playwright install --with-deps chromium webkit
-      - run: npm run test:e2e
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+      - run: npx playwright install-deps chromium webkit
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+      - run: npm run test:e2e -- ${{ matrix.projects }}
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: playwright-report
+          name: playwright-report-${{ matrix.group }}
           path: playwright-report/
           retention-days: 7
       # Spec section 8: the screens at every size the app claims to work at.
       # Uploaded separately from the report because these are meant to be
       # looked at, not dug out of a zip — and because nobody here owns an
       # Android phone or an iPad to look at them on.
+      #
+      # One artifact per shard, merged back into one below. v4 will not let two
+      # jobs write the same artifact name, and three folders to open would undo
+      # the reason this is uploaded apart from the report in the first place.
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: screenshots
+          name: screenshots-${{ matrix.group }}
           path: screenshots/
+          retention-days: 7
+
+  # The three shards' screenshots, back under the one name they had before.
+  # Deliberately not in `deploy`'s needs: this is for a person to look at, and
+  # a merge that failed should not stop a release that passed.
+  screenshots:
+    needs: [e2e]
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/upload-artifact/merge@v4
+        with:
+          name: screenshots
+          pattern: screenshots-*
+          delete-merged: true
           retention-days: 7
 
   lighthouse:

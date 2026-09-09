@@ -383,6 +383,32 @@ export function ModuleScreen({
                 </button>
               );
             })}
+
+            {/* The oefentoets, at the end of the same row.
+
+                It is still not a seventh way of practising and the code still
+                treats it as what ADR-085 says it is — a property of the round,
+                which is why pressing it does not un-press the way that is
+                chosen and why the start sentence carries it separately. What
+                changed is where it is drawn: a child asking "hoe wil je
+                oefenen?" answers "als een toets" in the same breath as "door
+                aan te wijzen", and a labelled block of its own under the row
+                was the page disagreeing with them about that.
+
+                Last in the row rather than among the six, because it modifies
+                whichever of them is chosen. */}
+            {chosen && toetsbaar ? (
+              <button
+                type="button"
+                className="tk-switch"
+                aria-label={`${t('choose.testMode')}. ${t('choose.testModeWhy')}`}
+                aria-pressed={toetsstand}
+                onClick={() => setToetsstand(!toetsstand)}
+              >
+                <PaperIcon size={20} />
+                {t('choose.testMode')}
+              </button>
+            ) : null}
           </div>
         </section>
 
@@ -412,26 +438,6 @@ export function ModuleScreen({
                 </button>
               ))}
             </div>
-          </div>
-        ) : null}
-
-        {/* Whether the answers wait. Not a numbered step and not a seventh way
-            of practising: it is a property of the round the steps above have
-            already chosen, which is exactly where "hoeveel vragen" sits and for
-            the same reason (ADR-074, ADR-085). */}
-        {chosen && toetsbaar ? (
-          <div className="tk-variant">
-            <p className="tk-label">{t('choose.testModeLabel')}</p>
-            <button
-              type="button"
-              className="tk-switch"
-              aria-label={`${t('choose.testMode')}. ${t('choose.testModeWhy')}`}
-              aria-pressed={toetsstand}
-              onClick={() => setToetsstand(!toetsstand)}
-            >
-              <PaperIcon size={20} />
-              {t('choose.testMode')}
-            </button>
           </div>
         ) : null}
 

@@ -1419,13 +1419,11 @@
     background: var(--accent-tint);
     padding: 0 15px;
   }
-  /* The switch is the only one of its kind on its row, and its row is a column
-   * — .tk-variant stacks its label above it — so it stretched to the full
-   * measure while every other tile sized to its own words. A tile that is one
-   * of one is still a tile. */
-  .tk-switch {
-    align-self: flex-start;
-  }
+  /* The oefentoets sits at the end of .tk-forms now rather than in a labelled
+   * block of its own, so it is one tile among six in a wrapping row and needs
+   * nothing here beyond the face it shares with them. It keeps its own class
+   * because it is still a switch and not a seventh way of practising: pressing
+   * it does not un-press the way that is chosen (ADR-085, ADR-089). */
 
   /* A region the plan has and the product does not. Hatched and dashed, which
    * is what the front door already draws for a module that is coming — a shape
