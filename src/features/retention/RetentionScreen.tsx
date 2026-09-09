@@ -5,6 +5,7 @@ import { loadItemSets } from '@/content/loadSets';
 import { t, type TranslationKey } from '@/i18n';
 import { loadItemStates } from '@/store/progress';
 import { SET_IDS, type SetId } from '@/features/practice/useRound';
+import { SET_NAME_KEY } from '@/features/module/onderdelen';
 import type { Item, ItemState } from '@/game-core';
 import { dueLabel, retentionOf, statusOf } from './itemStatus';
 
@@ -24,13 +25,12 @@ import { dueLabel, retentionOf, statusOf } from './itemStatus';
  * going.
  */
 
-const SET_NAME_KEY: Record<SetId, TranslationKey> = {
-  'nl-provincies': 'set.nl-provincies',
-  'nl-hoofdsteden': 'set.nl-hoofdsteden',
-  'nl-waddeneilanden': 'set.nl-waddeneilanden',
-  'nl-wateren': 'set.nl-wateren',
-  'nl-steden': 'set.nl-steden',
-};
+/*
+ * The names live in `onderdelen.ts` and are imported rather than repeated. This
+ * file kept a second copy of the same five, which is how a sixth set ends up
+ * named on one screen and nameless on the other — and a seventh is what found
+ * it: `Record<SetId, …>` stopped compiling the moment there were two more.
+ */
 
 export function RetentionScreen({ aside }: { readonly aside: ReactNode }) {
   const [states, setStates] = useState<Map<string, ItemState> | null>(null);
