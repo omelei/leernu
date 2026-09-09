@@ -95,6 +95,46 @@ SOURCES.push({
   attributie: 'Bron: CBS',
 });
 
+/**
+ * Natural Earth, for everything outside the Netherlands.
+ *
+ * **Public domain**, stated by the project itself: "no permission needed",
+ * no attribution required, no restrictions on use — which is the only licence
+ * in this repository that asks nothing at all. We credit it anyway, in
+ * docs/DATA_SOURCES.md, because a map with no stated origin is a map nobody can
+ * check.
+ *
+ * Two scales, because a continent and a globe want different amounts of
+ * coastline. **1:50m** for Europe: at 1:110m Luxembourg, Montenegro, Kosovo and
+ * half the Balkans are simply absent from the file, and a set of European
+ * countries that quietly omits eleven of them is worse than no set. **1:110m**
+ * for the world, where 1:50m would be four megabytes of coastline nobody can
+ * see at that size.
+ *
+ * The Dutch names come with the data — `NAME_NL` on every feature — so the
+ * names a child reads are sourced rather than typed out from memory, which is
+ * the same rule the provinces follow.
+ */
+const NATURAL_EARTH =
+  'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson';
+
+SOURCES.push(
+  {
+    id: 'ne-landen-50m',
+    url: `${NATURAL_EARTH}/ne_50m_admin_0_countries.geojson`,
+    bron: 'Natural Earth, admin 0 countries, 1:50m',
+    licentie: 'Publiek domein',
+    attributie: 'Made with Natural Earth',
+  },
+  {
+    id: 'ne-landen-110m',
+    url: `${NATURAL_EARTH}/ne_110m_admin_0_countries.geojson`,
+    bron: 'Natural Earth, admin 0 countries, 1:110m',
+    licentie: 'Publiek domein',
+    attributie: 'Made with Natural Earth',
+  },
+);
+
 const OUT_DIR = join(process.cwd(), 'content', 'geo', '_source');
 mkdirSync(OUT_DIR, { recursive: true });
 
@@ -134,3 +174,4 @@ for (const source of SOURCES) {
 
 console.log(`\nWritten to ${OUT_DIR}`);
 console.log('Now run: node tools/content/build-geo.mjs');
+console.log('           node tools/content/build-countries.mjs');

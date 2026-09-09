@@ -16,11 +16,10 @@ import type { Module } from '@/features/shell/modules';
  * because the region above has already said the rest. Then how, which is step
  * 2 and has not moved (ADR-083).
  *
- * **Two of the three do not exist yet and say so.** That is the same promise
- * the rail makes about klokkijken and vlaggen (ADR-051): a child who can see
- * that the countries of Europe are coming is reading a plan, and a region that
- * is not built is not dressed up as one that is. What it must never do is open
- * onto nothing, so it cannot be pressed at all.
+ * All three exist. Two of them arrived after the row did, which is the row
+ * doing its job: the shape of the product was drawn before the content was
+ * there, a child could see what was coming, and nothing had to move when it
+ * came (ADR-086). The `built` flag stays, because the next region will need it.
  */
 export interface Regio {
   readonly id: 'wereld' | 'europa' | 'nederland';
@@ -30,8 +29,8 @@ export interface Regio {
 }
 
 export const TOPO_REGIOS: readonly Regio[] = [
-  { id: 'wereld', naam: 'regio.wereld', built: false },
-  { id: 'europa', naam: 'regio.europa', built: false },
+  { id: 'wereld', naam: 'regio.wereld', built: true },
+  { id: 'europa', naam: 'regio.europa', built: true },
   { id: 'nederland', naam: 'regio.nederland', built: true },
 ];
 
@@ -47,7 +46,13 @@ export function regiosVan(moduleId: Module['id']): readonly Regio[] {
   return moduleId === 'topo' ? TOPO_REGIOS : [];
 }
 
-/** The region that has sets behind it, which is where the page opens. */
+/**
+ * Where the page opens when nothing else has decided.
+ *
+ * Nederland rather than the first row. The row is ordered widest first, the way
+ * an atlas is; the page opens where a Dutch child starts, which is home.
+ */
 export function eersteRegio(regios: readonly Regio[]): Regio['id'] | null {
-  return regios.find((regio) => regio.built)?.id ?? null;
+  const thuis = regios.find((regio) => regio.id === 'nederland' && regio.built);
+  return (thuis ?? regios.find((regio) => regio.built))?.id ?? null;
 }

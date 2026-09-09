@@ -1,0 +1,1680 @@
+{
+  "id": "wereld-landen",
+  "naam": "De landen van de wereld",
+  "regioSet": "wereld",
+  "contentVersie": "2026-09-09",
+  "_generated": "Geschreven door tools/content/build-countries.mjs. Handmatige wijzigingen gaan bij de volgende run verloren.",
+  "_geometrie": "geometrieRef verwijst naar een vorm-id in public/geo/wereld/landen.*.json.",
+  "items": [
+    {
+      "id": "wl-land-afghanistan",
+      "type": "land",
+      "naam": "Afghanistan",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-afghanistan",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-albanie",
+      "type": "land",
+      "naam": "Albanië",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-albanie",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-algerije",
+      "type": "land",
+      "naam": "Algerije",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-algerije",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-angola",
+      "type": "land",
+      "naam": "Angola",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-angola",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-argentinie",
+      "type": "land",
+      "naam": "Argentinië",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-argentinie",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-armenie",
+      "type": "land",
+      "naam": "Armenië",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-armenie",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-australie",
+      "type": "land",
+      "naam": "Australië",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-australie",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-azerbeidzjan",
+      "type": "land",
+      "naam": "Azerbeidzjan",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-azerbeidzjan",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-bahama-s",
+      "type": "land",
+      "naam": "Bahama's",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-bahama-s",
+      "niveau": 3,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-bangladesh",
+      "type": "land",
+      "naam": "Bangladesh",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-bangladesh",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-belarus",
+      "type": "land",
+      "naam": "Belarus",
+      "aliassen": ["Wit-Rusland"],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-belarus",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-belgie",
+      "type": "land",
+      "naam": "België",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-belgie",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-belize",
+      "type": "land",
+      "naam": "Belize",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-belize",
+      "niveau": 3,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-benin",
+      "type": "land",
+      "naam": "Benin",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-benin",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-bhutan",
+      "type": "land",
+      "naam": "Bhutan",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-bhutan",
+      "niveau": 3,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-bolivia",
+      "type": "land",
+      "naam": "Bolivia",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-bolivia",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-bosnie-en-herzegovina",
+      "type": "land",
+      "naam": "Bosnië en Herzegovina",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-bosnie-en-herzegovina",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-botswana",
+      "type": "land",
+      "naam": "Botswana",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-botswana",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-brazilie",
+      "type": "land",
+      "naam": "Brazilië",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-brazilie",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-brunei",
+      "type": "land",
+      "naam": "Brunei",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-brunei",
+      "niveau": 3,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-bulgarije",
+      "type": "land",
+      "naam": "Bulgarije",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-bulgarije",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-burkina-faso",
+      "type": "land",
+      "naam": "Burkina Faso",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-burkina-faso",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-burundi",
+      "type": "land",
+      "naam": "Burundi",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-burundi",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-cambodja",
+      "type": "land",
+      "naam": "Cambodja",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-cambodja",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-canada",
+      "type": "land",
+      "naam": "Canada",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-canada",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-centraal-afrikaanse-republiek",
+      "type": "land",
+      "naam": "Centraal-Afrikaanse Republiek",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-centraal-afrikaanse-republiek",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-chili",
+      "type": "land",
+      "naam": "Chili",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-chili",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-china",
+      "type": "land",
+      "naam": "China",
+      "aliassen": ["Volksrepubliek China"],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-china",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-colombia",
+      "type": "land",
+      "naam": "Colombia",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-colombia",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-congo-brazzaville",
+      "type": "land",
+      "naam": "Congo-Brazzaville",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-congo-brazzaville",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-congo-kinshasa",
+      "type": "land",
+      "naam": "Congo-Kinshasa",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-congo-kinshasa",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-costa-rica",
+      "type": "land",
+      "naam": "Costa Rica",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-costa-rica",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-cuba",
+      "type": "land",
+      "naam": "Cuba",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-cuba",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-cyprus",
+      "type": "land",
+      "naam": "Cyprus",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-cyprus",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-denemarken",
+      "type": "land",
+      "naam": "Denemarken",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-denemarken",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-djibouti",
+      "type": "land",
+      "naam": "Djibouti",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-djibouti",
+      "niveau": 3,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-dominicaanse-republiek",
+      "type": "land",
+      "naam": "Dominicaanse Republiek",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-dominicaanse-republiek",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-duitsland",
+      "type": "land",
+      "naam": "Duitsland",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-duitsland",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-ecuador",
+      "type": "land",
+      "naam": "Ecuador",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-ecuador",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-egypte",
+      "type": "land",
+      "naam": "Egypte",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-egypte",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-el-salvador",
+      "type": "land",
+      "naam": "El Salvador",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-el-salvador",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-equatoriaal-guinea",
+      "type": "land",
+      "naam": "Equatoriaal-Guinea",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-equatoriaal-guinea",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-eritrea",
+      "type": "land",
+      "naam": "Eritrea",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-eritrea",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-estland",
+      "type": "land",
+      "naam": "Estland",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-estland",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-eswatini",
+      "type": "land",
+      "naam": "Eswatini",
+      "aliassen": ["Swaziland"],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-eswatini",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-ethiopie",
+      "type": "land",
+      "naam": "Ethiopië",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-ethiopie",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-fiji",
+      "type": "land",
+      "naam": "Fiji",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-fiji",
+      "niveau": 3,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-filipijnen",
+      "type": "land",
+      "naam": "Filipijnen",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-filipijnen",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-finland",
+      "type": "land",
+      "naam": "Finland",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-finland",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-frankrijk",
+      "type": "land",
+      "naam": "Frankrijk",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-frankrijk",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-gabon",
+      "type": "land",
+      "naam": "Gabon",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-gabon",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-gambia",
+      "type": "land",
+      "naam": "Gambia",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-gambia",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-georgie",
+      "type": "land",
+      "naam": "Georgië",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-georgie",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-ghana",
+      "type": "land",
+      "naam": "Ghana",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-ghana",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-griekenland",
+      "type": "land",
+      "naam": "Griekenland",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-griekenland",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-guatemala",
+      "type": "land",
+      "naam": "Guatemala",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-guatemala",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-guinee",
+      "type": "land",
+      "naam": "Guinee",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-guinee",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-guinee-bissau",
+      "type": "land",
+      "naam": "Guinee-Bissau",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-guinee-bissau",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-guyana",
+      "type": "land",
+      "naam": "Guyana",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-guyana",
+      "niveau": 3,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-haiti",
+      "type": "land",
+      "naam": "Haïti",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-haiti",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-honduras",
+      "type": "land",
+      "naam": "Honduras",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-honduras",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-hongarije",
+      "type": "land",
+      "naam": "Hongarije",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-hongarije",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-ierland",
+      "type": "land",
+      "naam": "Ierland",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-ierland",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-ijsland",
+      "type": "land",
+      "naam": "IJsland",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-ijsland",
+      "niveau": 3,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-india",
+      "type": "land",
+      "naam": "India",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-india",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-indonesie",
+      "type": "land",
+      "naam": "Indonesië",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-indonesie",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-irak",
+      "type": "land",
+      "naam": "Irak",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-irak",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-iran",
+      "type": "land",
+      "naam": "Iran",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-iran",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-israel",
+      "type": "land",
+      "naam": "Israël",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-israel",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-italie",
+      "type": "land",
+      "naam": "Italië",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-italie",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-ivoorkust",
+      "type": "land",
+      "naam": "Ivoorkust",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-ivoorkust",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-jamaica",
+      "type": "land",
+      "naam": "Jamaica",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-jamaica",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-japan",
+      "type": "land",
+      "naam": "Japan",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-japan",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-jemen",
+      "type": "land",
+      "naam": "Jemen",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-jemen",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-jordanie",
+      "type": "land",
+      "naam": "Jordanië",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-jordanie",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-kameroen",
+      "type": "land",
+      "naam": "Kameroen",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-kameroen",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-kazachstan",
+      "type": "land",
+      "naam": "Kazachstan",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-kazachstan",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-kenia",
+      "type": "land",
+      "naam": "Kenia",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-kenia",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-kirgizie",
+      "type": "land",
+      "naam": "Kirgizië",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-kirgizie",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-koeweit",
+      "type": "land",
+      "naam": "Koeweit",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-koeweit",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-kosovo",
+      "type": "land",
+      "naam": "Kosovo",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-kosovo",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-kroatie",
+      "type": "land",
+      "naam": "Kroatië",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-kroatie",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-laos",
+      "type": "land",
+      "naam": "Laos",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-laos",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-lesotho",
+      "type": "land",
+      "naam": "Lesotho",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-lesotho",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-letland",
+      "type": "land",
+      "naam": "Letland",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-letland",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-libanon",
+      "type": "land",
+      "naam": "Libanon",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-libanon",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-liberia",
+      "type": "land",
+      "naam": "Liberia",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-liberia",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-libie",
+      "type": "land",
+      "naam": "Libië",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-libie",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-litouwen",
+      "type": "land",
+      "naam": "Litouwen",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-litouwen",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-luxemburg",
+      "type": "land",
+      "naam": "Luxemburg",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-luxemburg",
+      "niveau": 3,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-madagaskar",
+      "type": "land",
+      "naam": "Madagaskar",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-madagaskar",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-malawi",
+      "type": "land",
+      "naam": "Malawi",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-malawi",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-maleisie",
+      "type": "land",
+      "naam": "Maleisië",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-maleisie",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-mali",
+      "type": "land",
+      "naam": "Mali",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-mali",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-marokko",
+      "type": "land",
+      "naam": "Marokko",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-marokko",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-mauritanie",
+      "type": "land",
+      "naam": "Mauritanië",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-mauritanie",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-mexico",
+      "type": "land",
+      "naam": "Mexico",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-mexico",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-moldavie",
+      "type": "land",
+      "naam": "Moldavië",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-moldavie",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-mongolie",
+      "type": "land",
+      "naam": "Mongolië",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-mongolie",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-montenegro",
+      "type": "land",
+      "naam": "Montenegro",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-montenegro",
+      "niveau": 3,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-mozambique",
+      "type": "land",
+      "naam": "Mozambique",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-mozambique",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-myanmar",
+      "type": "land",
+      "naam": "Myanmar",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-myanmar",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-namibie",
+      "type": "land",
+      "naam": "Namibië",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-namibie",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-nederland",
+      "type": "land",
+      "naam": "Nederland",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-nederland",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-nepal",
+      "type": "land",
+      "naam": "Nepal",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-nepal",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-nicaragua",
+      "type": "land",
+      "naam": "Nicaragua",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-nicaragua",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-nieuw-zeeland",
+      "type": "land",
+      "naam": "Nieuw-Zeeland",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-nieuw-zeeland",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-niger",
+      "type": "land",
+      "naam": "Niger",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-niger",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-nigeria",
+      "type": "land",
+      "naam": "Nigeria",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-nigeria",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-noord-korea",
+      "type": "land",
+      "naam": "Noord-Korea",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-noord-korea",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-noord-macedonie",
+      "type": "land",
+      "naam": "Noord-Macedonië",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-noord-macedonie",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-noorwegen",
+      "type": "land",
+      "naam": "Noorwegen",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-noorwegen",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-oeganda",
+      "type": "land",
+      "naam": "Oeganda",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-oeganda",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-oekraine",
+      "type": "land",
+      "naam": "Oekraïne",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-oekraine",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-oezbekistan",
+      "type": "land",
+      "naam": "Oezbekistan",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-oezbekistan",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-oman",
+      "type": "land",
+      "naam": "Oman",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-oman",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-oost-timor",
+      "type": "land",
+      "naam": "Oost-Timor",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-oost-timor",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-oostenrijk",
+      "type": "land",
+      "naam": "Oostenrijk",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-oostenrijk",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-pakistan",
+      "type": "land",
+      "naam": "Pakistan",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-pakistan",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-panama",
+      "type": "land",
+      "naam": "Panama",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-panama",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-papoea-nieuw-guinea",
+      "type": "land",
+      "naam": "Papoea-Nieuw-Guinea",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-papoea-nieuw-guinea",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-paraguay",
+      "type": "land",
+      "naam": "Paraguay",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-paraguay",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-peru",
+      "type": "land",
+      "naam": "Peru",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-peru",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-polen",
+      "type": "land",
+      "naam": "Polen",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-polen",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-portugal",
+      "type": "land",
+      "naam": "Portugal",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-portugal",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-qatar",
+      "type": "land",
+      "naam": "Qatar",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-qatar",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-roemenie",
+      "type": "land",
+      "naam": "Roemenië",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-roemenie",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-rusland",
+      "type": "land",
+      "naam": "Rusland",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-rusland",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-rwanda",
+      "type": "land",
+      "naam": "Rwanda",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-rwanda",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-salomonseilanden",
+      "type": "land",
+      "naam": "Salomonseilanden",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-salomonseilanden",
+      "niveau": 3,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-saoedi-arabie",
+      "type": "land",
+      "naam": "Saoedi-Arabië",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-saoedi-arabie",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-senegal",
+      "type": "land",
+      "naam": "Senegal",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-senegal",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-servie",
+      "type": "land",
+      "naam": "Servië",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-servie",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-sierra-leone",
+      "type": "land",
+      "naam": "Sierra Leone",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-sierra-leone",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-slovenie",
+      "type": "land",
+      "naam": "Slovenië",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-slovenie",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-slowakije",
+      "type": "land",
+      "naam": "Slowakije",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-slowakije",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-soedan",
+      "type": "land",
+      "naam": "Soedan",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-soedan",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-somalie",
+      "type": "land",
+      "naam": "Somalië",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-somalie",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-spanje",
+      "type": "land",
+      "naam": "Spanje",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-spanje",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-sri-lanka",
+      "type": "land",
+      "naam": "Sri Lanka",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-sri-lanka",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-suriname",
+      "type": "land",
+      "naam": "Suriname",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-suriname",
+      "niveau": 3,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-syrie",
+      "type": "land",
+      "naam": "Syrië",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-syrie",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-tadzjikistan",
+      "type": "land",
+      "naam": "Tadzjikistan",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-tadzjikistan",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-taiwan",
+      "type": "land",
+      "naam": "Taiwan",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-taiwan",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-tanzania",
+      "type": "land",
+      "naam": "Tanzania",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-tanzania",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-thailand",
+      "type": "land",
+      "naam": "Thailand",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-thailand",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-togo",
+      "type": "land",
+      "naam": "Togo",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-togo",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-trinidad-en-tobago",
+      "type": "land",
+      "naam": "Trinidad en Tobago",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-trinidad-en-tobago",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-tsjaad",
+      "type": "land",
+      "naam": "Tsjaad",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-tsjaad",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-tsjechie",
+      "type": "land",
+      "naam": "Tsjechië",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-tsjechie",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-tunesie",
+      "type": "land",
+      "naam": "Tunesië",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-tunesie",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-turkije",
+      "type": "land",
+      "naam": "Turkije",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-turkije",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-turkmenistan",
+      "type": "land",
+      "naam": "Turkmenistan",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-turkmenistan",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-uruguay",
+      "type": "land",
+      "naam": "Uruguay",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-uruguay",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-vanuatu",
+      "type": "land",
+      "naam": "Vanuatu",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-vanuatu",
+      "niveau": 3,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-venezuela",
+      "type": "land",
+      "naam": "Venezuela",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-venezuela",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-verenigd-koninkrijk",
+      "type": "land",
+      "naam": "Verenigd Koninkrijk",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-verenigd-koninkrijk",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-verenigde-arabische-emiraten",
+      "type": "land",
+      "naam": "Verenigde Arabische Emiraten",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-verenigde-arabische-emiraten",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-verenigde-staten",
+      "type": "land",
+      "naam": "Verenigde Staten",
+      "aliassen": ["Verenigde Staten van Amerika", "Amerika", "VS"],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-verenigde-staten",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-vietnam",
+      "type": "land",
+      "naam": "Vietnam",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-vietnam",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-zambia",
+      "type": "land",
+      "naam": "Zambia",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-zambia",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-zimbabwe",
+      "type": "land",
+      "naam": "Zimbabwe",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-zimbabwe",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-zuid-afrika",
+      "type": "land",
+      "naam": "Zuid-Afrika",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-zuid-afrika",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-zuid-korea",
+      "type": "land",
+      "naam": "Zuid-Korea",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-zuid-korea",
+      "niveau": 1,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-zuid-soedan",
+      "type": "land",
+      "naam": "Zuid-Soedan",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-zuid-soedan",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-zweden",
+      "type": "land",
+      "naam": "Zweden",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-zweden",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    },
+    {
+      "id": "wl-land-zwitserland",
+      "type": "land",
+      "naam": "Zwitserland",
+      "aliassen": [],
+      "regioSet": "wereld",
+      "geometrieRef": "wl-land-zwitserland",
+      "niveau": 2,
+      "leerdoelen": ["ak-wereld-landen-aanwijzen", "ak-wereld-landen-benoemen"]
+    }
+  ]
+}

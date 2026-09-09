@@ -97,22 +97,38 @@ describe('what a child goes back to most', () => {
 
 /**
  * Topography's subjects, after the region row took the place-name off them
- * (ADR-083). Six is still the ceiling a section may hold, and one word is the
- * whole point of the change.
+ * (ADR-083) and then got two more regions to point at (ADR-086). Six is still
+ * the ceiling a section may hold, and one word is the whole point of the
+ * change — but the six is per region now, because that is what the page draws.
  */
 describe('what topography offers', () => {
-  it('offers five subjects, all under Nederland', () => {
-    const vakken = onderwerpenVan('topo');
+  const per = (regio: string) => onderwerpenVan('topo').filter((vak) => vak.regio === regio);
 
-    expect(vakken.map((vak) => vak.id)).toEqual([
+  it('offers five subjects under Nederland, in one word each', () => {
+    expect(per('nederland').map((vak) => vak.id)).toEqual([
       'provincies',
       'steden',
       'wateren',
       'eilanden',
       'nl-mix',
     ]);
-    expect(vakken.every((vak) => vak.regio === 'nederland')).toBe(true);
-    expect(vakken.length).toBeLessThanOrEqual(6);
+  });
+
+  it('offers the countries, and only the countries, further out', () => {
+    // One subject each, and that is not a placeholder: a continent has one
+    // thing on it a child is asked to find (ADR-086).
+    expect(per('europa').map((vak) => vak.id)).toEqual(['europa-landen']);
+    expect(per('wereld').map((vak) => vak.id)).toEqual(['wereld-landen']);
+  });
+
+  it('never puts more than six cards in front of a child at once', () => {
+    // The ceiling is per region, because a region is what step 1 draws.
+    for (const regio of ['nederland', 'europa', 'wereld']) {
+      expect(per(regio).length, regio).toBeLessThanOrEqual(6);
+    }
+    // And every subject belongs to a region, so none can go missing from the
+    // page by having no row to sit under.
+    expect(onderwerpenVan('topo').filter((vak) => vak.regio === null)).toEqual([]);
   });
 
   it('puts the two city sets under one subject, with a chip each', () => {

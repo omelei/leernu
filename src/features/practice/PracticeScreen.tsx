@@ -56,6 +56,7 @@ const PICK_LABEL: Record<Noemer, TranslationKey> = {
   stad: 'practice.kindCity',
   eiland: 'practice.kindIsland',
   water: 'practice.kindWater',
+  land: 'practice.kindCountry',
 };
 
 const TYPE_LABEL: Record<Noemer, TranslationKey> = {
@@ -63,6 +64,7 @@ const TYPE_LABEL: Record<Noemer, TranslationKey> = {
   stad: 'practice.kindTypeCity',
   eiland: 'practice.kindTypeIsland',
   water: 'practice.kindTypeWater',
+  land: 'practice.kindTypeCountry',
 };
 
 export function PracticeScreen({

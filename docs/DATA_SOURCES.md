@@ -160,13 +160,52 @@ oefening komt over bestuurlijke indeling in plaats van aardrijkskunde, is
 
 ---
 
+## Natural Earth — landen van Europa en van de wereld
+
+|                   |                                                                                                                                                        |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Bron**          | Natural Earth, `ne_50m_admin_0_countries` en `ne_110m_admin_0_countries`                                                                               |
+| **Vindplaats**    | https://github.com/nvkelso/natural-earth-vector — `geojson/`                                                                                           |
+| **Licentie**      | Publiek domein. Natural Earth stelt zelf: geen toestemming nodig, geen bronvermelding verplicht, geen beperkingen.                                     |
+| **Opgehaald**     | 9 september 2026                                                                                                                                       |
+| **Gebruikt voor** | `public/geo/europa/landen.*.json`, `public/geo/wereld/landen.*.json` en de sets `content/sets/europa-landen.json` en `content/sets/wereld-landen.json` |
+| **Gebouwd door**  | `tools/content/build-countries.mjs`                                                                                                                    |
+
+Bronvermelding is niet verplicht en staat er toch, hier en in de kaartbestanden
+zelf: een kaart zonder herkomst is een kaart die niemand kan controleren.
+
+**Twee schalen.** 1:50m voor Europa, want op 1:110m ontbreken Luxemburg,
+Montenegro, Kosovo en de helft van de Balkan gewoon in het bestand — en een set
+"landen van Europa" die er elf stilzwijgend weglaat is slechter dan geen set.
+1:110m voor de wereld, waar 1:50m vier megabyte kustlijn zou zijn die op die
+schaal niemand ziet.
+
+**Welke features een land zijn.** Het admin-0-bestand bevat soevereine staten,
+afhankelijke gebieden, kroondomeinen en betwiste gebieden door elkaar, en juist
+daar wordt een kaart voor kinderen ongemerkt een politiek statement. De regel is
+die van de bron zelf, twee keer: een feature is hier een land als het zijn eigen
+soeverein is (`ADMIN` gelijk aan `SOVEREIGNT`) én een ISO 3166-code heeft. Het
+eerste houdt Nederland, Frankrijk en Kosovo binnen en laat Jersey, de Faeröer en
+Puerto Rico buiten; het tweede laat Noord-Cyprus en Somaliland buiten, die
+zichzelf besturen en waaraan de normcommissie geen code heeft toegekend. Dat is
+een vraag die dit product niet beslecht.
+
+Cyprus is de enige uitzondering de andere kant op: Natural Earth zet het onder
+Azië en elke Nederlandse atlas drukt het op de Europa-pagina af. Zie ADR-086.
+
+**De namen komen uit de data** (`NAME_NL`), niet van ons. Twee zijn gecorrigeerd
+omdat het land zichzelf hernoemd heeft en de bron dat nog niet volgt — Eswatini
+(2018) en Belarus — en beide houden de oude naam als alias.
+
+---
+
 ## Nog niet in gebruik
 
 Voorbereid maar nog niet opgehaald; licentie vooraf te verifiëren zoals
 hierboven, dus met de bron zelf als vindplaats en niet met een blogpost.
 
-- **Natural Earth** — landgrenzen, steden, rivieren, gebergtes voor Europa en
-  wereld (fase 5). Publiek domein. Bereikbaarheid bevestigd op 5 september 2026.
+- **Natural Earth** — steden, rivieren en gebergtes voor Europa en wereld. De
+  landgrenzen zijn er wel (zie hierboven); de rest nog niet.
 - **PDOK BRT / waterdelen** — voor wateren als leeritem (IJsselmeer, Waddenzee,
   de rivieren) in plaats van alleen als achtergrond.
 

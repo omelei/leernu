@@ -106,6 +106,43 @@ test('the round: pointing, and the answer', async ({ page }, testInfo) => {
   await shoot(page, size, '07-resultaat');
 });
 
+/**
+ * The two maps that are not the Netherlands (ADR-086).
+ *
+ * Worth a picture at every size for the reason the whole file exists: a
+ * continent and a globe are the first maps in this product whose shape is
+ * nothing like the one the layout was drawn around, and a world map that goes
+ * wrong at 393 pixels goes wrong in a classroom.
+ */
+test('the round: Europe, and the world', async ({ page }, testInfo) => {
+  const size = testInfo.project.name;
+
+  await signIn(page, 'Isa');
+
+  for (const [regio, naam, land] of [
+    ['Europa', '13-europa', 'Spanje'],
+    ['Wereld', '14-wereld', 'Brazilië'],
+  ] as const) {
+    await page.goto('/topografie');
+    await page.getByRole('button', { name: new RegExp(`^${regio}`) }).click();
+    await page
+      .getByRole('region', { name: /Kies een onderwerp/ })
+      .getByRole('button', { name: /^Landen/ })
+      .click();
+    await page
+      .getByRole('region', { name: /Hoe wil je/ })
+      .getByRole('button', { name: /Aanwijzen/ })
+      .click();
+    await start(page);
+
+    await expect(page.locator('svg').getByRole('button', { name: land })).toBeVisible(READY);
+    await shoot(page, size, naam);
+
+    await page.getByRole('button', { name: 'Stoppen' }).click();
+    await expect(page.getByRole('heading', { name: 'Wat er is veranderd' })).toBeVisible();
+  }
+});
+
 test('the round: choosing between four names', async ({ page }, testInfo) => {
   const size = testInfo.project.name;
 

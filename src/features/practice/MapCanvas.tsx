@@ -2,9 +2,11 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState, type KeyboardEve
 import {
   fitView,
   helpTargetFor,
+  helpTargets,
   keyboardOrder,
   MIN_TOUCH_PX,
   reachablePoints,
+  type HelpTarget,
   type ViewFit,
 } from '@/game-core';
 import type { GeoSet, PointSet, Punt, Vorm } from '@/content/loadGeo';
@@ -181,6 +183,23 @@ export function MapCanvas({
 
   const clickable = interaction !== 'show' && !revealed;
 
+  /**
+   * The rings, worked out over the whole map at once rather than per shape.
+   *
+   * A ring takes over as the target from the shape underneath it, so two that
+   * overlap are two ways to hit the wrong country. `helpTargets` keeps only the
+   * ones nothing else reaches — every ring on the Wadden islands, almost none
+   * on a world map at phone size, which is the difference between help and
+   * clutter (ADR-086).
+   */
+  const rings = useMemo(
+    () =>
+      clickable
+        ? helpTargets(answerShapes, fit, (shape) => shape.punt)
+        : new Map<string, HelpTarget>(),
+    [clickable, answerShapes, fit],
+  );
+
   // Every point that is drawn must be hittable, including the ones the child
   // does not want. See reachablePoints: with eighty cities in the set, drawing
   // them all would put answers six pixels apart.
@@ -247,7 +266,7 @@ export function MapCanvas({
           state={stateOf(shape.id, targetId, chosenId, revealed, interaction, verdict)}
           dimmedWhenOpen={interaction === 'show'}
           clickable={clickable}
-          fit={fit}
+          help={rings.get(shape.id) ?? null}
           onPick={() => clickable && onPick(shape.id)}
           onKeyDown={(event) => clickable && handleKey(event, shape.id)}
         />
@@ -380,7 +399,7 @@ function AnswerShape({
   state,
   dimmedWhenOpen,
   clickable,
-  fit,
+  help,
   onPick,
   onKeyDown,
 }: {
@@ -389,14 +408,15 @@ function AnswerShape({
   readonly state: AnswerState;
   readonly dimmedWhenOpen: boolean;
   readonly clickable: boolean;
-  readonly fit: ViewFit;
+  /** The ring this shape is hit with, where it has one. See `rings` above. */
+  readonly help: HelpTarget | null;
   readonly onPick: () => void;
   readonly onKeyDown: (event: KeyboardEvent<Element>) => void;
 }) {
   // Ameland is 72 units long and 16 wide: judged on its long side it looks like
   // a comfortable target, and a finger disagrees. Anything too narrow to land on
-  // gets a circle it can actually be hit with.
-  const help = clickable ? helpTargetFor(shape.bbox, fit, shape.punt) : null;
+  // gets a circle it can actually be hit with — decided over the whole map, so
+  // two rings never reach each other (`rings` in MapCanvas).
   const pathIsTheTarget = clickable && help === null;
 
   return (

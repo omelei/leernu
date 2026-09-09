@@ -47,6 +47,11 @@ const SET_SLUG: Record<string, string> = {
   'nl-waddeneilanden': 'waddeneilanden',
   'nl-wateren': 'wateren',
   'nl-steden': 'steden',
+  // The countries, at the word a parent would type. Not "europa-landen": the
+  // module is topography and the address already says so, so the second
+  // segment only has to say which map.
+  'europa-landen': 'europa',
+  'wereld-landen': 'wereld',
   // The mix, on both modules, under the word a child would say. It is not a
   // file in either of them (ADR-062, ADR-063) and it still has an address,
   // because "ga naar leer.nu/rekenen/mix" is a sentence a parent can say.
@@ -71,7 +76,7 @@ const SET_SLUG: Record<string, string> = {
  */
 const SLUG_SET = new Map(
   Object.entries(SET_SLUG)
-    .filter(([id]) => id.startsWith('nl-'))
+    .filter(([id]) => id.startsWith('nl-') || id.endsWith('-landen'))
     .map(([id, slug]) => [slug, id]),
 );
 

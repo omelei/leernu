@@ -33,8 +33,8 @@ import { join } from 'node:path';
 
 const ROOT = process.cwd();
 const SETS = join(ROOT, 'content', 'sets');
-const GEO = join(ROOT, 'public', 'geo', 'nl');
-const PROVINCIE_BRON = join(ROOT, 'content', 'geo', '_source', 'nl-provincies.json');
+const GEO = join(ROOT, 'public', 'geo');
+const BRON = join(ROOT, 'content', 'geo', '_source');
 const OUT_DIR = join(ROOT, 'content', 'buren');
 
 /**
@@ -50,12 +50,55 @@ const KEEP = 6;
  */
 const MINIMUM_SHARED = 2;
 
+/**
+ * `bron` and `naamVeld` are what the border rule needs: the unsimplified source,
+ * and the property the geometry build made its ids from. Countries can use the
+ * same rule as provinces because Natural Earth is topological too — the
+ * Netherlands and Belgium share sixty-one vertices in the file, exactly the way
+ * two CBS provinces do, so counting them is again exact rather than a guess
+ * with a tolerance on it (ADR-086).
+ */
 const OPDRACHTEN = [
-  { set: 'nl-provincies', regel: 'grens', geo: 'provincies.detail.json' },
-  { set: 'nl-hoofdsteden', regel: 'afstand', geo: 'hoofdsteden.json' },
-  { set: 'nl-steden', regel: 'afstand', geo: 'steden.json' },
-  { set: 'nl-wateren', regel: 'afstand', geo: 'wateren.json' },
-  { set: 'nl-waddeneilanden', regel: 'afstand', geo: 'waddeneilanden.json' },
+  {
+    set: 'nl-provincies',
+    regel: 'grens',
+    regio: 'nl',
+    geo: 'provincies.detail.json',
+    bron: 'nl-provincies.json',
+    naamVeld: 'statnaam',
+    prefix: 'nl-prov-',
+  },
+  { set: 'nl-hoofdsteden', regel: 'afstand', regio: 'nl', geo: 'hoofdsteden.json' },
+  { set: 'nl-steden', regel: 'afstand', regio: 'nl', geo: 'steden.json' },
+  { set: 'nl-wateren', regel: 'afstand', regio: 'nl', geo: 'wateren.json' },
+  // `.detail.json`, which is what the islands are actually written to. It said
+  // `waddeneilanden.json` here and had done since the rename ADR-069 records:
+  // the file this script reads and the file the build writes were two spellings
+  // that nothing compared, and this one only failed when somebody re-ran it.
+  { set: 'nl-waddeneilanden', regel: 'afstand', regio: 'nl', geo: 'waddeneilanden.detail.json' },
+  {
+    set: 'europa-landen',
+    regel: 'grens',
+    regio: 'europa',
+    geo: 'landen.detail.json',
+    bron: 'ne-landen-50m.json',
+    naamVeld: 'NAME_NL',
+    prefix: 'eu-land-',
+    // Only the countries the set holds. The source file is every country in
+    // the world, and a European question offered Ecuador as a wrong answer
+    // would be a question about nothing.
+    binnen: (id, set) => set.items.some((item) => item.geometrieRef === id),
+  },
+  {
+    set: 'wereld-landen',
+    regel: 'grens',
+    regio: 'wereld',
+    geo: 'landen.detail.json',
+    bron: 'ne-landen-110m.json',
+    naamVeld: 'NAME_NL',
+    prefix: 'wl-land-',
+    binnen: (id, set) => set.items.some((item) => item.geometrieRef === id),
+  },
 ];
 
 /** The same slug the geometry build uses, so the ids line up by construction. */
@@ -92,13 +135,22 @@ function vertices(geometry) {
   return found;
 }
 
-/** Areas: ordered by how much boundary they share, most first. */
-function byBorder() {
-  const bron = readJson(PROVINCIE_BRON);
-  const gebieden = bron.features.map((feature) => ({
-    id: `nl-prov-${slug(feature.properties.statnaam)}`,
-    punten: vertices(feature.geometry),
-  }));
+/**
+ * Areas: ordered by how much boundary they share, most first.
+ *
+ * Read from the *source* rather than from what the build wrote. Simplification
+ * moves vertices, and two shapes that shared a boundary before it may share
+ * none after — which would turn an exact count into a tolerance, and a
+ * tolerance into an argument about how close is close enough.
+ */
+function byBorder(opdracht, set) {
+  const bron = readJson(join(BRON, opdracht.bron));
+  const gebieden = bron.features
+    .map((feature) => ({
+      id: `${opdracht.prefix}${slug(feature.properties[opdracht.naamVeld])}`,
+      punten: vertices(feature.geometry),
+    }))
+    .filter((gebied) => !opdracht.binnen || opdracht.binnen(gebied.id, set));
 
   const buren = new Map(gebieden.map((gebied) => [gebied.id, []]));
 
@@ -128,12 +180,12 @@ function byBorder() {
 }
 
 /** Points: ordered by distance between label points, nearest first. */
-function byDistance(bestand) {
-  const geo = readJson(join(GEO, bestand));
+function byDistance(opdracht) {
+  const geo = readJson(join(GEO, opdracht.regio, opdracht.geo));
   const plekken = (geo.punten ?? geo.vormen).map((plek) => ({ id: plek.id, punt: plek.punt }));
 
   const ontbreekt = plekken.find((plek) => !plek.punt);
-  if (ontbreekt) throw new Error(`${bestand}: ${ontbreekt.id} has no label point`);
+  if (ontbreekt) throw new Error(`${opdracht.geo}: ${ontbreekt.id} has no label point`);
 
   return new Map(
     plekken.map((plek) => [
@@ -159,22 +211,25 @@ function byDistance(bestand) {
  * mistake and never the other end of the country. Order carries the difference:
  * everything that shares a boundary comes first.
  */
-function byBorderThenDistance(bestand) {
-  const grenzen = byBorder();
-  const afstanden = byDistance(bestand);
+function byBorderThenDistance(opdracht, set) {
+  const grenzen = byBorder(opdracht, set);
+  const afstanden = byDistance(opdracht);
 
+  // Every shape the map has, whether or not it borders anything. Iceland,
+  // Malta and Cyprus share no boundary with anybody and still have to be
+  // askable, so the distance list is the floor and the borders come first.
   return new Map(
-    [...grenzen].map(([id, buren]) => [
-      id,
-      [...buren, ...afstanden.get(id).filter((ander) => !buren.includes(ander))],
-    ]),
+    [...afstanden].map(([id, dichtbij]) => {
+      const buren = grenzen.get(id) ?? [];
+      return [id, [...buren, ...dichtbij.filter((ander) => !buren.includes(ander))]];
+    }),
   );
 }
 
 function build(opdracht) {
   const set = readJson(join(SETS, `${opdracht.set}.json`));
   const perGeometrie =
-    opdracht.regel === 'grens' ? byBorderThenDistance(opdracht.geo) : byDistance(opdracht.geo);
+    opdracht.regel === 'grens' ? byBorderThenDistance(opdracht, set) : byDistance(opdracht);
 
   // The list is keyed by item id, not by geometry id: `distractors.ts` names
   // answers, and the geometry reference is an implementation detail of the map.

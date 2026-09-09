@@ -41,13 +41,18 @@ export function ExploreScreen({
 
   useEffect(() => {
     let cancelled = false;
-    void Promise.all([loadGeoSet('provincies', 'region'), loadAnswerLayer(SETS[setId])]).then(
-      ([loadedGeo, loadedAnswers]) => {
-        if (cancelled) return;
-        setGeo(loadedGeo);
-        setAnswers(loadedAnswers);
-      },
-    );
+    // The set decides which map it is looked at on, the same way a round does:
+    // the provinces behind a Dutch set, the countries of Europe behind a
+    // European one (ADR-086).
+    const shape = SETS[setId];
+    void Promise.all([
+      loadGeoSet(shape.achtergrond, 'region', shape.regio),
+      loadAnswerLayer(shape),
+    ]).then(([loadedGeo, loadedAnswers]) => {
+      if (cancelled) return;
+      setGeo(loadedGeo);
+      setAnswers(loadedAnswers);
+    });
     return () => {
       cancelled = true;
     };
