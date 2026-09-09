@@ -621,17 +621,25 @@ export function PinIcon(props: Omit<IconProps, 'children'>) {
 }
 
 /**
- * Provincies: topography's own diamond, cut in two.
+ * Provincies: one area, in parts of unequal size.
  *
- * The module pictogram is a whole diamond (`AreaIcon`), and a province is a
- * part of the area that mark stands for — so this is that shape with its
- * horizontal diagonal drawn, which is the smallest true statement about it.
+ * It was topography's diamond with a line across it, which is the obvious
+ * drawing and the wrong one twice over. `icons.test.ts` caught the first: that
+ * diamond is `AreaIcon`'s exact path and the line is `EraIcon`'s, so the set
+ * had two silhouettes it was not allowed to have. The second is what the test
+ * cannot see — `AreaIcon` is the module pictogram and sits in the eyebrow at
+ * the top of this very page, so the tile would have been the same shape as the
+ * heading above it.
+ *
+ * A frame with two cuts instead. Unequal on purpose: provinces are not a grid,
+ * and `GridIcon` is what a grid is for.
  */
 export function ProvincieIcon(props: Omit<IconProps, 'children'>) {
   return (
     <Icon {...props}>
-      <path d="M12 3l9 9-9 9-9-9z" strokeLinejoin="round" />
-      <path d="M3 12h18" />
+      <path d="M4 6h16v12H4z" strokeLinejoin="round" />
+      <path d="M11 6v12" />
+      <path d="M11 12h9" />
     </Icon>
   );
 }
