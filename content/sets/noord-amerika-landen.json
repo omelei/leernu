@@ -1,0 +1,240 @@
+{
+  "id": "noord-amerika-landen",
+  "naam": "De landen van Noord-Amerika",
+  "regioSet": "noord-amerika",
+  "contentVersie": "2026-09-09",
+  "_generated": "Geschreven door tools/content/build-countries.mjs. Handmatige wijzigingen gaan bij de volgende run verloren.",
+  "_geometrie": "geometrieRef verwijst naar een vorm-id in public/geo/noord-amerika/landen.*.json.",
+  "items": [
+    {
+      "id": "na-land-antigua-en-barbuda",
+      "type": "land",
+      "naam": "Antigua en Barbuda",
+      "aliassen": [],
+      "regioSet": "noord-amerika",
+      "geometrieRef": "na-land-antigua-en-barbuda",
+      "niveau": 3,
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
+    },
+    {
+      "id": "na-land-bahama-s",
+      "type": "land",
+      "naam": "Bahama's",
+      "aliassen": [],
+      "regioSet": "noord-amerika",
+      "geometrieRef": "na-land-bahama-s",
+      "niveau": 3,
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
+    },
+    {
+      "id": "na-land-barbados",
+      "type": "land",
+      "naam": "Barbados",
+      "aliassen": [],
+      "regioSet": "noord-amerika",
+      "geometrieRef": "na-land-barbados",
+      "niveau": 3,
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
+    },
+    {
+      "id": "na-land-belize",
+      "type": "land",
+      "naam": "Belize",
+      "aliassen": [],
+      "regioSet": "noord-amerika",
+      "geometrieRef": "na-land-belize",
+      "niveau": 3,
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
+    },
+    {
+      "id": "na-land-canada",
+      "type": "land",
+      "naam": "Canada",
+      "aliassen": [],
+      "regioSet": "noord-amerika",
+      "geometrieRef": "na-land-canada",
+      "niveau": 1,
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
+    },
+    {
+      "id": "na-land-costa-rica",
+      "type": "land",
+      "naam": "Costa Rica",
+      "aliassen": [],
+      "regioSet": "noord-amerika",
+      "geometrieRef": "na-land-costa-rica",
+      "niveau": 2,
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
+    },
+    {
+      "id": "na-land-cuba",
+      "type": "land",
+      "naam": "Cuba",
+      "aliassen": [],
+      "regioSet": "noord-amerika",
+      "geometrieRef": "na-land-cuba",
+      "niveau": 2,
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
+    },
+    {
+      "id": "na-land-dominica",
+      "type": "land",
+      "naam": "Dominica",
+      "aliassen": [],
+      "regioSet": "noord-amerika",
+      "geometrieRef": "na-land-dominica",
+      "niveau": 3,
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
+    },
+    {
+      "id": "na-land-dominicaanse-republiek",
+      "type": "land",
+      "naam": "Dominicaanse Republiek",
+      "aliassen": [],
+      "regioSet": "noord-amerika",
+      "geometrieRef": "na-land-dominicaanse-republiek",
+      "niveau": 2,
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
+    },
+    {
+      "id": "na-land-el-salvador",
+      "type": "land",
+      "naam": "El Salvador",
+      "aliassen": [],
+      "regioSet": "noord-amerika",
+      "geometrieRef": "na-land-el-salvador",
+      "niveau": 2,
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
+    },
+    {
+      "id": "na-land-grenada",
+      "type": "land",
+      "naam": "Grenada",
+      "aliassen": [],
+      "regioSet": "noord-amerika",
+      "geometrieRef": "na-land-grenada",
+      "niveau": 3,
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
+    },
+    {
+      "id": "na-land-guatemala",
+      "type": "land",
+      "naam": "Guatemala",
+      "aliassen": [],
+      "regioSet": "noord-amerika",
+      "geometrieRef": "na-land-guatemala",
+      "niveau": 2,
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
+    },
+    {
+      "id": "na-land-haiti",
+      "type": "land",
+      "naam": "Haïti",
+      "aliassen": [],
+      "regioSet": "noord-amerika",
+      "geometrieRef": "na-land-haiti",
+      "niveau": 2,
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
+    },
+    {
+      "id": "na-land-honduras",
+      "type": "land",
+      "naam": "Honduras",
+      "aliassen": [],
+      "regioSet": "noord-amerika",
+      "geometrieRef": "na-land-honduras",
+      "niveau": 2,
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
+    },
+    {
+      "id": "na-land-jamaica",
+      "type": "land",
+      "naam": "Jamaica",
+      "aliassen": [],
+      "regioSet": "noord-amerika",
+      "geometrieRef": "na-land-jamaica",
+      "niveau": 2,
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
+    },
+    {
+      "id": "na-land-mexico",
+      "type": "land",
+      "naam": "Mexico",
+      "aliassen": [],
+      "regioSet": "noord-amerika",
+      "geometrieRef": "na-land-mexico",
+      "niveau": 1,
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
+    },
+    {
+      "id": "na-land-nicaragua",
+      "type": "land",
+      "naam": "Nicaragua",
+      "aliassen": [],
+      "regioSet": "noord-amerika",
+      "geometrieRef": "na-land-nicaragua",
+      "niveau": 2,
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
+    },
+    {
+      "id": "na-land-panama",
+      "type": "land",
+      "naam": "Panama",
+      "aliassen": [],
+      "regioSet": "noord-amerika",
+      "geometrieRef": "na-land-panama",
+      "niveau": 2,
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
+    },
+    {
+      "id": "na-land-saint-kitts-en-nevis",
+      "type": "land",
+      "naam": "Saint Kitts en Nevis",
+      "aliassen": [],
+      "regioSet": "noord-amerika",
+      "geometrieRef": "na-land-saint-kitts-en-nevis",
+      "niveau": 3,
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
+    },
+    {
+      "id": "na-land-saint-lucia",
+      "type": "land",
+      "naam": "Saint Lucia",
+      "aliassen": [],
+      "regioSet": "noord-amerika",
+      "geometrieRef": "na-land-saint-lucia",
+      "niveau": 3,
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
+    },
+    {
+      "id": "na-land-saint-vincent-en-de-grenadines",
+      "type": "land",
+      "naam": "Saint Vincent en de Grenadines",
+      "aliassen": [],
+      "regioSet": "noord-amerika",
+      "geometrieRef": "na-land-saint-vincent-en-de-grenadines",
+      "niveau": 3,
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
+    },
+    {
+      "id": "na-land-trinidad-en-tobago",
+      "type": "land",
+      "naam": "Trinidad en Tobago",
+      "aliassen": [],
+      "regioSet": "noord-amerika",
+      "geometrieRef": "na-land-trinidad-en-tobago",
+      "niveau": 2,
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
+    },
+    {
+      "id": "na-land-verenigde-staten",
+      "type": "land",
+      "naam": "Verenigde Staten",
+      "aliassen": ["Verenigde Staten van Amerika", "Amerika", "VS"],
+      "regioSet": "noord-amerika",
+      "geometrieRef": "na-land-verenigde-staten",
+      "niveau": 1,
+      "leerdoelen": ["ak-werelddelen-landen-aanwijzen", "ak-werelddelen-landen-benoemen"]
+    }
+  ]
+}

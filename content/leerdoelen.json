@@ -59,20 +59,6 @@
       "kerndoelRefs": []
     },
     {
-      "id": "ak-europa-landen-aanwijzen",
-      "code": "AK.EU.L1",
-      "omschrijving": "De leerling wijst de landen van Europa aan op een kaart.",
-      "kerndoelRefs": [],
-      "leerjaar": ["groep7", "groep8"]
-    },
-    {
-      "id": "ak-europa-landen-benoemen",
-      "code": "AK.EU.L2",
-      "omschrijving": "De leerling noemt de landen van Europa bij naam.",
-      "kerndoelRefs": [],
-      "leerjaar": ["groep7", "groep8"]
-    },
-    {
       "id": "ak-wereld-landen-aanwijzen",
       "code": "AK.WL.L1",
       "omschrijving": "De leerling wijst landen van de wereld aan op een wereldkaart.",
@@ -85,6 +71,20 @@
       "omschrijving": "De leerling noemt landen van de wereld bij naam.",
       "kerndoelRefs": [],
       "leerjaar": ["groep7", "groep8"]
+    },
+    {
+      "id": "ak-werelddelen-landen-aanwijzen",
+      "code": "AK.WD.L1",
+      "omschrijving": "De leerling wijst de landen van een werelddeel aan op een kaart.",
+      "leerjaar": ["groep7", "groep8"],
+      "kerndoelRefs": []
+    },
+    {
+      "id": "ak-werelddelen-landen-benoemen",
+      "code": "AK.WD.L2",
+      "omschrijving": "De leerling noemt de landen van een werelddeel bij naam.",
+      "leerjaar": ["groep7", "groep8"],
+      "kerndoelRefs": []
     }
   ]
 }

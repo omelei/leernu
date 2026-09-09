@@ -9,6 +9,7 @@ import {
   type Onderdeel,
 } from './onderdelen';
 import type { ModeId } from '@/game-core';
+import { TOPO_REGIOS } from './regios';
 
 /**
  * The two things on the front door that are worked out rather than read.
@@ -117,13 +118,25 @@ describe('what topography offers', () => {
   it('offers the countries, and only the countries, further out', () => {
     // One subject each, and that is not a placeholder: a continent has one
     // thing on it a child is asked to find (ADR-086).
-    expect(per('europa').map((vak) => vak.id)).toEqual(['europa-landen']);
-    expect(per('wereld').map((vak) => vak.id)).toEqual(['wereld-landen']);
+    for (const regio of [
+      'europa',
+      'afrika',
+      'azie',
+      'noord-amerika',
+      'zuid-amerika',
+      'oceanie',
+      'wereld',
+    ]) {
+      expect(
+        per(regio).map((vak) => vak.id),
+        regio,
+      ).toEqual([`${regio}-landen`]);
+    }
   });
 
   it('never puts more than six cards in front of a child at once', () => {
     // The ceiling is per region, because a region is what step 1 draws.
-    for (const regio of ['nederland', 'europa', 'wereld']) {
+    for (const regio of TOPO_REGIOS.map((r) => r.id)) {
       expect(per(regio).length, regio).toBeLessThanOrEqual(6);
     }
     // And every subject belongs to a region, so none can go missing from the

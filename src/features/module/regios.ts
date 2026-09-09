@@ -11,10 +11,15 @@ import type { Module } from '@/features/shell/modules';
  * moment there are countries of Europe as well the list is nine and the word
  * is doing the work a heading should be doing.
  *
- * So the page asks the coarse question first: **Wereld, Europa, Nederland.**
- * Then what — provincies, steden, wateren, eilanden, mix — in one word each,
- * because the region above has already said the rest. Then how, which is step
- * 2 and has not moved (ADR-083).
+ * So the page asks the coarse question first: **the world, then a werelddeel,
+ * then Nederland.** Then what — provincies, steden, wateren, eilanden, mix, or
+ * simply landen — in one word each, because the region above has already said
+ * the rest. Then how, which is step 2 and has not moved (ADR-083).
+ *
+ * There are eight now rather than three, and the six werelddelen in the middle
+ * are the whole point: pointing at a country on a map of the world is hopeless
+ * at any size, and on a map of Africa it is fine. Every geography app worth
+ * copying organises itself this way, and so does every atlas (ADR-087).
  *
  * All three exist. Two of them arrived after the row did, which is the row
  * doing its job: the shape of the product was drawn before the content was
@@ -22,15 +27,33 @@ import type { Module } from '@/features/shell/modules';
  * came (ADR-086). The `built` flag stays, because the next region will need it.
  */
 export interface Regio {
-  readonly id: 'wereld' | 'europa' | 'nederland';
+  readonly id:
+    | 'wereld'
+    | 'afrika'
+    | 'azie'
+    | 'europa'
+    | 'noord-amerika'
+    | 'zuid-amerika'
+    | 'oceanie'
+    | 'nederland';
   readonly naam: TranslationKey;
   /** Whether there are sets behind it today. */
   readonly built: boolean;
 }
 
+/**
+ * Widest first, then the werelddelen in the order an atlas prints them, then
+ * home. Nederland is last on the row and first on the page: the row is a map of
+ * the world getting smaller, and the page opens where a Dutch child starts.
+ */
 export const TOPO_REGIOS: readonly Regio[] = [
   { id: 'wereld', naam: 'regio.wereld', built: true },
+  { id: 'afrika', naam: 'regio.afrika', built: true },
+  { id: 'azie', naam: 'regio.azie', built: true },
   { id: 'europa', naam: 'regio.europa', built: true },
+  { id: 'noord-amerika', naam: 'regio.noord-amerika', built: true },
+  { id: 'zuid-amerika', naam: 'regio.zuid-amerika', built: true },
+  { id: 'oceanie', naam: 'regio.oceanie', built: true },
   { id: 'nederland', naam: 'regio.nederland', built: true },
 ];
 

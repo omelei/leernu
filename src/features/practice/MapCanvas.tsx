@@ -200,6 +200,25 @@ export function MapCanvas({
     [clickable, answerShapes, fit],
   );
 
+  /**
+   * Where the question is, when the question is too small to see.
+   *
+   * Choosing and typing do not ask a child to hit anything — the map lights a
+   * country up and they answer in words — which is what makes those two the way
+   * in on a crowded map (ADR-087). It leaves the other half of the problem: on a
+   * map of the world, the country being asked about is three pixels of coastline
+   * and a child cannot *find* it either.
+   *
+   * So a ring says where. Not a target and not pressable — nothing is pressable
+   * in these two modes — and drawn in the accent rather than in ink, because it
+   * is the one thing on the map that is about the question.
+   */
+  const wijzer = useMemo(() => {
+    if (interaction !== 'show') return null;
+    const doel = answerShapes.find((shape) => shape.id === targetId);
+    return doel ? helpTargetFor(doel.bbox, fit, doel.punt) : null;
+  }, [interaction, answerShapes, targetId, fit]);
+
   // Every point that is drawn must be hittable, including the ones the child
   // does not want. See reachablePoints: with eighty cities in the set, drawing
   // them all would put answers six pixels apart.
@@ -286,6 +305,21 @@ export function MapCanvas({
             onKeyDown={(event) => clickable && handleKey(event, point.id)}
           />
         ))}
+
+      {/* Which one is being asked about, where it is too small to find. Drawn
+          after the shapes so a neighbour cannot cover it. */}
+      {wijzer !== null && (
+        <circle
+          cx={wijzer.cx}
+          cy={wijzer.cy}
+          r={wijzer.r * 0.85}
+          fill="none"
+          stroke="var(--accent)"
+          strokeWidth={2.5}
+          aria-hidden="true"
+          pointerEvents="none"
+        />
+      )}
 
       {/* Drawn before the label so the label stays on top of it. */}
       {showTravel && chosenPos !== null && targetPos !== null && (

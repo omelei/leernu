@@ -195,6 +195,11 @@ export const nl = {
   // welke - en deze naam staat op de startknop en in het logboek, waar de
   // regiorij van de kieslijst niet meekomt.
   'set.europa-landen': 'Landen van Europa',
+  'set.afrika-landen': 'Landen van Afrika',
+  'set.azie-landen': 'Landen van Azië',
+  'set.noord-amerika-landen': 'Landen van Noord-Amerika',
+  'set.zuid-amerika-landen': 'Landen van Zuid-Amerika',
+  'set.oceanie-landen': 'Landen van Oceanië',
   'set.wereld-landen': 'Landen van de wereld',
   // De mix. Geen zesde set maar dezelfde items onder één naam, zodat een
   // provincie die je hier goed hebt hetzelfde doosje opschuift als altijd.
@@ -210,7 +215,12 @@ export const nl = {
   // dezelfde afspraak die de linkerbalk maakt over modules die nog komen.
   'regio.title': 'Waar op de kaart?',
   'regio.wereld': 'Wereld',
+  'regio.afrika': 'Afrika',
+  'regio.azie': 'Azië',
   'regio.europa': 'Europa',
+  'regio.noord-amerika': 'Noord-Amerika',
+  'regio.zuid-amerika': 'Zuid-Amerika',
+  'regio.oceanie': 'Oceanië',
   'regio.nederland': 'Nederland',
   'regio.soon': 'binnenkort',
 
@@ -227,8 +237,15 @@ export const nl = {
   'onderwerp.eilanden': 'Eilanden',
   'onderwerp.topomix': 'Mix',
   'onderwerp.landen': 'Landen',
-  'onderwerp.landen.europa': 'Alle landen van Europa',
-  'onderwerp.landen.wereld': 'Alle landen van de wereld',
+  // Het aantal staat erbij, want dat is wat een kind wil weten voordat het
+  // begint: zestien landen is een middag, honderdzevenenzestig is een jaar.
+  'onderwerp.landen.europa': 'Alle 46 landen van Europa',
+  'onderwerp.landen.afrika': 'Alle 52 landen van Afrika',
+  'onderwerp.landen.azie': 'Alle 47 landen van Azië',
+  'onderwerp.landen.noord-amerika': 'Alle 23 landen van Noord-Amerika',
+  'onderwerp.landen.zuid-amerika': 'Alle 12 landen van Zuid-Amerika',
+  'onderwerp.landen.oceanie': 'Alle 9 landen van Oceanië',
+  'onderwerp.landen.wereld': 'Alle 167 landen bij elkaar',
 
   // Modes
   'mode.wijs-aan': 'Aanwijzen',

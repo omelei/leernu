@@ -162,19 +162,19 @@ oefening komt over bestuurlijke indeling in plaats van aardrijkskunde, is
 
 ## Natural Earth — landen van Europa en van de wereld
 
-|                   |                                                                                                                                                        |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Bron**          | Natural Earth, `ne_50m_admin_0_countries` en `ne_110m_admin_0_countries`                                                                               |
-| **Vindplaats**    | https://github.com/nvkelso/natural-earth-vector — `geojson/`                                                                                           |
-| **Licentie**      | Publiek domein. Natural Earth stelt zelf: geen toestemming nodig, geen bronvermelding verplicht, geen beperkingen.                                     |
-| **Opgehaald**     | 9 september 2026                                                                                                                                       |
-| **Gebruikt voor** | `public/geo/europa/landen.*.json`, `public/geo/wereld/landen.*.json` en de sets `content/sets/europa-landen.json` en `content/sets/wereld-landen.json` |
-| **Gebouwd door**  | `tools/content/build-countries.mjs`                                                                                                                    |
+|                   |                                                                                                                                                                        |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Bron**          | Natural Earth, `ne_50m_admin_0_countries` en `ne_110m_admin_0_countries`                                                                                               |
+| **Vindplaats**    | https://github.com/nvkelso/natural-earth-vector — `geojson/`                                                                                                           |
+| **Licentie**      | Publiek domein. Natural Earth stelt zelf: geen toestemming nodig, geen bronvermelding verplicht, geen beperkingen.                                                     |
+| **Opgehaald**     | 9 september 2026                                                                                                                                                       |
+| **Gebruikt voor** | `public/geo/<regio>/landen.*.json` en `content/sets/<regio>-landen.json`, voor zeven regio&#39;s: europa, afrika, azie, noord-amerika, zuid-amerika, oceanie en wereld |
+| **Gebouwd door**  | `tools/content/build-countries.mjs`                                                                                                                                    |
 
 Bronvermelding is niet verplicht en staat er toch, hier en in de kaartbestanden
 zelf: een kaart zonder herkomst is een kaart die niemand kan controleren.
 
-**Twee schalen.** 1:50m voor Europa, want op 1:110m ontbreken Luxemburg,
+**Twee schalen.** 1:50m voor de zes werelddelen, want op 1:110m ontbreken Luxemburg,
 Montenegro, Kosovo en de helft van de Balkan gewoon in het bestand — en een set
 "landen van Europa" die er elf stilzwijgend weglaat is slechter dan geen set.
 1:110m voor de wereld, waar 1:50m vier megabyte kustlijn zou zijn die op die
@@ -190,8 +190,15 @@ Puerto Rico buiten; het tweede laat Noord-Cyprus en Somaliland buiten, die
 zichzelf besturen en waaraan de normcommissie geen code heeft toegekend. Dat is
 een vraag die dit product niet beslecht.
 
-Cyprus is de enige uitzondering de andere kant op: Natural Earth zet het onder
-Azië en elke Nederlandse atlas drukt het op de Europa-pagina af. Zie ADR-086.
+**Welk werelddeel.** Het eigen `CONTINENT`-veld van Natural Earth, met één
+uitzondering: Cyprus staat daar onder Azië en elke Nederlandse atlas drukt het
+óók op de Europa-pagina af, dus het staat in beide lijsten — met eigen ids, zodat
+het één keer goed beantwoorden niet meetelt voor de andere kaart. Rusland staat
+bij Europa, waar de bron en de atlas het allebei zetten. Zie ADR-086 en ADR-087.
+
+Elk werelddeel heeft een eigen venster in graden waar de kaart ophoudt — wat een
+atlaspagina ook doet — en een eigen projectiecentrum. Ze staan in
+`tools/content/build-countries.mjs`, elk met de reden erbij.
 
 **De namen komen uit de data** (`NAME_NL`), niet van ons. Twee zijn gecorrigeerd
 omdat het land zichzelf hernoemd heeft en de bron dat nog niet volgt — Eswatini

@@ -40,6 +40,11 @@ export const SET_NAME_KEY: Record<SetId, TranslationKey> = {
   'nl-wateren': 'set.nl-wateren',
   'nl-steden': 'set.nl-steden',
   'europa-landen': 'set.europa-landen',
+  'afrika-landen': 'set.afrika-landen',
+  'azie-landen': 'set.azie-landen',
+  'noord-amerika-landen': 'set.noord-amerika-landen',
+  'zuid-amerika-landen': 'set.zuid-amerika-landen',
+  'oceanie-landen': 'set.oceanie-landen',
   'wereld-landen': 'set.wereld-landen',
 };
 
@@ -412,8 +417,8 @@ function topoOnderwerpen(): Onderwerp[] {
       regio: 'nederland',
       sets: [topoMix()],
     },
-    // Europe and the world are one subject each, and that is not a placeholder:
-    // a continent has one thing on it a child is asked to find, and it is the
+    // Every werelddeel is one subject, and that is not a placeholder: a
+    // continent has one thing on it a child is asked to find, and it is the
     // countries. Rivers and mountains would be a second subject and a second
     // licensed source; neither exists yet, and a card for one that does not
     // would be the product promising something (ADR-086).
@@ -425,6 +430,51 @@ function topoOnderwerpen(): Onderwerp[] {
       keuze: null,
       regio: 'europa',
       sets: van('europa-landen'),
+    },
+    {
+      moduleId: 'topo',
+      id: 'afrika-landen',
+      naam: 'onderwerp.landen',
+      uitleg: 'onderwerp.landen.afrika',
+      keuze: null,
+      regio: 'afrika',
+      sets: van('afrika-landen'),
+    },
+    {
+      moduleId: 'topo',
+      id: 'azie-landen',
+      naam: 'onderwerp.landen',
+      uitleg: 'onderwerp.landen.azie',
+      keuze: null,
+      regio: 'azie',
+      sets: van('azie-landen'),
+    },
+    {
+      moduleId: 'topo',
+      id: 'noord-amerika-landen',
+      naam: 'onderwerp.landen',
+      uitleg: 'onderwerp.landen.noord-amerika',
+      keuze: null,
+      regio: 'noord-amerika',
+      sets: van('noord-amerika-landen'),
+    },
+    {
+      moduleId: 'topo',
+      id: 'zuid-amerika-landen',
+      naam: 'onderwerp.landen',
+      uitleg: 'onderwerp.landen.zuid-amerika',
+      keuze: null,
+      regio: 'zuid-amerika',
+      sets: van('zuid-amerika-landen'),
+    },
+    {
+      moduleId: 'topo',
+      id: 'oceanie-landen',
+      naam: 'onderwerp.landen',
+      uitleg: 'onderwerp.landen.oceanie',
+      keuze: null,
+      regio: 'oceanie',
+      sets: van('oceanie-landen'),
     },
     {
       moduleId: 'topo',

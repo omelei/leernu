@@ -32,15 +32,24 @@ practises one of five sets:
 | **Zeeën en meren**                | 6     | the large bodies of water           |
 | **Steden van Nederland**          | 80    | cities, and the province each is in |
 
-Beyond the Netherlands there are two more maps: **46 landen van Europa** and
-**167 landen van de wereld**, from Natural Earth, projected offline like
-everything else — the continent on the same stereographic re-centred, the globe
-on Miller, because Mercator draws Greenland the size of Africa and this product
-exists to teach how big things are ([ADR-086](docs/DECISIONS.md)).
+Beyond the Netherlands there are seven more maps: the **six werelddelen** and
+the **wereld** — from Afrika's 52 countries to Oceanië's 9, and 167 of them at
+once — all from Natural Earth and projected offline like everything else. Each
+continent takes the same stereographic as the provinces, re-centred; the globe
+takes Miller, because Mercator draws Greenland the size of Africa and this
+product exists to teach how big things are ([ADR-086](docs/DECISIONS.md)).
 
-On /topografie they are offered as **where** and then **what**: Wereld, Europa,
-Nederland, and then Provincies, Steden, Wateren, Eilanden, Mix — or Landen, one
-word each ([ADR-083](docs/DECISIONS.md)).
+On /topografie they are offered as **where** and then **what**: the world, a
+werelddeel, or Nederland — and then Provincies, Steden, Wateren, Eilanden, Mix,
+or simply Landen, one word each ([ADR-083](docs/DECISIONS.md)).
+
+**And the way of practising follows the map.** Pointing at a country is fine on
+a map of Zuid-Amerika and hopeless on a map of the world: measured over every map
+at three screen sizes, ninety of the world's 167 countries cannot be hit even on
+a laptop. So past fifteen shapes on a phone, and past a hundred anywhere,
+pointing moves to the end of step 2 and **meerkeuze leads** — the map lights a
+country up and the child answers in words, which is also what a Dutch
+topografietoets asks ([ADR-087](docs/DECISIONS.md)).
 
 In six ways. **Wijs aan** points at the map; **meerkeuze** offers four names,
 three of them places that border the right one; **typ de naam** names what is

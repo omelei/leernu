@@ -301,6 +301,11 @@ describe('geometry references', () => {
 describe('the countries of Europe and of the world', () => {
   const regios = [
     { regio: 'europa', set: 'europa-landen', minstens: 40 },
+    { regio: 'afrika', set: 'afrika-landen', minstens: 45 },
+    { regio: 'azie', set: 'azie-landen', minstens: 40 },
+    { regio: 'noord-amerika', set: 'noord-amerika-landen', minstens: 20 },
+    { regio: 'zuid-amerika', set: 'zuid-amerika-landen', minstens: 10 },
+    { regio: 'oceanie', set: 'oceanie-landen', minstens: 8 },
     { regio: 'wereld', set: 'wereld-landen', minstens: 150 },
   ] as const;
 
@@ -370,9 +375,9 @@ describe('the countries of Europe and of the world', () => {
       return helpTargets(geo.vormen, fit, (vorm) => vorm.punt);
     };
 
-    // A laptop. Vaticaanstad is 0.2 view units across — a fifth of a pixel — and
-    // it still has to be reachable, which is the whole reason a ring shrinks
-    // rather than gives up when San Marino is close by.
+    // A laptop. Vaticaanstad is a fifth of a pixel across and it still has to be
+    // reachable, which is the whole reason a ring shrinks rather than gives up
+    // when San Marino is close by.
     const europa = ringen('europa', 700);
     for (const id of ['eu-land-vaticaanstad', 'eu-land-san-marino', 'eu-land-monaco']) {
       expect([...europa.keys()], id).toContain(id);
@@ -387,22 +392,19 @@ describe('the countries of Europe and of the world', () => {
   it('never lets two rings reach each other', () => {
     // The rule the whole thing exists for: a child aiming at one country must
     // not land inside another one's target.
-    for (const [regio, px] of [
-      ['europa', 700],
-      ['europa', 190],
-      ['wereld', 700],
-      ['wereld', 190],
-    ] as const) {
-      const geo = landenGeo(regio, 'region');
-      const ringen = [...helpTargets(geo.vormen, fitView(geo.viewBox[3], px), (v) => v.punt)];
+    for (const regio of regios.map((r) => r.regio)) {
+      for (const px of [700, 560, 190]) {
+        const geo = landenGeo(regio, 'region');
+        const ringen = [...helpTargets(geo.vormen, fitView(geo.viewBox[3], px), (v) => v.punt)];
 
-      for (const [idA, a] of ringen) {
-        for (const [idB, b] of ringen) {
-          if (idA === idB) continue;
-          const gap = Math.hypot(a.cx - b.cx, a.cy - b.cy);
-          expect(gap, `${regio}@${px}: ${idA} and ${idB} overlap`).toBeGreaterThanOrEqual(
-            a.r + b.r - 0.001,
-          );
+        for (const [idA, a] of ringen) {
+          for (const [idB, b] of ringen) {
+            if (idA === idB) continue;
+            const gap = Math.hypot(a.cx - b.cx, a.cy - b.cy);
+            expect(gap, `${regio}@${px}: ${idA} and ${idB} overlap`).toBeGreaterThanOrEqual(
+              a.r + b.r - 0.001,
+            );
+          }
         }
       }
     }

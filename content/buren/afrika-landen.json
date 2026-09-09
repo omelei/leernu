@@ -1,0 +1,425 @@
+{
+  "_gegenereerd": "tools/content/build-neighbours.mjs — gegenereerd, niet met de hand bewerken.",
+  "_regel": "Gebieden die een grens delen, de langste grens eerst, daarna de dichtstbijzijnde.",
+  "setId": "afrika-landen",
+  "contentVersie": "2026-09-09",
+  "regel": "grens",
+  "buren": {
+    "af-land-algerije": [
+      "af-land-marokko",
+      "af-land-mali",
+      "af-land-tunesie",
+      "af-land-libie",
+      "af-land-niger",
+      "af-land-mauritanie"
+    ],
+    "af-land-angola": [
+      "af-land-congo-kinshasa",
+      "af-land-namibie",
+      "af-land-zambia",
+      "af-land-congo-brazzaville",
+      "af-land-gabon",
+      "af-land-botswana"
+    ],
+    "af-land-benin": [
+      "af-land-nigeria",
+      "af-land-togo",
+      "af-land-burkina-faso",
+      "af-land-niger",
+      "af-land-ghana",
+      "af-land-ivoorkust"
+    ],
+    "af-land-botswana": [
+      "af-land-zuid-afrika",
+      "af-land-zimbabwe",
+      "af-land-namibie",
+      "af-land-eswatini",
+      "af-land-lesotho",
+      "af-land-zambia"
+    ],
+    "af-land-burkina-faso": [
+      "af-land-mali",
+      "af-land-niger",
+      "af-land-ghana",
+      "af-land-ivoorkust",
+      "af-land-benin",
+      "af-land-togo"
+    ],
+    "af-land-burundi": [
+      "af-land-tanzania",
+      "af-land-rwanda",
+      "af-land-congo-kinshasa",
+      "af-land-oeganda",
+      "af-land-kenia",
+      "af-land-zambia"
+    ],
+    "af-land-centraal-afrikaanse-republiek": [
+      "af-land-tsjaad",
+      "af-land-kameroen",
+      "af-land-congo-kinshasa",
+      "af-land-zuid-soedan",
+      "af-land-congo-brazzaville",
+      "af-land-soedan"
+    ],
+    "af-land-comoren": [
+      "af-land-madagaskar",
+      "af-land-malawi",
+      "af-land-mozambique",
+      "af-land-tanzania",
+      "af-land-kenia",
+      "af-land-zambia"
+    ],
+    "af-land-congo-brazzaville": [
+      "af-land-gabon",
+      "af-land-congo-kinshasa",
+      "af-land-kameroen",
+      "af-land-centraal-afrikaanse-republiek",
+      "af-land-angola",
+      "af-land-equatoriaal-guinea"
+    ],
+    "af-land-congo-kinshasa": [
+      "af-land-zambia",
+      "af-land-angola",
+      "af-land-congo-brazzaville",
+      "af-land-centraal-afrikaanse-republiek",
+      "af-land-oeganda",
+      "af-land-zuid-soedan"
+    ],
+    "af-land-djibouti": [
+      "af-land-ethiopie",
+      "af-land-eritrea",
+      "af-land-somalie",
+      "af-land-kenia",
+      "af-land-soedan",
+      "af-land-zuid-soedan"
+    ],
+    "af-land-egypte": [
+      "af-land-libie",
+      "af-land-soedan",
+      "af-land-eritrea",
+      "af-land-djibouti",
+      "af-land-ethiopie",
+      "af-land-tsjaad"
+    ],
+    "af-land-equatoriaal-guinea": [
+      "af-land-gabon",
+      "af-land-kameroen",
+      "af-land-sao-tome-en-principe",
+      "af-land-congo-brazzaville",
+      "af-land-nigeria",
+      "af-land-benin"
+    ],
+    "af-land-eritrea": [
+      "af-land-ethiopie",
+      "af-land-soedan",
+      "af-land-djibouti",
+      "af-land-somalie",
+      "af-land-zuid-soedan",
+      "af-land-kenia"
+    ],
+    "af-land-eswatini": [
+      "af-land-lesotho",
+      "af-land-botswana",
+      "af-land-zuid-afrika",
+      "af-land-zimbabwe",
+      "af-land-mozambique",
+      "af-land-namibie"
+    ],
+    "af-land-ethiopie": [
+      "af-land-eritrea",
+      "af-land-kenia",
+      "af-land-zuid-soedan",
+      "af-land-soedan",
+      "af-land-somalie",
+      "af-land-djibouti"
+    ],
+    "af-land-gabon": [
+      "af-land-congo-brazzaville",
+      "af-land-equatoriaal-guinea",
+      "af-land-kameroen",
+      "af-land-sao-tome-en-principe",
+      "af-land-nigeria",
+      "af-land-centraal-afrikaanse-republiek"
+    ],
+    "af-land-gambia": [
+      "af-land-senegal",
+      "af-land-guinee-bissau",
+      "af-land-mauritanie",
+      "af-land-guinee",
+      "af-land-sierra-leone",
+      "af-land-kaapverdie"
+    ],
+    "af-land-ghana": [
+      "af-land-togo",
+      "af-land-ivoorkust",
+      "af-land-burkina-faso",
+      "af-land-benin",
+      "af-land-mali",
+      "af-land-liberia"
+    ],
+    "af-land-guinee": [
+      "af-land-mali",
+      "af-land-liberia",
+      "af-land-sierra-leone",
+      "af-land-ivoorkust",
+      "af-land-guinee-bissau",
+      "af-land-senegal"
+    ],
+    "af-land-guinee-bissau": [
+      "af-land-guinee",
+      "af-land-senegal",
+      "af-land-gambia",
+      "af-land-sierra-leone",
+      "af-land-mauritanie",
+      "af-land-liberia"
+    ],
+    "af-land-ivoorkust": [
+      "af-land-mali",
+      "af-land-ghana",
+      "af-land-guinee",
+      "af-land-liberia",
+      "af-land-burkina-faso",
+      "af-land-sierra-leone"
+    ],
+    "af-land-kaapverdie": [
+      "af-land-gambia",
+      "af-land-guinee-bissau",
+      "af-land-senegal",
+      "af-land-mauritanie",
+      "af-land-sierra-leone",
+      "af-land-guinee"
+    ],
+    "af-land-kameroen": [
+      "af-land-nigeria",
+      "af-land-centraal-afrikaanse-republiek",
+      "af-land-tsjaad",
+      "af-land-congo-brazzaville",
+      "af-land-gabon",
+      "af-land-equatoriaal-guinea"
+    ],
+    "af-land-kenia": [
+      "af-land-ethiopie",
+      "af-land-oeganda",
+      "af-land-tanzania",
+      "af-land-somalie",
+      "af-land-zuid-soedan",
+      "af-land-rwanda"
+    ],
+    "af-land-lesotho": [
+      "af-land-zuid-afrika",
+      "af-land-eswatini",
+      "af-land-botswana",
+      "af-land-zimbabwe",
+      "af-land-namibie",
+      "af-land-mozambique"
+    ],
+    "af-land-liberia": [
+      "af-land-guinee",
+      "af-land-ivoorkust",
+      "af-land-sierra-leone",
+      "af-land-mali",
+      "af-land-guinee-bissau",
+      "af-land-ghana"
+    ],
+    "af-land-libie": [
+      "af-land-egypte",
+      "af-land-algerije",
+      "af-land-tunesie",
+      "af-land-tsjaad",
+      "af-land-soedan",
+      "af-land-niger"
+    ],
+    "af-land-madagaskar": [
+      "af-land-comoren",
+      "af-land-mozambique",
+      "af-land-malawi",
+      "af-land-tanzania",
+      "af-land-zimbabwe",
+      "af-land-eswatini"
+    ],
+    "af-land-malawi": [
+      "af-land-mozambique",
+      "af-land-zambia",
+      "af-land-tanzania",
+      "af-land-zimbabwe",
+      "af-land-comoren",
+      "af-land-burundi"
+    ],
+    "af-land-mali": [
+      "af-land-mauritanie",
+      "af-land-guinee",
+      "af-land-burkina-faso",
+      "af-land-algerije",
+      "af-land-ivoorkust",
+      "af-land-niger"
+    ],
+    "af-land-marokko": [
+      "af-land-algerije",
+      "af-land-mauritanie",
+      "af-land-mali",
+      "af-land-senegal",
+      "af-land-gambia",
+      "af-land-tunesie"
+    ],
+    "af-land-mauritanie": [
+      "af-land-mali",
+      "af-land-senegal",
+      "af-land-algerije",
+      "af-land-gambia",
+      "af-land-guinee-bissau",
+      "af-land-guinee"
+    ],
+    "af-land-mozambique": [
+      "af-land-malawi",
+      "af-land-zimbabwe",
+      "af-land-tanzania",
+      "af-land-zuid-afrika",
+      "af-land-zambia",
+      "af-land-comoren"
+    ],
+    "af-land-namibie": [
+      "af-land-angola",
+      "af-land-botswana",
+      "af-land-zuid-afrika",
+      "af-land-zambia",
+      "af-land-zimbabwe",
+      "af-land-lesotho"
+    ],
+    "af-land-niger": [
+      "af-land-nigeria",
+      "af-land-burkina-faso",
+      "af-land-mali",
+      "af-land-tsjaad",
+      "af-land-algerije",
+      "af-land-benin"
+    ],
+    "af-land-nigeria": [
+      "af-land-kameroen",
+      "af-land-niger",
+      "af-land-benin",
+      "af-land-tsjaad",
+      "af-land-togo",
+      "af-land-equatoriaal-guinea"
+    ],
+    "af-land-oeganda": [
+      "af-land-congo-kinshasa",
+      "af-land-kenia",
+      "af-land-zuid-soedan",
+      "af-land-tanzania",
+      "af-land-rwanda",
+      "af-land-burundi"
+    ],
+    "af-land-rwanda": [
+      "af-land-burundi",
+      "af-land-congo-kinshasa",
+      "af-land-tanzania",
+      "af-land-oeganda",
+      "af-land-kenia",
+      "af-land-zuid-soedan"
+    ],
+    "af-land-sao-tome-en-principe": [
+      "af-land-equatoriaal-guinea",
+      "af-land-gabon",
+      "af-land-congo-brazzaville",
+      "af-land-nigeria",
+      "af-land-kameroen",
+      "af-land-togo"
+    ],
+    "af-land-senegal": [
+      "af-land-mauritanie",
+      "af-land-gambia",
+      "af-land-mali",
+      "af-land-guinee",
+      "af-land-guinee-bissau",
+      "af-land-sierra-leone"
+    ],
+    "af-land-sierra-leone": [
+      "af-land-guinee",
+      "af-land-liberia",
+      "af-land-guinee-bissau",
+      "af-land-ivoorkust",
+      "af-land-gambia",
+      "af-land-senegal"
+    ],
+    "af-land-soedan": [
+      "af-land-zuid-soedan",
+      "af-land-tsjaad",
+      "af-land-eritrea",
+      "af-land-ethiopie",
+      "af-land-egypte",
+      "af-land-centraal-afrikaanse-republiek"
+    ],
+    "af-land-somalie": [
+      "af-land-ethiopie",
+      "af-land-kenia",
+      "af-land-djibouti",
+      "af-land-eritrea",
+      "af-land-oeganda",
+      "af-land-zuid-soedan"
+    ],
+    "af-land-tanzania": [
+      "af-land-malawi",
+      "af-land-mozambique",
+      "af-land-kenia",
+      "af-land-burundi",
+      "af-land-congo-kinshasa",
+      "af-land-zambia"
+    ],
+    "af-land-togo": [
+      "af-land-ghana",
+      "af-land-benin",
+      "af-land-burkina-faso",
+      "af-land-ivoorkust",
+      "af-land-nigeria",
+      "af-land-niger"
+    ],
+    "af-land-tsjaad": [
+      "af-land-centraal-afrikaanse-republiek",
+      "af-land-soedan",
+      "af-land-kameroen",
+      "af-land-niger",
+      "af-land-libie",
+      "af-land-nigeria"
+    ],
+    "af-land-tunesie": [
+      "af-land-algerije",
+      "af-land-libie",
+      "af-land-marokko",
+      "af-land-egypte",
+      "af-land-niger",
+      "af-land-tsjaad"
+    ],
+    "af-land-zambia": [
+      "af-land-congo-kinshasa",
+      "af-land-malawi",
+      "af-land-angola",
+      "af-land-zimbabwe",
+      "af-land-tanzania",
+      "af-land-mozambique"
+    ],
+    "af-land-zimbabwe": [
+      "af-land-mozambique",
+      "af-land-botswana",
+      "af-land-zambia",
+      "af-land-zuid-afrika",
+      "af-land-malawi",
+      "af-land-eswatini"
+    ],
+    "af-land-zuid-afrika": [
+      "af-land-botswana",
+      "af-land-lesotho",
+      "af-land-namibie",
+      "af-land-mozambique",
+      "af-land-zimbabwe",
+      "af-land-eswatini"
+    ],
+    "af-land-zuid-soedan": [
+      "af-land-soedan",
+      "af-land-ethiopie",
+      "af-land-congo-kinshasa",
+      "af-land-centraal-afrikaanse-republiek",
+      "af-land-oeganda",
+      "af-land-kenia"
+    ]
+  }
+}
