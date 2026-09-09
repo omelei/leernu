@@ -119,9 +119,14 @@ test('the round: Europe, and the world', async ({ page }, testInfo) => {
 
   await signIn(page, 'Isa');
 
-  for (const [regio, naam, land] of [
-    ['Europa', '13-europa', 'Spanje'],
-    ['Wereld', '14-wereld', 'Brazilië'],
+  // Europa by pointing, which is what a werelddeel is for: forty-six countries
+  // and a handful of rings round the microstates. And the world by choosing,
+  // because that is the way in there — a hundred and sixty-seven countries are
+  // not something a finger can find, so the map lights one up and the child
+  // answers in words (ADR-087). The two pictures are the argument.
+  for (const [regio, hoe, naam] of [
+    ['Europa', /Aanwijzen/, '13-europa'],
+    ['Wereld', /Kies uit vier namen/, '14-wereld'],
   ] as const) {
     await page.goto('/topografie');
     await page.getByRole('button', { name: new RegExp(`^${regio}`) }).click();
@@ -131,11 +136,13 @@ test('the round: Europe, and the world', async ({ page }, testInfo) => {
       .click();
     await page
       .getByRole('region', { name: /Hoe wil je/ })
-      .getByRole('button', { name: /Aanwijzen/ })
+      .getByRole('button', { name: hoe })
       .click();
     await start(page);
 
-    await expect(page.locator('svg').getByRole('button', { name: land })).toBeVisible(READY);
+    await expect(page.getByRole('heading', { name: /Waar ligt |Hoe heet dit land/ })).toBeVisible(
+      READY,
+    );
     await shoot(page, size, naam);
 
     await page.getByRole('button', { name: 'Stoppen' }).click();
