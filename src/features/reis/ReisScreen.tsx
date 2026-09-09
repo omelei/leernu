@@ -242,6 +242,10 @@ function Rij({
           // need a second drawing in every place the first one is used.
           const kiesbaar = open && reeks === 'inkt';
 
+          // Which level hands this one out: its place in the whole sixty,
+          // counted from one.
+          const opNiveau = levelForEarned(REEKSEN.indexOf(reeks) * PER_REEKS + plek + 1);
+
           if (!kiesbaar) {
             return (
               <span
@@ -257,18 +261,15 @@ function Rij({
                 aria-label={
                   open
                     ? t('reis.animalHave', { dier: t(sticker.name), reeks: naam })
-                    : t('reis.animalWant', {
-                        dier: t(sticker.name),
-                        reeks: naam,
-                        // Which level hands this one out: its place in the whole
-                        // sixty, counted from one.
-                        niveau: levelForEarned(REEKSEN.indexOf(reeks) * PER_REEKS + plek + 1),
-                      })
+                    : t('reis.animalWant', { dier: t(sticker.name), reeks: naam, niveau: opNiveau })
                 }
               >
                 <Draw size={28} />
+                {/* What it costs, not "nog niet". Nine cells saying the same
+                    two words tell a child nothing; nine saying niveau 4, 5, 6
+                    are a ladder they can read off the page. */}
                 <span aria-hidden="true" className="tk-animal-name">
-                  {open ? t(sticker.name) : t('reis.locked')}
+                  {open ? t(sticker.name) : t('reis.lockedLevel', { niveau: opNiveau })}
                 </span>
               </span>
             );

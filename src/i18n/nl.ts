@@ -430,7 +430,7 @@ export const nl = {
   'reis.reeksHave': '{reeks} · {aantal} van de {totaal}',
   'reis.animalHave': '{dier} in {reeks}',
   'reis.animalWant': '{dier} in {reeks}, vanaf niveau {niveau}',
-  'reis.locked': 'nog niet',
+  'reis.lockedLevel': 'niveau {niveau}',
   'reis.stamps': 'Reisstempels',
   'reis.stampsHave': '{aantal} van de {totaal}',
 
