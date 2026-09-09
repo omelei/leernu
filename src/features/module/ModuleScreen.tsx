@@ -264,7 +264,15 @@ export function ModuleScreen({
                 <button
                   key={vak.id}
                   type="button"
-                  className="tk-module-card w-full"
+                  // .tk-subject and not .tk-module-card: a subject is not a
+                  // door out of this module, and while it borrowed that class
+                  // it arrived in the module's accent — which §B reserves for
+                  // an entrance, and which made every subject on this page
+                  // blue on topography and green on rekenen for no reason a
+                  // child could act on. It wears the same face as the region
+                  // row above it now, because it asks the same kind of
+                  // question.
+                  className="tk-subject w-full"
                   aria-pressed={open}
                   // The subject's first set, and only when the subject is not
                   // already the open one: a child who has chosen the table of
