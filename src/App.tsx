@@ -32,9 +32,21 @@ import type { ProfileRecord } from '@/store/db';
 type Screen =
   | { name: 'home' }
   | { name: 'retention' }
-  | { name: 'practice'; setId: RoundSetId; practiceMode: PracticeMode; aantal: number | null }
+  | {
+      name: 'practice';
+      setId: RoundSetId;
+      practiceMode: PracticeMode;
+      aantal: number | null;
+      toetsstand: boolean;
+    }
   | { name: 'explore'; setId: SetId }
-  | { name: 'sums'; setId: string; sumMode: SumMode; aantal: number | null };
+  | {
+      name: 'sums';
+      setId: string;
+      sumMode: SumMode;
+      aantal: number | null;
+      toetsstand: boolean;
+    };
 type Boot = { status: 'loading' } | { status: 'ready'; profile: ProfileRecord | null };
 
 /**
@@ -99,11 +111,16 @@ export default function App() {
    * the page's job is to say what was chosen and this is the thing that knows
    * what a screen is.
    */
-  const beginRonde = (deel: Onderdeel, mode: ModeId, aantal: number | null = null) => {
+  const beginRonde = (
+    deel: Onderdeel,
+    mode: ModeId,
+    aantal: number | null = null,
+    toetsstand = false,
+  ) => {
     setVisit(visit + 1);
 
     if (deel.moduleId !== 'topo') {
-      setScreen({ name: 'sums', setId: deel.setId, sumMode: asSumMode(mode), aantal });
+      setScreen({ name: 'sums', setId: deel.setId, sumMode: asSumMode(mode), aantal, toetsstand });
       return;
     }
     // Exploring is one set's own layer, so the mix has no way of exploring and
@@ -118,6 +135,7 @@ export default function App() {
       setId: deel.setId as RoundSetId,
       practiceMode: asPracticeMode(mode),
       aantal,
+      toetsstand,
     });
   };
 
@@ -182,6 +200,7 @@ export default function App() {
         setId={screen.setId}
         mode={screen.sumMode}
         aantal={screen.aantal}
+        toetsstand={screen.toetsstand}
         onHome={goHome}
         onAgain={() => setVisit(visit + 1)}
       />
@@ -195,6 +214,7 @@ export default function App() {
         setId={screen.setId}
         practiceMode={screen.practiceMode}
         aantal={screen.aantal}
+        toetsstand={screen.toetsstand}
         onHome={goHome}
         onAgain={() => setVisit(visit + 1)}
       />
@@ -293,11 +313,11 @@ export default function App() {
         onReis={goReis}
         onStart={(setId, practiceMode) => {
           setVisit(visit + 1);
-          setScreen({ name: 'practice', setId, practiceMode, aantal: null });
+          setScreen({ name: 'practice', setId, practiceMode, aantal: null, toetsstand: false });
         }}
         onStartSum={(setId, sumMode) => {
           setVisit(visit + 1);
-          setScreen({ name: 'sums', setId, sumMode, aantal: null });
+          setScreen({ name: 'sums', setId, sumMode, aantal: null, toetsstand: false });
         }}
         onModule={goModule}
       />

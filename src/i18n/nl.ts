@@ -282,6 +282,16 @@ export const nl = {
   // Hoe lang de ronde duurt, waar er meer dan één eerlijk antwoord is. Tien is
   // wat een ronde altijd was en blijft de standaard; de rest bestaat omdat de
   // Rekenmix vijfhonderd sommen heeft.
+  // De toetsstand. Geen zevende manier van oefenen maar een schakelaar op de
+  // manier die je al koos: "de antwoorden komen pas aan het eind" kun je doen
+  // met aanwijzen, met kiezen en met typen. Hij staat waar "hoeveel vragen?"
+  // staat, want het is hetzelfde soort ding - een eigenschap van de ronde die
+  // de twee stappen erboven al gekozen hebben.
+  'choose.testModeLabel': 'Zoals op school',
+  'choose.testMode': 'Toetsstand',
+  'choose.testModeWhy': 'Je ziet pas aan het eind wat goed was, en je krijgt een cijfer.',
+  'choose.startTest': '{wat} · toetsstand',
+  'choose.likeTheTest': 'Oefen zoals de toets',
   'choose.howMany': 'Hoeveel vragen?',
   'choose.howManyOne': '{aantal} vragen',
 
@@ -422,6 +432,12 @@ export const nl = {
   'result.streakSaved': 'Je rustdag heeft je streak gered.',
   'result.restDayEarned': 'Je hebt er een rustdag bij verdiend.',
   'result.newStamp': 'Nieuwe reisstempel: {naam}',
+
+  // Het cijfer, en alleen na een toetsstand. Elke ronde wordt geteld en elke
+  // ronde komt met een cijfer in het logboek, maar een cijfer voor een ronde
+  // waarin de app je na elke vraag het antwoord gaf zegt niets over jou.
+  'result.markLabel': 'cijfer',
+  'result.markWhy': 'Zonder hulp onderweg, net als op school.',
 
   // Het pakje dat opengaat. Alleen te zien op het scherm na een ronde, en
   // alleen als er echt iets uit kwam - een kaart die er elke keer staat is

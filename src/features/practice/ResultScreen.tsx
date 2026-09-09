@@ -4,6 +4,7 @@ import type { AnswerLayer } from './MapCanvas';
 import { isMixSet, type RoundState } from './useRound';
 import { STAMP_NAME } from '@/features/reis/stampNames';
 import { NieuweDieren } from '@/features/reis/NieuwDier';
+import { RoundMark } from '@/components/RoundMark';
 
 /**
  * The screen after a round. Spec section 4.6 asks for exactly three things and
@@ -55,6 +56,13 @@ export function ResultScreen({
         <StreakLine state={state} />
         <RewardLine state={state} />
       </div>
+
+      {/* The mark, on the one round that has earned one. Every round is scored
+          and logged; a toetsstand is the only one where nothing helped on the
+          way, which is what makes a number about it mean anything (ADR-085). */}
+      {state.toetsstand ? (
+        <RoundMark goed={state.correctCount} totaal={state.answeredCount} />
+      ) : null}
 
       {/* What the round handed over, if it handed anything over. Above the
           list of what is still missing, because it is the only thing on this

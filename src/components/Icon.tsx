@@ -516,3 +516,26 @@ export function GlobeIcon(props: Omit<IconProps, 'children'>) {
     </Icon>
   );
 }
+
+/**
+ * A test paper: a sheet with its corner turned and two ruled lines on it.
+ *
+ * The mark for the toetsstand (ADR-085), and deliberately not `DiplomaIcon`.
+ * §E's rule is that an icon may not mean two things, and the rosette already
+ * means the tafeldiploma — a switch that borrowed it would be saying "diploma"
+ * on a page where a diploma is one of the six ways of practising, two blocks
+ * further up.
+ *
+ * The turned corner is what keeps it out of `WordIcon`'s and `FreezerIcon`'s
+ * silhouettes: a balloon has a tail below it and three bare rules have no
+ * outline at all.
+ */
+export function PaperIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <path d="M6 3h8l4 4v14H6z" strokeLinejoin="round" />
+      <path d="M14 3v4h4" strokeLinejoin="round" />
+      <path d="M9 12h6M9 16h6" />
+    </Icon>
+  );
+}

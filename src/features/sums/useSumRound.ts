@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import {
   COMBO_THRESHOLD,
   composeRound,
@@ -126,6 +126,14 @@ export interface SumRoundState {
   readonly livesLeft: number | null;
   readonly streak: StreakChange | null;
   readonly reward: RoundOutcome | null;
+  /**
+   * Whether this round kept its answers to itself until the end (ADR-085).
+   *
+   * The screen needs it twice: while the round runs, so nothing is coloured in
+   * between; and afterwards, because a round that asked without helping is the
+   * one round in this product that has earned a mark.
+   */
+  readonly toetsstand: boolean;
   readonly error: string | null;
 }
 
@@ -163,7 +171,19 @@ function optionsFor(sum: SumItem, rng: () => number): number[] {
  * @param aantal how many sums the child asked for, or null for the round's own
  *   length. A diploma ignores it: it is the whole table or it is not a diploma.
  */
-export function useSumRound(setId: string, mode: SumMode, aantal: number | null = null) {
+/**
+ * Toetsstand: a round that keeps its answers to itself until the end.
+ *
+ * The same switch the map's rounds carry, and the same argument (ADR-085): a
+ * child who has only ever practised with the answer arriving half a second
+ * later has practised something no test will ask of them.
+ */
+export function useSumRound(
+  setId: string,
+  mode: SumMode,
+  aantal: number | null = null,
+  toetsstand = false,
+) {
   const [set, setSet] = useState<SumSet | null>(null);
   const [questions, setQuestions] = useState<SumQuestion[]>([]);
   const [states, setStates] = useState<Map<string, ItemState>>(new Map());
@@ -418,10 +438,21 @@ export function useSumRound(setId: string, mode: SumMode, aantal: number | null 
    * long, because the thing worth seeing is what it actually was.
    */
   useEffect(() => {
-    if (rule.kind !== 'tijd' || phase !== 'revealed') return;
+    if (toetsstand || rule.kind !== 'tijd' || phase !== 'revealed') return;
     const id = setTimeout(next, lastCorrect ? 900 : 1800);
     return () => clearTimeout(id);
-  }, [rule, phase, lastCorrect, next]);
+  }, [toetsstand, rule, phase, lastCorrect, next]);
+
+  /**
+   * And a toetsstand moves on at once, with nothing shown in between. Before
+   * the paint rather than after it: `useEffect` would let the revealed frame
+   * reach the screen for a sixtieth of a second, and a green flash nobody can
+   * read is worse than either telling a child or not telling them.
+   */
+  useLayoutEffect(() => {
+    if (!toetsstand || phase !== 'revealed') return;
+    next();
+  }, [toetsstand, phase, next]);
 
   const state: SumRoundState = {
     phase,
@@ -448,6 +479,7 @@ export function useSumRound(setId: string, mode: SumMode, aantal: number | null 
     livesLeft: rule.kind === 'levens' ? livesLeft : null,
     streak,
     reward,
+    toetsstand,
     error,
   };
 

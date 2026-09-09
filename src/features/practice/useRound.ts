@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import {
   buildOptions,
   composeRound,
@@ -294,6 +294,14 @@ export interface RoundState {
   readonly streak: StreakChange | null;
   /** Set once the round ends: what it earned. */
   readonly reward: RoundOutcome | null;
+  /**
+   * Whether this round kept its answers to itself until the end (ADR-085).
+   *
+   * The screens need it twice: while the round runs, so nothing is coloured in
+   * between; and afterwards, because a round that asked without helping is the
+   * one round in this product that has earned a mark.
+   */
+  readonly toetsstand: boolean;
   readonly error: string | null;
 }
 
@@ -301,11 +309,24 @@ export interface RoundState {
  * @param aantal how many questions the child asked for, or null for the
  *   round's own length. Ignored by the rounds that end on a clock or on lives,
  *   which have no number of questions to change (ADR-074).
+ * @param toetsstand whether the round keeps its answers to itself until the
+ *   end.
+ *
+ *   Every round in this product answers back: a shape turns green, a wrong pick
+ *   travels to the right one, and the child is told before they move on. That
+ *   is the teaching, and it is right almost everywhere — but it is not what a
+ *   test does, and a child who has only ever practised with the answer arriving
+ *   half a second later has practised something the test will not ask of them.
+ *
+ *   A switch on whichever way was chosen rather than a seventh card in step 2:
+ *   "the answers come at the end" can be done to pointing, to choosing and to
+ *   typing alike, and step 2 holds six at most (ADR-085).
  */
 export function useRound(
   setId: RoundSetId,
   practiceMode: PracticeMode,
   aantal: number | null = null,
+  toetsstand = false,
 ) {
   const [geo, setGeo] = useState<GeoSet | null>(null);
   /** One layer per set the round can reach. A single set leaves one entry. */
@@ -723,10 +744,23 @@ export function useRound(
    * long, because the thing worth seeing is where it actually was.
    */
   useEffect(() => {
-    if (rule.kind !== 'tijd' || phase !== 'revealed') return;
+    if (toetsstand || rule.kind !== 'tijd' || phase !== 'revealed') return;
     const id = setTimeout(next, lastCorrect ? 900 : 1800);
     return () => clearTimeout(id);
-  }, [rule, phase, lastCorrect, next]);
+  }, [toetsstand, rule, phase, lastCorrect, next]);
+
+  /**
+   * And a toetsstand moves on at once, with nothing shown in between.
+   *
+   * Before the paint rather than after it, which is the whole reason this is a
+   * layout effect: `useEffect` would let the revealed frame reach the screen
+   * for a sixtieth of a second, and a green flash that says nothing legible is
+   * worse than either telling a child or not telling them.
+   */
+  useLayoutEffect(() => {
+    if (!toetsstand || phase !== 'revealed') return;
+    next();
+  }, [toetsstand, phase, next]);
 
   /** Ends the round early. What was answered is already saved. */
   const stop = useCallback(() => {
@@ -770,6 +804,7 @@ export function useRound(
     livesLeft: rule.kind === 'levens' ? livesLeft : null,
     streak,
     reward,
+    toetsstand,
     error,
   };
 

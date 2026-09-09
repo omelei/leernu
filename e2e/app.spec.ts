@@ -42,7 +42,7 @@ async function kiesOnderwerp(page: Page, [vak, chip]: Keuze) {
  * The steps are named regions and the queries are scoped to them, because the
  * set name is on the start button as well — which is what K2 puts it there for.
  */
-async function startRound(page: Page, set: Keuze, way: RegExp) {
+async function startRound(page: Page, set: Keuze, way: RegExp, toetsstand = false) {
   await page.goto('/topografie');
   await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
 
@@ -51,6 +51,7 @@ async function startRound(page: Page, set: Keuze, way: RegExp) {
     .getByRole('region', { name: /Hoe wil je/ })
     .getByRole('button', { name: way })
     .click();
+  if (toetsstand) await page.getByRole('button', { name: /^Toetsstand/ }).click();
   await start(page);
 }
 
@@ -234,6 +235,39 @@ test('logs the round that was just played, with its mark', async ({ page }) => {
   // The tile is the shortcut it looks like: same set, same way, no chooser.
   await tegel.click();
   await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
+});
+
+/**
+ * The toetsstand: a round that does not answer back until the end (ADR-085).
+ *
+ * Two halves, and both matter. **Nothing in between** — no Volgende button, no
+ * green shape, no waiting: the next question is simply there, which is the
+ * thing a test does that no other round in this product does. And **a mark at
+ * the end**, which is the only round that gets one, because it is the only
+ * round where nothing helped on the way.
+ */
+test('the toetsstand asks without answering, and marks at the end', async ({ page }) => {
+  await signIn(page, 'Roos');
+  await startRound(page, PROVINCIES, /Aanwijzen/, true);
+
+  const gevraagd = async () =>
+    (await page.getByRole('heading', { name: /Waar ligt / }).textContent()) ?? '';
+
+  const eerste = await gevraagd();
+  await answerWrongly(page);
+
+  // Straight on: the round asks the next question instead of telling the child
+  // about the last one. The order of these two matters — the absence is only
+  // worth asserting once the round has demonstrably moved.
+  await expect.poll(gevraagd).not.toBe(eerste);
+  await expect(page.getByRole('button', { name: 'Volgende vraag' })).toHaveCount(0);
+
+  await page.getByRole('button', { name: 'Stoppen' }).click();
+
+  // One answer, and it was wrong on purpose, so the mark is the lowest there
+  // is. What is being checked is that there is one at all.
+  await expect(page.getByText('Zonder hulp onderweg, net als op school.')).toBeVisible();
+  await expect(page.locator('.tk-mark')).toContainText(/1,0|10,0/);
 });
 
 /**
