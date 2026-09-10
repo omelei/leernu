@@ -1431,7 +1431,11 @@
    * and a hairline rather than a heading size: four blocks in a column of 320
    * are four things of equal weight, and it is the words in them that differ.
    */
+  /* Positioned as well as clipped: `overflow: hidden` only clips what it is
+   * the containing block of, and the lines for screen readers inside a block
+   * are absolute (see .tk-rij-baan). */
   .tk-blok {
+    position: relative;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -1579,7 +1583,14 @@
     color: var(--ink-3);
     cursor: default;
   }
+  /* Positioned, so it is the containing block of everything absolute inside
+   * it. A card carries a line for screen readers in .tk-sr-only, which is
+   * absolute; with nothing positioned above it, that line hung off the page
+   * rather than off the row, sat wherever its card sat — 540 across, for the
+   * third card on a phone — and pushed the page 129 wider than the glass. The
+   * row scrolls; the page must not. */
   .tk-rij-baan {
+    position: relative;
     display: flex;
     gap: 16px;
     overflow-x: auto;
@@ -2421,7 +2432,10 @@
    * rule round it. On a phone it is the hero alone — the name stays the
    * button's accessible name, drawn nowhere, which is what .tk-sr-only does
    * and why the rules below are its rules. */
+  /* Positioned for the same reason as .tk-rij-baan: on a phone the name inside
+   * it is absolute, and it should hang off this button, not off the page. */
   .tk-profiel {
+    position: relative;
     display: inline-flex;
     align-items: center;
     gap: 8px;
