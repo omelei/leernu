@@ -141,3 +141,36 @@ test('keeps the wordmark and the question legible at 200% text', async ({ page }
     0,
   );
 });
+
+test('below 1200 the modules are a menu under the app bar', async ({ page }, testInfo) => {
+  // ADR-093: the rail stands up at a desk and nowhere else. On both iPads and
+  // both phones the way to a module is this one control.
+  test.skip(
+    ['chromebook', 'desktop-1440'].includes(testInfo.project.name),
+    'the rail, at a desk',
+  );
+
+  await signIn(page, 'Ilse');
+
+  const knop = page.getByRole('button', { name: /^vak / });
+  await expect(knop).toHaveAccessibleName('vak Kies een vak');
+  await expect(knop).toHaveAttribute('aria-expanded', 'false');
+
+  await knop.click();
+  await expect(knop).toHaveAttribute('aria-expanded', 'true');
+  await page
+    .getByRole('navigation', { name: 'Modules' })
+    .getByRole('button', { name: 'Klok', exact: true })
+    .click();
+
+  // Where it was asked to go, closed again, and saying so on its own face.
+  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
+  await expect(knop).toHaveAccessibleName('vak Klok');
+  await expect(knop).toHaveAttribute('aria-expanded', 'false');
+
+  // And it lets go on Escape, with focus back on the control that opened it.
+  await knop.click();
+  await page.keyboard.press('Escape');
+  await expect(knop).toHaveAttribute('aria-expanded', 'false');
+  await expect(knop).toBeFocused();
+});

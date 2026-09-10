@@ -828,3 +828,87 @@ export function MinIcon(props: Omit<IconProps, 'children'>) {
     </Icon>
   );
 }
+
+// ---------------------------------------------------------------------------
+// The frame
+//
+// The destinations had no marks while they stood in the app bar as words. Below
+// 1200 they lie along the bottom now (ADR-093), where a tab bar is a row of
+// marks with a word under each and a child finds the one they want by its shape
+// before they read it. Onthouden takes the freezer and Jij takes the pupil,
+// which already mean those things; Vandaag needed one of its own, and the
+// control that opens the modules needed two.
+
+/**
+ * Vandaag: a sun.
+ *
+ * Today, drawn as the thing a child already draws for it — a small circle and
+ * eight straight rays. Another circle in a set that warns about them, told
+ * apart from the clock, the stamp, the diploma and the globe by being small and
+ * by everything around it pointing outwards.
+ */
+export function TodayIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1" />
+    </Icon>
+  );
+}
+
+/**
+ * The modules, closed: three rows with a dot before each.
+ *
+ * Not the three bare stripes a menu usually is, because that drawing is
+ * `FreezerIcon` and §E does not let one silhouette mean two things. A list with
+ * its bullets is also what the control opens into.
+ */
+export function MenuIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <circle cx="4.5" cy="7" r="1.5" fill="currentColor" />
+      <circle cx="4.5" cy="12" r="1.5" fill="currentColor" />
+      <circle cx="4.5" cy="17" r="1.5" fill="currentColor" />
+      <path d="M9 7h11M9 12h11M9 17h11" />
+    </Icon>
+  );
+}
+
+/*
+ * Four chevrons: open, close, and one step either way along a row.
+ *
+ * One stroke each and no shaft, which is what keeps them apart from `NextIcon`:
+ * an arrow means "the next question", a chevron means "more of this".
+ */
+
+export function ChevronDownIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <path d="M6 9l6 6 6-6" strokeLinejoin="round" />
+    </Icon>
+  );
+}
+
+export function ChevronUpIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <path d="M6 15l6-6 6 6" strokeLinejoin="round" />
+    </Icon>
+  );
+}
+
+export function ChevronLeftIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <path d="M15 6l-6 6 6 6" strokeLinejoin="round" />
+    </Icon>
+  );
+}
+
+export function ChevronRightIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <path d="M9 6l6 6-6 6" strokeLinejoin="round" />
+    </Icon>
+  );
+}

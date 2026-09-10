@@ -132,6 +132,25 @@
     --reeks-platina: #3f7f8f; /* 4.32:1, 4.14:1 */
     --reeks-ultra: #8a4fc9; /* 4.97:1, 3.61:1 */
 
+    /* The plate a hero stands on (ADR-094): each material as its colour, a
+     * deep tone along the plate's foot and a soft tone round its rim. The deep
+     * tone is also the word for the reeks on paper, so it is measured as text —
+     * every one clears 5.7:1. One value each, for the reason the colours have
+     * one: a material does not change with the theme. The silhouette on the
+     * plate is the light of the page in the light theme, and stays that light
+     * in the dark one. */
+    --reeks-brons-diep: #7d4720;
+    --reeks-brons-zacht: #f3e3d5;
+    --reeks-zilver-diep: #4f5a63;
+    --reeks-zilver-zacht: #e4e8eb;
+    --reeks-goud-diep: #6d6410;
+    --reeks-goud-zacht: #efeacd;
+    --reeks-platina-diep: #2f6270;
+    --reeks-platina-zacht: #dceaed;
+    --reeks-ultra-diep: #6b3aa0;
+    --reeks-ultra-zacht: #eadff7;
+    --reeks-licht: #fafaf7;
+
     /* ---- Module accents, styleguide §B and ADR-028 ------------------------
      * One ring: lightness 0.55, chroma 0.125, only the hue differs — measured
      * exactly so for four of the seven. Tafels sits at C 0.116, tijdvakken at
@@ -173,11 +192,25 @@
     --vlaggen-text: #006b74; /*                on tint 5.14:1 */
     --vlaggen-tint: #ceeff1;
 
+    /* The soft step, lighter than the tint (ADR-094): what a chosen tile and
+     * the start bar stand on. Every word on it is ink or the module's text
+     * colour, both already measured against the tint, which is darker — so
+     * nothing here needs a text variant of its own. Topo, rekenen and klok are
+     * the handoff's values; the other four are the same step on their own hue. */
+    --topo-soft: #f2f8ff;
+    --tafels-soft: #f1faf5;
+    --klok-soft: #fdf7f2;
+    --woorden-soft: #f7f6ff;
+    --spelling-soft: #fbf4fb;
+    --tijdvakken-soft: #f9f9ee;
+    --vlaggen-soft: #f0fafa;
+
     /* The resolved accent. Topography is the default because it is the only
      * module that exists; the mapping blocks below override it per module. */
     --accent: var(--topo);
     --accent-text: var(--topo-text);
     --accent-tint: var(--topo-tint);
+    --accent-soft: var(--topo-soft);
 
     /* ---- The map ---------------------------------------------------------
      * Land is the surface tone so the country reads as part of the page
@@ -203,6 +236,10 @@
     --radius-control: 6px; /* button, message, card in VO */
     --radius-card: 12px; /* card in PO, dialog, bottom sheet */
     --radius-full: 999px; /* chip, label, progress bar, the dot */
+    /* Two the handoff adds for the plates (ADR-094): a module's mark on its
+     * tint at 40-44, and the smaller one in a list. */
+    --radius-plaat: 10px;
+    --radius-klein: 8px;
 
     /* ---- Stroke widths, styleguide §D ------------------------------------
      * Named apart from the --line colours on purpose: --line is what a rule
@@ -223,6 +260,11 @@
     --shadow-1: 0 2px 6px rgb(29 34 28 / 10%);
     --shadow-2: 0 12px 32px rgb(29 34 28 / 18%);
     --scrim: rgb(29 34 28 / 45%);
+    /* The two shadows the handoff allows, and no others (ADR-094): the list of
+     * modules as it opens under its button, and a hero's plate, which is an
+     * object standing on the page rather than a surface lying in it. */
+    --shadow-menu: 0 10px 24px rgb(29 34 28 / 14%);
+    --shadow-held: 0 2px 4px rgb(29 34 28 / 18%);
 
     /* ---- Density, styleguide §D ------------------------------------------
      * PO takes one step up from VO for inner margins and row spacing: where
@@ -313,36 +355,43 @@
     --accent: var(--topo);
     --accent-text: var(--topo-text);
     --accent-tint: var(--topo-tint);
+    --accent-soft: var(--topo-soft);
   }
   [data-module='tafels'] {
     --accent: var(--tafels);
     --accent-text: var(--tafels-text);
     --accent-tint: var(--tafels-tint);
+    --accent-soft: var(--tafels-soft);
   }
   [data-module='klok'] {
     --accent: var(--klok);
     --accent-text: var(--klok-text);
     --accent-tint: var(--klok-tint);
+    --accent-soft: var(--klok-soft);
   }
   [data-module='woorden'] {
     --accent: var(--woorden);
     --accent-text: var(--woorden-text);
     --accent-tint: var(--woorden-tint);
+    --accent-soft: var(--woorden-soft);
   }
   [data-module='spelling'] {
     --accent: var(--spelling);
     --accent-text: var(--spelling-text);
     --accent-tint: var(--spelling-tint);
+    --accent-soft: var(--spelling-soft);
   }
   [data-module='tijdvakken'] {
     --accent: var(--tijdvakken);
     --accent-text: var(--tijdvakken-text);
     --accent-tint: var(--tijdvakken-tint);
+    --accent-soft: var(--tijdvakken-soft);
   }
   [data-module='vlaggen'] {
     --accent: var(--vlaggen);
     --accent-text: var(--vlaggen-text);
     --accent-tint: var(--vlaggen-tint);
+    --accent-soft: var(--vlaggen-soft);
   }
 
   /* ---- Dark theme, styleguide §B ----------------------------------------
@@ -407,12 +456,25 @@
       --vlaggen-text: #33c0c7;
       --vlaggen-tint: var(--surface);
 
+      /* The soft step has no dark value in the handoff either, and it falls
+       * back where the tint does: to the dark surface, neutral rather than
+       * invented. */
+      --topo-soft: var(--surface);
+      --tafels-soft: var(--surface);
+      --klok-soft: var(--surface);
+      --woorden-soft: var(--surface);
+      --spelling-soft: var(--surface);
+      --tijdvakken-soft: var(--surface);
+      --vlaggen-soft: var(--surface);
+
       /* Shadow weakens in dark and a lighter surface takes over the job of
        * height: level 1 is --surface with a line, level 2 keeps its shadow
        * and gains one. */
       --shadow-1: 0 2px 6px rgb(0 0 0 / 24%);
       --shadow-2: 0 12px 32px rgb(0 0 0 / 40%);
       --scrim: rgb(0 0 0 / 45%);
+      --shadow-menu: 0 10px 24px rgb(0 0 0 / 40%);
+      --shadow-held: 0 2px 4px rgb(0 0 0 / 40%);
     }
   }
 
@@ -752,41 +814,6 @@
    * nothing a screen reader could not get from the subject card above. */
   .tk-variant-dot {
     opacity: 0.75;
-  }
-
-  /* The way out of a card, at the foot of it. A link that needs a hit target,
-   * which on a touch screen is every link — so it is a button, drawn as the
-   * sentence it is rather than as a third weight of control. */
-  .tk-card-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    align-self: flex-start;
-    min-height: var(--touch-min);
-    margin-top: -4px;
-    color: var(--ink);
-    font-size: var(--type-label);
-    line-height: var(--type-label-lh);
-    font-weight: 600;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    cursor: pointer;
-  }
-  .tk-card-link:hover {
-    color: var(--ink-2);
-  }
-
-  /* ---- One test in the plan ---------------------------------------------
-   * A row rather than a card: the block around it is already the one surface
-   * on the front door, and a card inside a card is a border nobody reads.
-   */
-  .tk-toets {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 12px;
-    padding: 8px 0;
-    border-top: var(--stroke-hair) solid var(--line);
   }
 
   /* ---- The ten stamps, named and explained ------------------------------
@@ -1298,116 +1325,627 @@
     background: var(--accent);
   }
 
-  /* ---- K1, the front door ----------------------------------------------
-   * Three areas, and one grid that holds all four sizes.
+  /* ---- The page inside the shell ----------------------------------------
+   * One column of work, and from 1200 the child's own column of 320 beside it
+   * with 48 between (ADR-094). Below 1200 nothing stands beside anything: the
+   * child's blocks go into the flow of the page, and which of them goes where
+   * is the page's decision — `HomeScreen` and `SideColumn` make it in React,
+   * because it changes the reading order and not only the drawing.
    *
-   * The design gives the widest size a rail, a wide middle and a column of 320
-   * on the right, and the two smaller ones the same three things stacked. That
-   * is one grid with two shapes rather than two layouts: the document order is
-   * the reading order at every size — greeting, today, what you have kept,
-   * everything else there is — and only the placement changes.
-   *
-   * The right-hand column is deliberately not first on a phone. It is a
-   * forecast and a shelf of stamps; neither is something to do, and a child who
-   * opens the app should meet the work before they meet a report on it.
+   * The front door and a module page are one shape and share every number
+   * here. They keep two names because the front door's middle holds rows and a
+   * module page's holds a chooser, and that is the whole difference.
    */
+  .tk-page,
   .tk-home {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--row-gap);
+    gap: 20px;
     width: 100%;
-    /* The design's own measure: 1440 less the 88 of the rail is 1352, so a
-     * laptop gets the page K1 draws rather than a narrower one, and only a
-     * monitor wider than the design is capped. Below the cap this does
-     * nothing. */
+    /* The design's own measure: a monitor wider than the design is capped, and
+     * nothing narrower notices. */
     max-width: 1400px;
     margin: 0 auto;
-    padding: 24px 16px;
+    padding: 16px;
   }
-  .tk-home-top {
+  .tk-page-main,
+  .tk-home-main {
     display: flex;
     flex-direction: column;
-    gap: var(--row-gap);
+    gap: 20px;
     min-width: 0;
   }
   .tk-home-aside {
     display: flex;
     flex-direction: column;
-    gap: var(--row-gap);
+    gap: 16px;
     min-width: 0;
   }
-  .tk-home-more {
+  @media (min-width: 768px) {
+    .tk-page,
+    .tk-home {
+      gap: 24px;
+      padding: 28px 24px;
+    }
+    .tk-page-main,
+    .tk-home-main {
+      gap: 32px;
+    }
+  }
+  @media (min-width: 1200px) {
+    .tk-page,
+    .tk-home {
+      grid-template-columns: minmax(0, 1fr) 320px;
+      align-items: start;
+      gap: 48px;
+      padding: 48px;
+    }
+    .tk-page-main,
+    .tk-home-main {
+      gap: 40px;
+    }
+  }
+
+  /* The heading a page opens with, at the handoff's three sizes: 26 on a
+   * phone, 32 on a tablet, and §C's h1 from 1200. In rem, so a reader's own
+   * text size still reaches it (ADR-033). */
+  .tk-titel {
+    font-size: 1.625rem;
+    line-height: 2.125rem;
+  }
+  @media (min-width: 768px) {
+    .tk-titel {
+      font-size: 2rem;
+      line-height: 2.5rem;
+    }
+  }
+  @media (min-width: 1200px) {
+    .tk-titel {
+      font-size: var(--type-h1);
+      line-height: var(--type-h1-lh);
+    }
+  }
+
+  .tk-home-kop {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  /* Progress and tests side by side on a tablet, and exactly as tall as each
+   * other. A grid row does that without either block knowing about the other.
+   * One under the other on a phone. */
+  .tk-home-paar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+  @media (min-width: 768px) {
+    .tk-home-paar {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+  }
+
+  /* ---- A block in the child's own column --------------------------------
+   * A card with a band across the top that names it. The band is a surface
+   * and a hairline rather than a heading size: four blocks in a column of 320
+   * are four things of equal weight, and it is the words in them that differ.
+   */
+  .tk-blok {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: var(--stroke-hair) solid var(--line-strong);
+    border-radius: var(--radius-card);
+    background: var(--paper);
+  }
+  .tk-blok-kop {
+    padding: 10px 14px;
+    background: var(--surface);
+    border-bottom: var(--stroke-hair) solid var(--line);
+    font-weight: 500;
+  }
+  .tk-blok-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 12px;
+    padding: 14px;
+  }
+  @media (min-width: 1200px) {
+    .tk-blok-kop {
+      padding: 12px 20px;
+    }
+    .tk-blok-body {
+      padding: 20px;
+    }
+  }
+  /* The way on out of a block: add a test, see everything there is to earn. A
+   * secondary control at the floor height, because it is the second thing in
+   * its block and every page this column is on has its own primary. */
+  .tk-blok-knop {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: var(--touch-min);
+    padding: 0 16px;
+    border: var(--stroke-hair) solid var(--line-strong);
+    border-radius: var(--radius-control);
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 0.9375rem; /* 15px */
+    line-height: 1.25rem;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+  }
+  .tk-blok-knop:hover {
+    background: var(--surface);
+  }
+  /* A line that helps, at the handoff's 15: under a bar, beside a plate. */
+  .tk-hulp {
+    font-size: 0.9375rem;
+    line-height: 1.25rem;
+    color: var(--ink-2);
+  }
+
+  /* ---- The plate ---------------------------------------------------------
+   * A module's pictogram on the module's own tint (ADR-094). It is how the
+   * handoff says "this is about topography" wherever a card, a row or a line is
+   * about one module, and it is the one case §E lets an icon take an accent: it
+   * denotes the module. Listed in accent.test.ts for that reason.
+   */
+  .tk-plaat {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-plaat);
+    background: var(--accent-tint);
+    color: var(--accent-text);
+  }
+  .tk-plaat-groot {
+    width: 44px;
+    height: 44px;
+  }
+  .tk-plaat-rail {
+    width: 36px;
+    height: 36px;
+  }
+  .tk-plaat-klein {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-klein);
+  }
+  /* A plate that is about no module: "kies een vak", a test with no subject. */
+  .tk-plaat-neutraal {
+    background: var(--surface);
+    color: var(--ink-2);
+  }
+
+  /* ---- A row on the front door (ADR-094) ---------------------------------
+   * A heading on a hairline, two round buttons from a tablet up, and cards
+   * that run on past the edge. The scrollbar is hidden and scrolling is not:
+   * see `ScrollRij` for the three ways it still moves.
+   */
+  .tk-rij {
     display: flex;
     flex-direction: column;
     gap: 12px;
     min-width: 0;
   }
+  .tk-rij-kop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: var(--touch-min);
+    padding-bottom: 10px;
+    border-bottom: var(--stroke-hair) solid var(--line);
+  }
+  .tk-rij-knoppen {
+    display: none;
+    gap: 8px;
+  }
   @media (min-width: 768px) {
-    .tk-home {
-      padding: 32px 24px;
+    .tk-rij-knoppen {
+      display: flex;
     }
   }
-  /* The same breakpoint as the rail, because it is the same judgement: at this
-   * width there is a pointer and room to spare, and the page can be three
-   * columns wide instead of one. */
-  @media (min-width: 1280px) {
-    .tk-home {
-      grid-template-columns: minmax(0, 1fr) 320px;
-      align-items: start;
-      padding: 48px;
-    }
-    .tk-home-top {
-      grid-column: 1;
-      grid-row: 1;
-    }
-    .tk-home-aside {
-      grid-column: 2;
-      /* Beside both rows of the middle column, so a short sidebar does not
-       * leave the tiles reaching under it. */
-      grid-row: 1 / span 2;
-    }
-    .tk-home-more {
-      grid-column: 1;
-      grid-row: 2;
+  /* 44 where the handoff draws 40: 44 is the floor every control in this
+   * product clears (ADR-032), and a round button is no exception to a
+   * fingertip. */
+  .tk-rij-knop {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--touch-min);
+    height: var(--touch-min);
+    border: 0;
+    border-radius: var(--radius-full);
+    box-shadow: inset 0 0 0 var(--stroke-hair) var(--line-strong);
+    background: var(--paper);
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .tk-rij-knop:hover:not(:disabled) {
+    background: var(--surface);
+  }
+  /* Off at the end of the row: it recedes rather than disappearing, so the
+   * pair stays a pair and the heading does not change width. */
+  .tk-rij-knop:disabled {
+    color: var(--ink-3);
+    cursor: default;
+  }
+  .tk-rij-baan {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    /* Room inside the scroll box for a card's focus ring, which an overflow
+     * box would otherwise clip at every edge. The margin gives it back. */
+    margin: -4px;
+    padding: 4px;
+    scroll-padding-inline: 4px;
+  }
+  .tk-rij-baan::-webkit-scrollbar {
+    display: none;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .tk-rij-baan {
+      scroll-behavior: smooth;
     }
   }
 
-  /* ---- The page inside the shell ---------------------------------------
-   * K1's grid, minus the third area: one column of work and the child's own
-   * column beside it. A module page is not a different application and should
-   * not be a different shape, so the measure, the padding and the breakpoint
-   * are the ones .tk-home already uses — the same judgement about the same
-   * widths, made once.
-   *
-   * The aside is .tk-home-aside on purpose rather than a second class with the
-   * same body. It is the same column, carrying the same three blocks.
+  /* ---- A card in a row ---------------------------------------------------
+   * The same card in "meest geoefend" and "recent geoefend": a plate, the
+   * exercise, the way it was done, and under a rule the one line the row is
+   * about. 264 wide below 1200 and 300 from it, so the edge of the next card
+   * always shows — which is what tells a child there is more.
    */
-  .tk-page {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--row-gap);
-    width: 100%;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 24px 16px;
+  .tk-kaart {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    width: 264px;
+    padding: 20px;
+    border: var(--stroke-hair) solid var(--line);
+    border-radius: var(--radius-card);
+    background: var(--paper);
+    color: var(--ink);
+    text-align: left;
+    scroll-snap-align: start;
+    cursor: pointer;
   }
-  .tk-page-main {
+  @media (min-width: 1200px) {
+    .tk-kaart {
+      width: 300px;
+    }
+  }
+  /* Hover in ink, not in the module's colour. The card is a door into one
+   * exercise, and the plate already says which module it is behind. */
+  .tk-kaart:hover {
+    border-color: var(--ink-3);
+  }
+  .tk-kaart-titel {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-size: var(--type-h3);
+    line-height: var(--type-h3-lh);
+    letter-spacing: -0.02em;
+    font-weight: 600;
+  }
+  /* Room for two lines whether or not the name needs them, so a row of
+   * cards has its rules at one height. */
+  .tk-kaart-titel-twee {
+    min-height: calc(2 * var(--type-h3-lh));
+  }
+  .tk-kaart-regel {
+    font-size: var(--type-label);
+    line-height: var(--type-label-lh);
+    color: var(--ink-2);
+  }
+  .tk-kaart-voet {
+    align-self: stretch;
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: var(--stroke-hair) solid var(--line);
+    font-size: var(--type-label);
+    line-height: var(--type-label-lh);
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-2);
+  }
+  /* "Verder oefenen": a module with its bar, narrower than the exercise cards
+   * above it because it says less. The bar's track is the module's tint. */
+  .tk-verder {
+    align-items: stretch;
+    width: 236px;
+  }
+  .tk-verder-kop {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .tk-verder .tk-progress-rail {
+    background: var(--accent-tint);
+  }
+  /* A module the plan has and the product does not: a dashed rule and a
+   * plate with no module in it. A shape rather than a colour, so "not yet" is
+   * legible to a child who cannot tell two greys apart. */
+  .tk-kaart[data-soon] {
+    border-style: dashed;
+    border-color: var(--line-strong);
+  }
+  .tk-kaart[data-soon] .tk-plaat {
+    background: var(--surface);
+    color: var(--ink-2);
+  }
+
+  /* ---- The tests ----------------------------------------------------------
+   * One row per test: the subject as a badge, when, and a way to take it off
+   * the list. A hairline between rows rather than a card round each: the block
+   * is already the card.
+   */
+  .tk-toets-lijst {
     display: flex;
     flex-direction: column;
-    gap: var(--row-gap);
-    min-width: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
   }
-  @media (min-width: 768px) {
-    .tk-page {
-      padding: 32px 24px;
+  .tk-toets {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 12px;
+    padding: 8px 0;
+  }
+  .tk-toets + .tk-toets {
+    border-top: var(--stroke-hair) solid var(--line);
+  }
+  .tk-toets-wanneer {
+    font-size: var(--type-label);
+    line-height: var(--type-label-lh);
+    font-weight: 600;
+  }
+  .tk-toets-weg {
+    min-height: var(--touch-min);
+    margin-left: auto;
+    padding: 0 4px;
+    border: 0;
+    background: transparent;
+    color: var(--ink-2);
+    font-size: 0.9375rem;
+    line-height: 1.25rem;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+  .tk-toets-weg:hover {
+    color: var(--ink);
+  }
+  /* Which subject, as the module's mark and name in its tint. */
+  .tk-vakbadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+    background: var(--accent-tint);
+    color: var(--accent-text);
+    font-size: 0.9375rem;
+    line-height: 1.25rem;
+    font-weight: 600;
+  }
+  /* The block closed, below 1200: only the dates, and the whole of it one
+   * button that opens it. */
+  .tk-toetsen-kort {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 20px;
+    width: 100%;
+    min-height: var(--touch-min);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    text-align: left;
+    cursor: pointer;
+  }
+  .tk-toetsen-kort-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: var(--type-label);
+    line-height: var(--type-label-lh);
+    font-weight: 600;
+  }
+
+  /* ---- Progress ------------------------------------------------------------
+   * The level in the display face, the reeks beside it in mono, and the bar
+   * in the reeks' own material. Below 1200 the block is one row that is the
+   * way to the collection.
+   */
+  .tk-niveau {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-size: 1.75rem; /* 28px */
+    line-height: 2.25rem;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+  .tk-niveau-klein {
+    font-size: 1.25rem; /* 20px */
+    line-height: 1.75rem;
+  }
+  /* The reeks, in its deep tone — which is text, and measured as text: every
+   * deep tone clears 5.7:1 on paper (contrast.test.ts). Not in the dark theme,
+   * where a deep tone on the dark paper would not, so there it is the
+   * secondary ink. */
+  .tk-reeksnaam {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--held-diep);
+  }
+  @media (prefers-color-scheme: dark) {
+    .tk-reeksnaam {
+      color: var(--ink-2);
     }
   }
-  @media (min-width: 1280px) {
-    .tk-page {
-      grid-template-columns: minmax(0, 1fr) 320px;
-      align-items: start;
-      padding: 48px;
-    }
+  .tk-reeksbalk .tk-progress-rail {
+    background: var(--held-zacht);
+  }
+  .tk-reeksbalk .tk-progress-fill {
+    background: var(--held-kleur);
+  }
+  .tk-reeksbalk-dun .tk-progress-rail {
+    height: 6px;
+  }
+  .tk-voortgang-kort {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    min-height: var(--touch-min);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    text-align: left;
+    cursor: pointer;
+  }
+
+  /* ---- Answered correctly ------------------------------------------------
+   * A ring and the figure beside it. The ring is ink on the sunken tone, not
+   * a material: this is how the work is going, and a material is a reward
+   * (ADR-071). The figure is the handoff's 40/48, which is not a §C step.
+   */
+  .tk-donut {
+    display: inline-grid;
+    flex: none;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    border-radius: var(--radius-full);
+    background: conic-gradient(var(--ink) 0 var(--vul, 0%), var(--sunken) var(--vul, 0%));
+  }
+  .tk-donut::after {
+    content: '';
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-full);
+    background: var(--paper);
+  }
+  .tk-procent {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-size: 2.5rem;
+    line-height: 3rem;
+    letter-spacing: -0.02em;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---- A favourite ---------------------------------------------------------
+   * A row that starts a round: a small plate, the exercise and the way. A line
+   * rather than a card — four of them fit where two cards would.
+   */
+  .tk-favorieten {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .tk-favoriet {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: var(--touch-min);
+    padding: 8px;
+    border: 0;
+    border-radius: var(--radius-klein);
+    background: transparent;
+    color: var(--ink);
+    text-align: left;
+    cursor: pointer;
+  }
+  .tk-favoriet:hover {
+    background: var(--surface);
+  }
+
+  /* ---- A hero on its plate ----------------------------------------------
+   * The material of a reeks as three values — the colour, its deep tone and
+   * its soft tone — resolved from `data-reeks` the way an accent is resolved
+   * from `data-module`. The plate stands on the colour, rimmed in the soft tone
+   * with the deep tone along its foot, and the drawing on it is in the light
+   * that is the same in both themes, because a material does not change with
+   * the theme (ADR-071).
+   */
+  [data-reeks='brons'] {
+    --held-kleur: var(--reeks-brons);
+    --held-diep: var(--reeks-brons-diep);
+    --held-zacht: var(--reeks-brons-zacht);
+  }
+  [data-reeks='zilver'] {
+    --held-kleur: var(--reeks-zilver);
+    --held-diep: var(--reeks-zilver-diep);
+    --held-zacht: var(--reeks-zilver-zacht);
+  }
+  [data-reeks='goud'] {
+    --held-kleur: var(--reeks-goud);
+    --held-diep: var(--reeks-goud-diep);
+    --held-zacht: var(--reeks-goud-zacht);
+  }
+  [data-reeks='platina'] {
+    --held-kleur: var(--reeks-platina);
+    --held-diep: var(--reeks-platina-diep);
+    --held-zacht: var(--reeks-platina-zacht);
+  }
+  [data-reeks='ultra'] {
+    --held-kleur: var(--reeks-ultra);
+    --held-diep: var(--reeks-ultra-diep);
+    --held-zacht: var(--reeks-ultra-zacht);
+  }
+  .tk-held {
+    display: inline-flex;
+    flex: none;
+    width: var(--held, 48px);
+    height: var(--held, 48px);
+  }
+  .tk-held-kern {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 30%;
+    background: var(--held-kleur);
+    color: var(--reeks-licht);
+    box-shadow:
+      inset 0 0 0 3px var(--held-zacht),
+      inset 0 -5px 0 var(--held-diep),
+      var(--shadow-held);
+  }
+  /* The same hero as an avatar: round, inside a ring of its soft tone. */
+  .tk-held-rond {
+    padding: 3px;
+    border-radius: var(--radius-full);
+    background: var(--held-zacht);
+    box-shadow: inset 0 0 0 var(--stroke-hair) color-mix(in srgb, var(--held-kleur) 20%, transparent);
+  }
+  .tk-held-rond .tk-held-kern {
+    border-radius: var(--radius-full);
+    box-shadow: inset 0 -2px 0 var(--held-diep);
   }
 
   /* Which module a page belongs to, above its heading. The rail says it too,
@@ -1569,131 +2107,6 @@
     flex-basis: 100%;
   }
 
-  /* ---- Tiles -----------------------------------------------------------
-   * The foot of K1: every other module, as one row of equal things.
-   *
-   * Auto-fit rather than a fixed three, because a fixed three on a phone is
-   * three columns of 88px. The floor of 12rem is where a module name and a bar
-   * stop being legible side by side, and it is low enough that the four
-   * remaining modules make one row on a laptop rather than three and a lonely
-   * fourth.
-   *
-   * `min(12rem, 100%)` and not 12rem, because the floor is in rem and a reader
-   * at 200% text moves the rem. Without the min, that floor becomes 384px, a
-   * 393px screen gets a column wider than its own margins, and the page scrolls
-   * sideways — the first thing that goes wrong at that size and the one thing
-   * e2e/shell.spec.ts measures at every size.
-   */
-  .tk-tiles {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(12rem, 100%), 1fr));
-    gap: 16px;
-  }
-  .tk-tile {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-    min-height: var(--control-height);
-    padding: var(--card-padding);
-    border: var(--stroke-hair) solid var(--line);
-    border-radius: var(--card-radius);
-    background: var(--paper);
-    color: var(--ink);
-    text-align: left;
-    cursor: pointer;
-  }
-  .tk-tile:hover {
-    border-color: var(--accent);
-    border-width: var(--stroke-active);
-    /* Compensate the border so nothing beside it moves. */
-    padding: calc(var(--card-padding) - 1px);
-  }
-  /* The mark and the name of what the tile opens.
-   *
-   * Top-aligned rather than centred, because a set's full name — "Hoofdsteden
-   * van de provincies" — is three lines in a tile of twelve rem, and a centred
-   * mark then floats beside the middle line as though it belonged to it. The
-   * offset puts it on the first line's optical centre instead, and it is
-   * computed from the line height so a phone's smaller h3 needs no second rule.
-   */
-  .tk-tile-head {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    color: var(--accent-text);
-  }
-  .tk-tile-head > svg {
-    flex: none;
-    margin-top: calc((var(--type-h3-lh) - 24px) / 2);
-  }
-  /* How often this exercise was played, on the front door's "meest geoefend"
-   * row. Mono and tabular, because it is a count and counts line up; at the
-   * foot of the tile, because it is the answer to a question the name above it
-   * has already asked. */
-  .tk-tile-count {
-    font-family: 'IBM Plex Mono', ui-monospace, monospace;
-    font-size: var(--type-label);
-    line-height: var(--type-label-lh);
-    font-variant-numeric: tabular-nums;
-    color: var(--ink);
-  }
-
-  /* A module the plan has and the product does not. Hatched and dashed, which
-   * is what K1 draws — a shape rather than a colour, so that "not yet" is
-   * legible to a child who cannot tell the two greys apart. */
-  .tk-tile[data-soon] {
-    border-style: dashed;
-    border-color: var(--line-strong);
-    background: repeating-linear-gradient(135deg, var(--paper) 0 7px, var(--surface) 7px 14px);
-  }
-  .tk-tile[data-soon] .tk-tile-head {
-    color: var(--ink-2);
-  }
-  .tk-tile[data-soon]:hover {
-    border-color: var(--ink-2);
-  }
-
-  /* ---- The favourite -----------------------------------------------------
-   * A row in the right-hand column that starts a round. Not a `.tk-tile`: a
-   * tile is a door to a module and this is a shortcut back into one exercise,
-   * so it is a line rather than a card, and four of them fit where two tiles
-   * would.
-   */
-  .tk-favourite {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-    min-height: var(--touch-min);
-    padding: 8px 12px;
-    border: 0;
-    border-radius: var(--radius-control);
-    background: transparent;
-    color: var(--ink);
-    text-align: left;
-    cursor: pointer;
-  }
-  .tk-favourite:hover {
-    background: var(--surface);
-  }
-
-  /* ---- Stickers ----------------------------------------------------------
-   * The one thing on K1 a child chooses. Ink on paper like everything else:
-   * these carry no module and no state, so they take no accent and no colour —
-   * which is also what keeps six animals from looking like six categories.
-   */
-  .tk-sticker-big {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex: none;
-    width: 72px;
-    height: 72px;
-    border-radius: var(--radius-full);
-    background: var(--surface);
-    color: var(--ink);
-  }
   /* ---- The rung of the ladder -------------------------------------------
    * Which material a child is filling now, drawn as the chevrons every game
    * they play uses for a tier and coloured in that material. A pill rather
@@ -1883,202 +2296,53 @@
   }
 
   /* ---- Frame -----------------------------------------------------------
-   * The three navigation surfaces, at the sizes §D specifies. All three
-   * disappear during a round: on every size, the only things left are the stop
-   * cross, the ten progress dots and the read-aloud button.
+   * Three postures and one component (ADR-093).
+   *
+   * From 1200 up the app bar carries the wordmark and the destinations, the
+   * modules stand in a rail of 96 on the left, and nothing lies along the
+   * bottom. Below 1200 — a tablet either way up, and a phone — the app bar is
+   * the mark, the streak and the child; the modules are one control under it
+   * that opens into a list; and the destinations lie along the bottom, where a
+   * thumb is.
+   *
+   * 1200 rather than the 1280 this used to be. The Chromebook (1366) and the
+   * laptop (1440) keep the rail, the iPads (1080 and 810) and the phones get the
+   * menu, and no size the app is tested at sits between the two numbers — so
+   * the handoff's value moves no device and is the one the design is drawn to.
+   *
+   * Which of each pair is displayed is Tailwind's `desk:` on the element, not a
+   * rule here: a component-layer `display` would lose to the utility anyway,
+   * and one place deciding it is the point.
+   *
+   * All three disappear during a round. A round screen is not wrapped in the
+   * Shell at all (ADR-041).
    */
   .tk-appbar {
     display: flex;
     align-items: center;
     gap: 16px;
-    height: 64px;
-    /* 16 on a phone, which is the margin §D gives that size, and the twelve
-       pixels it saves are the difference between a name that fits and a bar
-       that runs off the side. */
+    height: 56px;
+    /* 16 on a phone, which is the margin §D gives that size. */
     padding: 0 16px;
     background: var(--paper);
     border-bottom: var(--stroke-hair) solid var(--line);
   }
-  /* The rail is one component with two postures, not two components.
-   *
-   * Lying down is the default, because that is what the smaller half of the
-   * range gets: §D puts a bar of 72 under a tablet, where the child is pointing
-   * at the map with a finger. Standing up is the exception, at a width where
-   * there is a mouse and room to spare.
-   *
-   * The breakpoint is 1280 rather than 1024 so that a tablet in landscape —
-   * exactly 1024 — gets the bar the design draws for it, and a 1366 Chromebook
-   * gets the rail. §D's own reasoning is about hands rather than pixels, and
-   * width is the poorer proxy; it is the one that can be tested. */
-  .tk-rail {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 8px;
-    height: 72px;
-    padding: 8px 16px;
-    background: var(--paper);
-    border-top: var(--stroke-hair) solid var(--line);
-  }
-  /* The list of modules inside it. `inherit` rather than a repeated value, so
-   * the rail's two postures stay one decision made in one place. */
-  .tk-rail-nav {
-    display: flex;
-    flex-direction: inherit;
-    align-items: center;
-    gap: 8px;
-    min-width: 0;
-  }
-  /* The mark at the head of the rail, which K1 draws only where the rail
-   * stands up — that is the corner it means by "linksboven". Lying along the
-   * bottom of a tablet it would be a logo in the last place anyone looks, and
-   * the app bar already carries the wordmark two centimetres away. */
-  .tk-rail-brand {
-    display: none;
-  }
-  /* Not on a phone, which is what §D asks for: "op mobiel vervalt de rail en
-   * komt er een tabbalk met vier items ... de modules blijven dan bereikbaar
-   * via de kaarten in de stroom".
-   *
-   * It is also arithmetic. Five entries at the 88 a touch target needs is 440,
-   * and a phone is 393 — the bar cannot be drawn at that size without either
-   * shrinking below the floor ADR-032 sets or pushing the page sideways, and
-   * it did the second. K1 carries the modules as cards there instead. */
-  @media (max-width: 767px) {
-    .tk-rail {
-      display: none;
+  @media (min-width: 768px) {
+    .tk-appbar {
+      height: 64px;
+      padding: 0 20px;
     }
   }
-  @media (min-width: 1280px) {
-    .tk-rail {
-      flex-direction: column;
-      align-items: stretch;
-      width: 88px;
-      height: auto;
-      padding: 16px 8px;
-      border-top: 0;
-      border-right: var(--stroke-hair) solid var(--line);
+  @media (min-width: 1200px) {
+    .tk-appbar {
+      gap: 24px;
+      padding: 0 24px;
     }
-    .tk-rail-nav {
-      align-items: stretch;
-    }
-    .tk-rail-brand {
-      display: flex;
-      justify-content: center;
-      /* The 12 K1 puts between the mark and the first module, so the mark
-       * reads as the head of the rail and not as a sixth entry in it. */
-      padding: 0 0 12px;
-    }
-  }
-  .tk-tabbar {
-    display: flex;
-    align-items: stretch;
-    height: var(--touch);
-    background: var(--paper);
-    border-top: var(--stroke-hair) solid var(--line);
-  }
-  .tk-rail-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    min-width: 88px;
-    min-height: var(--touch);
-    border: 0;
-    border-radius: var(--card-radius);
-    background: transparent;
-    color: var(--ink-2);
-    font-size: var(--type-small);
-    line-height: var(--type-small-lh);
-    font-weight: 600;
-    cursor: pointer;
-  }
-  @media (min-width: 1280px) {
-    .tk-rail-item {
-      min-width: 64px;
-      min-height: 64px;
-    }
-  }
-  /* The module entrance is one of the three things an accent may colour, and
-   * the rail is where it does most of its work. */
-  .tk-rail-item[aria-current='page'] {
-    background: var(--accent-tint);
-    color: var(--accent-text);
   }
 
-  .tk-tabbar-item {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    min-height: var(--touch);
-    border: 0;
-    background: transparent;
-    color: var(--ink-2);
-    font-size: var(--type-small);
-    line-height: var(--type-small-lh);
-    font-weight: 600;
-    cursor: pointer;
-  }
-  .tk-tabbar-item[aria-current='page'] {
-    color: var(--ink);
-  }
-
-  /* The same four destinations, standing up in the app bar. From a tablet
-   * upwards the foot of the screen is a long way from the pointer and the bar
-   * at the top is where a page's own navigation lives; below that width this
-   * is not displayed and the tab bar is. Exactly one of the two at any width,
-   * so nothing is offered twice. */
-  .tk-navbar {
-    align-items: center;
-    gap: 4px;
-    /* Both of these are about a reader at 200% text. The items may not wrap —
-     * a destination broken over two lines is not a destination — so at that
-     * size the row is wider than a tablet's app bar, and something has to
-     * give. It scrolls inside the bar rather than pushing the page sideways,
-     * which is the failure e2e/shell.spec.ts measures and the first thing that
-     * goes wrong at the small end. */
-    min-width: 0;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .tk-navbar::-webkit-scrollbar {
-    display: none;
-  }
-  .tk-navbar-item {
-    display: inline-flex;
-    align-items: center;
-    min-height: var(--touch-min);
-    padding: 0 12px;
-    border: 0;
-    border-radius: var(--radius-control);
-    background: transparent;
-    color: var(--ink-2);
-    font-family: 'Source Sans 3', system-ui, sans-serif;
-    font-size: var(--type-label);
-    line-height: var(--type-label-lh);
-    font-weight: 600;
-    white-space: nowrap;
-    cursor: pointer;
-  }
-  .tk-navbar-item:hover {
-    background: var(--surface);
-    color: var(--ink);
-  }
-  /* Where you are, said with weight and a rule under it rather than with a
-   * colour: §A's rule is that colour never carries a state on its own. */
-  .tk-navbar-item[aria-current='page'] {
-    color: var(--ink);
-    box-shadow: inset 0 -2px 0 0 var(--ink);
-    border-radius: var(--radius-control) var(--radius-control) 0 0;
-  }
-
-  /* The logo, which is now the way back to the front door. A button that looks
-   * like nothing: the mark is the affordance, and a border around it would be
-   * a second one competing with it. */
+  /* The logo, which is the way back to the front door. A button that looks
+   * like nothing: the mark is the affordance, and a border around it would be a
+   * second one competing with it. */
   .tk-brand {
     display: inline-flex;
     align-items: center;
@@ -2090,16 +2354,311 @@
     background: transparent;
     cursor: pointer;
   }
-  /* The rest of the address, beside the wordmark: "leer.nu" + "/topografie".
-   * §A draws that lockup and K2 puts it in the app bar, and it is the one
-   * place in the product that teaches a child the page has an address they
-   * could type or write down.
-   *
-   * Quieter than the mark and not part of the button, because the mark is the
-   * way home and the path is where you already are. Not on a phone: the bar
-   * there is a wordmark and a name across 393, and the name goes first. */
   .tk-brand:hover {
     background: var(--surface);
+  }
+
+  /* The destinations, standing in the app bar from 1200. At a reader's 200%
+   * text the row can be wider than the bar, and it scrolls inside the bar
+   * rather than pushing the page sideways. */
+  .tk-navbar {
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tk-navbar::-webkit-scrollbar {
+    display: none;
+  }
+  .tk-navbar-item {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--touch-min);
+    padding: 0 16px;
+    border: 0;
+    border-radius: var(--radius-control);
+    background: transparent;
+    color: var(--ink-2);
+    font-size: var(--type-label);
+    line-height: var(--type-label-lh);
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .tk-navbar-item:hover {
+    background: var(--surface);
+    color: var(--ink);
+  }
+  /* Where you are: a surface under the word and the word in ink at a heavier
+   * weight. A lightness and a weight, so no hue carries it (§A). */
+  .tk-navbar-item[aria-current='page'] {
+    background: var(--surface);
+    color: var(--ink);
+    font-weight: 700;
+  }
+
+  /* The streak, as a pill at every size. Secondary ink on the surface, 5.6:1,
+   * because it is context for the work and not a headline beside it. */
+  .tk-streak {
+    display: inline-flex;
+    align-items: center;
+    flex: none;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: var(--radius-full);
+    background: var(--surface);
+    color: var(--ink-2);
+  }
+  @media (max-width: 767px) {
+    .tk-streak {
+      gap: 6px;
+      padding: 3px 10px;
+    }
+  }
+
+  /* The profile switch: the child's hero and their name, in a pill with a
+   * rule round it. On a phone it is the hero alone — the name stays the
+   * button's accessible name, drawn nowhere, which is what .tk-sr-only does
+   * and why the rules below are its rules. */
+  .tk-profiel {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    min-height: var(--touch-min);
+    padding: 0 16px 0 6px;
+    border: var(--stroke-hair) solid var(--line-strong);
+    border-radius: var(--radius-full);
+    background: var(--paper);
+    color: var(--ink);
+    font-size: var(--type-label);
+    line-height: var(--type-label-lh);
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .tk-profiel:hover {
+    background: var(--surface);
+  }
+  .tk-profiel .tk-held {
+    width: 30px;
+    height: 30px;
+  }
+  .tk-profiel-naam {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  @media (max-width: 767px) {
+    .tk-profiel {
+      justify-content: center;
+      min-width: var(--touch-min);
+      padding: 0;
+      border: 0;
+      background: transparent;
+    }
+    .tk-profiel .tk-held {
+      width: 34px;
+      height: 34px;
+    }
+    .tk-profiel-naam {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+  }
+
+  /* The rail, from 1200: 96 wide, five doors, and no mark at its head — the
+   * handoff draws none, and the wordmark is a hand's width away in the bar. */
+  .tk-rail {
+    flex: none;
+    flex-direction: column;
+    gap: 6px;
+    width: 96px;
+    padding: 16px 8px;
+    background: var(--paper);
+    border-right: var(--stroke-hair) solid var(--line);
+  }
+  .tk-rail-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 72px;
+    padding: 8px 4px;
+    border: 0;
+    border-radius: var(--radius-card);
+    background: transparent;
+    color: var(--ink-2);
+    font-size: 0.9375rem; /* 15px */
+    line-height: 1.25rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .tk-rail-item:hover {
+    background: var(--surface);
+  }
+  /* The module entrance is one of the things an accent may colour, and the
+   * rail is where it does most of its work. The plate turns to paper on the
+   * tint, so the mark stays a mark on a ground rather than vanishing into it. */
+  .tk-rail-item[aria-current='page'] {
+    background: var(--accent-tint);
+    color: var(--accent-text);
+  }
+  .tk-rail-item[aria-current='page'] .tk-plaat {
+    background: var(--paper);
+  }
+
+  /* ---- The menu the rail becomes below 1200 (ADR-093) --------------------
+   * A row under the app bar with a word and a button in it; open, a panel in
+   * the flow of the page under that, holding a card of five rows. In the flow
+   * rather than over it, so nothing under it is covered while it is open and
+   * nothing has to be told to stop scrolling.
+   */
+  .tk-vakmenu-rij {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: var(--stroke-hair) solid var(--line);
+  }
+  .tk-vakmenu-knop {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    min-height: 48px;
+    padding: 0 14px 0 8px;
+    border: 0;
+    border-radius: var(--radius-full);
+    box-shadow: inset 0 0 0 var(--stroke-hair) var(--line-strong);
+    background: var(--paper);
+    color: var(--ink);
+    font-size: var(--type-label);
+    line-height: var(--type-label-lh);
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .tk-vakmenu-knop:hover {
+    background: var(--surface);
+  }
+  /* Open: the rule turns to ink, and the chevron turns over. */
+  .tk-vakmenu-knop[aria-expanded='true'] {
+    box-shadow: inset 0 0 0 var(--stroke-hair) var(--ink);
+  }
+  .tk-vakmenu-knop .tk-plaat {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-klein);
+  }
+  .tk-vakmenu-paneel {
+    padding: 10px 16px 14px;
+    background: var(--surface);
+    border-bottom: var(--stroke-hair) solid var(--line);
+  }
+  @media (min-width: 768px) {
+    .tk-vakmenu-rij {
+      padding: 12px 20px;
+    }
+    .tk-vakmenu-paneel {
+      padding: 10px 20px 14px;
+    }
+  }
+  .tk-vakmenu-lijst {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    list-style: none;
+    border: var(--stroke-hair) solid var(--line-strong);
+    border-radius: var(--radius-card);
+    background: var(--paper);
+    box-shadow: var(--shadow-menu);
+  }
+  .tk-vakmenu-lijst li + li {
+    border-top: var(--stroke-hair) solid var(--line);
+  }
+  .tk-vakmenu-optie {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: var(--touch);
+    padding: 0 14px;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    font-size: var(--type-label);
+    line-height: var(--type-label-lh);
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+  }
+  .tk-vakmenu-optie:hover {
+    background: var(--surface);
+  }
+  /* Inside the card's own edge, because the card clips what stands outside
+   * it and a focus ring that is cut off is not a focus ring. */
+  .tk-vakmenu-optie:focus-visible {
+    outline-offset: -4px;
+  }
+  .tk-vakmenu-optie[aria-current='page'] {
+    background: var(--accent-tint);
+    color: var(--accent-text);
+    font-weight: 700;
+  }
+  .tk-vakmenu-optie[aria-current='page'] .tk-plaat {
+    background: var(--paper);
+  }
+
+  /* ---- The tab bar, below 1200 ------------------------------------------
+   * A mark and a word per destination. Where you are is a rule across the
+   * top, a surface and a heavier word — and in ink, where the handoff draws it
+   * in topography's blue: a destination is not a module, and §B does not let
+   * an accent say which one you are on (ADR-093).
+   */
+  .tk-tabbar {
+    display: flex;
+    align-items: stretch;
+    background: var(--paper);
+    border-top: var(--stroke-hair) solid var(--line);
+  }
+  .tk-tabbar-item {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-height: 64px;
+    padding: 6px 4px 8px;
+    border: 0;
+    border-top: var(--stroke-answer) solid transparent;
+    background: transparent;
+    color: var(--ink-2);
+    font-size: 0.8125rem; /* 13px */
+    line-height: 1.125rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  @media (min-width: 768px) {
+    .tk-tabbar-item {
+      min-height: 68px;
+      font-size: 0.9375rem; /* 15px */
+      line-height: 1.25rem;
+    }
+  }
+  .tk-tabbar-item[aria-current='page'] {
+    border-top-color: var(--ink);
+    background: var(--surface);
+    color: var(--ink);
+    font-weight: 700;
   }
 
   /* ---- The round, on four sizes (K3) -----------------------------------
@@ -2125,9 +2684,6 @@
     border-bottom: var(--stroke-hair) solid var(--line);
   }
   @media (min-width: 768px) {
-    .tk-appbar {
-      padding: 0 24px;
-    }
     .tk-round-bar {
       gap: 20px;
       padding: 0 48px;

@@ -20,24 +20,20 @@ export const nl = {
   'home.restDay': '{aantal} rustdag bewaard',
   'home.restDays': '{aantal} rustdagen bewaard',
   // K1, de landingspagina. De begroeting zet het kind bovenaan het scherm; de
-  // zin eronder zegt hardop wat op een fout lijkt: dat je vragen terugkrijgt
-  // die je al had. Dat is precies de belofte.
+  // zin eronder zegt wat je hier doet, in de volgorde waarin je het doet: een
+  // vak kiezen, een ronde doen, en wat dat oplevert (herontwerp 2026-09).
   //
-  // Wat die zin niet meer doet is een aantal noemen. "Vandaag oefen je 10
-  // vragen" las als een opdracht met een plafond: tien, en dan ben je klaar.
-  // Niets in het product stopt na tien, dus zegt de zin nu wat er wel waar is
-  // - je oefent zolang je wilt, en wat je eerder had komt terug omdat het zo
-  // blijft hangen.
+  // Hij noemt nog steeds geen aantal. "Vandaag oefen je 10 vragen" las als een
+  // opdracht met een plafond: tien, en dan ben je klaar. Niets in het product
+  // stopt na tien.
   'home.welcome': 'Welkom {naam}!',
-  'home.todayOpen':
-    'Oefen zolang je wilt. Vragen die je eerder had komen terug, want zo onthoud je ze.',
+  'home.todayOpen': 'Kies een vak, doe een ronde en verdien je volgende held.',
   'home.practiceMore': 'Verder oefenen',
   // De tegels tussen het toetsblok en het logboek: waar je zelf het vaakst
   // naar teruggaat, met het aantal keer erbij. Dat getal komt van dit apparaat
   // en van niets anders - er is geen server die meekijkt, dus er is ook geen
   // "3.412 keer gespeeld" te tonen dat waar zou zijn.
   'home.popularTitle': 'Meest geoefend',
-  'home.popularIntro': 'Waar je het vaakst naar teruggaat.',
   'home.popularNew': 'Hier begin je mee.',
   'home.popularTimes': '{aantal} keer gespeeld',
   'home.popularOnce': '1 keer gespeeld',
@@ -49,8 +45,12 @@ export const nl = {
   // het staat er in de volgorde waarin het gebeurde en telt niets bij elkaar op.
   'home.recentTitle': 'Recent geoefend',
   'home.recentNone': 'Nog niets geoefend. Na je eerste ronde staat het hier.',
-  'home.recentGrade': 'cijfer',
   'home.recentOutOf': '{goed} van de {totaal} goed',
+  'home.recentLine': 'Cijfer {cijfer} · {goed} van de {totaal} goed',
+  // De twee knoppen boven een rij, die hem een kaart opschuiven. Ze noemen de
+  // rij, want er staan er drie onder elkaar en "verder" alleen zegt niet welke.
+  'home.rowBack': 'Terug in {rij}',
+  'home.rowOn': 'Verder in {rij}',
 
   // Alles bij elkaar, over alle rondes ooit. Nadrukkelijk niet hetzelfde als
   // wat je onthoudt: dit gaat over antwoorden die je gaf, dat over wat er
@@ -83,7 +83,7 @@ export const nl = {
   // silhouet ernaast doet de rest.
   'home.journeyNext': 'Hierna: een nieuw dier in {reeks}',
   'home.journeyComplete': 'Je hebt alle dieren. Je niveau blijft stijgen.',
-  'home.journeyAll': 'Bekijk alles wat je kunt halen',
+  'home.journeyAll': 'Bekijk alles wat je kunt verdienen',
 
   // De andere streak: goede antwoorden op rij, zonder dag ertussen. Hij staat
   // onder het percentage en niet erboven, want het is het enige getal in het
@@ -118,6 +118,11 @@ export const nl = {
   // scherm verdwijnen voor wie het niet ziet. De merknaam komt uit brand.ts.
   'nav.home': '{merk}, naar Vandaag',
   'nav.destinations': 'Waar je heen kunt',
+  // Het vakmenu onder de balk op een tablet en een telefoon, waar de rail niet
+  // staat. Het woord ervoor zegt wat je kiest; de knop zegt welk vak het is,
+  // of vraagt erom waar je nog in geen vak bent.
+  'nav.vak': 'vak',
+  'nav.vakKies': 'Kies een vak',
   'nav.vandaag': 'Vandaag',
   'nav.onthouden': 'Onthouden',
   'nav.vrienden': 'Vrienden',
@@ -142,21 +147,31 @@ export const nl = {
   'retention.due': 'Weer op',
   'retention.dueNow': 'vandaag',
 
-  // K1's toetsdatumblok: het enige blok op het scherm met een vlak én een
-  // rand, want het is de reden dat het kind vandaag oefent.
+  // Het toetsenblok, bovenaan de eigen kolom van het kind. Het is de reden dat
+  // het kind deze week oefent, en het zegt alleen dat: wanneer, en waarover.
   'home.testLabel': 'toets',
   'home.testNone': 'Nog geen toetsdatum',
   // Meer dan één, want een periode is nooit één toets: topografie op dinsdag en
   // de tafels de vrijdag erna. Het blok toont ze allemaal en verder niets.
-  'home.testTitle': 'Je toetsen',
+  'home.testTitle': 'Jouw toetsen',
   'home.testToday': 'De toets is vandaag',
   'home.testTomorrow': 'De toets is morgen',
   'home.testInDays': 'Toets over {aantal} dagen',
   'home.testPick': 'Wanneer is de toets?',
   'home.testAdd': 'Toets toevoegen',
   'home.testSave': 'Toevoegen',
-  'home.testRemove': 'Weg',
-  'home.testRemoveOne': 'Haal de toets weg: {wanneer}',
+  'home.testRemove': 'Verwijder',
+  // Begint met het woord op de knop, zodat wie de knop bij naam aanspreekt
+  // hem ook zo vindt (WCAG 2.5.3), en zegt daarna welke toets.
+  'home.testRemoveOne': 'Verwijder: {wanneer}',
+  // Kort, zoals het blok ze toont: het woord "toets" staat al in de kop.
+  'home.testSoonToday': 'Vandaag',
+  'home.testSoonTomorrow': 'Morgen',
+  'home.testSoonDays': 'Over {aantal} dagen',
+  // Op een tablet en een telefoon is het blok eerst alleen de datums. Erop
+  // tikken klapt het open tot wat een laptop meteen laat zien.
+  'home.testsChange': 'Toetsen wijzigen',
+  'home.testsDone': 'Klaar',
   // Het vak erbij, want een datum zonder vak plant niets. Alleen vakken die
   // bestaan: een toets voor woordjes instellen belooft oefenstof die er niet
   // is. Het gekozen vak bepaalt waarmee "Ga verder" verdergaat.

@@ -125,7 +125,11 @@ test('typing a time takes every way a child writes one', async ({ page }) => {
 });
 
 test('the clock is a door in the rail like the other two', async ({ page }, testInfo) => {
-  test.skip(['iphone', 'android'].includes(testInfo.project.name), 'no rail on a phone');
+  // Below 1200 the same door is in the menu (ADR-093); shell.spec.ts opens it.
+  test.skip(
+    !['chromebook', 'desktop-1440'].includes(testInfo.project.name),
+    'no rail below 1200',
+  );
 
   await signIn(page, 'Timo');
 

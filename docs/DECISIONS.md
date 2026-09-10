@@ -3784,6 +3784,133 @@ a content decision and not part of building the module.
 
 ---
 
+## ADR-093 — Below 1200 the modules are a menu, and the destinations lie along the bottom
+
+**Status:** accepted — 2026-09-10. Reshapes the frame of ADR-029 and ADR-051;
+what the rail lists is unchanged.
+
+### Context
+
+The redesign handoff of September 2026 draws the frame in three postures: a
+desk at 1440, a tablet at 834 and a phone at 390. The frame as built had four
+and drew them differently. A tablet got the rail lying along the bottom of the
+screen and the destinations as a row in the app bar; a phone got the
+destinations along the bottom and no way to a module at all except the tiles on
+the front door.
+
+### Decision
+
+**One width, 1200, replacing Tailwind's 1280.** From there up the app bar
+carries the wordmark and the destinations, and the modules stand in a rail of 96
+on the left. Below it the app bar is the mark, the streak and the child. No size
+the app is tested at sits between the two numbers — the Chromebook (1366) and
+the laptop (1440) keep the rail, the iPads (1080, 810) and the phones do not —
+so the handoff's value moves no device and is the one the design is drawn to.
+It is a Tailwind screen of our own, `desk`, and `useDesk` for the one place a
+component needs to know.
+
+**Below 1200 the modules are one control under the app bar** (`VakMenu`). It
+says which module you are in — or "Kies een vak" where you are in none — and it
+opens into the same five the rail lists, in the flow of the page rather than
+over it. A disclosure holding a navigation, not an ARIA menu: these are places
+to go, and `role="menu"` would take a screen reader's reading keys away. It
+opens with focus on the module you are in, moves with the arrow keys, Home and
+End, and closes on a choice, on Escape, on a press outside it and on tabbing out
+— with focus back on the button after the first two.
+
+**Below 1200 the destinations are a tab bar with a mark over each word.**
+Vandaag is a sun, drawn for the purpose; Onthouden takes the freezer and Jij the
+pupil, which already meant those things. Where you are is a rule across the top,
+a surface and a heavier word, in ink. The handoff draws it in topography's blue,
+and that is not followed: a destination is not a module, and §B does not let an
+accent say which one you are on.
+
+**The streak is a pill at every size**, and the rail loses the mark at its head:
+the handoff draws neither the rule that hid the streak on a phone nor a logo
+above the rail, and the mark alone in the bar below 1200 is what pays for the
+streak's width.
+
+### Consequences
+
+Exactly one of each pair is displayed at any width, and the menu's list is not
+in the document until it is opened — so the rail and a closed menu never both
+answer to "Modules". The rail tests in `sums.spec.ts` and `klok.spec.ts` run at
+the two desk sizes only now, and `shell.spec.ts` walks the menu at the four
+below.
+
+---
+
+## ADR-094 — The front door is three rows that scroll, and the child's column is four blocks
+
+**Status:** accepted — 2026-09-10. Redraws K1 (ADR-077, ADR-082) and the
+column every page carries (ADR-067); nothing is added to what either holds, and
+nothing is taken away.
+
+### Context
+
+The same handoff redraws the front door as three rows that scroll sideways —
+most practised, recently practised, carry on — and the child's column as four
+cards of one shape, with the test block moved out of the middle of the page and
+into the column. Its brief is a styling and layout revision: the same blocks,
+the same order, the same behaviour.
+
+### Decision
+
+**Three rows, one line each at every size.** "Meest geoefend" and "Recent
+geoefend" hold five cards of the same shape, most played and newest first;
+"Verder oefenen" holds every module in the rail, furthest along first, with the
+ones that do not exist yet after all of them. Five rather than four and three:
+`POPULAR_SHOWN` is five, and the starting list for a new profile gains the
+clock's whole hours to match. The scrollbar is hidden and scrolling is not — a
+finger or trackpad, two round buttons from a tablet up that switch off at the
+ends, and the arrow keys on the row, which is a stop in the tab order. A step is
+a jump rather than a glide when the reader asks for less motion. The buttons are
+44 where the handoff draws 40: 44 is the floor (ADR-032).
+
+**The column is four blocks with a band across the top**: Jouw toetsen, Jouw
+voortgang, Goed beantwoord, Jouw favorieten, in that order from 1200. Below it
+the blocks go into the flow of the page, progress first — side by side with the
+tests on a tablet, above the rows — and the other two after the rows. The order
+is decided in React (`useDesk`) rather than with CSS `order`, so a keyboard and
+a screen reader meet the blocks in the order the eye does.
+
+**Below 1200 the test block is only its dates.** That is what the handoff draws.
+It leaves "adding a test" to a screen that is out of scope; removing the form
+from a tablet and a phone until that screen exists was not an option, so the
+dates are a button that opens the block into what a laptop shows, and "Klaar"
+closes it.
+
+**Four things the handoff leaves out are kept**, because a layout revision is
+not the place to take behaviour away: Goed beantwoord and the favourites on a
+tablet (at the foot of the page, where the handoff says they will "get a place
+elsewhere" that does not exist yet), what is still wrapped up on the progress
+card (ADR-081), and the run of correct answers under the percentage (ADR-072).
+
+**The accuracy ring is ink, not gold.** A material is a reward (ADR-071) and how
+the work is going is not one. The progress bar does take the material of the
+reeks being filled, on that material's soft tone, because that bar is the
+reward's own.
+
+**New tokens**, each because the handoff draws a value the palette did not
+have: `--{module}-soft` for all seven and `--accent-soft`, the lightest step of
+a module, for a chosen tile and the start bar; a deep and a soft tone for each
+of the five materials and `--reeks-licht`, for the plate a hero stands on;
+`--shadow-menu` and `--shadow-held`, the two shadows the handoff allows;
+`--radius-plaat` (10) and `--radius-klein` (8). Four more places an accent may
+paint are listed in `accent.test.ts`, each with its reason: the plate, the
+module you are in in the menu, a test's subject, and the track under a module's
+bar on the front door. A card on the front door no longer lights its border in
+the module colour on hover; the plate on it already says which module it is.
+
+### Consequences
+
+The sentence under the greeting is the handoff's — choose a subject, do a round,
+earn your next hero. The one it replaces, about questions coming back on
+purpose, is gone from K1; it was the only place the product said so out loud,
+and the Onthouden page is where that argument lives now.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because

@@ -70,7 +70,7 @@ describe('what a child goes back to most', () => {
     expect(lijst[0]?.mode).toBe('wijs-aan');
   });
 
-  it('holds four, however many were played', () => {
+  it('holds five, however many were played', () => {
     const veel = ['a', 'b', 'c', 'd', 'e', 'f'].map((id, at) =>
       ronde(id, 'som-typen', `2026-09-0${at + 1}T11:00:00.000Z`),
     );
@@ -80,7 +80,7 @@ describe('what a child goes back to most', () => {
 
   /**
    * Nought rather than a guess. There is no server to ask what is popular with
-   * anybody else, so a child with no rounds behind them gets the four to start
+   * anybody else, so a child with no rounds behind them gets the five to start
    * with and a count that says so.
    */
   it('falls back to a starting list that is real and unplayed', () => {

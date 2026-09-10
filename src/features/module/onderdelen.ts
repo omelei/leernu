@@ -60,24 +60,29 @@ export const ROUND_SIZE = { topo: 15, tafels: 10, klok: 10 } as const;
 /** How many favourites the column on the right holds. */
 export const FAVOURITES_SHOWN = 4;
 
-/** How many tiles the front door's "meest geoefend" row holds. */
-export const POPULAR_SHOWN = 4;
+/**
+ * How many cards the front door's "meest geoefend" row holds: five, which is
+ * what the handoff draws in a row that scrolls rather than wraps (ADR-094).
+ */
+export const POPULAR_SHOWN = 5;
 
 /**
  * What a child who has never played anything is offered instead.
  *
- * Four sets and the way each of them begins. Not a guess at what is popular
+ * Five sets and the way each of them begins. Not a guess at what is popular
  * with anybody else — there is no anybody else to ask, because there is no
  * backend and nothing is sent anywhere (ADR-015). A number like "3.412 keer
  * gespeeld" would have to be invented, and this product does not put invented
  * numbers in front of children.
  *
- * So they are named as what they are: the ones to start with. Two from each
- * built module, and the two that a Dutch child meets first in each.
+ * So they are named as what they are: the ones to start with. The two that a
+ * Dutch child meets first in topography and in rekenen, and the first step of
+ * the clock — the fifth card the row has held since it started to scroll.
  */
 const STARTERS: readonly { readonly setId: string; readonly mode: ModeId }[] = [
   { setId: 'nl-provincies', mode: 'wijs-aan' },
   { setId: 'tafel-2', mode: 'som-typen' },
+  { setId: 'klok-heel', mode: 'klok-meerkeuze' },
   { setId: 'nl-hoofdsteden', mode: 'wijs-aan' },
   { setId: 'plus-20', mode: 'som-typen' },
 ];

@@ -1,14 +1,10 @@
 import { useEffect, useState } from 'react';
-import type { ComponentType } from 'react';
 import { countMastered, formatGrade, grade, type ItemState, type ModeId } from '@/game-core';
 import { ProgressBar } from '@/components/ProgressBar';
-import { type IconProps } from '@/components/Icon';
 import { RAIL_MODULES, type Module } from '@/features/shell/modules';
 import { MODULE_ICON } from '@/features/shell/moduleIcons';
+import { useDesk } from '@/features/shell/useSmallScreen';
 import { t, type TranslationKey } from '@/i18n';
-import { TestDate } from './TestDate';
-import { useTestPlan } from './testPlan';
-import { SideColumn } from './SideColumn';
 import { loadItemStates, loadPlayedRounds } from '@/store/progress';
 import type { PlayedRound } from '@/store/progress';
 import {
@@ -21,6 +17,7 @@ import {
   onderdelen,
   starters,
   startbareOnderdelen,
+  POPULAR_SHOWN,
   type Gespeeld,
   type Onderdeel,
   type Populair,
@@ -28,44 +25,42 @@ import {
 import type { PracticeMode, SetId } from '@/features/practice/useRound';
 import type { SumMode } from '@/features/sums/useSumRound';
 import type { KlokMode } from '@/features/klok/useKlokRound';
+import { ScrollRij } from './ScrollRij';
+import { FavorietenBlok, GoedBlok, VoortgangBlok } from './SideColumn';
+import { ToetsenBlok } from './ToetsenBlok';
 
 /**
  * K1, the front door — which is also leer.nu itself.
  *
- * Three areas, and the design gives a reason for each. The rail on the left is
- * the whole product. The wide middle is today, what was just practised, and
- * everything else there is to do. The column on the right is the child's own:
- * how the whole of it is going, where they keep going back to, and the one
- * thing on the screen they get to choose.
+ * Redrawn in 2026-09 (ADR-094) and still the same argument, in the same order.
+ * First the child's own name, and under it what doing this is: choose a
+ * subject, do a round, earn the next one. Then three rows of ways in — what this
+ * child goes back to most, what they did last and how it went, and everything
+ * else there is, furthest along first. Then the child's own column: the tests,
+ * the level, how the whole of it is going, and their favourites.
  *
- * The screen argues for the product in the order it puts things. First the
- * child's own name; then what practising here is like, which is the sentence
- * that admits the part that looks like a mistake; then the test, which is the
- * reason any of it is happening this week; then the exercises this child keeps
- * coming back to; then what was just practised and how it went; then
- * everything else there is.
+ * **Three rows that scroll sideways.** Each one used to be a grid that wrapped
+ * onto as many lines as it needed, which made the page as long as the child's
+ * history. As rows they are one line each at every size, with five cards in the
+ * first two and every module in the third, and what is past the edge is one
+ * swipe, one press or one arrow key away (`ScrollRij`).
  *
- * **The block between the test and the log is a way in, not a report.** It
- * held one set with its size, its number of rounds and two buttons — a card
- * that explained a decision the child had not asked to make yet. What stands
- * there now is four exercises with the number of times each was played, which
- * is the same question answered in the form a child actually uses: not "here
- * is what we suggest", but "here is where you keep going" (ADR-082).
+ * **The column moves, the page does not.** From 1200 it stands beside the rows.
+ * Below that its four blocks go into the flow of this page: progress and tests
+ * side by side on a tablet above the rows, and the other two after them. Which
+ * block goes where is decided here, in React, because it is the reading order
+ * as well as the drawing (see `useDesk`).
  *
- * Two things it deliberately does not do. **It does not forecast.** "Wat
- * onthoud je" is K9's and it stays there: it is the number the product argues
- * from, and on the front door beside a mark it read as a second opinion about
- * the same thing. And **the test block is about the test.** When it is, what it
- * is for, and the way in — no mark, no bar, no projection. A block that reports
- * on the child is not a reason to start.
- *
- * The catalogue of sets and the column on the right both used to live in this
- * file. They are shared with the module pages now and moved out to be shared;
- * nothing about what this screen draws changed with them.
+ * Two things it deliberately does not do. **It does not forecast** — "wat
+ * onthoud je" is K9's. And **the test block is about the tests**: when they are
+ * and what they are about, with no mark, no bar and no projection.
  */
 
-/** How many rounds the history shows. */
-const RECENT_SHOWN = 3;
+/**
+ * How many rounds the history shows: as many cards as "meest geoefend" holds,
+ * so the two rows the handoff draws as one shape are also one length.
+ */
+const RECENT_SHOWN = POPULAR_SHOWN;
 
 export interface HomeScreenProps {
   /** Whose front door this is. K1 opens by saying so. */
@@ -93,7 +88,7 @@ export function HomeScreen({
 }: HomeScreenProps) {
   const [states, setStates] = useState<Map<string, ItemState> | null>(null);
   const [played, setPlayed] = useState<readonly PlayedRound[]>([]);
-  const plan = useTestPlan();
+  const desk = useDesk();
 
   useEffect(() => {
     void loadItemStates().then(setStates);
@@ -101,7 +96,6 @@ export function HomeScreen({
   }, []);
 
   const known = states ?? new Map<string, ItemState>();
-  const now = new Date();
 
   // Over every set a round can be started on, mixes included: a round of the
   // Rekenmix that could not be placed would drop out of the history entirely.
@@ -115,62 +109,95 @@ export function HomeScreen({
     else onStartSum(deel.setId, asSumMode(mode));
   };
 
-  return (
-    <div className="tk-home">
-      <div className="tk-home-top">
-        {/* The child's own name, and under it the sentence that argues for the
-            whole product by admitting the part that looks like a mistake: a
-            child handed a question they have had before should be told that
-            was on purpose. */}
-        <div>
-          <h1 className="tk-display text-h1 font-semibold">{t('home.welcome', { naam })}</h1>
-          <p className="mt-1 text-body text-ink-2">{t('home.todayOpen')}</p>
+  const kop = (
+    <div className="tk-home-kop">
+      <h1 className="tk-display tk-titel font-semibold">{t('home.welcome', { naam })}</h1>
+      <p className="text-body text-ink-2">{t('home.todayOpen')}</p>
+    </div>
+  );
+
+  const rijen = (
+    <>
+      <Populairst populair={populair} onBegin={begin} />
+      <Recent gespeeld={gespeeld} onBegin={begin} />
+      <VerderOefenen known={known} onOpen={onModule} />
+    </>
+  );
+
+  const toetsen = <ToetsenBlok />;
+  const voortgang = <VoortgangBlok sticker={sticker} onReis={onReis} />;
+  const goed = <GoedBlok />;
+  const favorieten = <FavorietenBlok onBegin={begin} />;
+
+  if (desk) {
+    return (
+      <div className="tk-home">
+        <div className="tk-home-main">
+          {kop}
+          {rijen}
         </div>
 
-        {/* The one block with a surface and a border, and it is about the
-            tests. When they are and what they are about — and nothing else
-            (ADR-077). The way into a round used to be inside this border too,
-            which made one block answer two questions: when is the test, and
-            what shall I do now.
-
-            Nothing in this card waits for IndexedDB. It did, and on WebKit —
-            an iPad in a classroom — the screenshots caught the whole block
-            absent: the reason the child is here, missing for as long as the
-            read took, and then pushing everything under it down. */}
-        <section className="tk-card tk-card-accented" data-module={plan.subject ?? undefined}>
-          <TestDate plan={plan} now={now} />
-        </section>
-
-        {/* And the ways on, out from under it: where this child actually goes,
-            with the count that says so. */}
-        <Populairst populair={populair} onBegin={begin} />
+        <aside className="tk-home-aside">
+          {toetsen}
+          {voortgang}
+          {goed}
+          {favorieten}
+        </aside>
       </div>
+    );
+  }
 
-      <SideColumn sticker={sticker} onReis={onReis} onBegin={begin} />
-
-      <div className="tk-home-more">
-        <Recent gespeeld={gespeeld} onBegin={begin} />
-        <VerderOefenen known={known} onOpen={onModule} />
+  return (
+    <div className="tk-home">
+      {kop}
+      <div className="tk-home-paar">
+        {voortgang}
+        {toetsen}
       </div>
+      {rijen}
+      {goed}
+      {favorieten}
     </div>
   );
 }
 
 /**
- * Where this child keeps going, as four tiles with the count on them.
- *
- * The tiles are the shape the rail uses for a module and the foot of the page
- * uses for the ones that are coming, which is deliberate: a tile in this
- * product is a door, and these are doors. What is different is the line at the
- * bottom — "12 keer gespeeld" — and that line is the whole point of the block.
- * A child who has played the provinces twelve times knows something about
- * themselves that no bar and no mark tells them.
+ * One card in the first two rows. They are the same card in both, on purpose:
+ * a mark, the exercise, the way it was done, and under a rule the one line the
+ * row is about — how often, or how it went.
+ */
+function GeoefendKaart({
+  deel,
+  vorm,
+  status,
+  onClick,
+}: {
+  readonly deel: Onderdeel;
+  readonly vorm: string;
+  readonly status: string;
+  readonly onClick: () => void;
+}) {
+  const ModuleIcon = MODULE_ICON[deel.moduleId];
+
+  return (
+    <button type="button" data-module={deel.moduleId} className="tk-kaart" onClick={onClick}>
+      <span className="tk-plaat tk-plaat-groot">
+        <ModuleIcon size={24} />
+      </span>
+      <span className="tk-kaart-titel tk-kaart-titel-twee">{naamVan(deel)}</span>
+      <span className="tk-kaart-regel">{vorm}</span>
+      <span className="tk-kaart-voet">{status}</span>
+    </button>
+  );
+}
+
+/**
+ * Where this child keeps going, most played first, with the count on each.
  *
  * **The count is this device's own.** There is no backend and nothing leaves
- * the machine (ADR-015), so there is no "most popular with everyone" to report
- * and no honest way to invent one. On a profile with no rounds behind it the
- * block says so and offers four to start with, at nought rather than at a
- * number that would be a guess.
+ * the machine (ADR-015), so there is no "most popular with everyone" and no
+ * honest way to invent one. A profile with no rounds behind it is offered the
+ * ones to start with, at nought rather than at a number that would be a guess.
  */
 function Populairst({
   populair,
@@ -184,59 +211,37 @@ function Populairst({
   if (lijst.length === 0) return null;
 
   return (
-    <section className="flex flex-col gap-3" aria-label={t('home.popularTitle')}>
-      <div className="flex flex-wrap items-baseline gap-x-3">
-        <h2 className="tk-label">{t('home.popularTitle')}</h2>
-        <p className="text-ink-2">{leeg ? t('home.popularNew') : t('home.popularIntro')}</p>
-      </div>
-
-      <div className="tk-tiles">
-        {lijst.map(({ deel, mode, keer }) => {
-          const ModuleIcon: ComponentType<Omit<IconProps, 'children'>> = MODULE_ICON[deel.moduleId];
-
-          return (
-            <button
-              key={`${deel.setId}-${mode}`}
-              type="button"
-              data-module={deel.moduleId}
-              className="tk-tile"
-              onClick={() => onBegin(deel, mode)}
-            >
-              <span className="tk-tile-head">
-                <ModuleIcon size={24} />
-                <span className="tk-display text-h3 font-semibold">{naamVan(deel)}</span>
-              </span>
-
-              <span className="text-ink-2">{t(`mode.${mode}` as TranslationKey)}</span>
-
-              {/* The count, which is the reason the block exists. Nought is a
-                  sentence rather than a nought: "0 keer gespeeld" reads as a
-                  score on a child who has done nothing wrong. */}
-              <span className="tk-tile-count">
-                {keer === 0
-                  ? t('home.popularNone')
-                  : keer === 1
-                    ? t('home.popularOnce')
-                    : t('home.popularTimes', { aantal: keer })}
-              </span>
-            </button>
-          );
-        })}
-      </div>
-    </section>
+    <ScrollRij
+      titel={t('home.popularTitle')}
+      onder={leeg ? <p className="text-ink-2">{t('home.popularNew')}</p> : null}
+    >
+      {lijst.map(({ deel, mode, keer }) => (
+        <GeoefendKaart
+          key={`${deel.setId}-${mode}`}
+          deel={deel}
+          vorm={t(`mode.${mode}` as TranslationKey)}
+          // Nought is a sentence rather than a nought: "0 keer gespeeld" reads
+          // as a score on a child who has done nothing wrong.
+          status={
+            keer === 0
+              ? t('home.popularNone')
+              : keer === 1
+                ? t('home.popularOnce')
+                : t('home.popularTimes', { aantal: keer })
+          }
+          onClick={() => onBegin(deel, mode)}
+        />
+      ))}
+    </ScrollRij>
   );
 }
 
 /**
- * What was just practised, and what it came to.
+ * What was just practised, and what it came to — newest first.
  *
- * A log and not a league table: newest first, three of them, each one a round
- * that happened. The mark is over what was answered rather than what was asked,
- * because a round can be stopped early and the questions nobody saw were not
- * got wrong.
- *
- * Every tile starts that same set the same way again, which is the one thing a
- * child wants from a list of what they just did.
+ * A log and not a league table. The mark is over what was answered rather than
+ * what was asked, because a round can be stopped early and the questions nobody
+ * saw were not got wrong. Every card starts that same set the same way again.
  */
 function Recent({
   gespeeld,
@@ -248,61 +253,39 @@ function Recent({
   const recent = gespeeld.slice(0, RECENT_SHOWN);
 
   return (
-    <section className="flex flex-col gap-3" aria-label={t('home.recentTitle')}>
-      <h2 className="tk-label">{t('home.recentTitle')}</h2>
+    <ScrollRij
+      titel={t('home.recentTitle')}
+      leeg={recent.length === 0 ? t('home.recentNone') : undefined}
+    >
+      {recent.map(({ deel, ronde }) => {
+        const cijfer = grade(ronde.correct, ronde.answered);
+        const uit = { goed: ronde.correct, totaal: ronde.answered };
 
-      {recent.length === 0 ? (
-        <p className="text-ink-2">{t('home.recentNone')}</p>
-      ) : (
-        <div className="tk-tiles">
-          {recent.map(({ deel, ronde }) => {
-            const cijfer = grade(ronde.correct, ronde.answered);
-            const ModuleIcon: ComponentType<Omit<IconProps, 'children'>> =
-              MODULE_ICON[deel.moduleId];
-
-            return (
-              <button
-                key={ronde.at}
-                type="button"
-                data-module={deel.moduleId}
-                className="tk-tile"
-                onClick={() => onBegin(deel, ronde.mode)}
-              >
-                <span className="tk-tile-head">
-                  <ModuleIcon size={24} />
-                  <span className="tk-display text-h3 font-semibold">{naamVan(deel)}</span>
-                </span>
-
-                <span className="flex items-baseline gap-3">
-                  <span className="tk-label">{t('home.recentGrade')}</span>
-                  <span className="tk-display text-h2 font-bold tabular-nums">
-                    {cijfer === null ? '' : formatGrade(cijfer)}
-                  </span>
-                </span>
-
-                <span className="text-ink-2">
-                  {`${t(`mode.${ronde.mode}` as TranslationKey)} · ${t('home.recentOutOf', {
-                    goed: ronde.correct,
-                    totaal: ronde.answered,
-                  })}`}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      )}
-    </section>
+        return (
+          <GeoefendKaart
+            key={ronde.at}
+            deel={deel}
+            vorm={t(`mode.${ronde.mode}` as TranslationKey)}
+            status={
+              cijfer === null
+                ? t('home.recentOutOf', uit)
+                : t('home.recentLine', { cijfer: formatGrade(cijfer), ...uit })
+            }
+            onClick={() => onBegin(deel, ronde.mode)}
+          />
+        );
+      })}
+    </ScrollRij>
   );
 }
 
 /**
- * Everything else there is, as tiles across the foot of the page.
+ * Everything else there is, furthest along first.
  *
- * All five, not only the two that are built (ADR-051). A child who can see
- * that clocks and flags are coming is reading a plan; a rail and a list that
- * show only what is finished make the product look like it stops here — and a
- * module that does not exist yet says so on its own face rather than opening
- * onto nothing.
+ * All five, not only the ones that are built (ADR-051): a child who can see
+ * that flags are coming is reading a plan. The ones that exist are sorted by how
+ * much of them is remembered, and the ones that do not come after all of them,
+ * in the rail's order — a stable sort keeps it.
  */
 function VerderOefenen({
   known,
@@ -313,63 +296,61 @@ function VerderOefenen({
 }) {
   const alles = onderdelen();
 
+  const kaarten = RAIL_MODULES.map((module) => {
+    const ids = alles
+      .filter((deel) => deel.moduleId === module.id)
+      .flatMap((deel) => deel.items.map((item) => item.id));
+    const mastered = countMastered(known, ids);
+
+    return {
+      module,
+      totaal: ids.length,
+      mastered,
+      stand: ids.length === 0 ? 0 : mastered / ids.length,
+      started: ids.some((id) => known.get(id)?.laatsteReview != null),
+    };
+  }).sort((a, b) => Number(b.module.built) - Number(a.module.built) || b.stand - a.stand);
+
   return (
-    <section className="flex flex-col gap-3" aria-label={t('home.practiceMore')}>
-      <h2 className="tk-label">{t('home.practiceMore')}</h2>
+    <ScrollRij titel={t('home.practiceMore')}>
+      {kaarten.map(({ module, totaal, mastered, stand, started }) => {
+        const ModuleIcon = MODULE_ICON[module.id];
+        const onthoud = t('home.setMastered', { goed: mastered, totaal });
 
-      <div className="tk-tiles">
-        {RAIL_MODULES.map((module) => {
-          const ids = alles
-            .filter((deel) => deel.moduleId === module.id)
-            .flatMap((deel) => deel.items.map((item) => item.id));
-          const mastered = countMastered(known, ids);
-          const started = ids.some((id) => known.get(id)?.laatsteReview != null);
-          const ModuleIcon: ComponentType<Omit<IconProps, 'children'>> = MODULE_ICON[module.id];
-
-          return (
-            <button
-              key={module.id}
-              type="button"
-              data-module={module.id}
-              data-soon={module.built ? undefined : 'ja'}
-              className="tk-tile"
-              onClick={() => onOpen?.(module.id)}
-            >
-              <span className="tk-tile-head">
+        return (
+          <button
+            key={module.id}
+            type="button"
+            data-module={module.id}
+            data-soon={module.built ? undefined : 'ja'}
+            className="tk-kaart tk-verder"
+            onClick={() => onOpen?.(module.id)}
+          >
+            <span className="tk-verder-kop">
+              <span className="tk-plaat tk-plaat-groot">
                 <ModuleIcon size={24} />
-                <span className="tk-display text-h3 font-semibold">{t(module.name)}</span>
               </span>
+              <span className="tk-kaart-titel">{t(module.name)}</span>
+            </span>
 
-              {/* A bar only where there is something to fill it. An empty rail
-                  under a module that does not exist reads as nought percent
-                  rather than as not yet.
-
-                  Hidden from the accessibility tree, because the line under it
-                  says the same thing in words and the whole tile is one button:
-                  without this the bar's own name is folded into the button's,
-                  and a screen reader reads "Rekenen, 8 van de 12 onthoud je, 8
-                  van de 12 onthoud je". */}
-              {module.built ? (
+            {/* The bar is the handoff's, and it is hidden from the
+                accessibility tree: the whole card is one button, and a bar's
+                own name folded into the button's is read out twice. What it
+                shows is said in words instead, for the reader who cannot see
+                it. */}
+            {module.built ? (
+              <>
                 <span aria-hidden="true">
-                  <ProgressBar
-                    value={ids.length === 0 ? 0 : mastered / ids.length}
-                    showDot={false}
-                    label={t('home.setMastered', { goed: mastered, totaal: ids.length })}
-                  />
+                  <ProgressBar value={stand} showDot={false} label={onthoud} />
                 </span>
-              ) : null}
-
-              <span className="text-ink-2">
-                {!module.built
-                  ? t('soon.subtitle')
-                  : started
-                    ? t('home.setMastered', { goed: mastered, totaal: ids.length })
-                    : t('home.setNew')}
-              </span>
-            </button>
-          );
-        })}
-      </div>
-    </section>
+                <span className="tk-sr-only">{started ? onthoud : t('home.setNew')}</span>
+              </>
+            ) : (
+              <span className="tk-kaart-regel">{t('soon.subtitle')}</span>
+            )}
+          </button>
+        );
+      })}
+    </ScrollRij>
   );
 }

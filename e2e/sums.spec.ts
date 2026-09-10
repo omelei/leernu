@@ -49,9 +49,13 @@ async function start(page: Page) {
 test('the rail is the map of the product, not a list of what is finished', async ({
   page,
 }, testInfo) => {
-  // Not on a phone: §D drops the rail at that size and K1 carries the modules
-  // as cards in the flow instead. The test below covers those, at every size.
-  test.skip(['iphone', 'android'].includes(testInfo.project.name), 'no rail on a phone');
+  // Only at a desk: below 1200 the modules are the menu under the app bar
+  // instead (ADR-093), which e2e/shell.spec.ts walks. The test below covers
+  // the front door's own list, at every size.
+  test.skip(
+    !['chromebook', 'desktop-1440'].includes(testInfo.project.name),
+    'no rail below 1200',
+  );
 
   await signIn(page, 'Sam');
 

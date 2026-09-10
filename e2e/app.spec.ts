@@ -169,7 +169,10 @@ test('greets the child by name on the front door', async ({ page }) => {
  */
 test('the soonest test decides what the block on the front door is about', async ({ page }) => {
   await signIn(page, 'Tijn');
-  const toetsblok = page.locator('.tk-card-accented');
+  // The block is in the child's own column now, in the same card shape as the
+  // three blocks beside it (ADR-094), and it still says which module it is
+  // about — on itself, where everything inside it takes its accent from.
+  const toetsblok = page.getByRole('region', { name: 'Jouw toetsen' });
 
   // With no test set there is no subject, so the block takes no accent at all
   // rather than guessing at one.
@@ -188,22 +191,51 @@ test('the soonest test decides what the block on the front door is about', async
 
   // Both are on the list, and taking the soonest one off puts the other back
   // in charge — which is the whole of what makes a list a plan.
-  await expect(page.getByRole('button', { name: /^Haal de toets weg/ })).toHaveCount(2);
+  await openToetsen(page);
+  await expect(page.getByRole('button', { name: /^Verwijder:/ })).toHaveCount(2);
 
   await page
-    .getByRole('button', { name: /^Haal de toets weg/ })
+    .getByRole('button', { name: /^Verwijder:/ })
     .first()
     .click();
   await expect(toetsblok).toHaveAttribute('data-module', 'tafels');
 });
 
+/**
+ * Below 1200 the block is only its dates once it has any, and pressing them
+ * opens it into the whole thing a laptop shows straight away (ADR-094). At a
+ * desk, and with no tests, it is already whole and this does nothing.
+ */
+async function openToetsen(page: Page) {
+  const datums = page.getByRole('button', { name: /Toetsen wijzigen$/ });
+  if (await datums.isVisible()) await datums.click();
+}
+
 /** One test, through the block that is now a list with a form under it. */
 async function addTest(page: Page, date: string, subject: string) {
+  await openToetsen(page);
   await page.getByRole('button', { name: 'Toets toevoegen' }).click();
   await page.getByLabel('Wanneer is de toets?').fill(date);
   await page.getByLabel('Voor welk vak?').selectOption(subject);
   await page.getByRole('button', { name: 'Toevoegen', exact: true }).click();
 }
+
+/**
+ * The rows on the front door hide their scrollbar (ADR-094), and hiding it must
+ * not take scrolling away from anyone who does not swipe. The row is a stop in
+ * the tab order and the arrow keys move it — checked at every size, because a
+ * row that fits its screen would pass this by not moving at all, and five
+ * cards fit none of them.
+ */
+test('a row on the front door scrolls from the keyboard', async ({ page }) => {
+  await signIn(page, 'Rik');
+
+  const rij = page.getByRole('group', { name: 'Meest geoefend' });
+  await rij.focus();
+  await page.keyboard.press('ArrowRight');
+
+  await expect.poll(() => rij.evaluate((el) => el.scrollLeft)).toBeGreaterThan(0);
+});
 
 test('logs the round that was just played, with its mark', async ({ page }) => {
   await signIn(page, 'Jamie');
@@ -230,7 +262,7 @@ test('logs the round that was just played, with its mark', async ({ page }) => {
   // One answer, so the mark is a 10,0 or a 1,0 and never anything between —
   // which is exactly what "over what was answered" means.
   const tegel = recent.getByRole('button', { name: /Provincies van Nederland/ });
-  await expect(tegel).toContainText(/cijfer\s*(10,0|1,0)/);
+  await expect(tegel).toContainText(/Cijfer (10,0|1,0)/);
   await expect(tegel).toContainText('Aanwijzen');
 
   // And it went into the column on the right as a way straight back in.

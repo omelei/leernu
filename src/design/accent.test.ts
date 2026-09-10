@@ -56,13 +56,23 @@ const ALLOWED_SELECTORS: ReadonlyMap<string, string> = new Map([
   // The rail is where the module entrance does most of its work: a column of
   // seven accents is the only place in the product that shows them together.
   [".tk-rail-item[aria-current='page']", 'the module entrance, in the rail'],
-  // K1's tiles are the module entrance too — the same door as .tk-module-card,
-  // drawn as a tile because the front door lays them out in a row rather than
-  // a list. The head of the tile is the icon and the name of the module, which
-  // is the one case §E lets an icon take an accent: it denotes the module.
-  ['.tk-tile:hover', 'the module entrance, on the front door'],
-  ['.tk-tile-head', 'the module entrance, on the front door'],
-  // The same pair as .tk-tile-head — the module's pictogram and the module's
+  // The plate: a module's pictogram on the module's own tint (ADR-094). The
+  // handoff draws it wherever a card, a row or a line is about one module —
+  // the front door's rows, the favourites, the tests, the rail and the menu —
+  // and it is the one case §E lets an icon take an accent: it denotes the
+  // module. The words beside a plate stay ink.
+  ['.tk-plaat', 'the module entrance, as a plate'],
+  // The menu the rail becomes below 1200 (ADR-093): the module you are in,
+  // marked the way the rail marks it.
+  [".tk-vakmenu-optie[aria-current='page']", 'the module entrance, in the menu'],
+  // A test's subject, as the module's mark and name in its tint. It says
+  // which door the test is behind; it is not a badge about the child.
+  ['.tk-vakbadge', 'the module entrance, naming a test'],
+  // The track under a module's bar on the front door, in that module's tint
+  // rather than the sunken grey. The fill is already allowed as the progress
+  // bar, and the handoff draws the track as the same module.
+  ['.tk-verder .tk-progress-rail', 'the progress bar, on the front door'],
+  // The same pair as .tk-plaat — the module's pictogram and the module's
   // name — at the head of the module's own page. If anything in the product is
   // the module entrance, the line that says which module you have entered is,
   // and on a phone it is the only thing that says so at all: §D drops the rail
