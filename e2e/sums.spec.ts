@@ -52,10 +52,7 @@ test('the rail is the map of the product, not a list of what is finished', async
   // Only at a desk: below 1200 the modules are the menu under the app bar
   // instead (ADR-093), which e2e/shell.spec.ts walks. The test below covers
   // the front door's own list, at every size.
-  test.skip(
-    !['chromebook', 'desktop-1440'].includes(testInfo.project.name),
-    'no rail below 1200',
-  );
+  test.skip(!['chromebook', 'desktop-1440'].includes(testInfo.project.name), 'no rail below 1200');
 
   await signIn(page, 'Sam');
 

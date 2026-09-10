@@ -145,10 +145,7 @@ test('keeps the wordmark and the question legible at 200% text', async ({ page }
 test('below 1200 the modules are a menu under the app bar', async ({ page }, testInfo) => {
   // ADR-093: the rail stands up at a desk and nowhere else. On both iPads and
   // both phones the way to a module is this one control.
-  test.skip(
-    ['chromebook', 'desktop-1440'].includes(testInfo.project.name),
-    'the rail, at a desk',
-  );
+  test.skip(['chromebook', 'desktop-1440'].includes(testInfo.project.name), 'the rail, at a desk');
 
   await signIn(page, 'Ilse');
 

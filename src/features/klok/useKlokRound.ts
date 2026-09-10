@@ -45,11 +45,7 @@ import { applyRoundRewards, type RoundOutcome } from '@/store/rewardStore';
  */
 
 export type KlokMode =
-  | 'klok-meerkeuze'
-  | 'klok-welke-klok'
-  | 'klok-typen'
-  | 'bliksemronde'
-  | 'overleven';
+  'klok-meerkeuze' | 'klok-welke-klok' | 'klok-typen' | 'bliksemronde' | 'overleven';
 
 /*
  * Which of these a child is offered, in which order and with what said about

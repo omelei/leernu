@@ -290,9 +290,7 @@ function spokenFeedback(correct: boolean, tijd: KlokItem, gegeven: string | null
   if (correct) return t('klok.correct', { tijd: voluit });
 
   const detail =
-    gegeven === null || gegeven === ''
-      ? t('klok.dontKnowSub')
-      : t('klok.wrongSub', { gegeven });
+    gegeven === null || gegeven === '' ? t('klok.dontKnowSub') : t('klok.wrongSub', { gegeven });
   return `${t('klok.wrong', { tijd: voluit })} ${detail}`;
 }
 

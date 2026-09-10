@@ -175,7 +175,11 @@ function middagUur(uur: number): number {
 function leesTijd(typed: string): readonly [number, number] | null {
   // `u` is what a Dutch child writes on paper — "7u30" — and the separators are
   // whatever the keyboard put nearest their thumb.
-  const schoon = typed.trim().toLowerCase().replace(/\s+/g, '').replace(/[.,;u]/g, ':');
+  const schoon = typed
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/[.,;u]/g, ':');
 
   const delen = /^(\d{1,2}):(\d{1,2})$/.exec(schoon);
   if (delen) return begrensd(Number(delen[1]), Number(delen[2]));

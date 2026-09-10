@@ -57,7 +57,7 @@ async function addChild(page: Page, naam: string) {
   await page.goto('/jij');
   await page.getByRole('button', { name: 'Nog een kind erbij' }).click();
   await page.getByPlaceholder('Naam van het kind').fill(naam);
-  await page.getByRole('button', { name: 'Toevoegen' }).click();
+  await page.getByRole('button', { name: 'Toevoegen', exact: true }).click();
 
   // Adding reloads, on purpose: every screen holds some of a child's work in
   // React state and none of it may survive the handover.

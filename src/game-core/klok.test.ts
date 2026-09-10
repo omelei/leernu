@@ -122,7 +122,10 @@ describe('the wrong answers offered', () => {
 
         expect(fout, item.id).toHaveLength(3);
         expect(new Set(fout.map((wrong) => wrong.id)).size, item.id).toBe(3);
-        expect(fout.map((wrong) => wrong.id), item.id).not.toContain(item.id);
+        expect(
+          fout.map((wrong) => wrong.id),
+          item.id,
+        ).not.toContain(item.id);
       }
     }
   });
