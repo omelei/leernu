@@ -669,22 +669,6 @@
     opacity: 0.35;
   }
 
-  /* The initial beside a name in the app bar. A circle of ink on paper, not a
-   * module accent: whose turn it is has nothing to do with which subject they
-   * are in. */
-  .tk-avatar {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    flex: none;
-    border-radius: var(--radius-full);
-    background: var(--ink);
-    color: var(--paper);
-    font-weight: 700;
-    line-height: 1;
-  }
 
   /* ---- K2's start button -------------------------------------------------
    * What was chosen, in words, and then the way on — in that order, ending at
@@ -1463,6 +1447,11 @@
     .tk-blok-body {
       padding: 20px;
     }
+  }
+  /* A block still reading what goes in it: its card at roughly the height of
+   * what arrives, so the page under it does not move when it does. */
+  .tk-blok[aria-busy='true'] .tk-blok-body {
+    min-height: 76px;
   }
   /* The way on out of a block: add a test, see everything there is to earn. A
    * secondary control at the floor height, because it is the second thing in

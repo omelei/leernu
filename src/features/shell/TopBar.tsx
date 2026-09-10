@@ -38,15 +38,12 @@ export function TopBar({
           the name is said rather than shown — the button keeps it as its
           accessible name, so it is still the child's own button. */}
       <button type="button" className="tk-profiel" onClick={onProfile}>
-        {/* The animal they chose, on the round plate the handoff draws for the
-            avatar. The initial is the fallback and nothing more. */}
-        {sticker ? (
-          <Heldplaat sticker={sticker} reeks={REEKSEN[0]} size={30} vorm="rond" />
-        ) : (
-          <span aria-hidden="true" className="tk-avatar">
-            {profile.naam.slice(0, 1).toLocaleUpperCase('nl-NL')}
-          </span>
-        )}
+        {/* The animal they chose on the round plate the handoff draws for the
+            avatar — or, until they choose, the first one, which is also what
+            their progress card shows. A child always has one (ADR-067), and an
+            initial in the bar beside a cat in the column was two answers to
+            who you are. */}
+        <Heldplaat sticker={sticker} reeks={REEKSEN[0]} size={30} vorm="rond" />
         <span className="tk-profiel-naam">{profile.naam}</span>
       </button>
     </div>

@@ -115,9 +115,11 @@ export function VoortgangBlok({
     void loadAccuracy().then((accuracy) => setGoed(accuracy.correct));
   }, []);
 
-  // Nothing until it is known. A card that says level one and then changes its
-  // mind has told a child something about themselves that was not true.
-  if (goed === null) return null;
+  // Nothing in it until it is known: a card that says level one and then
+  // changes its mind has told a child something about themselves that was not
+  // true. The card itself is drawn at once, so the page does not move when the
+  // level arrives.
+  if (goed === null) return <Blok titel={t('home.journeyTitle')} bezig />;
 
   const level = levelFor(goed);
   const reeks = huidigeReeks(level);
@@ -226,7 +228,8 @@ export function GoedBlok() {
     void loadRun().then(setRun);
   }, []);
 
-  if (accuracy === null) return null;
+  // Empty until it is known, for the reason the progress card gives.
+  if (accuracy === null) return <Blok titel={t('home.accuracyTitle')} bezig />;
 
   const procent =
     accuracy.answered === 0 ? 0 : Math.round((accuracy.correct / accuracy.answered) * 100);

@@ -11,6 +11,7 @@ import type { ReactNode } from 'react';
 export function Blok({
   titel,
   module,
+  bezig = false,
   className,
   children,
 }: {
@@ -20,13 +21,21 @@ export function Blok({
    * `--accent` for everything inside, and it is how the block says which.
    */
   readonly module?: string | undefined;
+  /**
+   * Still reading what goes in it. The card is drawn at once and stays empty
+   * until it knows, rather than being absent: on WebKit the read takes long
+   * enough to see, and a block that arrives late moves everything under it —
+   * and on a tablet it left the tests alone on half the row.
+   */
+  readonly bezig?: boolean;
   readonly className?: string;
-  readonly children: ReactNode;
+  readonly children?: ReactNode;
 }) {
   return (
     <section
       className={['tk-blok', className].filter(Boolean).join(' ')}
       aria-label={titel}
+      aria-busy={bezig || undefined}
       data-module={module}
     >
       <h2 className="tk-label tk-blok-kop">{titel}</h2>
