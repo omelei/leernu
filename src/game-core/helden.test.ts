@@ -111,7 +111,10 @@ describe('a chest', () => {
   });
 
   it('says so when a hero is already at the top', () => {
-    const stand: HeldenStand = { helden: [{ plek: 4, reeks: 'ultra', dubbelen: 0 }], kistenOpen: 0 };
+    const stand: HeldenStand = {
+      helden: [{ plek: 4, reeks: 'ultra', dubbelen: 0 }],
+      kistenOpen: 0,
+    };
     const { uitkomst } = openKist(stand, op(4));
 
     expect(uitkomst.soort).toBe('vol');

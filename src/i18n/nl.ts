@@ -660,7 +660,8 @@ export const nl = {
     'Vijf sterren zijn een kist. In elke kist zit een held, en welke is een verrassing: alle twaalf zijn even kansrijk.',
   'reis.regel3':
     'Krijg je een held die je al hebt, dan telt hij dubbel. Na drie keer dubbel gaat hij een reeks omhoog: brons, zilver, goud, platina, ultra.',
-  'reis.regel4': 'Je kunt niets kopen, en door te wachten krijg je niets. Alleen goede antwoorden tellen.',
+  'reis.regel4':
+    'Je kunt niets kopen, en door te wachten krijg je niets. Alleen goede antwoorden tellen.',
   'reis.stamps': 'Reisstempels',
   'reis.stampsHave': '{aantal} van de {totaal}',
 
