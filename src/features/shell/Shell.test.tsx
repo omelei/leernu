@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { Shell } from './Shell';
 import { DESTINATIONS, MODULES } from './modules';
@@ -167,5 +167,85 @@ describe('the shell', () => {
     expect(container.querySelector('.tk-brand-path')).toBeNull();
     expect(container.textContent).not.toContain('/topografie');
     expect(screen.getByRole('button', { name: 'leer.nu, naar Vandaag' })).toBeInTheDocument();
+  });
+
+  it('opens the modules as a list below 1200, and gives focus back when it closes', () => {
+    // ADR-093. CSS decides which of the rail and the menu is displayed; jsdom
+    // applies no stylesheet, so both are in the tree and this checks the menu.
+    const seen: string[] = [];
+    render(
+      <Shell
+        modules={MODULES}
+        destinations={DESTINATIONS}
+        currentModule="klok"
+        onModule={(id) => seen.push(id)}
+      >
+        <p>klok</p>
+      </Shell>,
+    );
+
+    const knop = screen.getByRole('button', { name: 'vak Klok' });
+    expect(knop).toHaveAttribute('aria-expanded', 'false');
+
+    // Closed, the list is not in the document at all, so the rail is the one
+    // navigation called "Modules" — never two at once at a width that shows one.
+    expect(screen.getAllByRole('navigation', { name: 'Modules' })).toHaveLength(1);
+
+    fireEvent.click(knop);
+    expect(knop).toHaveAttribute('aria-expanded', 'true');
+
+    const lijst = document.getElementById(knop.getAttribute('aria-controls') ?? '');
+    expect(lijst).not.toBeNull();
+    const hier = within(lijst as HTMLElement).getByRole('button', { name: 'Klok' });
+
+    // Open on the module you are in, and marked the way the rail marks it.
+    expect(hier).toHaveAttribute('aria-current', 'page');
+    expect(hier).toHaveFocus();
+
+    // Escape closes it and puts focus back on the button that opened it.
+    fireEvent.keyDown(hier, { key: 'Escape' });
+    expect(knop).toHaveAttribute('aria-expanded', 'false');
+    expect(knop).toHaveFocus();
+
+    // A choice closes it too, and goes where it was asked to.
+    fireEvent.click(knop);
+    const opnieuw = document.getElementById(knop.getAttribute('aria-controls') ?? '');
+    fireEvent.click(within(opnieuw as HTMLElement).getByRole('button', { name: 'Taal' }));
+    expect(seen).toEqual(['woorden']);
+    expect(knop).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  it('moves through the list with the arrow keys', () => {
+    render(
+      <Shell modules={MODULES} destinations={DESTINATIONS} currentModule="topo">
+        <p>topografie</p>
+      </Shell>,
+    );
+
+    const knop = screen.getByRole('button', { name: 'vak Topo' });
+    fireEvent.click(knop);
+    const lijst = within(
+      document.getElementById(knop.getAttribute('aria-controls') ?? '') as HTMLElement,
+    );
+
+    fireEvent.keyDown(lijst.getByRole('button', { name: 'Topo' }), { key: 'ArrowDown' });
+    expect(lijst.getByRole('button', { name: 'Rekenen' })).toHaveFocus();
+
+    fireEvent.keyDown(lijst.getByRole('button', { name: 'Rekenen' }), { key: 'End' });
+    expect(lijst.getByRole('button', { name: 'Vlaggen' })).toHaveFocus();
+
+    // Round again from the end, rather than stopping at a wall.
+    fireEvent.keyDown(lijst.getByRole('button', { name: 'Vlaggen' }), { key: 'ArrowDown' });
+    expect(lijst.getByRole('button', { name: 'Topo' })).toHaveFocus();
+  });
+
+  it('asks for a module where none is open', () => {
+    render(
+      <Shell modules={MODULES} destinations={DESTINATIONS}>
+        <p>vandaag</p>
+      </Shell>,
+    );
+
+    expect(screen.getByRole('button', { name: 'vak Kies een vak' })).toBeInTheDocument();
   });
 });

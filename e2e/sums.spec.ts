@@ -49,9 +49,10 @@ async function start(page: Page) {
 test('the rail is the map of the product, not a list of what is finished', async ({
   page,
 }, testInfo) => {
-  // Not on a phone: §D drops the rail at that size and K1 carries the modules
-  // as cards in the flow instead. The test below covers those, at every size.
-  test.skip(['iphone', 'android'].includes(testInfo.project.name), 'no rail on a phone');
+  // Only at a desk: below 1200 the modules are the menu under the app bar
+  // instead (ADR-093), which e2e/shell.spec.ts walks. The test below covers
+  // the front door's own list, at every size.
+  test.skip(!['chromebook', 'desktop-1440'].includes(testInfo.project.name), 'no rail below 1200');
 
   await signIn(page, 'Sam');
 
@@ -66,9 +67,10 @@ test('the rail is the map of the product, not a list of what is finished', async
   }
 
   // And a door that is not open says so rather than opening onto nothing,
-  // which is the half of ADR-037 that survives.
-  await rail.getByRole('button', { name: 'Klok', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'Klok' })).toBeVisible();
+  // which is the half of ADR-037 that survives. Klokkijken used to be the
+  // example here and is open now, so this asks the next one along.
+  await rail.getByRole('button', { name: 'Taal', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Taal' })).toBeVisible();
 });
 
 test('the front door lists every module, at every size', async ({ page }) => {
@@ -267,9 +269,10 @@ test('rekenen offers five subjects, and never more than six', async ({ page }) =
     await expect(wat.getByRole('button', { name: new RegExp(`^${naam}`) })).toBeVisible();
   }
 
-  // Six is the ceiling a section may hold (ADR-061, ADR-062). The chips are
-  // buttons in the same region, so this counts the cards themselves.
-  await expect(page.locator('.tk-sets > button')).toHaveCount(5);
+  // Six is the ceiling a section may hold (ADR-061, ADR-062). Rekenen's subjects
+  // are chips now (ADR-095) and the step holds nothing else, so the region's
+  // buttons are the subjects.
+  await expect(wat.getByRole('button')).toHaveCount(5);
 });
 
 test('a subject with many sets asks which, instead of showing all of them', async ({ page }) => {
@@ -278,29 +281,32 @@ test('a subject with many sets asks which, instead of showing all of them', asyn
 
   const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
 
-  // Scoped to step 1: the same chip says how long the round is (ADR-074), and
-  // an unscoped count would be counting the answers to two questions at once.
-  // The first chip row on the page: the one that answers which set. The same
-  // chip shape says how long the round is further down (ADR-074), and counting
-  // both would be counting the answers to two questions at once.
-  const chips = page.locator('.tk-variant-row').first().locator('.tk-variant-chip');
+  // Each second question is a step of its own, named by what it asks, so its
+  // answers are the buttons in that region and nothing else — not the chips
+  // further down that say how long the round is (ADR-074).
+  const welke = (vraag: RegExp) => page.getByRole('region', { name: vraag }).getByRole('button');
 
-  // Twelve tables and "door elkaar", as chips under the card. Twelve cards is
-  // the page this replaced, and it pushed step 2 off the screen.
+  // Twelve tables and all of them at once, as a keypad under the subjects
+  // (ADR-095). Twelve cards is the page this replaced.
   await wat.getByRole('button', { name: /^Tafels/ }).click();
-  await expect(chips).toHaveCount(13);
+  await expect(welke(/^Welke tafel/)).toHaveCount(13);
 
   // Plus has three ranges, and they are offered smallest first. Sorted as
   // numbers: "1000" falls between "100" and "20" in every alphabet there is.
   await wat.getByRole('button', { name: /^Plussommen/ }).click();
-  await expect(chips).toHaveCount(3);
-  await expect(chips).toHaveText(['tot 20', 'tot 100', 'tot 1000']);
+  await expect(welke(/^Tot welk getal/)).toHaveCount(3);
+  await expect(welke(/^Tot welk getal/)).toHaveText(['tot 20', 'tot 100', 'tot 1000']);
 
   // The Rekenmix has three difficulties and an everything, out of the level
   // every set already carried (ADR-073).
   await wat.getByRole('button', { name: /^Rekenmix/ }).click();
-  await expect(chips).toHaveCount(4);
-  await expect(chips).toHaveText(['Makkelijk', 'Gemiddeld', 'Pittig', 'Door elkaar']);
+  await expect(welke(/^Hoe moeilijk/)).toHaveCount(4);
+  await expect(welke(/^Hoe moeilijk/)).toHaveText([
+    'Makkelijk',
+    'Gemiddeld',
+    'Pittig',
+    'Door elkaar',
+  ]);
 });
 
 test('a plus sum is a plus sum, and a division is a division', async ({ page }) => {

@@ -141,3 +141,75 @@ test('keeps the wordmark and the question legible at 200% text', async ({ page }
     0,
   );
 });
+
+test('below 1200 the modules are a menu under the app bar', async ({ page }, testInfo) => {
+  // ADR-093: the rail stands up at a desk and nowhere else. On both iPads and
+  // both phones the way to a module is this one control.
+  test.skip(['chromebook', 'desktop-1440'].includes(testInfo.project.name), 'the rail, at a desk');
+
+  await signIn(page, 'Ilse');
+
+  const knop = page.getByRole('button', { name: /^vak / });
+  await expect(knop).toHaveAccessibleName('vak Kies een vak');
+  await expect(knop).toHaveAttribute('aria-expanded', 'false');
+
+  await knop.click();
+  await expect(knop).toHaveAttribute('aria-expanded', 'true');
+  await page
+    .getByRole('navigation', { name: 'Modules' })
+    .getByRole('button', { name: 'Klok', exact: true })
+    .click();
+
+  // Where it was asked to go, closed again, and saying so on its own face.
+  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
+  await expect(knop).toHaveAccessibleName('vak Klok');
+  await expect(knop).toHaveAttribute('aria-expanded', 'false');
+
+  // And it lets go on Escape, with focus back on the control that opened it.
+  await knop.click();
+  await page.keyboard.press('Escape');
+  await expect(knop).toHaveAttribute('aria-expanded', 'false');
+  await expect(knop).toBeFocused();
+});
+
+/**
+ * The start bar on a phone (ADR-095), which ADR-052 put off after three
+ * attempts produced three bugs. Each of the three is checked here, at the size
+ * that found them: the bar is in reach without scrolling, a press on its button
+ * lands on its button, and the page is no wider than the phone.
+ */
+test('on a phone the start button stays in reach', async ({ page }, testInfo) => {
+  test.skip(!['iphone', 'android'].includes(testInfo.project.name), 'the bar is for phones');
+
+  await signIn(page, 'Mees');
+  await page.goto('/topografie');
+  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
+
+  const start = page.locator('.tk-choose-start button');
+
+  // In reach before anything has been scrolled: stuck to the foot of the glass.
+  await expect(start).toBeInViewport();
+
+  // The point at the button's centre is the button, not whatever the bar lies
+  // over and not the bar around it — ADR-052's second and third failures.
+  const box = await start.boundingBox();
+  if (box === null) throw new Error('the start button has no box');
+  const geraakt = await page.evaluate(
+    ({ x, y }) =>
+      (document.elementFromPoint(x, y)?.closest('.tk-choose-start button') ?? null) !== null,
+    { x: box.x + box.width / 2, y: box.y + box.height / 2 },
+  );
+  expect(geraakt, 'a press on the start button does not land on it').toBe(true);
+
+  // No wider than the phone — the first failure.
+  const overflow = await page.evaluate(
+    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+  );
+  expect(overflow).toBeLessThanOrEqual(0);
+
+  // Still there at the foot of the page, and it still starts the round.
+  await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+  await expect(start).toBeInViewport();
+  await start.click();
+  await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
+});

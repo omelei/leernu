@@ -307,6 +307,39 @@ describe('palette contrast', () => {
     expect(new Set(waarden).size).toBe(waarden.length);
   });
 
+  /**
+   * The soft step (ADR-094) carries the module's text colour on a chosen tile
+   * and the start bar. It is lighter than the tint, so this should hold by
+   * construction — which is exactly the kind of "should" worth measuring.
+   */
+  it.each(ACCENTS.map((name) => [name] as const))(
+    '%s-text clears 4.5:1 on its own soft step',
+    (name) => {
+      expect(contrastRatio(token(`${name}-text`), token(`${name}-soft`))).toBeGreaterThanOrEqual(
+        4.5,
+      );
+    },
+  );
+
+  /**
+   * A hero's plate (ADR-094). The deep tone names the reeks on paper, so it is
+   * text and has to clear 4.5; the light drawing on the material is a graphical
+   * object and has to clear 3, the floor the materials were chosen against.
+   */
+  it.each([['brons'], ['zilver'], ['goud'], ['platina'], ['ultra']])(
+    'names %s legibly in its deep tone, and draws on it in the light',
+    (reeks) => {
+      expect(
+        contrastRatio(token(`reeks-${reeks}-diep`), paper),
+        'deep tone',
+      ).toBeGreaterThanOrEqual(4.5);
+      expect(
+        contrastRatio(token('reeks-licht'), token(`reeks-${reeks}`)),
+        'drawing',
+      ).toBeGreaterThanOrEqual(3);
+    },
+  );
+
   it('keeps the semantic and accent scales separate, collision and all', () => {
     expect(token('good-text')).toBe(token('tafels-text'));
   });

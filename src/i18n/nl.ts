@@ -20,24 +20,20 @@ export const nl = {
   'home.restDay': '{aantal} rustdag bewaard',
   'home.restDays': '{aantal} rustdagen bewaard',
   // K1, de landingspagina. De begroeting zet het kind bovenaan het scherm; de
-  // zin eronder zegt hardop wat op een fout lijkt: dat je vragen terugkrijgt
-  // die je al had. Dat is precies de belofte.
+  // zin eronder zegt wat je hier doet, in de volgorde waarin je het doet: een
+  // vak kiezen, een ronde doen, en wat dat oplevert (herontwerp 2026-09).
   //
-  // Wat die zin niet meer doet is een aantal noemen. "Vandaag oefen je 10
-  // vragen" las als een opdracht met een plafond: tien, en dan ben je klaar.
-  // Niets in het product stopt na tien, dus zegt de zin nu wat er wel waar is
-  // - je oefent zolang je wilt, en wat je eerder had komt terug omdat het zo
-  // blijft hangen.
+  // Hij noemt nog steeds geen aantal. "Vandaag oefen je 10 vragen" las als een
+  // opdracht met een plafond: tien, en dan ben je klaar. Niets in het product
+  // stopt na tien.
   'home.welcome': 'Welkom {naam}!',
-  'home.todayOpen':
-    'Oefen zolang je wilt. Vragen die je eerder had komen terug, want zo onthoud je ze.',
+  'home.todayOpen': 'Kies een vak, doe een ronde en verdien je volgende held.',
   'home.practiceMore': 'Verder oefenen',
   // De tegels tussen het toetsblok en het logboek: waar je zelf het vaakst
   // naar teruggaat, met het aantal keer erbij. Dat getal komt van dit apparaat
   // en van niets anders - er is geen server die meekijkt, dus er is ook geen
   // "3.412 keer gespeeld" te tonen dat waar zou zijn.
   'home.popularTitle': 'Meest geoefend',
-  'home.popularIntro': 'Waar je het vaakst naar teruggaat.',
   'home.popularNew': 'Hier begin je mee.',
   'home.popularTimes': '{aantal} keer gespeeld',
   'home.popularOnce': '1 keer gespeeld',
@@ -49,8 +45,12 @@ export const nl = {
   // het staat er in de volgorde waarin het gebeurde en telt niets bij elkaar op.
   'home.recentTitle': 'Recent geoefend',
   'home.recentNone': 'Nog niets geoefend. Na je eerste ronde staat het hier.',
-  'home.recentGrade': 'cijfer',
   'home.recentOutOf': '{goed} van de {totaal} goed',
+  'home.recentLine': 'Cijfer {cijfer} · {goed} van de {totaal} goed',
+  // De twee knoppen boven een rij, die hem een kaart opschuiven. Ze noemen de
+  // rij, want er staan er drie onder elkaar en "verder" alleen zegt niet welke.
+  'home.rowBack': 'Terug in {rij}',
+  'home.rowOn': 'Verder in {rij}',
 
   // Alles bij elkaar, over alle rondes ooit. Nadrukkelijk niet hetzelfde als
   // wat je onthoudt: dit gaat over antwoorden die je gaf, dat over wat er
@@ -72,18 +72,11 @@ export const nl = {
   // hier niets.
   'home.journeyTitle': 'Jouw voortgang',
   'home.journeyLevel': 'Niveau {niveau}',
-  'home.journeyHave': '{aantal} van de {totaal} dieren',
+  'home.journeyHave': '{aantal} van de {totaal} helden',
   'home.journeyBar': 'Op weg naar niveau {niveau}',
   'home.journeyToGo': 'Nog {aantal} goede antwoorden tot niveau {niveau}.',
   'home.journeyOneToGo': 'Nog één goed antwoord tot niveau {niveau}.',
-  // Wat hierna komt is een verrassing, en de regel zegt dat ook. Hij noemde
-  // het dier bij naam - "Hierna: vos in zwart" - en daarmee was het geen
-  // verrassing meer maar een vooraankondiging. Wat er nu staat is wat je wel
-  // mag weten: in welke reeks hij valt, en dus hoe zeldzaam hij is. Het
-  // silhouet ernaast doet de rest.
-  'home.journeyNext': 'Hierna: een nieuw dier in {reeks}',
-  'home.journeyComplete': 'Je hebt alle dieren. Je niveau blijft stijgen.',
-  'home.journeyAll': 'Bekijk alles wat je kunt halen',
+  'home.journeyAll': 'Bekijk alles wat je kunt verdienen',
 
   // De andere streak: goede antwoorden op rij, zonder dag ertussen. Hij staat
   // onder het percentage en niet erboven, want het is het enige getal in het
@@ -118,6 +111,11 @@ export const nl = {
   // scherm verdwijnen voor wie het niet ziet. De merknaam komt uit brand.ts.
   'nav.home': '{merk}, naar Vandaag',
   'nav.destinations': 'Waar je heen kunt',
+  // Het vakmenu onder de balk op een tablet en een telefoon, waar de rail niet
+  // staat. Het woord ervoor zegt wat je kiest; de knop zegt welk vak het is,
+  // of vraagt erom waar je nog in geen vak bent.
+  'nav.vak': 'vak',
+  'nav.vakKies': 'Kies een vak',
   'nav.vandaag': 'Vandaag',
   'nav.onthouden': 'Onthouden',
   'nav.vrienden': 'Vrienden',
@@ -142,23 +140,33 @@ export const nl = {
   'retention.due': 'Weer op',
   'retention.dueNow': 'vandaag',
 
-  // K1's toetsdatumblok: het enige blok op het scherm met een vlak én een
-  // rand, want het is de reden dat het kind vandaag oefent.
+  // Het toetsenblok, bovenaan de eigen kolom van het kind. Het is de reden dat
+  // het kind deze week oefent, en het zegt alleen dat: wanneer, en waarover.
   'home.testLabel': 'toets',
   'home.testNone': 'Nog geen toetsdatum',
   // Meer dan één, want een periode is nooit één toets: topografie op dinsdag en
   // de tafels de vrijdag erna. Het blok toont ze allemaal en verder niets.
-  'home.testTitle': 'Je toetsen',
+  'home.testTitle': 'Jouw toetsen',
   'home.testToday': 'De toets is vandaag',
   'home.testTomorrow': 'De toets is morgen',
   'home.testInDays': 'Toets over {aantal} dagen',
   'home.testPick': 'Wanneer is de toets?',
   'home.testAdd': 'Toets toevoegen',
   'home.testSave': 'Toevoegen',
-  'home.testRemove': 'Weg',
-  'home.testRemoveOne': 'Haal de toets weg: {wanneer}',
+  'home.testRemove': 'Verwijder',
+  // Begint met het woord op de knop, zodat wie de knop bij naam aanspreekt
+  // hem ook zo vindt (WCAG 2.5.3), en zegt daarna welke toets.
+  'home.testRemoveOne': 'Verwijder: {wanneer}',
+  // Kort, zoals het blok ze toont: het woord "toets" staat al in de kop.
+  'home.testSoonToday': 'Vandaag',
+  'home.testSoonTomorrow': 'Morgen',
+  'home.testSoonDays': 'Over {aantal} dagen',
+  // Op een tablet en een telefoon is het blok eerst alleen de datums. Erop
+  // tikken klapt het open tot wat een laptop meteen laat zien.
+  'home.testsChange': 'Toetsen wijzigen',
+  'home.testsDone': 'Klaar',
   // Het vak erbij, want een datum zonder vak plant niets. Alleen vakken die
-  // bestaan: een toets voor klokkijken instellen belooft oefenstof die er niet
+  // bestaan: een toets voor woordjes instellen belooft oefenstof die er niet
   // is. Het gekozen vak bepaalt waarmee "Ga verder" verdergaat.
   'home.testSubjectPick': 'Voor welk vak?',
   'home.testSubjectNone': 'Nog geen vak',
@@ -208,6 +216,17 @@ export const nl = {
   // opnoemen maakte die tegel twee keer zo hoog als de rest van de rij.
   'set.nl-mix.uitleg': 'Alles van de kaart door elkaar',
 
+  // Klokkijken, in de vier stappen waarin een groep 4 en 5 het leert. De namen
+  // zijn de woorden die de juf gebruikt, niet de id's uit het bestand.
+  'set.klok-heel': 'Hele uren',
+  'set.klok-half': 'Halve uren',
+  'set.klok-kwart': 'Kwartieren',
+  'set.klok-vijf': 'Vijf minuten',
+  // Ook hier geen vijfde bestand maar dezelfde standen onder één naam, zodat
+  // half acht dat je hier goed hebt hetzelfde doosje opschuift als altijd.
+  'set.klok-mix': 'Klokmix',
+  'set.klok-mix.uitleg': 'Alle standen van de klok door elkaar',
+
   // Topografie in drie stappen: eerst waar op de wereld, dan wat, dan hoe.
   // De regio staat vooraan omdat het de grofste keuze is die er te maken valt
   // — en omdat een kind dat de provincies zoekt niet langs de landen van
@@ -246,6 +265,21 @@ export const nl = {
   'onderwerp.landen.zuid-amerika': 'Alle 12 landen van Zuid-Amerika',
   'onderwerp.landen.oceanie': 'Alle 9 landen van Oceanië',
   'onderwerp.landen.wereld': 'Alle 167 landen bij elkaar',
+
+  // De klok, in vier stappen en een mix. Eén woord per tegel, net als bij
+  // topografie — en het merk ernaast is de wijzerstand zelf, zodat een kind
+  // dat "kwartieren" nog niet leest toch ziet welke tegel dat is.
+  'onderwerp.heleUren': 'Hele uren',
+  'onderwerp.heleUren.uitleg': 'Eén uur, twee uur, tot en met twaalf uur',
+  'onderwerp.halveUren': 'Halve uren',
+  // De regel waar het hele vak om draait, en hij staat er voluit: half acht is
+  // half acht en niet half zeven.
+  'onderwerp.halveUren.uitleg': 'Half één tot half twaalf — half acht is 7:30',
+  'onderwerp.kwartieren': 'Kwartieren',
+  'onderwerp.kwartieren.uitleg': 'Kwart over en kwart voor',
+  'onderwerp.vijfMinuten': 'Vijf minuten',
+  'onderwerp.vijfMinuten.uitleg': 'Vijf over, tien voor half, en alles ertussen',
+  'onderwerp.klokmix': 'Klokmix',
 
   // Modes
   'mode.wijs-aan': 'Aanwijzen',
@@ -318,6 +352,25 @@ export const nl = {
   'choose.likeTheTest': 'Oefen zoals de toets',
   'choose.howMany': 'Hoeveel vragen?',
   'choose.howManyOne': '{aantal} vragen',
+  // Het eerste vakje van het tafelraster: alle tafels, of alle deelsommen, door
+  // elkaar.
+  'choose.mix': 'Mix',
+  // De startbalk (herontwerp 2026-09): wat er gekozen is, als een rij kleine
+  // labels, en daarna de knop. Het woordje voor elke waarde zegt welke vraag die
+  // beantwoordt. De knop zelf zegt voor een schermlezer nog steeds de hele zin.
+  'start.klaar': 'Klaar om te starten',
+  'start.kaart': 'kaart',
+  'start.onderwerp': 'onderwerp',
+  'start.som': 'som',
+  'start.welke': 'welke',
+  'start.manier': 'manier',
+  'start.ronde': 'ronde',
+  'start.stand': 'stand',
+  'start.vragen': '{aantal} vragen',
+  'start.vragenTijd': '{aantal} vragen · ±{minuten} min',
+  'start.seconden': '{aantal} seconden',
+  'start.levens': '{aantal} levens',
+  'start.vrij': 'rondkijken',
 
   // De onderwerpen van rekenen. Vier soorten sommen en een mix ervan; de tafels
   // en het delen hebben er dertien elk, en die staan als knopjes onder de kaart
@@ -442,6 +495,70 @@ export const nl = {
   'way.som-meerkeuze': 'Kies uit vier getallen — de weg terug als typen niet lukt',
   'way.tafeldiploma': 'De hele tafel foutloos — één fout en je begint opnieuw',
 
+  // Klokkijken. De klok zelf staat op het toneel waar bij topografie de kaart
+  // staat en bij rekenen de som: het ding waar de vraag over gaat.
+  //
+  // De namen van de vier standen worden hier voluit geschreven en niet in
+  // cijfers. Het verschil tussen "7:30" en "half acht" ís de oefening; een
+  // antwoordknop met "half 8" erop zou het kind het lezen uit handen nemen.
+  'klok.uur.1': 'een',
+  'klok.uur.2': 'twee',
+  'klok.uur.3': 'drie',
+  'klok.uur.4': 'vier',
+  'klok.uur.5': 'vijf',
+  'klok.uur.6': 'zes',
+  'klok.uur.7': 'zeven',
+  'klok.uur.8': 'acht',
+  'klok.uur.9': 'negen',
+  'klok.uur.10': 'tien',
+  'klok.uur.11': 'elf',
+  'klok.uur.12': 'twaalf',
+  // Vijf en tien, en verder niets: de inhoud gaat met stappen van vijf, dus de
+  // afstand tot een kwartier, een half of een heel uur is er een van die twee.
+  'klok.getal.5': 'vijf',
+  'klok.getal.10': 'tien',
+  // De acht vormen waarin het Nederlands een klok uitspreekt. Welke vorm en
+  // welk uur wordt in game-core uitgerekend; hier staan alleen de woorden.
+  'klok.zeg.uur': '{uur} uur',
+  'klok.zeg.over': '{aantal} over {uur}',
+  'klok.zeg.kwartOver': 'kwart over {uur}',
+  'klok.zeg.voorHalf': '{aantal} voor half {uur}',
+  'klok.zeg.half': 'half {uur}',
+  'klok.zeg.overHalf': '{aantal} over half {uur}',
+  'klok.zeg.kwartVoor': 'kwart voor {uur}',
+  'klok.zeg.voor': '{aantal} voor {uur}',
+  // Allebei de notaties, in de volgorde waarin een kind ze leert. Wie er één
+  // van de twee kent, kent het half — daarom staan ze samen op het
+  // resultaatscherm en niet los.
+  'klok.beide': '{woorden} ({cijfers})',
+
+  'klok.prompt': 'Hoe laat is het?',
+  // Wat de voorleesknop zegt op de twee vormen waar een klok op het toneel
+  // staat. Niet de tijd zelf: dat zou het antwoord voorlezen.
+  'klok.lookPrompt': 'Kijk naar de klok. Hoe laat is het?',
+  'klok.typeQuestion': 'Typ hoe laat het is',
+  'klok.chooseQuestion': 'Kies hoe laat het is',
+  'klok.whichQuestion': 'Welke klok is dit?',
+  'klok.typePlaceholder': '7:30',
+  'klok.correct': 'Het is {tijd} — goed.',
+  'klok.wrong': 'Het was {tijd}.',
+  'klok.wrongSub': 'Jij zei {gegeven}.',
+  'klok.dontKnowSub': 'Deze komt zo weer langs.',
+  'klok.practiceMore': 'Deze tijden moet je nog oefenen',
+  'mode.klok-meerkeuze': 'Meerkeuze',
+  // "Klok zoeken" en niet "Welke klok?": de naam van een oefenvorm komt in de
+  // startzin terecht — "Hele uren klok zoeken · 10 vragen" — en een vraagteken
+  // midden in die zin leest als een fout. De vraag zelf staat boven de vier
+  // klokken, waar hij hoort.
+  'mode.klok-welke-klok': 'Klok zoeken',
+  'mode.klok-typen': 'Zelf typen',
+  // De volgorde is het argument. Meerkeuze staat vooraan en niet achteraan
+  // zoals bij rekenen: de vier tijden die je krijgt zijn precies de vier
+  // fouten die kinderen maken, dus kiezen ís de oefening.
+  'way.klok-meerkeuze': 'Kies uit vier tijden — voor de eerste keer',
+  'way.klok-welke-klok': 'Van de tijd naar de wijzers — andersom dus',
+  'way.klok-typen': 'Schrijf de tijd zelf op — voor de toets',
+
   'result.title': 'Ronde klaar',
   // The one place the word "score" is allowed: the result of one round. It is
   // never a word for how much a child knows (ADR-030).
@@ -465,18 +582,20 @@ export const nl = {
   'result.markLabel': 'cijfer',
   'result.markWhy': 'Zonder hulp onderweg, net als op school.',
 
-  // Het pakje dat opengaat. Alleen te zien op het scherm na een ronde, en
-  // alleen als er echt iets uit kwam - een kaart die er elke keer staat is
-  // binnen een week meubilair. Geen "goed gedaan": het product zegt wat er
-  // gebeurd is, niet wat je ervan moet vinden.
-  'result.newAnimalTitle': 'Een nieuw dier',
-  'result.newAnimalOne': 'Je hebt een nieuw dier!',
-  'result.newAnimalMany': 'Je hebt {aantal} nieuwe dieren!',
-  'result.newAnimalIn': '{dier} in {reeks}',
-  // Waarvoor je hem kreeg staat erbij, net als bij een reisstempel. Een
-  // beloning die je niet kunt uitleggen is een raadsel, en dan kun je er ook
-  // geen tweede met opzet verdienen.
-  'result.newAnimalLevel': 'Je haalde niveau {niveau}.',
+  // Wat een ronde opleverde (ADR-096): de sterren die erbij kwamen, en als er
+  // een kist openging, welke held eruit kwam. Alleen te zien als er echt iets
+  // bij kwam. Geen "goed gedaan": het product zegt wat er gebeurd is, niet wat
+  // je ervan moet vinden. En nooit wat er in de volgende kist zit.
+  'result.beloningTitle': 'Wat je verdiende',
+  'result.sterEen': 'Je verdiende een ster.',
+  'result.sterVeel': 'Je verdiende {aantal} sterren.',
+  'result.sterStand': '{aantal} van de {totaal} sterren voor je volgende kist.',
+  'result.kistEen': 'Je kist gaat open!',
+  'result.kistVeel': 'Je {aantal} kisten gaan open!',
+  'result.heldNieuw': '{held} komt erbij, in {reeks}',
+  'result.heldDubbel': '{held} nog een keer: {aantal} van de {totaal} voor {reeks}',
+  'result.heldHoger': '{held} gaat naar {reeks}',
+  'result.heldVol': '{held} is al ultra',
   // K8. De score staat er, maar wat er veranderd is, is het product: het enige
   // op dit scherm dat een kind niet zelf had kunnen uitrekenen.
   'result.changed': 'Wat er is veranderd',
@@ -516,22 +635,33 @@ export const nl = {
   'you.off': 'uit',
   'you.stays': 'Wat je oefent blijft op dit apparaat.',
 
-  // De verzamelpagina: alles wat er te halen valt en wat het kost. De kaart in
-  // de rechterkolom kan er maar één tegelijk laten zien; dit is het geheel.
+  // De verzamelpagina: alles wat je hebt, en hoe de rest komt. De kaart in de
+  // rechterkolom kan er maar één tegelijk laten zien; dit is het geheel.
   // Nergens staat wanneer — alles hier koop je met goede antwoorden.
   'reis.title': 'Jouw voortgang',
-  'reis.intro': 'Alles wat je kunt halen, en wat het kost. Wat het wordt, zie je als je het haalt.',
+  'reis.intro':
+    'Elke tien goede antwoorden zijn een ster. Vijf sterren zijn een kist, en in elke kist zit een held.',
   'reis.level': 'Jouw niveau',
   'reis.answered': '{aantal} goede antwoorden',
-  'reis.animals': 'Dieren',
+  'reis.sterrenTitel': 'Sterren',
+  'reis.totKist': 'Nog {aantal} goede antwoorden tot je volgende kist.',
+  'reis.animals': 'Helden',
   'reis.animalsHave': '{aantal} van de {totaal}',
-  'reis.reeksHave': '{reeks} · {aantal} van de {totaal}',
-  'reis.animalHave': '{dier} in {reeks}',
-  // Niet-gehaalde dieren houden hun naam voor zich. Wat erbij staat is wat je
-  // ervoor moet doen, want daar kun je op mikken; wie het wordt is de
-  // verrassing die het halen de moeite waard maakt.
-  'reis.animalWant': 'Nog onbekend dier in {reeks}, vanaf niveau {niveau}',
-  'reis.lockedLevel': 'niveau {niveau}',
+  'reis.heldHave': '{dier}, {reeks}',
+  'reis.heldDubbel': '{reeks} · {aantal} van de {totaal}',
+  // Een held die je nog niet hebt houdt zijn naam voor zich: welke het wordt,
+  // is waar een kist voor is.
+  'reis.heldWant': 'Nog niet gevonden',
+  // De spelregels, voluit. Welke held er in een kist zit is toeval, en een kind
+  // mag precies weten hoe dat toeval werkt (ADR-096).
+  'reis.regelsTitel': 'Zo werkt het',
+  'reis.regel1': 'Tien goede antwoorden zijn één ster.',
+  'reis.regel2':
+    'Vijf sterren zijn een kist. In elke kist zit een held, en welke is een verrassing: alle twaalf zijn even kansrijk.',
+  'reis.regel3':
+    'Krijg je een held die je al hebt, dan telt hij dubbel. Na drie keer dubbel gaat hij een reeks omhoog: brons, zilver, goud, platina, ultra.',
+  'reis.regel4':
+    'Je kunt niets kopen, en door te wachten krijg je niets. Alleen goede antwoorden tellen.',
   'reis.stamps': 'Reisstempels',
   'reis.stampsHave': '{aantal} van de {totaal}',
 

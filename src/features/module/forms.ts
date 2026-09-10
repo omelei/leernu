@@ -13,6 +13,7 @@ import type { ModeId, RoundRule } from '@/game-core';
 import { t, type TranslationKey } from '@/i18n';
 import { isMixSet, ROUND_RULE, SETS, type SetId } from '@/features/practice/useRound';
 import { SUM_ROUND_RULE } from '@/features/sums/useSumRound';
+import { KLOK_ROUND_RULE } from '@/features/klok/useKlokRound';
 
 /**
  * The ways of practising a module offers, in order of weight, each with a face.
@@ -206,8 +207,87 @@ export const SUM_FORMS: readonly PracticeForm[] = [
   },
 ];
 
+/**
+ * Klokkijken: the two that read a face, the one that reads it backwards, then
+ * the two that put pressure on what is already read.
+ *
+ * **Choosing comes first here**, which is the map's order rather than the
+ * tables'. ADR-049 put typing first on rekenen because four plausible products
+ * can be narrowed by a child who cannot do the sum, so multiple choice measures
+ * less there. A clock is the opposite: the four times offered are the four
+ * mistakes children actually make reading one — an hour out, over for voor, the
+ * hands swapped — so choosing between them is the exercise rather than a way
+ * round it (`klokDistractors`).
+ *
+ * **"Welke klok" is the second, and it is not multiple choice turned round.**
+ * The other four ways all show a face and ask what it says. This one shows a
+ * time and asks which of four faces says it, which is the half of clock reading
+ * that a child who has only ever been shown clocks has never been asked. It is
+ * also the half a schoolbook drills hardest, because it is the one that catches
+ * a child who has learned to recognise twelve pictures.
+ *
+ * **Typing is third and last of the three that teach**, for the reason the map
+ * gives: writing "7:35" unaided is what a test asks.
+ *
+ * Five rather than six, and nothing is padded to make up the number. There is
+ * no exploring on a clock — twelve faces is not somewhere a child can wander —
+ * and there is no diploma, because no Dutch school hands one out for the clock
+ * the way it does for a table.
+ */
+export const KLOK_FORMS: readonly PracticeForm[] = [
+  {
+    id: 'klok-meerkeuze',
+    name: 'mode.klok-meerkeuze',
+    reason: 'way.klok-meerkeuze',
+    icon: ChoiceIcon,
+    rule: KLOK_ROUND_RULE['klok-meerkeuze'],
+    seconds: 10,
+    needsClock: false,
+  },
+  {
+    id: 'klok-welke-klok',
+    name: 'mode.klok-welke-klok',
+    reason: 'way.klok-welke-klok',
+    // Pointing, because that is what it is: four faces and a finger. The mark
+    // is the map's, and the two are never on a page together.
+    icon: PointIcon,
+    rule: KLOK_ROUND_RULE['klok-welke-klok'],
+    seconds: 12,
+    needsClock: false,
+  },
+  {
+    id: 'klok-typen',
+    name: 'mode.klok-typen',
+    reason: 'way.klok-typen',
+    icon: KeyboardIcon,
+    rule: KLOK_ROUND_RULE['klok-typen'],
+    seconds: 14,
+    needsClock: false,
+  },
+  {
+    id: 'bliksemronde',
+    name: 'mode.bliksemronde',
+    reason: 'way.bliksemronde',
+    icon: BoltIcon,
+    rule: KLOK_ROUND_RULE.bliksemronde,
+    seconds: null,
+    needsClock: true,
+  },
+  {
+    id: 'overleven',
+    name: 'mode.overleven',
+    reason: 'way.overleven',
+    icon: ShieldIcon,
+    rule: KLOK_ROUND_RULE.overleven,
+    seconds: null,
+    needsClock: false,
+  },
+];
+
 export function formsFor(moduleId: string): readonly PracticeForm[] {
-  return moduleId === 'tafels' ? SUM_FORMS : TOPO_FORMS;
+  if (moduleId === 'tafels') return SUM_FORMS;
+  if (moduleId === 'klok') return KLOK_FORMS;
+  return TOPO_FORMS;
 }
 
 /**

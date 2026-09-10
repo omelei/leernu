@@ -1,22 +1,18 @@
-import { useEffect, useState } from 'react';
-import type { ComponentType } from 'react';
-import { Dot } from '@/components/Dot';
-import type { IconProps } from '@/components/Icon';
+import { useEffect, useState, type CSSProperties } from 'react';
+import { Heldplaat } from '@/components/Heldplaat';
+import { NextIcon } from '@/components/Icon';
 import { ProgressBar } from '@/components/ProgressBar';
-import { stickerById } from '@/components/stickerSet';
-import { MysteryIcon, NextIcon, RankIcon } from '@/components/Icon';
 import {
+  AANTAL_HELDEN,
   correctToNextLevel,
-  earnedAt,
-  huidigeReeks,
   levelFor,
   levelProgress,
-  nextPlek,
-  COLLECTION_SIZE,
   type FlawlessRun,
   type ModeId,
 } from '@/game-core';
 import { MODULE_ICON } from '@/features/shell/moduleIcons';
+import { useDesk } from '@/features/shell/useSmallScreen';
+import { reeksVan, useHelden } from '@/features/reis/useHelden';
 import { t, type TranslationKey } from '@/i18n';
 import { loadAccuracy, loadPlayedRounds } from '@/store/progress';
 import type { Accuracy } from '@/store/progress';
@@ -29,26 +25,25 @@ import {
   type Gespeeld,
   type Onderdeel,
 } from '@/features/module/onderdelen';
+import { Blok } from './Blok';
+import { ToetsenBlok } from './ToetsenBlok';
 
 /**
- * The child's own column: how far along the journey is, how the whole of it is
- * going, and where they keep going back to.
+ * The child's own column: the tests that are coming, how far along the journey
+ * is, how the whole of it is going, and where they keep going back to.
  *
- * It was inside `HomeScreen` and it is out here because it is no longer the
- * front door's alone — a module page carries the same blocks, in the same
- * order, on the same side. That is a decision about the product rather than
- * about layout: this column is what the app knows about the child, and what the
- * app knows about the child does not change when they walk into topography.
+ * It is the same column on every page inside the shell, because it is what the
+ * app knows about the child, and that does not change when they walk into
+ * topography. The front door lays the same four blocks out itself — it puts
+ * them in the flow of its own page below 1200 — so each block is exported on
+ * its own as well as in this column (ADR-094).
  *
- * It reads what it needs itself, so it can be dropped on any screen inside the
- * shell without that screen having to know what is in it.
- *
- * **The journey is first, above the figures.** It replaces the sticker picker,
- * which was six animals to choose between and nothing else, and which sat under
- * two numbers about how a child was doing. What is at the top of a child's own
- * column should be the thing that says where they are going, not the thing that
- * reports on where they have been (ADR-067). The picking itself moved to
- * "Jij", where the rest of what a child owns already lives.
+ * **The order follows the width.** From 1200 the tests are first: the column is
+ * beside the work and the test is the reason for it this week. Below 1200 the
+ * column is under the work, and the handoff puts the level first there, where a
+ * child scrolling down meets what they are working towards before a date. It
+ * is decided in React rather than with CSS `order`, so a keyboard and a screen
+ * reader meet the blocks in the order the eye does.
  *
  * "Samen met" belongs at the foot of it. It is three friends, and there are
  * none until ADR-050's backend, so it is absent rather than empty.
@@ -58,150 +53,133 @@ export function SideColumn({
   onReis,
   onBegin,
 }: {
-  /** Which animal this child chose, so the journey shows theirs. */
+  /** Which hero this child wears, so the journey shows theirs. */
   readonly sticker: string | undefined;
   /** The way to the collection, which is what the journey card leads to. */
   readonly onReis: () => void;
   readonly onBegin: (deel: Onderdeel, mode: ModeId) => void;
 }) {
-  const [accuracy, setAccuracy] = useState<Accuracy | null>(null);
-  const [gespeeld, setGespeeld] = useState<readonly Gespeeld[]>([]);
-  const [run, setRun] = useState<FlawlessRun | null>(null);
-
-  useEffect(() => {
-    void loadAccuracy().then(setAccuracy);
-    void loadRun().then(setRun);
-    void loadPlayedRounds().then((rondes) => setGespeeld(geplaatst(rondes, startbareOnderdelen())));
-  }, []);
+  const desk = useDesk();
+  const toetsen = <ToetsenBlok key="toetsen" />;
+  const voortgang = <VoortgangBlok key="voortgang" sticker={sticker} onReis={onReis} />;
 
   return (
     <aside className="tk-home-aside">
-      <Reis goed={accuracy?.correct ?? null} sticker={sticker} onReis={onReis} />
-      <Goed accuracy={accuracy} run={run} />
-      <Favorieten gespeeld={gespeeld} onBegin={onBegin} />
+      {desk ? [toetsen, voortgang] : [voortgang, toetsen]}
+      <GoedBlok />
+      <FavorietenBlok onBegin={onBegin} />
     </aside>
   );
 }
 
 /**
- * Progress: which level, which rung of the ladder, and what is still wrapped up.
+ * Progress: the hero a child wears, which level, how many heroes, and how far to
+ * the next level.
  *
- * Everything on this card is worked out from one number the product has been
- * keeping since the first release and has never once shown: ten XP for a
- * correct answer, five more for each answer given while five in a row were
- * already right. A level was computed, a curve was tuned, and a child could
- * see none of it (ADR-065).
+ * The level is worked out from one number — correct answers, ever (ADR-070) —
+ * and the line that matters is "nog 6 goede antwoorden": a thing a child can
+ * decide to do this afternoon. The hero stands on its own reeks, and the bar is
+ * drawn in that reeks too (ADR-096). There are no stars here: the handoff keeps
+ * them for the screen after a round and the collection page, where a chest can
+ * open.
  *
- * The line that matters is the middle one. "Nog 340 XP" is a currency nobody
- * counts in; **"nog 6 goede antwoorden"** is a thing a child can decide to do
- * this afternoon, and it is exact rather than rounded — a combo can only make
- * it arrive sooner.
+ * Two sizes. From 1200 it is the whole card. Below 1200 the handoff draws one
+ * row with an arrow at the end, and that row is the way to the collection.
  *
  * What it never says is how many days, how long, or how often. Nothing here
- * moves by waiting, and a card that mentioned time would be inviting a child
- * to come back for the coming back rather than for the work.
+ * moves by waiting.
  */
-function Reis({
-  goed,
+export function VoortgangBlok({
   sticker,
   onReis,
 }: {
-  /** Correct answers over everything, ever. What the ladder runs on. */
-  readonly goed: number | null;
   readonly sticker: string | undefined;
   readonly onReis: () => void;
 }) {
-  // Nothing until it is known. A card that says level one and then changes its
-  // mind has told a child something about themselves that was not true.
-  if (goed === null) return null;
+  const [goed, setGoed] = useState<number | null>(null);
+  const helden = useHelden();
+  const desk = useDesk();
+
+  useEffect(() => {
+    void loadAccuracy().then((accuracy) => setGoed(accuracy.correct));
+  }, []);
+
+  // Nothing in it until it is known: a card that says level one, or a bronze
+  // hero, and then changes its mind has told a child something that was not
+  // true. The card itself is drawn at once, so the page does not move.
+  if (goed === null || helden === null) return <Blok titel={t('home.journeyTitle')} bezig />;
 
   const level = levelFor(goed);
-  // Theirs, not the newest one the ladder handed out. Three arrive at level one
-  // and a child picks between them; drawing whichever the list happens to end
-  // on would be this card telling them they are somebody else.
-  const nu = stickerById(sticker);
-  const reeks = huidigeReeks(level);
-  const volgende = nextPlek(level);
+  const reeks = reeksVan(helden, sticker);
+  const reeksNaam = t(`reeks.${reeks}` as TranslationKey);
   const teGaan = correctToNextLevel(goed);
-  const Nu = nu.draw;
+  const naarNiveau =
+    teGaan === 1
+      ? t('home.journeyOneToGo', { niveau: level + 1 })
+      : t('home.journeyToGo', { aantal: teGaan, niveau: level + 1 });
 
-  return (
-    <section className="tk-card flex flex-col gap-3" aria-label={t('home.journeyTitle')}>
-      <h2 className="tk-label">{t('home.journeyTitle')}</h2>
-
-      <div className="flex items-center gap-4">
-        {/* Decorative: the level and the animal's name are both beside it. */}
-        <span className="tk-sticker-big">
-          <Nu size={56} />
-        </span>
-        <div className="min-w-0">
-          {/* Not the score size the fraction below it uses: "Niveau 1" is two
-              words in a 320 column beside a 72px animal, and at that size it
-              broke mid-word — "Nivea / u 1". A number that has to be read as a
-              word is not a number that gets the biggest type on the page. */}
-          <p className="tk-display text-h2 font-bold">
-            {t('home.journeyLevel', { niveau: level })}
-          </p>
-          <p className="text-ink-2">
-            {t('home.journeyHave', { aantal: earnedAt(level), totaal: COLLECTION_SIZE })}
-          </p>
-        </div>
-      </div>
-
-      {/* Which rung of the ladder this is, as the chevrons every game a child
-          plays uses for a tier, in that material's own colour. The word is
-          beside it and not instead of it: §A never lets a colour carry a
-          meaning on its own, and "platina" is also the half a child says out
-          loud to a friend. */}
-      <p className="tk-reeks" data-reeks={reeks}>
-        <RankIcon size={20} />
-        <span className="tk-reeks-name">{t(`reeks.${reeks}` as TranslationKey)}</span>
-      </p>
-
+  const balk = (klasse: string) => (
+    <span className={klasse} data-reeks={reeks}>
       <ProgressBar
         value={levelProgress(goed)}
         showDot={false}
         label={t('home.journeyBar', { niveau: level + 1 })}
       />
+    </span>
+  );
 
-      {volgende === null ? (
-        <p className="text-ink-2">{t('home.journeyComplete')}</p>
-      ) : (
-        <>
-          <p className="text-body">
-            {teGaan === 1
-              ? t('home.journeyOneToGo', { niveau: level + 1 })
-              : t('home.journeyToGo', { aantal: teGaan, niveau: level + 1 })}
-          </p>
-
-          {/* What is coming, wrapped. It used to name the animal — "Hierna: vos
-              in zwart" — which is a ladder with the answers printed on it: by
-              the time a child got there they had known for a week what it was.
-              A parcel in the next material's colour says exactly as much as a
-              child needs to aim at it, and not one word more (ADR-081).
-
-              The parcel is a drawing and the sentence beside it is the label,
-              so the two together are one line rather than two things saying
-              the same thing twice. */}
-          <p className="flex items-center gap-3 text-ink-2">
-            <span className="tk-sticker-next" data-reeks={volgende.reeks} aria-hidden="true">
-              <MysteryIcon size={28} />
+  if (!desk) {
+    return (
+      <Blok titel={t('home.journeyTitle')}>
+        <button type="button" className="tk-voortgang-kort" onClick={onReis}>
+          <Heldplaat sticker={sticker} reeks={reeks} size={48} />
+          <span className="flex min-w-0 flex-1 flex-col gap-1">
+            <span className="flex flex-wrap items-baseline gap-x-2">
+              <span className="tk-niveau tk-niveau-klein">
+                {t('home.journeyLevel', { niveau: level })}
+              </span>
+              <span className="tk-reeksnaam" data-reeks={reeks}>
+                {reeksNaam}
+              </span>
             </span>
-            {t('home.journeyNext', {
-              reeks: t(`reeks.${volgende.reeks}` as TranslationKey),
-            })}
-          </p>
-        </>
-      )}
+            {/* The sentence under it says the same thing in words, and a bar
+                inside a button would fold its own name into the button's. */}
+            <span aria-hidden="true">{balk('tk-reeksbalk tk-reeksbalk-dun')}</span>
+            <span className="tk-hulp">{naarNiveau}</span>
+          </span>
+          <NextIcon size={20} />
+          <span className="tk-sr-only">{t('home.journeyAll')}</span>
+        </button>
+      </Blok>
+    );
+  }
 
-      {/* The way to the whole of it. The card can only ever show the animal a
-          child has and the parcel arriving next; sixty of them, twelve diplomas
-          and ten stamps need a page (ADR-076). */}
-      <button type="button" className="tk-card-link" onClick={onReis}>
-        {t('home.journeyAll')}
+  return (
+    <Blok titel={t('home.journeyTitle')}>
+      <div className="flex items-center gap-4">
+        <Heldplaat sticker={sticker} reeks={reeks} size={76} />
+        <div className="min-w-0">
+          <p className="flex flex-wrap items-baseline gap-x-2">
+            <span className="tk-niveau">{t('home.journeyLevel', { niveau: level })}</span>
+            <span className="tk-reeksnaam" data-reeks={reeks}>
+              {reeksNaam}
+            </span>
+          </p>
+          <p className="text-label text-ink-2">
+            {t('home.journeyHave', { aantal: helden.helden.length, totaal: AANTAL_HELDEN })}
+          </p>
+        </div>
+      </div>
+
+      {balk('tk-reeksbalk')}
+
+      <p className="text-label">{naarNiveau}</p>
+
+      <button type="button" className="tk-blok-knop" onClick={onReis}>
         <NextIcon size={20} />
+        {t('home.journeyAll')}
       </button>
-    </section>
+    </Blok>
   );
 }
 
@@ -209,46 +187,47 @@ function Reis({
  * Everything answered, ever, as one fraction.
  *
  * Deliberately not a retention figure, and worded so the two cannot be
- * confused: this is what has been answered correctly, over every round there
- * has been. It moves slowly, it never resets, and it is the only number in this
- * column about the whole of the work rather than about this week.
+ * confused. The ring is ink on the sunken tone rather than a material: this is
+ * how the work is going, and a material is a reward (ADR-071).
  */
-function Goed({
-  accuracy,
-  run,
-}: {
-  readonly accuracy: Accuracy | null;
-  readonly run: FlawlessRun | null;
-}) {
-  // Nothing until it is known. A card that says nought percent and then changes
-  // its mind has told a child something about themselves that was not true.
-  if (accuracy === null) return null;
+export function GoedBlok() {
+  const [accuracy, setAccuracy] = useState<Accuracy | null>(null);
+  const [run, setRun] = useState<FlawlessRun | null>(null);
+
+  useEffect(() => {
+    void loadAccuracy().then(setAccuracy);
+    void loadRun().then(setRun);
+  }, []);
+
+  // Empty until it is known, for the reason the progress card gives.
+  if (accuracy === null) return <Blok titel={t('home.accuracyTitle')} bezig />;
 
   const procent =
     accuracy.answered === 0 ? 0 : Math.round((accuracy.correct / accuracy.answered) * 100);
 
   return (
-    <section className="tk-card flex flex-col gap-3" aria-label={t('home.accuracyTitle')}>
-      <h2 className="tk-label">{t('home.accuracyTitle')}</h2>
-
+    <Blok titel={t('home.accuracyTitle')}>
       {accuracy.answered === 0 ? (
         <p className="text-ink-2">{t('home.accuracyNone')}</p>
       ) : (
         <div className="flex items-center gap-4">
-          <Dot size={64} fill={procent / 100} />
+          {/* Decorative: the figure beside it is the same number in words. */}
+          <span
+            className="tk-donut"
+            style={{ '--vul': `${procent}%` } as CSSProperties}
+            aria-hidden="true"
+          />
           <div className="min-w-0">
-            <p className="tk-display text-score font-bold tabular-nums">{`${procent}%`}</p>
-            <p className="text-ink-2">
+            <p className="tk-procent">{`${procent}%`}</p>
+            <p className="text-label text-ink-2">
               {t('home.accuracyOf', { goed: accuracy.correct, totaal: accuracy.answered })}
             </p>
           </div>
         </div>
       )}
 
-      {/* The other streak: correct answers in a row, with no day in it. Under
-          the fraction and not above it, because it is the one number in this
-          product a single wrong answer takes away, and a child should meet the
-          slow one first (ADR-072). Absent until there is a run to report. */}
+      {/* The other streak: correct answers in a row. Under the fraction, because
+          it is the one number a single wrong answer takes away (ADR-072). */}
       {run !== null && run.beste > 0 ? (
         <p className="flex flex-wrap items-baseline gap-x-3 border-t border-line pt-3">
           <span className="tk-label">{t('home.runLabel')}</span>
@@ -256,44 +235,49 @@ function Goed({
           <span className="text-ink-2">{t('home.runBest', { aantal: run.beste })}</span>
         </p>
       ) : null}
-    </section>
+    </Blok>
   );
 }
 
 /** Where a child keeps going back to, one press away. */
-function Favorieten({
-  gespeeld,
+export function FavorietenBlok({
   onBegin,
 }: {
-  readonly gespeeld: readonly Gespeeld[];
   readonly onBegin: (deel: Onderdeel, mode: ModeId) => void;
 }) {
+  const [gespeeld, setGespeeld] = useState<readonly Gespeeld[]>([]);
+
+  useEffect(() => {
+    void loadPlayedRounds().then((rondes) => setGespeeld(geplaatst(rondes, startbareOnderdelen())));
+  }, []);
+
   const lijst = favorieten(gespeeld);
 
   return (
-    <section className="tk-card flex flex-col gap-3" aria-label={t('home.favouritesTitle')}>
-      <h2 className="tk-label">{t('home.favouritesTitle')}</h2>
-
+    <Blok titel={t('home.favouritesTitle')}>
       {lijst.length === 0 ? (
         <p className="text-ink-2">{t('home.favouritesNone')}</p>
       ) : (
-        <ul className="flex flex-col gap-2 p-0">
+        <ul className="tk-favorieten">
           {lijst.map((favoriet) => {
-            const ModuleIcon: ComponentType<Omit<IconProps, 'children'>> =
-              MODULE_ICON[favoriet.deel.moduleId];
+            const ModuleIcon = MODULE_ICON[favoriet.deel.moduleId];
 
             return (
               <li key={`${favoriet.deel.setId}-${favoriet.mode}`}>
                 <button
                   type="button"
                   data-module={favoriet.deel.moduleId}
-                  className="tk-favourite"
+                  className="tk-favoriet"
                   onClick={() => onBegin(favoriet.deel, favoriet.mode)}
                 >
-                  <ModuleIcon size={24} />
+                  <span className="tk-plaat tk-plaat-klein">
+                    <ModuleIcon size={20} />
+                  </span>
                   <span className="min-w-0">
-                    <span className="block truncate font-semibold">{naamVan(favoriet.deel)}</span>
-                    <span className="block truncate text-ink-2">
+                    <span className="block truncate text-label font-semibold">
+                      {naamVan(favoriet.deel)}
+                    </span>
+                    <span className="block truncate text-label text-ink-2">
                       {t(`mode.${favoriet.mode}` as TranslationKey)}
                     </span>
                   </span>
@@ -303,6 +287,6 @@ function Favorieten({
           })}
         </ul>
       )}
-    </section>
+    </Blok>
   );
 }

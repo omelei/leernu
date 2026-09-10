@@ -61,6 +61,14 @@ export default {
       eyebrow: ['11px', { lineHeight: '16px', letterSpacing: '0.08em' }],
     },
     extend: {
+      // The one width of our own. From here up the page has a rail on the
+      // left, a column on the right and the destinations in the app bar; below
+      // it, the modules are a menu and the destinations a tab bar (ADR-093).
+      // Tailwind's own `xl` is 1280, which put a 1194 iPad Pro on its side in
+      // the tablet posture only by accident of a number.
+      screens: {
+        desk: '1200px',
+      },
       colors: {
         paper: 'var(--paper)',
         surface: 'var(--surface)',

@@ -35,7 +35,7 @@ export interface Module {
 export const MODULES: readonly Module[] = [
   { id: 'topo', name: 'module.topo', built: true },
   { id: 'tafels', name: 'module.tafels', built: true },
-  { id: 'klok', name: 'module.klok', built: false },
+  { id: 'klok', name: 'module.klok', built: true },
   { id: 'woorden', name: 'module.woorden', built: false },
   { id: 'spelling', name: 'module.spelling', built: false },
   { id: 'tijdvakken', name: 'module.tijdvakken', built: false },

@@ -1,32 +1,31 @@
 import {
   diplomaFor,
-  levelFor,
   newStamps,
-  nieuwePlekken,
   rewardForRound,
+  sterrenInKist,
+  sterrenVoor,
   tableOfDiploma,
-  type Plek,
+  type KistUitkomst,
   type RewardSnapshot,
   type StampId,
 } from '@/game-core';
 import { getDb } from './db';
 import { activeChildId, ensureProgressPerChild } from './children';
+import { openKisten } from './heldenStore';
 import { loadAccuracy } from './progress';
 
 /**
- * XP, coins and travel stamps, on the device.
+ * XP, coins, travel stamps, stars and chests, on the device.
  *
  * The object store is still called `badges` and its key is still `badgeId`.
  * That is the one thing here that does not follow the rename: the storage holds
  * what children have already earned, and a schema rename to tidy up a word
- * would be a migration risking real rows for no gain a child can see. The code
- * around it says stamp, the screen says reisstempel, and this paragraph is why
- * the two do not match.
+ * would be a migration risking real rows for no gain a child can see.
  *
- * Nothing here can be bought, won by chance, or granted by waiting. Spec §12 is
- * blunt about that and the audience is why: every one of these is reachable only
- * by practising, and the code is the place that promise is either kept or
- * quietly broken.
+ * Nothing here can be bought or granted by waiting, and every one of these is
+ * reachable only by practising. One thing is chance, since ADR-096 and on the
+ * owner's decision: which hero is in a chest. Whether there is a chest, and what
+ * it costs, is not — see `game-core/helden.ts` and `heldenStore.ts`.
  */
 
 export interface RoundOutcome {
@@ -37,13 +36,16 @@ export interface RoundOutcome {
   /** The table this round earned a diploma for, or null. */
   readonly diploma: number | null;
   /**
-   * The animals this round pushed over the line, in the order they arrive.
-   *
-   * Almost always empty. When it is not, it is the one thing on the result
-   * screen a child cannot have seen coming — the collection hides what is
-   * inside a parcel until it is opened (ADR-081), and this is the opening.
+   * The stars this round added, and how many of the next chest's five are there
+   * now. Worked out from the count of correct answers either side of the round,
+   * which cannot drift from the count the rest of the product shows.
    */
-  readonly dieren: readonly Plek[];
+  readonly sterren: { readonly erbij: number; readonly inKist: number };
+  /**
+   * The chests this round opened, in the order they opened. Almost always
+   * none; one when the round crossed a fifty.
+   */
+  readonly kisten: readonly KistUitkomst[];
 }
 
 export async function loadStamps(): Promise<Set<string>> {
@@ -59,8 +61,7 @@ export async function loadStamps(): Promise<Set<string>> {
  * The tables this child has a diploma for.
  *
  * Read from the same store the stamps are in, filtered by the shape of the id
- * rather than by a second store. A row that is not a diploma is not one — which
- * is also what keeps a stamp id and a diploma id from ever having to agree.
+ * rather than by a second store.
  */
 export async function loadDiplomas(): Promise<Set<number>> {
   const held = await loadStamps();
@@ -74,7 +75,8 @@ export async function loadDiplomas(): Promise<Set<number>> {
 
 /**
  * Applies a finished round: adds what was earned, awards any stamp the round
- * newly satisfies, and reports both so the result screen can say so.
+ * newly satisfies, opens any chest it paid for, and reports all of it so the
+ * result screen can say so.
  */
 export async function applyRoundRewards(params: {
   readonly correct: number;
@@ -106,11 +108,17 @@ export async function applyRoundRewards(params: {
 
   // The diploma, if this round was one and it was flawless. Reported even when
   // the child already had it: a child who sits the test again and passes again
-  // has passed again, and a screen that said nothing would read as a failure.
+  // has passed again.
   const diplomaId = diplomaFor(params.snapshot);
   if (diplomaId !== null) {
     await db.put('kindBadges', { kindId, badgeId: diplomaId, behaaldOp });
   }
+
+  // Every one of this round's answers is already written by now, so the total
+  // afterwards is read from the store and the round's own count subtracted
+  // back off it for the total before.
+  const na = (await loadAccuracy()).correct;
+  const voor = Math.max(0, na - params.correct);
 
   return {
     xp: reward.xp,
@@ -118,24 +126,7 @@ export async function applyRoundRewards(params: {
     totalXp,
     stamps: earned,
     diploma: diplomaId === null ? null : tableOfDiploma(diplomaId),
-    dieren: await dierenVanDezeRonde(params.correct),
+    sterren: { erbij: sterrenVoor(na) - sterrenVoor(voor), inKist: sterrenInKist(na) },
+    kisten: params.correct > 0 ? await openKisten() : [],
   };
-}
-
-/**
- * Which animals this round earned, worked out from the ladder either side of it.
- *
- * The ladder runs on correct answers over everything ever (ADR-070), and every
- * one of this round's answers is already written by the time a round finishes.
- * So the total afterwards is read from the store and the round's own correct
- * count is subtracted back off it to get the total before — which is exact
- * however many rounds were played today, and cannot drift from the number the
- * column on the right shows, because it is that number.
- */
-async function dierenVanDezeRonde(correct: number): Promise<readonly Plek[]> {
-  if (correct === 0) return [];
-
-  const na = (await loadAccuracy()).correct;
-  const voor = Math.max(0, na - correct);
-  return nieuwePlekken(levelFor(voor), levelFor(na));
 }

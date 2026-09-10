@@ -1,11 +1,13 @@
 /**
  * XP, levels, coins and badges.
  *
- * Spec §4.5 is unusually specific about what this may not be, and the
- * constraints are the design: no lootboxes, no chance mechanics, no real money,
- * nothing that can be bought rather than earned. The audience is ten years old.
+ * Spec §4.5 is unusually specific about what this may not be: no lootboxes, no
+ * chance mechanics, no real money, nothing that can be bought rather than
+ * earned. The audience is ten years old. Since ADR-096 one of those is revised
+ * by the owner, knowingly and in one place: which hero is in a chest is chance.
+ * Whether there is a chest, and what it costs, is not — see `helden.ts`.
  *
- * Everything here is therefore deterministic and explainable. A child who asks
+ * Everything in this file is still deterministic and explainable. A child who asks
  * "waarom kreeg ik dat?" gets a sentence, not a shrug — which also happens to be
  * the only way a teacher can defend the numbers to a parent.
  *

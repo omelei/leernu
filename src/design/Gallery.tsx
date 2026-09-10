@@ -10,9 +10,12 @@ import {
   FreezerIcon,
   GlobeIcon,
   GridIcon,
+  HalfUurIcon,
   type IconProps,
+  KwartierIcon,
   LandIcon,
   MinIcon,
+  MinuutIcon,
   MixIcon,
   NoordAmerikaIcon,
   OceanieIcon,
@@ -21,6 +24,7 @@ import {
   PlusIcon,
   ProvincieIcon,
   StadIcon,
+  UurIcon,
   WaterIcon,
   WrongIcon,
   ZuidAmerikaIcon,
@@ -68,6 +72,10 @@ const TEGELMERKEN: readonly (readonly [string, ComponentType<Omit<IconProps, 'ch
   ['Plus', PlusIcon],
   ['Min', MinIcon],
   ['Fouten', WrongIcon],
+  ['Hele uren', UurIcon],
+  ['Halve uren', HalfUurIcon],
+  ['Kwartieren', KwartierIcon],
+  ['Vijf minuten', MinuutIcon],
 ];
 
 export function Gallery() {
@@ -154,32 +162,42 @@ export function Gallery() {
         Nog niet beschikbaar
       </button>
 
-      {/* The tile a module page is made of: an icon and a word, sized to what
-          it says. Four classes share the face — region, subject, way of
-          practising, switch — so they belong on one line here. The last time
-          they drifted apart, nothing in this gallery put them side by side and
-          it went unnoticed for a release.
-
-          The pressed one is the only place a module accent is allowed outside
-          the three §B names (ADR-089), so this is where to look at it: the
-          gallery carries no data-module, which means it draws in topography's
-          blue, the default in :root. */}
-      <h2 className={HEADING}>Keuzetegel — één gezicht, en het accent op de gekozene</h2>
-      <div className="tk-sets">
-        <button type="button" className="tk-subject">
-          <ProvincieIcon size={20} />
+      {/* The answers on a module page (ADR-095): a chip for a word, a tile for
+          a subject or a way of practising, and the chosen one of each in the
+          module's colour. The gallery carries no data-module, so this draws in
+          topography's blue, the default in :root. */}
+      <h2 className={HEADING}>Keuzes — chip en tegel, en het accent op de gekozene</h2>
+      <div className="tk-keuzes">
+        <button type="button" className="tk-keuze">
+          <PinIcon size={20} />
           Rust
         </button>
-        <button type="button" className="tk-subject" aria-pressed="true">
-          <StadIcon size={20} />
+        <button type="button" className="tk-keuze" aria-pressed="true">
+          <PinIcon size={20} />
           Gekozen
         </button>
-        <button type="button" className="tk-regio" disabled data-soon="ja">
+        <button type="button" className="tk-keuze" disabled data-soon="ja">
           <PinIcon size={20} />
           Binnenkort
         </button>
-        <button type="button" className="tk-switch">
-          <PaperIcon size={20} />
+      </div>
+      <div className="tk-tegels mt-3">
+        <button type="button" className="tk-tegel">
+          <span className="tk-plaat">
+            <ProvincieIcon size={24} />
+          </span>
+          Rust
+        </button>
+        <button type="button" className="tk-tegel" aria-pressed="true">
+          <span className="tk-plaat">
+            <StadIcon size={24} />
+          </span>
+          Gekozen
+        </button>
+        <button type="button" className="tk-tegel">
+          <span className="tk-plaat">
+            <PaperIcon size={24} />
+          </span>
           Schakelaar
         </button>
       </div>
@@ -189,9 +207,9 @@ export function Gallery() {
           one draws — it is that no two of them are the same drawing, and that
           is a question you can only answer by seeing them together. */}
       <h2 className={HEADING}>Tegelmerken — geen twee hetzelfde</h2>
-      <div className="tk-regios">
+      <div className="tk-keuzes">
         {TEGELMERKEN.map(([naam, Merk]) => (
-          <span key={naam} className="tk-regio" aria-hidden="true">
+          <span key={naam} className="tk-keuze" aria-hidden="true">
             <Merk size={20} />
             {naam}
           </span>

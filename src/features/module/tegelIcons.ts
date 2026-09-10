@@ -7,9 +7,12 @@ import {
   EuropaIcon,
   GlobeIcon,
   GridIcon,
+  HalfUurIcon,
   type IconProps,
+  KwartierIcon,
   LandIcon,
   MinIcon,
+  MinuutIcon,
   MixIcon,
   NoordAmerikaIcon,
   OceanieIcon,
@@ -17,6 +20,7 @@ import {
   PlusIcon,
   ProvincieIcon,
   StadIcon,
+  UurIcon,
   WaterIcon,
   WrongIcon,
   ZuidAmerikaIcon,
@@ -60,9 +64,9 @@ export const REGIO_ICON: Record<string, TileIcon> = {
  *
  * The seven werelddeel subjects are all called "Landen" and all take the same
  * mark: they are one subject asked about seven maps, and the region row above
- * has already said which map. Topo-mix and Rekenmix share `MixIcon` for the
- * same kind of reason — one idea, one drawing, and they are never on a page
- * together.
+ * has already said which map. Topo-mix, Rekenmix and Klokmix share `MixIcon`
+ * for the same kind of reason — one idea, one drawing, and no two of them are
+ * ever on a page together.
  */
 export const ONDERWERP_ICON: Record<string, TileIcon> = {
   // Topografie
@@ -87,6 +91,14 @@ export const ONDERWERP_ICON: Record<string, TileIcon> = {
   // The child's own list of the sums they keep getting wrong (ADR-078). The
   // cross is not borrowed here, it is the subject: this tile is the mistakes.
   fouten: WrongIcon,
+  // Klokkijken. The mark *is* the subject here — three of the four are the
+  // hand position the step is named after, so a child who cannot read
+  // "kwartieren" can still see which tile has the hand on the three.
+  'hele-uren': UurIcon,
+  'halve-uren': HalfUurIcon,
+  kwartieren: KwartierIcon,
+  'vijf-minuten': MinuutIcon,
+  'klok-mix': MixIcon,
 };
 
 /**

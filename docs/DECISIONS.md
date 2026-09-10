@@ -3666,6 +3666,387 @@ neither is a bug to be found later.
 
 ---
 
+## ADR-092 — Klokkijken is a module, and it asks in two directions
+
+**Status:** accepted — 2026-09-09.
+
+### Context
+
+The third module of business plan v6 §5.5, and the one the rail has been
+promising since ADR-051. It had an accent, a pictogram, a rail entry and an
+address that answered "binnenkort"; what it did not have was a page or anything
+behind one.
+
+Two things about the clock are not true of either module already built.
+
+**There are two notations for one fact.** "Half acht" and "7:30" are the same
+reading, and a child who can say one and not write the other has learned half of
+it. A province has a name; a sum has an answer; a time has a sentence and a
+number, and they are not interchangeable in a Dutch classroom — the sentence is
+what a teacher asks for and the number is what a digital clock shows.
+
+**The hard part is Dutch.** Half past seven is "half _acht_". Every step from
+twenty past onwards names the hour that is coming rather than the one that has
+been, and that single rule is what a Dutch child gets wrong and what a
+schoolbook drills. Any content model that stored the words would have had to
+store that rule twelve times over.
+
+### Decision
+
+**The module is four steps and a mix**, at leer.nu/klokkijken: hele uren, halve
+uren, kwartieren, vijf minuten. One subject per step and one set under each, so
+the page has the shape topografie's Nederland row has rather than the shape
+rekenen has — no region row, no chips, two numbered steps.
+
+**The content stops at five minutes.** A hundred and forty-four faces rather
+than seven hundred and twenty. Going to the minute would add five hundred and
+seventy-six positions no schoolbook shows and no child has words for; the app
+design's line for this module is "hele en halve uren", and this is that plus the
+two steps a classroom teaches after it. That is a judgement, it is written out
+in `tools/content/build-klok.mjs` with the reason, and a teacher who disagrees
+is having a conversation rather than reading a bug.
+
+**The face is twelve hours; what a child may type is twenty-four.** A clock does
+not know whether it is morning, so a child who reads half past seven as 19:30
+has not made a mistake, and `judgeKlok` accepts it. It also accepts `7.30`,
+`730` and `7u30`, on the same argument `judgeSum` makes about a stray full stop:
+failing a child for a separator measures the keyboard.
+
+**The words are not content, and they are not in `game-core` either.**
+`klokVorm` returns which of the eight Dutch shapes a time is said in and which
+hour it names; `features/klok/klokTaal.ts` puts the words on through `t()`. The
+pure layer stays language-neutral — it is the one a server has to be able to
+import (ADR-015) — and the Dutch stays in `i18n` with every other string. It is
+the same split `rekenNaam` already makes for "Tafel van 7".
+
+**Five ways of practising, and one of them runs the other way.** Meerkeuze
+first, which is the map's order and not the tables': the four times offered are
+the four mistakes children actually make reading a clock — an hour out, over for
+voor, the hands swapped, five minutes out — so choosing between them is the
+exercise rather than a way round it. **"Klok zoeken" is second**, and it shows a
+time and asks which of four faces says it. That is not multiple choice with the
+question and the answer swapped: it is the half of clock reading that catches a
+child who has learned to recognise twelve pictures, and it is a mode of its own
+because what the child is looking at differs. Typing is third, for the reason
+the map gives — writing it unaided is what a test asks. Then the clock and the
+lives, as everywhere.
+
+No exploring: twelve faces is not somewhere a child can wander. No diploma: no
+Dutch school hands one out for the clock the way it does for a table, and
+inventing one would be inventing a certificate.
+
+**Read-aloud does not read the answer.** On rekenen the button speaks the
+question, because the question is "7 × 8". Here the question is a picture, so
+the button speaks the instruction — and speaks the time only in the one mode
+where the time _is_ the question. K9's read-aloud is for a child who cannot read
+the words, not for a child who cannot read the clock.
+
+**The subject marks are the module's own mark, saying four particular times.**
+Three of the four tiles are a clock face with the hand where that step puts it,
+so a child who cannot yet read "kwartieren" can see which tile has the hand on
+the three. §E allows the shared circle for the reason it allows the diamond
+inside `StampIcon`: what may not be shared is the silhouette.
+
+**/klok works as well as /klokkijken.** The rail says "Klok", so that is what a
+parent types. One row in a table, one way — `pathFor` still writes the module's
+own slug — which is the same relationship /rekenen and /tafels have a level up.
+
+### The round wiring, and why it is still three copies
+
+`useSumRound` says in as many words that the third module is when the guess
+about what is shared becomes an observation. It is, and the observation is this:
+what all three share is everything from `composeRound` down to
+`applyRoundRewards` — the schedule, the session record, the three ways a round
+ends, the combo, the streak and the rewards — and all of that is already
+imported rather than copied. What none of them share is the question: a map
+needs geometry and an answer layer, a sum needs a keypad, a clock needs a face
+and asks in two directions.
+
+What is genuinely duplicated is the hundred lines of bookkeeping between those
+two, three times over. Extracting it is a change to three working round hooks at
+once, with its own test run and its own way of going wrong, and it is not made
+safer by riding along with the module that finally made the case for it. So it
+is written down here as owed rather than done.
+
+### Consequences
+
+Klokkijken is `built`, which turns on more than its own page: it appears in
+"verder oefenen" with a progress bar, a test may be set for it, its sets show up
+in favourites and in "meest geoefend", and its rail entry opens a chooser rather
+than "binnenkort". Three tests that used klokkijken as their example of a module
+that does not exist yet now use woordjes — which is the plan doing exactly what
+ADR-051 says a rail full of unbuilt doors is for.
+
+The module earns no animals of its own. `rewards.ts` names sets by id for the
+map and the tables, and the two mode-based rewards — a lightning round and a
+survival round — apply here as they do anywhere. A clock-specific collection is
+a content decision and not part of building the module.
+
+---
+
+## ADR-093 — Below 1200 the modules are a menu, and the destinations lie along the bottom
+
+**Status:** accepted — 2026-09-10. Reshapes the frame of ADR-029 and ADR-051;
+what the rail lists is unchanged.
+
+### Context
+
+The redesign handoff of September 2026 draws the frame in three postures: a
+desk at 1440, a tablet at 834 and a phone at 390. The frame as built had four
+and drew them differently. A tablet got the rail lying along the bottom of the
+screen and the destinations as a row in the app bar; a phone got the
+destinations along the bottom and no way to a module at all except the tiles on
+the front door.
+
+### Decision
+
+**One width, 1200, replacing Tailwind's 1280.** From there up the app bar
+carries the wordmark and the destinations, and the modules stand in a rail of 96
+on the left. Below it the app bar is the mark, the streak and the child. No size
+the app is tested at sits between the two numbers — the Chromebook (1366) and
+the laptop (1440) keep the rail, the iPads (1080, 810) and the phones do not —
+so the handoff's value moves no device and is the one the design is drawn to.
+It is a Tailwind screen of our own, `desk`, and `useDesk` for the one place a
+component needs to know.
+
+**Below 1200 the modules are one control under the app bar** (`VakMenu`). It
+says which module you are in — or "Kies een vak" where you are in none — and it
+opens into the same five the rail lists, in the flow of the page rather than
+over it. A disclosure holding a navigation, not an ARIA menu: these are places
+to go, and `role="menu"` would take a screen reader's reading keys away. It
+opens with focus on the module you are in, moves with the arrow keys, Home and
+End, and closes on a choice, on Escape, on a press outside it and on tabbing out
+— with focus back on the button after the first two.
+
+**Below 1200 the destinations are a tab bar with a mark over each word.**
+Vandaag is a sun, drawn for the purpose; Onthouden takes the freezer and Jij the
+pupil, which already meant those things. Where you are is a rule across the top,
+a surface and a heavier word, in ink. The handoff draws it in topography's blue,
+and that is not followed: a destination is not a module, and §B does not let an
+accent say which one you are on.
+
+**The streak is a pill at every size**, and the rail loses the mark at its head:
+the handoff draws neither the rule that hid the streak on a phone nor a logo
+above the rail, and the mark alone in the bar below 1200 is what pays for the
+streak's width.
+
+### Consequences
+
+Exactly one of each pair is displayed at any width, and the menu's list is not
+in the document until it is opened — so the rail and a closed menu never both
+answer to "Modules". The rail tests in `sums.spec.ts` and `klok.spec.ts` run at
+the two desk sizes only now, and `shell.spec.ts` walks the menu at the four
+below.
+
+---
+
+## ADR-094 — The front door is three rows that scroll, and the child's column is four blocks
+
+**Status:** accepted — 2026-09-10. Redraws K1 (ADR-077, ADR-082) and the
+column every page carries (ADR-067); nothing is added to what either holds, and
+nothing is taken away.
+
+### Context
+
+The same handoff redraws the front door as three rows that scroll sideways —
+most practised, recently practised, carry on — and the child's column as four
+cards of one shape, with the test block moved out of the middle of the page and
+into the column. Its brief is a styling and layout revision: the same blocks,
+the same order, the same behaviour.
+
+### Decision
+
+**Three rows, one line each at every size.** "Meest geoefend" and "Recent
+geoefend" hold five cards of the same shape, most played and newest first;
+"Verder oefenen" holds every module in the rail, furthest along first, with the
+ones that do not exist yet after all of them. Five rather than four and three:
+`POPULAR_SHOWN` is five, and the starting list for a new profile gains the
+clock's whole hours to match. The scrollbar is hidden and scrolling is not — a
+finger or trackpad, two round buttons from a tablet up that switch off at the
+ends, and the arrow keys on the row, which is a stop in the tab order. A step is
+a jump rather than a glide when the reader asks for less motion. The buttons are
+44 where the handoff draws 40: 44 is the floor (ADR-032).
+
+**The column is four blocks with a band across the top**: Jouw toetsen, Jouw
+voortgang, Goed beantwoord, Jouw favorieten, in that order from 1200. Below it
+the blocks go into the flow of the page, progress first — side by side with the
+tests on a tablet, above the rows — and the other two after the rows. The order
+is decided in React (`useDesk`) rather than with CSS `order`, so a keyboard and
+a screen reader meet the blocks in the order the eye does.
+
+**Below 1200 the test block is only its dates.** That is what the handoff draws.
+It leaves "adding a test" to a screen that is out of scope; removing the form
+from a tablet and a phone until that screen exists was not an option, so the
+dates are a button that opens the block into what a laptop shows, and "Klaar"
+closes it.
+
+**Four things the handoff leaves out are kept**, because a layout revision is
+not the place to take behaviour away: Goed beantwoord and the favourites on a
+tablet (at the foot of the page, where the handoff says they will "get a place
+elsewhere" that does not exist yet), what is still wrapped up on the progress
+card (ADR-081), and the run of correct answers under the percentage (ADR-072).
+
+**The accuracy ring is ink, not gold.** A material is a reward (ADR-071) and how
+the work is going is not one. The progress bar does take the material of the
+reeks being filled, on that material's soft tone, because that bar is the
+reward's own.
+
+**New tokens**, each because the handoff draws a value the palette did not
+have: `--{module}-soft` for all seven and `--accent-soft`, the lightest step of
+a module, for a chosen tile and the start bar; a deep and a soft tone for each
+of the five materials and `--reeks-licht`, for the plate a hero stands on;
+`--shadow-menu` and `--shadow-held`, the two shadows the handoff allows;
+`--radius-plaat` (10) and `--radius-klein` (8). Four more places an accent may
+paint are listed in `accent.test.ts`, each with its reason: the plate, the
+module you are in in the menu, a test's subject, and the track under a module's
+bar on the front door. A card on the front door no longer lights its border in
+the module colour on hover; the plate on it already says which module it is.
+
+### Consequences
+
+The sentence under the greeting is the handoff's — choose a subject, do a round,
+earn your next hero. The one it replaces, about questions coming back on
+purpose, is gone from K1; it was the only place the product said so out loud,
+and the Onthouden page is where that argument lives now.
+
+---
+
+## ADR-095 — A module page is chips, tiles and squares, and the start bar stays in reach
+
+**Status:** accepted — 2026-09-10. Part 3 of the September redesign. Keeps
+ADR-089's accent on the answer already given and reverses its argument about
+height; supersedes ADR-052.
+
+### Context
+
+The handoff redraws the module pages — `/topo`, `/rekenen`, `/klok` — as a badge
+that names the module, the question, and numbered steps on a hairline: chips
+for a filter, tiles with a plate and a title for a subject or a way of
+practising (two columns from 1200), a keypad of squares for the tables, and a
+start bar that lists what was chosen. On a phone that bar is stuck to the foot
+of the screen, which ADR-052 put off after three attempts produced three bugs.
+
+### Decision
+
+**A word is a chip, a subject is a tile, a number is a square.** Where on the
+map, which kind of sum (rekenen's first step), which range, level or cities, and
+how many questions are chips. The subjects of topography and klokkijken and
+every way of practising are tiles; the oefentoets is the last tile and is still
+a switch, not a seventh way (ADR-085). The tables and the divisions are a
+keypad with the mix first. The chosen one of each wears the module's colour and
+changes something besides the hue — a heavier rule, a darker rule, or a tick.
+
+**The tiles are big again.** ADR-089 made them small to fit two steps on a
+tablet screen. The handoff draws them a hand's width across, and that is a tile
+a seven-year-old hits first time; a page that scrolls is the price, and the
+start bar is what makes the price small.
+
+**The start bar lists the answers.** One chip per question the page asked — the
+map, the subject, which one, the way, how long, and "oefentoets" when it is on
+— and the Start button at the end of the line. What a screen reader hears from
+the button is still the whole sentence (ADR-066).
+
+**On a phone it is built, the way ADR-052 said the next attempt should be.**
+Sticky rather than fixed, so its box is where it is drawn and a press lands on
+the thing it looks like it lands on. The last thing in the page — after the
+child's own column, as a sibling of the content rather than a child of it — so
+it is in reach the whole way down and never lies over its own button. Side
+margins exactly the page's padding and no more. `e2e/shell.spec.ts` checks all
+three at the two phone sizes.
+
+**Six things the handoff draws are not done, each for a reason:**
+
+- the heading keeps the child's name on a phone; asked of nobody it is a form;
+- all twelve tables on a phone, where the handoff shows seven — a table a child
+  cannot reach there is a table taken away;
+- one table at a time; "meerdere mag ook" is a round made of several sets, which
+  is new behaviour and waits for its own decision;
+- no "Analoog / Digitaal" step for the clock, and "Vijf minuten" rather than
+  "Minuten": the handoff's clock is a proposal written before the module was
+  built, and this page shows the module that exists;
+- the step titles stay "Kies een onderwerp" and "Welke tafel?" where the handoff
+  writes "Welke som?" and "Kies je tafels" — they are also each step's landmark
+  name, and the words a screen reader and every test find the step by;
+- the Start button keeps the triangle that means "begin" rather than an arrow,
+  which in this set means "the next question".
+
+**Dropped:** the small progress dot on each table. It was decorative, and how a
+table is going is in its label and in the child's own column.
+
+**New token:** `--radius-balk` (14) for the start bar and the squares.
+
+### Consequences
+
+`accent.test.ts` names the new places an accent paints — the chosen chip, tile
+and square, the tick, the start bar, the badge and the step number — and loses
+the old tile classes. The component gallery shows the chip and the tile.
+
+---
+
+## ADR-096 — Heroes come in chests, and which one is chance
+
+**Status:** accepted — 2026-09-10, on the owner's decision. Part 4 of the
+September redesign. **Revises ADR-067's first condition and spec §4.5 in one
+place**: which hero is in a chest is chance. Extends ADR-071; keeps ADR-081 and
+ADR-084 in a new shape.
+
+### Context
+
+The handoff replaces the ladder of sixty animals with heroes: ten correct
+answers are a star, five stars open a chest that holds a hero, and three
+duplicates move a hero up a reeks, bronze to ultra. A duplicate only exists if
+the chest draws, so the chest is a chance mechanism — for children of seven to
+twelve, in a product whose spec and ADR-067 said there would be none.
+
+That was put to the owner with a deterministic alternative (the next hero in a
+fixed order) and the owner chose the draw, knowingly. This records it.
+
+### Decision
+
+**Chance in one place and nowhere else.** Whether there is a chest, and what it
+costs, is arithmetic on correct answers — fifty for a chest, in `helden.ts`,
+pure and tested. Which of the twelve comes out is a draw from the platform's
+cryptographic source in `heldenStore.ts`, every hero equally likely, and
+nothing about it can be steered, bought, or hurried by waiting.
+
+**The rules are on the page.** The collection page says in four sentences how
+it works, including "alle twaalf zijn even kansrijk". A chance a child cannot
+read about is a chance they have no reason to trust.
+
+**Twelve heroes, the twelve drawings there are.** The handoff's "24" would need
+twelve more illustrations; the heroes are the animals, on a plate in their
+reeks. A duplicate of a hero already at ultra does nothing and says so.
+
+**The level stays.** Same curve, same "nog 6 goede antwoorden" on the progress
+card; the stars count in the same answers beside it. The handoff keeps the
+stars off the front door, and so does this: they are on the screen after a round
+and on the collection page.
+
+**Nobody loses anything.** A child's first read writes their heroes from the
+ladder they climbed: every animal they held becomes that hero, in the highest
+reeks they held it in. The chests those answers already paid for count as
+opened — they were paid out as animals — so the first chest arrives at the next
+fifty, not as a pile. A new child comes through the same path with nought
+answers, and starts with the three the ladder always started with.
+
+**Stored per child in `settings`**, as JSON under `helden:<kindId>` — the shape
+the tests already take (ADR-077) — rather than as a new object store. No schema
+version, and a row that will not parse re-runs the migration instead of taking
+the front door down.
+
+**The worn hero shows its reeks** on the progress card, in the app bar and on
+the collection page, where any hero a child has can be worn — not only the first
+row, as the ladder allowed.
+
+### Consequences
+
+`NieuweDieren` is gone and `Beloning` replaces it on all three result screens.
+`collection.ts` hands nothing out any more; it stays because it is what the
+migration reads. The comments in `rewards.ts` and `rewardStore.ts` that said
+"no chance" now say where the chance is.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because

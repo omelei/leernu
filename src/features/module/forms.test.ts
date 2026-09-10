@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  KLOK_FORMS,
   MAX_FORMS,
   SUM_FORMS,
   TOPO_FORMS,
@@ -45,10 +46,25 @@ describe('the ways of practising', () => {
       'overleven',
       'tafeldiploma',
     ]);
+
+    // And the clock is the map's order at the top rather than the tables':
+    // the four times offered are the four mistakes children actually make
+    // reading a face, so choosing between them is the exercise rather than a
+    // way round it. "Welke klok" is second because it is the direction a child
+    // who has learned to recognise twelve pictures has never been asked in.
+    // No exploring — twelve faces is not somewhere to wander — and no diploma,
+    // because no school hands one out for the clock.
+    expect(KLOK_FORMS.map((form) => form.id)).toEqual([
+      'klok-meerkeuze',
+      'klok-welke-klok',
+      'klok-typen',
+      'bliksemronde',
+      'overleven',
+    ]);
   });
 
   it('gives every way a reason and a face', () => {
-    for (const form of [...TOPO_FORMS, ...SUM_FORMS]) {
+    for (const form of [...TOPO_FORMS, ...SUM_FORMS, ...KLOK_FORMS]) {
       expect(form.reason, form.id).toMatch(/^way\./);
       expect(typeof form.icon, form.id).toBe('function');
     }
@@ -58,7 +74,7 @@ describe('the ways of practising', () => {
     // Six cards a child recognises rather than six cards a child reads is the
     // whole argument for an icon here, and it collapses the moment two of them
     // are the same drawing.
-    for (const forms of [TOPO_FORMS, SUM_FORMS]) {
+    for (const forms of [TOPO_FORMS, SUM_FORMS, KLOK_FORMS]) {
       const icons = forms.map((form) => form.icon);
       expect(new Set(icons).size).toBe(icons.length);
     }
@@ -68,8 +84,18 @@ describe('the ways of practising', () => {
     // A drawing rule, not a limit on the product: past six the grid stops being
     // one glance. A module with a seventh way has a question to answer here.
     expect(offeredForms(TOPO_FORMS, true, 'nl-provincies').length).toBeLessThanOrEqual(MAX_FORMS);
+    expect(offeredForms(KLOK_FORMS, true, 'klok-half').length).toBeLessThanOrEqual(MAX_FORMS);
     expect(formsFor('topo')).toBe(TOPO_FORMS);
     expect(formsFor('tafels')).toBe(SUM_FORMS);
+    expect(formsFor('klok')).toBe(KLOK_FORMS);
+  });
+
+  it('offers the clock module every one of its ways, on every step', () => {
+    // Nothing here is set-dependent: there is no mix a way stops making sense
+    // on, the way exploring does on the map, and no set a diploma belongs to.
+    for (const setId of ['klok-heel', 'klok-half', 'klok-kwart', 'klok-vijf', 'klok-mix']) {
+      expect(offeredForms(KLOK_FORMS, true, setId).length, setId).toBe(KLOK_FORMS.length);
+    }
   });
 
   it('does not offer the clock while the clock is switched off', () => {

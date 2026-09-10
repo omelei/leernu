@@ -88,4 +88,11 @@ export type ModeId =
   | 'ontdekken'
   | 'som-typen'
   | 'som-meerkeuze'
-  | 'tafeldiploma';
+  | 'tafeldiploma'
+  // Klokkijken asks in both directions, which neither of the first two modules
+  // does: from the face to the time, and from the time back to a face. That is
+  // why "welke klok" is a mode of its own rather than multiple choice with the
+  // question and the answer swapped — what a child is looking at differs.
+  | 'klok-meerkeuze'
+  | 'klok-welke-klok'
+  | 'klok-typen';

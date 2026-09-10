@@ -741,6 +741,70 @@ export function DeelIcon(props: Omit<IconProps, 'children'>) {
   );
 }
 
+/**
+ * The four steps of the clock, as four faces.
+ *
+ * A subject tile is a mark and a word (ADR-089), and the mark is the only thing
+ * that tells two of them apart before the word is read. For klokkijken that
+ * mark can *be* the subject: whole hours, half hours and quarters differ by
+ * exactly where the big hand points, so the icon points it there. A child who
+ * cannot yet read "kwartieren" can still see which tile is the one with the
+ * hand on the three.
+ *
+ * They share the circle with `ClockIcon`, which is the module's own mark, and
+ * §E allows that for the same reason it allows the diamond inside `StampIcon`:
+ * what may not be shared is the silhouette, and four different hand positions
+ * are four different silhouettes. It is also the honest relationship — these
+ * are the module's mark, saying four particular times.
+ *
+ * Whole hours: the big hand straight up, the little one on the three.
+ */
+export function UurIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M12 12V6M12 12h4.5" />
+    </Icon>
+  );
+}
+
+/** Half hours: the big hand straight down, which is what "half" looks like. */
+export function HalfUurIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M12 12v6M12 12l-4-2.5" />
+    </Icon>
+  );
+}
+
+/** Quarters: the big hand on the three, and the little one just past twelve. */
+export function KwartierIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M12 12h6M12 12V8" />
+    </Icon>
+  );
+}
+
+/**
+ * Five minutes: the marks round the rim, which is what a child counts.
+ *
+ * The one of the four that is not a hand position, because the subject is not a
+ * position — it is the eight of them that are left over, and what they have in
+ * common is that you get to them by counting round.
+ */
+export function MinuutIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M12 3.5v2M20.5 12h-2M12 20.5v-2M3.5 12h2" />
+      <path d="M12 12l3.5-3" />
+    </Icon>
+  );
+}
+
 /** Plussommen: the sign, drawn at the size a mark gets rather than a glyph. */
 export function PlusIcon(props: Omit<IconProps, 'children'>) {
   return (
@@ -761,6 +825,108 @@ export function MinIcon(props: Omit<IconProps, 'children'>) {
   return (
     <Icon {...props}>
       <path d="M5 12h14" />
+    </Icon>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// The frame
+//
+// The destinations had no marks while they stood in the app bar as words. Below
+// 1200 they lie along the bottom now (ADR-093), where a tab bar is a row of
+// marks with a word under each and a child finds the one they want by its shape
+// before they read it. Onthouden takes the freezer and Jij takes the pupil,
+// which already mean those things; Vandaag needed one of its own, and the
+// control that opens the modules needed two.
+
+/**
+ * Vandaag: a sun.
+ *
+ * Today, drawn as the thing a child already draws for it — a small circle and
+ * eight straight rays. Another circle in a set that warns about them, told
+ * apart from the clock, the stamp, the diploma and the globe by being small and
+ * by everything around it pointing outwards.
+ */
+export function TodayIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1" />
+    </Icon>
+  );
+}
+
+/**
+ * The modules, closed: three rows with a dot before each.
+ *
+ * Not the three bare stripes a menu usually is, because that drawing is
+ * `FreezerIcon` and §E does not let one silhouette mean two things. A list with
+ * its bullets is also what the control opens into.
+ */
+export function MenuIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <circle cx="4.5" cy="7" r="1.5" fill="currentColor" />
+      <circle cx="4.5" cy="12" r="1.5" fill="currentColor" />
+      <circle cx="4.5" cy="17" r="1.5" fill="currentColor" />
+      <path d="M9 7h11M9 12h11M9 17h11" />
+    </Icon>
+  );
+}
+
+/*
+ * Four chevrons: open, close, and one step either way along a row.
+ *
+ * One stroke each and no shaft, which is what keeps them apart from `NextIcon`:
+ * an arrow means "the next question", a chevron means "more of this".
+ */
+
+export function ChevronDownIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <path d="M6 9l6 6 6-6" strokeLinejoin="round" />
+    </Icon>
+  );
+}
+
+export function ChevronUpIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <path d="M6 15l6-6 6 6" strokeLinejoin="round" />
+    </Icon>
+  );
+}
+
+export function ChevronLeftIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <path d="M15 6l-6 6 6 6" strokeLinejoin="round" />
+    </Icon>
+  );
+}
+
+export function ChevronRightIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <path d="M9 6l6 6-6 6" strokeLinejoin="round" />
+    </Icon>
+  );
+}
+
+/**
+ * A star: ten correct answers (ADR-096).
+ *
+ * Five points and straight edges, which is what §E's primitives allow and what
+ * a star is anyway. One drawing for an empty star and a full one: the filling
+ * is the stylesheet's (`.tk-ster-vol`), so the pair can never drift apart.
+ */
+export function StarIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <path
+        d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6l-5.4 2.9 1.2-6-4.5-4.2 6.1-.7z"
+        strokeLinejoin="round"
+      />
     </Icon>
   );
 }

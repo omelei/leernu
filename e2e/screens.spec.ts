@@ -57,6 +57,14 @@ test('the front door, the chooser and the profile', async ({ page }, testInfo) =
   await shoot(page, size, '01-naam');
 
   await signIn(page, 'Fenna');
+  // The child's column and the streak are read from IndexedDB, and on WebKit —
+  // both iPads and the iPhone — the read is slower than a screenshot taken the
+  // moment the name appears. The page draws the cards at once and fills them
+  // when it knows (ADR-094); a picture of the empty cards is not the page a
+  // child looks at, so this waits for the filled one.
+  const voortgang = page.getByRole('region', { name: 'Jouw voortgang' });
+  await expect(voortgang).not.toHaveAttribute('aria-busy', 'true');
+  await expect(page.locator('.tk-streak')).toBeVisible();
   await shoot(page, size, '02-thuis');
 
   await page.goto('/topografie');

@@ -1,0 +1,129 @@
+{
+  "_gegenereerd": "tools/content/build-klok.mjs — gegenereerd, niet met de hand bewerken.",
+  "id": "klok-kwart",
+  "stap": 15,
+  "niveau": 2,
+  "contentVersie": "2026-09-09",
+  "items": [
+    {
+      "id": "klok-01-15",
+      "uur": 1,
+      "minuut": 15
+    },
+    {
+      "id": "klok-01-45",
+      "uur": 1,
+      "minuut": 45
+    },
+    {
+      "id": "klok-02-15",
+      "uur": 2,
+      "minuut": 15
+    },
+    {
+      "id": "klok-02-45",
+      "uur": 2,
+      "minuut": 45
+    },
+    {
+      "id": "klok-03-15",
+      "uur": 3,
+      "minuut": 15
+    },
+    {
+      "id": "klok-03-45",
+      "uur": 3,
+      "minuut": 45
+    },
+    {
+      "id": "klok-04-15",
+      "uur": 4,
+      "minuut": 15
+    },
+    {
+      "id": "klok-04-45",
+      "uur": 4,
+      "minuut": 45
+    },
+    {
+      "id": "klok-05-15",
+      "uur": 5,
+      "minuut": 15
+    },
+    {
+      "id": "klok-05-45",
+      "uur": 5,
+      "minuut": 45
+    },
+    {
+      "id": "klok-06-15",
+      "uur": 6,
+      "minuut": 15
+    },
+    {
+      "id": "klok-06-45",
+      "uur": 6,
+      "minuut": 45
+    },
+    {
+      "id": "klok-07-15",
+      "uur": 7,
+      "minuut": 15
+    },
+    {
+      "id": "klok-07-45",
+      "uur": 7,
+      "minuut": 45
+    },
+    {
+      "id": "klok-08-15",
+      "uur": 8,
+      "minuut": 15
+    },
+    {
+      "id": "klok-08-45",
+      "uur": 8,
+      "minuut": 45
+    },
+    {
+      "id": "klok-09-15",
+      "uur": 9,
+      "minuut": 15
+    },
+    {
+      "id": "klok-09-45",
+      "uur": 9,
+      "minuut": 45
+    },
+    {
+      "id": "klok-10-15",
+      "uur": 10,
+      "minuut": 15
+    },
+    {
+      "id": "klok-10-45",
+      "uur": 10,
+      "minuut": 45
+    },
+    {
+      "id": "klok-11-15",
+      "uur": 11,
+      "minuut": 15
+    },
+    {
+      "id": "klok-11-45",
+      "uur": 11,
+      "minuut": 45
+    },
+    {
+      "id": "klok-12-15",
+      "uur": 12,
+      "minuut": 15
+    },
+    {
+      "id": "klok-12-45",
+      "uur": 12,
+      "minuut": 45
+    }
+  ]
+}

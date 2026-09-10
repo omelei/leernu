@@ -68,6 +68,30 @@ const SET_SLUG: Record<string, string> = {
   'rekenmix-2': 'mix-gemiddeld',
   'rekenmix-3': 'mix-pittig',
   fouten: 'fouten',
+  // The clock, at the four words a teacher uses for the four steps. The ids
+  // are short because they are ids; "leer.nu/klok/halve-uren" is what somebody
+  // writes on a note.
+  'klok-heel': 'hele-uren',
+  'klok-half': 'halve-uren',
+  'klok-kwart': 'kwartieren',
+  'klok-vijf': 'vijf-minuten',
+  'klok-mix': 'mix',
+};
+
+/**
+ * A second word a module answers to.
+ *
+ * "Klokkijken" is what the module is called and "klok" is what the rail says,
+ * what a child says, and therefore what a parent types. That is the same
+ * relationship /rekenen and /tafels have, one level up — a word people use and
+ * a word the product uses — and it costs one row here to stop the shorter one
+ * landing on the front door.
+ *
+ * Aliases go one way. `pathFor` still writes the module's own slug, so nothing
+ * in the app links here; it is for an address somebody typed or wrote down.
+ */
+const MODULE_ALIAS: Record<string, Module['id']> = {
+  klok: 'klok',
 };
 
 /**
@@ -109,11 +133,21 @@ const REKENEN_MIX: Record<string, string> = {
   fouten: 'fouten',
 };
 
+/** The way back for the clock. Its own map, for the reason `SLUG_SET` has one. */
+const KLOK_SLUG: Record<string, string> = {
+  'hele-uren': 'klok-heel',
+  'halve-uren': 'klok-half',
+  kwartieren: 'klok-kwart',
+  'vijf-minuten': 'klok-vijf',
+  mix: 'klok-mix',
+};
+
 function setIdFor(module: Module, slug: string): string | null {
   if (module.id === 'tafels') {
     if (REKENEN_SLUG.test(slug)) return slug;
     return REKENEN_MIX[slug] ?? null;
   }
+  if (module.id === 'klok') return KLOK_SLUG[slug] ?? null;
   return SLUG_SET.get(slug) ?? null;
 }
 
@@ -192,7 +226,10 @@ export function routeFor(pathname: string): Route {
 
   const [head = '', tail] = slug.split('/');
 
-  const module = MODULES.find((candidate) => MODULE_SLUG[candidate.id] === head);
+  const alias = MODULE_ALIAS[head];
+  const module = MODULES.find(
+    (candidate) => MODULE_SLUG[candidate.id] === head || candidate.id === alias,
+  );
   if (module) return moduleRoute(module, tail);
 
   const category = CATEGORIES.find((candidate) => candidate.id === head);

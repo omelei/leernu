@@ -169,7 +169,10 @@ test('greets the child by name on the front door', async ({ page }) => {
  */
 test('the soonest test decides what the block on the front door is about', async ({ page }) => {
   await signIn(page, 'Tijn');
-  const toetsblok = page.locator('.tk-card-accented');
+  // The block is in the child's own column now, in the same card shape as the
+  // three blocks beside it (ADR-094), and it still says which module it is
+  // about — on itself, where everything inside it takes its accent from.
+  const toetsblok = page.getByRole('region', { name: 'Jouw toetsen' });
 
   // With no test set there is no subject, so the block takes no accent at all
   // rather than guessing at one.
@@ -188,22 +191,51 @@ test('the soonest test decides what the block on the front door is about', async
 
   // Both are on the list, and taking the soonest one off puts the other back
   // in charge — which is the whole of what makes a list a plan.
-  await expect(page.getByRole('button', { name: /^Haal de toets weg/ })).toHaveCount(2);
+  await openToetsen(page);
+  await expect(page.getByRole('button', { name: /^Verwijder:/ })).toHaveCount(2);
 
   await page
-    .getByRole('button', { name: /^Haal de toets weg/ })
+    .getByRole('button', { name: /^Verwijder:/ })
     .first()
     .click();
   await expect(toetsblok).toHaveAttribute('data-module', 'tafels');
 });
 
+/**
+ * Below 1200 the block is only its dates once it has any, and pressing them
+ * opens it into the whole thing a laptop shows straight away (ADR-094). At a
+ * desk, and with no tests, it is already whole and this does nothing.
+ */
+async function openToetsen(page: Page) {
+  const datums = page.getByRole('button', { name: /Toetsen wijzigen$/ });
+  if (await datums.isVisible()) await datums.click();
+}
+
 /** One test, through the block that is now a list with a form under it. */
 async function addTest(page: Page, date: string, subject: string) {
+  await openToetsen(page);
   await page.getByRole('button', { name: 'Toets toevoegen' }).click();
   await page.getByLabel('Wanneer is de toets?').fill(date);
   await page.getByLabel('Voor welk vak?').selectOption(subject);
   await page.getByRole('button', { name: 'Toevoegen', exact: true }).click();
 }
+
+/**
+ * The rows on the front door hide their scrollbar (ADR-094), and hiding it must
+ * not take scrolling away from anyone who does not swipe. The row is a stop in
+ * the tab order and the arrow keys move it — checked at every size, because a
+ * row that fits its screen would pass this by not moving at all, and five
+ * cards fit none of them.
+ */
+test('a row on the front door scrolls from the keyboard', async ({ page }) => {
+  await signIn(page, 'Rik');
+
+  const rij = page.getByRole('group', { name: 'Meest geoefend' });
+  await rij.focus();
+  await page.keyboard.press('ArrowRight');
+
+  await expect.poll(() => rij.evaluate((el) => el.scrollLeft)).toBeGreaterThan(0);
+});
 
 test('logs the round that was just played, with its mark', async ({ page }) => {
   await signIn(page, 'Jamie');
@@ -230,7 +262,7 @@ test('logs the round that was just played, with its mark', async ({ page }) => {
   // One answer, so the mark is a 10,0 or a 1,0 and never anything between —
   // which is exactly what "over what was answered" means.
   const tegel = recent.getByRole('button', { name: /Provincies van Nederland/ });
-  await expect(tegel).toContainText(/cijfer\s*(10,0|1,0)/);
+  await expect(tegel).toContainText(/Cijfer (10,0|1,0)/);
   await expect(tegel).toContainText('Aanwijzen');
 
   // And it went into the column on the right as a way straight back in.
@@ -329,38 +361,34 @@ test('the toetsstand asks without answering, and marks at the end', async ({ pag
 });
 
 /**
- * The animal a child picks is theirs, so it has to stick — and it has to show
+ * The hero a child wears is theirs, so it has to stick — and it has to show
  * somewhere other than the card it was chosen on, or it does not look saved.
  *
- * It is on "Jij" now rather than in the column on the right (ADR-067). Six of
- * the twelve are open from the first minute of level one; the other six arrive
- * one per level, and this checks both halves of that — that a reached one can
- * be chosen, and that one further up the ladder cannot.
+ * Heroes since ADR-096: a new child has the first three, in bronze, and the
+ * other nine arrive in chests. This checks both halves — that a hero a child
+ * has can be worn, and that one they have not found cannot.
  */
-test('the animal a child picks is theirs, and follows them', async ({ page }) => {
+test('the hero a child picks is theirs, and follows them', async ({ page }) => {
   await signIn(page, 'Puk');
   await page.goto('/voortgang');
 
-  const dieren = page.getByRole('region', { name: 'Dieren' });
-  await dieren.getByRole('button', { name: 'Vos', exact: true }).click();
-  await expect(dieren.getByRole('button', { name: 'Vos', exact: true })).toHaveAttribute(
+  const helden = page.getByRole('region', { name: 'Helden' });
+  await helden.getByRole('button', { name: /^Vos,/ }).click();
+  await expect(helden.getByRole('button', { name: /^Vos,/ })).toHaveAttribute(
     'aria-pressed',
     'true',
   );
 
-  // Level one, so the ninth cell of the first row is a parcel: it has a place,
-  // it says what it costs, and it does not say what is in it (ADR-081). It is
-  // not a button either — a control a child cannot use is a question they have
-  // to ask somebody about.
-  await expect(dieren.getByRole('button', { name: /^Draak/ })).toHaveCount(0);
-  await expect(
-    dieren.getByLabel(/Nog onbekend dier in brons, vanaf niveau \d+/).first(),
-  ).toBeVisible();
+  // Not found yet: a chest in its place, which says so and does not say what
+  // is in it (ADR-081). It is not a button either — a control a child cannot
+  // use is a question they have to ask somebody about.
+  await expect(helden.getByRole('button', { name: /^Draak/ })).toHaveCount(0);
+  await expect(helden.getByLabel('Nog niet gevonden').first()).toBeVisible();
 
   // It belongs to the child, not to the page: it survives a reload.
   await page.reload();
   await expect(
-    page.getByRole('region', { name: 'Dieren' }).getByRole('button', { name: 'Vos', exact: true }),
+    page.getByRole('region', { name: 'Helden' }).getByRole('button', { name: /^Vos,/ }),
   ).toHaveAttribute('aria-pressed', 'true');
 });
 

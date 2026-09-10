@@ -1,7 +1,8 @@
-import type { ReactNode } from 'react';
+import type { ComponentType, ReactNode } from 'react';
 import { brand } from '@/config/brand';
 import { Wordmark } from '@/components/Wordmark';
 import { Brandmark } from '@/components/Brandmark';
+import { FamilyIcon, FreezerIcon, PupilIcon, TodayIcon, type IconProps } from '@/components/Icon';
 import { t } from '@/i18n';
 import { MODULE_ICON } from './moduleIcons';
 import {
@@ -11,62 +12,59 @@ import {
   type Destination,
   type Module,
 } from './modules';
+import { VakMenu } from './VakMenu';
 
 /**
- * The frame around everything that is not a round.
+ * The frame around everything that is not a round, in three postures
+ * (ADR-093).
  *
- * §D: the navigation model follows the number of hands and the distance to the
- * screen, not the operating system. Behind a laptop there is a mouse at eye
- * level and the modules stand in a rail on the left. In one hand there is one
- * thumb and they lie along the bottom. The grid and the spacing scale do not
- * change, so the same building block keeps the same proportions everywhere.
+ * **From 1200 up** there is a mouse at eye level. The app bar carries the
+ * wordmark and the destinations, and the modules stand in a rail on the left.
  *
- * Width is a poorer proxy for that than §D's own reasoning would like — a
- * 1100px window on a laptop gets the tablet posture — but it is the proxy that
- * can be tested at four sizes without emulating a hand.
+ * **Below 1200** — a tablet either way up, and a phone — the app bar is the
+ * mark, the streak and the child. The modules are one control under it that
+ * opens into the same list, and the destinations lie along the bottom where a
+ * thumb is. A tablet used to get the rail lying along the bottom and the
+ * destinations in the app bar; the handoff swaps them, so both kinds of device
+ * in a child's hand are held the same way.
  *
- * The four destinations have two postures for the same reason. On a phone they
- * are the tab bar along the bottom, where a thumb is; from a tablet up they
- * are a row in the app bar, where the pointer is and where the bottom of the
- * screen is a long way from anything. Exactly one of the two is displayed at
- * any width, so nothing is offered twice.
+ * Exactly one of each pair is displayed at any width — rail or menu, app bar
+ * row or tab bar — so nothing is offered twice. Which one is CSS: the menu's
+ * list is not in the document until it is opened, so a closed menu and the rail
+ * never both answer to "Modules".
  *
  * **Nothing here appears during a round.** Not hidden: not rendered. A round
- * screen is not wrapped in this component at all, so there is no navigation in
- * the document to tab into, no bar to mis-tap on a 393px screen with the map
- * under a thumb, and nothing to hide and forget to hide again. e2e/shell.spec.ts
- * asserts it from the outside.
+ * screen is not wrapped in this component at all (ADR-041), and
+ * e2e/shell.spec.ts asserts it from the outside.
  */
+
+/** A mark per destination, for the tab bar, where a row of words is read rather than recognised. */
+const DESTINATION_ICON: Record<Destination['id'], ComponentType<Omit<IconProps, 'children'>>> = {
+  vandaag: TodayIcon,
+  onthouden: FreezerIcon,
+  vrienden: FamilyIcon,
+  jij: PupilIcon,
+};
 
 export interface ShellProps {
   readonly children: ReactNode;
   /**
    * Which destination is showing, when one is.
    *
-   * Not all of them are: a module page is not Vandaag, and it used to say it
-   * was — this defaulted to 'vandaag', so a child standing in the tables read
-   * an app bar telling them they were on the front door. A screen that is not a
-   * destination marks nothing, which is the truth and is also what a screen
+   * Not all of them are: a module page is not Vandaag, and a screen that is not
+   * a destination marks nothing, which is the truth and is also what a screen
    * reader should hear.
    */
   readonly current?: Destination['id'];
   readonly onNavigate?: (id: Destination['id']) => void;
-  /**
-   * Which module is open, so the rail can say so truthfully.
-   *
-   * It used to be hardcoded to the first entry, which was harmless while there
-   * was one module and a lie the moment there were two: the rail told a child
-   * they were in topography while they were doing tables.
-   */
+  /** Which module is open, so the rail and the menu can say so truthfully. */
   readonly currentModule?: Module['id'];
   readonly onModule?: (id: Module['id']) => void;
   /** The streak, the profile switch — whatever the app bar is carrying today. */
   readonly bar?: ReactNode;
   /**
-   * The two lists, injectable so the frame can be tested with more than the one
-   * module and the one destination that exist today. Nothing in the app passes
-   * them; a test that could only ever see a single entry would be testing the
-   * content rather than the component.
+   * The two lists, injectable so the frame can be tested with more than the
+   * entries that exist today. Nothing in the app passes them.
    */
   readonly modules?: readonly Module[];
   readonly destinations?: readonly Destination[];
@@ -82,43 +80,39 @@ export function Shell({
   modules = RAIL_MODULES,
   destinations = BUILT_DESTINATIONS,
 }: ShellProps) {
-  // A tab bar with one destination is a label you cannot press that costs 56px
-  // on the smallest screen there is, so it waits until there is somewhere to
-  // go. The rail no longer waits: ADR-051 makes it the map of the product
-  // rather than an index of what is finished.
-  const showRail = modules.length >= NAVIGATION_MINIMUM;
+  // A tab bar with one destination is a label you cannot press, so it waits
+  // until there is somewhere to go. The modules no longer wait: ADR-051 makes
+  // them the map of the product rather than an index of what is finished.
+  const showModules = modules.length >= NAVIGATION_MINIMUM;
   const showDestinations = destinations.length >= NAVIGATION_MINIMUM;
 
   const destinationItems = destinations.map((destination) => ({
     ...destination,
     label: t(destination.name),
+    Icon: DESTINATION_ICON[destination.id],
   }));
 
   return (
     <div className="flex min-h-screen flex-col bg-paper">
       <header className="tk-appbar flex-none">
-        {/* The mark, and the way back to the front door. A logo that goes home
-            is a convention every child already knows from every other site
-            they use, and until now this one was a picture that did nothing. */}
+        {/* The logo, and the way back to the front door. The wordmark where
+            there is room for it; the mark alone below 1200, where the bar is
+            the mark, the streak and the child. */}
         <button
           type="button"
           className="tk-brand"
           aria-label={t('nav.home', { merk: brand.name })}
           onClick={() => onNavigate?.('vandaag')}
         >
-          <Wordmark size={24} clearSpace={false} />
+          <span className="hidden desk:inline-flex">
+            <Wordmark size={30} clearSpace={false} />
+          </span>
+          <Brandmark size={32} className="hidden md:inline-flex desk:hidden" />
+          <Brandmark size={28} className="inline-flex md:hidden" />
         </button>
 
-        {/* The path used to be printed here — "leer.nu" + "/rekenen" — and it
-            is gone (ADR-068). It told a child where they already were, in a
-            spelling nobody says out loud, in the strip of the screen where
-            width is worth the most; the rail and the heading both say it
-            already. The addresses themselves are untouched and still work. */}
-
         {showDestinations ? (
-          // From a tablet up. On a phone the same list is the tab bar at the
-          // foot of the page, and only one of the two is ever displayed.
-          <nav aria-label={t('nav.destinations')} className="tk-navbar hidden md:flex">
+          <nav aria-label={t('nav.destinations')} className="tk-navbar hidden desk:flex">
             {destinationItems.map((destination) => (
               <button
                 key={destination.id}
@@ -136,54 +130,52 @@ export function Shell({
         {bar}
       </header>
 
-      {/* Column-reverse below the rail breakpoint puts the bar under the
-          content without moving it in the document, so the reading order and
-          the tab order stay the order of the page. */}
-      <div className="flex min-h-0 flex-1 flex-col-reverse xl:flex-row">
-        {showRail ? (
-          <div className="tk-rail flex-none">
-            {/* Top left of the page, where the rail stands up and the design
-                puts the merkteken. It is the mark on its own and the wordmark
-                in the bar is two steps away, so it carries no second name for
-                a screen reader to read out twice. */}
-            <Brandmark className="tk-rail-brand" size={32} />
+      {showModules ? (
+        <div className="flex-none desk:hidden">
+          <VakMenu modules={modules} current={currentModule} onModule={onModule} />
+        </div>
+      ) : null}
 
-            <nav aria-label={t('nav.modules')} className="tk-rail-nav">
-              {modules.map((module) => {
-                const ModuleIcon = MODULE_ICON[module.id];
+      <div className="flex min-h-0 flex-1">
+        {showModules ? (
+          <nav aria-label={t('nav.modules')} className="tk-rail hidden desk:flex">
+            {modules.map((module) => {
+              const ModuleIcon = MODULE_ICON[module.id];
 
-                return (
-                  <button
-                    key={module.id}
-                    type="button"
-                    data-module={module.id}
-                    aria-current={module.id === currentModule ? 'page' : undefined}
-                    className="tk-rail-item"
-                    onClick={() => onModule?.(module.id)}
-                  >
-                    <ModuleIcon size={24} />
-                    {t(module.name)}
-                  </button>
-                );
-              })}
-            </nav>
-          </div>
+              return (
+                <button
+                  key={module.id}
+                  type="button"
+                  data-module={module.id}
+                  aria-current={module.id === currentModule ? 'page' : undefined}
+                  className="tk-rail-item"
+                  onClick={() => onModule?.(module.id)}
+                >
+                  <span className="tk-plaat tk-plaat-rail">
+                    <ModuleIcon size={20} />
+                  </span>
+                  {t(module.name)}
+                </button>
+              );
+            })}
+          </nav>
         ) : null}
 
         <main className="min-h-0 min-w-0 flex-1">{children}</main>
       </div>
 
       {showDestinations ? (
-        <nav aria-label={t('nav.destinations')} className="tk-tabbar flex-none md:hidden">
-          {destinationItems.map((destination) => (
+        <nav aria-label={t('nav.destinations')} className="tk-tabbar flex-none desk:hidden">
+          {destinationItems.map(({ id, label, Icon }) => (
             <button
-              key={destination.id}
+              key={id}
               type="button"
-              aria-current={destination.id === current ? 'page' : undefined}
+              aria-current={id === current ? 'page' : undefined}
               className="tk-tabbar-item"
-              onClick={() => onNavigate?.(destination.id)}
+              onClick={() => onNavigate?.(id)}
             >
-              {destination.label}
+              <Icon size={24} />
+              {label}
             </button>
           ))}
         </nav>
