@@ -171,3 +171,45 @@ test('below 1200 the modules are a menu under the app bar', async ({ page }, tes
   await expect(knop).toHaveAttribute('aria-expanded', 'false');
   await expect(knop).toBeFocused();
 });
+
+/**
+ * The start bar on a phone (ADR-095), which ADR-052 put off after three
+ * attempts produced three bugs. Each of the three is checked here, at the size
+ * that found them: the bar is in reach without scrolling, a press on its button
+ * lands on its button, and the page is no wider than the phone.
+ */
+test('on a phone the start button stays in reach', async ({ page }, testInfo) => {
+  test.skip(!['iphone', 'android'].includes(testInfo.project.name), 'the bar is for phones');
+
+  await signIn(page, 'Mees');
+  await page.goto('/topografie');
+  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
+
+  const start = page.locator('.tk-choose-start button');
+
+  // In reach before anything has been scrolled: stuck to the foot of the glass.
+  await expect(start).toBeInViewport();
+
+  // The point at the button's centre is the button, not whatever the bar lies
+  // over and not the bar around it — ADR-052's second and third failures.
+  const box = await start.boundingBox();
+  if (box === null) throw new Error('the start button has no box');
+  const geraakt = await page.evaluate(
+    ({ x, y }) =>
+      (document.elementFromPoint(x, y)?.closest('.tk-choose-start button') ?? null) !== null,
+    { x: box.x + box.width / 2, y: box.y + box.height / 2 },
+  );
+  expect(geraakt, 'a press on the start button does not land on it').toBe(true);
+
+  // No wider than the phone — the first failure.
+  const overflow = await page.evaluate(
+    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+  );
+  expect(overflow).toBeLessThanOrEqual(0);
+
+  // Still there at the foot of the page, and it still starts the round.
+  await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+  await expect(start).toBeInViewport();
+  await start.click();
+  await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
+});

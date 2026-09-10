@@ -359,6 +359,25 @@ export const nl = {
   'choose.likeTheTest': 'Oefen zoals de toets',
   'choose.howMany': 'Hoeveel vragen?',
   'choose.howManyOne': '{aantal} vragen',
+  // Het eerste vakje van het tafelraster: alle tafels, of alle deelsommen, door
+  // elkaar.
+  'choose.mix': 'Mix',
+  // De startbalk (herontwerp 2026-09): wat er gekozen is, als een rij kleine
+  // labels, en daarna de knop. Het woordje voor elke waarde zegt welke vraag die
+  // beantwoordt. De knop zelf zegt voor een schermlezer nog steeds de hele zin.
+  'start.klaar': 'Klaar om te starten',
+  'start.kaart': 'kaart',
+  'start.onderwerp': 'onderwerp',
+  'start.som': 'som',
+  'start.welke': 'welke',
+  'start.manier': 'manier',
+  'start.ronde': 'ronde',
+  'start.stand': 'stand',
+  'start.vragen': '{aantal} vragen',
+  'start.vragenTijd': '{aantal} vragen · ±{minuten} min',
+  'start.seconden': '{aantal} seconden',
+  'start.levens': '{aantal} levens',
+  'start.vrij': 'rondkijken',
 
   // De onderwerpen van rekenen. Vier soorten sommen en een mix ervan; de tafels
   // en het delen hebben er dertien elk, en die staan als knopjes onder de kaart

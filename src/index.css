@@ -240,6 +240,8 @@
      * tint at 40-44, and the smaller one in a list. */
     --radius-plaat: 10px;
     --radius-klein: 8px;
+    /* The start bar and the keypad of tables on a module page (ADR-095). */
+    --radius-balk: 14px;
 
     /* ---- Stroke widths, styleguide §D ------------------------------------
      * Named apart from the --line colours on purpose: --line is what a rule
@@ -669,134 +671,119 @@
     opacity: 0.35;
   }
 
-  /* ---- K2's start button -------------------------------------------------
-   * What was chosen, in words, and then the way on — in that order, ending at
-   * the right-hand edge where a line of reading finishes.
+  /* ---- The start bar (ADR-095) --------------------------------------------
+   * What was chosen, as a row of small chips, and then the way on — on the
+   * module's soft ground with its colour down the leading edge, because it is
+   * the answer to every question above it at once. The chips say what the
+   * button is about to start; a screen reader hears the same thing out of the
+   * button's own label, which is still the whole sentence (ADR-066).
    *
-   * The button used to *be* the sentence: "Provincies aanwijzen · 15 vragen",
-   * left-aligned, in the same weight as the two secondary buttons above it.
-   * Everything a child needed to read was on it and nothing about it said
-   * press me. So the sentence stayed and moved beside it, and the button
-   * became a button: one word, an arrow, taller than the rest and alone at the
-   * end of the row (ADR-066). What a screen reader hears is still the whole
-   * sentence, out of the button's label.
-   *
-   * On a phone it stacks and goes full width. The design draws a bar fixed to
-   * the bottom of the screen there, with a reason: "de enige plek waar hij
-   * binnen duimbereik blijft zonder te scrollen". Three attempts at that
-   * produced three bugs — it pushed the page 48 wider than a 393 screen, then
-   * it swallowed the press on its own button, then it moved out from under the
-   * point that was being pressed. So it waits (ADR-052).
+   * From a tablet up it closes the chooser. On a phone it is a bar stuck to the
+   * foot of the screen — see .tk-startbalk-mobiel — which ADR-052 put off after
+   * three attempts produced three bugs.
    */
-  .tk-choose-start {
+  .tk-startbalk {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 24px;
+    padding: 20px 20px 20px 24px;
+    border: var(--stroke-hair) solid var(--accent);
+    border-left-width: 8px;
+    border-radius: var(--radius-balk);
+    background: var(--accent-soft);
+  }
+  .tk-startbalk-label {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 11px;
+    line-height: 16px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-text);
+  }
+  .tk-startbalk-keuzes {
     display: flex;
-    flex-direction: column;
-    gap: 12px;
-    align-items: stretch;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 12px 0 0;
+    padding: 0;
+    list-style: none;
   }
-  .tk-choose-said {
-    min-width: 0;
+  /* One answer: which question in mono, and the answer beside it. Paper on the
+   * soft ground with a hairline, so the chips read as things lying on the bar
+   * rather than as more controls — none of them can be pressed. */
+  .tk-startchip {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: var(--radius-klein);
+    background: var(--paper);
+    box-shadow: inset 0 0 0 var(--stroke-hair) var(--line);
+    font-size: var(--type-label);
+    line-height: var(--type-label-lh);
+    font-weight: 600;
   }
-  @media (min-width: 768px) {
-    .tk-choose-start {
-      flex-direction: row;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 24px;
-    }
-    .tk-choose-said {
-      text-align: right;
-    }
+  .tk-startchip-label {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--ink-2);
   }
+
   /* The one control on a page of controls that is the way on. Taller and wider
-   * than the standard button, because step 2 is a grid of six things that are
-   * also pressable and a start that matched them is a seventh option. */
+   * than the standard button, because the page above it is a grid of things
+   * that are also pressable and a start that matched them is one more option. */
   .tk-button-go {
     min-height: var(--touch-board);
     padding: 0 32px;
+    font-family: 'Space Grotesk', system-ui, sans-serif;
     font-size: var(--type-h3);
     line-height: var(--type-h3-lh);
   }
-  /* The word and the arrow are both inside the button's own label span, so the
-   * gap belongs there rather than on the button — which spaces its children,
-   * and this button has one. */
+  /* The word and the mark are both inside the button's own label span, so the
+   * gap belongs there rather than on the button, which has one child. */
   .tk-button-go > .tk-button-label {
     display: inline-flex;
     align-items: center;
     gap: 10px;
   }
-  @media (max-width: 767px) {
-    .tk-choose-start > .tk-button {
-      width: 100%;
-      justify-content: center;
-    }
-  }
 
-  /* ---- Step 1's second question ----------------------------------------
-   * Which table, which range. It appears under the subject cards once a
-   * subject is chosen and never before: a page that showed thirteen chips for
-   * every one of five subjects would be sixty-five controls in step 1.
+  /* On a phone: a bar stuck to the foot of the screen, with the sentence on the
+   * left and the button on the right, where a thumb is.
    *
-   * Chips rather than a menu. A select hides eleven of twelve tables behind a
-   * control a child has to open, and on a touch screen it opens over the thing
-   * they were looking at — while the whole argument for this block is that the
-   * one they want is already on the screen.
-   */
-  .tk-variant {
+   * ADR-052 recorded three failures, and this is built against each of them.
+   * It is **sticky, not fixed**, so its box is where it is drawn and a press
+   * lands on the thing it looks like it lands on; nothing passes taps through.
+   * It is **a sibling of the page's content**, the last thing in the page after
+   * the child's own column, so it stays in reach the whole way down and is never
+   * drawn over its own button. And its side margins are **exactly the page's own
+   * padding**, no more: the first attempt pulled further and the page came out
+   * 48 wider than the phone. e2e/shell.spec.ts checks all three at 393. */
+  .tk-startbalk-mobiel {
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding-top: 12px;
-  }
-  .tk-variant-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  /* Square-ish, so twelve numbers read as a keypad rather than as twelve words.
-   * The floor is the 44 every control in this product clears (ADR-032); a chip
-   * whose label is "tot 1000" grows sideways and keeps the height. */
-  .tk-variant-chip {
-    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    gap: 6px;
-    min-width: var(--touch-min);
-    min-height: var(--touch-min);
-    padding: 0 12px;
-    border: var(--stroke-hair) solid var(--line-strong);
-    border-radius: var(--radius-field);
+    gap: 12px;
+    margin: 0 -16px -16px;
+    padding: 12px 16px;
+    border-top: var(--stroke-hair) solid var(--line);
     background: var(--paper);
-    color: var(--ink);
+  }
+  .tk-startbalk-zin {
+    flex: 1;
+    min-width: 0;
     font-size: var(--type-label);
     line-height: var(--type-label-lh);
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-    cursor: pointer;
   }
-  .tk-variant-chip:hover {
-    background: var(--surface);
-    border-color: var(--ink-3);
-  }
-  /* Chosen: the module's colour and a doubled rule, the same two changes the
-   * tiles make, at the size a chip can carry them (ADR-089).
-   *
-   * A chip is not a tile, and it is the answer to a question that is numbered
-   * like the others — "2 · Welke tafel?" — so on rekenen the answer to step 1
-   * was green, the answer to step 2 was ink and the answer to step 3 was green
-   * again. One page, three steps, two colours of "you chose this" is not a
-   * distinction anybody can use. */
-  .tk-variant-chip[aria-pressed='true'] {
-    border-color: var(--accent);
-    border-width: var(--stroke-active);
-    background: var(--accent-tint);
-    padding: 0 11px;
-  }
-  /* How that one is going, at the size the numbers leave room for. Decorative:
-   * the chip's accessible name is the set's full name, and this repeats
-   * nothing a screen reader could not get from the subject card above. */
-  .tk-variant-dot {
-    opacity: 0.75;
+  .tk-startbalk-mobiel .tk-button-go {
+    flex: none;
+    min-height: var(--touch);
+    padding: 0 24px;
   }
 
   /* ---- The ten stamps, named and explained ------------------------------
@@ -1948,145 +1935,251 @@
     box-shadow: inset 0 -2px 0 var(--held-diep);
   }
 
-  /* Which module a page belongs to, above its heading. The rail says it too,
-   * and the rail is not drawn on a phone — where this is the only thing that
-   * does. It takes the module accent because it names the module, which is
-   * §B's third case; the heading under it stays ink. */
-  .tk-eyebrow {
-    display: flex;
+  /* ---- A module's own page (ADR-095) --------------------------------------
+   * A badge that names the module, the question, and then the chain of
+   * numbered steps, each answered by a row of chips, a grid of tiles or a grid
+   * of squares. In every one of them the answer already given wears the
+   * module's colour — the fourth thing §B lets an accent paint (ADR-089) — and
+   * changes something besides the hue: a heavier rule, a darker rule, or a
+   * tick, so a child who cannot tell the tint from the paper still sees which
+   * one is chosen (§A).
+   */
+  .tk-modulebadge {
+    display: inline-flex;
     align-items: center;
-    gap: 8px;
+    align-self: flex-start;
+    gap: 6px;
+    padding: 6px 12px 6px 10px;
+    border-radius: var(--radius-full);
+    background: var(--accent-tint);
     color: var(--accent-text);
-    font-size: var(--type-label);
-    line-height: var(--type-label-lh);
-    font-weight: 600;
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 11px;
+    line-height: 16px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 
-  /* ---- The two steps on a module page ------------------------------------
-   * "1 · Kies een onderwerp" and "2 · Hoe wil je oefenen?" were set in the
-   * 11px mono label, which is the size a caption gets. They are not captions:
-   * they are the two questions the page is, and a child scanning the page has
-   * to find them before anything under them means something.
-   *
-   * So they take the display face at h3 — bigger than everything they sit
-   * above, and deliberately smaller than "Wat wil je oefenen, Fem?", which is
-   * still the one heading on the page. The step number stays part of the
-   * string: it is the order, and the order is the argument.
-   */
-  .tk-step {
+  /* One step: its number and its question on a hairline. */
+  .tk-kies {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .tk-stap {
+    padding-bottom: 10px;
+    border-bottom: var(--stroke-hair) solid var(--line);
     font-family: 'Space Grotesk', system-ui, sans-serif;
-    font-size: var(--type-h3);
-    line-height: var(--type-h3-lh);
+    font-size: 1.25rem; /* 20px on a phone */
+    line-height: 1.75rem;
     letter-spacing: -0.02em;
     font-weight: 600;
     color: var(--ink);
   }
+  @media (min-width: 768px) {
+    .tk-stap {
+      font-size: var(--type-h3);
+      line-height: var(--type-h3-lh);
+    }
+  }
+  /* The number in the module's text colour: the page's own order, told in the
+   * module it belongs to. The question beside it stays ink. */
+  .tk-stap-nummer {
+    font-variant-numeric: tabular-nums;
+    color: var(--accent-text);
+  }
 
-  /* ---- The tiles a module page is made of --------------------------------
-   * Where on the map, which subject, which way of practising, and the switch
-   * under them. Four rows of the same kind of question, and one tile: an icon
-   * and a name of a word or two, sized to what it says, wrapping onto the next
-   * line when the row runs out. Nothing else goes inside it.
-   *
-   * The region row was already this. The other three were cards — a name, a
-   * second line under it, twenty-four pixels of padding all round — which cost
-   * step 2 and step 3 together about six hundred pixels of a tablet's height,
-   * so a child on the page could see the question but not the answer to it.
-   * As tiles the same two steps are about a hundred and thirty.
-   *
-   * What the card carried and the tile cannot is not thrown away, it moves
-   * **under the row, and only for the one that is chosen** — see .tk-said. Six
-   * reasons stacked in a column were five sentences about something the child
-   * had not picked; one under the row is the sentence about what they did.
-   *
-   * A tile is told apart by a lightness change in two places at once: the rule
-   * goes from grey hairline to ink at double weight, and the ground goes from
-   * paper to surface. No hue carries the state, which is §A's rule, and it is
-   * what the region row has always done.
+  /* ---- Chips: where on the map, which kind of sum, which one, how many ----
+   * A pill with a hairline. Chosen, the rule turns to the module's text colour
+   * and the ground to its tint — a lightness change in the rule as well as a
+   * hue in the ground.
    */
-  .tk-regios,
-  .tk-sets,
-  .tk-forms {
+  .tk-keuzes {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
   }
-  .tk-regio,
-  .tk-subject,
-  .tk-form,
-  .tk-switch {
+  .tk-keuze {
     display: inline-flex;
     align-items: center;
     gap: 8px;
     min-height: var(--touch-min);
     padding: 0 16px;
     border: var(--stroke-hair) solid var(--line-strong);
-    border-radius: var(--radius-field);
+    border-radius: var(--radius-full);
     background: var(--paper);
     color: var(--ink);
+    font-size: var(--type-label);
+    line-height: var(--type-label-lh);
     font-weight: 600;
+    font-variant-numeric: tabular-nums;
     cursor: pointer;
   }
-  /* Hover is for the ones not chosen. A chosen tile already carries the ink
-   * rule over the surface tone, and a hover rule that outranked it — which the
-   * region row's did, on specificity — let the pointer quietly un-say what the
-   * page was saying, for as long as it rested there. */
-  .tk-regio:not(:disabled):not([aria-pressed='true']):hover,
-  .tk-subject:not([aria-pressed='true']):hover,
-  .tk-form:not([aria-pressed='true']):hover,
-  .tk-switch:not([aria-pressed='true']):hover {
+  /* Hover is for the ones not chosen: a hover rule that outranked the chosen
+   * one would let the pointer quietly un-say what the page is saying. */
+  .tk-keuze:not(:disabled):not([aria-pressed='true']):hover {
     background: var(--surface);
     border-color: var(--ink-3);
   }
-  /* Chosen: the module's own colour, and a rule at double weight.
-   *
-   * This is the fourth thing §B lets an accent paint and it was argued for on
-   * its own (ADR-089). A module page is one long chain of choices — where,
-   * what, which one, how, and a switch — and the answer to each of them is the
-   * only thing on the page a child needs to find again after looking away. In
-   * ink it was a slightly darker rule among twenty; in the module's colour it
-   * is the one coloured thing in a section.
-   *
-   * The weight change stays, and it is not decoration: §A's rule is that
-   * colour never carries a state on its own, so the rule doubles as well as
-   * turns. A child who cannot tell the hue from the paper still sees which one
-   * is chosen. One pixel of padding goes back for that second pixel, so nothing
-   * beside it moves.
-   */
-  .tk-regio[aria-pressed='true'],
-  .tk-subject[aria-pressed='true'],
-  .tk-form[aria-pressed='true'],
-  .tk-switch[aria-pressed='true'] {
-    border-color: var(--accent);
-    border-width: var(--stroke-active);
+  .tk-keuze[aria-pressed='true'] {
+    border-color: var(--accent-text);
     background: var(--accent-tint);
-    padding: 0 15px;
+    color: var(--accent-text);
   }
-  /* The oefentoets sits at the end of .tk-forms now rather than in a labelled
-   * block of its own, so it is one tile among six in a wrapping row and needs
-   * nothing here beyond the face it shares with them. It keeps its own class
-   * because it is still a switch and not a seventh way of practising: pressing
-   * it does not un-press the way that is chosen (ADR-085, ADR-089). */
-
-  /* A region the plan has and the product does not. Hatched and dashed, which
-   * is what the front door already draws for a module that is coming — a shape
-   * rather than a colour, so "not yet" is legible to a child who cannot tell
-   * two greys apart. */
-  .tk-regio[data-soon] {
+  /* A region the plan has and the product does not: a dashed rule, which is
+   * what the front door draws for a module that is coming. */
+  .tk-keuze[data-soon] {
     border-style: dashed;
-    background: repeating-linear-gradient(135deg, var(--paper) 0 7px, var(--surface) 7px 14px);
     color: var(--ink-2);
     cursor: not-allowed;
   }
+  @media (max-width: 767px) {
+    .tk-keuze-soon {
+      display: none;
+    }
+  }
 
-  /*
-   * There was a .tk-said here for one release: the line under a row, carrying
-   * what the tile no longer had room for — "nog niet geoefend", "rondkijken,
-   * geen vragen". It is gone. A tile is its name, the rows are a chain of five
-   * questions, and a sentence under each of them put five paragraphs back on a
-   * page whose whole change was to take them off. What the six ways of
-   * practising are for still reaches a screen reader, in each tile's label.
+  /* ---- Tiles: which subject, and how to practise ---------------------------
+   * A plate and a title, one column below 1200 and two from it. The plate is
+   * grey until the tile is chosen; chosen, the tile takes the module's colour
+   * as a double rule over its soft ground, the plate takes the module's tint,
+   * and a tick stands at the end.
+   *
+   * These are bigger than the tiles ADR-089 made to save a tablet's height,
+   * and that is deliberate (ADR-095): the handoff draws them this size, and a
+   * tile a hand's width across is a tile a seven-year-old hits first time.
    */
+  .tk-tegels {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+  @media (min-width: 1200px) {
+    .tk-tegels {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .tk-tegel {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-height: var(--touch);
+    padding: 20px;
+    border: var(--stroke-hair) solid var(--line);
+    border-radius: var(--radius-card);
+    background: var(--paper);
+    color: var(--ink);
+    font-size: var(--type-body);
+    line-height: var(--type-body-lh);
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+  }
+  .tk-tegel .tk-plaat {
+    background: var(--surface);
+    color: var(--ink);
+  }
+  @media (min-width: 1200px) {
+    .tk-tegel .tk-plaat {
+      width: 44px;
+      height: 44px;
+    }
+  }
+  .tk-tegel:not([aria-pressed='true']):hover {
+    background: var(--surface);
+    border-color: var(--ink-3);
+  }
+  .tk-tegel:not([aria-pressed='true']):hover .tk-plaat {
+    background: var(--paper);
+  }
+  /* One pixel of padding goes back for the second pixel of rule, so nothing
+   * beside a chosen tile moves. */
+  .tk-tegel[aria-pressed='true'] {
+    padding: 19px;
+    border: var(--stroke-active) solid var(--accent);
+    background: var(--accent-soft);
+  }
+  .tk-tegel[aria-pressed='true'] .tk-plaat {
+    background: var(--accent-tint);
+    color: var(--accent-text);
+  }
+  .tk-tegel-vink {
+    display: inline-flex;
+    flex: none;
+    margin-left: auto;
+    color: var(--accent-text);
+  }
+
+  /* ---- Squares: which table, which division ------------------------------
+   * The numbers as a keypad: four across on a phone, seven from a tablet up,
+   * each one square. The first is the mix — all of them — with a plate and a
+   * word, and then one to twelve in the display face. All twelve on every size:
+   * the handoff shows seven on a phone, and a table a child cannot reach there
+   * is a table taken away (ADR-095).
+   */
+  .tk-tafels {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+  }
+  @media (min-width: 768px) {
+    .tk-tafels {
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 12px;
+    }
+  }
+  .tk-tafel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    aspect-ratio: 1;
+    min-height: var(--touch-min);
+    border: var(--stroke-hair) solid var(--line);
+    border-radius: var(--radius-balk);
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-size: 1.5rem; /* 24px on a phone */
+    line-height: 1.75rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+  }
+  @media (min-width: 768px) {
+    .tk-tafel {
+      font-size: 2.125rem; /* 34px */
+      line-height: 2.375rem;
+    }
+  }
+  .tk-tafel:not([aria-pressed='true']):hover {
+    background: var(--surface);
+    border-color: var(--ink-3);
+  }
+  .tk-tafel[aria-pressed='true'] {
+    border: var(--stroke-active) solid var(--accent);
+    background: var(--accent-soft);
+    color: var(--accent-text);
+  }
+  .tk-tafel .tk-plaat {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-klein);
+    background: var(--surface);
+    color: var(--ink);
+  }
+  .tk-tafel[aria-pressed='true'] .tk-plaat {
+    background: var(--accent-tint);
+    color: var(--accent-text);
+  }
+  .tk-tafel-mix {
+    font-family: 'Source Sans 3', system-ui, sans-serif;
+    font-size: 0.9375rem;
+    line-height: 1.25rem;
+    letter-spacing: 0;
+    font-weight: 600;
+  }
 
   /* The cijfer, after a toetsstand and nowhere else. The number gets the score
    * size because on this screen it is the thing the round was for; the word

@@ -35,24 +35,23 @@ const ALLOWED_SELECTORS: ReadonlyMap<string, string> = new Map([
   ['.tk-module-card', 'the module entrance'],
   ['.tk-module-card:hover', 'the module entrance'],
   ['.tk-module-card:disabled', 'the module entrance'],
-  // The fourth thing, added deliberately and argued in ADR-089: the answer a
-  // child has already given, on a page that is nothing but questions. A module
-  // page asks where, what, which one, how, and whether the answers wait — and
-  // the chosen tile in each row is the only thing on it worth finding again
-  // after looking away. In ink it was one slightly darker rule among twenty.
-  //
-  // Only the last selector of the list is what this file's parser records, so
-  // the other three are here to be read rather than to be matched. The rule
-  // they share also doubles the border weight, because §A does not let a hue
-  // carry a state on its own and this one does not.
-  [".tk-regio[aria-pressed='true']", 'the answer already given'],
-  [".tk-subject[aria-pressed='true']", 'the answer already given'],
-  [".tk-form[aria-pressed='true']", 'the answer already given'],
-  [".tk-switch[aria-pressed='true']", 'the answer already given'],
-  // The chips answer a numbered question too — "2 · Welke tafel?" — so they
-  // take the same mark. Without this, rekenen showed the answer to step 1 in
-  // green, step 2 in ink and step 3 in green again.
-  [".tk-variant-chip[aria-pressed='true']", 'the answer already given, as a chip'],
+  // The fourth thing, added deliberately in ADR-089 and kept in ADR-095: the
+  // answer a child has already given, on a page that is nothing but questions.
+  // Every question on a module page is answered by a chip, a tile or a square,
+  // and the chosen one of each is the only thing worth finding again after
+  // looking away. Each also changes its rule or carries a tick, because §A does
+  // not let a hue carry a state on its own.
+  [".tk-keuze[aria-pressed='true']", 'the answer already given, as a chip'],
+  [".tk-tegel[aria-pressed='true']", 'the answer already given, as a tile'],
+  [".tk-tegel[aria-pressed='true'] .tk-plaat", 'the answer already given, as a tile'],
+  ['.tk-tegel-vink', 'the answer already given: its tick'],
+  [".tk-tafel[aria-pressed='true']", 'the answer already given, as a square'],
+  [".tk-tafel[aria-pressed='true'] .tk-plaat", 'the answer already given, as a square'],
+  // The start bar is all of those answers at once, on the module's soft ground
+  // with its colour down the leading edge (ADR-095). Its label is in the
+  // module's text colour; the chips on it are ink.
+  ['.tk-startbalk', 'the answers already given, together'],
+  ['.tk-startbalk-label', 'the answers already given, together'],
   // The rail is where the module entrance does most of its work: a column of
   // seven accents is the only place in the product that shows them together.
   [".tk-rail-item[aria-current='page']", 'the module entrance, in the rail'],
@@ -77,7 +76,10 @@ const ALLOWED_SELECTORS: ReadonlyMap<string, string> = new Map([
   // the module entrance, the line that says which module you have entered is,
   // and on a phone it is the only thing that says so at all: §D drops the rail
   // at that width. The heading under it stays ink.
-  ['.tk-eyebrow', 'the module entrance, at the head of its own page'],
+  ['.tk-modulebadge', 'the module entrance, at the head of its own page'],
+  // The number of each question on that page: the page's own order, told in
+  // the module's colour. The question beside it stays ink.
+  ['.tk-stap-nummer', 'the module entrance, numbering its own page'],
 ]);
 
 /** Where an accent may be *defined* rather than used. */

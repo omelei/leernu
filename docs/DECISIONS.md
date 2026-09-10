@@ -3911,6 +3911,78 @@ and the Onthouden page is where that argument lives now.
 
 ---
 
+## ADR-095 — A module page is chips, tiles and squares, and the start bar stays in reach
+
+**Status:** accepted — 2026-09-10. Part 3 of the September redesign. Keeps
+ADR-089's accent on the answer already given and reverses its argument about
+height; supersedes ADR-052.
+
+### Context
+
+The handoff redraws the module pages — `/topo`, `/rekenen`, `/klok` — as a badge
+that names the module, the question, and numbered steps on a hairline: chips
+for a filter, tiles with a plate and a title for a subject or a way of
+practising (two columns from 1200), a keypad of squares for the tables, and a
+start bar that lists what was chosen. On a phone that bar is stuck to the foot
+of the screen, which ADR-052 put off after three attempts produced three bugs.
+
+### Decision
+
+**A word is a chip, a subject is a tile, a number is a square.** Where on the
+map, which kind of sum (rekenen's first step), which range, level or cities, and
+how many questions are chips. The subjects of topography and klokkijken and
+every way of practising are tiles; the oefentoets is the last tile and is still
+a switch, not a seventh way (ADR-085). The tables and the divisions are a
+keypad with the mix first. The chosen one of each wears the module's colour and
+changes something besides the hue — a heavier rule, a darker rule, or a tick.
+
+**The tiles are big again.** ADR-089 made them small to fit two steps on a
+tablet screen. The handoff draws them a hand's width across, and that is a tile
+a seven-year-old hits first time; a page that scrolls is the price, and the
+start bar is what makes the price small.
+
+**The start bar lists the answers.** One chip per question the page asked — the
+map, the subject, which one, the way, how long, and "oefentoets" when it is on
+— and the Start button at the end of the line. What a screen reader hears from
+the button is still the whole sentence (ADR-066).
+
+**On a phone it is built, the way ADR-052 said the next attempt should be.**
+Sticky rather than fixed, so its box is where it is drawn and a press lands on
+the thing it looks like it lands on. The last thing in the page — after the
+child's own column, as a sibling of the content rather than a child of it — so
+it is in reach the whole way down and never lies over its own button. Side
+margins exactly the page's padding and no more. `e2e/shell.spec.ts` checks all
+three at the two phone sizes.
+
+**Six things the handoff draws are not done, each for a reason:**
+
+- the heading keeps the child's name on a phone; asked of nobody it is a form;
+- all twelve tables on a phone, where the handoff shows seven — a table a child
+  cannot reach there is a table taken away;
+- one table at a time; "meerdere mag ook" is a round made of several sets, which
+  is new behaviour and waits for its own decision;
+- no "Analoog / Digitaal" step for the clock, and "Vijf minuten" rather than
+  "Minuten": the handoff's clock is a proposal written before the module was
+  built, and this page shows the module that exists;
+- the step titles stay "Kies een onderwerp" and "Welke tafel?" where the handoff
+  writes "Welke som?" and "Kies je tafels" — they are also each step's landmark
+  name, and the words a screen reader and every test find the step by;
+- the Start button keeps the triangle that means "begin" rather than an arrow,
+  which in this set means "the next question".
+
+**Dropped:** the small progress dot on each table. It was decorative, and how a
+table is going is in its label and in the child's own column.
+
+**New token:** `--radius-balk` (14) for the start bar and the squares.
+
+### Consequences
+
+`accent.test.ts` names the new places an accent paints — the chosen chip, tile
+and square, the tick, the start bar, the badge and the step number — and loses
+the old tile classes. The component gallery shows the chip and the tile.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because

@@ -41,7 +41,7 @@ export function ModuleSoon({
             <ModuleIcon size={20} />
             {t('soon.subtitle')}
           </span>
-          <h1 className="tk-display text-h1 font-semibold">{t(module.name)}</h1>
+          <h1 className="tk-display tk-titel font-semibold">{t(module.name)}</h1>
           <p className="text-ink-2">{t('soon.body')}</p>
         </div>
 
