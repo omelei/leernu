@@ -866,106 +866,90 @@
     color: var(--ink);
   }
 
-  /* ---- The twelve animals, on Jij ---------------------------------------
-   * A collection, so it is drawn as one: equal cells, in the order they
-   * arrive, with the ones not reached yet greyed and carrying the level rather
-   * than hidden behind it.
+  /* ---- The twelve heroes, on the collection page (ADR-096) ---------------
+   * Equal cells, in the order they are drawn. A hero a child has is a button —
+   * pressing it makes it the one they wear — on its plate in its own reeks, with
+   * its name in ink and its reeks in the reeks' deep tone. One they have not
+   * found yet is a chest: not a button, and not a silhouette, because which one
+   * it turns out to be is the whole of what a chest is for (ADR-081).
    */
-  .tk-animals {
+  .tk-helden {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(6rem, 100%), 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(7rem, 100%), 1fr));
     gap: 8px;
   }
-  .tk-animal {
+  .tk-held-cel {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 4px;
+    gap: 6px;
     min-height: var(--touch-board);
-    padding: 8px;
+    padding: 12px 8px;
     border: var(--stroke-hair) solid var(--line);
     border-radius: var(--radius-card);
     background: var(--paper);
     color: var(--ink-2);
-    cursor: not-allowed;
+    text-align: center;
   }
-  /* Not reached yet, said with the drawing rather than with the words — and
-   * the drawing is a parcel rather than the animal, because the animal is the
-   * surprise (ADR-081). The level on it — "niveau 7" — is the whole point of
-   * showing the cell at all, so it stays at full legibility, and the parcel
-   * sits back a little without disappearing: a wrapper you cannot see is not
-   * an invitation to open it. */
-  .tk-animal:not([data-open]) svg {
-    opacity: 0.65;
-  }
-  /* Earned: ringed in its own material, so a full row reads as a shelf of
-   * things you have rather than as twelve drawings. The colour comes from the
-   * row below, and the ring takes it with `currentColor` — one declaration for
-   * all five materials. */
-  .tk-animal[data-open] {
-    border-color: currentColor;
+  button.tk-held-cel {
+    color: var(--ink);
     cursor: pointer;
   }
-  /* Which reeks this row is. The drawings are `currentColor` and nothing else
-   * (§E), so the material is the row's colour and both the animal and the
-   * parcel take it — one declaration per material rather than sixty coloured
-   * drawings.
-   *
-   * The parcels take it too, and that is the point: a row of ultra is a row a
-   * child can see is worth more before they can reach any of it. They are told
-   * apart from what has been earned by three other things — the shape is a
-   * parcel, the caption is a level rather than a name, and the ring round an
-   * earned cell is the material where a waiting one keeps the hairline. The
-   * words in these cells are ink either way; see .tk-animal-name. */
-  .tk-animals[data-reeks='brons'] .tk-animal {
-    color: var(--reeks-brons);
-  }
-  .tk-animals[data-reeks='zilver'] .tk-animal {
-    color: var(--reeks-zilver);
-  }
-  .tk-animals[data-reeks='goud'] .tk-animal {
-    color: var(--reeks-goud);
-  }
-  .tk-animals[data-reeks='platina'] .tk-animal {
-    color: var(--reeks-platina);
-  }
-  .tk-animals[data-reeks='ultra'] .tk-animal {
-    color: var(--reeks-ultra);
-  }
-  /* The one arriving next, marked with a rule rather than a colour: it is not
-   * earned yet, and a material it has not got would say it was. */
-  .tk-animal[data-next] {
+  button.tk-held-cel:not([aria-pressed='true']):hover {
+    background: var(--surface);
     border-color: var(--ink-3);
-    border-style: dashed;
   }
-  .tk-animal[data-open]:hover {
+  /* The one worn: ink at double weight over the surface — a lightness and a
+   * weight, not a hue, because every cell around it already wears one. */
+  .tk-held-cel[aria-pressed='true'] {
+    padding: 11px 7px;
+    border: var(--stroke-active) solid var(--ink);
     background: var(--surface);
-    color: var(--ink);
   }
-  .tk-animal[aria-pressed='true'] {
-    border-color: var(--ink);
-    border-width: var(--stroke-active);
-    padding: 7px;
+  .tk-held-pakje {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 30%;
     background: var(--surface);
-    color: var(--ink);
+    color: var(--ink-3);
   }
-  /* The word under the drawing is ink, never the material.
-   *
-   * A material is a colour for a *drawing*: §A's floor for a graphical object
-   * is 3:1 and that is what these five were measured against (ADR-071). Text
-   * needs 4.5, and bronze on the pressed cell's surface is 4.28 — which is what
-   * axe found the moment the first reeks stopped being ink. So the animal takes
-   * the material and its name takes the ink, which is also the honest division:
-   * the colour says which reeks, the word says which animal. */
-  .tk-animal-name {
+  .tk-held-naam {
     font-size: var(--type-label);
     line-height: var(--type-label-lh);
-    text-align: center;
+    font-weight: 600;
+  }
+  /* The rules, written out in full. A chance a child cannot read about is a
+   * chance they have no reason to trust. */
+  .tk-regels {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+    padding-left: 1.25rem;
+    list-style: disc;
     color: var(--ink-2);
   }
-  .tk-animal[data-open] .tk-animal-name {
-    color: var(--ink);
+
+  /* Stars towards the next chest: five, in gold because they are a reward, the
+   * ones already there filled. The filling is the stylesheet's, on the icon's
+   * own outline, so a star and a full star stay one drawing (§E). */
+  .tk-sterren {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+  }
+  .tk-sterren-rij {
+    display: inline-flex;
+    gap: 4px;
+    color: var(--reeks-goud);
+  }
+  .tk-ster-vol path {
+    fill: currentColor;
   }
 
   /* ---- The sum ----------------------------------------------------------
@@ -2200,86 +2184,6 @@
     flex-basis: 100%;
   }
 
-  /* ---- The rung of the ladder -------------------------------------------
-   * Which material a child is filling now, drawn as the chevrons every game
-   * they play uses for a tier and coloured in that material. A pill rather
-   * than a line of text: it is a badge, and a badge is a thing you have.
-   *
-   * The word is inside it as well as the colour. §A: a colour never carries a
-   * meaning on its own, and this is the one place in the product where a
-   * colour *is* the reward, so it is also the place it would be tempting to
-   * let it stand alone.
-   */
-  .tk-reeks {
-    display: inline-flex;
-    align-items: center;
-    align-self: flex-start;
-    gap: 8px;
-    padding: 4px 12px 4px 8px;
-    border: var(--stroke-hair) solid currentColor;
-    border-radius: var(--radius-full);
-    color: var(--ink-2);
-  }
-  .tk-reeks[data-reeks='brons'] {
-    color: var(--reeks-brons);
-  }
-  .tk-reeks[data-reeks='zilver'] {
-    color: var(--reeks-zilver);
-  }
-  .tk-reeks[data-reeks='goud'] {
-    color: var(--reeks-goud);
-  }
-  .tk-reeks[data-reeks='platina'] {
-    color: var(--reeks-platina);
-  }
-  .tk-reeks[data-reeks='ultra'] {
-    color: var(--reeks-ultra);
-  }
-  /* Ink, for the same reason `.tk-animal-name` is: a material is measured
-   * against the 3:1 a drawing needs, and silver on paper is 4.32 — fine for the
-   * chevrons and the ring, short of the 4.5 a word needs. The badge keeps the
-   * material in its border and its icon. */
-  .tk-reeks-name {
-    font-family: 'IBM Plex Mono', ui-monospace, monospace;
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    font-weight: 500;
-    color: var(--ink);
-  }
-
-  /* Who arrives at the next level, drawn quietly. Not a padlock and not the
-   * word "locked": a lighter version of the same animal says "not yet" without
-   * saying "no", and it is the same drawing a child will see filled in when
-   * they get there. The picking itself lives on Jij now — see .tk-animals. */
-  .tk-sticker-next {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex: none;
-    width: 36px;
-    height: 36px;
-    border-radius: var(--radius-full);
-    background: var(--surface);
-    color: var(--ink-3);
-    opacity: 0.75;
-  }
-  .tk-sticker-next[data-reeks='brons'] {
-    color: var(--reeks-brons);
-  }
-  .tk-sticker-next[data-reeks='zilver'] {
-    color: var(--reeks-zilver);
-  }
-  .tk-sticker-next[data-reeks='goud'] {
-    color: var(--reeks-goud);
-  }
-  .tk-sticker-next[data-reeks='platina'] {
-    color: var(--reeks-platina);
-  }
-  .tk-sticker-next[data-reeks='ultra'] {
-    color: var(--reeks-ultra);
-  }
-
   /* ---- Badges ----------------------------------------------------------
    * The small hard-edged label K1 puts before a heading: "toets", and the
    * subject that test is for. Square, because §A gives the badge no radius —
@@ -3053,7 +2957,7 @@
 
   /* One row per animal that arrived, and the drawing in its own material — the
    * colour is the reward here, so this is the one place it leads. The words
-   * beside it are ink, for the reason .tk-animal-name is: a material is
+   * beside it are ink, for the reason a hero's name is on the collection page: a material is
    * measured against what a drawing needs, not what a word does. */
   .tk-unwraps {
     display: flex;

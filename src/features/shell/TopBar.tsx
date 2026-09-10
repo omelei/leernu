@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Heldplaat } from '@/components/Heldplaat';
 import { StreakIcon } from '@/components/Icon';
-import { currentStreak, REEKSEN, type StreakState } from '@/game-core';
+import { currentStreak, type StreakState } from '@/game-core';
+import { reeksVan, useHelden } from '@/features/reis/useHelden';
 import { t } from '@/i18n';
 import { HOLIDAYS, loadStreak } from '@/store/streakStore';
 import type { ProfileRecord } from '@/store/db';
@@ -22,6 +23,7 @@ export function TopBar({
   readonly onProfile?: (() => void) | undefined;
 }) {
   const [streak, setStreak] = useState<StreakState | null>(null);
+  const helden = useHelden();
 
   useEffect(() => {
     void loadStreak().then(setStreak);
@@ -43,7 +45,7 @@ export function TopBar({
             their progress card shows. A child always has one (ADR-067), and an
             initial in the bar beside a cat in the column was two answers to
             who you are. */}
-        <Heldplaat sticker={sticker} reeks={REEKSEN[0]} size={30} vorm="rond" />
+        <Heldplaat sticker={sticker} reeks={reeksVan(helden, sticker)} size={30} vorm="rond" />
         <span className="tk-profiel-naam">{profile.naam}</span>
       </button>
     </div>

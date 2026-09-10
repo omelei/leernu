@@ -912,3 +912,21 @@ export function ChevronRightIcon(props: Omit<IconProps, 'children'>) {
     </Icon>
   );
 }
+
+/**
+ * A star: ten correct answers (ADR-096).
+ *
+ * Five points and straight edges, which is what §E's primitives allow and what
+ * a star is anyway. One drawing for an empty star and a full one: the filling
+ * is the stylesheet's (`.tk-ster-vol`), so the pair can never drift apart.
+ */
+export function StarIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <path
+        d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6l-5.4 2.9 1.2-6-4.5-4.2 6.1-.7z"
+        strokeLinejoin="round"
+      />
+    </Icon>
+  );
+}

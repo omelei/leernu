@@ -1,5 +1,5 @@
 import { t } from '@/i18n';
-import { NieuweDieren } from '@/features/reis/NieuwDier';
+import { Beloning } from '@/features/reis/Beloning';
 import { RoundMark } from '@/components/RoundMark';
 import { KlokFace } from './KlokFace';
 import { klokVoluit } from './klokTaal';
@@ -61,7 +61,7 @@ export function KlokResultScreen({
       ) : null}
 
       {/* What the round handed over, if it handed anything over. */}
-      <NieuweDieren plekken={state.reward?.dieren ?? []} />
+      <Beloning reward={state.reward} />
 
       {state.missed.length > 0 ? (
         <section className="flex flex-col gap-3" aria-label={t('klok.practiceMore')}>

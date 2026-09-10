@@ -3983,6 +3983,70 @@ the old tile classes. The component gallery shows the chip and the tile.
 
 ---
 
+## ADR-096 — Heroes come in chests, and which one is chance
+
+**Status:** accepted — 2026-09-10, on the owner's decision. Part 4 of the
+September redesign. **Revises ADR-067's first condition and spec §4.5 in one
+place**: which hero is in a chest is chance. Extends ADR-071; keeps ADR-081 and
+ADR-084 in a new shape.
+
+### Context
+
+The handoff replaces the ladder of sixty animals with heroes: ten correct
+answers are a star, five stars open a chest that holds a hero, and three
+duplicates move a hero up a reeks, bronze to ultra. A duplicate only exists if
+the chest draws, so the chest is a chance mechanism — for children of seven to
+twelve, in a product whose spec and ADR-067 said there would be none.
+
+That was put to the owner with a deterministic alternative (the next hero in a
+fixed order) and the owner chose the draw, knowingly. This records it.
+
+### Decision
+
+**Chance in one place and nowhere else.** Whether there is a chest, and what it
+costs, is arithmetic on correct answers — fifty for a chest, in `helden.ts`,
+pure and tested. Which of the twelve comes out is a draw from the platform's
+cryptographic source in `heldenStore.ts`, every hero equally likely, and
+nothing about it can be steered, bought, or hurried by waiting.
+
+**The rules are on the page.** The collection page says in four sentences how
+it works, including "alle twaalf zijn even kansrijk". A chance a child cannot
+read about is a chance they have no reason to trust.
+
+**Twelve heroes, the twelve drawings there are.** The handoff's "24" would need
+twelve more illustrations; the heroes are the animals, on a plate in their
+reeks. A duplicate of a hero already at ultra does nothing and says so.
+
+**The level stays.** Same curve, same "nog 6 goede antwoorden" on the progress
+card; the stars count in the same answers beside it. The handoff keeps the
+stars off the front door, and so does this: they are on the screen after a round
+and on the collection page.
+
+**Nobody loses anything.** A child's first read writes their heroes from the
+ladder they climbed: every animal they held becomes that hero, in the highest
+reeks they held it in. The chests those answers already paid for count as
+opened — they were paid out as animals — so the first chest arrives at the next
+fifty, not as a pile. A new child comes through the same path with nought
+answers, and starts with the three the ladder always started with.
+
+**Stored per child in `settings`**, as JSON under `helden:<kindId>` — the shape
+the tests already take (ADR-077) — rather than as a new object store. No schema
+version, and a row that will not parse re-runs the migration instead of taking
+the front door down.
+
+**The worn hero shows its reeks** on the progress card, in the app bar and on
+the collection page, where any hero a child has can be worn — not only the first
+row, as the ladder allowed.
+
+### Consequences
+
+`NieuweDieren` is gone and `Beloning` replaces it on all three result screens.
+`collection.ts` hands nothing out any more; it stays because it is what the
+migration reads. The comments in `rewards.ts` and `rewardStore.ts` that said
+"no chance" now say where the chance is.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because

@@ -361,38 +361,34 @@ test('the toetsstand asks without answering, and marks at the end', async ({ pag
 });
 
 /**
- * The animal a child picks is theirs, so it has to stick — and it has to show
+ * The hero a child wears is theirs, so it has to stick — and it has to show
  * somewhere other than the card it was chosen on, or it does not look saved.
  *
- * It is on "Jij" now rather than in the column on the right (ADR-067). Six of
- * the twelve are open from the first minute of level one; the other six arrive
- * one per level, and this checks both halves of that — that a reached one can
- * be chosen, and that one further up the ladder cannot.
+ * Heroes since ADR-096: a new child has the first three, in bronze, and the
+ * other nine arrive in chests. This checks both halves — that a hero a child
+ * has can be worn, and that one they have not found cannot.
  */
-test('the animal a child picks is theirs, and follows them', async ({ page }) => {
+test('the hero a child picks is theirs, and follows them', async ({ page }) => {
   await signIn(page, 'Puk');
   await page.goto('/voortgang');
 
-  const dieren = page.getByRole('region', { name: 'Dieren' });
-  await dieren.getByRole('button', { name: 'Vos', exact: true }).click();
-  await expect(dieren.getByRole('button', { name: 'Vos', exact: true })).toHaveAttribute(
+  const helden = page.getByRole('region', { name: 'Helden' });
+  await helden.getByRole('button', { name: /^Vos,/ }).click();
+  await expect(helden.getByRole('button', { name: /^Vos,/ })).toHaveAttribute(
     'aria-pressed',
     'true',
   );
 
-  // Level one, so the ninth cell of the first row is a parcel: it has a place,
-  // it says what it costs, and it does not say what is in it (ADR-081). It is
-  // not a button either — a control a child cannot use is a question they have
-  // to ask somebody about.
-  await expect(dieren.getByRole('button', { name: /^Draak/ })).toHaveCount(0);
-  await expect(
-    dieren.getByLabel(/Nog onbekend dier in brons, vanaf niveau \d+/).first(),
-  ).toBeVisible();
+  // Not found yet: a chest in its place, which says so and does not say what
+  // is in it (ADR-081). It is not a button either — a control a child cannot
+  // use is a question they have to ask somebody about.
+  await expect(helden.getByRole('button', { name: /^Draak/ })).toHaveCount(0);
+  await expect(helden.getByLabel('Nog niet gevonden').first()).toBeVisible();
 
   // It belongs to the child, not to the page: it survives a reload.
   await page.reload();
   await expect(
-    page.getByRole('region', { name: 'Dieren' }).getByRole('button', { name: 'Vos', exact: true }),
+    page.getByRole('region', { name: 'Helden' }).getByRole('button', { name: /^Vos,/ }),
   ).toHaveAttribute('aria-pressed', 'true');
 });
 

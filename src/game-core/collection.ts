@@ -25,6 +25,11 @@
  * This is pure and lives in game-core: it decides what has been earned, never
  * what it looks like. The drawings are `components/Stickers.tsx` and the
  * materials are five tokens in `index.css`.
+ *
+ * **Since ADR-096 this ladder hands nothing out.** Heroes arrive in chests
+ * (`helden.ts`). What this still decides is where a child who climbed it
+ * starts: `uitLadder` reads the animals it had given them and turns each into
+ * that hero, in the highest reeks they held it in.
  */
 
 export const REEKSEN = ['brons', 'zilver', 'goud', 'platina', 'ultra'] as const;

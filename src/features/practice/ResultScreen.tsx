@@ -3,7 +3,7 @@ import type { GeoSet } from '@/content/loadGeo';
 import type { AnswerLayer } from './MapCanvas';
 import { isMixSet, type RoundState } from './useRound';
 import { STAMP_NAME } from '@/features/reis/stampNames';
-import { NieuweDieren } from '@/features/reis/NieuwDier';
+import { Beloning } from '@/features/reis/Beloning';
 import { RoundMark } from '@/components/RoundMark';
 
 /**
@@ -68,7 +68,7 @@ export function ResultScreen({
           list of what is still missing, because it is the only thing on this
           screen that is not about this round — and under the score, because the
           number that matters is still what the child learned (ADR-084). */}
-      <NieuweDieren plekken={state.reward?.dieren ?? []} />
+      <Beloning reward={state.reward} />
 
       {state.missed.length === 0 ? (
         <p className="text-body">{t('result.allCorrect')}</p>

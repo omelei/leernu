@@ -72,17 +72,10 @@ export const nl = {
   // hier niets.
   'home.journeyTitle': 'Jouw voortgang',
   'home.journeyLevel': 'Niveau {niveau}',
-  'home.journeyHave': '{aantal} van de {totaal} dieren',
+  'home.journeyHave': '{aantal} van de {totaal} helden',
   'home.journeyBar': 'Op weg naar niveau {niveau}',
   'home.journeyToGo': 'Nog {aantal} goede antwoorden tot niveau {niveau}.',
   'home.journeyOneToGo': 'Nog één goed antwoord tot niveau {niveau}.',
-  // Wat hierna komt is een verrassing, en de regel zegt dat ook. Hij noemde
-  // het dier bij naam - "Hierna: vos in zwart" - en daarmee was het geen
-  // verrassing meer maar een vooraankondiging. Wat er nu staat is wat je wel
-  // mag weten: in welke reeks hij valt, en dus hoe zeldzaam hij is. Het
-  // silhouet ernaast doet de rest.
-  'home.journeyNext': 'Hierna: een nieuw dier in {reeks}',
-  'home.journeyComplete': 'Je hebt alle dieren. Je niveau blijft stijgen.',
   'home.journeyAll': 'Bekijk alles wat je kunt verdienen',
 
   // De andere streak: goede antwoorden op rij, zonder dag ertussen. Hij staat
@@ -589,18 +582,20 @@ export const nl = {
   'result.markLabel': 'cijfer',
   'result.markWhy': 'Zonder hulp onderweg, net als op school.',
 
-  // Het pakje dat opengaat. Alleen te zien op het scherm na een ronde, en
-  // alleen als er echt iets uit kwam - een kaart die er elke keer staat is
-  // binnen een week meubilair. Geen "goed gedaan": het product zegt wat er
-  // gebeurd is, niet wat je ervan moet vinden.
-  'result.newAnimalTitle': 'Een nieuw dier',
-  'result.newAnimalOne': 'Je hebt een nieuw dier!',
-  'result.newAnimalMany': 'Je hebt {aantal} nieuwe dieren!',
-  'result.newAnimalIn': '{dier} in {reeks}',
-  // Waarvoor je hem kreeg staat erbij, net als bij een reisstempel. Een
-  // beloning die je niet kunt uitleggen is een raadsel, en dan kun je er ook
-  // geen tweede met opzet verdienen.
-  'result.newAnimalLevel': 'Je haalde niveau {niveau}.',
+  // Wat een ronde opleverde (ADR-096): de sterren die erbij kwamen, en als er
+  // een kist openging, welke held eruit kwam. Alleen te zien als er echt iets
+  // bij kwam. Geen "goed gedaan": het product zegt wat er gebeurd is, niet wat
+  // je ervan moet vinden. En nooit wat er in de volgende kist zit.
+  'result.beloningTitle': 'Wat je verdiende',
+  'result.sterEen': 'Je verdiende een ster.',
+  'result.sterVeel': 'Je verdiende {aantal} sterren.',
+  'result.sterStand': '{aantal} van de {totaal} sterren voor je volgende kist.',
+  'result.kistEen': 'Je kist gaat open!',
+  'result.kistVeel': 'Je {aantal} kisten gaan open!',
+  'result.heldNieuw': '{held} komt erbij, in {reeks}',
+  'result.heldDubbel': '{held} nog een keer: {aantal} van de {totaal} voor {reeks}',
+  'result.heldHoger': '{held} gaat naar {reeks}',
+  'result.heldVol': '{held} is al ultra',
   // K8. De score staat er, maar wat er veranderd is, is het product: het enige
   // op dit scherm dat een kind niet zelf had kunnen uitrekenen.
   'result.changed': 'Wat er is veranderd',
@@ -640,22 +635,32 @@ export const nl = {
   'you.off': 'uit',
   'you.stays': 'Wat je oefent blijft op dit apparaat.',
 
-  // De verzamelpagina: alles wat er te halen valt en wat het kost. De kaart in
-  // de rechterkolom kan er maar één tegelijk laten zien; dit is het geheel.
+  // De verzamelpagina: alles wat je hebt, en hoe de rest komt. De kaart in de
+  // rechterkolom kan er maar één tegelijk laten zien; dit is het geheel.
   // Nergens staat wanneer — alles hier koop je met goede antwoorden.
   'reis.title': 'Jouw voortgang',
-  'reis.intro': 'Alles wat je kunt halen, en wat het kost. Wat het wordt, zie je als je het haalt.',
+  'reis.intro':
+    'Elke tien goede antwoorden zijn een ster. Vijf sterren zijn een kist, en in elke kist zit een held.',
   'reis.level': 'Jouw niveau',
   'reis.answered': '{aantal} goede antwoorden',
-  'reis.animals': 'Dieren',
+  'reis.sterrenTitel': 'Sterren',
+  'reis.totKist': 'Nog {aantal} goede antwoorden tot je volgende kist.',
+  'reis.animals': 'Helden',
   'reis.animalsHave': '{aantal} van de {totaal}',
-  'reis.reeksHave': '{reeks} · {aantal} van de {totaal}',
-  'reis.animalHave': '{dier} in {reeks}',
-  // Niet-gehaalde dieren houden hun naam voor zich. Wat erbij staat is wat je
-  // ervoor moet doen, want daar kun je op mikken; wie het wordt is de
-  // verrassing die het halen de moeite waard maakt.
-  'reis.animalWant': 'Nog onbekend dier in {reeks}, vanaf niveau {niveau}',
-  'reis.lockedLevel': 'niveau {niveau}',
+  'reis.heldHave': '{dier}, {reeks}',
+  'reis.heldDubbel': '{reeks} · {aantal} van de {totaal}',
+  // Een held die je nog niet hebt houdt zijn naam voor zich: welke het wordt,
+  // is waar een kist voor is.
+  'reis.heldWant': 'Nog niet gevonden',
+  // De spelregels, voluit. Welke held er in een kist zit is toeval, en een kind
+  // mag precies weten hoe dat toeval werkt (ADR-096).
+  'reis.regelsTitel': 'Zo werkt het',
+  'reis.regel1': 'Tien goede antwoorden zijn één ster.',
+  'reis.regel2':
+    'Vijf sterren zijn een kist. In elke kist zit een held, en welke is een verrassing: alle twaalf zijn even kansrijk.',
+  'reis.regel3':
+    'Krijg je een held die je al hebt, dan telt hij dubbel. Na drie keer dubbel gaat hij een reeks omhoog: brons, zilver, goud, platina, ultra.',
+  'reis.regel4': 'Je kunt niets kopen, en door te wachten krijg je niets. Alleen goede antwoorden tellen.',
   'reis.stamps': 'Reisstempels',
   'reis.stampsHave': '{aantal} van de {totaal}',
 
