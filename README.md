@@ -124,23 +124,38 @@ what was answered and not over what was asked ([ADR-053](docs/DECISIONS.md)).
 And down the right it keeps what is the child's own — on every screen inside
 the frame, not only here: their progress first, then everything answered
 correctly so far with the run of correct answers under it, then the exercises
-they keep going back to. "Jouw voortgang" is the level a child has reached, the
-rung of the ladder they are on, and one line saying what the next one costs, in
-the only unit that means anything to them: "nog 6 goede antwoorden"
-([ADR-070](docs/DECISIONS.md)).
+they keep going back to. "Jouw voortgang" is the hero a child wears, the reeks
+it stands in, five stars with as many filled as the next chest has, and one line
+saying what that chest costs, in the only unit that means anything to them: "nog
+6 goede antwoorden" ([ADR-099](docs/DECISIONS.md)). The level stands under it
+as one thin bar and one line, so the nearest reward weighs most and the two do
+not compete ([ADR-070](docs/DECISIONS.md)).
 
-The whole of it is at **leer.nu/voortgang**: sixty animals in five materials —
-brons, zilver, goud, platina, ultra ([ADR-080](docs/DECISIONS.md)) — twelve
+**What a round is worth is counted in one thing, and counted the same
+everywhere: correct answers.** Ten of them are a star, five stars are a chest,
+and a chest holds one of the twelve heroes — one the child does not have yet,
+chosen by them from three that are laid face up
+([ADR-097](docs/DECISIONS.md)). Twelve chests are twelve heroes, six hundred
+correct answers, and the same twelve for every child; the choosing changes when
+a hero arrives, never whether. Three duplicates carry a hero up a reeks, so the
+collection is twelve heroes and sixty plates. Nothing else moves it: not money,
+not chance, not a day of the week.
+
+The whole of it is at **leer.nu/voortgang**: twelve heroes — Valerie Vos to
+Ben Buizerd, each with a ring round the plate for every reeks climbed, brons,
+zilver, goud, platina, ultra ([ADR-080](docs/DECISIONS.md)) — twelve
 tafeldiploma's and ten reisstempels, with what every one of them costs written
-next to it ([ADR-071](docs/DECISIONS.md), [ADR-076](docs/DECISIONS.md)). What it
-does not say is what the next animal _is_: an animal not yet earned is drawn as
-a parcel with its price on it, so a child can aim at the next rung without
-having read the whole collection off the screen on their first afternoon
-([ADR-081](docs/DECISIONS.md)). The parcel is opened at the end of the round
+next to it ([ADR-076](docs/DECISIONS.md), [ADR-098](docs/DECISIONS.md)). A hero not found yet is drawn as a
+chest and keeps its name to itself, which is what the three cards are for
+([ADR-081](docs/DECISIONS.md)). A chest is opened at the end of the round
 that earned it — the one moment of movement in this product that is a reward
-rather than a lesson, and one that happens a handful of times a month
-([ADR-084](docs/DECISIONS.md)). Nothing on that page can be bought, won by
-chance or reached by waiting, and nothing on it mentions a date.
+rather than a lesson — and it says which hero, which reeks, and which chest
+handed it over ([ADR-084](docs/DECISIONS.md)). A chest earned by a round that
+was closed too early is still owed, and the collection page opens it instead. Nothing on that page can be bought, won by
+chance or reached by waiting, and nothing on it mentions a date. **There is no
+random number anywhere in the reward path**: which hero a chest may hold is
+arithmetic in `game-core`, the order is fixed and the same for every child, and
+the choosing is the child's ([ADR-097](docs/DECISIONS.md)).
 
 The forecast — "69%, weet je hier over drie weken nog van" — is the number the
 product argues from and it lives on **Onthouden**, one screen along. On the

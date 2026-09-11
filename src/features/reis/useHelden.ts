@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { REEKSEN, type HeldenStand, type Reeks } from '@/game-core';
+import { REEKSEN, type Held, type HeldenStand, type Reeks } from '@/game-core';
 import { STICKERS, stickerById } from '@/components/stickerSet';
 import { loadHelden } from '@/store/heldenStore';
 
@@ -24,6 +24,11 @@ export function useHelden(): HeldenStand | null {
  * what every child's first three are.
  */
 export function reeksVan(stand: HeldenStand | null, sticker: string | undefined): Reeks {
+  return heldVan(stand, sticker)?.reeks ?? REEKSEN[0];
+}
+
+/** The hero a child wears, as the row holds it — or undefined if it does not. */
+export function heldVan(stand: HeldenStand | null, sticker: string | undefined): Held | undefined {
   const plek = STICKERS.indexOf(stickerById(sticker));
-  return stand?.helden.find((held) => held.plek === plek)?.reeks ?? REEKSEN[0];
+  return stand?.helden.find((held) => held.plek === plek);
 }

@@ -129,7 +129,7 @@ test('the module pages have no violations, in each of their four shapes', async 
 });
 
 /**
- * The collection: sixty animals, twelve diplomas and ten stamps, most of them
+ * The collection: twelve heroes, twelve diplomas and ten stamps, most of them
  * not earned yet. It is the densest page in the product and the one where the
  * temptation to say "not yet" with a colour alone is strongest, so it is worth
  * a scan of its own (ADR-076).

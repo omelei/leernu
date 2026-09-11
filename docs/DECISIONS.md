@@ -3990,6 +3990,11 @@ September redesign. **Revises ADR-067's first condition and spec §4.5 in one
 place**: which hero is in a chest is chance. Extends ADR-071; keeps ADR-081 and
 ADR-084 in a new shape.
 
+> **The draw is reversed by [ADR-097](#adr-097--a-chest-always-gives-a-hero-you-do-not-have-and-the-child-picks-from-three)
+> (2026-09-11), after it was worked out what it costs in answers.** Everything
+> else here stands: the fifty-answer chest, the twelve heroes, the five reeksen,
+> the migration off the ladder, and the rules being written out on the page.
+
 ### Context
 
 The handoff replaces the ladder of sixty animals with heroes: ten correct
@@ -4044,6 +4049,340 @@ row, as the ladder allowed.
 `collection.ts` hands nothing out any more; it stays because it is what the
 migration reads. The comments in `rewards.ts` and `rewardStore.ts` that said
 "no chance" now say where the chance is.
+
+---
+
+## ADR-097 — A chest always gives a hero you do not have, and the child picks from three
+
+**Status:** accepted — 2026-09-11. **Reverses the draw in ADR-096** and with it
+restores spec §4.5 and ADR-067's first condition. Keeps everything else ADR-096
+decided: the fifty-answer chest, the twelve heroes, the five reeksen, the
+migration off the ladder.
+
+### Context
+
+ADR-096 made which hero a chest holds a draw, knowingly and against spec §4.5.
+What was not on the table when that was decided is what the draw costs in
+answers, and it is not small.
+
+Twelve heroes, uniform, fifty correct answers a chest: completing the set takes
+**37.2 chests in expectation — 1,862 correct answers** — with a standard
+deviation of 13.7 chests. The median is 35 chests and the ninetieth percentile
+is 55, so two children working equally hard end up four months apart. About
+**twenty-five of those thirty-seven chests hold a hero the child already has.**
+The last three heroes alone cost 22 chests, which is 59% of the whole set.
+
+Past the set it is worse. Four reeks steps at three duplicates each is thirteen
+copies of one hero, so **one named hero at ultra costs 156 chests — 7,800
+correct answers, thirty-nine weeks at four sessions of fifty a week.** A child
+of eight does not have a thirty-nine week horizon. "I want Vlam in ultra" is the
+goal the design invites and the goal it cannot pay.
+
+The worst case is not rare either. Holding eleven of twelve, the chance that ten
+consecutive chests are all duplicates is **42%**: five hundred correct answers
+and ten openings that hand over nothing. `vol` — a duplicate of a hero already
+at ultra — hands over less than nothing, and it gets more frequent the harder a
+child has worked.
+
+Three accepted decisions also said the opposite of what the code did. ADR-076:
+"bought with correct answers and nothing else". ADR-080: "nothing behind money,
+chance or waiting". ADR-081: "nothing in this product is ever earned by chance
+or by waiting". ADR-096 revised ADR-067 and spec §4.5 and named none of the
+three, so the repository contradicted itself in four places while verifiability
+is the whole of what it claims.
+
+### Decision
+
+**A chest lays out three heroes face up, and the child turns one over.**
+
+- While any of the twelve is missing, the three are heroes this child does not
+  have, taken in a fixed order that is the same for every child and lives in
+  `game-core` as `KIST_VOLGORDE`. **Every chest gives a hero you did not have.**
+  Twelve chests, twelve heroes, **six hundred correct answers**, identical for
+  every child.
+- Once the twelve are held, the three are heroes not yet at ultra, and the child
+  picks which one takes the duplicate. That is the only strategic decision in
+  the product: spread, or push one hero to ultra.
+- **`vol` becomes unreachable.** A hero at ultra is never offered. `KistSoort`
+  keeps the case so a row written by an older version still reads, and so there
+  is still something to say if one ever turns up.
+- **The choice changes when, never whether.** Taking a favourite first shifts
+  the rest forward; over twelve chests the child gets all twelve either way.
+- **Each card says what pressing it would do**, before it is pressed. Three
+  cards that do not say what they are is not a choice, it is three buttons.
+  `watKistDoet` answers that without applying anything.
+
+**No randomness anywhere in the product.** `heldenStore.trek()` is deleted and
+with it the only call to `crypto.getRandomValues` in the reward path. `openKist`
+takes a chosen place rather than a number in [0,1) and stays pure; a place that
+was not offered falls back to the first one that was, because this runs behind a
+button and a stale press should hand over the obvious thing rather than throw.
+
+**A chest is a debt, not an event.** `kistenTeGoed` is a subtraction of chests
+opened from chests paid for, so a chest earned by a round that was closed before
+the result screen was read is still owed. It is offered on the result screen and
+on the collection page, and both render the same component and read the same row.
+
+### Consequences
+
+At fifty correct answers a chest:
+
+|                            | ADR-096                   | this           |
+| -------------------------- | ------------------------- | -------------- |
+| all twelve heroes          | 1,862 answers (p90 2,750) | **600, exact** |
+| one chosen hero at ultra   | 7,800                     | **1,200**      |
+| every hero at ultra        | 11,700                    | **7,800**      |
+| chests holding nothing new | ~25 of 37                 | **0**          |
+
+`README.md`, ADR-076, ADR-080 and ADR-081 become true again rather than needing
+amendment. Spec §4.5 is no longer revised by anything, and ADR-067's first
+condition — "nothing is behind money or chance" — stands as written.
+
+What is given up: the jackpot. A rare pull is a real thrill and it is gone. The
+trade is a small chance of a large spike against a large chance of nothing, and
+for an audience of eight that is the right way round. Scarcity now means "I
+worked for this" rather than "I was lucky", which is honest and less exciting.
+
+`RoundOutcome.kisten` becomes `RoundOutcome.kistenTeGoed`, a count rather than a
+list of what came out: nothing comes out until the child picks, and that happens
+on the screen the number is handed to rather than before it is drawn.
+`applyRoundRewards` no longer opens anything.
+
+`reis.regel2` and `reis.regel3` are rewritten. The page can now say that a chest
+always gives a hero you do not have, which is a better sentence than "alle twaalf
+zijn even kansrijk" in every way that matters — and `reis.regel4` can say there
+is no luck in it at all.
+
+---
+
+## ADR-098 — Twelve heroes, none of which belongs to a module, and the animals are replaced
+
+**Status:** accepted — 2026-09-11, **in the form the design chose rather than
+the one first proposed**. Completes ADR-096, which named twelve heroes and
+shipped twelve animals. Retires the drawings ADR-059 and ADR-067 introduced.
+
+### What was built
+
+The design canvas "Jouw voortgang" (`docs/Jouw voortgang.dc.html`) answered the
+question below differently from the proposal that follows it, and the design is
+what shipped. The twelve are **animals with a name and an outfit**, not abstract
+shapes:
+
+| Place | Hero         | Was      |
+| ----- | ------------ | -------- |
+| 0     | Valerie Vos  | cat      |
+| 1     | Daan Das     | owl      |
+| 2     | Olaf Otter   | fox      |
+| 3     | Harm Havik   | bear     |
+| 4     | Willem Wolf  | hare     |
+| 5     | Esmee Egel   | fish     |
+| 6     | Bart Bever   | hedgehog |
+| 7     | Udo Uil      | frog     |
+| 8     | Minou Marter | squirrel |
+| 9     | Fem Flamingo | penguin  |
+| 10    | Richard Ree  | elephant |
+| 11    | Ben Buizerd  | dragon   |
+
+- **One construction kit, twelve characters.** Every hero is the same bust —
+  body, ears, head, snout, two eyes, glasses and one accessory — and they differ
+  in ears and in what they wear. They read as one cast, and a thirteenth could
+  join without a new style.
+- **A first name on the animal's letter.** Easy to read aloud in groep 4, and a
+  name makes a character of a species.
+- **The reeks is a layer, and a count.** The fur stays ink; the outfit and the
+  inside of the ears take the material; the plate takes the material's soft
+  tone. Round the plate is one closed ring per reeks climbed — none for bronze,
+  four for ultra — so which of two heroes stands higher is readable without the
+  names of the materials (ADR-080). Gold, platinum and ultra have a still sheen.
+  The four ring slots are always reserved, so a plate is the same size in every
+  reeks and a card does not jump when its hero climbs.
+- **Illustrations, served as images.** Sixty PNGs in `public/helden/`, twelve
+  heroes by five reeksen, 320 square (two pixels to one at 160). They are not on
+  §E's frame and `icons.test.ts` no longer holds them to it. Below 64 pixels the
+  rings are thinner than two and cannot be counted, so `Heldplaat` draws the
+  plate alone and its tone carries the reeks.
+- **A hero not found is a chest**, not a silhouette: the surface with a band
+  across it both ways, "Nog niet gevonden" and "Kist: vijf sterren". The name
+  stays secret (ADR-081), and the three cards a chest lays out are where it is
+  first seen.
+- **Places are kept, ids are not.** `Held.plek` is unchanged, so `uitLadder` and
+  every stored row stand as they are. The profile's `sticker` becomes a first
+  name (`valerie`), which cannot be mistaken for an id an older version wrote
+  (`vos` was the animal in place 2); `stickerById` resolves an old id to the
+  hero in its place.
+- **The proposal's rhymes are not kept.** Place 0 is Valerie Vos because the
+  design draws a new child with the fox, the badger and the otter, wearing the
+  fox. So a child who wore the owl now wears Daan Das, not Udo Uil. The reeks
+  and the duplicates of that place carry over; the picture does not.
+
+The rest of this record is the proposal as it was written, kept because its
+constraints — no hero belongs to a module, the animals are replaced rather than
+kept alongside, there is no last hero — are the ones the design kept.
+
+### Context
+
+ADR-096 replaced the ladder of sixty animals with heroes and then used the
+twelve animal drawings as the heroes, on the argument that "the handoff's 24
+would need twelve more illustrations". So the product calls a hedgehog a hero.
+There is no name, no power and no drawing for any of the twelve.
+
+Two constraints shape what they can be. **The frame:** §E is a 24 grid, one
+stroke weight, circles and straight lines, no colour of its own. The animals
+work at that size because ears tell them apart; a hero in a cape and a mask is a
+smudge. **The modules:** topografie, rekenen and klokkijken share one collection
+(ADR-062, ADR-063) and four more modules stand in the rail. A hero that belongs
+to arithmetic breaks that, and breaks it again for every module not yet built.
+
+### Decision
+
+**Twelve heroes, each one unmistakable shape rather than a costume**, and each
+power a way of being rather than a school subject.
+
+| #   | Name  | Power                                                            | Silhouette                                                   |
+| --- | ----- | ---------------------------------------------------------------- | ------------------------------------------------------------ |
+| 1   | Reus  | lifts what nobody can lift                                       | shoulders wider than the frame, small head at the top edge   |
+| 2   | Pluis | small and light enough to pass anywhere and land from any height | a small soft circle with two dots, alone in empty space      |
+| 3   | Flits | there and back before you looked up                              | a zigzag body with a small round head                        |
+| 4   | Schim | goes where the light does not                                    | an outline of head and shoulders, empty inside, ragged below |
+| 5   | Steen | nothing gets past him                                            | a wide rounded block, two dots high, flat on the ground      |
+| 6   | Golf  | goes round anything and cannot be held                           | a wave crest with an eye in the hollow                       |
+| 7   | Vonk  | makes light where there is none                                  | a round head with eight short rays                           |
+| 8   | IJs   | holds everything still for a moment so you can look              | a six-pointed crystal with an eye at its centre              |
+| 9   | Klim  | grows a ladder or a bridge where there is none                   | a spiral with a small head at its tip                        |
+| 10  | Bout  | repairs anything, himself included                               | a rounded block head, one large eye, a nut on top            |
+| 11  | Echo  | says back what was said long ago                                 | a head between two open arcs                                 |
+| 12  | Vlam  | burns through what is in the way                                 | a jaw, one horn, one eye — the dragon already drawn          |
+
+**Six pairs of opposites**: large/small, fast/silent, hard/soft, light/cold,
+grows/builds, remembers/burns. A child seeing Reus beside Pluis reads the system
+without a legend, which is the rule ADR-080 applies to the reeksen.
+
+**All twelve are ordinary Dutch words**, eleven of one syllable, every one at or
+below AVI-M6, and each means what the drawing does — so the name and the picture
+teach each other.
+
+**Nine of the twelve are not male-human**: five female, two unspecified, four
+non-human, two of those male-coded. Only Reus is a man. That falls out of the
+frame rather than being imposed on it: at 24 pixels a shape reads better than a
+person.
+
+**Twelve roles, no two alike**: tank, bruiser, speedster, stealth, evader,
+illuminator, controller, builder, repairer, memory, damage, and mobility by
+being small.
+
+**The animals are replaced, not kept alongside.** Two collections would be two
+ladders in the same narrow column, which is what ADR-058 took off the front door
+and what ADR-071's own consequences warn about. The mapping keeps the slot, so
+`uitLadder` is unchanged, and it rhymes where a rhyme exists: cat→Schim,
+owl→Echo, fox→Flits, bear→Steen, hare→Pluis, fish→Golf, hedgehog→Bout,
+frog→Klim, squirrel→Vonk, penguin→IJs, elephant→Reus, dragon→Vlam. Six rhyme
+strongly and the dragon stays the dragon.
+
+**There is no last hero any more.** ADR-067 made the dragon twelfth because "the
+last rung should look like the last rung". Under ADR-097 all twelve arrive within
+twelve chests, so that job is gone. The ladder is the reeksen now, and its last
+rung is ultra.
+
+### Consequences
+
+`Stickers.tsx` is gone; `stickerSet.ts` keeps its shape — a list of twelve in
+their places, and nothing about earning them — with the animal each hero is
+drawn as and the id its place had before. Twelve keys in `nl.ts`.
+`KIST_VOLGORDE` is about offering rather than drawing and is unaffected.
+
+A child who wore an animal loses that drawing. The slot, the reeks and the
+duplicates survive the change; the picture does not. The proposal had the
+product say so once on first open; that line is not built.
+
+Sixty images are about four megabytes. Only the ones on screen are fetched, and
+lazily, but the collection page at ultra is the heaviest page in the product.
+
+---
+
+## ADR-099 — The star is visible where the work is done, and the column counts to the chest
+
+**Status:** accepted — 2026-09-11. Amends ADR-096 and ADR-070. Does not remove
+the level; re-aims what the column counts towards.
+
+> **Amended the same day by the design canvas "Jouw voortgang".** The level's
+> bar and sentence stay, as one thin bar and one line **under** the chest, and
+> the bar measures the level again rather than the chest. The chest gets the
+> five stars and the large sentence — "Nog 24 goede antwoorden tot je volgende
+> kist.", or before the first star "Nog 10 goede antwoorden tot je eerste ster."
+> — so the two are ranked by weight rather than one removed. "5 van de 12
+> helden" leaves the block for the top of the heroes on /voortgang: it counts
+> what a child has and says nothing about the next round. Below 1200 the stars
+> stand in the row beside "Niveau 3". /voortgang opens on the same order: the
+> hero worn at full size, the stars, the chest sentence, the level, and "Verder
+> oefenen met …" back to the subject last practised. The bullets below record
+> the decision as it was first taken.
+
+### Context
+
+Since ADR-096 a level hands nothing out. `collection.ts` says so in its own
+header: "Since ADR-096 this ladder hands nothing out." The right-hand column,
+which stands on every screen inside the shell, still counted down to it: "Nog 6
+goede antwoorden tot niveau 7." That sentence is ADR-070's whole reason for
+existing — "a level is a promise about work" — and the promise had stopped being
+paid.
+
+Meanwhile the event that does hand something over, the chest at every fifty
+correct answers, was on no persistent surface at all. ADR-096 kept the stars off
+the front door on purpose: "they are on the screen after a round and on the
+collection page."
+
+So the one progress object a child saw all day counted towards nothing, and the
+one that counted was invisible between rounds. That is the shape of the problem
+the September redesign set out to solve, rebuilt inside the solution.
+
+Two ladders in the same unit on the same card is also the pattern this product
+keeps rejecting: ADR-058 took the forecast off the front door because beside a
+mark it read as "a second opinion about the same thing", and ADR-071's
+consequences call a second copy of one rule "how two of them come to disagree".
+
+### Decision
+
+**One new element in the column, and one thing gives way.**
+
+- **In:** the five-star row, as many filled as the next chest has. It is the
+  component the result screen already had, moved to `components/Sterren.tsx`
+  because three features now import it — no new drawing and no new colour.
+- **Out:** the level progress bar and "Nog {n} goede antwoorden tot niveau
+  {n+1}". The bar measures `kistProgress` now, and the sentence is
+  `reis.totKist`, which already existed and already read "Nog {aantal} goede
+  antwoorden tot je volgende kist."
+- **Unchanged:** the hero plate, the reeks name, "x van de 12", the way to the
+  collection. The level number stays beside the reeks name as a lifetime figure
+  and counts towards nothing, because that is what it now is.
+
+**A star is counted during the round.** `SterTeller` stands in the round bar of
+all three round screens, in every mode including the endless ones, and shows how
+many of the current star's ten are in. It reads the total once when the round
+opens and adds the round's own correct answers to it; reading it again mid-round
+would count them twice, because they are written as they are given.
+
+**It counts; it does not move.** Counting is what the rest of that bar does, and
+a third animation in a product that has two on purpose would need an argument
+this does not have (ADR-084).
+
+**On the result screen nothing changes.** The row was already there.
+
+### Consequences
+
+A child now sees something move on every correct answer, on every screen,
+between rewards. That is the gap the old ladder left: from level five onwards a
+rung cost two hundred correct answers, which at four sessions of fifty a week is
+one animal a week with six days of nothing in between.
+
+ADR-070's level survives as a measure and stops being a promise. Whether it
+should survive at all is a separate question and deserves its own ADR; settling
+it inside a change about stars would be settling it by accident.
+
+One thing this leaves broken, and it should be recorded rather than quietly
+carried: **ADR-084 allows the unwrap animation because it is rare** — "this card
+appears a handful of times a month". At fifty correct answers a chest it appears
+roughly every round or two. Either the animation gets quieter or ADR-084's
+justification is rewritten. Both cannot stand.
 
 ---
 

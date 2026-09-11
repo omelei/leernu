@@ -83,18 +83,21 @@ export const nl = {
   // product dat één fout antwoord meteen afpakt.
   'home.runLabel': 'Foutloos op rij',
   'home.runBest': 'beste {aantal}',
-  'sticker.kat': 'Kat',
-  'sticker.uil': 'Uil',
-  'sticker.vos': 'Vos',
-  'sticker.beer': 'Beer',
-  'sticker.haas': 'Haas',
-  'sticker.vis': 'Vis',
-  'sticker.egel': 'Egel',
-  'sticker.kikker': 'Kikker',
-  'sticker.eekhoorn': 'Eekhoorn',
-  'sticker.pinguin': 'Pinguïn',
-  'sticker.olifant': 'Olifant',
-  'sticker.draak': 'Draak',
+  // De twaalf helden (ADR-098). Een voornaam met dezelfde letter als het dier:
+  // makkelijk voor te lezen in groep 4, en een naam maakt er een karakter van
+  // in plaats van een soort.
+  'held.valerie': 'Valerie Vos',
+  'held.daan': 'Daan Das',
+  'held.olaf': 'Olaf Otter',
+  'held.harm': 'Harm Havik',
+  'held.willem': 'Willem Wolf',
+  'held.esmee': 'Esmee Egel',
+  'held.bart': 'Bart Bever',
+  'held.udo': 'Udo Uil',
+  'held.minou': 'Minou Marter',
+  'held.fem': 'Fem Flamingo',
+  'held.richard': 'Richard Ree',
+  'held.ben': 'Ben Buizerd',
   'home.modules': 'Wat je kunt oefenen',
   'home.continueTitle': 'Verder waar je was',
   'home.retention': 'weet je hier over drie weken nog van',
@@ -411,6 +414,10 @@ export const nl = {
   'practice.counterLives': 'levens',
   'practice.counterCorrect': 'goed',
   'practice.counterCombo': 'goed op rij',
+  // Tien goede antwoorden zijn een ster. Tussen twee kisten is dit het enige
+  // dat beweegt, en daarom staat het in elke ronde (ADR-099).
+  'practice.counterStar': 'ster',
+  'practice.counterStarValue': '{aantal}/{totaal}',
   'practice.speak': 'Lees de vraag voor',
   'practice.correct': '{naam} — goed.',
   'practice.wrong': '{naam} ligt hier.',
@@ -590,12 +597,33 @@ export const nl = {
   'result.sterEen': 'Je verdiende een ster.',
   'result.sterVeel': 'Je verdiende {aantal} sterren.',
   'result.sterStand': '{aantal} van de {totaal} sterren voor je volgende kist.',
-  'result.kistEen': 'Je kist gaat open!',
-  'result.kistVeel': 'Je {aantal} kisten gaan open!',
-  'result.heldNieuw': '{held} komt erbij, in {reeks}',
-  'result.heldDubbel': '{held} nog een keer: {aantal} van de {totaal} voor {reeks}',
-  'result.heldHoger': '{held} gaat naar {reeks}',
-  'result.heldVol': '{held} is al ultra',
+  'result.kistEen': 'Je kist gaat open.',
+  'result.kistVeel': 'Je {aantal} kisten gaan open.',
+  // Wat er uit een kist kwam. ADR-084 vraagt drie dingen: wat het is, uit welke
+  // reeks, en welk moment het overhandigde — dat laatste stond er niet in en
+  // staat er nu wel: uit welke kist. Nooit "goed gedaan": het product zegt wat
+  // er gebeurde, wat je ervan vindt is aan het kind.
+  'result.heldNieuw': '{held} komt erbij, in {reeks}. Uit kist {kist}.',
+  // De zwakste uitkomst, dus het aantal staat vooraan: dat is het enige dat
+  // beweegt, en de zin moet naar het bewegende deel wijzen.
+  'result.heldDubbel': '{held}: {aantal} van de {totaal} naar {reeks}. Uit kist {kist}.',
+  // Noem waar hij vandaan komt, anders is "naar goud" een mededeling zonder
+  // afstand.
+  'result.heldHoger': '{held} gaat van {vorige} naar {reeks}. Uit kist {kist}.',
+  // Onbereikbaar sinds ADR-097: een held op ultra wordt niet meer aangeboden.
+  // Blijft staan als vangnet voor een rij uit een oudere versie.
+  'result.heldVol': '{held} staat al op ultra.',
+
+  // De drie kaarten die een kist openlegt. Elke kaart zegt wat hij doet vóór
+  // je hem indrukt: drie kaarten die niet zeggen wat ze zijn, zijn geen keuze
+  // maar drie knoppen (ADR-097).
+  'kist.titel': 'Je kist',
+  'kist.kiesTitel': 'Kies wie eruit komt.',
+  'kist.kiesTitelVeel': 'Kies wie eruit komt. Je hebt {aantal} kisten.',
+  'kist.kaartNieuw': '{held} erbij, in {reeks}',
+  'kist.kaartHoger': '{held} naar {reeks}',
+  'kist.kaartDubbel': '{held}, {aantal} van de {totaal} naar {reeks}',
+  'kist.kaartKort': 'naar {reeks}',
   // K8. De score staat er, maar wat er veranderd is, is het product: het enige
   // op dit scherm dat een kind niet zelf had kunnen uitrekenen.
   'result.changed': 'Wat er is veranderd',
@@ -639,29 +667,45 @@ export const nl = {
   // rechterkolom kan er maar één tegelijk laten zien; dit is het geheel.
   // Nergens staat wanneer — alles hier koop je met goede antwoorden.
   'reis.title': 'Jouw voortgang',
-  'reis.intro':
-    'Elke tien goede antwoorden zijn een ster. Vijf sterren zijn een kist, en in elke kist zit een held.',
-  'reis.level': 'Jouw niveau',
   'reis.answered': '{aantal} goede antwoorden',
-  'reis.sterrenTitel': 'Sterren',
+  // Bovenaan staat de beloning die het dichtst bij is: de sterren naar de
+  // volgende kist, in één grote zin. Bij nul is de eerste ster het doel, want
+  // tien is vanmiddag te halen en vijftig niet.
+  'reis.kistTitel': 'Je volgende kist',
+  'reis.sterrenStand': '{aantal} van de {totaal} sterren',
   'reis.totKist': 'Nog {aantal} goede antwoorden tot je volgende kist.',
+  'reis.totKistEen': 'Nog één goed antwoord tot je volgende kist.',
+  'reis.totEersteSter': 'Nog {aantal} goede antwoorden tot je eerste ster.',
+  'reis.totEersteSterEen': 'Nog één goed antwoord tot je eerste ster.',
+  // De weg terug naar oefenen, naar het vak waar je het laatst was. Zonder die
+  // weg is de pagina een eindpunt in plaats van een aanleiding.
+  'reis.verderMet': 'Verder oefenen met {vak}',
+  'reis.doeEenRonde': 'Doe één ronde',
+  'reis.vak.topo': 'topografie',
+  'reis.vak.tafels': 'tafels',
+  'reis.vak.klok': 'klokkijken',
   'reis.animals': 'Helden',
-  'reis.animalsHave': '{aantal} van de {totaal}',
   'reis.heldHave': '{dier}, {reeks}',
   'reis.heldDubbel': '{reeks} · {aantal} van de {totaal}',
+  'reis.heldUltra': '{reeks} · hoogste reeks',
+  'reis.heldDraagt': 'je draagt deze',
+  'reis.heldDragen': 'dragen',
   // Een held die je nog niet hebt houdt zijn naam voor zich: welke het wordt,
-  // is waar een kist voor is.
+  // is waar een kist voor is. Wat hij kost staat er wel.
   'reis.heldWant': 'Nog niet gevonden',
-  // De spelregels, voluit. Welke held er in een kist zit is toeval, en een kind
-  // mag precies weten hoe dat toeval werkt (ADR-096).
+  'reis.heldPrijs': 'Kist: vijf sterren',
+  'reis.heldWantLabel': 'Nog niet gevonden. Kist: vijf sterren.',
+  // De spelregels, voluit. Er zit geen geluk meer in: elke kist geeft een held
+  // die je nog niet hebt en je kiest er één van drie (ADR-097). Een kind mag
+  // precies weten hoe het werkt, en nu is dat een kortere zin dan eerst.
   'reis.regelsTitel': 'Zo werkt het',
   'reis.regel1': 'Tien goede antwoorden zijn één ster.',
   'reis.regel2':
-    'Vijf sterren zijn een kist. In elke kist zit een held, en welke is een verrassing: alle twaalf zijn even kansrijk.',
+    'Vijf sterren zijn een kist. Een kist legt drie helden neer die je nog niet hebt, en jij kiest er één.',
   'reis.regel3':
-    'Krijg je een held die je al hebt, dan telt hij dubbel. Na drie keer dubbel gaat hij een reeks omhoog: brons, zilver, goud, platina, ultra.',
+    'Heb je alle twaalf? Dan kies je wie er omhoog gaat. Na drie keer gaat een held een reeks omhoog: brons, zilver, goud, platina, ultra.',
   'reis.regel4':
-    'Je kunt niets kopen, en door te wachten krijg je niets. Alleen goede antwoorden tellen.',
+    'Je kunt niets kopen, door te wachten krijg je niets, en er komt geen geluk aan te pas. Alleen goede antwoorden tellen.',
   'reis.stamps': 'Reisstempels',
   'reis.stampsHave': '{aantal} van de {totaal}',
 

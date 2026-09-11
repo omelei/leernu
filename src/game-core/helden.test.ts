@@ -1,26 +1,44 @@
 import { describe, expect, it } from 'vitest';
 import {
+  aanbod,
   AANTAL_HELDEN,
+  DUBBELEN_PER_REEKS,
+  goedInSter,
   goedTotKist,
+  KEUZE_PER_KIST,
+  KIST_VOLGORDE,
+  kistenTeGoed,
   kistenVoor,
+  kistProgress,
   openKist,
-  openVerdiend,
   sterrenInKist,
   sterrenVoor,
   uitLadder,
   volgendeReeks,
+  vorigeReeks,
+  watKistDoet,
   type HeldenStand,
 } from './helden';
 import { correctForLevel } from './rewards';
+import type { Reeks } from './collection';
 
 /**
- * Heroes, stars and chests (ADR-096). The draw is handed in, so every chest
- * here opens on a number the test chose: the chance is in the store, and what
- * is worth pinning is everything around it.
+ * Heroes, stars and chests (ADR-096, ADR-097).
+ *
+ * There is nothing to hand a draw into any more. A chest offers three and the
+ * child chooses one, so what is worth pinning is what may be offered, what
+ * choosing does, and the two properties the whole decision rests on: a chest
+ * never hands over a hero the child already has while one is missing, and
+ * twelve chests are always twelve heroes.
  */
 
-/** The draw that picks the hero at this place. */
-const op = (plek: number) => (plek + 0.5) / AANTAL_HELDEN;
+/** Every hero, so a stand can be built at any point in the collection. */
+function alles(reeks: Reeks): HeldenStand {
+  return {
+    helden: Array.from({ length: AANTAL_HELDEN }, (_, plek) => ({ plek, reeks, dubbelen: 0 })),
+    kistenOpen: 0,
+  };
+}
 
 describe('stars and chests', () => {
   it('makes a star of ten correct answers and a chest of five stars', () => {
@@ -40,9 +58,31 @@ describe('stars and chests', () => {
     expect(goedTotKist(50)).toBe(50);
   });
 
+  it('counts the answers towards the star being filled, which a round shows', () => {
+    expect(goedInSter(0)).toBe(0);
+    expect(goedInSter(7)).toBe(7);
+    expect(goedInSter(10)).toBe(0);
+    expect(goedInSter(23)).toBe(3);
+  });
+
+  it('fills the bar towards the chest rather than towards the level', () => {
+    expect(kistProgress(0)).toBe(0);
+    expect(kistProgress(25)).toBe(0.5);
+    expect(kistProgress(50)).toBe(0);
+  });
+
   it('never counts backwards from a negative number', () => {
     expect(sterrenVoor(-5)).toBe(0);
     expect(kistenVoor(-5)).toBe(0);
+    expect(goedInSter(-5)).toBe(0);
+  });
+});
+
+describe('the order a chest works through', () => {
+  it('holds every one of the twelve exactly once', () => {
+    expect([...KIST_VOLGORDE].sort((a, b) => a - b)).toEqual(
+      Array.from({ length: AANTAL_HELDEN }, (_, plek) => plek),
+    );
   });
 });
 
@@ -73,87 +113,170 @@ describe('from the old ladder', () => {
     const stand = uitLadder(correct);
 
     expect(stand.kistenOpen).toBe(kistenVoor(correct));
-    expect(openVerdiend(stand, correct, () => 0).uitkomsten).toEqual([]);
+    expect(kistenTeGoed(stand, correct)).toBe(0);
   });
 });
 
-describe('a chest', () => {
+describe('what a chest offers', () => {
   const begin: HeldenStand = uitLadder(0);
 
-  it('gives a hero not yet held, in bronze', () => {
-    const { stand, uitkomst } = openKist(begin, op(7));
+  it('lays out three, and none of them a hero already held', () => {
+    const drie = aanbod(begin);
 
-    expect(uitkomst).toEqual({ plek: 7, reeks: 'brons', dubbelen: 0, soort: 'nieuw' });
+    expect(drie).toHaveLength(KEUZE_PER_KIST);
+    expect(drie.some((plek) => plek <= 2)).toBe(false);
+    expect(new Set(drie).size).toBe(KEUZE_PER_KIST);
+  });
+
+  it('offers the missing ones in the fixed order, the same for every child', () => {
+    expect(aanbod(begin)).toEqual(KIST_VOLGORDE.filter((plek) => plek > 2).slice(0, 3));
+  });
+
+  it('offers heroes that can still climb once all twelve are held', () => {
+    const drie = aanbod(alles('goud'));
+
+    expect(drie).toEqual(KIST_VOLGORDE.slice(0, KEUZE_PER_KIST));
+  });
+
+  it('offers nothing at all when every hero is at ultra', () => {
+    expect(aanbod(alles('ultra'))).toEqual([]);
+  });
+
+  it('offers what is left when fewer than three can still climb', () => {
+    const stand: HeldenStand = {
+      helden: Array.from({ length: AANTAL_HELDEN }, (_, plek) => ({
+        plek,
+        reeks: plek === KIST_VOLGORDE[0] ? 'platina' : 'ultra',
+        dubbelen: 0,
+      })),
+      kistenOpen: 0,
+    };
+
+    expect(aanbod(stand)).toEqual([KIST_VOLGORDE[0]]);
+  });
+});
+
+describe('choosing from a chest', () => {
+  const begin: HeldenStand = uitLadder(0);
+
+  it('gives the hero the child picked, in bronze, and says which chest did it', () => {
+    const keuze = aanbod(begin)[1] as number;
+    const { stand, uitkomst } = openKist(begin, keuze);
+
+    expect(uitkomst).toEqual({
+      plek: keuze,
+      reeks: 'brons',
+      dubbelen: 0,
+      soort: 'nieuw',
+      kist: 1,
+    });
     expect(stand.helden).toHaveLength(4);
     expect(stand.kistenOpen).toBe(1);
   });
 
-  it('counts a hero already held as a duplicate', () => {
-    const { uitkomst } = openKist(begin, op(0));
-    expect(uitkomst).toEqual({ plek: 0, reeks: 'brons', dubbelen: 1, soort: 'dubbel' });
-  });
-
-  it('moves a hero up a reeks on its third duplicate', () => {
+  it('never hands over a duplicate while a hero is still missing', () => {
     let stand = begin;
     const soorten: string[] = [];
-    for (let keer = 0; keer < 3; keer++) {
-      const geopend = openKist(stand, op(1));
+
+    // Nine chests is every hero the ladder did not hand out.
+    for (let kist = 0; kist < AANTAL_HELDEN - 3; kist++) {
+      const geopend = openKist(stand, aanbod(stand)[0] as number);
+      stand = geopend.stand;
+      soorten.push(geopend.uitkomst.soort);
+    }
+
+    expect(soorten.every((soort) => soort === 'nieuw')).toBe(true);
+    expect(stand.helden).toHaveLength(AANTAL_HELDEN);
+  });
+
+  it('reaches all twelve in twelve chests however the child chooses', () => {
+    // Always taking the last of the three is the most impatient strategy there
+    // is, and it still ends with the whole collection.
+    let stand: HeldenStand = { helden: [], kistenOpen: 0 };
+
+    for (let kist = 0; kist < AANTAL_HELDEN; kist++) {
+      const drie = aanbod(stand);
+      stand = openKist(stand, drie[drie.length - 1] as number).stand;
+    }
+
+    expect(stand.helden.map((held) => held.plek).sort((a, b) => a - b)).toEqual(
+      Array.from({ length: AANTAL_HELDEN }, (_, plek) => plek),
+    );
+    expect(stand.helden.every((held) => held.reeks === 'brons')).toBe(true);
+  });
+
+  it('counts a duplicate and moves a hero up on the third one', () => {
+    let stand = alles('brons');
+    const keuze = aanbod(stand)[0] as number;
+    const soorten: string[] = [];
+
+    for (let keer = 0; keer < DUBBELEN_PER_REEKS; keer++) {
+      const geopend = openKist(stand, keuze);
       stand = geopend.stand;
       soorten.push(geopend.uitkomst.soort);
     }
 
     expect(soorten).toEqual(['dubbel', 'dubbel', 'hoger']);
-    expect(stand.helden.find((held) => held.plek === 1)).toEqual({
-      plek: 1,
+    expect(stand.helden.find((held) => held.plek === keuze)).toEqual({
+      plek: keuze,
       reeks: 'zilver',
       dubbelen: 0,
     });
   });
 
-  it('says so when a hero is already at the top', () => {
+  it('never lands on a hero at ultra, so nothing is ever handed over twice over', () => {
     const stand: HeldenStand = {
-      helden: [{ plek: 4, reeks: 'ultra', dubbelen: 0 }],
+      helden: Array.from({ length: AANTAL_HELDEN }, (_, plek) => ({
+        plek,
+        reeks: plek === 4 ? 'platina' : 'ultra',
+        dubbelen: 0,
+      })),
       kistenOpen: 0,
     };
-    const { uitkomst } = openKist(stand, op(4));
 
-    expect(uitkomst.soort).toBe('vol');
-    expect(uitkomst.reeks).toBe('ultra');
+    expect(aanbod(stand)).toEqual([4]);
+    expect(openKist(stand, 7).uitkomst.plek).toBe(4);
+    expect(openKist(stand, 7).uitkomst.soort).not.toBe('vol');
   });
 
-  it('reaches every one of the twelve, and nothing past them', () => {
-    const plekken = new Set<number>();
-    for (let plek = 0; plek < AANTAL_HELDEN; plek++) {
-      plekken.add(openKist(begin, op(plek)).uitkomst.plek);
-    }
-    expect(plekken.size).toBe(AANTAL_HELDEN);
-
-    // The edges of the draw land on the first and the last, never outside.
-    expect(openKist(begin, 0).uitkomst.plek).toBe(0);
-    expect(openKist(begin, 0.999_999).uitkomst.plek).toBe(AANTAL_HELDEN - 1);
-    expect(openKist(begin, 1).uitkomst.plek).toBe(AANTAL_HELDEN - 1);
+  it('falls back to the first on offer when asked for something it did not offer', () => {
+    const drie = aanbod(begin);
+    expect(openKist(begin, 0).uitkomst.plek).toBe(drie[0]);
   });
 
-  it('names the reeks above each one, and none above ultra', () => {
+  it('says what a card would do before the child presses it', () => {
+    const stand = alles('brons');
+    const keuze = aanbod(stand)[0] as number;
+
+    expect(watKistDoet(stand, keuze).soort).toBe('dubbel');
+    // And it changes nothing: the stand it was asked about still has no
+    // duplicates on it.
+    expect(stand.helden.every((held) => held.dubbelen === 0)).toBe(true);
+  });
+
+  it('names the reeks above and below each one', () => {
     expect(volgendeReeks('brons')).toBe('zilver');
     expect(volgendeReeks('platina')).toBe('ultra');
     expect(volgendeReeks('ultra')).toBeNull();
+    expect(vorigeReeks('zilver')).toBe('brons');
+    expect(vorigeReeks('brons')).toBeNull();
   });
 });
 
 describe('the chests a round paid for', () => {
-  it('opens exactly the ones owed, in order, and remembers it did', () => {
-    const trekken = [op(5), op(0)];
-    const { stand, uitkomsten } = openVerdiend(uitLadder(0), 100, () => trekken.shift() ?? 0);
+  it('owes exactly the ones the answers bought and no more', () => {
+    const stand = uitLadder(0);
 
-    expect(uitkomsten.map((uitkomst) => uitkomst.soort)).toEqual(['nieuw', 'dubbel']);
-    expect(stand.kistenOpen).toBe(2);
-
-    // Asked again with the same answers, there is nothing left to open.
-    expect(openVerdiend(stand, 100, () => 0).uitkomsten).toEqual([]);
+    expect(kistenTeGoed(stand, 49)).toBe(0);
+    expect(kistenTeGoed(stand, 50)).toBe(1);
+    expect(kistenTeGoed(stand, 100)).toBe(2);
   });
 
-  it('opens nothing before the first fifty', () => {
-    expect(openVerdiend(uitLadder(0), 49, () => 0).uitkomsten).toEqual([]);
+  it('still owes a chest that was earned and never opened', () => {
+    const stand = uitLadder(0);
+    const na = openKist(stand, aanbod(stand)[0] as number).stand;
+
+    expect(kistenTeGoed(na, 100)).toBe(1);
+    expect(kistenTeGoed(na, 50)).toBe(0);
   });
 });

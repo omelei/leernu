@@ -23,8 +23,8 @@
  * there is no reason a reward should be the exception.
  *
  * This is pure and lives in game-core: it decides what has been earned, never
- * what it looks like. The drawings are `components/Stickers.tsx` and the
- * materials are five tokens in `index.css`.
+ * what it looks like. The heroes are `components/stickerSet.ts` and the images
+ * in `public/helden/`, and the materials are five tokens in `index.css`.
  *
  * **Since ADR-096 this ladder hands nothing out.** Heroes arrive in chests
  * (`helden.ts`). What this still decides is where a child who climbed it

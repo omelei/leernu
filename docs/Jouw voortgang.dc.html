@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+body { margin: 0; background: #e5e5df; }
+a { color: #1d221c; }
+a:hover { color: #5a5f59; }
+</style>
+</helmet>
+
+<section style="display:flex;flex-direction:column;gap:96px;padding:64px;font-family:'Source Sans 3',system-ui,sans-serif;color:#1d221c;border-bottom:1px solid #b7b8b0">
+
+  <div id="2a" style="display:flex;flex-direction:column;gap:24px">
+    <div style="display:flex;align-items:center;gap:12px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;background:#1d221c;color:#fafaf7;border-radius:999px;padding:4px 8px">2a</span>
+      <h2 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:24px">De twaalf helden — heldenblad</h2>
+    </div>
+    <p style="margin:0;font-size:17px;line-height:1.45;color:#5a5f59;max-width:72ch;text-wrap:pretty">Twaalf portretten, allemaal even kansrijk: borstbeeld in een ronde plaat, vacht in inkt, en bril, strik, sjaal, hoed of pet in het materiaal van de reeks. Eén bouwdoos — romp, oren, kop, snuit, ogen, bril, accessoire — dus de twaalf horen bij elkaar en zijn los van elkaar te onderscheiden op oren en uitrusting.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:24px;width:1440px">
+      <sc-for list="{{ heldenblad }}" as="h" hint-placeholder-count="12">
+        <div style="width:336px;flex:none;box-sizing:border-box;display:flex;gap:16px;align-items:center;background:#fafaf7;border:1px solid #d6d6cf;border-radius:12px;padding:16px">
+          <dc-import name="Heldplaat" dier="{{ h.dier }}" reeks="{{ h.reeks }}" size="{{ 112 }}" hint-size="112px,112px"></dc-import>
+          <div style="display:flex;flex-direction:column;gap:4px;min-width:0">
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:20px">{{ h.naam }}</span>
+            <p style="margin:0;font-size:14px;line-height:1.35;color:#5a5f59;text-wrap:pretty">{{ h.opdracht }}</p>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div id="2b" style="display:flex;flex-direction:column;gap:24px">
+    <div style="display:flex;align-items:center;gap:12px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;background:#1d221c;color:#fafaf7;border-radius:999px;padding:4px 8px">2b</span>
+      <h2 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:24px">De vijf reeksen — ringen om de plaat</h2>
+    </div>
+    <p style="margin:0;font-size:17px;line-height:1.45;color:#5a5f59;max-width:72ch;text-wrap:pretty">Dezelfde held, vijf keer. De reeks is een telling: één gesloten ring per beklommen trede, zodat je zonder legenda ziet welke hoger staat. De plaat en de uitrusting nemen het materiaal over. De vier ringsleuven zijn altijd gereserveerd, dus de plaat blijft even groot en de kaart verspringt niet als een held omhooggaat.</p>
+    <div style="display:flex;gap:24px;flex-wrap:wrap">
+      <sc-for list="{{ reeksenRij }}" as="r" hint-placeholder-count="5">
+        <div style="width:200px;box-sizing:border-box;display:flex;flex-direction:column;gap:12px;align-items:flex-start;background:#fafaf7;border:1px solid #d6d6cf;border-radius:12px;padding:16px">
+          <dc-import name="Heldplaat" dier="vos" reeks="{{ r.reeks }}" size="{{ 140 }}" hint-size="140px,140px"></dc-import>
+          <span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px">Valerie Vos</span>
+          <span style="font-size:14px;color:#5a5f59;font-variant-numeric:tabular-nums">{{ r.meta }}</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#5a5f59">{{ r.ringen }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div id="2c" style="display:flex;flex-direction:column;gap:24px">
+    <div style="display:flex;align-items:center;gap:12px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;background:#1d221c;color:#fafaf7;border-radius:999px;padding:4px 8px">2c</span>
+      <h2 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:24px">Maten en toestanden van de plaat</h2>
+    </div>
+    <div style="display:flex;gap:48px;align-items:flex-end;flex-wrap:wrap;background:#fafaf7;border:1px solid #d6d6cf;border-radius:12px;padding:24px">
+      <sc-for list="{{ maten }}" as="m" hint-placeholder-count="3">
+        <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-start">
+          <dc-import name="Heldplaat" dier="uil" reeks="goud" size="{{ m.avatar }}" ringen="{{ m.ringen }}" hint-size="100%,100%"></dc-import>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#5a5f59">{{ m.label }}</span>
+        </div>
+      </sc-for>
+      <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-start">
+        <dc-import name="Heldplaat" dier="bever" reeks="brons" gevonden="{{ false }}" size="{{ 112 }}" hint-size="112px,112px"></dc-import>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#5a5f59">nog niet gevonden</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-start;border:1px solid #1d221c;border-radius:12px;background:#f0f0ec;padding:12px">
+        <dc-import name="Heldplaat" dier="wolf" reeks="ultra" size="{{ 112 }}" hint-size="112px,112px"></dc-import>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.08em;background:#1d221c;color:#fafaf7;border-radius:999px;padding:4px 8px">je draagt deze</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="2d" style="display:flex;flex-direction:column;gap:24px;max-width:880px">
+    <div style="display:flex;align-items:center;gap:12px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;background:#1d221c;color:#fafaf7;border-radius:999px;padding:4px 8px">2d</span>
+      <h2 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:24px">Notities bij de helden</h2>
+    </div>
+    <div style="background:#fafaf7;border:1px solid #d6d6cf;border-radius:12px;padding:24px;display:flex;flex-direction:column">
+      <sc-for list="{{ heldNotities }}" as="n" hint-placeholder-count="5">
+        <div style="display:flex;gap:16px;align-items:flex-start;padding:16px 0;border-top:1px solid #d6d6cf">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#5a5f59;width:96px;flex:none;padding-top:4px">{{ n.tag }}</span>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px">{{ n.wat }}</span>
+            <p style="margin:0;font-size:16px;line-height:1.45;color:#5a5f59;text-wrap:pretty">{{ n.waarom }}</p>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+</section>
+
+<section style="display:flex;flex-direction:column;gap:96px;padding:64px;font-family:'Source Sans 3',system-ui,sans-serif;color:#1d221c">
+
+  <div id="1a" style="display:flex;flex-direction:column;gap:24px">
+    <div style="display:flex;align-items:center;gap:12px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;background:#1d221c;color:#fafaf7;border-radius:999px;padding:4px 8px">1a</span>
+      <h2 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:24px">Blok "Jouw voortgang" — 1440, vier toestanden</h2>
+    </div>
+    <div style="display:flex;gap:32px;align-items:flex-start">
+      <sc-for list="{{ blokken }}" as="b" hint-placeholder-count="4">
+        <div style="width:344px;flex:none;display:flex;flex-direction:column;gap:8px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#5a5f59">{{ b.titel }}</span>
+          <dc-import name="Voortgangsblok" data="{{ b.data }}" hint-size="344px,360px"></dc-import>
+        </div>
+      </sc-for>
+      <div style="width:344px;flex:none;display:flex;flex-direction:column;gap:8px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#5a5f59">Tijdens laden</span>
+        <dc-import name="Voortgangsblok" loading="{{ true }}" hint-size="344px,300px"></dc-import>
+      </div>
+    </div>
+  </div>
+
+  <div id="1b" style="display:flex;flex-direction:column;gap:24px">
+    <div style="display:flex;align-items:center;gap:12px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;background:#1d221c;color:#fafaf7;border-radius:999px;padding:4px 8px">1b</span>
+      <h2 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:24px">Blok — 390, één aanraakvlak naar /voortgang</h2>
+    </div>
+    <div style="display:flex;gap:32px;align-items:flex-start">
+      <sc-for list="{{ blokken }}" as="b" hint-placeholder-count="4">
+        <div style="width:358px;flex:none;display:flex;flex-direction:column;gap:8px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#5a5f59">{{ b.titel }}</span>
+          <div style="width:390px;padding:16px;background:#fafaf7;border:1px solid #b7b8b0;box-sizing:border-box">
+            <dc-import name="Voortgangsblok" data="{{ b.data }}" compact="{{ true }}" hint-size="358px,150px"></dc-import>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div id="1c" style="display:flex;flex-direction:column;gap:32px">
+    <div style="display:flex;align-items:center;gap:12px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;background:#1d221c;color:#fafaf7;border-radius:999px;padding:4px 8px">1c</span>
+      <h2 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:24px">/voortgang — 1440, vier toestanden</h2>
+    </div>
+    <sc-for list="{{ blokken }}" as="b" hint-placeholder-count="4">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#5a5f59">{{ b.titel }} · 1440</span>
+        <div style="width:1440px;border:1px solid #b7b8b0;box-shadow:0 12px 32px rgba(29,34,28,0.18);overflow:hidden">
+          <dc-import name="Voortgangspagina" data="{{ b.data }}" mode="desk" hint-size="1440px,1600px"></dc-import>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+
+  <div id="1d" style="display:flex;flex-direction:column;gap:32px">
+    <div style="display:flex;align-items:center;gap:12px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;background:#1d221c;color:#fafaf7;border-radius:999px;padding:4px 8px">1d</span>
+      <h2 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:24px">/voortgang — 834, vakken in een menu, bestemmingen onderaan</h2>
+    </div>
+    <div style="display:flex;gap:48px;align-items:flex-start">
+      <sc-for list="{{ tweeStaten }}" as="b" hint-placeholder-count="2">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#5a5f59">{{ b.titel }} · 834</span>
+          <div style="width:834px;border:1px solid #b7b8b0;box-shadow:0 12px 32px rgba(29,34,28,0.18);overflow:hidden">
+            <dc-import name="Voortgangspagina" data="{{ b.data }}" mode="tablet" hint-size="834px,1600px"></dc-import>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div id="1e" style="display:flex;flex-direction:column;gap:32px">
+    <div style="display:flex;align-items:center;gap:12px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;background:#1d221c;color:#fafaf7;border-radius:999px;padding:4px 8px">1e</span>
+      <h2 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:24px">/voortgang — 390</h2>
+    </div>
+    <div style="display:flex;gap:48px;align-items:flex-start">
+      <sc-for list="{{ tweeStaten }}" as="b" hint-placeholder-count="2">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#5a5f59">{{ b.titel }} · 390</span>
+          <div style="width:390px;border:1px solid #b7b8b0;box-shadow:0 12px 32px rgba(29,34,28,0.18);overflow:hidden">
+            <dc-import name="Voortgangspagina" data="{{ b.data }}" mode="phone" hint-size="390px,1800px"></dc-import>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div id="1f" style="display:flex;flex-direction:column;gap:24px;max-width:880px">
+    <div style="display:flex;align-items:center;gap:12px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;background:#1d221c;color:#fafaf7;border-radius:999px;padding:4px 8px">1f</span>
+      <h2 style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:24px">Notities bij de keuzes</h2>
+    </div>
+    <div style="background:#fafaf7;border:1px solid #d6d6cf;border-radius:12px;padding:24px;display:flex;flex-direction:column">
+      <sc-for list="{{ notities }}" as="n" hint-placeholder-count="10">
+        <div style="display:flex;gap:16px;align-items:flex-start;padding:16px 0;border-top:1px solid #d6d6cf">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#5a5f59;width:96px;flex:none;padding-top:4px">{{ n.tag }}</span>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <span style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px">{{ n.wat }}</span>
+            <p style="margin:0;font-size:16px;line-height:1.45;color:#5a5f59;text-wrap:pretty">{{ n.waarom }}</p>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const TIER = {
+  brons: { base: "#a4602a", deep: "#7d4720", soft: "#f3e3d5" },
+  zilver: { base: "#6b7883", deep: "#4f5a63", soft: "#e4e8eb" },
+  goud: { base: "#8f8213", deep: "#6d6410", soft: "#efeacd" },
+  platina: { base: "#3f7f8f", deep: "#2f6270", soft: "#dceaed" },
+  ultra: { base: "#8a4fc9", deep: "#6b3aa0", soft: "#eadff7" },
+};
+const NAMEN = [
+  ["Valerie Vos", "vos"], ["Daan Das", "das"], ["Olaf Otter", "otter"], ["Harm Havik", "havik"],
+  ["Willem Wolf", "wolf"], ["Esmee Egel", "egel"], ["Bart Bever", "bever"], ["Udo Uil", "uil"],
+  ["Minou Marter", "marter"], ["Fem Flamingo", "flamingo"], ["Richard Ree", "ree"], ["Ben Buizerd", "buizerd"],
+];
+const CUM = [0, 0, 25, 75, 175, 375, 575, 775, 975, 1175, 1375, 1575, 1775, 1975, 2175, 2375];
+
+class Component extends DCLogic {
+  build(o) {
+    const heroes = NAMEN.map((n, i) => {
+      const naam = n[0];
+      const dier = n[1];
+      const h = o.helden[i];
+      if (!h) return { naam, dier, found: false };
+      const t = TIER[h[0]];
+      const dupes = h[1];
+      return {
+        naam,
+        dier,
+        found: true,
+        worn: o.wornIndex === i,
+        reeks: h[0],
+        base: t.base,
+        deep: t.deep,
+        soft: t.soft,
+        meta: h[0] === "ultra" ? "ultra · hoogste reeks" : h[0] + " · " + dupes + " van de 3",
+      };
+    });
+    const worn = heroes[o.wornIndex];
+    const wornTier = o.helden[o.wornIndex][0];
+    const t = TIER[wornTier];
+    const from = CUM[o.level];
+    const to = CUM[o.level + 1];
+    const pct = Math.min(100, Math.max(4, Math.round(((o.correct - from) / (to - from)) * 100)));
+    const toLevel = Math.max(0, to - o.correct);
+    const toChest = (5 - o.stars) * 10 - o.withinStar;
+    return {
+      level: o.level,
+      levelPct: pct,
+      levelLine: "Nog " + toLevel + " goede antwoorden tot niveau " + (o.level + 1) + ".",
+      stars: o.stars,
+      starsLabel: o.stars + " van de 5 sterren",
+      chestLine: o.chestLine || "Nog " + toChest + " goede antwoorden tot je volgende kist.",
+      correct: o.correct,
+      perfectRow: o.perfectRow,
+      streak: o.streak,
+      wornName: worn.naam,
+      wornDier: worn.dier,
+      wornTier: wornTier,
+      wornTier: wornTier,
+      wornBase: t.base,
+      wornDeep: t.deep,
+      wornSoft: t.soft,
+      wornStripe: "rgba(29,34,28,0.06)",
+      heroes,
+      heroesLabel: o.helden.length + " van de 12 helden",
+      diplomas: o.diplomas,
+      diplomaLabel: o.diplomas.length + " van de 12 gehaald",
+      stampsDone: o.stamps,
+      stampLabel: o.stamps + " van de 10 gehaald",
+      practiceLabel: o.practiceLabel,
+    };
+  }
+
+  renderVals() {
+    const nieuw = this.build({
+      correct: 0, level: 1, stars: 0, withinStar: 0,
+      chestLine: "Nog 10 goede antwoorden tot je eerste ster.",
+      helden: [["brons", 0], ["brons", 0], ["brons", 0]], wornIndex: 0,
+      diplomas: [], stamps: 0, perfectRow: 0, streak: 1,
+      practiceLabel: "Doe één ronde",
+    });
+    const onderweg = this.build({
+      correct: 169, level: 3, stars: 2, withinStar: 6,
+      helden: [["goud", 2], ["zilver", 1], ["brons", 0], ["brons", 2], ["zilver", 0]], wornIndex: 0,
+      diplomas: [1, 2, 5], stamps: 4, perfectRow: 8, streak: 6,
+      practiceLabel: "Verder oefenen met tafels",
+    });
+    const bijna = this.build({
+      correct: 902, level: 7, stars: 4, withinStar: 7,
+      helden: [["goud", 1], ["zilver", 2], ["zilver", 0], ["brons", 1], ["platina", 0], ["brons", 2], ["brons", 0]], wornIndex: 4,
+      diplomas: [1, 2, 3, 5, 10], stamps: 6, perfectRow: 14, streak: 9,
+      practiceLabel: "Verder oefenen met topografie",
+    });
+    const ver = this.build({
+      correct: 1900, level: 12, stars: 3, withinStar: 4,
+      helden: [["ultra", 0], ["platina", 2], ["goud", 1], ["platina", 0], ["ultra", 0], ["goud", 2],
+               ["zilver", 1], ["ultra", 0], ["platina", 1], ["goud", 0], ["zilver", 2], ["platina", 2]], wornIndex: 0,
+      diplomas: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], stamps: 10, perfectRow: 21, streak: 34,
+      practiceLabel: "Verder oefenen met klokkijken",
+    });
+
+    const blokken = [
+      { titel: "Nieuw kind", data: nieuw },
+      { titel: "Onderweg", data: onderweg },
+      { titel: "Bijna een kist", data: bijna },
+      { titel: "Ver gevorderd", data: ver },
+    ];
+
+    const dieren = [
+      ["Valerie Vos", "vos", "brons", "Spitse oren, witte wangen, ronde bril en een strik."],
+      ["Daan Das", "das", "zilver", "Witte streep over de kop, hoge hoed met band."],
+      ["Olaf Otter", "otter", "goud", "Brede snuit, kleine oren, snor en strik."],
+      ["Harm Havik", "havik", "platina", "Kuif, hoekige bril en een ruitsnavel."],
+      ["Willem Wolf", "wolf", "ultra", "Grootste oren, wangen en een sjaal."],
+      ["Esmee Egel", "egel", "brons", "Stekelkrans om de kop, ronde bril."],
+      ["Bart Bever", "bever", "zilver", "Pet met klep, hoekige bril, twee snijtanden."],
+      ["Udo Uil", "uil", "goud", "Gezichtsschijf met de grootste ogen en oorpluimen."],
+      ["Minou Marter", "marter", "platina", "Masker over de ogen, geen bril."],
+      ["Fem Flamingo", "flamingo", "ultra", "Lange nek, kuif en een haaksnavel."],
+      ["Richard Ree", "ree", "brons", "Gewei, monocle en een snor."],
+      ["Ben Buizerd", "buizerd", "zilver", "Witte kraag, ruitsnavel en een sjaal."],
+    ];
+    const heldenblad = dieren.map((d) => ({ naam: d[0], dier: d[1], reeks: d[2], opdracht: d[3] }));
+    const reeksenRij = ["brons", "zilver", "goud", "platina", "ultra"].map((naam, i) => ({
+      reeks: naam,
+      ringen: i === 0 ? "geen ring" : i + (i === 1 ? " ring" : " ringen"),
+      meta: naam === "ultra" ? "ultra · hoogste reeks" : naam + " · 0 van de 3",
+    }));
+
+    return {
+      blokken,
+      tweeStaten: [blokken[1], blokken[2]],
+      heldenblad,
+      reeksenRij,
+      maten: [
+        { label: "152 · paginatop", avatar: 152, ringen: true },
+        { label: "112 · heldenraster", avatar: 112, ringen: true },
+        { label: "76 · blok 1440", avatar: 76, ringen: true },
+        { label: "48 · blok 390, zonder ringen", avatar: 48, ringen: true },
+      ],
+      heldNotities: [
+        { tag: "Tekening", wat: "Eén pose per held, vast voor altijd", waarom: "Een kind herkent de held aan de vorm, niet aan de kleur. Daardoor blijft dezelfde held leesbaar op 48px in het blok en op 140px op de pagina, en werkt de reeks als tweede laag." },
+        { tag: "Ringen", wat: "De reeks is een telling om de plaat", waarom: "Eén gesloten ring per trede: brons heeft er geen, ultra vier. Een kleur alleen zegt niet welke reeks hoger is; een aantal wel, en het werkt zonder legenda. De vier sleuven zijn altijd gereserveerd, dus de plaat is in elke reeks even groot." },
+        { tag: "Materiaal", wat: "De uitrusting draagt de kleur, de vacht niet", waarom: "Vacht blijft inkt en oppervlak; bril, strik, sjaal, hoed, pet en oorbinnenkant nemen het materiaal van de reeks over. Zo blijft het contrast in alle vijf reeksen gelijk en is er geen nieuwe kleur buiten het systeem nodig." },
+        { tag: "Onbekend", wat: "Een kist, geen silhouet", waarom: "Een niet-gevonden held toont geen vervaagde tekening: dat verklapt de verrassing en voelt als iets dat wordt afgehouden. De kruisband op oppervlak zegt \"hier zit iets in\" en de naam blijft geheim." },
+        { tag: "Namen", wat: "Voornaam op dezelfde letter als het dier", waarom: "Valerie Vos, Daan Das, Fem Flamingo. De alliteratie maakt de naam onthoudbaar en makkelijk voor te lezen voor groep 4, en de volledige naam geeft de held een karakter in plaats van een soort. In de zin \"goud · 2 van de 3\" blijft de soort leidend, dus de kaart blijft kort." },
+        { tag: "Bouw", wat: "Eén bouwdoos, twaalf karakters", waarom: "Iedere held is hetzelfde borstbeeld: romp, oren, kop, snuit, twee ogen, bril en één accessoire. Het verschil zit in de oren en in wat hij draagt, dus ze voelen als één cast en er kan een dertiende bij zonder nieuwe stijl." },
+        { tag: "Reeks", wat: "De uitrusting draagt de kleur", waarom: "Het silhouet blijft inkt, de uitrusting krijgt het basismateriaal van de reeks en de plaat de zachte toon. Een held die van brons naar ultra klimt, ziet er zichtbaar sterker uit zonder dat er een nieuwe tekening nodig is — dat is precies de reden om nog een ronde te doen." },
+        { tag: "Leesbaar", wat: "Ringen vanaf 64px, daaronder alleen de plaat", waarom: "Onder 64px worden de ringen dunner dan 2px en zijn ze niet meer te tellen; daar vult de tekening het hele vak en draagt alleen de plaatkleur de reeks. De rang lees je dan op /voortgang, waar de plaat 112px is." },
+      ],
+      notities: [
+        { tag: "Blok", wat: "De kist weegt het zwaarst, het niveau staat eronder", waarom: "De kist is de dichtstbijzijnde beloning en de enige met een verrassing erin, dus die krijgt de sterrenmeter en de grote zin. Niveau blijft één dunne balk met één regel, zodat de twee niet om aandacht vechten en een kind in één blik ziet wat de volgende ronde oplevert." },
+        { tag: "Blok", wat: "\"5 van de 12 helden\" is uit het blok", waarom: "Die regel telt wat je al hebt en zegt niets over de volgende ronde. Hij staat voluit op /voortgang boven het raster. Zo blijft het blok even hoog als nu, met de sterrenmeter erbij." },
+        { tag: "Blok 390", wat: "Sterren in dezelfde rij, geen tweede kaart", waarom: "Vijf sterretjes van 15px passen naast \"Niveau 3\" op één regel. De rij blijft één aanraakvlak van minstens 56px dat naar /voortgang leidt." },
+        { tag: "Toestand 1", wat: "De lege meter noemt de eerste stap", waarom: "Bij nul goede antwoorden staat er \"Nog 10 goede antwoorden tot je eerste ster.\" en heet de knop \"Doe één ronde\". Een afstand van tien is vanmiddag te halen; \"0 van 5 sterren\" alleen zou alleen leegte tonen." },
+        { tag: "Laden", wat: "De kaart staat er meteen, leeg", waarom: "Kopband, padding en de vier vlakken hebben dezelfde hoogte als de gevulde kaart, dus de eigen kolom verspringt niet als de gegevens binnenkomen." },
+        { tag: "Pagina", wat: "Bovenaan de beloning die het dichtst bij is", waarom: "De oude pagina begon met titel, intro en dan niveau. Nu staat de sterrenmeter met de grote regel bovenaan, naast de gedragen held, met \"Verder oefenen\" ernaast: het besluit om te oefenen valt boven de vouw." },
+        { tag: "Pagina", wat: "\"Verder oefenen\" is een voorstel", waarom: "De knop bestaat nog niet en gaat naar het vak dat het kind het laatst deed. Zonder die weg terug is de pagina een eindpunt in plaats van een aanleiding." },
+        { tag: "Pagina", wat: "Blok en paginatop zeggen niet twee keer hetzelfde", waarom: "Het blok noemt alleen de volgende kist en het volgende niveau. De paginatop voegt de gedragen held groot, het aantal sterren voluit en de weg terug naar oefenen toe; de collectie zelf staat eronder." },
+        { tag: "Helden", wat: "Ontbrekende held is een kist, geen hangslot", waarom: "Het vlak is oppervlak met een kruisband in diep, met \"Nog niet gevonden\" en \"Kist: vijf sterren\". Er is geen vervaagde tekening en geen slot, dus niets voelt afgepakt." },
+        { tag: "Helden", wat: "Gedragen held is meer dan een kleur", waarom: "De gekozen kaart heeft een inktrand van 1px, een oppervlak-vulling en de pil \"je draagt deze\". De andere gevonden helden dragen de omtrekpil \"dragen\". Niet-gevonden helden zijn geen knop." },
+        { tag: "Kleur", wat: "Geen vakaccent, alleen materiaal en goud", waarom: "De enige kleuren zijn de vijf reeksmaterialen (helden, niveaubalk) en goud voor sterren. Diploma's en stempels zijn inkt, want \"hoe het gaat\" is geen beloning." },
+        { tag: "Alles", wat: "Elk getal is een goed antwoord, een ster, een kist of een niveau", waarom: "Geen punten, geen datums, geen aftellers. Alle vier de regels staan voluit onder \"Zo werkt het\", zodat een kind zelf kan uitrekenen wat een ronde oplevert." },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1886,37 +1886,228 @@
     --held-diep: var(--reeks-ultra-diep);
     --held-zacht: var(--reeks-ultra-zacht);
   }
+  /* The hero itself is an image (ADR-098): 320 square, drawn on paper, the
+   * plate a circle of 124 round the centre and the four ring slots outside it
+   * up to 140. Two ways to show it, split at 64 pixels (Heldplaat.tsx). */
   .tk-held {
+    position: relative;
     display: inline-flex;
     flex: none;
     width: var(--held, 48px);
     height: var(--held, 48px);
   }
-  .tk-held-kern {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+  .tk-held-beeld {
+    display: block;
     width: 100%;
     height: 100%;
-    border-radius: 30%;
-    background: var(--held-kleur);
-    color: var(--reeks-licht);
-    box-shadow:
-      inset 0 0 0 3px var(--held-zacht),
-      inset 0 -5px 0 var(--held-diep),
-      var(--shadow-held);
+    max-width: none;
+    user-select: none;
   }
-  /* The same hero as an avatar: round, inside a ring of its soft tone. */
-  .tk-held-rond {
-    padding: 3px;
-    border-radius: var(--radius-full);
-    background: var(--held-zacht);
-    box-shadow: inset 0 0 0 var(--stroke-hair)
-      color-mix(in srgb, var(--held-kleur) 20%, transparent);
+  /* The whole drawing, rings and all, clipped at the edge of what is drawn so
+   * the paper it stands on does not show — as a square in the dark theme, or as
+   * a pale ring on a card that stands on the surface. The edge moves out with
+   * every ring: the plate and its shadow reach 129 of 320, the outer ring of
+   * gold 131, of platinum 137 and of ultra 141. */
+  .tk-held-ringen .tk-held-beeld {
+    clip-path: circle(40.3%);
   }
-  .tk-held-rond .tk-held-kern {
+  .tk-held-ringen[data-reeks='goud'] .tk-held-beeld {
+    clip-path: circle(41%);
+  }
+  .tk-held-ringen[data-reeks='platina'] .tk-held-beeld {
+    clip-path: circle(43%);
+  }
+  .tk-held-ringen[data-reeks='ultra'] .tk-held-beeld {
+    clip-path: circle(44%);
+  }
+  /* The plate alone, enlarged until it fills the frame: 118 of the drawing's
+   * radius of 160, inside the plate's own edge, so no ring and no paper. */
+  .tk-held-klein {
+    overflow: hidden;
     border-radius: var(--radius-full);
-    box-shadow: inset 0 -2px 0 var(--held-diep);
+  }
+  .tk-held-klein .tk-held-beeld {
+    transform: scale(1.36);
+  }
+  /* A hero not found yet is a chest the size of a plate: the surface, with a
+   * band across it both ways in the sunken tone. "Something is in here" — and
+   * nothing about what, because that is the chest's to say. */
+  .tk-held-kist {
+    position: absolute;
+    inset: 11%;
+    border-radius: var(--radius-full);
+    background:
+      linear-gradient(var(--sunken), var(--sunken)) center / 16% 100% no-repeat,
+      linear-gradient(var(--sunken), var(--sunken)) center / 100% 16% no-repeat,
+      var(--surface);
+    box-shadow: inset 0 0 0 var(--stroke-hair) var(--line);
+  }
+  .tk-held-klein .tk-held-kist {
+    inset: 0;
+  }
+
+  /* ---- "Jouw voortgang" ----------------------------------------------------
+   * The block in the column and the top of /voortgang. The chest weighs most:
+   * the stars and the large sentence on the surface, the level under it as one
+   * thin bar and one line (ADR-099). The only colours are the reeks material and
+   * the gold of the stars.
+   */
+  .tk-vg-naam {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-size: 1.25rem; /* 20px */
+    line-height: 1.75rem;
+    letter-spacing: -0.01em;
+    font-weight: 600;
+  }
+  .tk-vg-naam-groot {
+    font-size: 1.5rem; /* 24px */
+    line-height: 2rem;
+  }
+  .tk-vg-kist {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px 16px;
+    border-radius: var(--radius-klein);
+    background: var(--surface);
+  }
+  .tk-vg-kistzin {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-size: 1.25rem; /* 20px */
+    line-height: 1.75rem;
+    letter-spacing: -0.01em;
+    font-weight: 600;
+  }
+  .tk-vg-niveau {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .tk-vg-niveaukop {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 12px;
+    font-weight: 600;
+  }
+  /* The top of the page: the hero at full size, the chest beside it, and the
+   * way back to practising — beside them from 1200, under them below. */
+  .tk-vg-top {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    gap: 24px;
+  }
+  .tk-vg-top-tekst {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+  }
+  .tk-vg-top-knop {
+    grid-column: 1 / -1;
+  }
+  @media (max-width: 767px) {
+    .tk-vg-top {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 16px;
+    }
+    .tk-vg-top-knop .tk-button {
+      width: 100%;
+    }
+  }
+  @media (min-width: 1200px) {
+    .tk-vg-top {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 32px;
+    }
+    .tk-vg-top-knop {
+      grid-column: auto;
+    }
+  }
+  /* The twelve on /voortgang: one card each, the plate at 112 with its rings,
+   * the name, the reeks and how far towards the next, and whether it is worn.
+   * The one worn has an ink edge, the surface and a filled label, so it is
+   * found by more than a tint. */
+  .tk-heldenraster {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(18rem, 100%), 1fr));
+    gap: 16px;
+  }
+  .tk-heldkaart {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-width: 0;
+    padding: 16px;
+    border: var(--stroke-hair) solid var(--line);
+    border-radius: var(--radius-card);
+    background: var(--paper);
+    color: var(--ink);
+    text-align: left;
+  }
+  button.tk-heldkaart {
+    cursor: pointer;
+  }
+  button.tk-heldkaart:not([aria-pressed='true']):hover {
+    background: var(--surface);
+    border-color: var(--ink-3);
+  }
+  .tk-heldkaart[aria-pressed='true'] {
+    border-color: var(--ink);
+    background: var(--surface);
+  }
+  .tk-heldkaart-tekst {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    min-width: 0;
+  }
+  .tk-heldkaart-naam {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-size: 1.25rem; /* 20px */
+    line-height: 1.75rem;
+    letter-spacing: -0.01em;
+    font-weight: 600;
+  }
+  .tk-heldkaart-meta {
+    font-size: 0.875rem; /* 14px */
+    line-height: 1.25rem;
+    color: var(--ink-2);
+    font-variant-numeric: tabular-nums;
+  }
+  .tk-heldkaart-pil {
+    margin-top: 4px;
+    padding: 4px 8px;
+    border: var(--stroke-hair) solid var(--line-strong);
+    border-radius: var(--radius-full);
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 10px;
+    line-height: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+  .tk-heldkaart[aria-pressed='true'] .tk-heldkaart-pil {
+    border-color: var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .tk-heldkaart-kist .tk-heldkaart-naam {
+    font-size: 1.0625rem; /* 17px */
+    line-height: 1.5rem;
+    color: var(--ink-2);
+  }
+  /* A card still reading: its parts drawn empty at their own heights. */
+  .tk-leeg {
+    display: block;
+    flex: none;
+    border-radius: var(--radius-klein);
+    background: var(--surface);
+  }
+  .tk-leeg-rond {
+    border-radius: var(--radius-full);
   }
 
   /* ---- A module's own page (ADR-095) --------------------------------------

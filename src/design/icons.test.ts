@@ -16,14 +16,13 @@ import { describe, expect, it } from 'vitest';
  * weight, or a colour of its own.
  */
 
-const source = readFileSync(join(process.cwd(), 'src', 'components', 'Icon.tsx'), 'utf8');
-/**
- * The stickers are not part of §E's sixteen and never will be — that list is
- * fixed. They sit in the same interface, though, so the two rules that are
- * about the interface rather than about the list apply to them as well: the
- * shared frame, and no colour of their own.
+/*
+ * The heroes are not in here. They were drawn on this frame while they were
+ * animals; since ADR-098 they are illustrations with a material of their own,
+ * served as images, and a rule about one stroke weight and no colour is not a
+ * rule they could keep.
  */
-const stickers = readFileSync(join(process.cwd(), 'src', 'components', 'Stickers.tsx'), 'utf8');
+const source = readFileSync(join(process.cwd(), 'src', 'components', 'Icon.tsx'), 'utf8');
 
 /** The sixteen, in §E's own order. */
 const NAMED = [
@@ -69,25 +68,6 @@ describe('the icon set', () => {
     // mistake or an icon drawn against a different frame.
     const numbers = source.matchAll(/(?:cx|cy|r)="(-?[\d.]+)"/g);
     for (const match of numbers) {
-      const value = Number(match[1]);
-      expect(value, match[0]).toBeGreaterThanOrEqual(0);
-      expect(value, match[0]).toBeLessThanOrEqual(24);
-    }
-  });
-
-  it('draws the stickers on the same frame, with no colour of their own', () => {
-    expect(stickers).not.toContain('<svg');
-    expect(stickers).toMatch(/<Icon \{\.\.\.props\}>/);
-
-    const fills = [...stickers.matchAll(/fill="([^"]*)"/g)].map((match) => match[1]);
-    for (const fill of fills) {
-      expect(['none', 'currentColor'], `fill="${fill ?? ''}"`).toContain(fill);
-    }
-    expect(stickers).not.toMatch(/#[0-9a-fA-F]{3,8}\b/);
-    expect(stickers).not.toMatch(/\b(?:rgb|hsl|oklch)\(/);
-
-    // Same grid, so a sticker cannot quietly be drawn against a bigger one.
-    for (const match of stickers.matchAll(/(?:cx|cy|r)="(-?[\d.]+)"/g)) {
       const value = Number(match[1]);
       expect(value, match[0]).toBeGreaterThanOrEqual(0);
       expect(value, match[0]).toBeLessThanOrEqual(24);

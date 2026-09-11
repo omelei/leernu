@@ -2,17 +2,20 @@ import { useEffect, useState, type CSSProperties } from 'react';
 import { Heldplaat } from '@/components/Heldplaat';
 import { NextIcon } from '@/components/Icon';
 import { ProgressBar } from '@/components/ProgressBar';
+import { Sterren } from '@/components/Sterren';
+import { stickerById } from '@/components/stickerSet';
 import {
-  AANTAL_HELDEN,
-  correctToNextLevel,
   levelFor,
   levelProgress,
+  STERREN_PER_KIST,
+  sterrenInKist,
   type FlawlessRun,
   type ModeId,
 } from '@/game-core';
 import { MODULE_ICON } from '@/features/shell/moduleIcons';
 import { useDesk } from '@/features/shell/useSmallScreen';
-import { reeksVan, useHelden } from '@/features/reis/useHelden';
+import { heldVan, reeksVan, useHelden } from '@/features/reis/useHelden';
+import { kistZin, niveauZin, reeksRegel } from '@/features/reis/voortgangTekst';
 import { t, type TranslationKey } from '@/i18n';
 import { loadAccuracy, loadPlayedRounds } from '@/store/progress';
 import type { Accuracy } from '@/store/progress';
@@ -73,18 +76,26 @@ export function SideColumn({
 }
 
 /**
- * Progress: the hero a child wears, which level, how many heroes, and how far to
- * the next level.
+ * Progress: the hero a child wears, how full the next chest is, and how far to
+ * the next level — in that order, because that is the order of how soon.
  *
- * The level is worked out from one number — correct answers, ever (ADR-070) —
- * and the line that matters is "nog 6 goede antwoorden": a thing a child can
- * decide to do this afternoon. The hero stands on its own reeks, and the bar is
- * drawn in that reeks too (ADR-096). There are no stars here: the handoff keeps
- * them for the screen after a round and the collection page, where a chest can
- * open.
+ * **The chest weighs most.** It is the nearest reward and the only one with
+ * something in it, so it gets the five stars and the large sentence: "Nog 24
+ * goede antwoorden tot je volgende kist." The level stays under it as one thin
+ * bar and one line, so the two do not compete and a child sees in one look what
+ * the next round is worth (ADR-099, as the design draws it). Before the first
+ * star the sentence names that star instead: ten is this afternoon, fifty is not.
  *
- * Two sizes. From 1200 it is the whole card. Below 1200 the handoff draws one
- * row with an arrow at the end, and that row is the way to the collection.
+ * "5 van de 12 helden" is not here. It counts what a child already has and says
+ * nothing about the next round; it is on /voortgang, above the heroes.
+ *
+ * The hero stands on its own reeks with its rings, and the level's bar is drawn
+ * in that reeks too — the only colours in the block are the material and the
+ * gold of the stars.
+ *
+ * Two sizes. From 1200 it is the whole card. Below 1200 it is one row, one
+ * touch target of at least 44 that leads to /voortgang: the plate, "Niveau 3"
+ * with the five stars beside it, and the chest sentence under them.
  *
  * What it never says is how many days, how long, or how often. Nothing here
  * moves by waiting.
@@ -106,27 +117,20 @@ export function VoortgangBlok({
 
   // Nothing in it until it is known: a card that says level one, or a bronze
   // hero, and then changes its mind has told a child something that was not
-  // true. The card itself is drawn at once, so the page does not move.
-  if (goed === null || helden === null) return <Blok titel={t('home.journeyTitle')} bezig />;
+  // true. The card is drawn at once, with its parts at their own heights, so
+  // the column does not move when they arrive.
+  if (goed === null || helden === null) {
+    return (
+      <Blok titel={t('home.journeyTitle')} bezig>
+        <VoortgangLeeg desk={desk} />
+      </Blok>
+    );
+  }
 
   const level = levelFor(goed);
   const reeks = reeksVan(helden, sticker);
-  const reeksNaam = t(`reeks.${reeks}` as TranslationKey);
-  const teGaan = correctToNextLevel(goed);
-  const naarNiveau =
-    teGaan === 1
-      ? t('home.journeyOneToGo', { niveau: level + 1 })
-      : t('home.journeyToGo', { aantal: teGaan, niveau: level + 1 });
-
-  const balk = (klasse: string) => (
-    <span className={klasse} data-reeks={reeks}>
-      <ProgressBar
-        value={levelProgress(goed)}
-        showDot={false}
-        label={t('home.journeyBar', { niveau: level + 1 })}
-      />
-    </span>
-  );
+  const sterren = sterrenInKist(goed);
+  const naarKist = kistZin(goed);
 
   if (!desk) {
     return (
@@ -134,52 +138,95 @@ export function VoortgangBlok({
         <button type="button" className="tk-voortgang-kort" onClick={onReis}>
           <Heldplaat sticker={sticker} reeks={reeks} size={48} />
           <span className="flex min-w-0 flex-1 flex-col gap-1">
-            <span className="flex flex-wrap items-baseline gap-x-2">
+            <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
               <span className="tk-niveau tk-niveau-klein">
                 {t('home.journeyLevel', { niveau: level })}
               </span>
-              <span className="tk-reeksnaam" data-reeks={reeks}>
-                {reeksNaam}
-              </span>
+              <Sterren inKist={sterren} grootte={15} zin="geen" />
             </span>
-            {/* The sentence under it says the same thing in words, and a bar
-                inside a button would fold its own name into the button's. */}
-            <span aria-hidden="true">{balk('tk-reeksbalk tk-reeksbalk-dun')}</span>
-            <span className="tk-hulp">{naarNiveau}</span>
+            <span className="tk-hulp">{naarKist}</span>
           </span>
           <NextIcon size={20} />
+          {/* The stars in words, since the stars themselves are drawn only. */}
+          <span className="tk-sr-only">
+            {t('reis.sterrenStand', { aantal: sterren, totaal: STERREN_PER_KIST })}
+          </span>
           <span className="tk-sr-only">{t('home.journeyAll')}</span>
         </button>
       </Blok>
     );
   }
 
+  const held = heldVan(helden, sticker);
+
   return (
     <Blok titel={t('home.journeyTitle')}>
       <div className="flex items-center gap-4">
         <Heldplaat sticker={sticker} reeks={reeks} size={76} />
         <div className="min-w-0">
-          <p className="flex flex-wrap items-baseline gap-x-2">
-            <span className="tk-niveau">{t('home.journeyLevel', { niveau: level })}</span>
-            <span className="tk-reeksnaam" data-reeks={reeks}>
-              {reeksNaam}
-            </span>
-          </p>
-          <p className="text-label text-ink-2">
-            {t('home.journeyHave', { aantal: helden.helden.length, totaal: AANTAL_HELDEN })}
+          <p className="tk-vg-naam">{t(stickerById(sticker).name)}</p>
+          <p className="tk-reeksnaam" data-reeks={reeks}>
+            {reeksRegel(reeks, held?.dubbelen ?? 0)}
           </p>
         </div>
       </div>
 
-      {balk('tk-reeksbalk')}
+      <div className="tk-vg-kist">
+        <Sterren inKist={sterren} grootte={20} zin="kort" />
+        <p className="tk-vg-kistzin">{naarKist}</p>
+      </div>
 
-      <p className="text-label">{naarNiveau}</p>
+      <div className="tk-vg-niveau">
+        <p className="tk-vg-niveaukop">{t('home.journeyLevel', { niveau: level })}</p>
+        <span className="tk-reeksbalk tk-reeksbalk-dun" data-reeks={reeks}>
+          <ProgressBar
+            value={levelProgress(goed)}
+            showDot={false}
+            label={t('home.journeyBar', { niveau: level + 1 })}
+          />
+        </span>
+        <p className="tk-hulp">{niveauZin(goed)}</p>
+      </div>
 
       <button type="button" className="tk-blok-knop" onClick={onReis}>
         <NextIcon size={20} />
         {t('home.journeyAll')}
       </button>
     </Blok>
+  );
+}
+
+/**
+ * The progress card before it knows anything: the same parts at the same
+ * heights, and empty. Decorative, because "still reading" is already said by
+ * the card's `aria-busy`.
+ */
+function VoortgangLeeg({ desk }: { readonly desk: boolean }) {
+  if (!desk) {
+    return (
+      <div className="flex items-center gap-4" aria-hidden="true">
+        <span className="tk-leeg tk-leeg-rond" style={{ width: 48, height: 48 }} />
+        <span className="flex flex-1 flex-col gap-2">
+          <span className="tk-leeg" style={{ width: '60%', height: 28 }} />
+          <span className="tk-leeg" style={{ width: '90%', height: 20 }} />
+        </span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col gap-3" aria-hidden="true">
+      <div className="flex items-center gap-4">
+        <span className="tk-leeg tk-leeg-rond" style={{ width: 76, height: 76 }} />
+        <span className="flex flex-1 flex-col gap-2">
+          <span className="tk-leeg" style={{ width: '70%', height: 28 }} />
+          <span className="tk-leeg" style={{ width: '50%', height: 16 }} />
+        </span>
+      </div>
+      <span className="tk-leeg" style={{ height: 92 }} />
+      <span className="tk-leeg" style={{ height: 56 }} />
+      <span className="tk-leeg" style={{ width: '80%', height: 44 }} />
+    </div>
   );
 }
 
