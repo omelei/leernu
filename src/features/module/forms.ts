@@ -284,6 +284,26 @@ export const KLOK_FORMS: readonly PracticeForm[] = [
   },
 ];
 
+/**
+ * The way the oefentoets answers in, per module: typing, because that is what a
+ * test asks — the name unaided, the sum unaided, the time written out. The
+ * oefentoets is a tile of its own and pressing it chooses this way too, so a
+ * child is never asked to pick a way a test does not have (ADR-100).
+ */
+const TOETS_VORM: Record<string, ModeId> = {
+  topo: 'hoe-heet-dit',
+  tafels: 'som-typen',
+  klok: 'klok-typen',
+};
+
+/** The way the oefentoets uses, if this page offers it; null otherwise. */
+export function toetsVormVan(
+  moduleId: string,
+  forms: readonly PracticeForm[],
+): PracticeForm | null {
+  return forms.find((form) => form.id === TOETS_VORM[moduleId]) ?? null;
+}
+
 export function formsFor(moduleId: string): readonly PracticeForm[] {
   if (moduleId === 'tafels') return SUM_FORMS;
   if (moduleId === 'klok') return KLOK_FORMS;

@@ -328,23 +328,31 @@ test('the countries of the world have an address of their own', async ({ page })
 });
 
 /**
- * The toetsstand: a round that does not answer back until the end (ADR-085).
+ * The oefentoets: a round that does not answer back until the end (ADR-085).
  *
  * Two halves, and both matter. **Nothing in between** — no Volgende button, no
  * green shape, no waiting: the next question is simply there, which is the
  * thing a test does that no other round in this product does. And **a mark at
  * the end**, which is the only round that gets one, because it is the only
  * round where nothing helped on the way.
+ *
+ * It is a way of its own since ADR-100, and it types: pressing it after
+ * Aanwijzen un-presses Aanwijzen, and the round asks for the name.
  */
-test('the toetsstand asks without answering, and marks at the end', async ({ page }) => {
+test('the oefentoets asks without answering, and marks at the end', async ({ page }) => {
   await signIn(page, 'Roos');
   await startRound(page, PROVINCIES, /Aanwijzen/, true);
 
+  await expect(page.getByRole('heading', { name: 'Hoe heet dit gebied?' })).toBeVisible();
+
+  // Every question of a typed round has the same heading, so the round's
+  // progress bar is what says it moved.
   const gevraagd = async () =>
-    (await page.getByRole('heading', { name: /Waar ligt / }).textContent()) ?? '';
+    (await page.getByRole('progressbar').getAttribute('aria-valuetext')) ?? '';
 
   const eerste = await gevraagd();
-  await answerWrongly(page);
+  await page.getByPlaceholder('Naam').fill('Atlantis');
+  await page.getByRole('button', { name: 'Kijk na' }).click();
 
   // Straight on: the round asks the next question instead of telling the child
   // about the last one. The order of these two matters — the absence is only

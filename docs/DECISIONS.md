@@ -4446,9 +4446,22 @@ Rekenen has six subjects, and seven when "Oefen je fouten" appears. That is one
 past ADR-061's ceiling. It holds as chips, which wrap, and it does not hold as
 tiles.
 
-The oefentoets is still a switch among the ways (ADR-085). The same parent asked
-why a toets needs a way chosen at all. That question is open, and this ADR does
-not answer it.
+### Amended the same day: the oefentoets is a way of its own
+
+The same parent asked why a toets needs a way chosen at all. Under ADR-085 it
+did: the toets was a switch on a way, deciding when you hear back while the way
+decided how you answer. In practice that made a child answer a question a test
+never asks — point or type? a minute or three lives? — and it offered a mark on
+the lightning round and on survival, where "as many as you managed" has nothing
+to be marked out of.
+
+So the oefentoets is a tile of its own, last among the ways, and pressing it
+chooses the way as well: typing (`toetsVormVan`), because that is what a test
+asks — Zelf typen on the map and for sums, the time written out on the clock.
+"Hoeveel vragen?" stands under it as under any round of so many questions.
+Pressing another way leaves the toets. This reverses ADR-085's "a switch on a
+round, not a seventh way"; the start bar still lists the way and the stand
+separately, so what the round is remains readable.
 
 ---
 

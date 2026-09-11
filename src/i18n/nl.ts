@@ -345,13 +345,13 @@ export const nl = {
   // Hoe lang de ronde duurt, waar er meer dan één eerlijk antwoord is. Tien is
   // wat een ronde altijd was en blijft de standaard; de rest bestaat omdat de
   // Rekenmix vijfhonderd sommen heeft.
-  // De toetsstand. Geen zevende manier van oefenen maar een schakelaar op de
-  // manier die je al koos: "de antwoorden komen pas aan het eind" kun je doen
-  // met aanwijzen, met kiezen en met typen. Hij staat waar "hoeveel vragen?"
-  // staat, want het is hetzelfde soort ding - een eigenschap van de ronde die
-  // de twee stappen erboven al gekozen hebben.
+  // De oefentoets, als eigen manier van oefenen (ADR-100): je typt, zoals op
+  // een toets, en pas aan het eind zie je wat goed was. Eerst was het een
+  // schakelaar op een manier die je al koos, en dan moest je een manier kiezen
+  // die een toets niet heeft.
   'choose.testMode': 'Oefentoets',
-  'choose.testModeWhy': 'Je ziet pas aan het eind wat goed was, en je krijgt een cijfer.',
+  'choose.testModeWhy':
+    'Zelf typen zonder hulp. Aan het eind zie je wat goed was en krijg je een cijfer.',
   'choose.startTest': '{wat} · oefentoets',
   'choose.likeTheTest': 'Oefen zoals de toets',
   'choose.howMany': 'Hoeveel vragen?',

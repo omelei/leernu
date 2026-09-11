@@ -28,6 +28,7 @@ import {
   questionCount,
   startLabel,
   teDrukOmAanTeWijzen,
+  toetsVormVan,
   type PracticeForm,
 } from './forms';
 import { useSmallScreen } from '@/features/shell/useSmallScreen';
@@ -150,7 +151,13 @@ export function ModuleScreen({
   // page, at the end of the row.
   const krap = teDrukOmAanTeWijzen(chosen?.setId ?? null, chosen?.items.length ?? 0, kleinScherm);
   const forms = offeredForms(formsFor(module.id), prefs.timer, chosen?.setId ?? null, krap);
-  const form = forms.find((candidate) => candidate.id === formId) ?? forms[0] ?? null;
+  const gekozenManier = forms.find((candidate) => candidate.id === formId) ?? forms[0] ?? null;
+  // The oefentoets is a way of its own (ADR-100). It answers the way a test
+  // asks, by typing, and hears back only at the end — so pressing it chooses
+  // the way as well, and pressing any other way leaves it.
+  const toetsVorm = toetsVormVan(module.id, forms);
+  const alsToets = toetsstand && toetsVorm !== null;
+  const form = alsToets ? toetsVorm : gekozenManier;
 
   const ModuleIcon = MODULE_ICON[module.id];
 
@@ -162,15 +169,12 @@ export function ModuleScreen({
   const gekozen = aantal !== null && lengtes.includes(aantal) ? aantal : null;
   const vragen = form === null ? null : questionCount(form, setSize, gekozen);
   const minuten = form === null ? null : minutesFor(form, vragen);
-  // Not offered where there is nothing to withhold. Exploring asks no
-  // questions, and a tafeldiploma already stops at the first mistake.
-  const toetsbaar = form !== null && form.rule !== null && form.id !== 'tafeldiploma';
   /** Everything this module holds, under one name. What a test asks about. */
   const mix = mixVan(alleOnderwerpen);
   const zin =
     chosen === null || form === null
       ? ''
-      : toetsstand && toetsbaar
+      : alsToets
         ? t('choose.startTest', { wat: startLabel(form, naamVan(chosen), setSize, gekozen) })
         : startLabel(form, naamVan(chosen), setSize, gekozen);
 
@@ -193,7 +197,7 @@ export function ModuleScreen({
       : []),
     ...(form ? [{ label: t('start.manier'), waarde: t(form.name) }] : []),
     ...(ronde ? [{ label: t('start.ronde'), waarde: ronde }] : []),
-    ...(toetsstand && toetsbaar ? [{ label: t('start.stand'), waarde: t('choose.testMode') }] : []),
+    ...(alsToets ? [{ label: t('start.stand'), waarde: t('choose.testMode') }] : []),
   ];
 
   const startKnop =
@@ -201,7 +205,7 @@ export function ModuleScreen({
       <Button
         className="tk-button-go"
         aria-label={t('choose.goLabel', { wat: zin })}
-        onClick={() => onStart(chosen, form.id, gekozen, toetsstand && toetsbaar)}
+        onClick={() => onStart(chosen, form.id, gekozen, alsToets)}
       >
         {t('choose.go')}
         <GoIcon size={24} />
@@ -384,7 +388,7 @@ export function ModuleScreen({
           <div className="tk-tegels">
             {forms.map((candidate) => {
               const FormIcon = candidate.icon;
-              const gekozenVorm = candidate.id === form?.id;
+              const gekozenVorm = !alsToets && candidate.id === form?.id;
 
               return (
                 <button
@@ -393,7 +397,10 @@ export function ModuleScreen({
                   className="tk-tegel"
                   aria-label={`${t(candidate.name)}. ${t(candidate.reason)}`}
                   aria-pressed={gekozenVorm}
-                  onClick={() => setFormId(candidate.id)}
+                  onClick={() => {
+                    setFormId(candidate.id);
+                    setToetsstand(false);
+                  }}
                 >
                   <span className="tk-plaat">
                     <FormIcon size={24} />
@@ -404,22 +411,24 @@ export function ModuleScreen({
               );
             })}
 
-            {/* The oefentoets, last among the ways. Still a switch and not a
-                seventh way (ADR-085): pressing it does not un-press the way
-                that is chosen, and the start bar carries it separately. */}
-            {chosen && toetsbaar ? (
+            {/* The oefentoets, last among the ways and one of them: pressing it
+                un-presses the others, because it chooses how you answer too.
+                It used to be a switch on whichever way was chosen (ADR-085),
+                which asked a child to pick a way a test never asks for
+                (ADR-100). */}
+            {chosen && toetsVorm ? (
               <button
                 type="button"
                 className="tk-tegel"
                 aria-label={`${t('choose.testMode')}. ${t('choose.testModeWhy')}`}
-                aria-pressed={toetsstand}
-                onClick={() => setToetsstand(!toetsstand)}
+                aria-pressed={alsToets}
+                onClick={() => setToetsstand(true)}
               >
                 <span className="tk-plaat">
                   <PaperIcon size={24} />
                 </span>
                 <span className="min-w-0">{t('choose.testMode')}</span>
-                {toetsstand ? vink : null}
+                {alsToets ? vink : null}
               </button>
             ) : null}
           </div>
@@ -484,6 +493,7 @@ export function ModuleScreen({
             onKies={(tafel) => {
               onSet(tafel);
               setFormId('tafeldiploma');
+              setToetsstand(false);
             }}
           />
         ) : null}

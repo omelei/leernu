@@ -11,7 +11,20 @@ import {
   questionCount,
   startLabel,
   teDrukOmAanTeWijzen,
+  toetsVormVan,
 } from './forms';
+
+describe('the oefentoets', () => {
+  it('answers by typing, whatever the module', () => {
+    // A test asks for the name, the sum or the time unaided (ADR-100).
+    const vorm = (moduleId: string, forms: typeof TOPO_FORMS, setId: string) =>
+      toetsVormVan(moduleId, offeredForms(forms, false, setId))?.id;
+
+    expect(vorm('topo', TOPO_FORMS, 'nl-provincies')).toBe('hoe-heet-dit');
+    expect(vorm('tafels', SUM_FORMS, 'tafel-7')).toBe('som-typen');
+    expect(vorm('klok', KLOK_FORMS, 'klok-heel')).toBe('klok-typen');
+  });
+});
 
 /**
  * The order of the ways of practising is the argument K2 is making, so it is
