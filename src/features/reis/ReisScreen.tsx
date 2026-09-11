@@ -5,13 +5,7 @@ import { DiplomaIcon, StampIcon } from '@/components/Icon';
 import { ProgressBar } from '@/components/ProgressBar';
 import { Sterren } from '@/components/Sterren';
 import { STICKERS, stickerById } from '@/components/stickerSet';
-import {
-  AANTAL_HELDEN,
-  levelFor,
-  levelProgress,
-  sterrenInKist,
-  STAMPS,
-} from '@/game-core';
+import { AANTAL_HELDEN, levelFor, levelProgress, sterrenInKist, STAMPS } from '@/game-core';
 import { geplaatst, startbareOnderdelen } from '@/features/module/onderdelen';
 import type { Module } from '@/features/shell/modules';
 import { useSmallScreen } from '@/features/shell/useSmallScreen';

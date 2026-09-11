@@ -4127,12 +4127,12 @@ on the collection page, and both render the same component and read the same row
 
 At fifty correct answers a chest:
 
-| | ADR-096 | this |
-| --- | --- | --- |
-| all twelve heroes | 1,862 answers (p90 2,750) | **600, exact** |
-| one chosen hero at ultra | 7,800 | **1,200** |
-| every hero at ultra | 11,700 | **7,800** |
-| chests holding nothing new | ~25 of 37 | **0** |
+|                            | ADR-096                   | this           |
+| -------------------------- | ------------------------- | -------------- |
+| all twelve heroes          | 1,862 answers (p90 2,750) | **600, exact** |
+| one chosen hero at ultra   | 7,800                     | **1,200**      |
+| every hero at ultra        | 11,700                    | **7,800**      |
+| chests holding nothing new | ~25 of 37                 | **0**          |
 
 `README.md`, ADR-076, ADR-080 and ADR-081 become true again rather than needing
 amendment. Spec §4.5 is no longer revised by anything, and ADR-067's first
@@ -4168,20 +4168,20 @@ question below differently from the proposal that follows it, and the design is
 what shipped. The twelve are **animals with a name and an outfit**, not abstract
 shapes:
 
-| Place | Hero | Was |
-| --- | --- | --- |
-| 0 | Valerie Vos | cat |
-| 1 | Daan Das | owl |
-| 2 | Olaf Otter | fox |
-| 3 | Harm Havik | bear |
-| 4 | Willem Wolf | hare |
-| 5 | Esmee Egel | fish |
-| 6 | Bart Bever | hedgehog |
-| 7 | Udo Uil | frog |
-| 8 | Minou Marter | squirrel |
-| 9 | Fem Flamingo | penguin |
-| 10 | Richard Ree | elephant |
-| 11 | Ben Buizerd | dragon |
+| Place | Hero         | Was      |
+| ----- | ------------ | -------- |
+| 0     | Valerie Vos  | cat      |
+| 1     | Daan Das     | owl      |
+| 2     | Olaf Otter   | fox      |
+| 3     | Harm Havik   | bear     |
+| 4     | Willem Wolf  | hare     |
+| 5     | Esmee Egel   | fish     |
+| 6     | Bart Bever   | hedgehog |
+| 7     | Udo Uil      | frog     |
+| 8     | Minou Marter | squirrel |
+| 9     | Fem Flamingo | penguin  |
+| 10    | Richard Ree  | elephant |
+| 11    | Ben Buizerd  | dragon   |
 
 - **One construction kit, twelve characters.** Every hero is the same bust —
   body, ears, head, snout, two eyes, glasses and one accessory — and they differ
@@ -4238,20 +4238,20 @@ to arithmetic breaks that, and breaks it again for every module not yet built.
 **Twelve heroes, each one unmistakable shape rather than a costume**, and each
 power a way of being rather than a school subject.
 
-| # | Name | Power | Silhouette |
-| --- | --- | --- | --- |
-| 1 | Reus | lifts what nobody can lift | shoulders wider than the frame, small head at the top edge |
-| 2 | Pluis | small and light enough to pass anywhere and land from any height | a small soft circle with two dots, alone in empty space |
-| 3 | Flits | there and back before you looked up | a zigzag body with a small round head |
-| 4 | Schim | goes where the light does not | an outline of head and shoulders, empty inside, ragged below |
-| 5 | Steen | nothing gets past him | a wide rounded block, two dots high, flat on the ground |
-| 6 | Golf | goes round anything and cannot be held | a wave crest with an eye in the hollow |
-| 7 | Vonk | makes light where there is none | a round head with eight short rays |
-| 8 | IJs | holds everything still for a moment so you can look | a six-pointed crystal with an eye at its centre |
-| 9 | Klim | grows a ladder or a bridge where there is none | a spiral with a small head at its tip |
-| 10 | Bout | repairs anything, himself included | a rounded block head, one large eye, a nut on top |
-| 11 | Echo | says back what was said long ago | a head between two open arcs |
-| 12 | Vlam | burns through what is in the way | a jaw, one horn, one eye — the dragon already drawn |
+| #   | Name  | Power                                                            | Silhouette                                                   |
+| --- | ----- | ---------------------------------------------------------------- | ------------------------------------------------------------ |
+| 1   | Reus  | lifts what nobody can lift                                       | shoulders wider than the frame, small head at the top edge   |
+| 2   | Pluis | small and light enough to pass anywhere and land from any height | a small soft circle with two dots, alone in empty space      |
+| 3   | Flits | there and back before you looked up                              | a zigzag body with a small round head                        |
+| 4   | Schim | goes where the light does not                                    | an outline of head and shoulders, empty inside, ragged below |
+| 5   | Steen | nothing gets past him                                            | a wide rounded block, two dots high, flat on the ground      |
+| 6   | Golf  | goes round anything and cannot be held                           | a wave crest with an eye in the hollow                       |
+| 7   | Vonk  | makes light where there is none                                  | a round head with eight short rays                           |
+| 8   | IJs   | holds everything still for a moment so you can look              | a six-pointed crystal with an eye at its centre              |
+| 9   | Klim  | grows a ladder or a bridge where there is none                   | a spiral with a small head at its tip                        |
+| 10  | Bout  | repairs anything, himself included                               | a rounded block head, one large eye, a nut on top            |
+| 11  | Echo  | says back what was said long ago                                 | a head between two open arcs                                 |
+| 12  | Vlam  | burns through what is in the way                                 | a jaw, one horn, one eye — the dragon already drawn          |
 
 **Six pairs of opposites**: large/small, fast/silent, hard/soft, light/cold,
 grows/builds, remembers/burns. A child seeing Reus beside Pluis reads the system

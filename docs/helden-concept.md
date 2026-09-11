@@ -32,25 +32,25 @@ Basis: `README.md`, `docs/DECISIONS.md` (ADR-040, 059, 065, 067, 070, 071, 076, 
 ### De drie hypothesen, scherp gescheiden
 
 **H1 — Thema.** De dieren zijn niet cool. Dan verandert een skin het gedrag.
-*Voorspelling:* met dezelfde loop maar superheldnamen en -tekeningen stijgt de speeltijd.
+_Voorspelling:_ met dezelfde loop maar superheldnamen en -tekeningen stijgt de speeltijd.
 
 **H2 — Loop.** De beloning stond te ver weg. Feit uit `rewards.ts`: de niveaucurve is 25, 50, 100, 200, dan 200. Het 4e dier kostte 25 goede antwoorden, het 5e 50, het 6e 100, het 7e 200, en elk dier daarna 200. Het twaalfde dier zat op **1.375 goede antwoorden**.
-*Voorspelling:* met dezelfde dieren maar een vaste kadans van 50 stijgt de speeltijd.
+_Voorspelling:_ met dezelfde dieren maar een vaste kadans van 50 stijgt de speeltijd.
 
 **H3 — Zichtbaarheid.** Het pakket verbergt wat er komt (ADR-081), de kolom noemt de volgende beloning niet meer, en er is tussen twee beloningen niets dat beweegt. Er is dus niets om naar te verlangen en niets dat vooruitgang toont.
-*Voorspelling:* met dezelfde dieren en dezelfde curve, maar een zichtbare ster elke tien antwoorden en een zichtbaar aftelmoment, stijgt de sessielengte.
+_Voorspelling:_ met dezelfde dieren en dezelfde curve, maar een zichtbare ster elke tien antwoorden en een zichtbaar aftelmoment, stijgt de sessielengte.
 
 ### Hoe je ze binnen een week uit elkaar trekt
 
 Je hebt twee kinderen; dat is te weinig voor statistiek, maar genoeg voor een A/B over de tijd als je maar één ding tegelijk verandert.
 
-| Dag | Wat je doet | Wat het uitsluit |
-|---|---|---|
-| 1 (ma) | **Nulmeting, zonder iets te bouwen.** Lees `attempts` van de afgelopen 8 weken uit: goede antwoorden per week, dagen met minstens één ronde. Die data staat er al sinds v1. | niets — dit is je referentie |
-| 2 (di) | **H3-test.** Zet de sterrenrij in de rechterkolom en laat bij elk tiende goede antwoord in de ronde een ster vollopen. Verander verder níéts: dieren blijven, curve blijft. | als de sessielengte stijgt: H1 is niet nodig |
-| 3–5 | Laat het staan. Meet dezelfde twee getallen. | |
-| 6 (za) | **H2-test.** Zet de kadans op 50 met een gegarandeerd nieuw dier. Nog steeds dieren, nog steeds geen heldentekening. | als dit het verschil maakt en dag 2 niet: het was de loop |
-| 7 (zo) | **H1-test, gratis.** Vraag ze het gewoon: leg de twaalf bestaande tekeningen neer en zeg "stel dat dit superhelden zijn met namen en krachten — wil je ze dan?" en kijk of ze doorvragen over de namen of over hoe snel je ze krijgt. | de richting van hun eigen antwoord |
+| Dag    | Wat je doet                                                                                                                                                                                                                           | Wat het uitsluit                                          |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| 1 (ma) | **Nulmeting, zonder iets te bouwen.** Lees `attempts` van de afgelopen 8 weken uit: goede antwoorden per week, dagen met minstens één ronde. Die data staat er al sinds v1.                                                           | niets — dit is je referentie                              |
+| 2 (di) | **H3-test.** Zet de sterrenrij in de rechterkolom en laat bij elk tiende goede antwoord in de ronde een ster vollopen. Verander verder níéts: dieren blijven, curve blijft.                                                           | als de sessielengte stijgt: H1 is niet nodig              |
+| 3–5    | Laat het staan. Meet dezelfde twee getallen.                                                                                                                                                                                          |                                                           |
+| 6 (za) | **H2-test.** Zet de kadans op 50 met een gegarandeerd nieuw dier. Nog steeds dieren, nog steeds geen heldentekening.                                                                                                                  | als dit het verschil maakt en dag 2 niet: het was de loop |
+| 7 (zo) | **H1-test, gratis.** Vraag ze het gewoon: leg de twaalf bestaande tekeningen neer en zeg "stel dat dit superhelden zijn met namen en krachten — wil je ze dan?" en kijk of ze doorvragen over de namen of over hoe snel je ze krijgt. | de richting van hun eigen antwoord                        |
 
 De hele week kost je **geen enkele tekening**. Dat is het punt: H1 is de enige hypothese die dure assets vereist, en het is de hypothese waarvoor je het minste bewijs hebt.
 
@@ -58,11 +58,11 @@ De hele week kost je **geen enkele tekening**. Dat is het punt: H1 is de enige h
 
 **H3 eerst, H2 direct daarachter, H1 een verre derde.** Onderbouwing, en ik scheid feit van interpretatie:
 
-- *Feit:* de curve decelereert hard. Vanaf het 7e dier kost elk dier 200 goede antwoorden. Bij vier sessies van 50 per week is dat één dier per week, met zes dagen niets ertussen.
-- *Feit:* ADR-081 haalde de naam van het volgende dier weg ("Hierna: vos in zwart" was een week van tevoren een verrassing verklappen). Daarmee verdween ook het enige object van verlangen. Het kind weet nu alleen nog *wanneer*, niet *wat*.
-- *Feit:* sinds ADR-096 telt de kolom af naar een niveau dat niets uitdeelt.
-- *Interpretatie:* een kind van 8 en 10 zegt zelden "de bekrachtigingskadans klopt niet". Ze zeggen "saai", of ze noemen iets dat ze wél leuk vinden. Hun uitspraak is een **betrouwbaar signaal over smaak en een onbetrouwbaar signaal over oorzaak**. Dat is geen reden om ze niet te geloven — het is een reden om de oorzaak apart te toetsen.
-- *Hypothese:* de klacht kwam op het moment dat de loop op zijn slechtst was (dier 7 en verder, 200 antwoorden per stuk). Dat is een samenloop die je in één week kunt ontwarren en waar ADR-096 nu ongetoetst overheen bouwt.
+- _Feit:_ de curve decelereert hard. Vanaf het 7e dier kost elk dier 200 goede antwoorden. Bij vier sessies van 50 per week is dat één dier per week, met zes dagen niets ertussen.
+- _Feit:_ ADR-081 haalde de naam van het volgende dier weg ("Hierna: vos in zwart" was een week van tevoren een verrassing verklappen). Daarmee verdween ook het enige object van verlangen. Het kind weet nu alleen nog _wanneer_, niet _wat_.
+- _Feit:_ sinds ADR-096 telt de kolom af naar een niveau dat niets uitdeelt.
+- _Interpretatie:_ een kind van 8 en 10 zegt zelden "de bekrachtigingskadans klopt niet". Ze zeggen "saai", of ze noemen iets dat ze wél leuk vinden. Hun uitspraak is een **betrouwbaar signaal over smaak en een onbetrouwbaar signaal over oorzaak**. Dat is geen reden om ze niet te geloven — het is een reden om de oorzaak apart te toetsen.
+- _Hypothese:_ de klacht kwam op het moment dat de loop op zijn slechtst was (dier 7 en verder, 200 antwoorden per stuk). Dat is een samenloop die je in één week kunt ontwarren en waar ADR-096 nu ongetoetst overheen bouwt.
 
 ### En dan het scherpste punt over ADR-096
 
@@ -78,15 +78,15 @@ De hele week kost je **geen enkele tekening**. Dat is het punt: H1 is de enige h
 
 Wat er nu feitelijk onjuist is, in volgorde van ernst:
 
-| Plek | Huidige tekst | Status |
-|---|---|---|
-| `README.md` r.142–143 | "Nothing on that page can be bought, won by chance or reached by waiting" | **onjuist** |
-| ADR-081 | "nothing in this product is ever earned by chance or by waiting" | **onjuist** (staat als geaccepteerd, niet geamendeerd) |
-| ADR-080 | "nothing behind money, chance or waiting" | **onjuist** (idem) |
-| ADR-076 | "Everything on the page is bought with correct answers and nothing else" | **onjuist** |
-| `README.md` r.132–142 | "sixty animals", pakjes, "a handful of times a month" | **verouderd** |
-| `README.md` r.127–130 | "'Jouw voortgang' is the level a child has reached … nog 6 goede antwoorden" | **misleidend**: dat niveau deelt niets meer uit |
-| `README.md` geheel | noemt sterren, kisten en helden nergens | **omissie**: de hoofdloop van het product staat niet in de eigen README |
+| Plek                  | Huidige tekst                                                                | Status                                                                  |
+| --------------------- | ---------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| `README.md` r.142–143 | "Nothing on that page can be bought, won by chance or reached by waiting"    | **onjuist**                                                             |
+| ADR-081               | "nothing in this product is ever earned by chance or by waiting"             | **onjuist** (staat als geaccepteerd, niet geamendeerd)                  |
+| ADR-080               | "nothing behind money, chance or waiting"                                    | **onjuist** (idem)                                                      |
+| ADR-076               | "Everything on the page is bought with correct answers and nothing else"     | **onjuist**                                                             |
+| `README.md` r.132–142 | "sixty animals", pakjes, "a handful of times a month"                        | **verouderd**                                                           |
+| `README.md` r.127–130 | "'Jouw voortgang' is the level a child has reached … nog 6 goede antwoorden" | **misleidend**: dat niveau deelt niets meer uit                         |
+| `README.md` geheel    | noemt sterren, kisten en helden nergens                                      | **omissie**: de hoofdloop van het product staat niet in de eigen README |
 
 ADR-096 zegt "revises ADR-067's first condition and spec §4.5 in one place". Dat is netjes voor ADR-067, maar **ADR-080, 081 en 076 zijn niet genoemd** en staan ongewijzigd als geaccepteerd in hetzelfde document. Op een publieke repo is dat het duurste soort fout: niet een verkeerde claim, maar een document dat zichzelf tegenspreekt terwijl verifieerbaarheid de hele belofte is.
 
@@ -100,13 +100,13 @@ Let op wat die formulering kost: je verplaatst een kansmechanisme voor kinderen 
 
 ### A2(b) Juridisch en ethisch
 
-**Nederlands kansspelrecht: geen risico, en dat is hard.** De Afdeling bestuursrechtspraak van de Raad van State oordeelde op **9 maart 2022** dat de loot boxes in FIFA 22 géén kansspel zijn in de zin van de Wok: het openen van packs is geen zelfstandig spel maar onderdeel van een behendigheidsspel. De dwangsom van de Kansspelautoriteit werd vernietigd. Als zélfs betaalde FIFA-packs geen kansspel zijn, is een gratis kist in een oefenapp dat met grote zekerheid ook niet. *Feit.*
+**Nederlands kansspelrecht: geen risico, en dat is hard.** De Afdeling bestuursrechtspraak van de Raad van State oordeelde op **9 maart 2022** dat de loot boxes in FIFA 22 géén kansspel zijn in de zin van de Wok: het openen van packs is geen zelfstandig spel maar onderdeel van een behendigheidsspel. De dwangsom van de Kansspelautoriteit werd vernietigd. Als zélfs betaalde FIFA-packs geen kansspel zijn, is een gratis kist in een oefenapp dat met grote zekerheid ook niet. _Feit._
 
-**PEGI: valt er buiten, maar de lijn beweegt.** PEGI's nieuwe "interactive risk categories" gaan per **juni 2026** in en geven games met "paid random items" **minimaal PEGI 16**. De categorie is expliciet beperkt tot bétaalde willekeurige items; gratis in het spel verdiende willekeurige beloningen vallen er niet onder. leer.nu wordt dus niet geraakt. *Feit.* Wat het wél zegt: een classificatie-instituut markeert dit mechanisme nu überhaupt, en de reden is het mechanisme, niet alleen het geld.
+**PEGI: valt er buiten, maar de lijn beweegt.** PEGI's nieuwe "interactive risk categories" gaan per **juni 2026** in en geven games met "paid random items" **minimaal PEGI 16**. De categorie is expliciet beperkt tot bétaalde willekeurige items; gratis in het spel verdiende willekeurige beloningen vallen er niet onder. leer.nu wordt dus niet geraakt. _Feit._ Wat het wél zegt: een classificatie-instituut markeert dit mechanisme nu überhaupt, en de reden is het mechanisme, niet alleen het geld.
 
-**DSA artikel 28: het echte, en niet waar je het verwacht.** De Commissie publiceerde op **14 juli 2025** richtsnoeren bij artikel 28(1). Over loot boxes zeggen die: zorg dat kinderen niet worden blootgesteld aan commerciële praktijken die manipulatief zijn of tot ongewenste uitgaven leiden, "including certain virtual currencies or loot-boxes". Dat is **commercieel geframed** — leer.nu heeft geen commercie, dus die passage raakt je niet. Maar dezelfde richtsnoeren zeggen ook: zet standaard uit wat overmatig gebruik in de hand werkt, "like communication 'streaks'", en verwijder "persuasive design features aimed predominantly at engagement". *Feit.* **Je dagstreak is daarmee een grotere blootstelling aan deze richtsnoeren dan je kist.** Dat je in `streak.ts` en ADR-072 bewust hebt ontworpen om niet te straffen is precies het verweer dat je wilt hebben — en je hebt het al. Naleving is bovendien vrijwillig; het weegt mee in de compliance-beoordeling van de Commissie.
+**DSA artikel 28: het echte, en niet waar je het verwacht.** De Commissie publiceerde op **14 juli 2025** richtsnoeren bij artikel 28(1). Over loot boxes zeggen die: zorg dat kinderen niet worden blootgesteld aan commerciële praktijken die manipulatief zijn of tot ongewenste uitgaven leiden, "including certain virtual currencies or loot-boxes". Dat is **commercieel geframed** — leer.nu heeft geen commercie, dus die passage raakt je niet. Maar dezelfde richtsnoeren zeggen ook: zet standaard uit wat overmatig gebruik in de hand werkt, "like communication 'streaks'", en verwijder "persuasive design features aimed predominantly at engagement". _Feit._ **Je dagstreak is daarmee een grotere blootstelling aan deze richtsnoeren dan je kist.** Dat je in `streak.ts` en ADR-072 bewust hebt ontworpen om niet te straffen is precies het verweer dat je wilt hebben — en je hebt het al. Naleving is bovendien vrijwillig; het weegt mee in de compliance-beoordeling van de Commissie.
 
-**Digital Fairness Act: open einde.** Status per 2026: aangekondigd, voorstel geagendeerd voor **Q4 2026**, gericht op dark patterns, verslavend ontwerp en bescherming van minderjarigen. Loot boxes worden in het huidige dossier niet met zoveel woorden genoemd. *Feit, met de aantekening dat dit een bewegend doel is en dat het maar één kant op beweegt.*
+**Digital Fairness Act: open einde.** Status per 2026: aangekondigd, voorstel geagendeerd voor **Q4 2026**, gericht op dark patterns, verslavend ontwerp en bescherming van minderjarigen. Loot boxes worden in het huidige dossier niet met zoveel woorden genoemd. _Feit, met de aantekening dat dit een bewegend doel is en dat het maar één kant op beweegt._
 
 **Waar het reputatierisico zit — en dat is niet juridisch.**
 
@@ -120,34 +120,34 @@ De publieke argumentatie van deze repo staat in één alinea: het bekendste grat
 
 **De twaalf compleet** (coupon collector, n = 12; exact berekend, niet gesimuleerd):
 
-| | kisten | goede antwoorden | weken (200/wk) |
-|---|---|---|---|
-| verwachting | 37,2 | 1.862 | 9,3 |
-| mediaan | 35 | 1.750 | 8,8 |
-| p90 | 55 | 2.750 | 13,8 |
-| p95 | 63 | 3.150 | 15,8 |
-| p99 | 82 | 4.100 | 20,5 |
+|             | kisten | goede antwoorden | weken (200/wk) |
+| ----------- | ------ | ---------------- | -------------- |
+| verwachting | 37,2   | 1.862            | 9,3            |
+| mediaan     | 35     | 1.750            | 8,8            |
+| p90         | 55     | 2.750            | 13,8           |
+| p95         | 63     | 3.150            | 15,8           |
+| p99         | 82     | 4.100            | 20,5           |
 
 Standaarddeviatie 13,7 kisten (686 antwoorden), scheef naar rechts. Twee kinderen die precies even hard werken kunnen **vier maanden** uit elkaar liggen. Met een broer en zus op één apparaat is dat geen statistisch detail.
 
 **Waar de curve breekt — marginale kosten per held:**
 
-| stap | kisten | goede antwoorden |
-|---|---|---|
-| 1 → 6 (samen) | 7,8 | 392 |
-| 9 → 10 | 4,0 | 200 |
-| 10 → 11 | 6,0 | 300 |
-| 11 → 12 | **12,0** | **600** |
+| stap          | kisten   | goede antwoorden |
+| ------------- | -------- | ---------------- |
+| 1 → 6 (samen) | 7,8      | 392              |
+| 9 → 10        | 4,0      | 200              |
+| 10 → 11       | 6,0      | 300              |
+| 11 → 12       | **12,0** | **600**          |
 
 De eerste zes helden kosten samen ~2 weken. De **laatste drie kosten samen 22 kisten = 1.100 antwoorden = 59% van de hele reis**. Van de ~37 kisten die een kind opent zijn er **~25 een dubbele**: twee van elke drie kistmomenten leveren geen nieuwe held op.
 
 **Ultra.** Vier reeksstappen × drie dubbelen = twaalf dubbelen, dus dertien exemplaren van dezelfde held.
 
-| doel | kisten (verwachting) | goede antwoorden | weken |
-|---|---|---|---|
-| één specifieke held naar ultra | 156 | 7.800 | 39 |
-| hele collectie in ultra | 234 | 11.700 | 58,5 |
-| *(p10 / p90 voor de hele collectie)* | 201 / 272 | 10.050 / 13.600 | 50 / 68 |
+| doel                                 | kisten (verwachting) | goede antwoorden | weken   |
+| ------------------------------------ | -------------------- | ---------------- | ------- |
+| één specifieke held naar ultra       | 156                  | 7.800            | 39      |
+| hele collectie in ultra              | 234                  | 11.700           | 58,5    |
+| _(p10 / p90 voor de hele collectie)_ | 201 / 272            | 10.050 / 13.600  | 50 / 68 |
 
 **Vergelijking met de oude ladder**, die deterministisch was: twaalf dieren op **1.375** goede antwoorden, alle zestig op **10.975**. Het nieuwe systeem is dus **langzamer naar de volle set** (1.862 vs 1.375) en ongeveer even traag naar volledig ultra (11.700 vs 10.975) — maar met een spreiding die de oude niet had, en met een veel betere kadans in het begin (vaste 50 in plaats van 25, 50, 100, 200, 200, 200…).
 
@@ -157,11 +157,11 @@ De eerste zes helden kosten samen ~2 weken. De **laatste drie kosten samen 22 ki
 
 Kans dat een kind **achtereen** niets nieuws krijgt:
 
-| in bezit | 3 kisten dubbel | 5 | 8 | 10 |
-|---|---|---|---|---|
-| 6/12 | 13% | 3,1% | 0,4% | 0,1% |
-| 9/12 | 42% | 24% | 10% | 5,6% |
-| 11/12 | 77% | 65% | 50% | **42%** |
+| in bezit | 3 kisten dubbel | 5    | 8    | 10      |
+| -------- | --------------- | ---- | ---- | ------- |
+| 6/12     | 13%             | 3,1% | 0,4% | 0,1%    |
+| 9/12     | 42%             | 24%  | 10%  | 5,6%    |
+| 11/12    | 77%             | 65%  | 50%  | **42%** |
 
 Op 11 van de 12 is tien dubbele kisten op rij niet de pechuitkomst maar de **normale** uitkomst: 500 goede antwoorden, tien keer het ritueel, tien keer niets. En `vol` is erger dan `dubbel`: bij `dubbel` schuift er nog iets op, bij `vol` is de trekking letterlijk weggegooid — en `vol` wordt frequenter naarmate het kind verder komt, dus precies bij het kind dat het hardst gewerkt heeft.
 
@@ -188,25 +188,25 @@ Mijn advies is daarom **geen bodem onder de trekking, maar het weghalen van de t
 
 ### Wat dit doet met de curve
 
-| doel | huidig (trekking) | voorstel | verschil |
-|---|---|---|---|
-| twaalf helden compleet | 1.862 antw. (mediaan 1.750, p90 2.750) | **600**, exact | 3,1× sneller, nul spreiding |
-| jouw favoriet naar ultra | 7.800 antw. = 39 weken | **1.200 = 6 weken** | 6,5× |
-| alles op ultra | 11.700 = 58,5 weken | **7.800 = 39 weken** | 1,5×, en zonder weggegooide kisten |
-| kisten zonder nieuwe held | ~25 van de 37 (68%) | **0** | — |
+| doel                      | huidig (trekking)                      | voorstel             | verschil                           |
+| ------------------------- | -------------------------------------- | -------------------- | ---------------------------------- |
+| twaalf helden compleet    | 1.862 antw. (mediaan 1.750, p90 2.750) | **600**, exact       | 3,1× sneller, nul spreiding        |
+| jouw favoriet naar ultra  | 7.800 antw. = 39 weken                 | **1.200 = 6 weken**  | 6,5×                               |
+| alles op ultra            | 11.700 = 58,5 weken                    | **7.800 = 39 weken** | 1,5×, en zonder weggegooide kisten |
+| kisten zonder nieuwe held | ~25 van de 37 (68%)                    | **0**                | —                                  |
 
 De scherpste regel: **in het huidige ontwerp koopt 39 weken werk je in verwachting één favoriete held in ultra; in het voorstel koopt diezelfde 39 weken de hele collectie in ultra.**
 
 ### De vergelijking, eerlijk
 
-| | huidig: trekking | (b) vaste verborgen volgorde | (c) keuze uit drie — **voorstel** |
-|---|---|---|---|
-| **Verrassing** | hoog, maar twee van drie keer een teleurstelling | matig: je weet niet wat, wel dat het nieuw is | matig-hoog: drie kaarten, jij draait er één om |
-| **Verlangen** | zwak: geen object, want je weet niet wat er bestaat | zwak, om dezelfde reden | **sterk**, als je alle twaalf laat zien (zie B5) |
-| **Eerlijkheid** | zwak: p90 is 1,6× de mediaan | sterk | **sterk**: identiek voor elk kind |
-| **Uitlegbaar aan een ouder** | "het is toeval, maar gratis" | "hij krijgt ze allemaal, in een vaste volgorde" | **"elke kist geeft een held die hij nog niet had, en hij kiest welke van drie"** |
-| **Consistent met de rest** | breekt README + ADR-076/080/081 | herstelt alles | **herstelt alles, nul RNG in het hele product** |
-| **Autonomie** | geen | geen | **elke kist een beslissing** |
+|                              | huidig: trekking                                    | (b) vaste verborgen volgorde                    | (c) keuze uit drie — **voorstel**                                                |
+| ---------------------------- | --------------------------------------------------- | ----------------------------------------------- | -------------------------------------------------------------------------------- |
+| **Verrassing**               | hoog, maar twee van drie keer een teleurstelling    | matig: je weet niet wat, wel dat het nieuw is   | matig-hoog: drie kaarten, jij draait er één om                                   |
+| **Verlangen**                | zwak: geen object, want je weet niet wat er bestaat | zwak, om dezelfde reden                         | **sterk**, als je alle twaalf laat zien (zie B5)                                 |
+| **Eerlijkheid**              | zwak: p90 is 1,6× de mediaan                        | sterk                                           | **sterk**: identiek voor elk kind                                                |
+| **Uitlegbaar aan een ouder** | "het is toeval, maar gratis"                        | "hij krijgt ze allemaal, in een vaste volgorde" | **"elke kist geeft een held die hij nog niet had, en hij kiest welke van drie"** |
+| **Consistent met de rest**   | breekt README + ADR-076/080/081                     | herstelt alles                                  | **herstelt alles, nul RNG in het hele product**                                  |
+| **Autonomie**                | geen                                                | geen                                            | **elke kist een beslissing**                                                     |
 
 ### Aanbeveling en wat je opgeeft
 
@@ -237,20 +237,20 @@ Derde: de twaalf zijn opgezet als **zes tegenstellingen**. Groot/klein, snel/sti
 
 ### De twaalf
 
-| # | Naam | Kracht (één regel) | Silhouet (één regel) | Waarom een kind van 8–12 die wil |
-|---|---|---|---|---|
-| 1 | **Reus** | Tilt op wat niemand kan tillen. | Schouders breder dan het kader, klein hoofd tegen de bovenrand. | De sterkste. Er is altijd één kind dat alleen de sterkste wil. |
-| 2 | **Pluis** | Zo klein en zo licht dat ze overal doorheen past en van elke hoogte veilig landt. | Een klein zacht rond bolletje met twee stipjes, verloren in veel lege ruimte. | Klein zijn is hier een kracht, niet een tekort. Precies het kind dat de kleinste van de klas is. |
-| 3 | **Flits** | Heen en terug voordat je opkeek. | Een zigzag waar het lijf hoort, met een klein rond hoofd erop. | De snelste is in elk speelkwartier de meest gevraagde. |
-| 4 | **Schim** | Gaat waar het licht niet komt. | Een omtrek van hoofd en schouders, vanbinnen leeg, met een rafelige onderrand. | De sluipende. Het kind dat liever ongezien wint. |
-| 5 | **Steen** | Er komt niets langs hem. | Een breed afgerond blok, twee stippen hoog, plat op de grond. | De muur waar je achter kunt staan. Een rol, geen karakter. |
-| 6 | **Golf** | Gaat overal omheen en is niet vast te houden. | Een golfkam met een oog in de holte. | Niet te pakken — de tegenpool van Steen, en even cool. |
-| 7 | **Vonk** | Maakt licht waar geen licht is. | Een rond hoofd met acht korte stralen. | De eerste die aan gaat. Vindt dingen die verstopt zijn. |
-| 8 | **IJs** | Houdt alles één tel stil zodat je goed kunt kijken. | Een zespuntige kristalster met een oog in het midden. | Tijd stilzetten is in elk spel de favoriete kracht. |
-| 9 | **Klim** | Laat een ladder of een brug groeien waar er geen is. | Een spiraal met een klein hoofdje aan de punt. | De bouwer-oplosser. Niet vechten, maar erlangs komen. |
-| 10 | **Bout** | Repareert alles, zichzelf inbegrepen. | Een afgerond blokhoofd, één groot oog, een moer bovenop. | De robot. Er moet een robot bij. |
-| 11 | **Echo** | Zegt terug wat lang geleden gezegd is. | Een hoofd tussen twee open bogen. | Nooit iets vergeten is voor een kind een superkracht, geen schoolvak. |
-| 12 | **Vlam** | Brandt door wat in de weg staat. | Een kaak in profiel, één hoorn, één oog — de bestaande draak. | De draak. Er moet een draak zijn en jullie hebben hem al getekend. |
+| #   | Naam      | Kracht (één regel)                                                                | Silhouet (één regel)                                                           | Waarom een kind van 8–12 die wil                                                                 |
+| --- | --------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ |
+| 1   | **Reus**  | Tilt op wat niemand kan tillen.                                                   | Schouders breder dan het kader, klein hoofd tegen de bovenrand.                | De sterkste. Er is altijd één kind dat alleen de sterkste wil.                                   |
+| 2   | **Pluis** | Zo klein en zo licht dat ze overal doorheen past en van elke hoogte veilig landt. | Een klein zacht rond bolletje met twee stipjes, verloren in veel lege ruimte.  | Klein zijn is hier een kracht, niet een tekort. Precies het kind dat de kleinste van de klas is. |
+| 3   | **Flits** | Heen en terug voordat je opkeek.                                                  | Een zigzag waar het lijf hoort, met een klein rond hoofd erop.                 | De snelste is in elk speelkwartier de meest gevraagde.                                           |
+| 4   | **Schim** | Gaat waar het licht niet komt.                                                    | Een omtrek van hoofd en schouders, vanbinnen leeg, met een rafelige onderrand. | De sluipende. Het kind dat liever ongezien wint.                                                 |
+| 5   | **Steen** | Er komt niets langs hem.                                                          | Een breed afgerond blok, twee stippen hoog, plat op de grond.                  | De muur waar je achter kunt staan. Een rol, geen karakter.                                       |
+| 6   | **Golf**  | Gaat overal omheen en is niet vast te houden.                                     | Een golfkam met een oog in de holte.                                           | Niet te pakken — de tegenpool van Steen, en even cool.                                           |
+| 7   | **Vonk**  | Maakt licht waar geen licht is.                                                   | Een rond hoofd met acht korte stralen.                                         | De eerste die aan gaat. Vindt dingen die verstopt zijn.                                          |
+| 8   | **IJs**   | Houdt alles één tel stil zodat je goed kunt kijken.                               | Een zespuntige kristalster met een oog in het midden.                          | Tijd stilzetten is in elk spel de favoriete kracht.                                              |
+| 9   | **Klim**  | Laat een ladder of een brug groeien waar er geen is.                              | Een spiraal met een klein hoofdje aan de punt.                                 | De bouwer-oplosser. Niet vechten, maar erlangs komen.                                            |
+| 10  | **Bout**  | Repareert alles, zichzelf inbegrepen.                                             | Een afgerond blokhoofd, één groot oog, een moer bovenop.                       | De robot. Er moet een robot bij.                                                                 |
+| 11  | **Echo**  | Zegt terug wat lang geleden gezegd is.                                            | Een hoofd tussen twee open bogen.                                              | Nooit iets vergeten is voor een kind een superkracht, geen schoolvak.                            |
+| 12  | **Vlam**  | Brandt door wat in de weg staat.                                                  | Een kaak in profiel, één hoorn, één oog — de bestaande draak.                  | De draak. Er moet een draak zijn en jullie hebben hem al getekend.                               |
 
 **Namen:** alle twaalf zijn bestaande Nederlandse woorden; elf zijn eenlettergrepig (alleen Echo is twee). Alle twaalf liggen onder AVI-M6 en betekenen wat de tekening doet, dus de naam en het plaatje leren elkaar aan.
 
@@ -258,7 +258,7 @@ Derde: de twaalf zijn opgezet als **zes tegenstellingen**. Groot/klein, snel/sti
 
 **Niet-mannelijk of niet-menselijk:** Pluis (v), Flits (onbepaald), Schim (onbepaald), Golf (niet-menselijk), Vonk (v), IJs (niet-menselijk), Klim (v), Echo (v), Vlam (v, draak) = **negen van de twaalf**. Uitgesproken mannelijk-menselijk: alleen Reus. Steen en Bout zijn niet-menselijk en mannelijk gekleurd. Dat is ruim boven de helft zonder dat het als quotum leest, omdat de meeste helden simpelweg geen mens zijn — wat op 24 pixels ook het beste werkt.
 
-**Eén eerlijk risico:** IJs' kracht ("alles één tel stil") kan als klokkijken lezen. Ik houd hem omdat de formulering over *kijken* gaat en niet over tijd, maar als je dat te dun vindt, is de wissel: "bevriest wat hij aanraakt".
+**Eén eerlijk risico:** IJs' kracht ("alles één tel stil") kan als klokkijken lezen. Ik houd hem omdat de formulering over _kijken_ gaat en niet over tijd, maar als je dat te dun vindt, is de wissel: "bevriest wat hij aanraakt".
 
 ### Het slotverschil dat niemand heeft opgemerkt
 
@@ -272,13 +272,13 @@ Brons, zilver, goud, platina, ultra zijn nu vijf kleuren op een plaat. Een kleur
 
 **Voorstel: de reeks wordt geteld, niet gekleurd.** Om de heldplaat komt **één ring per beklommen trede**.
 
-| Reeks | Plaat | Wat het kind ziet |
-|---|---|---|
-| brons | kale plaat, met één boog die volloopt | gevonden — en er loopt al iets vol |
-| zilver | één gesloten ring, nieuwe boog loopt vol | één keer omhoog |
-| goud | twee gesloten ringen | twee keer omhoog |
-| platina | drie gesloten ringen | drie keer |
-| ultra | vier gesloten ringen, én de held zelf gevuld in plaats van omlijnd | vol — de enige die anders getékend is |
+| Reeks   | Plaat                                                              | Wat het kind ziet                     |
+| ------- | ------------------------------------------------------------------ | ------------------------------------- |
+| brons   | kale plaat, met één boog die volloopt                              | gevonden — en er loopt al iets vol    |
+| zilver  | één gesloten ring, nieuwe boog loopt vol                           | één keer omhoog                       |
+| goud    | twee gesloten ringen                                               | twee keer omhoog                      |
+| platina | drie gesloten ringen                                               | drie keer                             |
+| ultra   | vier gesloten ringen, én de held zelf gevuld in plaats van omlijnd | vol — de enige die anders getékend is |
 
 Waarom dit werkt zonder legenda:
 
@@ -287,7 +287,7 @@ Waarom dit werkt zonder legenda:
 - **Ultra is de enige die van omtrek naar vulling gaat.** Eén visuele gebeurtenis, precies aan het eind, die "dit is het einde" zegt zonder een zin.
 - **Drie kanalen in plaats van één**: naam, tint én aantal. Dat is §A's eigen regel ("told apart by name as well as by hue") met een derde erbij, en het helpt bij kleurenblindheid.
 
-**Verhalend**, één regel per reeks, beschrijvend en niet gevoelsturend (de productlijn uit ADR-084): *"Vlam, brons — één ring van drie."* Meer is het niet, en meer hoort het niet te zijn: de opklimming is te zien, dus hij hoeft niet verteld.
+**Verhalend**, één regel per reeks, beschrijvend en niet gevoelsturend (de productlijn uit ADR-084): _"Vlam, brons — één ring van drie."_ Meer is het niet, en meer hoort het niet te zijn: de opklimming is te zien, dus hij hoeft niet verteld.
 
 **Groottegrens.** Vier concentrische ringen passen niet op 24 pixels. Regel: ringen vanaf 48px (kaart, collectiepagina, resultaatscherm); op 24px (appbalk) blijft het de tint, zoals nu.
 
@@ -347,13 +347,13 @@ Consistent met A3: het kind kiest, dus de tekst noemt de keuze en niet het lot.
 
 ### En een waarschuwing bij ADR-084
 
-ADR-084 staat de unwrap-animatie toe met één argument: *"It is absent almost every time … this card appears a handful of times a month."* Dat was waar bij 25→200 antwoorden per dier. Bij **50 per kist** verschijnt hij ongeveer elke ronde of elke twee rondes, en bij lange rondes twee keer achter elkaar. **Het argument dat de animatie rechtvaardigde is vervallen.** Kies: of de animatie wordt stiller (de boog die volloopt volstaat), of ADR-084 krijgt een nieuwe motivering. Niet allebei laten staan.
+ADR-084 staat de unwrap-animatie toe met één argument: _"It is absent almost every time … this card appears a handful of times a month."_ Dat was waar bij 25→200 antwoorden per dier. Bij **50 per kist** verschijnt hij ongeveer elke ronde of elke twee rondes, en bij lange rondes twee keer achter elkaar. **Het argument dat de animatie rechtvaardigde is vervallen.** Kies: of de animatie wordt stiller (de boog die volloopt volstaat), of ADR-084 krijgt een nieuwe motivering. Niet allebei laten staan.
 
 ---
 
 ## B4. Sterren onderweg
 
-Jouw eigen zin — *"ze moeten voortgang zien, ook na 10 goede antwoorden"* — is de belangrijkste in de hele opdracht, en het huidige ontwerp doet er niets mee: de ster bestaat alleen op het resultaatscherm en op `/ontdekkingsreis`.
+Jouw eigen zin — _"ze moeten voortgang zien, ook na 10 goede antwoorden"_ — is de belangrijkste in de hele opdracht, en het huidige ontwerp doet er niets mee: de ster bestaat alleen op het resultaatscherm en op `/ontdekkingsreis`.
 
 **Tijdens de ronde: ja, en dit is de hoogste prioriteit van het hele document.** Bij het tiende goede antwoord loopt in de bestaande kop van de ronde een ster vol. Belangrijk detail: **laat hem vullen, niet bewegen.** Een vulling is dezelfde taal als de `ProgressBar` en introduceert dus geen derde animatie in een product dat er bewust twee heeft (ADR-084). Geen modal, geen onderbreking, geen geluid.
 
@@ -363,12 +363,12 @@ Jouw eigen zin — *"ze moeten voortgang zien, ook na 10 goede antwoorden"* — 
 
 De kolom heeft nu vier blokken: toetsen, voortgang, goed, favorieten. Het voortgangsblok bevat: heldplaat, "Niveau N", reeksnaam, balk (niveauvoortgang), "x van de 12", "nog X goede antwoorden tot niveau N+1", knop naar de collectie.
 
-| | wat |
-|---|---|
-| **Erbij (één element)** | de sterrenrij — vijf sterren, zoveel gevuld als de volgende kist heeft. De component bestaat al: `Sterren` uit `Beloning.tsx`. **Nul nieuwe code.** |
-| **Wat wijkt** | de **niveaubalk** en de zin **"nog X goede antwoorden tot niveau N+1"**. De balk gaat de kist meten, de zin wordt **"Nog X goede antwoorden tot je kist."** (`reis.totKist` bestaat al, met exact die tekst.) |
-| **Wat blijft** | heldplaat met reeksringen, reeksnaam, "x van de 12", knop naar de collectie. |
-| **Wat er met het niveau gebeurt** | het niveaugetal blijft staan als stille levenslange teller naast de reeksnaam, maar telt nergens meer naar af. |
+|                                   | wat                                                                                                                                                                                                           |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Erbij (één element)**           | de sterrenrij — vijf sterren, zoveel gevuld als de volgende kist heeft. De component bestaat al: `Sterren` uit `Beloning.tsx`. **Nul nieuwe code.**                                                           |
+| **Wat wijkt**                     | de **niveaubalk** en de zin **"nog X goede antwoorden tot niveau N+1"**. De balk gaat de kist meten, de zin wordt **"Nog X goede antwoorden tot je kist."** (`reis.totKist` bestaat al, met exact die tekst.) |
+| **Wat blijft**                    | heldplaat met reeksringen, reeksnaam, "x van de 12", knop naar de collectie.                                                                                                                                  |
+| **Wat er met het niveau gebeurt** | het niveaugetal blijft staan als stille levenslange teller naast de reeksnaam, maar telt nergens meer naar af.                                                                                                |
 
 **Waarom dit de goede ruil is, en niet alleen de goedkoopste.** Er staan nu twee ladders in dezelfde eenheid (goede antwoorden) op dezelfde kaart, en sinds ADR-096 deelt er één niets meer uit. Twee tellers voor hetzelfde is precies waar ADR-071's eigen consequentie tegen waarschuwt ("a second copy of the same rule, which is how two of them come to disagree") en waar ADR-058 de prognose om van de voordeur haalde ("a second opinion about the same thing"). De kolom moet aftellen naar de gebeurtenis die iets uitdeelt. Dat is de kist.
 
@@ -425,40 +425,40 @@ Argumenten:
 
 1. **Laat de silhouetten rijmen.** Kies de mapping zo dat de held op dezelfde plek iets van het dier meeneemt:
 
-| plek | dier | held | rijm |
-|---|---|---|---|
-| 0 | kat | **Schim** | sluipt |
-| 1 | uil | **Echo** | hoort, onthoudt |
-| 2 | vos | **Flits** | snel, sluw |
-| 3 | beer | **Steen** | onverzettelijk |
-| 4 | haas | **Pluis** | licht, springt |
-| 5 | vis | **Golf** | water |
-| 6 | egel | **Bout** | stekels, metaal |
-| 7 | kikker | **Klim** | klimt, springt |
-| 8 | eekhoorn | **Vonk** | (zwak rijm — willekeurig) |
-| 9 | pinguïn | **IJs** | ijs |
-| 10 | olifant | **Reus** | groot |
-| 11 | draak | **Vlam** | dezelfde draak, met een naam |
+| plek | dier     | held      | rijm                         |
+| ---- | -------- | --------- | ---------------------------- |
+| 0    | kat      | **Schim** | sluipt                       |
+| 1    | uil      | **Echo**  | hoort, onthoudt              |
+| 2    | vos      | **Flits** | snel, sluw                   |
+| 3    | beer     | **Steen** | onverzettelijk               |
+| 4    | haas     | **Pluis** | licht, springt               |
+| 5    | vis      | **Golf**  | water                        |
+| 6    | egel     | **Bout**  | stekels, metaal              |
+| 7    | kikker   | **Klim**  | klimt, springt               |
+| 8    | eekhoorn | **Vonk**  | (zwak rijm — willekeurig)    |
+| 9    | pinguïn  | **IJs**   | ijs                          |
+| 10   | olifant  | **Reus**  | groot                        |
+| 11   | draak    | **Vlam**  | dezelfde draak, met een naam |
 
 Zes van de twaalf rijmen sterk, en de draak blijft letterlijk de draak.
 
-2. **Zeg het één keer, in het product.** Eén regel bij de eerste keer openen: *"De dieren zijn helden geworden. Jouw vos is nu Flits."* Niet als nieuwsbericht, gewoon als mededeling — dezelfde toon als de rest.
+2. **Zeg het één keer, in het product.** Eén regel bij de eerste keer openen: _"De dieren zijn helden geworden. Jouw vos is nu Flits."_ Niet als nieuwsbericht, gewoon als mededeling — dezelfde toon als de rest.
 
 ---
 
 ## B7. Exploits en randgevallen
 
-| # | Geval | Oordeel |
-|---|---|---|
-| 1 | **Meerkeuze doorklikken tot het goed is** | **De grootste openstaande exploit, en hij is nu live.** Bij vier opties levert doorklikken vrijwel gegarandeerd een "goed" op. Een ronde van 50 vragen wordt dan een kist, ongeacht kennis. Regel die moet gelden: **alleen het eerste antwoord op een vraag telt voor `correct`.** *Ik heb de antwoordregistratie zelf niet gelezen* — `ADR-043` noemt vier antwoordtoestanden, dus mogelijk is dit al goed. **Verifieer dit vóór alles.** Als het niet klopt is de hele economie stuk en heeft geen enkele curve-analyse nog betekenis. |
-| 2 | **Ontdekken-modus** | Stelt geen vragen, levert dus geen antwoorden en geen sterren. Correct door constructie. Verifieer dat er geen `attempts` worden weggeschreven. |
-| 3 | **Toetsstand** | Moet meetellen. Het is echt werk en het is de eerlijkste modus in het product; die uitzonderen zou de enige modus zonder hulp ook de enige modus zonder beloning maken. Gokken kost je daar het cijfer, en dat is waar die modus voor is. |
-| 4 | **Ronde halverwege gestopt** | **Al goed opgelost, en netjes.** `openVerdiend` vergelijkt `kistenOpen` met `kistenVoor(correct)`, dus een kist die verdiend maar niet geopend is, komt aan het eind van de volgende ronde alsnog. Niets aan doen. |
-| 5 | **Meerdere kisten in één lange ronde** | `openVerdiend` loopt door en `Beloning` rendert een lijst — functioneel correct. Maar twee unwraps achter elkaar plus de vervallen zeldzaamheid uit ADR-084 (zie B3) maken dit een presentatieprobleem. Bij drie of meer: toon ze als lijst zonder animatie, met alleen de laatste uitgepakt. |
-| 6 | **Alles op ultra (60/60)** | Bereikbaar: 7.800 goede antwoorden in mijn voorstel, ~1 jaar bij dit tempo. **Er is nu geen eindtoestand ontworpen** — de kist blijft `vol` teruggeven. Ontwerp: de sterrenrij in de kolom wordt vervangen door de levenslange teller, de collectiepagina zegt dat hij compleet is, en er komt géén zesde reeks — "ultra" is gekozen omdat het einde betekent (ADR-080) en dat woord moet je niet verraden. |
-| 7 | **Twee kinderen op één apparaat** | Opslag is al per kind gescheiden (`helden:<kindId>`). Zie B5: niets van elkaar tonen. |
-| 8 | *(erbij)* **Systeemklok verzetten** | Raakt de dagstreak, niet de kisten — die hangen alleen aan goede antwoorden. Dat is een structureel voordeel van "alles in goede antwoorden" dat je mag opschrijven. |
-| 9 | *(erbij)* **Een korte set eindeloos herhalen** | Twaalf provincies twintig keer op rij geeft 240 goede antwoorden zonder iets te leren. De Leitner-planner beschermt de leerinhoud, maar niet de economie. Overweeg: alleen antwoorden op items die niet in dezelfde sessie al goed waren, tellen voor een ster. Dat is dezelfde regel als #1, één niveau hoger. |
+| #   | Geval                                          | Oordeel                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| --- | ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | **Meerkeuze doorklikken tot het goed is**      | **De grootste openstaande exploit, en hij is nu live.** Bij vier opties levert doorklikken vrijwel gegarandeerd een "goed" op. Een ronde van 50 vragen wordt dan een kist, ongeacht kennis. Regel die moet gelden: **alleen het eerste antwoord op een vraag telt voor `correct`.** _Ik heb de antwoordregistratie zelf niet gelezen_ — `ADR-043` noemt vier antwoordtoestanden, dus mogelijk is dit al goed. **Verifieer dit vóór alles.** Als het niet klopt is de hele economie stuk en heeft geen enkele curve-analyse nog betekenis. |
+| 2   | **Ontdekken-modus**                            | Stelt geen vragen, levert dus geen antwoorden en geen sterren. Correct door constructie. Verifieer dat er geen `attempts` worden weggeschreven.                                                                                                                                                                                                                                                                                                                                                                                           |
+| 3   | **Toetsstand**                                 | Moet meetellen. Het is echt werk en het is de eerlijkste modus in het product; die uitzonderen zou de enige modus zonder hulp ook de enige modus zonder beloning maken. Gokken kost je daar het cijfer, en dat is waar die modus voor is.                                                                                                                                                                                                                                                                                                 |
+| 4   | **Ronde halverwege gestopt**                   | **Al goed opgelost, en netjes.** `openVerdiend` vergelijkt `kistenOpen` met `kistenVoor(correct)`, dus een kist die verdiend maar niet geopend is, komt aan het eind van de volgende ronde alsnog. Niets aan doen.                                                                                                                                                                                                                                                                                                                        |
+| 5   | **Meerdere kisten in één lange ronde**         | `openVerdiend` loopt door en `Beloning` rendert een lijst — functioneel correct. Maar twee unwraps achter elkaar plus de vervallen zeldzaamheid uit ADR-084 (zie B3) maken dit een presentatieprobleem. Bij drie of meer: toon ze als lijst zonder animatie, met alleen de laatste uitgepakt.                                                                                                                                                                                                                                             |
+| 6   | **Alles op ultra (60/60)**                     | Bereikbaar: 7.800 goede antwoorden in mijn voorstel, ~1 jaar bij dit tempo. **Er is nu geen eindtoestand ontworpen** — de kist blijft `vol` teruggeven. Ontwerp: de sterrenrij in de kolom wordt vervangen door de levenslange teller, de collectiepagina zegt dat hij compleet is, en er komt géén zesde reeks — "ultra" is gekozen omdat het einde betekent (ADR-080) en dat woord moet je niet verraden.                                                                                                                               |
+| 7   | **Twee kinderen op één apparaat**              | Opslag is al per kind gescheiden (`helden:<kindId>`). Zie B5: niets van elkaar tonen.                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| 8   | _(erbij)_ **Systeemklok verzetten**            | Raakt de dagstreak, niet de kisten — die hangen alleen aan goede antwoorden. Dat is een structureel voordeel van "alles in goede antwoorden" dat je mag opschrijven.                                                                                                                                                                                                                                                                                                                                                                      |
+| 9   | _(erbij)_ **Een korte set eindeloos herhalen** | Twaalf provincies twintig keer op rij geeft 240 goede antwoorden zonder iets te leren. De Leitner-planner beschermt de leerinhoud, maar niet de economie. Overweeg: alleen antwoorden op items die niet in dezelfde sessie al goed waren, tellen voor een ster. Dat is dezelfde regel als #1, één niveau hoger.                                                                                                                                                                                                                           |
 
 ---
 
@@ -495,7 +495,7 @@ Concreet, en volledig binnen de belofte (lokaal, geen server, geen analytics, ge
 
 1. **Een leesvenster in het bestaande ouderblok** op "Jij" (ADR-079). Een tabel uit `attempts`: ISO-week | goede antwoorden | dagen geoefend | rondes. Read-only, per kind, alleen op het apparaat.
 2. **Kopieerbaar als tekst.** Één knop die die tabel naar het klembord zet, zodat je hem in een spreadsheet plakt. Geen export-bestand, geen upload.
-3. **Geen enkel nieuw datapunt.** Alles komt uit rijen die er al staan. Dit is een *view*, geen *meting* — en dat verschil is precies wat het verenigbaar maakt met de README-claim.
+3. **Geen enkel nieuw datapunt.** Alles komt uit rijen die er al staan. Dit is een _view_, geen _meting_ — en dat verschil is precies wat het verenigbaar maakt met de README-claim.
 
 **Leesregel voor jezelf, vooraf vastleggen zodat je jezelf niet overtuigt:** je vergelijkt de vier weken ná de verandering met de vier weken ervóór, per kind, op goede antwoorden per week. Nieuwigheid geeft in week 1 altijd een piek. **Als de winst in week 3 en 4 weg is, was het de nieuwigheid en niet het ontwerp.** Schrijf dat op vóór je begint.
 
@@ -505,26 +505,26 @@ Concreet, en volledig binnen de belofte (lokaal, geen server, geen analytics, ge
 
 ### Deze week — en geen van deze punten heeft een heldentekening nodig
 
-| # | Wat | Waarom nu |
-|---|---|---|
-| 0 | **Verifieer en repareer de meerkeuze-exploit** (B7 #1) | Blokkeert alles. Zonder dit is elk getal in dit document betekenisloos. |
-| 1 | **Ster vult tijdens de ronde, bij elk tiende goede antwoord** | De hoogste verwachte opbrengst per uur werk in het hele document. En het is jouw eigen hypothese. |
-| 2 | **Rechterkolom richt zich op de kist** (B4) | Eén bestaande component verplaatsen, één bestaande i18n-sleutel hergebruiken. |
-| 3 | **`openKist` wordt keuze uit drie** (ADR-097) | Puur, in `game-core`, testbaar. `heldenStore.trek()` verdwijnt. |
-| 4 | **`vol` wordt onbereikbaar** | Eén regel, verwijdert de slechtste uitkomst. Ook waardevol als je 3 níét doet. |
-| 5 | **De vier resultaatteksten** met het moment erin (B3) | i18n-only. Herstelt naleving van ADR-084. |
-| 6 | **README + ADR-097/098/099** | Zolang dit blijft staan is de repo publiek onjuist. Dit is de goedkoopste post op de lijst. |
+| #   | Wat                                                           | Waarom nu                                                                                         |
+| --- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| 0   | **Verifieer en repareer de meerkeuze-exploit** (B7 #1)        | Blokkeert alles. Zonder dit is elk getal in dit document betekenisloos.                           |
+| 1   | **Ster vult tijdens de ronde, bij elk tiende goede antwoord** | De hoogste verwachte opbrengst per uur werk in het hele document. En het is jouw eigen hypothese. |
+| 2   | **Rechterkolom richt zich op de kist** (B4)                   | Eén bestaande component verplaatsen, één bestaande i18n-sleutel hergebruiken.                     |
+| 3   | **`openKist` wordt keuze uit drie** (ADR-097)                 | Puur, in `game-core`, testbaar. `heldenStore.trek()` verdwijnt.                                   |
+| 4   | **`vol` wordt onbereikbaar**                                  | Eén regel, verwijdert de slechtste uitkomst. Ook waardevol als je 3 níét doet.                    |
+| 5   | **De vier resultaatteksten** met het moment erin (B3)         | i18n-only. Herstelt naleving van ADR-084.                                                         |
+| 6   | **README + ADR-097/098/099**                                  | Zolang dit blijft staan is de repo publiek onjuist. Dit is de goedkoopste post op de lijst.       |
 
 Alles hierboven werkt **met de twaalf bestaande dierentekeningen en de bestaande namen**. Dat is het antwoord op "wat kan mee zonder dat de helden-tekeningen af zijn": alles wat ertoe doet.
 
 ### Daarna
 
-| Wanneer | Wat |
-|---|---|
-| Volgende week | De twaalf heldentekeningen + namen in i18n + de mapping uit B6. |
-| Daarna | De ringen per reeks (B2) op `Heldplaat`. |
-| Daarna | "Kies je eerste held uit twaalf" als startscherm (B5). |
-| Daarna | De eindtoestand bij 60/60 (B7 #6). |
+| Wanneer              | Wat                                                                               |
+| -------------------- | --------------------------------------------------------------------------------- |
+| Volgende week        | De twaalf heldentekeningen + namen in i18n + de mapping uit B6.                   |
+| Daarna               | De ringen per reeks (B2) op `Heldplaat`.                                          |
+| Daarna               | "Kies je eerste held uit twaalf" als startscherm (B5).                            |
+| Daarna               | De eindtoestand bij 60/60 (B7 #6).                                                |
 | Los, wanneer je wilt | Het leesvenster voor de ouder (B8). Kan ook eerst — dan heb je week 1 al gemeten. |
 
 **Waarom deze volgorde ook de juiste test is.** Als 0–5 alleen al het weekgetal beweegt, was het thema nooit het probleem en zijn de helden een verbetering in plaats van een redding. Dat weet je binnen twee weken, vóórdat je een weekend in twaalf tekeningen steekt. Als het weekgetal níét beweegt, weet je dat H1 overblijft en ga je met veel meer vertrouwen tekenen.
@@ -602,12 +602,12 @@ three (ADR-098 covers what the twelve are, and why showing them is the point).
 
 The numbers move as follows, at fifty correct answers a chest:
 
-| | ADR-096 | this |
-| --- | --- | --- |
-| all twelve heroes | 1,862 answers (p90 2,750) | **600, exact** |
-| one chosen hero at ultra | 7,800 | **1,200** |
-| every hero at ultra | 11,700 | **7,800** |
-| chests holding nothing new | ~25 of 37 | **0** |
+|                            | ADR-096                   | this           |
+| -------------------------- | ------------------------- | -------------- |
+| all twelve heroes          | 1,862 answers (p90 2,750) | **600, exact** |
+| one chosen hero at ultra   | 7,800                     | **1,200**      |
+| every hero at ultra        | 11,700                    | **7,800**      |
+| chests holding nothing new | ~25 of 37                 | **0**          |
 
 `README.md`, ADR-076, ADR-080 and ADR-081 become true again rather than needing
 amendment. Spec §4.5 is no longer revised by anything.
@@ -649,20 +649,20 @@ to arithmetic breaks that, and breaks it again for every module not yet built.
 **Twelve heroes, each one unmistakable shape rather than a costume**, and each
 power a way of being rather than a school subject.
 
-| # | Name | Power | Silhouette |
-| --- | --- | --- | --- |
-| 1 | Reus | lifts what nobody can lift | shoulders wider than the frame, small head at the top edge |
-| 2 | Pluis | small and light enough to pass anywhere and land from any height | a small soft circle with two dots, alone in empty space |
-| 3 | Flits | there and back before you looked up | a zigzag body with a small round head |
-| 4 | Schim | goes where the light does not | an outline of head and shoulders, empty inside, ragged below |
-| 5 | Steen | nothing gets past him | a wide rounded block, two dots high, flat on the ground |
-| 6 | Golf | goes round anything and cannot be held | a wave crest with an eye in the hollow |
-| 7 | Vonk | makes light where there is none | a round head with eight short rays |
-| 8 | IJs | holds everything still for a moment so you can look | a six-pointed crystal with an eye at its centre |
-| 9 | Klim | grows a ladder or a bridge where there is none | a spiral with a small head at its tip |
-| 10 | Bout | repairs anything, himself included | a rounded block head, one large eye, a nut on top |
-| 11 | Echo | says back what was said long ago | a head between two open arcs |
-| 12 | Vlam | burns through what is in the way | a jaw, one horn, one eye — the dragon already drawn |
+| #   | Name  | Power                                                            | Silhouette                                                   |
+| --- | ----- | ---------------------------------------------------------------- | ------------------------------------------------------------ |
+| 1   | Reus  | lifts what nobody can lift                                       | shoulders wider than the frame, small head at the top edge   |
+| 2   | Pluis | small and light enough to pass anywhere and land from any height | a small soft circle with two dots, alone in empty space      |
+| 3   | Flits | there and back before you looked up                              | a zigzag body with a small round head                        |
+| 4   | Schim | goes where the light does not                                    | an outline of head and shoulders, empty inside, ragged below |
+| 5   | Steen | nothing gets past him                                            | a wide rounded block, two dots high, flat on the ground      |
+| 6   | Golf  | goes round anything and cannot be held                           | a wave crest with an eye in the hollow                       |
+| 7   | Vonk  | makes light where there is none                                  | a round head with eight short rays                           |
+| 8   | IJs   | holds everything still for a moment so you can look              | a six-pointed crystal with an eye at its centre              |
+| 9   | Klim  | grows a ladder or a bridge where there is none                   | a spiral with a small head at its tip                        |
+| 10  | Bout  | repairs anything, himself included                               | a rounded block head, one large eye, a nut on top            |
+| 11  | Echo  | says back what was said long ago                                 | a head between two open arcs                                 |
+| 12  | Vlam  | burns through what is in the way                                 | a jaw, one horn, one eye — the dragon already drawn          |
 
 **Six pairs of opposites**: large/small, fast/silent, hard/soft, light/cold,
 grows/builds, remembers/burns. A child seeing Reus beside Pluis reads the system
@@ -790,17 +790,17 @@ Regelnummers naar de huidige `README.md`. Vervangende tekst is geschreven **onde
 
 **1. Regel 132–135** — het aantal en het soort
 
-> *Nu:* "The whole of it is at **leer.nu/voortgang**: sixty animals in five materials — brons, zilver, goud, platina, ultra (ADR-080) — twelve tafeldiploma's and ten reisstempels, with what every one of them costs written next to it (ADR-071, ADR-076)."
+> _Nu:_ "The whole of it is at **leer.nu/voortgang**: sixty animals in five materials — brons, zilver, goud, platina, ultra (ADR-080) — twelve tafeldiploma's and ten reisstempels, with what every one of them costs written next to it (ADR-071, ADR-076)."
 
 > **Voorstel:** "The whole of it is at **leer.nu/ontdekkingsreis**: twelve heroes in five reeksen — brons, zilver, goud, platina, ultra ([ADR-080], [ADR-098]) — twelve tafeldiploma's and ten reisstempels, with what every one of them costs written next to it."
 
-*(Let ook op: de README zegt `/voortgang`, ADR-076 zegt `/ontdekkingsreis`. Eén van de twee is fout — verifieer de route.)*
+_(Let ook op: de README zegt `/voortgang`, ADR-076 zegt `/ontdekkingsreis`. Eén van de twee is fout — verifieer de route.)_
 
 ---
 
 **2. Regel 135–139** — het pakje
 
-> *Nu:* "What it does not say is what the next animal _is_: an animal not yet earned is drawn as a parcel with its price on it, so a child can aim at the next rung without having read the whole collection off the screen on their first afternoon (ADR-081)."
+> _Nu:_ "What it does not say is what the next animal _is_: an animal not yet earned is drawn as a parcel with its price on it, so a child can aim at the next rung without having read the whole collection off the screen on their first afternoon (ADR-081)."
 
 > **Voorstel:** "All twelve heroes are on it by name from the first minute, and a child picks the one they start as ([ADR-098]). Sixty parcels over fifty-eight levels was a collection you could read off the screen in an afternoon and then spend forty levels re-meeting; twelve heroes over twelve chests is the opposite problem, and you cannot want what you have not seen. What the page does not say is which hero the next chest will offer."
 
@@ -808,17 +808,17 @@ Regelnummers naar de huidige `README.md`. Vervangende tekst is geschreven **onde
 
 **3. Regel 139–142** — het moment en de frequentie
 
-> *Nu:* "The parcel is opened at the end of the round that earned it — the one moment of movement in this product that is a reward rather than a lesson, and one that happens a handful of times a month (ADR-084)."
+> _Nu:_ "The parcel is opened at the end of the round that earned it — the one moment of movement in this product that is a reward rather than a lesson, and one that happens a handful of times a month (ADR-084)."
 
 > **Voorstel:** "Ten correct answers are a star, five stars a chest, and a chest is opened at the end of the round that earned it — the one moment of movement in this product that is a reward rather than a lesson. A chest holds a hero the child does not have, and the child picks one of three ([ADR-097])."
 
-*(Het "a handful of times a month" moet hoe dan ook weg: bij 50 goede antwoorden per kist is het elke ronde of twee.)*
+_(Het "a handful of times a month" moet hoe dan ook weg: bij 50 goede antwoorden per kist is het elke ronde of twee.)_
 
 ---
 
 **4. Regel 142–143** — de belofte. **De belangrijkste.**
 
-> *Nu:* "Nothing on that page can be bought, won by chance or reached by waiting, and nothing on it mentions a date."
+> _Nu:_ "Nothing on that page can be bought, won by chance or reached by waiting, and nothing on it mentions a date."
 
 > **Voorstel onder ADR-097** (ongewijzigd houden, want weer waar) — maar met één zin eraan vast, omdat de claim nu sterker is dan hij was: "Nothing on that page can be bought, won by chance or reached by waiting, and nothing on it mentions a date. There is no random number anywhere in the reward path: twelve chests hold twelve heroes, the same twelve for every child, and the choosing is the child's."
 
@@ -828,7 +828,7 @@ Regelnummers naar de huidige `README.md`. Vervangende tekst is geschreven **onde
 
 **5. Regel 127–130** — de rechterkolom
 
-> *Nu:* "'Jouw voortgang' is the level a child has reached, the rung of the ladder they are on, and one line saying what the next one costs, in the only unit that means anything to them: 'nog 6 goede antwoorden' (ADR-070)."
+> _Nu:_ "'Jouw voortgang' is the level a child has reached, the rung of the ladder they are on, and one line saying what the next one costs, in the only unit that means anything to them: 'nog 6 goede antwoorden' (ADR-070)."
 
 > **Voorstel:** "'Jouw voortgang' is the hero a child wears, which reeks it stands in, and one line saying what the next chest costs, in the only unit that means anything to them: 'nog 6 goede antwoorden' ([ADR-099]). Five stars stand beside it, as many filled as the next chest has. The level is still counted and still shown, and it is a measure of work done rather than a promise about what is coming."
 
@@ -844,13 +844,13 @@ De README beschrijft de hoofdloop van het product nergens. Er staat geen woord o
 
 **7. ADR's die geamendeerd moeten worden, los van de README**
 
-| ADR | Wat er staat | Wat eraan moet |
-|---|---|---|
-| ADR-076 | "Everything on the page is bought with correct answers and nothing else" | onder ADR-097 weer waar — wel het aantal (zestig dieren → twaalf helden) corrigeren |
-| ADR-080 | "nothing behind money, chance or waiting" | onder ADR-097 weer waar — geen wijziging |
-| ADR-081 | "nothing in this product is ever earned by chance or by waiting" | onder ADR-097 weer waar; de *pakjes*-beslissing zelf wordt door ADR-098 voor de helden teruggedraaid en dat moet erbij |
-| ADR-084 | "It is absent almost every time … a handful of times a month" | **vervallen argument**, ongeacht welke kant je op gaat. Moet herschreven of de animatie moet stiller |
-| ADR-067 | eerste voorwaarde ("nothing behind money or chance") | onder ADR-097 hersteld; ADR-096's revisie vervalt |
+| ADR     | Wat er staat                                                             | Wat eraan moet                                                                                                         |
+| ------- | ------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
+| ADR-076 | "Everything on the page is bought with correct answers and nothing else" | onder ADR-097 weer waar — wel het aantal (zestig dieren → twaalf helden) corrigeren                                    |
+| ADR-080 | "nothing behind money, chance or waiting"                                | onder ADR-097 weer waar — geen wijziging                                                                               |
+| ADR-081 | "nothing in this product is ever earned by chance or by waiting"         | onder ADR-097 weer waar; de _pakjes_-beslissing zelf wordt door ADR-098 voor de helden teruggedraaid en dat moet erbij |
+| ADR-084 | "It is absent almost every time … a handful of times a month"            | **vervallen argument**, ongeacht welke kant je op gaat. Moet herschreven of de animatie moet stiller                   |
+| ADR-067 | eerste voorwaarde ("nothing behind money or chance")                     | onder ADR-097 hersteld; ADR-096's revisie vervalt                                                                      |
 
 ---
 
@@ -864,13 +864,13 @@ De twaalf helden (ADR-098) zijn een goede investering — maar doe ze pas als de
 
 ## De drie grootste risico's
 
-1. **De meerkeuze-exploit maakt elke berekening in dit document irrelevant.** Als doorklikken tot het goed is als "goed" telt, is een kist niet vijftig goede antwoorden maar vijftig keer klikken, en dan meet je straks niets. *Niet geverifieerd — ik heb de antwoordregistratie niet gelezen.* Dit moet vóór alles.
+1. **De meerkeuze-exploit maakt elke berekening in dit document irrelevant.** Als doorklikken tot het goed is als "goed" telt, is een kist niet vijftig goede antwoorden maar vijftig keer klikken, en dan meet je straks niets. _Niet geverifieerd — ik heb de antwoordregistratie niet gelezen._ Dit moet vóór alles.
 
 2. **Je meet de nieuwigheid en niet het ontwerp.** Elke verandering geeft bij twee kinderen in week 1 een piek. Als je op grond van week 1 concludeert, concludeer je over de verandering-op-zich. Leg je leesregel vast vóór je begint: week 3 en 4 tellen, week 1 niet.
 
 3. **Twee kinderen zijn geen steekproef, en jouw kinderen zijn niet de markt.** Alles in dit document is afgestemd op een kind van 8 en een kind van 10 in jouw huis. Dat is de juiste keuze voor nu — maar ADR-096 is ontstaan uit één gesprek met twee kinderen, en dit document dreigt op dezelfde manier te ontstaan. Het verschil dat je kunt maken is dat je deze keer méét in plaats van luistert, en dat de meting al op het apparaat staat.
 
-*Eén risico dat ik bewust niet in de top drie zet: het juridische. Dat is er niet — de Raad van State-uitspraak van 9 maart 2022 sluit het kansspelspoor af en PEGI raakt alleen betaalde mechanismen. Het risico is reputationeel en pedagogisch, en dat is een ander soort risico dat je niet met een juridisch advies wegneemt.*
+_Eén risico dat ik bewust niet in de top drie zet: het juridische. Dat is er niet — de Raad van State-uitspraak van 9 maart 2022 sluit het kansspelspoor af en PEGI raakt alleen betaalde mechanismen. Het risico is reputationeel en pedagogisch, en dat is een ander soort risico dat je niet met een juridisch advies wegneemt._
 
 ## De eerstvolgende stap
 
