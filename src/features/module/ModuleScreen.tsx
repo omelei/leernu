@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Button } from '@/components/Button';
-import { CorrectIcon, GoIcon, MixIcon, PaperIcon } from '@/components/Icon';
+import { CorrectIcon, GoIcon, PaperIcon } from '@/components/Icon';
 import { countMastered, type ItemState, type ModeId } from '@/game-core';
 import { t } from '@/i18n';
 import { loadItemStates } from '@/store/progress';
@@ -28,6 +28,7 @@ import {
   questionCount,
   startLabel,
   teDrukOmAanTeWijzen,
+  toetsVormVan,
   type PracticeForm,
 } from './forms';
 import { useSmallScreen } from '@/features/shell/useSmallScreen';
@@ -49,7 +50,7 @@ import { useSmallScreen } from '@/features/shell/useSmallScreen';
  * short words, several to a line. A subject and a way of practising are tiles —
  * a plate and a title, two columns from 1200 — because they are what the page
  * is about and a tile a hand's width across is hit first time. The tables and
- * the divisions are a keypad of squares with the mix first. In each of them the
+ * the divisions are a keypad of twelve squares (ADR-100). In each of them the
  * answer already given wears the module's colour (ADR-089).
  *
  * **Topography asks where before it asks what** (ADR-083), and rekenen's first
@@ -150,7 +151,13 @@ export function ModuleScreen({
   // page, at the end of the row.
   const krap = teDrukOmAanTeWijzen(chosen?.setId ?? null, chosen?.items.length ?? 0, kleinScherm);
   const forms = offeredForms(formsFor(module.id), prefs.timer, chosen?.setId ?? null, krap);
-  const form = forms.find((candidate) => candidate.id === formId) ?? forms[0] ?? null;
+  const gekozenManier = forms.find((candidate) => candidate.id === formId) ?? forms[0] ?? null;
+  // The oefentoets is a way of its own (ADR-100). It answers the way a test
+  // asks, by typing, and hears back only at the end — so pressing it chooses
+  // the way as well, and pressing any other way leaves it.
+  const toetsVorm = toetsVormVan(module.id, forms);
+  const alsToets = toetsstand && toetsVorm !== null;
+  const form = alsToets ? toetsVorm : gekozenManier;
 
   const ModuleIcon = MODULE_ICON[module.id];
 
@@ -162,15 +169,12 @@ export function ModuleScreen({
   const gekozen = aantal !== null && lengtes.includes(aantal) ? aantal : null;
   const vragen = form === null ? null : questionCount(form, setSize, gekozen);
   const minuten = form === null ? null : minutesFor(form, vragen);
-  // Not offered where there is nothing to withhold. Exploring asks no
-  // questions, and a tafeldiploma already stops at the first mistake.
-  const toetsbaar = form !== null && form.rule !== null && form.id !== 'tafeldiploma';
   /** Everything this module holds, under one name. What a test asks about. */
   const mix = mixVan(alleOnderwerpen);
   const zin =
     chosen === null || form === null
       ? ''
-      : toetsstand && toetsbaar
+      : alsToets
         ? t('choose.startTest', { wat: startLabel(form, naamVan(chosen), setSize, gekozen) })
         : startLabel(form, naamVan(chosen), setSize, gekozen);
 
@@ -193,7 +197,7 @@ export function ModuleScreen({
       : []),
     ...(form ? [{ label: t('start.manier'), waarde: t(form.name) }] : []),
     ...(ronde ? [{ label: t('start.ronde'), waarde: ronde }] : []),
-    ...(toetsstand && toetsbaar ? [{ label: t('start.stand'), waarde: t('choose.testMode') }] : []),
+    ...(alsToets ? [{ label: t('start.stand'), waarde: t('choose.testMode') }] : []),
   ];
 
   const startKnop =
@@ -201,7 +205,7 @@ export function ModuleScreen({
       <Button
         className="tk-button-go"
         aria-label={t('choose.goLabel', { wat: zin })}
-        onClick={() => onStart(chosen, form.id, gekozen, toetsstand && toetsbaar)}
+        onClick={() => onStart(chosen, form.id, gekozen, alsToets)}
       >
         {t('choose.go')}
         <GoIcon size={24} />
@@ -332,15 +336,16 @@ export function ModuleScreen({
 
         {/* The second, smaller decision, where there is one — numbered like the
             others, because on rekenen it is the press that decides what the
-            round contains. The tables and the divisions are a keypad with the
-            mix first; a range, a level or which cities are chips. */}
+            round contains. The tables and the divisions are a keypad of twelve;
+            a range, a level or which cities are chips. The keypad has no mix
+            square: the Rekenmix is one step up already (ADR-100). */}
         {onderwerp && onderwerp.keuze && onderwerp.sets.length > 1 ? (
           <section className="tk-kies" aria-label={t(onderwerp.keuze)}>
             <Stap nummer={stap.keuze} label={t(onderwerp.keuze)} />
 
             {isKeypad(onderwerp) ? (
               <div className="tk-tafels">
-                {mixEerst(onderwerp.sets).map((deel) => (
+                {onderwerp.sets.map((deel) => (
                   <button
                     key={deel.setId}
                     type="button"
@@ -351,18 +356,7 @@ export function ModuleScreen({
                     aria-pressed={deel.setId === chosen?.setId}
                     onClick={() => onSet(deel.setId)}
                   >
-                    {deel.mix ? (
-                      <>
-                        <span className="tk-plaat">
-                          <MixIcon size={20} />
-                        </span>
-                        <span aria-hidden="true" className="tk-tafel-mix">
-                          {t('choose.mix')}
-                        </span>
-                      </>
-                    ) : (
-                      <span aria-hidden="true">{deel.kortNaam ?? naamVan(deel)}</span>
-                    )}
+                    <span aria-hidden="true">{deel.kortNaam ?? naamVan(deel)}</span>
                   </button>
                 ))}
               </div>
@@ -394,7 +388,7 @@ export function ModuleScreen({
           <div className="tk-tegels">
             {forms.map((candidate) => {
               const FormIcon = candidate.icon;
-              const gekozenVorm = candidate.id === form?.id;
+              const gekozenVorm = !alsToets && candidate.id === form?.id;
 
               return (
                 <button
@@ -403,7 +397,10 @@ export function ModuleScreen({
                   className="tk-tegel"
                   aria-label={`${t(candidate.name)}. ${t(candidate.reason)}`}
                   aria-pressed={gekozenVorm}
-                  onClick={() => setFormId(candidate.id)}
+                  onClick={() => {
+                    setFormId(candidate.id);
+                    setToetsstand(false);
+                  }}
                 >
                   <span className="tk-plaat">
                     <FormIcon size={24} />
@@ -414,48 +411,59 @@ export function ModuleScreen({
               );
             })}
 
-            {/* The oefentoets, last among the ways. Still a switch and not a
-                seventh way (ADR-085): pressing it does not un-press the way
-                that is chosen, and the start bar carries it separately. */}
-            {chosen && toetsbaar ? (
+            {/* The oefentoets, last among the ways and one of them: pressing it
+                un-presses the others, because it chooses how you answer too.
+                It used to be a switch on whichever way was chosen (ADR-085),
+                which asked a child to pick a way a test never asks for
+                (ADR-100). */}
+            {chosen && toetsVorm ? (
               <button
                 type="button"
                 className="tk-tegel"
                 aria-label={`${t('choose.testMode')}. ${t('choose.testModeWhy')}`}
-                aria-pressed={toetsstand}
-                onClick={() => setToetsstand(!toetsstand)}
+                aria-pressed={alsToets}
+                onClick={() => setToetsstand(true)}
               >
                 <span className="tk-plaat">
                   <PaperIcon size={24} />
                 </span>
                 <span className="min-w-0">{t('choose.testMode')}</span>
-                {toetsstand ? vink : null}
+                {alsToets ? vink : null}
               </button>
             ) : null}
           </div>
         </section>
 
-        {/* How long, where there is more than one honest answer. Not a numbered
-            step: it is a property of the round the steps above have already
-            chosen (ADR-074). */}
+        {/* How long, as a step of its own — and only after a way that has a
+            length: pointing, choosing, typing. A minute, three lives and
+            exploring have none, and a diploma is the whole table, so for those
+            the step is not there rather than empty (ADR-100, amending ADR-074). */}
         {chosen && form && lengtes.length > 0 ? (
-          <div className="tk-kies">
-            <p className="tk-label">{t('choose.howMany')}</p>
+          <section className="tk-kies" aria-label={t('choose.howMany')}>
+            <Stap nummer={stap.hoe + 1} label={t('choose.howMany')} />
+
             <div className="tk-keuzes">
-              {lengtes.map((count) => (
-                <button
-                  key={count}
-                  type="button"
-                  className="tk-keuze"
-                  aria-label={t('choose.howManyOne', { aantal: count })}
-                  aria-pressed={count === vragen}
-                  onClick={() => setAantal(count)}
-                >
-                  <span aria-hidden="true">{count}</span>
-                </button>
-              ))}
+              {lengtes.map((count) => {
+                const heel = count === setSize;
+                const label = heel ? 'choose.howManyAllLabel' : 'choose.howManyOne';
+
+                return (
+                  <button
+                    key={count}
+                    type="button"
+                    className="tk-keuze"
+                    aria-label={t(label, { aantal: count })}
+                    aria-pressed={count === vragen}
+                    onClick={() => setAantal(count)}
+                  >
+                    <span aria-hidden="true">
+                      {heel ? t('choose.howManyAll', { aantal: count }) : count}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
-          </div>
+          </section>
         ) : null}
 
         {/* From a tablet up, the answers together and the way on, closing the
@@ -485,6 +493,7 @@ export function ModuleScreen({
             onKies={(tafel) => {
               onSet(tafel);
               setFormId('tafeldiploma');
+              setToetsstand(false);
             }}
           />
         ) : null}
@@ -537,11 +546,6 @@ function rondeVan(
 /** The subjects whose sets are numbers: a keypad, not a row of words. */
 function isKeypad(onderwerp: Onderwerp): boolean {
   return onderwerp.id === 'tafels' || onderwerp.id === 'delen';
-}
-
-/** The mix first, then the rest in their own order — the keypad the handoff draws. */
-function mixEerst(sets: readonly Onderdeel[]): Onderdeel[] {
-  return [...sets.filter((deel) => deel.mix), ...sets.filter((deel) => !deel.mix)];
 }
 
 /**

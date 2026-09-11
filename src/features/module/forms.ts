@@ -284,6 +284,26 @@ export const KLOK_FORMS: readonly PracticeForm[] = [
   },
 ];
 
+/**
+ * The way the oefentoets answers in, per module: typing, because that is what a
+ * test asks — the name unaided, the sum unaided, the time written out. The
+ * oefentoets is a tile of its own and pressing it chooses this way too, so a
+ * child is never asked to pick a way a test does not have (ADR-100).
+ */
+const TOETS_VORM: Record<string, ModeId> = {
+  topo: 'hoe-heet-dit',
+  tafels: 'som-typen',
+  klok: 'klok-typen',
+};
+
+/** The way the oefentoets uses, if this page offers it; null otherwise. */
+export function toetsVormVan(
+  moduleId: string,
+  forms: readonly PracticeForm[],
+): PracticeForm | null {
+  return forms.find((form) => form.id === TOETS_VORM[moduleId]) ?? null;
+}
+
 export function formsFor(moduleId: string): readonly PracticeForm[] {
   if (moduleId === 'tafels') return SUM_FORMS;
   if (moduleId === 'klok') return KLOK_FORMS;
@@ -385,7 +405,20 @@ export function teDrukOmAanTeWijzen(
 export const QUESTION_CHOICES: readonly number[] = [10, 25, 50, 100];
 
 /**
+ * The biggest set that is offered whole, as "Alle 12". Past a hundred a whole
+ * set is not a round, it is an afternoon: the world's hundred and sixty-seven
+ * countries stop at a hundred.
+ */
+const HEEL_TOT = 100;
+
+/**
  * The lengths worth offering for this way of practising on this set, or none.
+ *
+ * The four above that fit, the round's own length — fifteen on the map, which
+ * is what a round asks when nobody chooses and so has to be something a child
+ * can choose back — and the whole set where it fits in one round. Without those
+ * last two the row never appeared on topography: twelve provinces fit only
+ * "10", and one chip is not a choice (ADR-100).
  *
  * Empty where there is nothing to choose: a round that ends on a clock or on
  * three lives has no number of questions, a diploma is the whole table by
@@ -393,7 +426,10 @@ export const QUESTION_CHOICES: readonly number[] = [10, 25, 50, 100];
  */
 export function questionChoices(form: PracticeForm, setSize: number): number[] {
   if (form.rule === null || form.rule.kind !== 'fixed') return [];
-  const fits = QUESTION_CHOICES.filter((count) => count <= setSize);
+  const korter = [...new Set([...QUESTION_CHOICES, form.rule.aantal])]
+    .filter((count) => count < setSize)
+    .sort((a, b) => a - b);
+  const fits = setSize <= HEEL_TOT ? [...korter, setSize] : korter;
   return fits.length > 1 ? fits : [];
 }
 

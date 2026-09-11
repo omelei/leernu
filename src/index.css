@@ -2305,9 +2305,10 @@
   }
 
   /* ---- Squares: which table, which division ------------------------------
-   * The numbers as a keypad: four across on a phone, seven from a tablet up,
-   * each one square. The first is the mix — all of them — with a plate and a
-   * word, and then one to twelve in the display face. All twelve on every size:
+   * The numbers as a keypad: four across on a phone, six from a tablet up,
+   * each one square, one to twelve in the display face. Twelve is three rows of
+   * four and two of six, with no gap in either. The mix square that came first
+   * is gone: the Rekenmix is one step up (ADR-100). All twelve on every size:
    * the handoff shows seven on a phone, and a table a child cannot reach there
    * is a table taken away (ADR-095).
    */
@@ -2318,7 +2319,7 @@
   }
   @media (min-width: 768px) {
     .tk-tafels {
-      grid-template-columns: repeat(7, minmax(0, 1fr));
+      grid-template-columns: repeat(6, minmax(0, 1fr));
       gap: 12px;
     }
   }
@@ -2356,25 +2357,6 @@
     background: var(--accent-soft);
     color: var(--accent-text);
   }
-  .tk-tafel .tk-plaat {
-    width: 36px;
-    height: 36px;
-    border-radius: var(--radius-klein);
-    background: var(--surface);
-    color: var(--ink);
-  }
-  .tk-tafel[aria-pressed='true'] .tk-plaat {
-    background: var(--accent-tint);
-    color: var(--accent-text);
-  }
-  .tk-tafel-mix {
-    font-family: 'Source Sans 3', system-ui, sans-serif;
-    font-size: 0.9375rem;
-    line-height: 1.25rem;
-    letter-spacing: 0;
-    font-weight: 600;
-  }
-
   /* The cijfer, after a toetsstand and nowhere else. The number gets the score
    * size because on this screen it is the thing the round was for; the word
    * before it and the reason after it are the label and the caveat.

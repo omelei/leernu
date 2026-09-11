@@ -2,8 +2,9 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 /**
- * Rekenen, as content: the twelve tables, the division facts that mirror them,
- * and plus and minus in three ranges.
+ * Rekenen, as content: the twelve tables, the keersommen past them in two
+ * ranges, the division facts that mirror the tables, and plus and minus in
+ * three ranges.
  *
  * Generated rather than written by hand, and that is the opposite of the rule
  * the geography sets follow. The reason is that these need no editor for the
@@ -231,13 +232,78 @@ const PLUS_MIN = [
   },
 ];
 
-for (const set of PLUS_MIN) {
+// ---------------------------------------------------------------------------
+// Keersommen voorbij de tafels, in twee bereiken (ADR-100).
+//
+// Wat na de tafels komt: een getal boven de tien keer een getal onder de tien,
+// de som die een kind splitst — 6 × 14 is 6 × 10 en 6 × 4. Het kleine getal
+// staat voorop, zoals een rekenboek het schrijft: zes groepjes van veertien.
+
+/** Elf tot en met vijfentwintig keer drie tot en met negen, zolang de uitkomst
+ *  niet boven de honderd komt. Geen ronde tientallen: 6 × 20 is een tafelsom
+ *  met een nul erachter, niet iets om te splitsen. Precies vijftig. Keer twee
+ *  staat er niet in: dat is verdubbelen, en dat kan een kind al. */
+function keerTotHonderd() {
+  const items = [];
+  for (let keer = 3; keer <= 9; keer++) {
+    for (let getal = 11; getal <= 25; getal++) {
+      if (getal % 10 === 0 || keer * getal > 100) continue;
+      items.push({
+        id: `keer100-${keer}x${getal}`,
+        op: 'keer',
+        links: keer,
+        rechts: getal,
+        antwoord: keer * getal,
+      });
+    }
+  }
+  return items;
+}
+
+/** Vijftien tweecijferige getallen, verspreid over de tientallen, elk keer 4, 7
+ *  en 9 — de tafels waar een kind het langst over doet. De grootste is 9 × 96
+ *  en blijft onder de duizend. Vijfenveertig, net als plus en min tot 1000. */
+const DUIZEND_KEER = [16, 23, 27, 34, 38, 42, 46, 53, 58, 64, 67, 75, 83, 88, 96];
+
+function keerSommen(getallen, keren, naam) {
+  const items = [];
+  for (const keer of keren) {
+    for (const getal of getallen) {
+      items.push({
+        id: `${naam}-${keer}x${getal}`,
+        op: 'keer',
+        links: keer,
+        rechts: getal,
+        antwoord: keer * getal,
+      });
+    }
+  }
+  return items;
+}
+
+/**
+ * Een eigen datum, want de rest van de inhoud veranderde niet toen deze erbij
+ * kwamen — zie CONTENT_VERSION.
+ */
+const KEER_VERSION = '2026-09-11';
+
+const KEER = [
+  { id: 'keer-100', op: 'keer', niveau: 2, items: keerTotHonderd() },
+  {
+    id: 'keer-1000',
+    op: 'keer',
+    niveau: 3,
+    items: keerSommen(DUIZEND_KEER, [4, 7, 9], 'keer1000'),
+  },
+];
+
+for (const set of [...PLUS_MIN, ...KEER]) {
   write(SOM_DIR, {
     id: set.id,
     op: set.op,
     tafel: null,
     niveau: set.niveau,
-    contentVersie: CONTENT_VERSION,
+    contentVersie: set.op === 'keer' ? KEER_VERSION : CONTENT_VERSION,
     items: set.items,
   });
   geschreven++;
@@ -247,7 +313,7 @@ for (const set of PLUS_MIN) {
 // Een uitkomst onder de één of boven het bereik zou hier stil doorheen glippen
 // en pas op een scherm van een kind opvallen. De test controleert het ook, maar
 // de generator hoort geen bestand te schrijven waarvan hij weet dat het fout is.
-for (const set of PLUS_MIN) {
+for (const set of [...PLUS_MIN, ...KEER]) {
   const grens = Number(set.id.split('-')[1]);
   for (const som of set.items) {
     if (som.antwoord < 1 || som.antwoord > grens) {

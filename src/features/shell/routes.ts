@@ -112,11 +112,13 @@ const SLUG_SET = new Map(
 /**
  * The sets of rekenen that answer to their own name.
  *
- * One to twelve, times and divide, and three ranges each for plus and minus. A
- * thirteenth table is a typo, not a set, and so is "plus-50": a slug that does
- * not name something opens the module rather than an error page.
+ * One to twelve, times and divide, three ranges each for plus and minus, and two
+ * for the keersommen past the tables. A thirteenth table is a typo, not a set,
+ * and so is "plus-50": a slug that does not name something opens the module
+ * rather than an error page.
  */
-const REKENEN_SLUG = /^(?:tafel|deel)-(?:[1-9]|1[0-2])$|^(?:plus|min)-(?:20|100|1000)$/;
+const REKENEN_SLUG =
+  /^(?:tafel|deel)-(?:[1-9]|1[0-2])$|^(?:plus|min)-(?:20|100|1000)$|^keer-(?:100|1000)$/;
 
 export function setSlug(setId: string): string {
   return SET_SLUG[setId] ?? setId;

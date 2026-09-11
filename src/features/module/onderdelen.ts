@@ -28,8 +28,8 @@ import type { KlokMode } from '@/features/klok/useKlokRound';
  * is a set: ten sums, twelve provinces, the thing a round is made of. An
  * *onderwerp* is what step 1 offers: "Tafels", "Provincies", "Rekenmix". Where
  * a subject holds one set the two are the same thing and the page shows one
- * card. Where it holds thirteen — the twelve tables and all of them at once —
- * the page shows one card and asks which, because twelve cards for one subject
+ * card. Where it holds twelve — the twelve tables — the page shows one card
+ * and asks which, because twelve cards for one subject
  * is a page a child scrolls past rather than reads, and it pushed step 2 off
  * the screen on the page whose whole argument is that the two steps are one
  * flow (ADR-061 gives step 2 the same ceiling for the same reason).
@@ -200,6 +200,13 @@ function topoMix(): Onderdeel {
 // ---------------------------------------------------------------------------
 // Rekenen
 
+/** What a range of sums is called, by the sign in front of its ceiling. */
+const BEREIK_NAAM: Record<string, TranslationKey> = {
+  plus: 'sums.plusUpTo',
+  min: 'sums.minusUpTo',
+  keer: 'sums.timesUpTo',
+};
+
 /** The name of a set of sums, and the short label on its chip. */
 function rekenNaam(setId: string): { naam: string; kort: string } {
   const tafel = /^tafel-(\d+)$/.exec(setId)?.[1];
@@ -208,11 +215,14 @@ function rekenNaam(setId: string): { naam: string; kort: string } {
   const deel = /^deel-(\d+)$/.exec(setId)?.[1];
   if (deel) return { naam: t('sums.divideBy', { tafel: deel }), kort: deel };
 
-  const bereik = /^(plus|min)-(\d+)$/.exec(setId);
+  const bereik = /^(plus|min|keer)-(\d+)$/.exec(setId);
+  const soort = bereik?.[1];
   const grens = bereik?.[2];
-  if (bereik && grens) {
-    const key = bereik[1] === 'plus' ? 'sums.plusUpTo' : 'sums.minusUpTo';
-    return { naam: t(key, { grens }), kort: t('sums.upTo', { grens }) };
+  if (soort && grens) {
+    return {
+      naam: t(BEREIK_NAAM[soort] ?? 'sums.plusUpTo', { grens }),
+      kort: t('sums.upTo', { grens }),
+    };
   }
 
   if (setId === 'tafels-alle') return { naam: t('sums.allTables'), kort: t('sums.allShort') };
@@ -405,9 +415,10 @@ export function startbareOnderdelen(): Onderdeel[] {
 /**
  * The subjects a module offers, in the order a child should meet them.
  *
- * Topography is five sets and a mix of them, one subject each. Rekenen is four
- * kinds of sum and a mix of all four, and two of those four hold thirteen sets
- * apiece. Klokkijken is four steps and a mix, one subject each — the shape
+ * Topography is five sets and a mix of them, one subject each. Rekenen is five
+ * kinds of sum and a mix of them; the tables and the divisions hold twelve sets
+ * apiece, and the mix of each is the Rekenmix rather than a thirteenth square
+ * (ADR-100). Klokkijken is four steps and a mix, one subject each — the shape
  * topography has rather than the shape rekenen has.
  */
 export function onderwerpenVan(
@@ -432,7 +443,19 @@ export function onderwerpenVan(
       uitleg: 'onderwerp.tafels.uitleg',
       keuze: 'onderwerp.tafels.keuze',
       regio: null,
-      sets: [...van('tafel-'), ...mixMet('tafels-alle')],
+      sets: van('tafel-'),
+    },
+    // What comes after the tables: a number past ten times one under it, the
+    // sum a child splits (ADR-100). Beside the tables because it is the same
+    // sign.
+    {
+      moduleId: 'tafels',
+      id: 'keer',
+      naam: 'onderwerp.keer',
+      uitleg: 'onderwerp.keer.uitleg',
+      keuze: 'onderwerp.bereik.keuze',
+      regio: null,
+      sets: van('keer-'),
     },
     {
       moduleId: 'tafels',
@@ -441,7 +464,7 @@ export function onderwerpenVan(
       uitleg: 'onderwerp.delen.uitleg',
       keuze: 'onderwerp.delen.keuze',
       regio: null,
-      sets: [...van('deel-'), ...mixMet('deel-alle')],
+      sets: van('deel-'),
     },
     {
       moduleId: 'tafels',

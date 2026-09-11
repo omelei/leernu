@@ -715,7 +715,11 @@ export function LandIcon(props: Omit<IconProps, 'children'>) {
   );
 }
 
-/** Tafels: the times table, which is a grid before it is anything else. */
+/**
+ * Keersommen: the grid a big keersom is split in — 6 × 14 as a block of six by
+ * ten and a block of six by four. It was the tables' mark until the tables took
+ * the sign itself (ADR-100).
+ */
 export function GridIcon(props: Omit<IconProps, 'children'>) {
   return (
     <Icon {...props}>
@@ -801,6 +805,23 @@ export function MinuutIcon(props: Omit<IconProps, 'children'>) {
       <circle cx="12" cy="12" r="8.5" />
       <path d="M12 3.5v2M20.5 12h-2M12 20.5v-2M3.5 12h2" />
       <path d="M12 12l3.5-3" />
+    </Icon>
+  );
+}
+
+/**
+ * Tafels: the times sign, the one the sums themselves are written with.
+ *
+ * An operator beside `PlusIcon` rather than `WrongIcon` again: the plus's two
+ * strokes at the plus's length, turned an eighth, so the rekenen row reads
+ * × : + − as one family. `WrongIcon` runs further, corner to corner. The two
+ * share a row only when "Oefen je fouten" is on it, and there the word says
+ * which is which (ADR-100).
+ */
+export function KeerIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <path d="M7 7l10 10M17 7L7 17" />
     </Icon>
   );
 }

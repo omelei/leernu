@@ -11,7 +11,20 @@ import {
   questionCount,
   startLabel,
   teDrukOmAanTeWijzen,
+  toetsVormVan,
 } from './forms';
+
+describe('the oefentoets', () => {
+  it('answers by typing, whatever the module', () => {
+    // A test asks for the name, the sum or the time unaided (ADR-100).
+    const vorm = (moduleId: string, forms: typeof TOPO_FORMS, setId: string) =>
+      toetsVormVan(moduleId, offeredForms(forms, false, setId))?.id;
+
+    expect(vorm('topo', TOPO_FORMS, 'nl-provincies')).toBe('hoe-heet-dit');
+    expect(vorm('tafels', SUM_FORMS, 'tafel-7')).toBe('som-typen');
+    expect(vorm('klok', KLOK_FORMS, 'klok-heel')).toBe('klok-typen');
+  });
+});
 
 /**
  * The order of the ways of practising is the argument K2 is making, so it is
@@ -199,8 +212,22 @@ describe('how many questions', () => {
   it('offers only the lengths the set can actually fill', () => {
     // A table of ten has one honest answer, so there is nothing to choose.
     expect(questionChoices(point, 10)).toEqual([]);
-    expect(questionChoices(point, 45)).toEqual([10, 25]);
-    expect(questionChoices(point, 510)).toEqual([10, 25, 50, 100]);
+    expect(questionChoices(point, 45)).toEqual([10, 15, 25, 45]);
+    expect(questionChoices(point, 605)).toEqual([10, 15, 25, 50, 100]);
+    // Rekenen's own length is ten, which is already one of the four.
+    expect(questionChoices(vorm('som-typen'), 605)).toEqual([10, 25, 50, 100]);
+  });
+
+  it('offers a small map whole, so topography has a choice at all', () => {
+    // Twelve provinces used to fit only "10", and one chip is no row. The whole
+    // set is the round's own length here, since fifteen does not fit in twelve.
+    expect(questionChoices(point, 12)).toEqual([10, 12]);
+    expect(questionCount(point, 12, null)).toBe(12);
+    expect(questionCount(point, 12, 10)).toBe(10);
+    // Eighty cities: the round's own fifteen is a chip, and so is all eighty.
+    expect(questionChoices(point, 80)).toEqual([10, 15, 25, 50, 80]);
+    // The world is not offered whole: a hundred and sixty-seven is an afternoon.
+    expect(questionChoices(point, 167)).toEqual([10, 15, 25, 50, 100]);
   });
 
   it('offers nothing where a round has no number of questions', () => {

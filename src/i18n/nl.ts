@@ -82,7 +82,8 @@ export const nl = {
   // onder het percentage en niet erboven, want het is het enige getal in het
   // product dat één fout antwoord meteen afpakt.
   'home.runLabel': 'Foutloos op rij',
-  'home.runBest': 'beste {aantal}',
+  // "beste 12" las als een lijstje van de beste twaalf. Het is je record.
+  'home.runBest': 'je record is {aantal}',
   // De twaalf helden (ADR-098). Een voornaam met dezelfde letter als het dier:
   // makkelijk voor te lezen in groep 4, en een naam maakt er een karakter van
   // in plaats van een soort.
@@ -344,20 +345,21 @@ export const nl = {
   // Hoe lang de ronde duurt, waar er meer dan één eerlijk antwoord is. Tien is
   // wat een ronde altijd was en blijft de standaard; de rest bestaat omdat de
   // Rekenmix vijfhonderd sommen heeft.
-  // De toetsstand. Geen zevende manier van oefenen maar een schakelaar op de
-  // manier die je al koos: "de antwoorden komen pas aan het eind" kun je doen
-  // met aanwijzen, met kiezen en met typen. Hij staat waar "hoeveel vragen?"
-  // staat, want het is hetzelfde soort ding - een eigenschap van de ronde die
-  // de twee stappen erboven al gekozen hebben.
+  // De oefentoets, als eigen manier van oefenen (ADR-100): je typt, zoals op
+  // een toets, en pas aan het eind zie je wat goed was. Eerst was het een
+  // schakelaar op een manier die je al koos, en dan moest je een manier kiezen
+  // die een toets niet heeft. "Zelf typen" staat er bewust niet in: dat is de
+  // naam van de tegel ernaast, en twee tegels die zo heten zijn er één te veel.
   'choose.testMode': 'Oefentoets',
-  'choose.testModeWhy': 'Je ziet pas aan het eind wat goed was, en je krijgt een cijfer.',
+  'choose.testModeWhy':
+    'Je typt zonder hulp. Aan het eind zie je wat goed was en krijg je een cijfer.',
   'choose.startTest': '{wat} · oefentoets',
   'choose.likeTheTest': 'Oefen zoals de toets',
   'choose.howMany': 'Hoeveel vragen?',
   'choose.howManyOne': '{aantal} vragen',
-  // Het eerste vakje van het tafelraster: alle tafels, of alle deelsommen, door
-  // elkaar.
-  'choose.mix': 'Mix',
+  // De hele set, als die in één ronde past: twaalf provincies zijn "Alle 12".
+  'choose.howManyAll': 'Alle {aantal}',
+  'choose.howManyAllLabel': 'Alle {aantal} vragen',
   // De startbalk (herontwerp 2026-09): wat er gekozen is, als een rij kleine
   // labels, en daarna de knop. Het woordje voor elke waarde zegt welke vraag die
   // beantwoordt. De knop zelf zegt voor een schermlezer nog steeds de hele zin.
@@ -375,12 +377,14 @@ export const nl = {
   'start.levens': '{aantal} levens',
   'start.vrij': 'rondkijken',
 
-  // De onderwerpen van rekenen. Vier soorten sommen en een mix ervan; de tafels
-  // en het delen hebben er dertien elk, en die staan als knopjes onder de kaart
-  // in plaats van als dertien kaarten ernaast.
+  // De onderwerpen van rekenen. Vijf soorten sommen en een mix ervan; de tafels
+  // en het delen hebben er twaalf elk, en die staan als knopjes onder de kaart
+  // in plaats van als twaalf kaarten ernaast.
   'onderwerp.tafels': 'Tafels',
-  'onderwerp.tafels.uitleg': 'Keersommen, de tafel van 1 tot en met 12',
+  'onderwerp.tafels.uitleg': 'De tafel van 1 tot en met 12',
   'onderwerp.tafels.keuze': 'Welke tafel?',
+  'onderwerp.keer': 'Keersommen',
+  'onderwerp.keer.uitleg': 'Voorbij de tafels: 6 × 14, tot 100 of 1000',
   'onderwerp.delen': 'Deelsommen',
   'onderwerp.delen.uitleg': 'De tafels andersom: 56 : 7',
   'onderwerp.delen.keuze': 'Delen door welk getal?',
@@ -459,6 +463,7 @@ export const nl = {
   'sums.divideBy': 'Delen door {tafel}',
   'sums.plusUpTo': 'Plussommen tot {grens}',
   'sums.minusUpTo': 'Minsommen tot {grens}',
+  'sums.timesUpTo': 'Keersommen tot {grens}',
   'sums.upTo': 'tot {grens}',
   'sums.allTables': 'Alle tafels door elkaar',
   'sums.allDivides': 'Alle deelsommen door elkaar',

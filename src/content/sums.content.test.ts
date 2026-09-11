@@ -8,7 +8,7 @@ import { loadSumSet, loadSumSets, MIX_IDS, sumPool } from './loadSums';
  * A province's name and its weetje are judgements someone has to make and
  * defend, so a person reads them. 7 × 8 = 56 is not a judgement — it is either
  * right or it is a bug that would teach a child something false — so every one
- * of the five hundred is worked back out here instead. That trade is available
+ * of the six hundred is worked back out here instead. That trade is available
  * exactly once in this content pipeline and this is the place.
  *
  * What it cannot check is the other half of that file: **which** sums to
@@ -19,9 +19,13 @@ import { loadSumSet, loadSumSets, MIX_IDS, sumPool } from './loadSums';
  */
 
 const sets = loadSumSets();
-const tafels = sets.filter((set) => set.op === 'keer');
+const tafels = sets.filter((set) => set.op === 'keer' && set.tafel !== null);
+const keersommen = sets.filter((set) => set.op === 'keer' && set.tafel === null);
 const delen = sets.filter((set) => set.op === 'delen');
 const plusMin = sets.filter((set) => set.op === 'plus' || set.op === 'min');
+
+/** Every sum there is, counted once. */
+const TOTAAL = 605;
 
 describe('the tables', () => {
   it('runs from one to twelve, in order', () => {
@@ -54,6 +58,42 @@ describe('the tables', () => {
 
     for (const tafel of [1, 2, 5, 10]) expect(level(tafel), `tafel ${tafel}`).toBe(1);
     for (const tafel of [7, 9, 11, 12]) expect(level(tafel), `tafel ${tafel}`).toBe(3);
+  });
+});
+
+describe('the keersommen past the tables', () => {
+  it('comes in two ranges, after the tables', () => {
+    expect(keersommen.map((set) => set.id)).toEqual(['keer-100', 'keer-1000']);
+    expect(keersommen.map((set) => set.items.length)).toEqual([50, 45]);
+  });
+
+  it('multiplies every one of them back out', () => {
+    for (const set of keersommen) {
+      for (const sum of set.items) {
+        expect(sum.antwoord, `${sum.links} × ${sum.rechts}`).toBe(sum.links * sum.rechts);
+      }
+    }
+  });
+
+  it('is a number under ten times one past it, and never a table', () => {
+    // The small number first, as a schoolbook writes it. A sum that fitted in
+    // a table would be a second id for a sum a child already has a box for.
+    for (const set of keersommen) {
+      for (const sum of set.items) {
+        expect(sum.links, sum.id).toBeGreaterThanOrEqual(3);
+        expect(sum.links, sum.id).toBeLessThanOrEqual(9);
+        expect(sum.rechts, sum.id).toBeGreaterThan(10);
+      }
+    }
+  });
+
+  it('stays inside the range its name claims', () => {
+    for (const set of keersommen) {
+      const grens = Number(set.id.split('-')[1]);
+      for (const sum of set.items) {
+        expect(sum.antwoord, sum.id).toBeLessThanOrEqual(grens);
+      }
+    }
   });
 });
 
@@ -132,7 +172,7 @@ describe('every sum there is', () => {
         seen.add(sum.id);
       }
     }
-    expect(seen.size).toBe(510);
+    expect(seen.size).toBe(TOTAAL);
   });
 
   it('never collides with a geography item', () => {
@@ -141,7 +181,7 @@ describe('every sum there is', () => {
     // same Leitner box. The prefix is what keeps them apart.
     for (const set of sets) {
       for (const sum of set.items) {
-        expect(sum.id, sum.id).toMatch(/^(?:tafel|deel|plus|min)/);
+        expect(sum.id, sum.id).toMatch(/^(?:tafel|keer|deel|plus|min)/);
         expect(sum.id.startsWith('nl-'), sum.id).toBe(false);
       }
     }
@@ -163,22 +203,22 @@ describe('the mixes', () => {
   });
 
   it('holds what its name says and nothing else', () => {
+    // "Alle tafels" is the tables, not the keersommen past them (ADR-100).
     expect(loadSumSet('tafels-alle')?.items).toHaveLength(120);
     expect(loadSumSet('deel-alle')?.items).toHaveLength(120);
-    expect(loadSumSet('rekenmix')?.items).toHaveLength(510);
+    expect(loadSumSet('rekenmix')?.items).toHaveLength(TOTAAL);
   });
 
   it('splits the Rekenmix by the level every set already carried', () => {
-    // Ten sets each and a hundred and seventy sums each, which is not a
-    // coincidence worth relying on but is worth noticing: the content was
-    // levelled evenly long before anything read the level out loud (ADR-073).
-    for (const [id, niveau] of [
-      ['rekenmix-1', 1],
-      ['rekenmix-2', 2],
-      ['rekenmix-3', 3],
+    // A hundred and seventy each until the keersommen came in at levels two
+    // and three (ADR-073, ADR-100).
+    for (const [id, niveau, aantal] of [
+      ['rekenmix-1', 1, 170],
+      ['rekenmix-2', 2, 220],
+      ['rekenmix-3', 3, 215],
     ] as const) {
       const mix = loadSumSet(id);
-      expect(mix?.items, id).toHaveLength(170);
+      expect(mix?.items, id).toHaveLength(aantal);
 
       // Every sum in it comes from a set of that level and no other.
       const ids = new Set(
@@ -193,14 +233,14 @@ describe('the mixes', () => {
       (total, niveau) => total + (loadSumSet(`rekenmix-${niveau}`)?.items.length ?? 0),
       0,
     );
-    expect(perLevel).toBe(510);
+    expect(perLevel).toBe(TOTAAL);
   });
 
   it('carries every sum in the mistakes set, and narrows it in the round', () => {
     // It holds them all here because a set is a list of sums and a child's
     // mistakes are not a property of the content. `useSumRound` reads the
     // boxes and filters (ADR-078).
-    expect(loadSumSet('fouten')?.items).toHaveLength(510);
+    expect(loadSumSet('fouten')?.items).toHaveLength(TOTAAL);
   });
 });
 
@@ -208,13 +248,16 @@ describe('the pool a timed round draws from', () => {
   it('reaches the other sets of the same kind, and no further', () => {
     // A minute of tables is a minute of tables. Ten sums run out long before
     // sixty seconds do, so it reaches past the chosen table — but a child who
-    // asked for the table of seven should not be handed "845 − 140" halfway.
+    // asked for the table of seven should not be handed "845 − 140" halfway,
+    // nor "9 × 96", which is `keer` too (ADR-100).
     expect(sumPool('tafel-7')).toHaveLength(120);
+    expect(sumPool('keer-100')).toHaveLength(95);
+    expect(sumPool('keer-100').every((sum) => sum.op === 'keer')).toBe(true);
     expect(sumPool('plus-20').every((sum) => sum.op === 'plus')).toBe(true);
     expect(sumPool('min-100').every((sum) => sum.op === 'min')).toBe(true);
   });
 
   it('lets a mix draw from itself, which is already everything', () => {
-    expect(sumPool('rekenmix')).toHaveLength(510);
+    expect(sumPool('rekenmix')).toHaveLength(TOTAAL);
   });
 });

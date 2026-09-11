@@ -1,8 +1,9 @@
 import type { SumItem, SumSet } from '@/game-core';
 
 /**
- * Rekenen's content, at build time: twelve tables, twelve sets of division
- * facts, and plus and minus in three ranges each.
+ * Rekenen's content, at build time: twelve tables, keersommen past them in two
+ * ranges, twelve sets of division facts, and plus and minus in three ranges
+ * each.
  *
  * Bundled like the geography sets and unlike the geometry: five hundred sums is
  * a few kilobytes, and a round has to be able to start without waiting for
@@ -96,7 +97,10 @@ function unie(id: MixId, sets: readonly SumSet[]): SumSet {
  * itself.
  */
 function mixLeden(id: MixId, alles: readonly SumSet[]): SumSet[] {
-  if (id === 'tafels-alle') return alles.filter((set) => set.op === 'keer');
+  // The tables and not the keersommen past them, which are `keer` too. No page
+  // offers this mix any more (ADR-100); it is kept so an address and a round
+  // played on it still have something to name.
+  if (id === 'tafels-alle') return alles.filter((set) => set.op === 'keer' && set.tafel !== null);
   if (id === 'deel-alle') return alles.filter((set) => set.op === 'delen');
 
   const niveau = /^rekenmix-(\d)$/.exec(id)?.[1];
@@ -133,7 +137,11 @@ export function sumPool(id: string): readonly SumItem[] {
 
   const set = alles.find((candidate) => candidate.id === id);
   if (!set) return [];
+  // Of the same kind means the same sign and the same shape: the tables and the
+  // keersommen past them are both `keer`, and a minute of the table of seven
+  // should not hand a child "9 × 96" any more than "845 − 140" (ADR-100).
+  const soort = (candidate: SumSet) => `${candidate.op}|${candidate.tafel === null}`;
   return alles
-    .filter((candidate) => candidate.op === set.op)
+    .filter((candidate) => soort(candidate) === soort(set))
     .flatMap((candidate) => candidate.items);
 }

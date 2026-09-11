@@ -1,0 +1,325 @@
+{
+  "_gegenereerd": "tools/content/build-rekenen.mjs — gegenereerd, niet met de hand bewerken.",
+  "id": "keer-1000",
+  "op": "keer",
+  "tafel": null,
+  "niveau": 3,
+  "contentVersie": "2026-09-11",
+  "items": [
+    {
+      "id": "keer1000-4x16",
+      "op": "keer",
+      "links": 4,
+      "rechts": 16,
+      "antwoord": 64
+    },
+    {
+      "id": "keer1000-4x23",
+      "op": "keer",
+      "links": 4,
+      "rechts": 23,
+      "antwoord": 92
+    },
+    {
+      "id": "keer1000-4x27",
+      "op": "keer",
+      "links": 4,
+      "rechts": 27,
+      "antwoord": 108
+    },
+    {
+      "id": "keer1000-4x34",
+      "op": "keer",
+      "links": 4,
+      "rechts": 34,
+      "antwoord": 136
+    },
+    {
+      "id": "keer1000-4x38",
+      "op": "keer",
+      "links": 4,
+      "rechts": 38,
+      "antwoord": 152
+    },
+    {
+      "id": "keer1000-4x42",
+      "op": "keer",
+      "links": 4,
+      "rechts": 42,
+      "antwoord": 168
+    },
+    {
+      "id": "keer1000-4x46",
+      "op": "keer",
+      "links": 4,
+      "rechts": 46,
+      "antwoord": 184
+    },
+    {
+      "id": "keer1000-4x53",
+      "op": "keer",
+      "links": 4,
+      "rechts": 53,
+      "antwoord": 212
+    },
+    {
+      "id": "keer1000-4x58",
+      "op": "keer",
+      "links": 4,
+      "rechts": 58,
+      "antwoord": 232
+    },
+    {
+      "id": "keer1000-4x64",
+      "op": "keer",
+      "links": 4,
+      "rechts": 64,
+      "antwoord": 256
+    },
+    {
+      "id": "keer1000-4x67",
+      "op": "keer",
+      "links": 4,
+      "rechts": 67,
+      "antwoord": 268
+    },
+    {
+      "id": "keer1000-4x75",
+      "op": "keer",
+      "links": 4,
+      "rechts": 75,
+      "antwoord": 300
+    },
+    {
+      "id": "keer1000-4x83",
+      "op": "keer",
+      "links": 4,
+      "rechts": 83,
+      "antwoord": 332
+    },
+    {
+      "id": "keer1000-4x88",
+      "op": "keer",
+      "links": 4,
+      "rechts": 88,
+      "antwoord": 352
+    },
+    {
+      "id": "keer1000-4x96",
+      "op": "keer",
+      "links": 4,
+      "rechts": 96,
+      "antwoord": 384
+    },
+    {
+      "id": "keer1000-7x16",
+      "op": "keer",
+      "links": 7,
+      "rechts": 16,
+      "antwoord": 112
+    },
+    {
+      "id": "keer1000-7x23",
+      "op": "keer",
+      "links": 7,
+      "rechts": 23,
+      "antwoord": 161
+    },
+    {
+      "id": "keer1000-7x27",
+      "op": "keer",
+      "links": 7,
+      "rechts": 27,
+      "antwoord": 189
+    },
+    {
+      "id": "keer1000-7x34",
+      "op": "keer",
+      "links": 7,
+      "rechts": 34,
+      "antwoord": 238
+    },
+    {
+      "id": "keer1000-7x38",
+      "op": "keer",
+      "links": 7,
+      "rechts": 38,
+      "antwoord": 266
+    },
+    {
+      "id": "keer1000-7x42",
+      "op": "keer",
+      "links": 7,
+      "rechts": 42,
+      "antwoord": 294
+    },
+    {
+      "id": "keer1000-7x46",
+      "op": "keer",
+      "links": 7,
+      "rechts": 46,
+      "antwoord": 322
+    },
+    {
+      "id": "keer1000-7x53",
+      "op": "keer",
+      "links": 7,
+      "rechts": 53,
+      "antwoord": 371
+    },
+    {
+      "id": "keer1000-7x58",
+      "op": "keer",
+      "links": 7,
+      "rechts": 58,
+      "antwoord": 406
+    },
+    {
+      "id": "keer1000-7x64",
+      "op": "keer",
+      "links": 7,
+      "rechts": 64,
+      "antwoord": 448
+    },
+    {
+      "id": "keer1000-7x67",
+      "op": "keer",
+      "links": 7,
+      "rechts": 67,
+      "antwoord": 469
+    },
+    {
+      "id": "keer1000-7x75",
+      "op": "keer",
+      "links": 7,
+      "rechts": 75,
+      "antwoord": 525
+    },
+    {
+      "id": "keer1000-7x83",
+      "op": "keer",
+      "links": 7,
+      "rechts": 83,
+      "antwoord": 581
+    },
+    {
+      "id": "keer1000-7x88",
+      "op": "keer",
+      "links": 7,
+      "rechts": 88,
+      "antwoord": 616
+    },
+    {
+      "id": "keer1000-7x96",
+      "op": "keer",
+      "links": 7,
+      "rechts": 96,
+      "antwoord": 672
+    },
+    {
+      "id": "keer1000-9x16",
+      "op": "keer",
+      "links": 9,
+      "rechts": 16,
+      "antwoord": 144
+    },
+    {
+      "id": "keer1000-9x23",
+      "op": "keer",
+      "links": 9,
+      "rechts": 23,
+      "antwoord": 207
+    },
+    {
+      "id": "keer1000-9x27",
+      "op": "keer",
+      "links": 9,
+      "rechts": 27,
+      "antwoord": 243
+    },
+    {
+      "id": "keer1000-9x34",
+      "op": "keer",
+      "links": 9,
+      "rechts": 34,
+      "antwoord": 306
+    },
+    {
+      "id": "keer1000-9x38",
+      "op": "keer",
+      "links": 9,
+      "rechts": 38,
+      "antwoord": 342
+    },
+    {
+      "id": "keer1000-9x42",
+      "op": "keer",
+      "links": 9,
+      "rechts": 42,
+      "antwoord": 378
+    },
+    {
+      "id": "keer1000-9x46",
+      "op": "keer",
+      "links": 9,
+      "rechts": 46,
+      "antwoord": 414
+    },
+    {
+      "id": "keer1000-9x53",
+      "op": "keer",
+      "links": 9,
+      "rechts": 53,
+      "antwoord": 477
+    },
+    {
+      "id": "keer1000-9x58",
+      "op": "keer",
+      "links": 9,
+      "rechts": 58,
+      "antwoord": 522
+    },
+    {
+      "id": "keer1000-9x64",
+      "op": "keer",
+      "links": 9,
+      "rechts": 64,
+      "antwoord": 576
+    },
+    {
+      "id": "keer1000-9x67",
+      "op": "keer",
+      "links": 9,
+      "rechts": 67,
+      "antwoord": 603
+    },
+    {
+      "id": "keer1000-9x75",
+      "op": "keer",
+      "links": 9,
+      "rechts": 75,
+      "antwoord": 675
+    },
+    {
+      "id": "keer1000-9x83",
+      "op": "keer",
+      "links": 9,
+      "rechts": 83,
+      "antwoord": 747
+    },
+    {
+      "id": "keer1000-9x88",
+      "op": "keer",
+      "links": 9,
+      "rechts": 88,
+      "antwoord": 792
+    },
+    {
+      "id": "keer1000-9x96",
+      "op": "keer",
+      "links": 9,
+      "rechts": 96,
+      "antwoord": 864
+    }
+  ]
+}
