@@ -348,10 +348,11 @@ export const nl = {
   // De oefentoets, als eigen manier van oefenen (ADR-100): je typt, zoals op
   // een toets, en pas aan het eind zie je wat goed was. Eerst was het een
   // schakelaar op een manier die je al koos, en dan moest je een manier kiezen
-  // die een toets niet heeft.
+  // die een toets niet heeft. "Zelf typen" staat er bewust niet in: dat is de
+  // naam van de tegel ernaast, en twee tegels die zo heten zijn er één te veel.
   'choose.testMode': 'Oefentoets',
   'choose.testModeWhy':
-    'Zelf typen zonder hulp. Aan het eind zie je wat goed was en krijg je een cijfer.',
+    'Je typt zonder hulp. Aan het eind zie je wat goed was en krijg je een cijfer.',
   'choose.startTest': '{wat} · oefentoets',
   'choose.likeTheTest': 'Oefen zoals de toets',
   'choose.howMany': 'Hoeveel vragen?',
