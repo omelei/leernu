@@ -161,7 +161,7 @@ export function Shell({
           </nav>
         ) : null}
 
-        <main className="min-h-0 min-w-0 flex-1">{children}</main>
+        <main className="tk-grond min-h-0 min-w-0 flex-1">{children}</main>
       </div>
 
       {showDestinations ? (

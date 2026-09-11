@@ -122,6 +122,12 @@ describe('palette contrast', () => {
     ['paper on neutral', paper, token('neutral')],
     ['topo-text on paper', token('topo-text'), paper],
     ['a label on the map', token('ink'), token('map-land')],
+    // The ground a page stands on. Headings, labels and the lines between
+    // cards are set straight on it, so it is measured like paper.
+    ['ink on the ground', token('ink'), token('grond')],
+    ['ink-2 on the ground', token('ink-2'), token('grond')],
+    ['attention-text on the ground', token('attention-text'), token('grond')],
+    ['good-text on the ground', token('good-text'), token('grond')],
   ])('%s clears 4.5:1 for body text', (_name, foreground, background) => {
     expect(contrastRatio(foreground, background)).toBeGreaterThanOrEqual(4.5);
   });
@@ -136,6 +142,7 @@ describe('palette contrast', () => {
     ['attention on paper', token('attention', 'dark'), darkPaper],
     ['neutral on paper', token('neutral', 'dark'), darkPaper],
     ['a label on the map', token('ink', 'dark'), token('map-land', 'dark')],
+    ['ink-2 on the ground', token('ink-2', 'dark'), token('grond', 'dark')],
   ])('dark: %s clears 4.5:1 for body text', (_name, foreground, background) => {
     expect(contrastRatio(foreground, background)).toBeGreaterThanOrEqual(4.5);
   });
