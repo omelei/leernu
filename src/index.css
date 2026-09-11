@@ -1903,9 +1903,21 @@
     max-width: none;
     user-select: none;
   }
-  /* The whole drawing, rings and all, clipped just outside the outer ring so
-   * the paper it stands on does not show as a square in the dark theme. */
+  /* The whole drawing, rings and all, clipped at the edge of what is drawn so
+   * the paper it stands on does not show — as a square in the dark theme, or as
+   * a pale ring on a card that stands on the surface. The edge moves out with
+   * every ring: the plate and its shadow reach 129 of 320, the outer ring of
+   * gold 131, of platinum 137 and of ultra 141. */
   .tk-held-ringen .tk-held-beeld {
+    clip-path: circle(40.3%);
+  }
+  .tk-held-ringen[data-reeks='goud'] .tk-held-beeld {
+    clip-path: circle(41%);
+  }
+  .tk-held-ringen[data-reeks='platina'] .tk-held-beeld {
+    clip-path: circle(43%);
+  }
+  .tk-held-ringen[data-reeks='ultra'] .tk-held-beeld {
     clip-path: circle(44%);
   }
   /* The plate alone, enlarged until it fills the frame: 118 of the drawing's
