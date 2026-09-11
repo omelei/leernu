@@ -4196,7 +4196,7 @@ shapes:
   names of the materials (ADR-080). Gold, platinum and ultra have a still sheen.
   The four ring slots are always reserved, so a plate is the same size in every
   reeks and a card does not jump when its hero climbs.
-- **Illustrations, served as images.** Sixty PNGs in `public/helden/`, twelve
+- **Illustrations, served as images.** Sixty WebPs in `public/helden/`, twelve
   heroes by five reeksen, 320 square (two pixels to one at 160). They are not on
   §E's frame and `icons.test.ts` no longer holds them to it. Below 64 pixels the
   rings are thinner than two and cannot be counted, so `Heldplaat` draws the
@@ -4294,8 +4294,16 @@ A child who wore an animal loses that drawing. The slot, the reeks and the
 duplicates survive the change; the picture does not. The proposal had the
 product say so once on first open; that line is not built.
 
-Sixty images are about four megabytes. Only the ones on screen are fetched, and
-lazily, but the collection page at ultra is the heaviest page in the product.
+The sixty images arrived as PNGs of about four megabytes and are served as lossy
+WebP at quality 88: about half a megabyte for all sixty, from four kilobytes
+for a bronze plate to thirteen for an ultra one, whose sheen costs the most, and
+indistinguishable at the sizes they are drawn — the sheen
+on gold, platinum and ultra is where the loss would show first, and at three
+times enlarged it is a slightly softer ring edge. Quality 80 saved another
+hundred kilobytes and visibly blurred the rings. The PNGs are the source and
+stay outside the repository in `docs/helden/`; the conversion is Pillow's
+`save('WEBP', quality=88, method=6)`. Only the images on screen are fetched,
+and lazily.
 
 ---
 
