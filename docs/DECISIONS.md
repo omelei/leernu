@@ -4394,6 +4394,64 @@ justification is rewritten. Both cannot stand.
 
 ---
 
+## ADR-100 — Rekenen: no mix on the keypad, × for the tables, keersommen past them, and "hoeveel vragen?" as a step
+
+**Status:** accepted — 2026-09-11. Amends ADR-074, ADR-062 and ADR-095.
+
+### Context
+
+A parent went through both module pages and read them the way a first visitor
+does. Four things on them did not survive that reading:
+
+- The tables' keypad opened on a **Mix** square, one step below a subject row
+  that already holds the **Rekenmix**. Two mixes on one page, a step apart, is
+  one of them too many.
+- The tables' mark was a grid. The chips beside it are + − and :, so the one
+  kind of sum without its own sign was the one every child knows the sign of.
+- Multiplication stopped at 12 × 10. Plus and minus run to a thousand; the
+  keersom a child splits in groep 6, 6 × 14, was not in the product.
+- On topography "hoeveel vragen?" never appeared. It needed two lengths that
+  fit, and twelve provinces fit only "10". Where it did appear it was an
+  unnumbered row under the ways, which read as part of the ways.
+
+### Decision
+
+**The keypad is twelve squares.** `tafels-alle` and `deel-alle` are no longer
+offered on the page. They stay as content, with their addresses, because rounds
+already played on them are named by them and a favourite may start one.
+
+**The tables take ×** (`KeerIcon`), drawn at the plus's length so × : + − read
+as one family. `WrongIcon` is the longer, corner-to-corner cross; the two meet
+only when "Oefen je fouten" is on the row, where the word tells them apart.
+
+**Keersommen is a subject**, between the tables and delen, with two ranges:
+
+- `keer-100`: 11–25 (no round tens) times 3–9, at most 100. Fifty sums, level 2.
+- `keer-1000`: fifteen two-digit numbers times 4, 7 and 9. Forty-five, level 3.
+
+The small number goes first, as a schoolbook writes it. The levels put them in
+the Rekenmix's "gemiddeld" and "pittig". A timed round on a table keeps to the
+tables: `sumPool` now splits `keer` by whether a set is a table.
+
+**"Hoeveel vragen?" is a numbered step**, after "hoe wil je oefenen?", present
+only for the ways that have a length. It offers the round's own length and the
+whole set ("Alle 12") where the set is a hundred or fewer, beside 10, 25, 50 and
+100 where they fit. ADR-074 called it "not a numbered step" because it is a
+property of the round. It still is one, but a row nobody could see was not
+working as a property either.
+
+### Consequences
+
+Rekenen has six subjects, and seven when "Oefen je fouten" appears. That is one
+past ADR-061's ceiling. It holds as chips, which wrap, and it does not hold as
+tiles.
+
+The oefentoets is still a switch among the ways (ADR-085). The same parent asked
+why a toets needs a way chosen at all. That question is open, and this ADR does
+not answer it.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because

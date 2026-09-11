@@ -199,8 +199,22 @@ describe('how many questions', () => {
   it('offers only the lengths the set can actually fill', () => {
     // A table of ten has one honest answer, so there is nothing to choose.
     expect(questionChoices(point, 10)).toEqual([]);
-    expect(questionChoices(point, 45)).toEqual([10, 25]);
-    expect(questionChoices(point, 510)).toEqual([10, 25, 50, 100]);
+    expect(questionChoices(point, 45)).toEqual([10, 15, 25, 45]);
+    expect(questionChoices(point, 605)).toEqual([10, 15, 25, 50, 100]);
+    // Rekenen's own length is ten, which is already one of the four.
+    expect(questionChoices(vorm('som-typen'), 605)).toEqual([10, 25, 50, 100]);
+  });
+
+  it('offers a small map whole, so topography has a choice at all', () => {
+    // Twelve provinces used to fit only "10", and one chip is no row. The whole
+    // set is the round's own length here, since fifteen does not fit in twelve.
+    expect(questionChoices(point, 12)).toEqual([10, 12]);
+    expect(questionCount(point, 12, null)).toBe(12);
+    expect(questionCount(point, 12, 10)).toBe(10);
+    // Eighty cities: the round's own fifteen is a chip, and so is all eighty.
+    expect(questionChoices(point, 80)).toEqual([10, 15, 25, 50, 80]);
+    // The world is not offered whole: a hundred and sixty-seven is an afternoon.
+    expect(questionChoices(point, 167)).toEqual([10, 15, 25, 50, 100]);
   });
 
   it('offers nothing where a round has no number of questions', () => {

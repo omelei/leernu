@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Button } from '@/components/Button';
-import { CorrectIcon, GoIcon, MixIcon, PaperIcon } from '@/components/Icon';
+import { CorrectIcon, GoIcon, PaperIcon } from '@/components/Icon';
 import { countMastered, type ItemState, type ModeId } from '@/game-core';
 import { t } from '@/i18n';
 import { loadItemStates } from '@/store/progress';
@@ -49,7 +49,7 @@ import { useSmallScreen } from '@/features/shell/useSmallScreen';
  * short words, several to a line. A subject and a way of practising are tiles —
  * a plate and a title, two columns from 1200 — because they are what the page
  * is about and a tile a hand's width across is hit first time. The tables and
- * the divisions are a keypad of squares with the mix first. In each of them the
+ * the divisions are a keypad of twelve squares (ADR-100). In each of them the
  * answer already given wears the module's colour (ADR-089).
  *
  * **Topography asks where before it asks what** (ADR-083), and rekenen's first
@@ -332,15 +332,16 @@ export function ModuleScreen({
 
         {/* The second, smaller decision, where there is one — numbered like the
             others, because on rekenen it is the press that decides what the
-            round contains. The tables and the divisions are a keypad with the
-            mix first; a range, a level or which cities are chips. */}
+            round contains. The tables and the divisions are a keypad of twelve;
+            a range, a level or which cities are chips. The keypad has no mix
+            square: the Rekenmix is one step up already (ADR-100). */}
         {onderwerp && onderwerp.keuze && onderwerp.sets.length > 1 ? (
           <section className="tk-kies" aria-label={t(onderwerp.keuze)}>
             <Stap nummer={stap.keuze} label={t(onderwerp.keuze)} />
 
             {isKeypad(onderwerp) ? (
               <div className="tk-tafels">
-                {mixEerst(onderwerp.sets).map((deel) => (
+                {onderwerp.sets.map((deel) => (
                   <button
                     key={deel.setId}
                     type="button"
@@ -351,18 +352,7 @@ export function ModuleScreen({
                     aria-pressed={deel.setId === chosen?.setId}
                     onClick={() => onSet(deel.setId)}
                   >
-                    {deel.mix ? (
-                      <>
-                        <span className="tk-plaat">
-                          <MixIcon size={20} />
-                        </span>
-                        <span aria-hidden="true" className="tk-tafel-mix">
-                          {t('choose.mix')}
-                        </span>
-                      </>
-                    ) : (
-                      <span aria-hidden="true">{deel.kortNaam ?? naamVan(deel)}</span>
-                    )}
+                    <span aria-hidden="true">{deel.kortNaam ?? naamVan(deel)}</span>
                   </button>
                 ))}
               </div>
@@ -435,27 +425,36 @@ export function ModuleScreen({
           </div>
         </section>
 
-        {/* How long, where there is more than one honest answer. Not a numbered
-            step: it is a property of the round the steps above have already
-            chosen (ADR-074). */}
+        {/* How long, as a step of its own — and only after a way that has a
+            length: pointing, choosing, typing. A minute, three lives and
+            exploring have none, and a diploma is the whole table, so for those
+            the step is not there rather than empty (ADR-100, amending ADR-074). */}
         {chosen && form && lengtes.length > 0 ? (
-          <div className="tk-kies">
-            <p className="tk-label">{t('choose.howMany')}</p>
+          <section className="tk-kies" aria-label={t('choose.howMany')}>
+            <Stap nummer={stap.hoe + 1} label={t('choose.howMany')} />
+
             <div className="tk-keuzes">
-              {lengtes.map((count) => (
-                <button
-                  key={count}
-                  type="button"
-                  className="tk-keuze"
-                  aria-label={t('choose.howManyOne', { aantal: count })}
-                  aria-pressed={count === vragen}
-                  onClick={() => setAantal(count)}
-                >
-                  <span aria-hidden="true">{count}</span>
-                </button>
-              ))}
+              {lengtes.map((count) => {
+                const heel = count === setSize;
+                const label = heel ? 'choose.howManyAllLabel' : 'choose.howManyOne';
+
+                return (
+                  <button
+                    key={count}
+                    type="button"
+                    className="tk-keuze"
+                    aria-label={t(label, { aantal: count })}
+                    aria-pressed={count === vragen}
+                    onClick={() => setAantal(count)}
+                  >
+                    <span aria-hidden="true">
+                      {heel ? t('choose.howManyAll', { aantal: count }) : count}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
-          </div>
+          </section>
         ) : null}
 
         {/* From a tablet up, the answers together and the way on, closing the
@@ -537,11 +536,6 @@ function rondeVan(
 /** The subjects whose sets are numbers: a keypad, not a row of words. */
 function isKeypad(onderwerp: Onderwerp): boolean {
   return onderwerp.id === 'tafels' || onderwerp.id === 'delen';
-}
-
-/** The mix first, then the rest in their own order — the keypad the handoff draws. */
-function mixEerst(sets: readonly Onderdeel[]): Onderdeel[] {
-  return [...sets.filter((deel) => deel.mix), ...sets.filter((deel) => !deel.mix)];
 }
 
 /**

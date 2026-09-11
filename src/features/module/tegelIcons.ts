@@ -9,6 +9,7 @@ import {
   GridIcon,
   HalfUurIcon,
   type IconProps,
+  KeerIcon,
   KwartierIcon,
   LandIcon,
   MinIcon,
@@ -82,8 +83,10 @@ export const ONDERWERP_ICON: Record<string, TileIcon> = {
   'zuid-amerika-landen': LandIcon,
   'oceanie-landen': LandIcon,
   'wereld-landen': LandIcon,
-  // Rekenen
-  tafels: GridIcon,
+  // Rekenen. The four kinds of sum are their own sign, × : + −, and the
+  // keersommen past the tables are the grid a big keersom is split in (ADR-100).
+  tafels: KeerIcon,
+  keer: GridIcon,
   delen: DeelIcon,
   plus: PlusIcon,
   min: MinIcon,

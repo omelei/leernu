@@ -145,6 +145,7 @@ describe('the addresses', () => {
       ['/rekenen/deel-7', 'deel-7'],
       ['/rekenen/plus-20', 'plus-20'],
       ['/rekenen/min-1000', 'min-1000'],
+      ['/rekenen/keer-100', 'keer-100'],
       ['/rekenen/alle-tafels', 'tafels-alle'],
       ['/rekenen/alle-deelsommen', 'deel-alle'],
       ['/rekenen/mix', 'rekenmix'],

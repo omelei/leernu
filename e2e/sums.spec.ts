@@ -259,20 +259,27 @@ test('the lightning round is offered only once the clock is on', async ({ page }
  * kind, that the page keeps its shape while they do, and that no section ever
  * grows past six cards.
  */
-test('rekenen offers five subjects, and never more than six', async ({ page }) => {
+test('rekenen offers six subjects, and never more than six', async ({ page }) => {
   await signIn(page, 'Bram');
   await page.goto('/rekenen');
 
   const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
 
-  for (const naam of ['Tafels', 'Deelsommen', 'Plussommen', 'Minsommen', 'Rekenmix']) {
+  for (const naam of [
+    'Tafels',
+    'Keersommen',
+    'Deelsommen',
+    'Plussommen',
+    'Minsommen',
+    'Rekenmix',
+  ]) {
     await expect(wat.getByRole('button', { name: new RegExp(`^${naam}`) })).toBeVisible();
   }
 
   // Six is the ceiling a section may hold (ADR-061, ADR-062). Rekenen's subjects
   // are chips now (ADR-095) and the step holds nothing else, so the region's
   // buttons are the subjects.
-  await expect(wat.getByRole('button')).toHaveCount(5);
+  await expect(wat.getByRole('button')).toHaveCount(6);
 });
 
 test('a subject with many sets asks which, instead of showing all of them', async ({ page }) => {
@@ -286,10 +293,14 @@ test('a subject with many sets asks which, instead of showing all of them', asyn
   // further down that say how long the round is (ADR-074).
   const welke = (vraag: RegExp) => page.getByRole('region', { name: vraag }).getByRole('button');
 
-  // Twelve tables and all of them at once, as a keypad under the subjects
-  // (ADR-095). Twelve cards is the page this replaced.
+  // Twelve tables as a keypad under the subjects (ADR-095), and no mix square
+  // among them: the Rekenmix is a subject of its own (ADR-100).
   await wat.getByRole('button', { name: /^Tafels/ }).click();
-  await expect(welke(/^Welke tafel/)).toHaveCount(13);
+  await expect(welke(/^Welke tafel/)).toHaveCount(12);
+
+  // The keersommen past the tables, in two ranges.
+  await wat.getByRole('button', { name: /^Keersommen/ }).click();
+  await expect(welke(/^Tot welk getal/)).toHaveText(['tot 100', 'tot 1000']);
 
   // Plus has three ranges, and they are offered smallest first. Sorted as
   // numbers: "1000" falls between "100" and "20" in every alphabet there is.
