@@ -89,6 +89,11 @@
     --paper: #fafaf7; /* --papier */
     --surface: #f0f0ec; /* --oppervlak */
     --sunken: #e5e5df; /* --diep */
+    /* The ground a page stands on, between the app bar and the tab bar, with
+     * its cards and the child's own column on it in paper — how the design
+     * canvas "Jouw voortgang" lays everything out. Every text colour clears
+     * 4.5:1 on it (contrast.test.ts). */
+    --grond: var(--sunken);
     --line: #d6d6cf; /* --lijn        1.40:1, carries no text */
     --line-strong: #b7b8b0; /* --lijnsterk   1.91:1 */
 
@@ -410,6 +415,10 @@
       --paper: #0f130f; /* greener than neutral black, not #000 */
       --surface: #1b201a; /* lighter than paper, never darker */
       --sunken: #282d27;
+      /* Paper, not the sunken tone: in the dark the sunken tone is lighter
+       * than paper, and cards darker than the ground they stand on would read
+       * as holes rather than as things. */
+      --grond: var(--paper);
       --line: #373c36; /* 1.66:1, carries no text */
       --line-strong: #525751; /* 2.54:1 */
 
@@ -567,9 +576,11 @@
    * every block has a border is a page with no hierarchy at all — so a card is
    * for something you could pick up and move, and nothing else.
    */
+  /* Paper on the ground, edged with the hairline: the fill says "a card", so
+   * the edge can be the quiet one. */
   .tk-card {
     background: var(--paper);
-    border: var(--stroke-hair) solid var(--line-strong);
+    border: var(--stroke-hair) solid var(--line);
     border-radius: var(--card-radius);
     padding: var(--card-padding);
   }
@@ -1309,6 +1320,12 @@
     gap: 20px;
     min-width: 0;
   }
+  /* What `main` stands on: the ground, under the cards and the column. The
+   * app bar, the rail, the menu and the tab bar keep paper — they are the
+   * frame, and the frame is not part of the page. */
+  .tk-grond {
+    background: var(--grond);
+  }
   .tk-home-aside {
     display: flex;
     flex-direction: column;
@@ -1329,7 +1346,9 @@
   @media (min-width: 1200px) {
     .tk-page,
     .tk-home {
-      grid-template-columns: minmax(0, 1fr) 320px;
+      /* The child's own column at 344, the width the design canvas draws its
+       * blocks at 1440. */
+      grid-template-columns: minmax(0, 1fr) 344px;
       align-items: start;
       gap: 48px;
       padding: 48px;
@@ -1393,7 +1412,7 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    border: var(--stroke-hair) solid var(--line-strong);
+    border: var(--stroke-hair) solid var(--line);
     border-radius: var(--radius-card);
     background: var(--paper);
   }
