@@ -21,7 +21,7 @@ export interface Sticker {
   readonly name: TranslationKey;
   /**
    * The animal, which is the file the plate is drawn from:
-   * `public/helden/<dier>-<reeks>.png`.
+   * `public/helden/<dier>-<reeks>.webp`.
    */
   readonly dier: string;
   /**

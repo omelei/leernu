@@ -11,7 +11,7 @@ export const RINGEN_VANAF = 64;
 
 /** Where one hero in one reeks is drawn. Served as it is, never bundled. */
 export function heldBeeld(dier: string, reeks: Reeks): string {
-  return `${import.meta.env.BASE_URL}helden/${dier}-${reeks}.png`;
+  return `${import.meta.env.BASE_URL}helden/${dier}-${reeks}.webp`;
 }
 
 /**

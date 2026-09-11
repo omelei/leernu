@@ -22,8 +22,8 @@ describe('the twelve heroes', () => {
 
     for (const held of STICKERS) {
       for (const reeks of REEKSEN) {
-        const file = join(process.cwd(), 'public', 'helden', `${held.dier}-${reeks}.png`);
-        if (!existsSync(file)) missing.push(`${held.dier}-${reeks}.png`);
+        const file = join(process.cwd(), 'public', 'helden', `${held.dier}-${reeks}.webp`);
+        if (!existsSync(file)) missing.push(`${held.dier}-${reeks}.webp`);
       }
     }
 
