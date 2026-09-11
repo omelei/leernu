@@ -3,38 +3,54 @@ import type { Reeks } from '@/game-core';
 import { stickerById } from './stickerSet';
 
 /**
- * A hero on its plate: the drawing in the light of the page, standing on the
- * material of its reeks.
+ * Below this the rings are thinner than two pixels and cannot be counted, so
+ * only the plate is drawn and its tone carries the reeks on its own. The rank
+ * is read on /voortgang, where the plate is 112 (docs/helden/LEESMIJ.md).
+ */
+export const RINGEN_VANAF = 64;
+
+/** Where one hero in one reeks is drawn. Served as it is, never bundled. */
+export function heldBeeld(dier: string, reeks: Reeks): string {
+  return `${import.meta.env.BASE_URL}helden/${dier}-${reeks}.png`;
+}
+
+/**
+ * A hero on its plate, with a ring round it for every reeks it has climbed.
  *
- * Two shapes of one thing. The plate is a square with its corners rounded by a
- * third of the side, which is how the child's own column shows a hero. The
- * round one is the same hero as the avatar in the app bar, inside a ring of its
- * material's soft tone.
+ * **The reeks is a count, not only a colour.** Bronze has no ring, silver one,
+ * gold two, platinum three and ultra four, so a child can see which of two
+ * heroes stands higher without knowing the names of the materials. The four
+ * ring slots are always reserved in the drawing, so a plate is the same size in
+ * every reeks and a card does not jump when its hero climbs.
  *
- * Decorative, always. Every place that draws one says in words who it is or
- * which level it stands for, and a drawing announced as well would be the same
- * thing twice.
+ * From 64 pixels it is the whole drawing, clipped just outside the outer ring
+ * — the file stands on paper, and a square of paper in the dark theme would be a
+ * frame nobody drew. Below 64 it is the plate alone, enlarged until it fills the
+ * frame.
  *
- * The material comes from `data-reeks` and the three tokens behind it in
- * index.css. This component names no colour, which is a lint rule and not a
- * courtesy.
+ * **Not found yet** is a chest: the surface with a band across it both ways,
+ * the plate's size and nothing else. No faded drawing and no silhouette,
+ * because which hero it turns out to be is what a chest is for (ADR-081).
+ *
+ * Decorative, always. Every place that draws one says in words who it is and
+ * which reeks, and a picture announced as well would be the same thing twice.
  */
 export function Heldplaat({
   sticker,
   reeks,
   size,
-  vorm = 'plaat',
+  gevonden = true,
   className,
 }: {
   readonly sticker: string | undefined;
   readonly reeks: Reeks;
-  /** The side in px. The drawing inside is a little over half of it. */
+  /** The side in px. */
   readonly size: number;
-  readonly vorm?: 'plaat' | 'rond';
+  readonly gevonden?: boolean;
   readonly className?: string;
 }) {
-  const Draw = stickerById(sticker).draw;
-  const classes = ['tk-held', vorm === 'rond' ? 'tk-held-rond' : null, className]
+  const ringen = size >= RINGEN_VANAF;
+  const classes = ['tk-held', ringen ? 'tk-held-ringen' : 'tk-held-klein', className]
     .filter(Boolean)
     .join(' ');
 
@@ -45,9 +61,20 @@ export function Heldplaat({
       style={{ '--held': `${size}px` } as CSSProperties}
       aria-hidden="true"
     >
-      <span className="tk-held-kern">
-        <Draw size={Math.round(size * (vorm === 'rond' ? 0.5 : 0.55))} />
-      </span>
+      {gevonden ? (
+        <img
+          className="tk-held-beeld"
+          src={heldBeeld(stickerById(sticker).dier, reeks)}
+          alt=""
+          width={size}
+          height={size}
+          loading="lazy"
+          decoding="async"
+          draggable={false}
+        />
+      ) : (
+        <span className="tk-held-kist" />
+      )}
     </span>
   );
 }

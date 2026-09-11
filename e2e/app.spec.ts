@@ -364,31 +364,32 @@ test('the toetsstand asks without answering, and marks at the end', async ({ pag
  * The hero a child wears is theirs, so it has to stick — and it has to show
  * somewhere other than the card it was chosen on, or it does not look saved.
  *
- * Heroes since ADR-096: a new child has the first three, in bronze, and the
- * other nine arrive in chests. This checks both halves — that a hero a child
- * has can be worn, and that one they have not found cannot.
+ * Heroes since ADR-096: a new child has the first three, in bronze — Valerie
+ * Vos, Daan Das and Olaf Otter (ADR-098) — and the other nine arrive in
+ * chests. This checks both halves: that a hero a child has can be worn, and
+ * that one they have not found cannot.
  */
 test('the hero a child picks is theirs, and follows them', async ({ page }) => {
   await signIn(page, 'Puk');
   await page.goto('/voortgang');
 
   const helden = page.getByRole('region', { name: 'Helden' });
-  await helden.getByRole('button', { name: /^Vos,/ }).click();
-  await expect(helden.getByRole('button', { name: /^Vos,/ })).toHaveAttribute(
+  await helden.getByRole('button', { name: /^Olaf Otter,/ }).click();
+  await expect(helden.getByRole('button', { name: /^Olaf Otter,/ })).toHaveAttribute(
     'aria-pressed',
     'true',
   );
 
-  // Not found yet: a chest in its place, which says so and does not say what
-  // is in it (ADR-081). It is not a button either — a control a child cannot
-  // use is a question they have to ask somebody about.
-  await expect(helden.getByRole('button', { name: /^Draak/ })).toHaveCount(0);
+  // Not found yet: a chest in its place, which says so and what it costs, and
+  // does not say what is in it (ADR-081). It is not a button either — a control
+  // a child cannot use is a question they have to ask somebody about.
+  await expect(helden.getByRole('button', { name: /^Ben Buizerd/ })).toHaveCount(0);
   await expect(helden.getByLabel('Nog niet gevonden').first()).toBeVisible();
 
   // It belongs to the child, not to the page: it survives a reload.
   await page.reload();
   await expect(
-    page.getByRole('region', { name: 'Helden' }).getByRole('button', { name: /^Vos,/ }),
+    page.getByRole('region', { name: 'Helden' }).getByRole('button', { name: /^Olaf Otter,/ }),
   ).toHaveAttribute('aria-pressed', 'true');
 });
 

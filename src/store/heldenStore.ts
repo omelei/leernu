@@ -1,7 +1,8 @@
 import {
   AANTAL_HELDEN,
   DUBBELEN_PER_REEKS,
-  openVerdiend,
+  kistenTeGoed,
+  openKist,
   REEKSEN,
   uitLadder,
   type Held,
@@ -13,7 +14,7 @@ import { loadAccuracy } from './progress';
 import { getSetting, setSetting } from './settings';
 
 /**
- * A child's heroes, on the device (ADR-096).
+ * A child's heroes, on the device (ADR-096, ADR-097).
  *
  * One row per child in `settings`, holding the list as JSON — the shape the
  * tests already take (ADR-077). Twelve heroes and a count are not a table, and
@@ -23,13 +24,14 @@ import { getSetting, setSetting } from './settings';
  * **The first read is the migration.** A child with no row yet gets the heroes
  * the old ladder had given them (`uitLadder`), written straight back. It runs
  * in an ordinary transaction on first read rather than in a version change, for
- * the reason `ensureProgressPerChild` gives: it can be tried again, and it cannot
- * make a child's work unreachable. It is deterministic, so two screens reading
- * at once write the same thing.
+ * the reason `ensureProgressPerChild` gives: it can be tried again, and it
+ * cannot make a child's work unreachable. It is deterministic, so two screens
+ * reading at once write the same thing.
  *
- * **This is where the chance is.** `game-core` takes a draw between 0 and 1;
- * this file makes it, from the platform's cryptographic source, so no hero is
- * more likely than another and nothing about the draw can be steered.
+ * **There is no random number here any more.** ADR-096 put the draw in this
+ * file; ADR-097 takes it out. A chest lays out three heroes and the child turns
+ * one over, so what this file does is read the row, apply the choice, and write
+ * it back. `crypto.getRandomValues` is gone from the reward path entirely.
  */
 
 const sleutel = (kindId: string) => `helden:${kindId}`;
@@ -83,24 +85,34 @@ export async function loadHelden(): Promise<HeldenStand> {
 }
 
 /**
- * Opens every chest this child's answers have paid for, and says what came out.
+ * How many chests this child's answers have paid for and nobody has chosen
+ * from yet.
  *
- * Called once at the end of a round, after the round's answers are written, so
- * the count it reads includes them. Almost always it opens nothing.
+ * Almost always none. It is a subtraction rather than an event, so a chest
+ * earned at the end of a round that was closed before it was opened is still
+ * here the next time anybody looks.
  */
-export async function openKisten(): Promise<readonly KistUitkomst[]> {
+export async function kistenOpenstaand(): Promise<number> {
+  const stand = await loadHelden();
+  const { correct } = await loadAccuracy();
+  return kistenTeGoed(stand, correct);
+}
+
+/**
+ * Opens one owed chest on the hero the child chose, and says what it did.
+ *
+ * Null when nothing is owed, which is what a second press on the same card
+ * looks like: the first one already spent the chest, and a chest that could be
+ * spent twice would be the one thing here that is not paid for in answers.
+ */
+export async function kiesHeld(plek: number): Promise<KistUitkomst | null> {
   const kindId = await activeChildId();
   const stand = await loadHelden();
   const { correct } = await loadAccuracy();
 
-  const { stand: nieuw, uitkomsten } = openVerdiend(stand, correct, trek);
-  if (uitkomsten.length > 0) await setSetting(sleutel(kindId), JSON.stringify(nieuw));
-  return uitkomsten;
-}
+  if (kistenTeGoed(stand, correct) <= 0) return null;
 
-/** A number in [0, 1), from the platform's cryptographic source. */
-function trek(): number {
-  const waarde = new Uint32Array(1);
-  crypto.getRandomValues(waarde);
-  return (waarde[0] ?? 0) / 2 ** 32;
+  const { stand: nieuw, uitkomst } = openKist(stand, plek);
+  await setSetting(sleutel(kindId), JSON.stringify(nieuw));
+  return uitkomst;
 }

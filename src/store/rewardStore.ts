@@ -5,13 +5,12 @@ import {
   sterrenInKist,
   sterrenVoor,
   tableOfDiploma,
-  type KistUitkomst,
   type RewardSnapshot,
   type StampId,
 } from '@/game-core';
 import { getDb } from './db';
 import { activeChildId, ensureProgressPerChild } from './children';
-import { openKisten } from './heldenStore';
+import { kistenOpenstaand } from './heldenStore';
 import { loadAccuracy } from './progress';
 
 /**
@@ -22,10 +21,10 @@ import { loadAccuracy } from './progress';
  * what children have already earned, and a schema rename to tidy up a word
  * would be a migration risking real rows for no gain a child can see.
  *
- * Nothing here can be bought or granted by waiting, and every one of these is
- * reachable only by practising. One thing is chance, since ADR-096 and on the
- * owner's decision: which hero is in a chest. Whether there is a chest, and what
- * it costs, is not — see `game-core/helden.ts` and `heldenStore.ts`.
+ * Nothing here can be bought, granted by waiting, or decided by chance, and
+ * every one of these is reachable only by practising. ADR-096 made which hero
+ * is in a chest a draw; ADR-097 takes it back out, so there is no random number
+ * anywhere in this path — see `game-core/helden.ts`.
  */
 
 export interface RoundOutcome {
@@ -42,10 +41,14 @@ export interface RoundOutcome {
    */
   readonly sterren: { readonly erbij: number; readonly inKist: number };
   /**
-   * The chests this round opened, in the order they opened. Almost always
+   * Chests this round paid for that nobody has chosen from yet. Almost always
    * none; one when the round crossed a fifty.
+   *
+   * A count rather than a list of what came out, because since ADR-097 nothing
+   * comes out until the child picks one of three — and that happens on the
+   * screen this number is handed to, not before it is drawn.
    */
-  readonly kisten: readonly KistUitkomst[];
+  readonly kistenTeGoed: number;
 }
 
 export async function loadStamps(): Promise<Set<string>> {
@@ -75,8 +78,8 @@ export async function loadDiplomas(): Promise<Set<number>> {
 
 /**
  * Applies a finished round: adds what was earned, awards any stamp the round
- * newly satisfies, opens any chest it paid for, and reports all of it so the
- * result screen can say so.
+ * newly satisfies, and reports all of it — including any chest the round paid
+ * for — so the result screen can say so and lay the chest out.
  */
 export async function applyRoundRewards(params: {
   readonly correct: number;
@@ -127,6 +130,6 @@ export async function applyRoundRewards(params: {
     stamps: earned,
     diploma: diplomaId === null ? null : tableOfDiploma(diplomaId),
     sterren: { erbij: sterrenVoor(na) - sterrenVoor(voor), inKist: sterrenInKist(na) },
-    kisten: params.correct > 0 ? await openKisten() : [],
+    kistenTeGoed: await kistenOpenstaand(),
   };
 }

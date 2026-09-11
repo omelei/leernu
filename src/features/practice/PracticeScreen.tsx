@@ -5,6 +5,7 @@ import { SpeakButton } from '@/components/SpeakButton';
 import { usePreferences } from '@/features/player/settings';
 import { MapCanvas } from './MapCanvas';
 import { RoundProgress } from './RoundProgress';
+import { SterTeller } from '@/features/reis/SterTeller';
 import { StopButton } from './StopButton';
 import { ResultScreen } from './ResultScreen';
 import {
@@ -179,6 +180,10 @@ export function PracticeScreen({
         {prefs.readAloud ? <SpeakButton text={vraag} /> : null}
 
         <div className="ml-auto flex items-center gap-4 md:gap-6">
+          {/* The star being filled, on every round screen and in every mode:
+              ten correct answers are one, and between two chests it is the only
+              thing that moves (ADR-099). */}
+          <SterTeller correct={state.correctCount} />
           {/* What is running out, or how far along you are — never both, because
               in a timed round the question number counts towards nothing. */}
           {state.secondsLeft !== null ? (

@@ -4,6 +4,7 @@ import type { KlokItem } from '@/game-core';
 import { SpeakButton } from '@/components/SpeakButton';
 import { usePreferences } from '@/features/player/settings';
 import { RoundProgress } from '@/features/practice/RoundProgress';
+import { SterTeller } from '@/features/reis/SterTeller';
 import { StopButton } from '@/features/practice/StopButton';
 import { KlokFace } from './KlokFace';
 import { klokVoluit, klokWoorden } from './klokTaal';
@@ -125,6 +126,10 @@ export function KlokScreen({
         ) : null}
         {prefs.readAloud ? <SpeakButton text={spoken} /> : null}
         <div className="ml-auto flex items-center gap-4 md:gap-6">
+          {/* The star being filled, on every round screen and in every mode:
+              ten correct answers are one, and between two chests it is the only
+              thing that moves (ADR-099). */}
+          <SterTeller correct={state.correctCount} />
           {/* What is running out, or nothing. Never both a clock and lives:
               only one round has each. */}
           {state.secondsLeft !== null ? (

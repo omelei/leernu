@@ -40,12 +40,12 @@ export function TopBar({
           the name is said rather than shown — the button keeps it as its
           accessible name, so it is still the child's own button. */}
       <button type="button" className="tk-profiel" onClick={onProfile}>
-        {/* The animal they chose on the round plate the handoff draws for the
-            avatar — or, until they choose, the first one, which is also what
-            their progress card shows. A child always has one (ADR-067), and an
-            initial in the bar beside a cat in the column was two answers to
-            who you are. */}
-        <Heldplaat sticker={sticker} reeks={reeksVan(helden, sticker)} size={30} vorm="rond" />
+        {/* The hero they chose, on its plate — or, until they choose, the
+            first one, which is also what their progress card shows. A child
+            always has one (ADR-067), and an initial in the bar beside a hero in
+            the column was two answers to who you are. At this size there are
+            no rings; the plate's tone carries the reeks. */}
+        <Heldplaat sticker={sticker} reeks={reeksVan(helden, sticker)} size={30} />
         <span className="tk-profiel-naam">{profile.naam}</span>
       </button>
     </div>

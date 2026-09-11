@@ -1,24 +1,27 @@
 import { useEffect, useState, type ReactNode } from 'react';
+import { Button } from '@/components/Button';
 import { Heldplaat } from '@/components/Heldplaat';
-import { DiplomaIcon, MysteryIcon, StampIcon } from '@/components/Icon';
+import { DiplomaIcon, StampIcon } from '@/components/Icon';
 import { ProgressBar } from '@/components/ProgressBar';
+import { Sterren } from '@/components/Sterren';
 import { STICKERS, stickerById } from '@/components/stickerSet';
 import {
   AANTAL_HELDEN,
-  correctToNextLevel,
-  DUBBELEN_PER_REEKS,
-  goedTotKist,
   levelFor,
   levelProgress,
   sterrenInKist,
   STAMPS,
 } from '@/game-core';
+import { geplaatst, startbareOnderdelen } from '@/features/module/onderdelen';
+import type { Module } from '@/features/shell/modules';
+import { useSmallScreen } from '@/features/shell/useSmallScreen';
 import { t, type TranslationKey } from '@/i18n';
-import { loadAccuracy } from '@/store/progress';
+import { loadAccuracy, loadPlayedRounds } from '@/store/progress';
 import { loadDiplomas, loadStamps } from '@/store/rewardStore';
-import { Sterren } from './Beloning';
+import { Kistkeuze } from './Kistkeuze';
 import { STAMP_NAME } from './stampNames';
-import { useHelden } from './useHelden';
+import { heldVan, reeksVan, useHelden } from './useHelden';
+import { kistZin, niveauZin, reeksRegel, verderZin } from './voortgangTekst';
 
 /** One to twelve, which is every table the product has a diploma for. */
 const TAFELS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
@@ -30,140 +33,175 @@ const REGELS = ['reis.regel1', 'reis.regel2', 'reis.regel3', 'reis.regel4'] as c
  * The whole of what a child has collected, and how the rest arrives.
  *
  * The card in the right-hand column says where the journey is; this is the
- * journey (ADR-076). Since ADR-096 it holds the level, the stars towards the
- * next chest, the twelve heroes — each in its own reeks, the unfound ones as
- * chests — and the diplomas and the stamps, which are unchanged.
+ * journey (ADR-076).
  *
- * **The rules are written out, here.** Which hero is in a chest is chance, and
- * the one thing a product owes a child about a chance is to say plainly how it
- * works: ten answers a star, five stars a chest, every hero equally likely,
- * three duplicates up a reeks, and nothing to buy and nothing for waiting.
+ * **It opens on the nearest reward.** The page used to begin with a title, an
+ * introduction and then the level. Now the top is the hero a child wears, large
+ * and in its rings, beside the five stars and the sentence that says how far the
+ * next chest is — and a way back to practising next to it, so the decision to
+ * do another round is made above the fold rather than at the bottom of a list.
+ * The level is under the stars, one thin bar and one line, as in the column.
+ *
+ * **The block and the top of the page do not say the same thing twice.** The
+ * block names the next chest and the next level. The top adds the hero at full
+ * size, the stars in full, and the way back; the collection is under it.
+ *
+ * **A chest is opened here too.** One earned by a round that was closed before
+ * the result screen was read is still owed, and this is the other place a child
+ * can come and open it.
+ *
+ * **The rules are written out.** Ten answers a star, five stars a chest, a chest
+ * that always holds a hero you do not have, three of them to choose between,
+ * three duplicates up a reeks, and nothing to buy and nothing for waiting
+ * (ADR-097).
  *
  * **It never says when.** No dates, no "kom morgen terug", no counter that moves
- * by waiting. Everything on this page is bought with correct answers.
+ * by waiting. Every number on this page is a correct answer, a star, a chest or
+ * a level.
  */
 export function ReisScreen({
   sticker,
   onSticker,
+  onVerder,
   aside,
 }: {
   readonly sticker: string | undefined;
   readonly onSticker: (id: string) => void;
+  /** Back to practising: the subject last practised, or null for none yet. */
+  readonly onVerder: (vak: Module['id'] | null) => void;
   readonly aside: ReactNode;
 }) {
   const [goed, setGoed] = useState<number | null>(null);
+  const [vak, setVak] = useState<Module['id'] | null | undefined>(undefined);
   const [diplomas, setDiplomas] = useState<ReadonlySet<number>>(new Set());
   const [stamps, setStamps] = useState<ReadonlySet<string>>(new Set());
   const helden = useHelden();
+  const telefoon = useSmallScreen();
 
   useEffect(() => {
     void loadAccuracy().then((accuracy) => setGoed(accuracy.correct));
     void loadDiplomas().then(setDiplomas);
     void loadStamps().then(setStamps);
+    // The rounds arrive newest first, so the first one placed is the subject
+    // the child was last in.
+    void loadPlayedRounds().then((rondes) =>
+      setVak(geplaatst(rondes, startbareOnderdelen())[0]?.deel.moduleId ?? null),
+    );
   }, []);
 
   // Nothing until it is known. A page that shows an empty collection and then
   // fills it in has told a child they had none.
-  if (goed === null || helden === null) return null;
+  if (goed === null || helden === null || vak === undefined) return null;
 
   const level = levelFor(goed);
-  const teGaan = correctToNextLevel(goed);
   const gekozen = stickerById(sticker);
+  const reeks = reeksVan(helden, sticker);
+  const gedragen = heldVan(helden, sticker);
 
   return (
     <div className="tk-page">
       <div className="tk-page-main">
-        <div>
-          <h1 className="tk-display tk-titel font-semibold">{t('reis.title')}</h1>
-          <p className="mt-1 text-ink-2">{t('reis.intro')}</p>
-        </div>
+        <h1 className="tk-display tk-titel font-semibold">{t('reis.title')}</h1>
 
-        {/* Its own name rather than the card's in the column beside it: two
-            landmarks with one label is two places called the same thing. */}
-        <section className="tk-card flex flex-col gap-3" aria-label={t('reis.level')}>
-          <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-            <p className="tk-display text-h2 font-bold">
-              {t('home.journeyLevel', { niveau: level })}
-            </p>
-            <p className="text-ink-2">{t('reis.answered', { aantal: goed })}</p>
+        {/* The nearest reward, beside the hero it is for. Its own name rather
+            than the card's in the column: two landmarks with one label is two
+            places called the same thing. */}
+        <section className="tk-card tk-vg-top" aria-label={t('reis.kistTitel')}>
+          <Heldplaat sticker={sticker} reeks={reeks} size={telefoon ? 112 : 152} />
+
+          <div className="tk-vg-top-tekst">
+            <div>
+              <p className="tk-vg-naam tk-vg-naam-groot">{t(gekozen.name)}</p>
+              <p className="tk-reeksnaam" data-reeks={reeks}>
+                {reeksRegel(reeks, gedragen?.dubbelen ?? 0)}
+              </p>
+            </div>
+
+            <Sterren inKist={sterrenInKist(goed)} grootte={32} zin="kort" />
+            <p className="tk-display text-h2 font-bold">{kistZin(goed)}</p>
+
+            <div className="tk-vg-niveau">
+              <p className="tk-vg-niveaukop">
+                <span>{t('home.journeyLevel', { niveau: level })}</span>
+                <span className="font-normal text-ink-2">
+                  {t('reis.answered', { aantal: goed })}
+                </span>
+              </p>
+              <span className="tk-reeksbalk tk-reeksbalk-dun" data-reeks={reeks}>
+                <ProgressBar
+                  value={levelProgress(goed)}
+                  showDot={false}
+                  label={t('home.journeyBar', { niveau: level + 1 })}
+                />
+              </span>
+              <p className="tk-hulp">{niveauZin(goed)}</p>
+            </div>
           </div>
 
-          <ProgressBar
-            value={levelProgress(goed)}
-            showDot={false}
-            label={t('home.journeyBar', { niveau: level + 1 })}
-          />
-
-          <p className="text-body">
-            {teGaan === 1
-              ? t('home.journeyOneToGo', { niveau: level + 1 })
-              : t('home.journeyToGo', { aantal: teGaan, niveau: level + 1 })}
-          </p>
+          <div className="tk-vg-top-knop">
+            <Button onClick={() => onVerder(vak)}>{verderZin(vak)}</Button>
+          </div>
         </section>
 
-        {/* The stars towards the next chest, and what is still to go. */}
-        <section className="tk-card flex flex-col gap-3" aria-label={t('reis.sterrenTitel')}>
-          <h2 className="tk-label">{t('reis.sterrenTitel')}</h2>
-          <Sterren inKist={sterrenInKist(goed)} />
-          <p className="text-ink-2">{t('reis.totKist', { aantal: goedTotKist(goed) })}</p>
-        </section>
+        {/* A chest still owed, when there is one: three heroes face up. Absent
+            almost every time. */}
+        <Kistkeuze kaart />
 
-        {/* The twelve, in the order they are drawn. A hero this child has is a
-            button that makes it the one they wear; one they have not found is a
-            chest, which says so and cannot be pressed. */}
+        {/* The twelve, in their places. A hero this child has is a button that
+            makes it the one they wear; one they have not found is a chest, which
+            says so and what it costs, and cannot be pressed. */}
         <section className="flex flex-col gap-4" aria-label={t('reis.animals')}>
-          <div>
+          <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
             <h2 className="tk-label">{t('reis.animals')}</h2>
             <p className="text-ink-2">
-              {t('reis.animalsHave', { aantal: helden.helden.length, totaal: AANTAL_HELDEN })}
+              {t('home.journeyHave', { aantal: helden.helden.length, totaal: AANTAL_HELDEN })}
             </p>
           </div>
 
-          <div className="tk-helden">
+          <div className="tk-heldenraster">
             {STICKERS.map((dier, plek) => {
               const held = helden.helden.find((kandidaat) => kandidaat.plek === plek);
 
               if (!held) {
                 return (
-                  <span
+                  <div
                     key={dier.id}
-                    className="tk-held-cel"
+                    className="tk-heldkaart tk-heldkaart-kist"
                     role="img"
-                    aria-label={t('reis.heldWant')}
+                    aria-label={t('reis.heldWantLabel')}
                   >
-                    <span className="tk-held-pakje">
-                      <MysteryIcon size={28} />
+                    <Heldplaat sticker={dier.id} reeks="brons" size={112} gevonden={false} />
+                    <span className="tk-heldkaart-tekst" aria-hidden="true">
+                      <span className="tk-heldkaart-naam">{t('reis.heldWant')}</span>
+                      <span className="tk-heldkaart-meta">{t('reis.heldPrijs')}</span>
                     </span>
-                    <span aria-hidden="true" className="tk-held-naam">
-                      {t('reis.heldWant')}
-                    </span>
-                  </span>
+                  </div>
                 );
               }
 
-              const reeks = t(`reeks.${held.reeks}` as TranslationKey);
+              const draagt = dier.id === gekozen.id;
 
               return (
                 <button
                   key={dier.id}
                   type="button"
-                  className="tk-held-cel"
-                  aria-label={t('reis.heldHave', { dier: t(dier.name), reeks })}
-                  aria-pressed={dier.id === gekozen.id}
+                  className="tk-heldkaart"
+                  aria-label={t('reis.heldHave', {
+                    dier: t(dier.name),
+                    reeks: t(`reeks.${held.reeks}` as TranslationKey),
+                  })}
+                  aria-pressed={draagt}
                   onClick={() => onSticker(dier.id)}
                 >
-                  <Heldplaat sticker={dier.id} reeks={held.reeks} size={48} />
-                  <span aria-hidden="true" className="tk-held-naam">
-                    {t(dier.name)}
-                  </span>
-                  <span aria-hidden="true" className="tk-reeksnaam" data-reeks={held.reeks}>
-                    {held.dubbelen > 0
-                      ? t('reis.heldDubbel', {
-                          reeks,
-                          aantal: held.dubbelen,
-                          totaal: DUBBELEN_PER_REEKS,
-                        })
-                      : reeks}
+                  <Heldplaat sticker={dier.id} reeks={held.reeks} size={112} />
+                  <span className="tk-heldkaart-tekst" aria-hidden="true">
+                    <span className="tk-heldkaart-naam">{t(dier.name)}</span>
+                    <span className="tk-heldkaart-meta">
+                      {reeksRegel(held.reeks, held.dubbelen)}
+                    </span>
+                    <span className="tk-heldkaart-pil">
+                      {draagt ? t('reis.heldDraagt') : t('reis.heldDragen')}
+                    </span>
                   </span>
                 </button>
               );

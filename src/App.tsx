@@ -159,7 +159,7 @@ export default function App() {
   };
 
   /**
-   * The animal a child chose, written through and held here, because the app
+   * The hero a child chose, written through and held here, because the app
    * bar shows it too: a choice that only redrew the card it was made on would
    * look like it had not been saved.
    */
@@ -262,8 +262,8 @@ export default function App() {
     <SideColumn sticker={boot.profile.avatarConfig.sticker} onReis={goReis} onBegin={beginRonde} />
   );
 
-  // Everything there is to collect: sixty animals, twelve diplomas, ten stamps,
-  // and what each of them costs. Reached from the journey card and by its own
+  // Everything there is to collect: twelve heroes in five reeksen, twelve
+  // diplomas, ten stamps, and what each of them costs. Reached from the journey card and by its own
   // address, never from the tab bar — it is the long view of one card rather
   // than a fifth section of the product (ADR-076).
   if (route.name === 'reis') {
@@ -272,6 +272,7 @@ export default function App() {
         <ReisScreen
           sticker={boot.profile.avatarConfig.sticker}
           onSticker={chooseSticker}
+          onVerder={(vak) => (vak === null ? goHome() : goModule(vak))}
           aside={eigenKolom}
         />
       </Shell>
