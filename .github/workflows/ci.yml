@@ -124,7 +124,7 @@ jobs:
       matrix:
         include:
           - group: laptop-en-ipad-staand
-            projects: --project=chromebook --project=ipad-portrait --project=tablet-1024
+            projects: --project=chromebook --project=ipad-portrait
           - group: desktop-en-iphone
             projects: --project=desktop-1440 --project=iphone
           - group: android-en-ipad-liggend

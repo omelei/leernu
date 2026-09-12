@@ -415,11 +415,6 @@ export interface RoundState {
    * for. It reports what was gained, or nothing.
    */
   readonly gained: number;
-  /** The boxes when the round began, and as they are now: what changed (S10). */
-  readonly voor: ReadonlyMap<string, ItemState>;
-  readonly na: ReadonlyMap<string, ItemState>;
-  /** The set's items, to name what changed. */
-  readonly items: readonly Item[];
   readonly answeredCount: number;
   /** Bliksemronde only: whole seconds left, or null in every other mode. */
   readonly secondsLeft: number | null;
@@ -484,7 +479,6 @@ export function useRound(
    * not have worked out for themselves.
    */
   const masteredAtStart = useRef(0);
-  const statesAtStart = useRef<ReadonlyMap<string, ItemState>>(new Map());
   const [questions, setQuestions] = useState<RoundQuestion[]>([]);
   const [index, setIndex] = useState(0);
   const [phase, setPhase] = useState<RoundPhase>('loading');
@@ -606,7 +600,6 @@ export function useRound(
         setItems([...all]);
         setCatalogue(loadAllItems().filter((item) => item.regioSet === sets[0]?.regioSet));
         setStates(loadedStates);
-        statesAtStart.current = loadedStates;
         masteredAtStart.current = countMastered(
           loadedStates,
           all.map((item) => item.id),
@@ -946,9 +939,6 @@ export function useRound(
         items.map((item) => item.id),
       ) - masteredAtStart.current,
     ),
-    voor: statesAtStart.current,
-    na: states,
-    items,
     answeredCount,
     secondsLeft: rule.kind === 'tijd' ? secondsLeft : null,
     livesLeft: rule.kind === 'levens' ? livesLeft : null,

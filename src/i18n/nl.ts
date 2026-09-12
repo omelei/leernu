@@ -124,102 +124,6 @@ export const nl = {
   'nav.onthouden': 'Onthouden',
   'nav.vrienden': 'Vrienden',
   'nav.jij': 'Jij',
-  // De vier bestemmingen van huisstijl v2: Vandaag, Oefenen, Verzameling, Jij.
-  'nav.oefenen': 'Oefenen',
-  'nav.verzameling': 'Verzameling',
-  'nav.terugNaarOefenen': 'Terug naar Oefenen',
-  // De kopbalk: de sterren en het kind (S2). Op een telefoon valt het woord weg;
-  // een schermlezer hoort het altijd.
-  'kop.sterren': 'sterren',
-  'kop.sterrenLabel': '{aantal} sterren',
-
-  // Oefenen (S3). De namen zoals de pagina ze schrijft, voluit.
-  'oefenen.titel': 'Waar wil je in oefenen?',
-  'oefenen.naam.topo': 'Topografie',
-  'oefenen.naam.tafels': 'Tafels',
-  'oefenen.naam.klok': 'Klokkijken',
-  'oefenen.naam.woorden': 'Woordjes',
-  'oefenen.naam.spelling': 'Spelling',
-  'oefenen.naam.tijdvakken': 'Tijdvakken',
-  'oefenen.naam.vlaggen': 'Vlaggen',
-  'oefenen.sub.topo': 'Vijf sets in Nederland, zes werelddelen en de wereld',
-  'oefenen.sub.tafels': 'Tafels, delen, plus en min',
-  'oefenen.sub.klok': 'Hele uren, halve uren, kwartieren en vijf minuten',
-  'oefenen.sub.vlaggen': 'De vlaggen van zes werelddelen',
-  'oefenen.nietGebouwd': 'Nog niet gebouwd',
-  'oefenen.standLabel': '{goed} van de {totaal} onthouden',
-  'oefenen.diploma': '1 diploma',
-  'oefenen.diplomas': '{aantal} diploma’s',
-
-  // Verzameling (S11).
-  'verzameling.titel': 'Verzameling',
-  'verzameling.meta':
-    '{aantal} van de {totaal} helden · nog {nog} goede antwoorden tot de volgende kist',
-  'verzameling.metaEen':
-    '{aantal} van de {totaal} helden · nog één goed antwoord tot de volgende kist',
-  'verzameling.helden': 'Jouw helden',
-  'verzameling.materialen': 'Vijf materialen',
-  'verzameling.uitleg':
-    'Drie dubbele helden brengen een held een reeks hoger. Tien goede antwoorden zijn een ster, vijf sterren een kist. Niets anders beweegt het: geen geld, geen kans, geen dag van de week.',
-  'verzameling.kiesTitel': 'Welke wil je?',
-
-  // Vandaag (S2). Kleine getallen voluit, zoals het ontwerp ze schrijft:
-  // "zes dagen op rij", "Vier dagen niet geoefend".
-  'vandaag.titel': 'Vandaag',
-  'vandaag.meta': '{datum} · {streak}',
-  'vandaag.streakEerste': 'eerste dag',
-  'vandaag.streakEen': 'één dag op rij',
-  'vandaag.streakVeel': '{aantal} dagen op rij',
-  'vandaag.toets': 'Toets {vak} op {datum}',
-  'vandaag.toetsZonderVak': 'Toets op {datum}',
-  'vandaag.toetsSub': '{set} · {nog}',
-  'vandaag.nogDagen': 'nog {aantal} dagen',
-  'vandaag.nogDag': 'nog één dag',
-  'vandaag.toetsVandaag': 'vandaag',
-  'vandaag.horizonNu': 'nu',
-  'vandaag.horizonWeek': '1 week',
-  'vandaag.horizonDrieWeken': '3 weken',
-  'vandaag.horizonLabel': '{wanneer}: {procent}% onthouden',
-  'vandaag.onthouden': 'onthouden',
-  'vandaag.geenToets': 'Nog geen toets gepland',
-  'vandaag.geenToetsUitleg':
-    'Zet een datum, dan zie je hier hoeveel je er op die dag nog van onthoudt.',
-  'vandaag.datumKiezen': 'Datum kiezen',
-  'vandaag.alles': 'Alles',
-  'vandaag.statusNooit': 'Nog niet geoefend',
-  'vandaag.statusVandaag': 'Vandaag geoefend',
-  'vandaag.statusGisteren': 'Gisteren geoefend',
-  'vandaag.statusDagen': '{aantal} dagen niet geoefend',
-  'vandaag.statusOnthouden': ' · {goed} van {totaal} onthouden',
-  'vandaag.start': 'Start de ronde',
-  'vandaag.startRegel': '{set} · {manier} · {vragen}',
-  'vandaag.startRegelOpen': '{set} · {manier}',
-  'vandaag.helden': 'Jouw helden',
-  'vandaag.week': 'Jouw week',
-  'week.ma': 'ma',
-  'week.di': 'di',
-  'week.wo': 'wo',
-  'week.do': 'do',
-  'week.vr': 'vr',
-  'week.za': 'za',
-  'week.zo': 'zo',
-  'week.geoefend': '{dag}: geoefend',
-  'week.nietGeoefend': '{dag}: niet geoefend',
-  // De vriezer is het woord uit de overdracht voor een rustdag: één per week
-  // waarin je oefent, twee hoogstens, en hij vangt een gemiste schooldag op.
-  'week.geenVriezer': 'Oefen deze week, dan krijg je een vriezer voor een dag dat het niet lukt.',
-  'week.vriezer': 'Je hebt één vriezer. Mis je een schooldag, dan lopen je dagen op rij door.',
-  'week.vriezers':
-    'Je hebt {aantal} vriezers. Mis je een schooldag, dan lopen je dagen op rij door.',
-  'week.vakantie': 'Vakantie staat aan: je dagen op rij lopen door zolang je weg bent.',
-
-  // Jij (S12).
-  'jij.held': 'De held die je draagt',
-  'jij.heldNaam': '{held} · {materiaal}',
-  'jij.wisselen': 'Wisselen',
-  'jij.vakantie': 'Vakantie',
-  'jij.vakantieWhy': 'Je dagen op rij lopen door zolang je weg bent.',
-  'jij.anderKind': 'Wissel naar een ander kind',
   // De rail draagt korte woorden, zoals K1 ze tekent: "topo", niet
   // "Topografie". Een rail van 88 breed leest als een lijst en niet als proza.
   'module.topo': 'Topo',
@@ -399,19 +303,16 @@ export const nl = {
   'way.ontdekken': 'Rondkijken, geen vragen',
   'way.bliksemronde': 'Zo veel mogelijk in een minuut — voor als het al zit',
   'way.overleven': 'Doorgaan tot je levens op zijn — voor als het al zit',
-  // S4: de pagina gaat over één ding, dus een titel en geen begroeting. De
-  // naam staat al rechtsboven in de kopbalk.
-  'choose.title': 'Kies je ronde',
-  // De metaregel onder de titel (S4): waar op de kaart, en hoeveel onderwerpen.
-  'choose.meta': '{aantal} onderwerpen',
-  'choose.metaEen': 'één onderwerp',
-  // Het woord uit S4. De nummers staan niet in de tekst: de pagina telt zelf,
-  // want topografie heeft een stap meer dan rekenen.
-  'choose.stepWhat': 'Waarover',
-  // De regel onder een onderwerptegel. "Gekozen" in woorden, want een tegel
-  // die gekozen is mag dat niet alleen met kleur zeggen.
-  'choose.items': '{aantal} items',
-  'choose.itemsGekozen': 'Gekozen · {aantal} items',
+  // Bij naam, net als de begroeting op de voordeur. "Wat wil je oefenen?" aan
+  // niemand in het bijzonder is een formulier; aan Fem gevraagd is het een
+  // vraag, en zij is degene die hem beantwoordt.
+  'choose.title': 'Wat wil je oefenen, {naam}?',
+  // "Waarover" was een woord dat niemand van tien hardop zegt. Deze zegt wat
+  // de stap van je vraagt in plaats van waar hij over gaat.
+  // De nummers staan niet meer in de tekst: de pagina telt zelf, want
+  // topografie heeft een stap meer dan rekenen en één vaste "1 ·" in de copy
+  // zou op één van de twee pagina's het verkeerde getal zijn.
+  'choose.stepWhat': 'Kies een onderwerp',
   // "Van makkelijk naar moeilijk" stond in de kop en is eruit. Het was een
   // toelichting op de volgorde, niet de vraag zelf, en het maakte van een kop
   // van vier woorden een zin van acht — op een telefoon twee regels lang.
@@ -441,13 +342,6 @@ export const nl = {
   // hele ding, want dat staat in het label.
   'choose.go': 'Start',
   'choose.goLabel': 'Start: {wat}',
-  // S4: de primaire knop draagt de combinatie letterlijk, zonder tijd — tijd
-  // hoort niet in de leerkern.
-  'choose.goZin': 'Start · {wat}',
-  // De toetsstand als tertiaire knop naast Start (S4). De stand staat in de
-  // woorden, niet in een kleur.
-  'choose.toetsUit': 'Oefentoets uit',
-  'choose.toetsAan': 'Oefentoets aan',
   // Hoe lang de ronde duurt, waar er meer dan één eerlijk antwoord is. Tien is
   // wat een ronde altijd was en blijft de standaard; de rest bestaat omdat de
   // Rekenmix vijfhonderd sommen heeft.
@@ -540,14 +434,6 @@ export const nl = {
     'Je schreef {gekozen}. Dat bestaat ook, maar het ligt ergens anders. Wij zochten {naam}.',
   'practice.next': 'Volgende vraag',
   'practice.stop': 'Stoppen',
-  // De onderbreking (S5): de enige dialoog in de hele oefenstroom. Wat al
-  // beantwoord is, telt; dat zegt de zin, want dat is wat een kind wil weten.
-  'ronde.afbreken': 'Ronde afbreken?',
-  'ronde.afbrekenKnop': 'Afbreken',
-  'ronde.verder': 'Verder oefenen',
-  'ronde.bewaard': 'Je {aantal} goede antwoorden blijven bewaard.',
-  'ronde.bewaardEen': 'Je goede antwoord blijft bewaard.',
-  'ronde.bewaardGeen': 'Wat je hebt beantwoord, blijft bewaard.',
   'practice.kindCity': 'Wijs de stad aan',
   'practice.kindIsland': 'Wijs het eiland aan',
   'practice.kindWater': 'Wijs het water aan',
@@ -831,20 +717,6 @@ export const nl = {
   'result.gainedMany': '{aantal} vragen meer die je nu onthoudt.',
   'result.gainedNone': 'Nog niets erbij. Deze komen morgen terug.',
   'result.again': 'Nog een ronde',
-  // De uitslag (S10): een kaart met drie rijen. Elke rij telt en noemt de
-  // eerste twee bij naam. Geen minuten: tijd hoort niet in de leerkern.
-  'uitslag.meta': 'Ronde van {aantal} vragen',
-  'uitslag.metaGestopt': '{gedaan} van {totaal} vragen · afgebroken',
-  'uitslag.nieuw': '{namen} onthoud je nu',
-  'uitslag.nieuwSub': 'Nieuw onthouden',
-  'uitslag.opgefrist': '{namen} opgefrist',
-  'uitslag.opgefristSubEen': 'Stond op zakken',
-  'uitslag.opgefristSubVeel': 'Stonden op zakken',
-  'uitslag.wisselenEen': '{namen} blijft wisselen',
-  'uitslag.wisselenVeel': '{namen} blijven wisselen',
-  'uitslag.wisselenSubEen': 'Komt morgen terug',
-  'uitslag.wisselenSubVeel': 'Komen morgen terug',
-  'uitslag.andere': '{namen} en {aantal} andere',
 
   // K10. Twee schakelaars in plaats van drie: de leesmodus verviel (ADR-025).
   // School en woonplaats staan er niet en komen er niet — dat zijn de twee
@@ -963,42 +835,12 @@ export const nl = {
   'stamp.overleven-vijftien': 'Vijftien levens lang',
   'stamp.overleven-vijftien.criterion': 'Vijftien goed met drie levens.',
   // Profile
-  // S1: een plek, dus een vraag als kop en één metaregel die zegt waar de
-  // naam blijft. Het label staat boven het veld, nooit alleen erin.
-  'profile.title': 'Hoe heet je?',
-  'profile.help': 'Je naam blijft op dit apparaat staan en gaat nergens heen.',
-  'profile.label': 'Je naam',
+  'profile.title': 'Wie ben jij?',
+  'profile.help': 'Typ je naam. Je naam blijft op dit apparaat.',
   'profile.placeholder': 'Je naam',
-  'profile.submit': 'Verder',
+  'profile.submit': 'Beginnen',
   'profile.nameTooShort': 'Typ eerst je naam.',
 
   // Accessible names for things that have no visible label of their own
   'a11y.progress': 'Voortgang in deze ronde',
-
-  // De componentset van huisstijl v2. De punt zegt wat hij toont in woorden,
-  // want een cirkel die voor driekwart vol is, is voor een schermlezer niets.
-  'ds.punt': '{procent}% onthouden',
-  'ds.teller': 'Vraag {huidig} van {totaal}',
-  'ds.ruiten': '{gedaan} van de {totaal} vragen gedaan',
-  'ds.aan': 'Aan',
-  'ds.uit': 'Uit',
-  'ds.laden': 'Even geduld',
-  'ds.stoppen': 'Stoppen',
-  'ds.voorlezen': 'Voorlezen',
-  'ds.goed': 'Goed',
-  'ds.fout': 'Fout',
-  'ds.gemist': 'Het goede antwoord',
-  'ds.bijna': 'Bijna',
-  'ds.leeg': 'Leeg',
-  'ds.nogTeVinden': 'nog te vinden',
-  'ds.kist': 'Kist',
-  'ds.kistOpenNu': 'Open nu',
-  'ds.gedragen': 'Gedragen',
-  // De vijf materialen, in de volgorde van de ladder (S11). Klein geschreven:
-  // het zijn woorden onder een rondje, geen namen.
-  'materiaal.brons': 'brons',
-  'materiaal.zilver': 'zilver',
-  'materiaal.goud': 'goud',
-  'materiaal.platina': 'platina',
-  'materiaal.ultra': 'ultra',
 } as const;

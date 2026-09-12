@@ -80,18 +80,6 @@ const ALLOWED_SELECTORS: ReadonlyMap<string, string> = new Map([
   // The number of each question on that page: the page's own order, told in
   // the module's colour. The question beside it stays ink.
   ['.tk-stap-nummer', 'the module entrance, numbering its own page'],
-
-  // House style v2. There is one accent now, the green, and stap 3's
-  // conformity table gives it four jobs and no more: the module's area, right,
-  // chosen, and progress. The component set below is where each of the four
-  // is drawn.
-  ['.ln-punt', 'progress over time: the dot is the retention meter (README)'],
-  [".ln-ruit[data-stand='gedaan']", 'progress in a round: an answered question'],
-  ['.ln-balk-vul', 'progress: the bar'],
-  [".ln-tegel[aria-pressed='true']", 'chosen: a tile'],
-  ['.ln-tegel-ruit', 'chosen: the diamond in a chosen tile’s plate'],
-  ['.ln-chip-accent', 'right: a chest that is ready, on the light green'],
-  [".ln-rail-knop[aria-current='page'] .ln-rail-plaat", 'chosen: where you are, in the rail'],
 ]);
 
 /** Where an accent may be *defined* rather than used. */
@@ -113,13 +101,6 @@ const ALLOWED_LINES: readonly { file: string; snippet: string; why: string }[] =
     file: 'src/features/practice/ResultScreen.tsx',
     snippet: 'var(--accent',
     why: 'the highlight on the map',
-  },
-  {
-    // The README writes the dot's fill as conic-gradient(<accent> …), and this
-    // is the one line that does.
-    file: 'src/components/ds/meten.ts',
-    snippet: 'conic-gradient(var(--accent)',
-    why: 'the dot, the retention meter',
   },
 ];
 
@@ -197,7 +178,7 @@ describe('a module accent colours three things and nothing else', () => {
   it('keeps the mark out of it entirely', () => {
     // The dot is the one thing that is identical in every module. If it ever
     // learns about accents, the brand has seven versions of itself.
-    for (const name of ['Dot.tsx', 'ds/Logo.tsx']) {
+    for (const name of ['Dot.tsx', 'Wordmark.tsx']) {
       const source = readFileSync(join(ROOT, 'src', 'components', name), 'utf8');
       const code = source
         .split('\n')

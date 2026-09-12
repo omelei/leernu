@@ -3,19 +3,15 @@ import {
   DUBBELEN_PER_REEKS,
   kistenTeGoed,
   openKist,
-  planMigratie,
-  planTerugdraaien,
   REEKSEN,
   uitLadder,
   type Held,
   type HeldenStand,
   type KistUitkomst,
-  type Profielstand,
 } from '@/game-core';
-import { activeChildId, getActiveChild } from './children';
-import type { ProfileRecord } from './db';
+import { activeChildId } from './children';
 import { loadAccuracy } from './progress';
-import { deleteSetting, getSetting, setSetting } from './settings';
+import { getSetting, setSetting } from './settings';
 
 /**
  * A child's heroes, on the device (ADR-096, ADR-097).
@@ -78,59 +74,14 @@ function parse(raw: string | undefined): HeldenStand | null {
   }
 }
 
-/** Where the copy of the old rewards is kept (phase 7), once, per child. */
-const kopieSleutel = (kindId: string) => `beloning-v1-kopie:${kindId}`;
-
-/** The old system's profile fields, as the copy keeps them. */
-function profielstand(profiel: ProfileRecord | undefined): Profielstand {
-  return {
-    niveau: profiel?.niveau ?? 1,
-    xp: profiel?.xp ?? 0,
-    munten: profiel?.munten ?? 0,
-    sticker: profiel?.avatarConfig.sticker ?? null,
-  };
-}
-
 export async function loadHelden(): Promise<HeldenStand> {
   const kindId = await activeChildId();
   const bewaard = parse(await getSetting(sleutel(kindId)));
   if (bewaard) return bewaard;
 
-  const [{ correct }, profiel, kopie] = await Promise.all([
-    loadAccuracy(),
-    getActiveChild(),
-    getSetting(kopieSleutel(kindId)),
-  ]);
-  const plan = planMigratie({
-    helden: null,
-    kopie: kopie ?? null,
-    correct,
-    profiel: profielstand(profiel),
-    nu: new Date(),
-  });
-
-  // The copy first: a move that stops half-way leaves a copy and no heroes,
-  // which the next read repairs — never heroes and no copy.
-  if (plan.kopie !== null) await setSetting(kopieSleutel(kindId), plan.kopie);
-  const stand = plan.helden ?? uitLadder(correct);
+  const stand = uitLadder((await loadAccuracy()).correct);
   await setSetting(sleutel(kindId), JSON.stringify(stand));
   return stand;
-}
-
-/**
- * The way back from the reward move, for this child: removes the heroes' row
- * the move wrote, where this device holds the copy that proves it ran here.
- * The copy stays. True when something was removed.
- *
- * Not wired to any screen. It is the rollback path for a release that has to
- * undo the move; see docs/huisstijl-v2/eindverslag.md.
- */
-export async function terugdraaienBeloning(): Promise<boolean> {
-  const kindId = await activeChildId();
-  const { verwijderHelden } = planTerugdraaien((await getSetting(kopieSleutel(kindId))) ?? null);
-  if (!verwijderHelden) return false;
-  await deleteSetting(sleutel(kindId));
-  return true;
 }
 
 /**

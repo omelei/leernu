@@ -23,7 +23,7 @@ const STEDEN: Keuze = [/^Steden/, /^Steden van Nederland$/];
 type Keuze = readonly [RegExp] | readonly [RegExp, RegExp];
 
 async function kiesOnderwerp(page: Page, [vak, chip]: Keuze) {
-  const what = page.getByRole('region', { name: /Waarover/ });
+  const what = page.getByRole('region', { name: /Kies een onderwerp/ });
 
   // First rather than exact: after the card is pressed its chips are in the
   // same region, and a chip's accessible name is the set's full name.
@@ -48,7 +48,7 @@ async function kiesOnderwerp(page: Page, [vak, chip]: Keuze) {
  */
 async function startRound(page: Page, set: Keuze, way: RegExp, toetsstand = false) {
   await page.goto('/topografie');
-  await expect(page.getByRole('heading', { name: 'Kies je ronde' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
 
   await kiesOnderwerp(page, set);
   await page
@@ -68,13 +68,47 @@ async function startRound(page: Page, set: Keuze, way: RegExp, toetsstand = fals
  * matched on "vragen" was quietly asserting which modes exist.
  */
 async function start(page: Page) {
-  await page.locator('.ln-start-knop').click();
+  await page.locator('.tk-choose-start button').click();
+}
+
+/**
+ * The lightning round is only offered when the clock is switched on, and it is
+ * off by default (K10). Turning it on is part of getting there, so this tests
+ * the setting as well as the round.
+ *
+ * The switch moves only once the write has landed, so waiting for it to read as
+ * on is waiting for IndexedDB. The reload then proves the value survives the
+ * page rather than the render.
+ */
+async function turnTheClockOn(page: Page) {
+  const clock = page.getByRole('button', { name: /Klok bij het oefenen/ });
+
+  await page.goto('/jij');
+  await expect(clock).toHaveAttribute('aria-pressed', 'false');
+
+  await clock.click();
+  await expect(clock).toHaveAttribute('aria-pressed', 'true');
+
+  await page.reload();
+  await expect(clock).toHaveAttribute('aria-pressed', 'true');
+}
+
+/**
+ * A round with a clock or with lives on it.
+ *
+ * These were chips that started a round the moment they were pressed. They are
+ * ways of practising like the other four now, so getting into one is the same
+ * three steps as anything else — which is the point: the two heaviest rounds
+ * in the product were the only two nobody read a description of first.
+ */
+async function startChallenge(page: Page, naam: string) {
+  await startRound(page, PROVINCIES, new RegExp(`^${naam}\\b`));
 }
 
 async function signIn(page: Page, naam: string) {
   await page.goto('/');
   await page.getByPlaceholder('Je naam').fill(naam);
-  await page.getByRole('button', { name: 'Verder', exact: true }).click();
+  await page.getByRole('button', { name: 'Beginnen' }).click();
 
   // The name is in the app bar now, beside the streak — K1 puts the profile
   // switch top right, so that is where "you are signed in" is visible.
@@ -84,7 +118,7 @@ async function signIn(page: Page, naam: string) {
 test('asks for a name on the first visit and never for anything else', async ({ page }) => {
   await page.goto('/');
 
-  await expect(page.getByRole('heading', { name: 'Hoe heet je?' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Wie ben jij?' })).toBeVisible();
 
   // The two sentences that used to be asserted here — no adverts, no account
   // needed — are gone (ADR-046). The second stopped being true for the parent
@@ -99,7 +133,7 @@ test('asks for a name on the first visit and never for anything else', async ({ 
 
 test('refuses an empty name', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Verder', exact: true }).click();
+  await page.getByRole('button', { name: 'Beginnen' }).click();
   await expect(page.getByRole('alert')).toHaveText('Typ eerst je naam.');
 });
 
@@ -112,14 +146,13 @@ test('keeps the profile across a reload, with no sign-in', async ({ page }) => {
 });
 
 /**
- * The front door is Vandaag (S2): a place, with the date and the days in a row
- * under it. The child's name is not a greeting any more; it is in the kopbalk,
- * on the button that is theirs.
+ * K1 greets the child by the name they typed, and the front door is the first
+ * place that name is worth anything: a profile that is not an account still has
+ * to be visibly theirs.
  */
-test('the front door is Vandaag, and the child is in the kopbalk', async ({ page }) => {
+test('greets the child by name on the front door', async ({ page }) => {
   await signIn(page, 'Bo');
-  await expect(page.getByRole('heading', { name: 'Vandaag', level: 1 })).toBeVisible();
-  await expect(page.getByRole('banner').getByRole('button', { name: 'Bo' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Welkom Bo!' })).toBeVisible();
 });
 
 /**
@@ -169,60 +202,74 @@ test('the soonest test decides what the block on the front door is about', async
 });
 
 /**
- * The test card is one target (S2): pressing it opens the list of tests under
- * it. With no test yet it is an empty card whose button is "Datum kiezen".
- * Either way, what is wanted here is the list open with its form, and pressing
- * an opener twice would close it again — so only what is not yet showing is
- * pressed.
+ * Below 1200 the block is only its dates once it has any, and pressing them
+ * opens it into the whole thing a laptop shows straight away (ADR-094). At a
+ * desk, and with no tests, it is already whole and this does nothing.
  */
 async function openToetsen(page: Page) {
-  const toevoegen = page.getByRole('button', { name: 'Toets toevoegen' });
-  if (await toevoegen.isVisible()) return;
-  const kies = page.getByRole('button', { name: 'Datum kiezen' });
-  if (await kies.isVisible()) {
-    await kies.click();
-    return;
-  }
-  await page.getByRole('button', { name: /Toetsen wijzigen$/ }).click();
+  const datums = page.getByRole('button', { name: /Toetsen wijzigen$/ });
+  if (await datums.isVisible()) await datums.click();
 }
 
-/** One test, through the list under the card. */
+/** One test, through the block that is now a list with a form under it. */
 async function addTest(page: Page, date: string, subject: string) {
   await openToetsen(page);
-  const wanneer = page.getByLabel('Wanneer is de toets?');
-  if (!(await wanneer.isVisible()))
-    await page.getByRole('button', { name: 'Toets toevoegen' }).click();
-  await wanneer.fill(date);
+  await page.getByRole('button', { name: 'Toets toevoegen' }).click();
+  await page.getByLabel('Wanneer is de toets?').fill(date);
   await page.getByLabel('Voor welk vak?').selectOption(subject);
   await page.getByRole('button', { name: 'Toevoegen', exact: true }).click();
 }
 
 /**
- * Verder oefenen (S2): the sets in the middle of being practised, newest first,
- * and one start button that starts the last one again in the same way. Before
- * any round it offers the sets to start with, each still "nog niet geoefend".
+ * The rows on the front door hide their scrollbar (ADR-094), and hiding it must
+ * not take scrolling away from anyone who does not swipe. The row is a stop in
+ * the tab order and the arrow keys move it — checked at every size, because a
+ * row that fits its screen would pass this by not moving at all, and five
+ * cards fit none of them.
  */
-test('the round just played is where Vandaag carries on', async ({ page }) => {
+test('a row on the front door scrolls from the keyboard', async ({ page }) => {
+  await signIn(page, 'Rik');
+
+  const rij = page.getByRole('group', { name: 'Meest geoefend' });
+  await rij.focus();
+  await page.keyboard.press('ArrowRight');
+
+  await expect.poll(() => rij.evaluate((el) => el.scrollLeft)).toBeGreaterThan(0);
+});
+
+test('logs the round that was just played, with its mark', async ({ page }) => {
   await signIn(page, 'Jamie');
 
-  const verder = page.getByRole('region', { name: 'Verder oefenen' });
-  await expect(verder.getByText('Nog niet geoefend').first()).toBeVisible();
+  const recent = page.getByRole('region', { name: 'Recent geoefend' });
+  const favourites = page.getByRole('region', { name: 'Jouw favorieten' });
+
+  // Before the first round both are empty, and both say so rather than
+  // standing there as headings over nothing.
+  await expect(
+    recent.getByText('Nog niets geoefend. Na je eerste ronde staat het hier.'),
+  ).toBeVisible();
+  await expect(
+    favourites.getByText('Nog geen favorieten. Wat je vaak oefent, komt hier te staan.'),
+  ).toBeVisible();
 
   await startRound(page, PROVINCIES, /Aanwijzen/);
   await page.getByRole('button', { name: 'Limburg' }).click();
   await expect(page.getByRole('button', { name: 'Volgende vraag' })).toBeVisible();
 
   await page.getByRole('button', { name: 'Stoppen' }).click();
-  await page.getByRole('button', { name: 'Afbreken' }).click();
   await page.getByRole('button', { name: 'Terug naar start' }).click();
 
-  // First in the list now, practised today.
-  const kaart = verder.getByRole('button', { name: /^Provincies van Nederland/ });
-  await expect(kaart).toContainText('Vandaag geoefend');
+  // One answer, so the mark is a 10,0 or a 1,0 and never anything between —
+  // which is exactly what "over what was answered" means.
+  const tegel = recent.getByRole('button', { name: /Provincies van Nederland/ });
+  await expect(tegel).toContainText(/Cijfer (10,0|1,0)/);
+  await expect(tegel).toContainText('Aanwijzen');
 
-  // And the start bar says it starts that set again, the same way.
-  await expect(page.getByText(/^Provincies van Nederland · aanwijzen/)).toBeVisible();
-  await page.getByRole('button', { name: 'Start de ronde' }).click();
+  // And it went into the column on the right as a way straight back in.
+  await expect(favourites.getByRole('button', { name: /Provincies van Nederland/ })).toBeVisible();
+
+  // The tile is the shortcut it looks like: same set, same way, no chooser.
+  await tegel.click();
   await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
 });
 
@@ -241,7 +288,7 @@ test('a round of Europe draws Europe, not the Netherlands', async ({ page }) => 
 
   await page.getByRole('button', { name: /^Europa/ }).click();
 
-  const wat = page.getByRole('region', { name: /Waarover/ });
+  const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
   await expect(wat.getByRole('button', { name: /^Landen/ })).toBeVisible();
   // And the Dutch subjects are gone: a region is a filter, not a heading.
   await expect(wat.getByRole('button', { name: /^Provincies/ })).toHaveCount(0);
@@ -255,9 +302,7 @@ test('a round of Europe draws Europe, not the Netherlands', async ({ page }) => 
 
   // A country on the map, asked for in the words a country is asked for in.
   await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
-  // The instruction is not on the screen (S5: the question is the heading, and
-  // there is nothing else); it is what a screen reader and read aloud say.
-  await expect(page.getByRole('status')).toContainText('Wijs het land aan');
+  await expect(page.getByText('Wijs het land aan')).toBeVisible();
   await expect(page.locator('svg').getByRole('button', { name: 'Spanje' })).toBeVisible();
   // The provinces are not underneath it.
   await expect(page.locator('svg').getByRole('button', { name: 'Limburg' })).toHaveCount(0);
@@ -271,7 +316,7 @@ test('the countries of the world have an address of their own', async ({ page })
   await signIn(page, 'Noor');
   await page.goto('/topografie/wereld');
 
-  const wat = page.getByRole('region', { name: /Waarover/ });
+  const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
   await expect(wat.getByRole('button', { name: /^Landen/ })).toHaveAttribute(
     'aria-pressed',
     'true',
@@ -316,7 +361,6 @@ test('the oefentoets asks without answering, and marks at the end', async ({ pag
   await expect(page.getByRole('button', { name: 'Volgende vraag' })).toHaveCount(0);
 
   await page.getByRole('button', { name: 'Stoppen' }).click();
-  await page.getByRole('button', { name: 'Afbreken' }).click();
 
   // One answer, and it was wrong on purpose, so the mark is the lowest there
   // is. What is being checked is that there is one at all.
@@ -327,27 +371,33 @@ test('the oefentoets asks without answering, and marks at the end', async ({ pag
 /**
  * The hero a child wears is theirs, so it has to stick — and it has to show
  * somewhere other than the card it was chosen on, or it does not look saved.
- * A new child has the first three (ADR-098); the other nine are empty places
- * on the collection (S11), which are not buttons and do not say who is coming.
+ *
+ * Heroes since ADR-096: a new child has the first three, in bronze — Valerie
+ * Vos, Daan Das and Olaf Otter (ADR-098) — and the other nine arrive in
+ * chests. This checks both halves: that a hero a child has can be worn, and
+ * that one they have not found cannot.
  */
 test('the hero a child picks is theirs, and follows them', async ({ page }) => {
   await signIn(page, 'Puk');
-  await page.goto('/verzameling');
+  await page.goto('/voortgang');
 
-  const helden = page.getByRole('region', { name: 'Jouw helden' });
-  await helden.getByRole('button', { name: /^Olaf Otter/ }).click();
-  await expect(helden.getByRole('button', { name: /^Olaf Otter/ })).toHaveAttribute(
+  const helden = page.getByRole('region', { name: 'Helden' });
+  await helden.getByRole('button', { name: /^Olaf Otter,/ }).click();
+  await expect(helden.getByRole('button', { name: /^Olaf Otter,/ })).toHaveAttribute(
     'aria-pressed',
     'true',
   );
 
+  // Not found yet: a chest in its place, which says so and what it costs, and
+  // does not say what is in it (ADR-081). It is not a button either — a control
+  // a child cannot use is a question they have to ask somebody about.
   await expect(helden.getByRole('button', { name: /^Ben Buizerd/ })).toHaveCount(0);
-  await expect(helden.getByText('nog te vinden').first()).toBeVisible();
+  await expect(helden.getByLabel('Nog niet gevonden').first()).toBeVisible();
 
   // It belongs to the child, not to the page: it survives a reload.
   await page.reload();
   await expect(
-    page.getByRole('region', { name: 'Jouw helden' }).getByRole('button', { name: /^Olaf Otter/ }),
+    page.getByRole('region', { name: 'Helden' }).getByRole('button', { name: /^Olaf Otter,/ }),
   ).toHaveAttribute('aria-pressed', 'true');
 });
 
@@ -402,7 +452,6 @@ test('asks about every province, and lets a child stop early', async ({ page }) 
   await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuetext', 'vraag 1 van 12');
 
   await page.getByRole('button', { name: 'Stoppen' }).click();
-  await page.getByRole('button', { name: 'Afbreken' }).click();
   // K8: the heading is what changed, and the score is a line underneath it.
   await expect(page.getByRole('heading', { name: 'Wat er is veranderd' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Terug naar start' })).toBeVisible();
@@ -532,7 +581,7 @@ test('explore names a city, places it, and scores nothing', async ({ page }) => 
   // the sets live now.
   await page.goto('/topografie');
   const steden = page
-    .getByRole('region', { name: /Waarover/ })
+    .getByRole('region', { name: /Kies een onderwerp/ })
     .getByRole('button', { name: /^Steden/ })
     .first();
   // The accessible name and not the visible text: a subject tile shows an icon
@@ -542,22 +591,83 @@ test('explore names a city, places it, and scores nothing', async ({ page }) => 
   await expect(steden).toHaveAccessibleName(/nog niet geoefend/);
 });
 
+/** Answers the current province question wrongly, whatever it happens to be. */
+async function answerWrongly(page: Page) {
+  const vraag = await page.getByRole('heading', { name: /Waar ligt / }).textContent();
+  const fout = vraag?.includes('Limburg') ? 'Groningen' : 'Limburg';
+  await page.locator('svg').getByRole('button', { name: fout, exact: true }).click();
+}
+
 /**
- * S5: the one dialog in practising. Escape asks before a round is lost, from
- * anywhere in the round, and Escape inside the dialog keeps the round — the one
- * thing a child pressing Escape does not want is to lose it.
+ * The bliksemronde adds a clock and takes away the Volgende button. Both matter:
+ * a timed round where a child pays for a button press with their own seconds is
+ * a timed round that measures the wrong thing.
  */
-test('Escape asks whether to stop, and Escape again carries on', async ({ page }) => {
-  await signIn(page, 'Ada');
+test('bliksemronde runs a clock and moves on by itself', async ({ page }) => {
+  await signIn(page, 'Sem');
+  await turnTheClockOn(page);
+  await startChallenge(page, 'Bliksemronde');
+
+  await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
+  // Sixty seconds reads as 1:00, so the first tick a test can see is not 0:xx.
+  await expect(page.getByText(/^[01]:[0-5]\d$/)).toBeVisible();
+
+  await answerWrongly(page);
+  await expect(page.getByRole('button', { name: 'Volgende vraag' })).toHaveCount(0);
+
+  // No click of ours: the round advances on its own after showing the answer.
+  await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible({ timeout: 5000 });
+});
+
+/**
+ * "Ik weet het niet", drawn on K3 at every size. It is the one control that
+ * lets a child stop guessing, so what matters is that it shows the answer and
+ * that pressing it is cheaper than a guess — see ADR-048 for why.
+ */
+test('a child can say they do not know, and is shown the answer', async ({ page }) => {
+  await signIn(page, 'Pim');
   await startRound(page, PROVINCIES, /Aanwijzen/);
-  await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Limburg' })).toBeVisible();
 
-  await page.keyboard.press('Escape');
-  const dialoog = page.getByRole('dialog', { name: 'Ronde afbreken?' });
-  await expect(dialoog).toBeVisible();
-  await expect(dialoog.getByRole('button', { name: 'Afbreken' })).toBeFocused();
+  await page.getByRole('button', { name: 'Ik weet het niet' }).click();
 
-  await page.keyboard.press('Escape');
-  await expect(dialoog).toHaveCount(0);
+  await expect(page.getByRole('status')).toContainText('ligt hier.');
+  await expect(page.getByRole('button', { name: 'Volgende vraag' })).toBeVisible();
+});
+
+test('saying you do not know costs no life', async ({ page }) => {
+  await signIn(page, 'Nora');
+  await startChallenge(page, 'Overleven');
+
+  const levens = page
+    .getByRole('banner')
+    .locator('div')
+    .filter({ hasText: /^levens\d$/ });
+  await expect(levens).toContainText('3');
+
+  await page.getByRole('button', { name: 'Ik weet het niet' }).click();
+  await expect(page.getByRole('button', { name: 'Volgende vraag' })).toBeVisible();
+
+  // A wrong guess costs one; this does not, or nobody would ever press it.
+  await expect(levens).toContainText('3');
+});
+
+/** Overleven ends when the lives do, and a life is lost only for a wrong answer. */
+test('overleven spends a life on a wrong answer', async ({ page }) => {
+  await signIn(page, 'Lieke');
+  await startChallenge(page, 'Overleven');
+
   await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
+  const levens = page
+    .getByRole('banner')
+    .locator('div')
+    .filter({ hasText: /^levens\d$/ });
+  await expect(levens).toContainText('3');
+
+  await answerWrongly(page);
+  await expect(levens).toContainText('2');
+
+  await page.getByRole('button', { name: 'Volgende vraag' }).click();
+  await answerWrongly(page);
+  await expect(levens).toContainText('1');
 });

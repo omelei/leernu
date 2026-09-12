@@ -73,36 +73,8 @@ describe('scheduleFrom', () => {
     expect(INTERVAL_DAYS).toEqual({ 1: 1, 2: 2, 3: 4, 4: 8, 5: 21 });
   });
 
-  // ADR-106: the start of a calendar day in Amsterdam, the box's interval
-  // after the day of the answer. NOW is Saturday 5 September, noon there.
-  it('schedules the start of the day the interval later, in Amsterdam', () => {
-    expect(scheduleFrom(3, NOW).toISOString()).toBe('2026-09-08T22:00:00.000Z');
-  });
-
-  it('makes an item practised in the evening ready the next morning', () => {
-    // 20:30 on Monday 7 September in Amsterdam: box one, ready Tuesday 00:00.
-    const avond = new Date('2026-09-07T18:30:00Z');
-    expect(scheduleFrom(1, avond).toISOString()).toBe('2026-09-07T22:00:00.000Z');
-  });
-
-  it('counts the day in Amsterdam, not in UTC, just after midnight', () => {
-    // 00:30 on Tuesday 8 September in Amsterdam is still Monday in UTC.
-    const nacht = new Date('2026-09-07T22:30:00Z');
-    expect(scheduleFrom(1, nacht).toISOString()).toBe('2026-09-08T22:00:00.000Z');
-  });
-
-  it('holds its day across the start of summer time', () => {
-    // Saturday 28 March, 21:00 winter time. Summer time begins Sunday at 02:00.
-    const zaterdag = new Date('2026-03-28T20:00:00Z');
-    expect(scheduleFrom(1, zaterdag).toISOString()).toBe('2026-03-28T23:00:00.000Z');
-    expect(scheduleFrom(2, zaterdag).toISOString()).toBe('2026-03-29T22:00:00.000Z');
-  });
-
-  it('holds its day across the end of summer time', () => {
-    // Saturday 24 October, 22:30 summer time. Winter time begins Sunday at 03:00.
-    const zaterdag = new Date('2026-10-24T20:30:00Z');
-    expect(scheduleFrom(1, zaterdag).toISOString()).toBe('2026-10-24T22:00:00.000Z');
-    expect(scheduleFrom(2, zaterdag).toISOString()).toBe('2026-10-25T23:00:00.000Z');
+  it('schedules the interval for the box it is given', () => {
+    expect(scheduleFrom(3, NOW).getTime()).toBe(NOW.getTime() + 4 * DAY);
   });
 });
 
@@ -114,8 +86,7 @@ describe('review', () => {
     expect(after.box).toBe(2);
     expect(after.goedCount).toBe(1);
     expect(after.foutCount).toBe(0);
-    // Monday 7 September from midnight in Amsterdam.
-    expect(after.volgendeReview).toBe('2026-09-06T22:00:00.000Z');
+    expect(after.volgendeReview).toBe(new Date(NOW.getTime() + 2 * DAY).toISOString());
   });
 
   it('demotes to box one and reschedules for tomorrow on a wrong answer', () => {
@@ -124,38 +95,7 @@ describe('review', () => {
 
     expect(after.box).toBe(1);
     expect(after.foutCount).toBe(1);
-    // Sunday 6 September from midnight in Amsterdam.
-    expect(after.volgendeReview).toBe('2026-09-05T22:00:00.000Z');
-  });
-
-  it('marks a mistake under a clock "controleren" instead of sending it back', () => {
-    const before = knownState('nl-flevoland');
-    const after = review(before, false, NOW, { metKlok: true });
-
-    expect(after.box).toBe(5);
-    expect(after.volgendeReview).toBe(before.volgendeReview);
-    expect(after.laatsteReview).toBe(before.laatsteReview);
-    expect(after.foutCount).toBe(1);
-    expect(after.controleren).toBe(true);
-  });
-
-  it('confirms and moves up on a right answer under a clock', () => {
-    const before: ItemState = { ...dueState('x', 2, 1), controleren: true };
-    const after = review(before, true, NOW, { metKlok: true });
-    expect(after.box).toBe(3);
-    expect(after.controleren).toBeUndefined();
-  });
-
-  it('settles a "controleren" mark in the next round without a clock, either way', () => {
-    const marked = review(knownState('x'), false, NOW, { metKlok: true });
-
-    const right = review(marked, true, NOW);
-    expect(right.controleren).toBeUndefined();
-    expect(right.box).toBe(5);
-
-    const wrong = review(marked, false, NOW);
-    expect(wrong.controleren).toBeUndefined();
-    expect(wrong.box).toBe(1);
+    expect(after.volgendeReview).toBe(new Date(NOW.getTime() + 1 * DAY).toISOString());
   });
 
   it('does not mutate the state it is given', () => {
@@ -178,10 +118,6 @@ describe('isDue', () => {
 
   it('is not due before then', () => {
     expect(isDue(knownState('x'), NOW)).toBe(false);
-  });
-
-  it('is due whatever its date while marked "controleren"', () => {
-    expect(isDue({ ...knownState('x'), controleren: true }, NOW)).toBe(true);
   });
 });
 
@@ -259,17 +195,6 @@ describe('composeRound', () => {
     const round = composeRound({ items, states: new Map(), size: 10, now: NOW, rng });
 
     expect(round).toHaveLength(2);
-  });
-
-  it('asks what is marked "controleren" before anything else that is due', () => {
-    const items = Array.from({ length: 20 }, (_, i) => item(`due-${i}`));
-    const states = new Map<string, ItemState>();
-    items.forEach((it, i) => states.set(it.id, dueState(it.id, 2, 20 - i)));
-    // The least overdue one, and not due by date at all.
-    states.set('due-19', { ...knownState('due-19'), controleren: true });
-
-    const round = composeRound({ items, states, size: 10, now: NOW, rng });
-    expect(round.map((i) => i.id)).toContain('due-19');
   });
 
   it('prefers the most overdue work when the backlog is larger than the round', () => {

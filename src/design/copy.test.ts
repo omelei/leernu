@@ -26,8 +26,8 @@ const ROOT = process.cwd();
 /** Files that legitimately hold letters that are not copy. */
 const NOT_COPY: ReadonlyMap<string, string> = new Map([
   [
-    'src/components/ds/Logo.tsx',
-    'the lockup of house style v2 sets "leer" and "nu" as SVG text; they are a logo, and the accessible name comes from brand.ts',
+    'src/components/Wordmark.tsx',
+    'the letters of the wordmark are a logo, drawn as text; the accessible name comes from brand.ts',
   ],
   [
     'src/design/Gallery.tsx',

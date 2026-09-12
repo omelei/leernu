@@ -11,7 +11,7 @@ import { expect, test, type Page } from '@playwright/test';
 async function signIn(page: Page, naam: string) {
   await page.goto('/');
   await page.getByPlaceholder('Je naam').fill(naam);
-  await page.getByRole('button', { name: 'Verder', exact: true }).click();
+  await page.getByRole('button', { name: 'Beginnen' }).click();
   // The name is in the app bar now, beside the streak — K1 puts the profile
   // switch top right, so that is where "you are signed in" is visible.
   await expect(page.getByRole('banner').getByRole('button', { name: naam })).toBeVisible();
@@ -20,7 +20,7 @@ async function signIn(page: Page, naam: string) {
 async function startRound(page: Page) {
   await page.goto('/topografie');
   await page
-    .getByRole('region', { name: /Waarover/ })
+    .getByRole('region', { name: /Kies een onderwerp/ })
     .getByRole('button', { name: /^Provincies/ })
     .click();
   await page
@@ -30,7 +30,7 @@ async function startRound(page: Page) {
   // The wrapper rather than the label: the label is the combination in words
   // and its measure comes from the round, so matching on "vragen" was quietly
   // asserting which modes exist — and one of the mode cards ends in it too.
-  await page.locator('.ln-start-knop').click();
+  await page.locator('.tk-choose-start button').click();
   await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
 }
 
@@ -41,9 +41,9 @@ test('a round has no navigation in the document at all', async ({ page }) => {
   // Not "hidden": absent. A round screen is not wrapped in the Shell, so there
   // is nothing to tab into and nothing to mis-tap with the map under a thumb.
   await expect(page.getByRole('navigation')).toHaveCount(0);
-  await expect(page.locator('.ln-rail')).toHaveCount(0);
-  await expect(page.locator('.ln-tabbar')).toHaveCount(0);
-  await expect(page.locator('.ln-kopbalk')).toHaveCount(0);
+  await expect(page.locator('.tk-rail')).toHaveCount(0);
+  await expect(page.locator('.tk-tabbar')).toHaveCount(0);
+  await expect(page.locator('.tk-appbar')).toHaveCount(0);
 
   // What is left is a way out and the progress.
   //
@@ -72,7 +72,7 @@ test('shows the question and the map together, at every size', async ({ page }) 
   expect(box?.width ?? 0, 'the question was squeezed').toBeGreaterThan(120);
 
   // And the map is on screen with it, which is the whole point of the layout.
-  await expect(page.locator('.ln-canvas svg').first()).toBeVisible();
+  await expect(page.locator('.tk-round-map svg').first()).toBeVisible();
 
   // The ten dots, and nothing that could be mistaken for navigation.
   await expect(page.getByRole('progressbar')).toBeVisible();
@@ -83,11 +83,10 @@ test('the frame comes back when the round ends', async ({ page }) => {
   await signIn(page, 'Noor');
   await startRound(page);
   await page.getByRole('button', { name: 'Stoppen' }).click();
-  await page.getByRole('button', { name: 'Afbreken' }).click();
   await page.getByRole('button', { name: 'Terug naar start' }).click();
 
   await expect(page.getByRole('banner').getByRole('button', { name: 'Noor' })).toBeVisible();
-  await expect(page.locator('.ln-kopbalk')).toHaveCount(1);
+  await expect(page.locator('.tk-appbar')).toHaveCount(1);
 });
 
 test('never scrolls sideways, at any size', async ({ page }) => {
@@ -127,7 +126,7 @@ test('keeps the wordmark and the question legible at 200% text', async ({ page }
   // The heading of the page, not the name in the app bar: what this is checking
   // is that the type scale moves with the root size, and only a heading is set
   // on the scale. A label in a pill would pass this by staying small.
-  const heading = page.getByRole('heading', { name: 'Vandaag', level: 1 });
+  const heading = page.getByRole('heading', { name: 'Welkom Fatima!' });
   await expect(heading).toBeVisible();
 
   // Grown, not merely still there.
@@ -143,37 +142,34 @@ test('keeps the wordmark and the question legible at 200% text', async ({ page }
   );
 });
 
-/**
- * One navigation, four destinations, in one of two postures (stap 7, point
- * 12): the rail from a tablet on its side up, the tab bar below it, and never
- * both on screen. The iPad on its side (1080) gets the rail; standing up (810)
- * it gets the tab bar, as the phones do.
- */
-test('the four destinations are one rail or one tab bar, never both', async ({
-  page,
-}, testInfo) => {
+test('below 1200 the modules are a menu under the app bar', async ({ page }, testInfo) => {
+  // ADR-093: the rail stands up at a desk and nowhere else. On both iPads and
+  // both phones the way to a module is this one control.
+  test.skip(['chromebook', 'desktop-1440'].includes(testInfo.project.name), 'the rail, at a desk');
+
   await signIn(page, 'Ilse');
 
-  const rail = page.locator('.ln-rail');
-  const tabbar = page.locator('.ln-tabbar');
-  const breed = ['chromebook', 'desktop-1440', 'ipad-landscape'].includes(testInfo.project.name);
+  const knop = page.getByRole('button', { name: /^vak / });
+  await expect(knop).toHaveAccessibleName('vak Kies een vak');
+  await expect(knop).toHaveAttribute('aria-expanded', 'false');
 
-  await expect(breed ? rail : tabbar).toBeVisible();
-  await expect(breed ? tabbar : rail).toBeHidden();
+  await knop.click();
+  await expect(knop).toHaveAttribute('aria-expanded', 'true');
+  await page
+    .getByRole('navigation', { name: 'Modules' })
+    .getByRole('button', { name: 'Klok', exact: true })
+    .click();
 
-  const zichtbaar = breed ? rail : tabbar;
-  for (const naam of ['Vandaag', 'Oefenen', 'Verzameling', 'Jij']) {
-    await expect(zichtbaar.getByRole('button', { name: naam })).toBeVisible();
-  }
+  // Where it was asked to go, closed again, and saying so on its own face.
+  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
+  await expect(knop).toHaveAccessibleName('vak Klok');
+  await expect(knop).toHaveAttribute('aria-expanded', 'false');
 
-  // And the modules are a page, not a second navigation.
-  await zichtbaar.getByRole('button', { name: 'Oefenen' }).click();
-  await expect(page.getByRole('heading', { name: 'Waar wil je in oefenen?' })).toBeVisible();
-  await expect(zichtbaar.getByRole('button', { name: 'Oefenen' })).toHaveAttribute(
-    'aria-current',
-    'page',
-  );
-  await expect(page.getByRole('navigation', { name: 'Modules' })).toHaveCount(0);
+  // And it lets go on Escape, with focus back on the control that opened it.
+  await knop.click();
+  await page.keyboard.press('Escape');
+  await expect(knop).toHaveAttribute('aria-expanded', 'false');
+  await expect(knop).toBeFocused();
 });
 
 /**
@@ -187,9 +183,9 @@ test('on a phone the start button stays in reach', async ({ page }, testInfo) =>
 
   await signIn(page, 'Mees');
   await page.goto('/topografie');
-  await expect(page.getByRole('heading', { name: 'Kies je ronde' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
 
-  const start = page.locator('.ln-start-knop');
+  const start = page.locator('.tk-choose-start button');
 
   // In reach before anything has been scrolled: stuck to the foot of the glass.
   await expect(start).toBeInViewport();
@@ -199,7 +195,8 @@ test('on a phone the start button stays in reach', async ({ page }, testInfo) =>
   const box = await start.boundingBox();
   if (box === null) throw new Error('the start button has no box');
   const geraakt = await page.evaluate(
-    ({ x, y }) => (document.elementFromPoint(x, y)?.closest('.ln-start-knop') ?? null) !== null,
+    ({ x, y }) =>
+      (document.elementFromPoint(x, y)?.closest('.tk-choose-start button') ?? null) !== null,
     { x: box.x + box.width / 2, y: box.y + box.height / 2 },
   );
   expect(geraakt, 'a press on the start button does not land on it').toBe(true);

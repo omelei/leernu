@@ -71,13 +71,6 @@ export interface ItemState {
   readonly volgendeReview: string | null;
   readonly goedCount: number;
   readonly foutCount: number;
-  /**
-   * "Controleren" (ADR-106): wrong once under a clock, which does not send an
-   * item back to box one but marks it for the next round without a clock,
-   * where it comes first. Absent means false, which is what every row written
-   * before the mark existed reads as.
-   */
-  readonly controleren?: boolean;
 }
 
 /**

@@ -29,7 +29,7 @@ async function shoot(page: Page, project: string, naam: string) {
 async function signIn(page: Page, naam: string) {
   await page.goto('/');
   await page.getByPlaceholder('Je naam').fill(naam);
-  await page.getByRole('button', { name: 'Verder', exact: true }).click();
+  await page.getByRole('button', { name: 'Beginnen' }).click();
   // The name is in the app bar now, beside the streak — K1 puts the profile
   // switch top right, so that is where "you are signed in" is visible.
   await expect(page.getByRole('banner').getByRole('button', { name: naam })).toBeVisible();
@@ -37,7 +37,7 @@ async function signIn(page: Page, naam: string) {
 
 async function chooseAndStart(page: Page, way: RegExp) {
   await page.goto('/topografie');
-  await expect(page.getByRole('heading', { name: 'Kies je ronde' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
 
   const how = page.getByRole('region', { name: /Hoe wil je/ });
   await how.getByRole('button', { name: way }).click();
@@ -46,14 +46,14 @@ async function chooseAndStart(page: Page, way: RegExp) {
 
 /** The one way out of K2, whatever was chosen. See e2e/app.spec.ts. */
 async function start(page: Page) {
-  await page.locator('.ln-start-knop').click();
+  await page.locator('.tk-choose-start button').click();
 }
 
 test('the front door, the chooser and the profile', async ({ page }, testInfo) => {
   const size = testInfo.project.name;
 
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Hoe heet je?' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Wie ben jij?' })).toBeVisible();
   await shoot(page, size, '01-naam');
 
   await signIn(page, 'Fenna');
@@ -62,30 +62,25 @@ test('the front door, the chooser and the profile', async ({ page }, testInfo) =
   // moment the name appears. The page draws the cards at once and fills them
   // when it knows (ADR-094); a picture of the empty cards is not the page a
   // child looks at, so this waits for the filled one.
-  await expect(page.getByRole('heading', { name: 'Verder oefenen' })).toBeVisible();
-  await expect(page.locator('.ln-verder')).not.toHaveAttribute('aria-busy', 'true');
-  // The stars in the kopbalk are read from IndexedDB as well.
-  await expect(page.locator('.ln-kopbalk .ln-getal')).toBeVisible();
+  const voortgang = page.getByRole('region', { name: 'Jouw voortgang' });
+  await expect(voortgang).not.toHaveAttribute('aria-busy', 'true');
+  await expect(page.locator('.tk-streak')).toBeVisible();
   await shoot(page, size, '02-thuis');
 
   await page.goto('/topografie');
-  await expect(page.getByRole('heading', { name: 'Kies je ronde' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
   await shoot(page, size, '03-kiezen');
 
   await page.goto('/jij');
   await expect(page.getByRole('heading', { name: 'Jij', exact: true })).toBeVisible();
   await shoot(page, size, '04-jij');
 
-  // The collection, which has to survive being mostly empty: a new child has
-  // three of twelve heroes and nine empty places (S11).
-  await page.goto('/verzameling');
-  await expect(page.getByRole('heading', { name: 'Verzameling', level: 1 })).toBeVisible();
-  await shoot(page, size, '12-verzameling');
-
-  // Oefenen, the list of modules (S3).
-  await page.goto('/oefenen');
-  await expect(page.getByRole('heading', { name: 'Waar wil je in oefenen?' })).toBeVisible();
-  await shoot(page, size, '15-oefenen');
+  // The collection, which is the longest page in the product and the one that
+  // has to survive being mostly empty: a new child has three of twelve heroes,
+  // no stars, no diplomas and no stamps (ADR-076, ADR-098).
+  await page.goto('/voortgang');
+  await expect(page.getByRole('heading', { name: 'Jouw voortgang', level: 1 })).toBeVisible();
+  await shoot(page, size, '12-voortgang');
 });
 
 /**
@@ -98,7 +93,7 @@ test('the round: pointing, and the answer', async ({ page }, testInfo) => {
   await signIn(page, 'Joris');
   await page.goto('/topografie');
   await page
-    .getByRole('region', { name: /Waarover/ })
+    .getByRole('region', { name: /Kies een onderwerp/ })
     .getByRole('button', { name: /^Provincies/ })
     .click();
   await page
@@ -115,7 +110,6 @@ test('the round: pointing, and the answer', async ({ page }, testInfo) => {
   await shoot(page, size, '06-antwoord');
 
   await page.getByRole('button', { name: 'Stoppen' }).click();
-  await page.getByRole('button', { name: 'Afbreken' }).click();
   await expect(page.getByRole('heading', { name: 'Wat er is veranderd' })).toBeVisible();
   await shoot(page, size, '07-resultaat');
 });
@@ -145,7 +139,7 @@ test('the round: Europe, and the world', async ({ page }, testInfo) => {
     await page.goto('/topografie');
     await page.getByRole('button', { name: new RegExp(`^${regio}`) }).click();
     await page
-      .getByRole('region', { name: /Waarover/ })
+      .getByRole('region', { name: /Kies een onderwerp/ })
       .getByRole('button', { name: /^Landen/ })
       .click();
     await page
@@ -160,7 +154,6 @@ test('the round: Europe, and the world', async ({ page }, testInfo) => {
     await shoot(page, size, naam);
 
     await page.getByRole('button', { name: 'Stoppen' }).click();
-    await page.getByRole('button', { name: 'Afbreken' }).click();
     await expect(page.getByRole('heading', { name: 'Wat er is veranderd' })).toBeVisible();
   }
 });
@@ -193,7 +186,7 @@ test('the tables: choosing one, and a sum', async ({ page }, testInfo) => {
   // The word a parent types, which is now the page itself rather than a card
   // pointing at one.
   await page.goto('/rekenen');
-  await expect(page.getByRole('heading', { name: 'Kies je ronde' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
   await shoot(page, size, '10-tafels');
 
   // The page opens on the table of one and on typing, so the start button is

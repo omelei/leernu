@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { SectieKop } from '@/components/ds';
 import { DiplomaIcon } from '@/components/Icon';
 import { DIPLOMA_WERELDDELEN, type DiplomaWerelddeel } from '@/game-core';
 import { t, type TranslationKey } from '@/i18n';
@@ -32,8 +31,8 @@ export function VlagDiplomas({
   return (
     <section className="flex flex-col gap-3" aria-label={t('vlag.diplomasTitle')}>
       <div>
-        <SectieKop titel={t('vlag.diplomasTitle')} />
-        <p className="ln-sub">
+        <h2 className="tk-label">{t('vlag.diplomasTitle')}</h2>
+        <p className="text-ink-2">
           {t('vlag.diplomasCount', { aantal: behaald.size, totaal: DIPLOMA_WERELDDELEN.length })}
         </p>
       </div>

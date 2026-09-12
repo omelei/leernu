@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { MODULE_SLUG, pathFor, routeFor } from './routes';
+import { MODULE_SLUG, pathFor, routeFor, RETENTION_SLUG } from './routes';
 import { MODULES } from './modules';
 
 /**
@@ -54,9 +54,7 @@ describe('the addresses', () => {
 
   it('round-trips every route through its own path', () => {
     expect(routeFor(pathFor({ name: 'home' }))).toEqual({ name: 'home' });
-    expect(routeFor(pathFor({ name: 'oefenen' }))).toEqual({ name: 'oefenen' });
-    expect(routeFor(pathFor({ name: 'verzameling' }))).toEqual({ name: 'verzameling' });
-    expect(routeFor(pathFor({ name: 'you' }))).toEqual({ name: 'you' });
+    expect(routeFor(pathFor({ name: 'retention' }))).toEqual({ name: 'retention' });
 
     for (const module of MODULES) {
       const route = module.built
@@ -174,25 +172,21 @@ describe('the addresses', () => {
     expect(routeFor('/rekenen/plus-50')).toMatchObject({ name: 'module', setId: null });
   });
 
-  it('gives each of the four destinations an address, and nothing else a new one', () => {
-    // Vandaag, Oefenen, Verzameling, Jij — the rail of the house style.
-    expect(routeFor('/')).toEqual({ name: 'home' });
-    expect(routeFor('/oefenen')).toEqual({ name: 'oefenen' });
-    expect(routeFor('/verzameling')).toEqual({ name: 'verzameling' });
-    expect(routeFor('/jij')).toEqual({ name: 'you' });
-    expect(pathFor({ name: 'verzameling' })).toMatch(/\/verzameling$/);
+  it('gives the collection an address, and keeps it out of the tab bar', () => {
+    // A place a child goes on purpose, from the card that says where their
+    // journey is — not a fifth section of the product (ADR-076).
+    expect(routeFor('/voortgang')).toEqual({ name: 'reis' });
+    expect(pathFor({ name: 'reis' })).toMatch(/\/voortgang$/);
   });
 
-  it('still answers to the words the collection used to be called', () => {
-    // "Jouw ontdekkingsreis" became "Jouw voortgang" became the Verzameling. An
-    // address somebody wrote down keeps working; nothing links to it any more.
-    expect(routeFor('/voortgang')).toEqual({ name: 'verzameling' });
-    expect(routeFor('/ontdekkingsreis')).toEqual({ name: 'verzameling' });
+  it('still answers to the word the collection used to be called', () => {
+    // "Jouw ontdekkingsreis" became "Jouw voortgang". An address somebody
+    // wrote down keeps working; nothing links to it any more.
+    expect(routeFor('/ontdekkingsreis')).toEqual({ name: 'reis' });
   });
 
-  it('opens Vandaag at the word of the page that is gone', () => {
-    // "Onthouden" was a destination of its own (K9). The house style has no
-    // such page — the dot on every card says what it said.
-    expect(routeFor('/onthouden')).toEqual({ name: 'home' });
+  it('keeps the retention screen at a word a child could type', () => {
+    expect(RETENTION_SLUG).toBe('onthouden');
+    expect(routeFor('/onthouden')).toEqual({ name: 'retention' });
   });
 });
