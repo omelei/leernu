@@ -232,7 +232,7 @@ function KistRij({ kist }: { readonly kist: KistUitkomst }) {
         </span>
       </span>
 
-      <span className="tk-display text-card font-semibold">{zin}</span>
+      <span className="tk-display text-h3 font-semibold">{zin}</span>
     </li>
   );
 }

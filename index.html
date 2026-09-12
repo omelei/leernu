@@ -7,25 +7,8 @@
       name="description"
       content="Leren om te onthouden. Oefenen met topografie, en onthouden wat je leert."
     />
-    <!-- Light only. The dark theme belongs to a round, which sets it on <html>
-         itself; the app no longer follows the system (house style v2). -->
-    <meta name="color-scheme" content="light" />
-    <!-- The two typefaces, asked for before the stylesheet names them, so the
-         first question is not drawn in a fallback and then redrawn. -->
-    <link
-      rel="preload"
-      href="/fonts/archivo-latin-wght.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      href="/fonts/public-sans-latin-wght.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
+    <!-- Both, since step 1: the dark palette is tokens and the app follows the system. -->
+    <meta name="color-scheme" content="light dark" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <title>leer.nu</title>
   </head>

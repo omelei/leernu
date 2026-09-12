@@ -6,7 +6,6 @@ import {
   keyboardOrder,
   MIN_TOUCH_PX,
   reachablePoints,
-  tekenvolgorde,
   type HelpTarget,
   type ViewFit,
 } from '@/game-core';
@@ -27,10 +26,8 @@ import { Dot } from '@/components/Dot';
  * - After a wrong answer a dot **travels** from the place the child pointed at
  *   to the right one. The one moment in this product where movement teaches
  *   instead of decorates: the child sees the distance they were out by.
- * - Anything too small to hit gets an invisible circle exactly 44 CSS pixels
- *   across (stap 10, S27: judged by a shape's surface where it has one),
- *   drawn last so the smallest is on top, whatever the map is scaled to —
- *   which is why the canvas measures
+ * - Anything too small to hit gets an invisible circle exactly 48 CSS pixels
+ *   across, whatever the map is scaled to — which is why the canvas measures
  *   itself rather than assuming a size.
  *
  * Three exercises share one canvas, and the only difference between them is
@@ -280,7 +277,7 @@ export function MapCanvas({
           <path key={vorm.id} d={vorm.d} className="tk-shape-dim" aria-hidden="true" />
         ))}
 
-      {tekenvolgorde(answerShapes, rings).map((shape) => (
+      {answerShapes.map((shape) => (
         <AnswerShape
           key={shape.id}
           shape={shape}
@@ -454,25 +451,10 @@ function AnswerShape({
   // a comfortable target, and a finger disagrees. Anything too narrow to land on
   // gets a circle it can actually be hit with — decided over the whole map, so
   // two rings never reach each other (`rings` in MapCanvas).
-  //
-  // The group is the button, not the path or the ring. The ring can arrive
-  // after the first paint — the drawing is measured again when the panel
-  // settles — and a target that changed element halfway through a tap would
-  // lose it to its own ring. As one group, what a child presses is the same
-  // thing whether the ring is there or not.
-  const target = clickable
-    ? {
-        className: 'tk-doel',
-        tabIndex: 0,
-        role: 'button',
-        'aria-label': name,
-        onClick: onPick,
-        onKeyDown,
-      }
-    : { 'aria-hidden': true };
+  const pathIsTheTarget = clickable && help === null;
 
   return (
-    <g {...target}>
+    <g>
       {/* The double rule of "gemist". SVG has no double stroke, so the path is
           drawn twice: the wide ink one below, a narrow paper one on top, which
           leaves two bands of ink with a gap between them. */}
@@ -482,7 +464,9 @@ function AnswerShape({
       <path
         d={shape.d}
         className={shapeClass(state, dimmedWhenOpen)}
-        {...(clickable && help === null ? {} : { pointerEvents: 'none' as const })}
+        {...(pathIsTheTarget
+          ? { tabIndex: 0, role: 'button', 'aria-label': name, onClick: onPick, onKeyDown }
+          : { 'aria-hidden': true, pointerEvents: 'none' as const })}
       />
       {help !== null && (
         <>
@@ -505,7 +489,12 @@ function AnswerShape({
             cy={help.cy}
             r={help.r}
             fill="transparent"
-            className="tk-zone cursor-pointer"
+            className="cursor-pointer"
+            tabIndex={0}
+            role="button"
+            aria-label={name}
+            onClick={onPick}
+            onKeyDown={onKeyDown}
           />
         </>
       )}
@@ -584,7 +573,7 @@ function CityMarker({
           cy={y}
           r={radius}
           fill="transparent"
-          className="tk-zone cursor-pointer"
+          className="cursor-pointer"
           tabIndex={0}
           role="button"
           aria-label={name}
@@ -637,13 +626,9 @@ function TravelPath({
         cy={to[1]}
         r={11}
         fill="var(--ink)"
-        // The one movement in the product (README): from where the child
-        // pointed to where it is, a good two seconds, eased at both ends, and
-        // once. Reduced motion takes the travel away and leaves the dot where
-        // it belongs (index.css).
         style={
           {
-            animation: 'tk-travel 2s ease-in-out 1',
+            animation: 'tk-travel .32s cubic-bezier(.2,.7,.3,1) 1',
             '--tk-dx': `${-dx}px`,
             '--tk-dy': `${-dy}px`,
           } as React.CSSProperties

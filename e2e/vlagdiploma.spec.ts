@@ -9,7 +9,7 @@ import { expect, test, type Page } from '@playwright/test';
 async function signIn(page: Page, naam: string) {
   await page.goto('/');
   await page.getByPlaceholder('Je naam').fill(naam);
-  await page.getByRole('button', { name: 'Verder', exact: true }).click();
+  await page.getByRole('button', { name: 'Beginnen' }).click();
   await expect(page.getByRole('banner').getByRole('button', { name: naam })).toBeVisible();
 }
 
@@ -21,11 +21,7 @@ async function speel(page: Page) {
   const namen = page.getByRole('group', { name: 'Kies een naam' });
 
   for (let vraag = 0; vraag < 40; vraag++) {
-    // The first question waits for sixty flags to load; on a slow runner that
-    // is more than the default five seconds.
-    await expect(klaar.or(volgende).or(vlaggen).or(namen).first()).toBeVisible({
-      timeout: 15_000,
-    });
+    await expect(klaar.or(volgende).or(vlaggen).or(namen).first()).toBeVisible();
     if (await klaar.isVisible()) return;
     // A diploma says nothing until the end, so there is never a "next".
     await expect(volgende).toHaveCount(0);
@@ -48,7 +44,7 @@ test('six vlaggendiploma’s, and one press chooses a whole werelddeel to sit', 
     'aria-pressed',
     'true',
   );
-  const wat = page.getByRole('region', { name: /Waarover/ });
+  const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
   await expect(wat.getByRole('button', { name: /^Alle vlaggen/ })).toHaveAttribute(
     'aria-pressed',
     'true',
@@ -61,15 +57,14 @@ test('six vlaggendiploma’s, and one press chooses a whole werelddeel to sit', 
   // A diploma is its own length.
   await expect(page.getByRole('region', { name: 'Hoeveel vragen?' })).toHaveCount(0);
 
-  await page.locator('.ln-start-knop').click();
+  await page.locator('.tk-choose-start button').click();
   await speel(page);
 
   await expect(page.getByText(/^Vlaggendiploma gehaald|^Nog geen diploma/)).toBeVisible();
   await expect(page.getByText('cijfer', { exact: true })).toBeVisible();
 
-  // And back on the flags page, where the six are kept: the collection (S11) is
-  // heroes and materials only.
-  await page.goto('/vlaggen');
-  const muurNa = page.getByRole('region', { name: 'Jouw vlaggendiploma’s' });
-  await expect(muurNa.getByRole('button')).toHaveCount(6);
+  // And on the collection page, as pictures rather than buttons.
+  await page.goto('/voortgang');
+  const verzameling = page.getByRole('region', { name: 'Jouw vlaggendiploma’s' });
+  await expect(verzameling.getByRole('img')).toHaveCount(6);
 });

@@ -1,7 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
 import { t } from '@/i18n';
-import { Button } from '@/components/Button';
-import { Laden, PaginaKop } from '@/components/ds';
 import { SpeakButton } from '@/components/SpeakButton';
 import { MapCanvas, type AnswerLayer } from '@/features/practice/MapCanvas';
 import { loadAnswerLayer, SETS, type SetId } from '@/features/practice/useRound';
@@ -16,20 +14,16 @@ import type { Item } from '@/game-core';
  * wrong. That is testing, not teaching, and with 80 cities it is a long way to
  * learn anything. This screen is the other half: look first, be asked later.
  * Nothing here is scored and nothing is written to the scheduler — a child who
- * browses has not practised, and pretending otherwise would corrupt what
- * Vandaag says.
- *
- * Not a round, so not in the round's dark theme; and no navigation either,
- * because it is a way of practising and one press of "Klaar" leaves it. The
- * stap-2 screens do not draw it: this is the component set applied to the
- * layout it already had.
+ * browses has not practised, and pretending otherwise would corrupt the
+ * forecast on the home screen.
  *
  * **Why a list and not just the map.** Tapping the map cannot reach everything.
  * Measured on a 640px map, 77 of the 80 cities have a neighbour closer than a
  * fingertip; even the 25 largest have 23 pairs too close, because the Randstad
  * is the Randstad. So the list is the way in that always works, at any density
  * and on any device, and it is keyboard- and screen-reader-navigable for free.
- * The map still takes taps for whatever it can show (ADR-022).
+ * The map still takes taps for whatever it can show (ADR-022), so a child who
+ * wants to point may point.
  */
 export function ExploreScreen({
   setId,
@@ -85,8 +79,8 @@ export function ExploreScreen({
 
   if (!geo || !answers) {
     return (
-      <main className="ln-ronde ln-ronde-laden" aria-busy="true">
-        <Laden label={t('practice.loading')} />
+      <main className="flex min-h-screen items-center justify-center p-6" aria-busy="true">
+        <p className="text-ink-2">{t('practice.loading')}</p>
       </main>
     );
   }
@@ -96,36 +90,54 @@ export function ExploreScreen({
   const spoken = chosen === null ? '' : `${chosen.naam}. ${chosen.weetje ?? ''}`.trim();
 
   return (
-    <div className="ln-ontdek">
-      <div className="ln-ontdek-kop">
-        <PaginaKop titel={set?.naam ?? ''} meta={t('explore.kind')} soort="ding" />
-        <span className="ln-ontdek-acties">
-          {chosen !== null && <SpeakButton text={spoken} />}
-          <Button variant="secondary" onClick={onHome}>
-            {t('explore.done')}
-          </Button>
-        </span>
-      </div>
+    <div className="flex h-screen flex-col bg-paper">
+      <header className="flex flex-none items-center gap-6 border-b border-line px-6 py-4">
+        <div className="min-w-0">
+          <p className="tk-label">{t('explore.kind')}</p>
+          <h1 className="tk-display truncate text-h1 font-semibold">{set?.naam ?? ''}</h1>
+        </div>
+
+        {chosen !== null && <SpeakButton text={spoken} />}
+
+        <button type="button" className="tk-button tk-button-secondary ml-auto" onClick={onHome}>
+          {t('explore.done')}
+        </button>
+      </header>
 
       {/* What the child chose, announced rather than only drawn. */}
-      <p className="ln-sr-only" role="status" aria-live="polite">
+      <p className="tk-sr-only" role="status" aria-live="polite">
         {spoken}
       </p>
 
-      <div className="ln-ontdek-lijf">
-        {/* On a phone the list gets half the screen and scrolls inside it;
-            beside the map from a tablet up, in a column of its own. */}
-        <nav aria-label={t('explore.listLabel')} className="ln-ontdek-lijst">
-          <p className="ln-sub">{t('explore.hint')}</p>
-          <ul>
+      <div className="flex min-h-0 flex-1 flex-col-reverse md:flex-row">
+        {/* On a phone the list gets half the screen and scrolls inside it.
+            It used to be flex-none, so its height came from its own contents —
+            eighty cities in a container that could not grow — and the buttons
+            ended up somewhere a thumb could not reach and a test could not
+            click. Beside the map there is room for a column, so from md it goes
+            back to a fixed 320.
+
+            320 is still a layout width rather than a step on §D's scale, which
+            names none for this column. Spelled out so it stays a decision. */}
+        <nav
+          aria-label={t('explore.listLabel')}
+          className="flex min-h-0 flex-1 flex-col border-t border-line md:w-[320px] md:flex-none md:border-r md:border-t-0"
+        >
+          <p className="flex-none px-6 py-3 text-ink-2">{t('explore.hint')}</p>
+
+          <ul className="min-h-0 flex-1 overflow-y-auto px-3 pb-3">
             {items.map((item) => {
               const picked = item.id === chosenId;
               return (
                 <li key={item.id}>
                   <button
                     type="button"
-                    className="ln-ontdek-item"
                     aria-current={picked ? 'true' : undefined}
+                    className={
+                      picked
+                        ? 'w-full rounded-control border-2 border-ink bg-surface px-4 py-3 text-left font-semibold'
+                        : 'w-full rounded-control border-2 border-transparent px-4 py-3 text-left'
+                    }
                     onClick={() => setChosenId(picked ? null : item.id)}
                   >
                     {item.naam}
@@ -136,8 +148,11 @@ export function ExploreScreen({
           </ul>
         </nav>
 
-        <main className="ln-ontdek-hoofd">
-          <div className="ln-canvas">
+        {/* Half the screen on a phone, all of what is left beside the list on
+            anything wider. Bounded rather than greedy: a map that takes the
+            whole height leaves the list with none. */}
+        <main className="flex min-h-0 flex-none basis-1/2 flex-col md:flex-1 md:basis-auto">
+          <div className="flex min-h-0 flex-1 items-center justify-center p-3">
             <MapCanvas
               background={geo}
               answers={answers}
@@ -154,13 +169,13 @@ export function ExploreScreen({
 
           {/* Reserved rather than appearing, so choosing something does not shove
               the map upward and lose the place a child was looking at. */}
-          <div className="ln-ontdek-uitleg">
+          <div className="min-h-[7rem] flex-none border-t border-line px-6 py-4">
             {chosen === null ? (
-              <p className="ln-sub">{t('explore.nothingChosen')}</p>
+              <p className="text-ink-2">{t('explore.nothingChosen')}</p>
             ) : (
               <>
-                <h2 className="ln-titel">{chosen.naam}</h2>
-                {chosen.weetje !== undefined && <p className="ln-tekst">{chosen.weetje}</p>}
+                <h2 className="tk-display text-h2 font-semibold">{chosen.naam}</h2>
+                {chosen.weetje !== undefined && <p className="mt-1">{chosen.weetje}</p>}
               </>
             )}
           </div>

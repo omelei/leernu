@@ -4,15 +4,13 @@ import {
   emptyStreak,
   recordActivity,
   recordAnswerRun,
-  vakantieAan,
-  zetVakantie,
   type FlawlessRun,
   type HolidayPeriod,
   type StreakChange,
   type StreakState,
 } from '@/game-core';
 import kalender from '../../content/vakanties.json';
-import { getDb, type StreakRecord } from './db';
+import { getDb } from './db';
 import { activeChildId } from './children';
 
 /**
@@ -42,41 +40,12 @@ export async function loadStreak(): Promise<StreakState> {
     laatsteActieveDag: row.laatsteActieveDag,
     rustdagen: row.rustdagen,
     rustdagWeek: row.rustdagWeek,
-    ...(row.eigenVakanties ? { eigenVakanties: row.eigenVakanties } : {}),
   };
 }
 
-/**
- * Writes the day streak, keeping what else is on the row. The run of correct
- * answers lives there too (ADR-072), and a put of the streak alone used to
- * replace it with nothing.
- */
 export async function saveStreak(state: StreakState): Promise<void> {
   const db = await getDb();
-  const id = await activeChildId();
-  const row = await db.get('streak', id);
-  await db.put('streak', {
-    ...row,
-    id,
-    huidigeStreak: state.huidigeStreak,
-    langsteStreak: state.langsteStreak,
-    laatsteActieveDag: state.laatsteActieveDag,
-    rustdagen: state.rustdagen,
-    rustdagWeek: state.rustdagWeek,
-    ...(state.eigenVakanties ? { eigenVakanties: [...state.eigenVakanties] } : {}),
-  });
-}
-
-/** Whether this child's holiday mode is on. */
-export async function readVakantie(): Promise<boolean> {
-  return vakantieAan(await loadStreak());
-}
-
-/** Switches this child's holiday mode, from today. Returns the new setting. */
-export async function setVakantie(aan: boolean, now = new Date()): Promise<boolean> {
-  const next = zetVakantie(await loadStreak(), aan, now);
-  await saveStreak(next);
-  return vakantieAan(next);
+  await db.put('streak', { id: await activeChildId(), ...state });
 }
 
 /** Applies a finished round and saves the result. Returns what changed. */
@@ -111,14 +80,7 @@ export async function loadRun(): Promise<FlawlessRun> {
 export async function recordAnswerFlawless(correct: boolean): Promise<FlawlessRun> {
   const db = await getDb();
   const id = await activeChildId();
-  const row: StreakRecord = (await db.get('streak', id)) ?? {
-    id,
-    huidigeStreak: 0,
-    langsteStreak: 0,
-    laatsteActieveDag: null,
-    rustdagen: 0,
-    rustdagWeek: null,
-  };
+  const row = (await db.get('streak', id)) ?? { id, ...emptyStreak() };
   const run = recordAnswerRun({ nu: row.foutloosNu ?? 0, beste: row.foutloosBeste ?? 0 }, correct);
 
   await db.put('streak', { ...row, id, foutloosNu: run.nu, foutloosBeste: run.beste });

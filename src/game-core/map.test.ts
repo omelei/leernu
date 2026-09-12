@@ -9,8 +9,6 @@ import {
   MIN_TOUCH_PX,
   needsHelpTarget,
   smallestSidePx,
-  tekenvolgorde,
-  trefruimtePx,
   type BoundingBox,
 } from './map';
 
@@ -99,62 +97,6 @@ describe('helpTargetFor', () => {
     const target = helpTargetFor([0, 0, 20, 20], fit, null);
     expect(target?.cx).toBe(10);
     expect(target?.cy).toBe(10);
-  });
-});
-
-/** Stap 10, S27: the zone comes from the surface, and it is at least 44. */
-describe('trefruimtePx', () => {
-  it('is 44 points at the least', () => {
-    expect(MIN_TOUCH_PX).toBe(44);
-  });
-
-  it('is the diameter of a circle with the same surface', () => {
-    const fit = fitView(VIEW, 500);
-    // A circle of radius 50 units, at half a pixel per unit: 50 pixels across.
-    expect(trefruimtePx([0, 0, 100, 100], fit, Math.PI * 50 * 50)).toBeCloseTo(50, 6);
-  });
-
-  it('falls back to the narrow side of the box without a surface', () => {
-    const fit = fitView(VIEW, 500);
-    expect(trefruimtePx([0, 0, 200, 40], fit)).toBe(20);
-    expect(trefruimtePx([0, 0, 200, 40], fit, null)).toBe(20);
-  });
-
-  it('decides whether a shape needs a zone from its surface when it has one', () => {
-    const fit = fitView(VIEW, 640);
-    // A province-sized surface clears 44 easily; an island's does not, even
-    // judged by its surface rather than its narrow side.
-    expect(needsHelpTarget([0, 0, 179, 155], fit, MIN_TOUCH_PX, 20000)).toBe(false);
-    expect(needsHelpTarget([0, 0, 72, 16], fit, MIN_TOUCH_PX, 700)).toBe(true);
-  });
-});
-
-/** Stap 10: what is drawn last is what a tap lands on, so the smallest goes last. */
-describe('tekenvolgorde', () => {
-  const vorm = (id: string, oppervlak: number) => ({
-    id,
-    bbox: [0, 0, 10, 10] as BoundingBox,
-    oppervlak,
-  });
-
-  it('keeps shapes without a zone in the order given, and puts the zoned ones last', () => {
-    const shapes = [vorm('groot', 900), vorm('eiland', 20), vorm('midden', 400), vorm('rots', 5)];
-    const zones = new Map([
-      ['eiland', null],
-      ['rots', null],
-    ]);
-
-    expect(tekenvolgorde(shapes, zones).map((s) => s.id)).toEqual([
-      'groot',
-      'midden',
-      'eiland',
-      'rots',
-    ]);
-  });
-
-  it('changes nothing where no shape has a zone', () => {
-    const shapes = [vorm('b', 10), vorm('a', 900)];
-    expect(tekenvolgorde(shapes, new Map()).map((s) => s.id)).toEqual(['b', 'a']);
   });
 });
 

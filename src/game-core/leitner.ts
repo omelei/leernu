@@ -1,4 +1,3 @@
-import { beginVanDag, dagSleutel, plusDagen } from './kalender';
 import type { Item, ItemState, LeitnerBox } from './types';
 
 /**
@@ -33,17 +32,8 @@ export function nextBox(box: LeitnerBox, correct: boolean): LeitnerBox {
   return Math.min(box + 1, MAX_BOX) as LeitnerBox;
 }
 
-/**
- * When an item in this box comes round again: the start of the calendar day in
- * Europe/Amsterdam that lies the box's interval after the day of the answer
- * (ADR-106). Practised on Tuesday at four, box two: Thursday from midnight.
- *
- * A calendar day rather than a multiple of twenty-four hours, so an item
- * practised in the evening is ready the next afternoon, and a change of clocks
- * moves nothing.
- */
 export function scheduleFrom(box: LeitnerBox, now: Date): Date {
-  return beginVanDag(plusDagen(dagSleutel(now), INTERVAL_DAYS[box]));
+  return new Date(now.getTime() + INTERVAL_DAYS[box] * DAY_MS);
 }
 
 export function emptyState(itemId: string): ItemState {
@@ -57,44 +47,8 @@ export function emptyState(itemId: string): ItemState {
   };
 }
 
-export interface ReviewOpties {
-  /**
-   * Whether the answer was given against a clock. No round with a clock is
-   * built yet (stap 8 is out of scope); the rule is here so that building one
-   * is a flag and not a change to the scheduler.
-   */
-  readonly metKlok?: boolean;
-}
-
-/**
- * Applies one answer. Pure: returns the next state, mutates nothing.
- *
- * Without a clock (every round there is): right is one box up and wrong is
- * box one. Either way a "controleren" mark is settled and goes.
- *
- * Under a clock (ADR-106, stap 8): right confirms and moves the item up, the
- * same as without one; wrong does not send it back, because haste is not
- * forgetting — it keeps its box and its date and is marked "controleren", so
- * the next round without a clock asks it first.
- */
-export function review(
-  state: ItemState,
-  correct: boolean,
-  now: Date,
-  opties: ReviewOpties = {},
-): ItemState {
-  if (opties.metKlok && !correct) {
-    return {
-      itemId: state.itemId,
-      box: state.box,
-      laatsteReview: state.laatsteReview,
-      volgendeReview: state.volgendeReview,
-      goedCount: state.goedCount,
-      foutCount: state.foutCount + 1,
-      controleren: true,
-    };
-  }
-
+/** Applies one answer. Pure: returns the next state, mutates nothing. */
+export function review(state: ItemState, correct: boolean, now: Date): ItemState {
   const box = nextBox(state.box, correct);
   return {
     itemId: state.itemId,
@@ -106,9 +60,7 @@ export function review(
   };
 }
 
-/** Due: never answered, marked "controleren", or its day has come. */
 export function isDue(state: ItemState, now: Date): boolean {
-  if (state.controleren) return true;
   if (state.volgendeReview === null) return true;
   return new Date(state.volgendeReview).getTime() <= now.getTime();
 }
@@ -193,14 +145,9 @@ export function composeRound<T extends Schedulable = Item>(input: ComposeRoundIn
     }
   }
 
-  // "Controleren" first (ADR-106), then the most overdue, so the work that has
-  // waited longest is not the work that gets dropped when a round is smaller
-  // than the backlog.
-  due.sort(
-    (a, b) =>
-      Number(states.get(b.id)?.controleren ?? false) -
-        Number(states.get(a.id)?.controleren ?? false) || dueTime(states, a) - dueTime(states, b),
-  );
+  // Most overdue first, so the work that has waited longest is not the work that
+  // gets dropped when a round is smaller than the backlog.
+  due.sort((a, b) => dueTime(states, a) - dueTime(states, b));
 
   const shuffledNieuw = shuffle(nieuw, rng);
   const shuffledBekend = shuffle(bekend, rng);

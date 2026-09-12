@@ -23,9 +23,3 @@ export async function setSetting(key: string, value: string): Promise<void> {
   const db = await getDb();
   await db.put('settings', { key, value });
 }
-
-/** Removes a row. Used by the way back of the reward move (heldenStore). */
-export async function deleteSetting(key: string): Promise<void> {
-  const db = await getDb();
-  await db.delete('settings', key);
-}

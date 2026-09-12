@@ -44,6 +44,7 @@ describe('the vlaggendiploma', () => {
       'vlag-zoeken',
       'vlag-meerkeuze',
       'ontdekken',
+      'overleven',
       'vlag-diploma',
     ]);
     expect(offeredForms(formsFor('vlaggen'), true, 'vlag-europa-alle').length).toBeLessThanOrEqual(

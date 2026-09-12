@@ -12,8 +12,8 @@
  * punishment, and stopping is allowed here.
  *
  * This is not a retention figure and must never be used as one. What a child
- * remembers is `setRetentie` (ADR-107), the number the dot shows and the one
- * this product argues from; a mark is the result of one round.
+ * will still know in three weeks is `setRetention`, it is the number this
+ * product argues from, and the two live in different places on K1 on purpose.
  */
 
 /** The lowest mark a Dutch report card carries, and what nothing right scores. */

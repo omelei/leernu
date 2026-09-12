@@ -24,12 +24,6 @@ export interface Vorm {
   readonly punt: readonly [number, number] | null;
   /** [minX, minY, maxX, maxY]. Drives reading order and touch-target sizing. */
   readonly bbox: readonly [number, number, number, number];
-  /**
-   * The surface in square view-box units, outer rings less holes. Written for
-   * the provinces (stap 10, S27): the hit zone is the diameter of a circle
-   * with this surface. Layers built without it fall back to the box.
-   */
-  readonly oppervlak?: number;
 }
 
 export interface GeoSet {
