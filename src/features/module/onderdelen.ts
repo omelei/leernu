@@ -1,15 +1,18 @@
 import { isDue, type ItemState, type ModeId, type Schedulable } from '@/game-core';
 import { loadItemSets } from '@/content/loadSets';
 import { isMix, loadSumSet, loadSumSets, MIX_IDS } from '@/content/loadSums';
-import { KLOK_MIX_ID, loadKlokSet, loadKlokSets } from '@/content/loadKlok';
+import { KLOK_FOUTEN_ID, KLOK_MIX_ID, loadKlokSet, loadKlokSets } from '@/content/loadKlok';
 import { loadVlagSet, loadVlagSets, type VlagOnderwerp, type VlagSet } from '@/content/loadVlaggen';
 import { t, type TranslationKey } from '@/i18n';
 import type { Module } from '@/features/shell/modules';
 import type { PlayedRound } from '@/store/progress';
 import {
+  FOUTEN_SET_IDS,
   MIX_SET_ID,
   NL_SET_IDS,
   SET_IDS,
+  setsInRound,
+  type FoutenSetId,
   type PracticeMode,
   type SetId,
 } from '@/features/practice/useRound';
@@ -202,6 +205,62 @@ function topoMix(): Onderdeel {
   };
 }
 
+/** What each map's list of mistakes is called. */
+const TOPO_FOUTEN_NAAM: Record<FoutenSetId, TranslationKey> = {
+  'nl-fouten': 'set.nl-fouten',
+  'europa-fouten': 'set.europa-fouten',
+  'afrika-fouten': 'set.afrika-fouten',
+  'azie-fouten': 'set.azie-fouten',
+  'noord-amerika-fouten': 'set.noord-amerika-fouten',
+  'zuid-amerika-fouten': 'set.zuid-amerika-fouten',
+  'oceanie-fouten': 'set.oceanie-fouten',
+  'wereld-fouten': 'set.wereld-fouten',
+};
+
+/** One map's list of mistakes, over every item that map can ask. */
+function topoFoutenOnderdeel(id: FoutenSetId): Onderdeel {
+  const wanted: readonly string[] = setsInRound(id);
+
+  return {
+    moduleId: 'topo',
+    setId: id,
+    naam: TOPO_FOUTEN_NAAM[id],
+    literalNaam: null,
+    kortNaam: null,
+    mix: false,
+    items: topoOnderdelen()
+      .filter((deel) => wanted.includes(deel.setId))
+      .flatMap((deel) => deel.items),
+    roundSize: ROUND_SIZE.topo,
+  };
+}
+
+/**
+ * "Oefen je fouten" on the map (ADR-103): under each region, once this child
+ * has got five of its places wrong, holding exactly those — the subject the
+ * tables have had since ADR-078. Last in its row, after the mix: it is not a
+ * subject of the content but a list about this child.
+ */
+function topoFouten(known: ReadonlyMap<string, ItemState>): Onderwerp[] {
+  return FOUTEN_SET_IDS.flatMap((id): Onderwerp[] => {
+    const alles = topoFoutenOnderdeel(id);
+    const fout = alles.items.filter((item) => (known.get(item.id)?.foutCount ?? 0) > 0);
+    if (fout.length < MIN_FOUTEN) return [];
+
+    return [
+      {
+        moduleId: 'topo',
+        id,
+        naam: 'onderwerp.fouten',
+        uitleg: 'onderwerp.topo.fouten.uitleg',
+        keuze: null,
+        regio: id === 'nl-fouten' ? 'nederland' : id.replace(/-fouten$/, ''),
+        sets: [{ ...alles, items: fout }],
+      },
+    ];
+  });
+}
+
 // ---------------------------------------------------------------------------
 // Rekenen
 
@@ -291,6 +350,7 @@ const KLOK_NAAM: Record<string, TranslationKey> = {
   'klok-kwart': 'set.klok-kwart',
   'klok-vijf': 'set.klok-vijf',
   [KLOK_MIX_ID]: 'set.klok-mix',
+  [KLOK_FOUTEN_ID]: 'set.klok-fouten',
 };
 
 function klokOnderdeel(set: { readonly id: string; readonly items: readonly Schedulable[] }) {
@@ -334,7 +394,7 @@ function klokMix(): Onderdeel | null {
  * No regions, so the page draws no region row and numbers its steps from one —
  * which is what `ModuleScreen` works out for itself rather than being told.
  */
-function klokOnderwerpen(): Onderwerp[] {
+function klokOnderwerpen(known: ReadonlyMap<string, ItemState>): Onderwerp[] {
   const sets = klokOnderdelen();
   const van = (id: string) => sets.filter((deel) => deel.setId === id);
   const mix = klokMix();
@@ -388,7 +448,32 @@ function klokOnderwerpen(): Onderwerp[] {
   ];
 
   // A subject with nothing in it is a card that opens onto nothing.
-  return vakken.filter((vak) => vak.sets.length > 0);
+  return [...vakken.filter((vak) => vak.sets.length > 0), ...klokFouten(known)];
+}
+
+/**
+ * "Oefen je fouten" on the clock (ADR-103): every face this child has had
+ * wrong, whichever step it came from, once there are five. A sixth tile at
+ * most, which is the ceiling a page holds.
+ */
+function klokFouten(known: ReadonlyMap<string, ItemState>): Onderwerp[] {
+  const alles = loadKlokSet(KLOK_FOUTEN_ID);
+  if (!alles) return [];
+
+  const fout = alles.items.filter((tijd) => (known.get(tijd.id)?.foutCount ?? 0) > 0);
+  if (fout.length < MIN_FOUTEN) return [];
+
+  return [
+    {
+      moduleId: 'klok',
+      id: KLOK_FOUTEN_ID,
+      naam: 'onderwerp.fouten',
+      uitleg: 'onderwerp.klok.fouten.uitleg',
+      keuze: null,
+      regio: null,
+      sets: [{ ...klokOnderdeel(alles), items: fout }],
+    },
+  ];
 }
 
 // ---------------------------------------------------------------------------
@@ -496,9 +581,12 @@ export function onderdelen(): Onderdeel[] {
 /** Every set a round can be started on, mixes included. Used to name a round. */
 export function startbareOnderdelen(): Onderdeel[] {
   const klok = klokMix();
+  const klokFout = loadKlokSet(KLOK_FOUTEN_ID);
   return [
     ...topoOnderdelen(),
     topoMix(),
+    ...FOUTEN_SET_IDS.map(topoFoutenOnderdeel),
+    ...(klokFout ? [klokOnderdeel(klokFout)] : []),
     ...rekenOnderdelen(),
     ...rekenMixen(),
     ...klokOnderdelen(),
@@ -520,8 +608,8 @@ export function onderwerpenVan(
   moduleId: Module['id'],
   known: ReadonlyMap<string, ItemState> = new Map(),
 ): Onderwerp[] {
-  if (moduleId === 'topo') return topoOnderwerpen();
-  if (moduleId === 'klok') return klokOnderwerpen();
+  if (moduleId === 'topo') return topoOnderwerpen(known);
+  if (moduleId === 'klok') return klokOnderwerpen(known);
   if (moduleId === 'vlaggen') return vlagOnderwerpen(known);
 
   if (moduleId !== 'tafels') return [];
@@ -615,7 +703,7 @@ export function onderwerpenVan(
  * the eighty cities are the same question at two sizes, and a child who wants
  * "steden" should not have to know which of two cards means which.
  */
-function topoOnderwerpen(): Onderwerp[] {
+function topoOnderwerpen(known: ReadonlyMap<string, ItemState>): Onderwerp[] {
   const sets = topoOnderdelen();
   const van = (id: string) => sets.filter((deel) => deel.setId === id);
 
@@ -746,7 +834,7 @@ function topoOnderwerpen(): Onderwerp[] {
   // A subject with nothing in it is a card that opens onto nothing. Only the
   // mix is guaranteed to hold something; the rest depend on the content files
   // being there.
-  return vakken.filter((vak) => vak.sets.length > 0);
+  return [...vakken.filter((vak) => vak.sets.length > 0), ...topoFouten(known)];
 }
 
 /**

@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import {
   afleiderFase,
   composeRound,
+  metFouten,
   OPTIES,
   OPTIES_ALLES,
   vlagOpties,
@@ -12,7 +13,6 @@ import {
   alleVlaggen,
   isVlagFouten,
   loadVlagSet,
-  metFouten,
   vlagPool,
   type VlagSet,
 } from '@/content/loadVlaggen';

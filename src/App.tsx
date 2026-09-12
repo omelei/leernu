@@ -32,6 +32,7 @@ import type { Route } from '@/features/shell/routes';
 import { getProfile, setSticker } from '@/store/profile';
 import type { ModeId } from '@/game-core';
 import {
+  isFoutenSet,
   isMixSet,
   type PracticeMode,
   type RoundSetId,
@@ -169,7 +170,7 @@ export default function App() {
     // Exploring is one set's own layer, so the mix has no way of exploring and
     // does not offer one (`forms.ts`). A stored favourite from before that rule
     // could still ask for it, and it points instead than fails.
-    if (mode === 'ontdekken' && !isMixSet(deel.setId)) {
+    if (mode === 'ontdekken' && !isMixSet(deel.setId) && !isFoutenSet(deel.setId)) {
       setScreen({ name: 'explore', setId: deel.setId as SetId });
       return;
     }

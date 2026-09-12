@@ -4,11 +4,12 @@ import {
   judgeKlok,
   klokDigitaal,
   klokDistractors,
+  metFouten,
   type KlokItem,
   type KlokSet,
   type RoundRule,
 } from '@/game-core';
-import { klokPool, loadKlokSet } from '@/content/loadKlok';
+import { KLOK_FOUTEN_ID, klokPool, loadKlokSet } from '@/content/loadKlok';
 import { useRoundCore, type RondeFase, type RondeKern } from '@/features/round/useRoundCore';
 
 /**
@@ -144,7 +145,10 @@ export function useKlokRound(
       // lives draws from the whole face, because twelve whole hours would run
       // out long before the minute does — and a child who reaches for the
       // stopwatch is one who can already read the thing.
-      const pool = rule.kind === 'fixed' ? loaded.items : klokPool(setId);
+      const alles = rule.kind === 'fixed' ? loaded.items : klokPool(setId);
+      // "Oefen je fouten": only the faces with a mistake against them, read
+      // from the boxes as the round starts (ADR-103).
+      const pool = setId === KLOK_FOUTEN_ID ? metFouten(alles, states) : alles;
 
       const picked = composeRound({
         items: pool,

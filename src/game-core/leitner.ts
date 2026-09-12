@@ -222,6 +222,24 @@ function dueTime(states: ReadonlyMap<string, ItemState>, item: Schedulable): num
 }
 
 /**
+ * The items in a list that a child has had wrong at least once, hardest first.
+ *
+ * What "Oefen je fouten" asks, in every module that has it (ADR-078, ADR-103).
+ * `foutCount` is on the Leitner state and is written on every wrong answer;
+ * this is the one list in the product that is about a particular child rather
+ * than about the content, and it is read at the moment a round starts, so a
+ * mistake put right a minute ago is not asked again because a card was stale.
+ */
+export function metFouten<T extends Schedulable>(
+  items: readonly T[],
+  states: ReadonlyMap<string, ItemState>,
+): T[] {
+  return items
+    .filter((item) => (states.get(item.id)?.foutCount ?? 0) > 0)
+    .sort((a, b) => (states.get(b.id)?.foutCount ?? 0) - (states.get(a.id)?.foutCount ?? 0));
+}
+
+/**
  * Puts a missed item back into the queue, `gap` questions further on.
  *
  * Spec section 4.2 asks for three questions in between. If the round is nearly

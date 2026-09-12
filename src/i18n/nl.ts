@@ -584,6 +584,19 @@ export const nl = {
   'onderwerp.vlaggen.provincies': 'Provincievlaggen',
   'onderwerp.vlaggen.provincies.uitleg': 'De vlaggen van de twaalf provincies',
   'onderwerp.vlaggen.fouten.uitleg': 'De vlaggen die je eerder fout had',
+  // "Oefen je fouten" bij topografie en klok (ADR-103). Per kaart, want een
+  // ronde blijft op één kaart.
+  'onderwerp.topo.fouten.uitleg': 'De plekken die je eerder fout had',
+  'onderwerp.klok.fouten.uitleg': 'De tijden die je eerder fout had',
+  'set.nl-fouten': 'Jouw fouten in Nederland',
+  'set.europa-fouten': 'Jouw fouten in Europa',
+  'set.afrika-fouten': 'Jouw fouten in Afrika',
+  'set.azie-fouten': 'Jouw fouten in Azië',
+  'set.noord-amerika-fouten': 'Jouw fouten in Noord-Amerika',
+  'set.zuid-amerika-fouten': 'Jouw fouten in Zuid-Amerika',
+  'set.oceanie-fouten': 'Jouw fouten in Oceanië',
+  'set.wereld-fouten': 'Jouw fouten op de wereldkaart',
+  'set.klok-fouten': 'Jouw fouten met de klok',
   // De naam van een set: wat de startbalk, de kaarten en de favorieten tonen.
   'vlag.regio.wereld': 'de wereld',
   'vlag.set.bekend': 'Bekende vlaggen van {regio}',

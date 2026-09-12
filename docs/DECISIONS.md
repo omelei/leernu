@@ -4603,6 +4603,47 @@ planned and deliberately not started.
 
 ---
 
+## ADR-103 — "Oefen je fouten" on the map and on the clock
+
+**Status:** accepted — 2026-09-12, asked for by the product owner alongside
+ADR-102.
+
+### Context
+
+ADR-078 gave the tables a subject that is this child's own: the sums they have
+had wrong, as soon as there are five. Flags got the same (ADR-102). The owner
+asked for it everywhere, so a child who got provinces wrong can ask for exactly
+those, the way they can for sums.
+
+### Decision
+
+**The list is one map's.** Topography has one per region — Nederland's across
+its five layers, like the Topomix; each werelddeel's over its countries — for
+the mix's reason: a round that changed its background halfway would be two
+rounds. The clock has one over every face. Each appears last in its row, after
+the mix, once there are five mistakes in it, and holds exactly those.
+
+**Not a set of its own.** Like the mixes it is the same items narrowed when the
+round starts (`metFouten`, now one function in `game-core` for all four
+modules), so a province put right here moves the box it moves anywhere else.
+The rest of the map stays loaded and named, so pointing at the wrong province
+still says which one it was.
+
+It has an address — /topografie/fouten, /topografie/europa-fouten,
+/klokkijken/fouten — no Ontdekken, and on a crowded map the same rule as the
+map itself: six countries still wrong on the world map are six targets among a
+hundred and sixty-seven, so choosing leads and pointing moves to the end
+(ADR-087).
+
+### Consequences
+
+A page gains at most one tile. Nederland's row goes to six, the ceiling, and
+the clock's to six. The result map after a round of Nederland's mistakes is
+absent, as after the mix, because the misses span layers one map cannot show
+at once.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because
