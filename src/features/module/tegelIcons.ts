@@ -128,6 +128,8 @@ const VLAG_ONDERWERP_ICON: Record<string, TileIcon> = {
  * layout bug wearing the clothes of a content one.
  */
 export function onderwerpIcon(id: string): TileIcon {
+  // Every module's list of mistakes is the mistakes, whatever map it is on.
+  if (id.endsWith('-fouten')) return WrongIcon;
   const vlag = /^vlag-.+-([a-z]+)$/.exec(id)?.[1];
   return ONDERWERP_ICON[id] ?? (vlag ? VLAG_ONDERWERP_ICON[vlag] : undefined) ?? MixIcon;
 }

@@ -28,6 +28,13 @@ const modules = import.meta.glob<{ default: KlokSet }>('../../content/klok/*.jso
 export const KLOK_MIX_ID = 'klok-mix';
 
 /**
+ * "Oefen je fouten" on the clock (ADR-103): every face there is, narrowed to
+ * the ones this child has had wrong when a round starts. The same items as the
+ * mix, under the child's own name.
+ */
+export const KLOK_FOUTEN_ID = 'klok-fouten';
+
+/**
  * The four, in the order a child meets them: whole hours, half hours, quarters,
  * then the five-minute steps.
  *
@@ -63,6 +70,7 @@ function klokMix(sets: readonly KlokSet[]): KlokSet {
 export function loadKlokSet(id: string): KlokSet | undefined {
   const sets = loadKlokSets();
   if (isKlokMix(id)) return klokMix(sets);
+  if (id === KLOK_FOUTEN_ID) return { ...klokMix(sets), id: KLOK_FOUTEN_ID };
   return sets.find((set) => set.id === id);
 }
 

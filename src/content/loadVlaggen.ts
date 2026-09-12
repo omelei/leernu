@@ -1,4 +1,4 @@
-import type { ItemState, VlagGroep, VlagItem, Werelddeel } from '@/game-core';
+import type { VlagGroep, VlagItem, Werelddeel } from '@/game-core';
 import bestand from '../../content/vlaggen/vlaggen.json';
 
 /**
@@ -156,18 +156,4 @@ export function vlagPool(id: string): readonly VlagItem[] {
   if (!set) return [];
   if (set.onderwerp === 'mix' || set.onderwerp === 'fouten') return set.items;
   return set.regio === 'wereld' ? DATA.landen : inRegio(set.regio);
-}
-
-/**
- * The flags in a list that this child has had wrong at least once, hardest
- * first: what "Oefen je fouten" asks, read from the boxes at the moment the
- * round starts (ADR-078).
- */
-export function metFouten(
-  items: readonly VlagItem[],
-  states: ReadonlyMap<string, ItemState>,
-): readonly VlagItem[] {
-  return items
-    .filter((vlag) => (states.get(vlag.id)?.foutCount ?? 0) > 0)
-    .sort((a, b) => (states.get(b.id)?.foutCount ?? 0) - (states.get(a.id)?.foutCount ?? 0));
 }

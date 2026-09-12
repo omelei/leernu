@@ -1,7 +1,7 @@
 import { t, type TranslationKey } from '@/i18n';
 import type { GeoSet } from '@/content/loadGeo';
 import type { AnswerLayer } from './MapCanvas';
-import { isMixSet, type RoundState } from './useRound';
+import { setsInRound, type RoundState } from './useRound';
 import { STAMP_NAME } from '@/features/reis/stampNames';
 import { Beloning } from '@/features/reis/Beloning';
 import { RoundMark } from '@/components/RoundMark';
@@ -90,8 +90,10 @@ export function ResultScreen({
               A mix asks about provinces, capitals, islands and seas in one
               round; one map can light up one of those layers, so a review map
               here would show a child four of their eight misses and quietly
-              drop the rest. The list beside it names all of them. */}
-          {state.geo !== null && !isMixSet(state.setId) && (
+              drop the rest. The list beside it names all of them. The same is
+              true of Nederland's list of mistakes, which spans the same five
+              layers (ADR-103). */}
+          {state.geo !== null && setsInRound(state.setId).length === 1 && (
             <section className="md:w-1/2" aria-label={t('result.mapLabel')}>
               <div className="tk-card flex justify-center">
                 <ReviewMap background={state.geo} answers={state.answers} highlighted={missedIds} />

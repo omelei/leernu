@@ -77,6 +77,17 @@ const SET_SLUG: Record<string, string> = {
   'klok-kwart': 'kwartieren',
   'klok-vijf': 'vijf-minuten',
   'klok-mix': 'mix',
+  // "Oefen je fouten" (ADR-103): for Nederland and the clock the one word,
+  // further out the werelddeel in front of it, because each map has its own.
+  'nl-fouten': 'fouten',
+  'europa-fouten': 'europa-fouten',
+  'afrika-fouten': 'afrika-fouten',
+  'azie-fouten': 'azie-fouten',
+  'noord-amerika-fouten': 'noord-amerika-fouten',
+  'zuid-amerika-fouten': 'zuid-amerika-fouten',
+  'oceanie-fouten': 'oceanie-fouten',
+  'wereld-fouten': 'wereld-fouten',
+  'klok-fouten': 'fouten',
 };
 
 /**
@@ -95,6 +106,9 @@ const MODULE_ALIAS: Record<string, Module['id']> = {
   klok: 'klok',
 };
 
+/** The map's own lists of mistakes, further out than Nederland ("nl-" covers home). */
+const TOPO_FOUTEN = /^(?:europa|afrika|azie|noord-amerika|zuid-amerika|oceanie|wereld)-fouten$/;
+
 /**
  * The way back, for the map sets only.
  *
@@ -106,7 +120,7 @@ const MODULE_ALIAS: Record<string, Module['id']> = {
  */
 const SLUG_SET = new Map(
   Object.entries(SET_SLUG)
-    .filter(([id]) => id.startsWith('nl-') || id.endsWith('-landen'))
+    .filter(([id]) => id.startsWith('nl-') || id.endsWith('-landen') || TOPO_FOUTEN.test(id))
     .map(([id, slug]) => [slug, id]),
 );
 
@@ -152,6 +166,7 @@ const KLOK_SLUG: Record<string, string> = {
   kwartieren: 'klok-kwart',
   'vijf-minuten': 'klok-vijf',
   mix: 'klok-mix',
+  fouten: 'klok-fouten',
 };
 
 function setIdFor(module: Module, slug: string): string | null {

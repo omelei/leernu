@@ -6,6 +6,7 @@ import {
   countMastered,
   emptyState,
   judgeAnswer,
+  metFouten,
   review,
   type AnswerVerdict,
   type Item,
@@ -200,16 +201,48 @@ export const NL_SET_IDS: readonly SetId[] = [
  */
 export const MIX_SET_ID = 'nl-mix';
 
-/** A round is one set, or the mix of all of them. */
-export type RoundSetId = SetId | typeof MIX_SET_ID;
+/**
+ * "Oefen je fouten", on the map: the places this child has had wrong, one map
+ * at a time (ADR-103).
+ *
+ * Not a set of its own, for the Topomix's reason: the same items, narrowed to
+ * the ones with a mistake against them when the round starts, so a province put
+ * right here moves the box it moves anywhere else. And like the mix it stays on
+ * one map — Nederland's list reaches across its five layers, a werelddeel's is
+ * its countries — because a round that changed its background halfway would be
+ * two rounds.
+ */
+const FOUTEN = {
+  'nl-fouten': NL_SET_IDS,
+  'europa-fouten': ['europa-landen'],
+  'afrika-fouten': ['afrika-landen'],
+  'azie-fouten': ['azie-landen'],
+  'noord-amerika-fouten': ['noord-amerika-landen'],
+  'zuid-amerika-fouten': ['zuid-amerika-landen'],
+  'oceanie-fouten': ['oceanie-landen'],
+  'wereld-fouten': ['wereld-landen'],
+} as const satisfies Record<string, readonly SetId[]>;
+
+export type FoutenSetId = keyof typeof FOUTEN;
+
+export const FOUTEN_SET_IDS = Object.keys(FOUTEN) as FoutenSetId[];
+
+export function isFoutenSet(id: string): id is FoutenSetId {
+  return Object.hasOwn(FOUTEN, id);
+}
+
+/** A round is one set, the mix of all of them, or one map's mistakes. */
+export type RoundSetId = SetId | typeof MIX_SET_ID | FoutenSetId;
 
 export function isMixSet(id: string): id is typeof MIX_SET_ID {
   return id === MIX_SET_ID;
 }
 
-/** Which sets a round draws from. One, or all five. */
+/** Which sets a round draws from. One, all five, or the ones a list of mistakes spans. */
 export function setsInRound(id: RoundSetId): readonly SetId[] {
-  return isMixSet(id) ? NL_SET_IDS : [id];
+  if (isMixSet(id)) return NL_SET_IDS;
+  if (isFoutenSet(id)) return FOUTEN[id];
+  return [id];
 }
 
 /**
@@ -518,10 +551,14 @@ export function useRound(
         const all = sets
           .flatMap((set) => set.items)
           .filter((item) => item.geometrieRef !== undefined);
+        // "Oefen je fouten" asks only what has a mistake against it (ADR-103).
+        // The rest of the map stays loaded and named: a child who points at
+        // the wrong province is still told which one it was.
+        const vraagbaar = isFoutenSet(setId) ? metFouten(all, loadedStates) : all;
         const picked = composeRound({
-          items: all,
+          items: vraagbaar,
           states: loadedStates,
-          size: Math.min(all.length, rule.kind === 'fixed' ? rule.aantal : ENDLESS_POOL),
+          size: Math.min(vraagbaar.length, rule.kind === 'fixed' ? rule.aantal : ENDLESS_POOL),
           now: new Date(),
         });
 
@@ -874,7 +911,7 @@ export function useRound(
   const state: RoundState = {
     phase,
     setId,
-    noemer: SETS[question?.setId ?? (isMixSet(setId) ? 'nl-provincies' : setId)].noemer,
+    noemer: SETS[question?.setId ?? setsInRound(setId)[0] ?? 'nl-provincies'].noemer,
     practiceMode,
     rule,
     geo,

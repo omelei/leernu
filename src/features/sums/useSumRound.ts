@@ -2,8 +2,8 @@ import { useCallback } from 'react';
 import {
   composeRound,
   judgeSum,
+  metFouten,
   sumDistractors,
-  type ItemState,
   type RoundRule,
   type SumItem,
   type SumSet,
@@ -103,23 +103,6 @@ export type SumRoundState = RondeKern<SumSet, SumQuestion, SumItem, number> & {
 
 /** The item a question is about, for the core. At module level so it is stable. */
 const somVan = (question: SumQuestion): SumItem => question.sum;
-
-/**
- * The sums this child has got wrong at least once, hardest first.
- *
- * `foutCount` is on the Leitner state and has been since the first release,
- * written on every wrong answer and never read by anything. This is what it was
- * for: the one list in the product that is about a particular child rather than
- * about the content.
- */
-function metFouten(
-  items: readonly SumItem[],
-  states: ReadonlyMap<string, ItemState>,
-): readonly SumItem[] {
-  return items
-    .filter((sum) => (states.get(sum.id)?.foutCount ?? 0) > 0)
-    .sort((a, b) => (states.get(b.id)?.foutCount ?? 0) - (states.get(a.id)?.foutCount ?? 0));
-}
 
 /** Four options: the answer and three wrong ones, dealt once. */
 function optionsFor(sum: SumItem, rng: () => number): number[] {

@@ -13,7 +13,15 @@ import {
 import type { ModeId, RoundRule } from '@/game-core';
 import { t, type TranslationKey } from '@/i18n';
 import { isVlagFouten, isVlagMix } from '@/content/loadVlaggen';
-import { isMixSet, ROUND_RULE, SETS, type SetId } from '@/features/practice/useRound';
+import { loadItemSets } from '@/content/loadSets';
+import {
+  isFoutenSet,
+  isMixSet,
+  ROUND_RULE,
+  SETS,
+  setsInRound,
+  type SetId,
+} from '@/features/practice/useRound';
 import { SUM_ROUND_RULE } from '@/features/sums/useSumRound';
 import { KLOK_ROUND_RULE } from '@/features/klok/useKlokRound';
 import { VLAG_ROUND_RULE } from '@/features/vlaggen/useVlagRound';
@@ -129,7 +137,8 @@ export const TOPO_FORMS: readonly PracticeForm[] = [
     rule: null,
     seconds: null,
     needsClock: false,
-    geldtVoor: (setId) => !isMixSet(setId),
+    // Nor a child's own list of mistakes: exploring is where a set is met.
+    geldtVoor: (setId) => !isMixSet(setId) && !isFoutenSet(setId),
   },
   {
     id: 'bliksemronde',
@@ -468,6 +477,18 @@ export function teDrukOmAanTeWijzen(
   kleinScherm: boolean,
 ): boolean {
   if (setId === null) return false;
+
+  // A list of mistakes is asked on its map, and it is the map that is crowded:
+  // six countries still wrong on the world map are six targets among a hundred
+  // and sixty-seven. Nederland's spans five layers, like the mix, and is left
+  // alone like the mix.
+  if (isFoutenSet(setId)) {
+    const [kaart, ...meer] = setsInRound(setId);
+    if (!kaart || meer.length > 0) return false;
+    const vormen = loadItemSets().find((set) => set.id === kaart)?.items.length ?? aantalVormen;
+    return teDrukOmAanTeWijzen(kaart, vormen, kleinScherm);
+  }
+
   const shape = SETS[setId as SetId];
   // A set the map does not know, or one answered on markers rather than on its
   // own outlines. Neither is what this rule is about.
