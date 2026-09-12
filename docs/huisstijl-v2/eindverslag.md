@@ -330,11 +330,15 @@ met 3 px afstand.
   de sterren, de kistkeuze, de diplomamuren, en `.tk-sum` en `.tk-cijfer`,
   waar de e2e op leunt. Het zijn namen van tekeningen, geen pagina's in de oude
   stijl; hernoemen is werk zonder zichtbaar gevolg.
-- **Dode CSS** van de oude pagina's (`tk-round-*`, `tk-options`, `tk-kies`,
-  `tk-startbalk` en verwante) staat nog in `index.css`. Niets gebruikt hem.
-- **Oude kleurnamen** onderaan `tokens.css`: `--surface`, `--sunken`,
-  `--accent-soft` en de tien `--reeks-*`-tinten, alle als verwijzing naar een
-  token. Ze gaan weg met de dode CSS.
+- **Dode CSS is weg:** 127 klassen van de oude pagina's (234 selectors) uit
+  `index.css`, dat van 4.626 naar zo'n 2.860 regels ging. Een selector gold als
+  dood als hij een `tk-`/`ln-`klasse noemt die nergens in `src` of
+  `index.html` voorkomt; klassen uit een sjabloon (`ln-teken-${…}`) tellen als
+  gebruikt.
+- **Oude kleurnamen zijn weg:** `--surface`, `--sunken`, `--accent-soft` en de
+  `--reeks-*`-tinten verwijzen nu rechtstreeks naar het token waar ze al naar
+  wezen (dezelfde waarde, niets verandert in beeld), en het aliasblok in
+  `tokens.css` en de twee Tailwind-namen zijn verwijderd.
 
 ## Open punten
 
@@ -342,6 +346,3 @@ met 3 px afstand.
    S4 tekent onderwerp en manier naast elkaar en de regiokeuze niet.
 2. Een compacte tegel voor de tafels en het aantal vragen staat niet in de set.
 3. De tabel 44 / 48 / 56 in het plan (stap 7, punt 7).
-4. De dode CSS en de laatste oude kleurnamen opruimen (hierboven).
-5. De merge van PR #31, en daarmee de omzetting van de beloningen op echte
-   apparaten.

@@ -53,7 +53,10 @@ export function Vraagbalk({
   useEffect(() => {
     if (afbreken) return;
     function onKeyDown(event: KeyboardEvent) {
-      if (event.key !== 'Escape') return;
+      // An Escape the dialog already answered is not a new one. React runs
+      // this effect again while that same keydown is still bubbling, so
+      // without the check the dialog closes and opens again in one press.
+      if (event.key !== 'Escape' || event.defaultPrevented) return;
       event.preventDefault();
       setAfbreken(true);
     }

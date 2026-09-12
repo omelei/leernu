@@ -21,7 +21,11 @@ async function speel(page: Page) {
   const namen = page.getByRole('group', { name: 'Kies een naam' });
 
   for (let vraag = 0; vraag < 40; vraag++) {
-    await expect(klaar.or(volgende).or(vlaggen).or(namen).first()).toBeVisible();
+    // The first question waits for sixty flags to load; on a slow runner that
+    // is more than the default five seconds.
+    await expect(klaar.or(volgende).or(vlaggen).or(namen).first()).toBeVisible({
+      timeout: 15_000,
+    });
     if (await klaar.isVisible()) return;
     // A diploma says nothing until the end, so there is never a "next".
     await expect(volgende).toHaveCount(0);

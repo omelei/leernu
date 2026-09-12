@@ -90,10 +90,6 @@ export default {
           text: 'var(--bad-text)',
         },
         'module-tint': 'var(--module-tint)',
-        // Old names, resolved in tokens.css to tokens above, until the pages
-        // that use them are rebuilt.
-        surface: 'var(--surface)',
-        sunken: 'var(--sunken)',
       },
       fontFamily: {
         sans: ['var(--font-body)'],

@@ -110,6 +110,7 @@ export function Dialoog({
   function onKeyDown(event: KeyboardEvent<HTMLDivElement>) {
     if (event.key === 'Escape') {
       event.preventDefault();
+      event.stopPropagation();
       onSluit();
       return;
     }

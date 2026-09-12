@@ -120,103 +120,6 @@
     border-radius: var(--card-radius);
     padding: var(--card-padding);
   }
-  /* The one block on a screen that is the reason the child is there — the test
-   * date on K1. A surface fill and a border, where everything else has neither. */
-  .tk-card-accented {
-    background: var(--surface);
-  }
-
-  /* ---- Buttons ---------------------------------------------------------
-   * Three weights and no more. Primary is the way on and there is one per
-   * screen; secondary is the alternative that is still an action; tertiary is
-   * a link that happens to need a hit target.
-   *
-   * Min-height rather than fixed: Dutch runs longer than the English it is
-   * translated from, and buttons are where that shows first.
-   */
-  .tk-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    min-height: var(--control-height);
-    padding: 0 24px;
-    border: var(--stroke-hair) solid transparent;
-    border-radius: var(--radius-chip);
-    background: var(--ink);
-    color: var(--paper);
-    font-family: var(--font-body);
-    font-size: var(--type-button);
-    line-height: var(--type-button-lh);
-    font-weight: 600;
-    text-align: center;
-    cursor: pointer;
-  }
-  .tk-button:hover {
-    background: var(--ink-2);
-  }
-  .tk-button:active {
-    background: var(--ink-2);
-    /* Pressed reads as movement, not as another colour. */
-    transform: translateY(1px);
-  }
-
-  .tk-button-secondary {
-    background: var(--paper);
-    color: var(--ink);
-    border-color: var(--line-strong);
-  }
-  .tk-button-secondary:hover {
-    background: var(--surface);
-  }
-  .tk-button-secondary:active {
-    background: var(--sunken);
-  }
-
-  .tk-button-tertiary {
-    background: transparent;
-    color: var(--ink);
-    border-color: transparent;
-    padding: 0 8px;
-    text-decoration: underline;
-    text-underline-offset: 2px;
-  }
-  .tk-button-tertiary:hover {
-    background: var(--surface);
-  }
-  .tk-button-tertiary:active {
-    background: var(--sunken);
-  }
-
-  /* Disabled says "not now", never "you got this wrong", so it recedes rather
-   * than turning a semantic colour. A disabled control keeps its size: a
-   * button that shrinks when it switches off moves everything under it. */
-  .tk-button:disabled,
-  .tk-button[aria-disabled='true'] {
-    background: var(--sunken);
-    color: var(--ink-3);
-    border-color: transparent;
-    cursor: not-allowed;
-    transform: none;
-  }
-  .tk-button-secondary:disabled,
-  .tk-button-secondary[aria-disabled='true'],
-  .tk-button-tertiary:disabled,
-  .tk-button-tertiary[aria-disabled='true'] {
-    background: transparent;
-    color: var(--ink-3);
-    border-color: var(--line);
-  }
-
-  /* Busy. The label stays put and the button keeps its width, because a
-   * control that changes size while you are waiting for it invites a second
-   * click on whatever has moved into its place. */
-  .tk-button[aria-busy='true'] {
-    cursor: progress;
-  }
-  .tk-button[aria-busy='true'] > .tk-button-label {
-    opacity: 0.35;
-  }
 
   /* ---- The start bar (ADR-095) --------------------------------------------
    * What was chosen, as a row of small chips, and then the way on — on the
@@ -238,7 +141,7 @@
     border: var(--stroke-hair) solid var(--accent);
     border-left-width: 8px;
     border-radius: var(--radius-card-phone);
-    background: var(--accent-soft);
+    background: var(--accent-tint);
   }
   .tk-startbalk-label {
     font-family: var(--font-body);
@@ -248,123 +151,6 @@
     letter-spacing: var(--type-label-ls);
     text-transform: uppercase;
     color: var(--accent-text);
-  }
-  .tk-startbalk-keuzes {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin: 12px 0 0;
-    padding: 0;
-    list-style: none;
-  }
-  /* One answer: which question in mono, and the answer beside it. Paper on the
-   * soft ground with a hairline, so the chips read as things lying on the bar
-   * rather than as more controls — none of them can be pressed. */
-  .tk-startchip {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 8px;
-    padding: 8px 12px;
-    border-radius: var(--radius-chip-lg);
-    background: var(--paper);
-    box-shadow: inset 0 0 0 var(--stroke-hair) var(--line);
-    font-size: var(--type-button);
-    line-height: var(--type-button-lh);
-    font-weight: 600;
-  }
-  .tk-startchip-label {
-    font-family: var(--font-body);
-    font-size: var(--type-label);
-    letter-spacing: var(--type-label-ls);
-    text-transform: uppercase;
-    font-weight: 600;
-    color: var(--ink-2);
-  }
-
-  /* The one control on a page of controls that is the way on. Taller and wider
-   * than the standard button, because the page above it is a grid of things
-   * that are also pressable and a start that matched them is one more option. */
-  .tk-button-go {
-    min-height: var(--touch);
-    padding: 0 32px;
-    font-family: var(--font-display);
-    font-size: var(--type-card);
-    line-height: var(--type-card-lh);
-  }
-  /* The word and the mark are both inside the button's own label span, so the
-   * gap belongs there rather than on the button, which has one child. */
-  .tk-button-go > .tk-button-label {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  /* On a phone: a bar stuck to the foot of the screen, with the sentence on the
-   * left and the button on the right, where a thumb is.
-   *
-   * ADR-052 recorded three failures, and this is built against each of them.
-   * It is **sticky, not fixed**, so its box is where it is drawn and a press
-   * lands on the thing it looks like it lands on; nothing passes taps through.
-   * It is **a sibling of the page's content**, the last thing in the page after
-   * the child's own column, so it stays in reach the whole way down and is never
-   * drawn over its own button. And its side margins are **exactly the page's own
-   * padding**, no more: the first attempt pulled further and the page came out
-   * 48 wider than the phone. e2e/shell.spec.ts checks all three at 393. */
-  .tk-startbalk-mobiel {
-    position: sticky;
-    bottom: 0;
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin: 0 -16px -16px;
-    padding: 12px 16px;
-    border-top: var(--stroke-hair) solid var(--line);
-    background: var(--paper);
-  }
-  .tk-startbalk-zin {
-    flex: 1;
-    min-width: 0;
-    font-size: var(--type-button);
-    line-height: var(--type-button-lh);
-  }
-  .tk-startbalk-mobiel .tk-button-go {
-    flex: none;
-    min-height: var(--touch);
-    padding: 0 24px;
-  }
-
-  /* ---- The ten stamps, named and explained ------------------------------
-   * On the collection page, where the ones not yet earned are shown as well —
-   * which is the whole difference between a collection and a mystery. The ones
-   * not held are quieter, and the drawing is what fades rather than the words:
-   * the criterion is the point of the row.
-   */
-  .tk-stamps {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
-    gap: 12px;
-    padding: 0;
-    list-style: none;
-  }
-  .tk-stamp {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: var(--card-padding);
-    border: var(--stroke-hair) solid var(--line);
-    border-radius: var(--card-radius);
-    color: var(--ink-2);
-  }
-  .tk-stamp[data-gehaald] {
-    border-color: var(--ink);
-    border-width: var(--stroke-active);
-    padding: calc(var(--card-padding) - 1px);
-    background: var(--surface);
-    color: var(--ink);
-  }
-  .tk-stamp:not([data-gehaald]) svg {
-    opacity: 0.4;
   }
 
   /* ---- The wall of diplomas --------------------------------------------
@@ -402,7 +188,7 @@
     cursor: pointer;
   }
   .tk-diploma:hover {
-    background: var(--surface);
+    background: var(--grond);
   }
   /* Passed. Ink and a heavier rule — the difference is lightness and weight,
    * not a colour, so it survives grey and every kind of colour blindness. */
@@ -410,7 +196,7 @@
     border-color: var(--ink);
     border-width: var(--stroke-active);
     padding: 3px 7px;
-    background: var(--surface);
+    background: var(--grond);
     color: var(--ink);
   }
 
@@ -445,7 +231,7 @@
     cursor: pointer;
   }
   button.tk-held-cel:not([aria-pressed='true']):hover {
-    background: var(--surface);
+    background: var(--grond);
     border-color: var(--ink-3);
   }
   /* The one worn: ink at double weight over the surface — a lightness and a
@@ -453,33 +239,12 @@
   .tk-held-cel[aria-pressed='true'] {
     padding: 11px 7px;
     border: var(--stroke-active) solid var(--ink);
-    background: var(--surface);
-  }
-  .tk-held-pakje {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 48px;
-    height: 48px;
-    border-radius: var(--radius-chip-lg);
-    background: var(--surface);
-    color: var(--ink-3);
+    background: var(--grond);
   }
   .tk-held-naam {
     font-size: var(--type-button);
     line-height: var(--type-button-lh);
     font-weight: 600;
-  }
-  /* The rules, written out in full. A chance a child cannot read about is a
-   * chance they have no reason to trust. */
-  .tk-regels {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin: 0;
-    padding-left: 1.25rem;
-    list-style: disc;
-    color: var(--ink-2);
   }
 
   /* Stars towards the next chest: five, in gold because they are a reward, the
@@ -597,34 +362,11 @@
     cursor: pointer;
   }
   .tk-klok-optie:hover {
-    background: var(--surface);
+    background: var(--grond);
     border-color: var(--ink-3);
   }
   .tk-klok-optie .tk-klok {
     max-width: 8rem;
-  }
-
-  /* The times still to practise, on the result screen. Shown as well as told:
-   * a clock can be pointed at, and a child who has just misread half past
-   * seven should see the hands that say it. */
-  .tk-klok-lijst {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 12px;
-  }
-  .tk-klok-gemist {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    min-height: var(--touch);
-    padding: 8px 12px;
-    border: var(--stroke-hair) solid var(--line-strong);
-    border-radius: var(--radius-chip);
-    font-weight: 600;
-  }
-  .tk-klok-gemist .tk-klok {
-    width: 40px;
-    flex: 0 0 40px;
   }
 
   /* ---- Flags (ADR-102) -------------------------------------------------
@@ -688,207 +430,8 @@
     cursor: pointer;
   }
   .tk-vlag-optie:hover {
-    background: var(--surface);
+    background: var(--grond);
     border-color: var(--ink-3);
-  }
-
-  /* The flags still to practise, shown as well as named. */
-  .tk-vlag-lijst {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 12px;
-  }
-  .tk-vlag-gemist {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    min-height: var(--touch);
-    padding: 8px 12px;
-    border: var(--stroke-hair) solid var(--line-strong);
-    border-radius: var(--radius-chip);
-    font-weight: 600;
-  }
-  .tk-vlag-gemist .tk-vlag {
-    width: 48px;
-    flex: 0 0 48px;
-  }
-  .tk-vlag-feiten {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px 32px;
-    margin-top: 8px;
-  }
-
-  /* ---- Multiple choice, K5 ---------------------------------------------
-   * Two by two where there is width, one under the other where there is not,
-   * so no option is ever the odd one at the end of a row. `auto-fit` with a
-   * 200px floor does that without a breakpoint: two columns fit a tablet and a
-   * desktop, one fits a phone, and nothing has to know which it is on.
-   *
-   * The box is the target. `--touch` rather than `--touch-min`, because this
-   * is a control a child aims at in a hurry with a thumb, and ADR-032 puts the
-   * 44 at the smallest a control may ever be, not the size it should be.
-   */
-  .tk-options {
-    display: grid;
-    /* Two on a phone, where auto-fit would give one and a card tall enough to
-     * leave the map a strip. The names are two words at most and the box grows
-     * to fit a wrap, so a narrow column costs a line and not a truncation. */
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-    margin-top: 16px;
-  }
-  @media (min-width: 768px) {
-    .tk-options {
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    }
-  }
-  .tk-option {
-    display: flex;
-    align-items: center;
-    min-height: var(--touch);
-    padding: 12px 20px;
-    border: var(--stroke-hair) solid var(--line-strong);
-    border-radius: var(--radius-chip);
-    background: var(--paper);
-    color: var(--ink);
-    font-size: var(--type-body);
-    line-height: var(--type-body-lh);
-    font-weight: 600;
-    text-align: left;
-    cursor: pointer;
-  }
-  .tk-option:hover {
-    background: var(--surface);
-    border-color: var(--ink-3);
-  }
-
-  /* ---- Chip and pill ---------------------------------------------------
-   * A chip is a filter you can switch on; a pill is a choice among several.
-   * Both are controls, so both clear the 44 floor — the old 40 here was below
-   * it, which is exactly the kind of thing that survives review because it
-   * looks deliberate (ADR-032).
-   */
-  .tk-chip,
-  .tk-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    min-height: var(--touch-min);
-    padding: 0 16px;
-    border-radius: var(--radius-full);
-    border: var(--stroke-hair) solid var(--line-strong);
-    background: var(--paper);
-    font-size: var(--type-button);
-    line-height: var(--type-button-lh);
-    font-weight: 600;
-    color: var(--ink);
-    cursor: pointer;
-  }
-  .tk-chip:hover,
-  .tk-pill:hover {
-    background: var(--surface);
-  }
-  .tk-chip[aria-pressed='true'],
-  .tk-pill[aria-pressed='true'] {
-    background: var(--ink);
-    color: var(--paper);
-    border-color: var(--ink);
-  }
-  .tk-chip:disabled,
-  .tk-pill:disabled {
-    background: transparent;
-    color: var(--ink-3);
-    border-color: var(--line);
-    cursor: not-allowed;
-  }
-
-  /* ---- Status label ----------------------------------------------------
-   * A label, deliberately not a chip: no border, no background, no hit target,
-   * because it is a fact about a row and not something you can press. K9 gets
-   * this wrong at a glance otherwise — "in de vriezer" looks tappable the
-   * moment it has a border.
-   *
-   * Colour never carries it alone: every status also has an icon and a word.
-   */
-  .tk-status {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: var(--type-caption);
-    line-height: var(--type-caption-lh);
-    font-weight: 600;
-    color: var(--ink-2);
-    white-space: nowrap;
-  }
-  /* "Onthoud je" is not the same as "goed". Green is an answer state and may
-   * never mean a status, so a remembered item reads in ink and is told apart
-   * by its dot and its word. */
-  .tk-status-remembered {
-    color: var(--ink);
-  }
-
-  /* ---- Input -----------------------------------------------------------
-   * The focus ring is the global one: 2px of ink with 2px of paper between it
-   * and the field. Neutral in both themes and never semantic — a field does
-   * not turn green because you are typing in it.
-   */
-  .tk-input {
-    min-height: var(--control-height);
-    width: 100%;
-    padding: 12px 16px;
-    border: var(--stroke-hair) solid var(--line-strong);
-    border-radius: var(--radius-chip);
-    background: var(--paper);
-    color: var(--ink);
-    font: inherit;
-    font-size: var(--type-body);
-    line-height: var(--type-body-lh);
-  }
-  .tk-input:hover {
-    border-color: var(--ink-3);
-  }
-  .tk-input:disabled {
-    background: var(--sunken);
-    color: var(--ink-3);
-    border-color: var(--line);
-    cursor: not-allowed;
-  }
-  /* aria-invalid rather than a class: the thing that makes a field wrong for a
-   * screen reader is the same thing that makes it wrong to look at. */
-  .tk-input[aria-invalid='true'] {
-    border-color: var(--bad);
-    border-width: var(--stroke-active);
-  }
-
-  /* ---- Table -----------------------------------------------------------
-   * Square corners (§D), a rule between rows, and figures that do not dance.
-   * Numbers are right-aligned and tabular so a column of them lines up on the
-   * digit rather than on the glyph.
-   */
-  .tk-table {
-    width: 100%;
-    border-collapse: collapse;
-    border-radius: 0;
-  }
-  .tk-table th {
-    padding: 12px 16px;
-    background: var(--surface);
-    border-bottom: var(--stroke-hair) solid var(--line-strong);
-    font-size: var(--type-caption);
-    line-height: var(--type-caption-lh);
-    font-weight: 600;
-    color: var(--ink-2);
-    text-align: left;
-  }
-  .tk-table td {
-    padding: 12px 16px;
-    border-bottom: var(--stroke-hair) solid var(--line);
-  }
-  .tk-table th.tk-num,
-  .tk-table td.tk-num {
-    font-variant-numeric: tabular-nums;
-    text-align: right;
   }
 
   /* ---- Progress --------------------------------------------------------
@@ -896,17 +439,12 @@
    * up, drawn sideways. The accent is allowed here — it is one of the three
    * places a module may colour anything.
    */
-  .tk-progress {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
   .tk-progress-rail {
     display: block;
     flex: 1;
     height: 8px;
     border-radius: var(--radius-full);
-    background: var(--sunken);
+    background: var(--line);
     overflow: hidden;
   }
   /* Displayed, and said out loud. Both of these are spans so that the bar is
@@ -920,186 +458,11 @@
     background: var(--accent);
   }
 
-  /* ---- The page inside the shell ----------------------------------------
-   * One column of work, and from 1200 the child's own column of 320 beside it
-   * with 48 between (ADR-094). Below 1200 nothing stands beside anything: the
-   * child's blocks go into the flow of the page, and which of them goes where
-   * is the page's decision — `HomeScreen` and `SideColumn` make it in React,
-   * because it changes the reading order and not only the drawing.
-   *
-   * The front door and a module page are one shape and share every number
-   * here. They keep two names because the front door's middle holds rows and a
-   * module page's holds a chooser, and that is the whole difference.
-   */
-  .tk-page,
-  .tk-home {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 20px;
-    width: 100%;
-    /* The design's own measure: a monitor wider than the design is capped, and
-     * nothing narrower notices. */
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 16px;
-  }
-  .tk-page-main,
-  .tk-home-main {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    min-width: 0;
-  }
-  /* What `main` stands on: the ground, under the cards and the column. The
-   * app bar, the rail, the menu and the tab bar keep paper — they are the
-   * frame, and the frame is not part of the page. */
-  .tk-grond {
-    background: var(--grond);
-  }
-  .tk-home-aside {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    min-width: 0;
-  }
-  @media (min-width: 768px) {
-    .tk-page,
-    .tk-home {
-      gap: 24px;
-      padding: 28px 24px;
-    }
-    .tk-page-main,
-    .tk-home-main {
-      gap: 32px;
-    }
-  }
-  @media (min-width: 1200px) {
-    .tk-page,
-    .tk-home {
-      /* The child's own column at 344, the width the design canvas draws its
-       * blocks at 1440. */
-      grid-template-columns: minmax(0, 1fr) 344px;
-      align-items: start;
-      gap: 48px;
-      padding: 48px;
-    }
-    .tk-page-main,
-    .tk-home-main {
-      gap: 40px;
-    }
-  }
-
-  /* The heading a page opens with, at the handoff's three sizes: 26 on a
-   * phone, 32 on a tablet, and §C's h1 from 1200. In rem, so a reader's own
-   * text size still reaches it (ADR-033). */
-  .tk-titel {
-    font-size: var(--type-display);
-    line-height: var(--type-display-lh);
-  }
-  @media (min-width: 768px) {
-    .tk-titel {
-      font-size: var(--type-display);
-      line-height: var(--type-display-lh);
-    }
-  }
-  @media (min-width: 1200px) {
-    .tk-titel {
-      font-size: var(--type-display);
-      line-height: var(--type-display-lh);
-    }
-  }
-
-  .tk-home-kop {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  /* Progress and tests side by side on a tablet, and exactly as tall as each
-   * other. A grid row does that without either block knowing about the other.
-   * One under the other on a phone. */
-  .tk-home-paar {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 20px;
-  }
-  @media (min-width: 768px) {
-    .tk-home-paar {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-    }
-  }
-
   /* ---- A block in the child's own column --------------------------------
    * A card with a band across the top that names it. The band is a surface
    * and a hairline rather than a heading size: four blocks in a column of 320
    * are four things of equal weight, and it is the words in them that differ.
    */
-  /* Positioned as well as clipped: `overflow: hidden` only clips what it is
-   * the containing block of, and the lines for screen readers inside a block
-   * are absolute (see .tk-rij-baan). */
-  .tk-blok {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    border: var(--stroke-hair) solid var(--line);
-    border-radius: var(--radius-card);
-    background: var(--paper);
-  }
-  .tk-blok-kop {
-    padding: 10px 14px;
-    background: var(--surface);
-    border-bottom: var(--stroke-hair) solid var(--line);
-    font-weight: 600;
-  }
-  .tk-blok-body {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    gap: 12px;
-    padding: 14px;
-  }
-  @media (min-width: 1200px) {
-    .tk-blok-kop {
-      padding: 12px 20px;
-    }
-    .tk-blok-body {
-      padding: 20px;
-    }
-  }
-  /* A block still reading what goes in it: its card at roughly the height of
-   * what arrives, so the page under it does not move when it does. */
-  .tk-blok[aria-busy='true'] .tk-blok-body {
-    min-height: 76px;
-  }
-  /* The way on out of a block: add a test, see everything there is to earn. A
-   * secondary control at the floor height, because it is the second thing in
-   * its block and every page this column is on has its own primary. */
-  .tk-blok-knop {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    min-height: var(--touch-min);
-    padding: 0 16px;
-    border: var(--stroke-hair) solid var(--line-strong);
-    border-radius: var(--radius-chip);
-    background: var(--paper);
-    color: var(--ink);
-    font-size: var(--type-caption);
-    line-height: var(--type-caption-lh);
-    font-weight: 600;
-    text-align: left;
-    cursor: pointer;
-  }
-  .tk-blok-knop:hover {
-    background: var(--surface);
-  }
-  /* A line that helps, at the handoff's 15: under a bar, beside a plate. */
-  .tk-hulp {
-    font-size: var(--type-caption);
-    line-height: var(--type-caption-lh);
-    color: var(--ink-2);
-  }
 
   /* ---- The plate ---------------------------------------------------------
    * A module's pictogram on the module's own tint (ADR-094). It is how the
@@ -1118,236 +481,17 @@
     background: var(--accent-tint);
     color: var(--accent-text);
   }
-  .tk-plaat-groot {
-    width: 44px;
-    height: 44px;
-  }
-  .tk-plaat-rail {
-    width: 36px;
-    height: 36px;
-  }
-  .tk-plaat-klein {
-    width: 36px;
-    height: 36px;
-    border-radius: var(--radius-chip-lg);
-  }
-  /* A plate that is about no module: "kies een vak", a test with no subject. */
-  .tk-plaat-neutraal {
-    background: var(--surface);
-    color: var(--ink-2);
-  }
 
-  /* ---- A row on the front door (ADR-094) ---------------------------------
-   * A heading on a hairline, two round buttons from a tablet up, and cards
-   * that run on past the edge. The scrollbar is hidden and scrolling is not:
-   * see `ScrollRij` for the three ways it still moves.
-   */
-  .tk-rij {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    min-width: 0;
-  }
-  .tk-rij-kop {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    min-height: var(--touch-min);
-    padding-bottom: 10px;
-    border-bottom: var(--stroke-hair) solid var(--line);
-  }
-  .tk-rij-knoppen {
-    display: none;
-    gap: 8px;
-  }
-  @media (min-width: 768px) {
-    .tk-rij-knoppen {
-      display: flex;
-    }
-  }
-  /* 44 where the handoff draws 40: 44 is the floor every control in this
-   * product clears (ADR-032), and a round button is no exception to a
-   * fingertip. */
-  .tk-rij-knop {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: var(--touch-min);
-    height: var(--touch-min);
-    border: 0;
-    border-radius: var(--radius-full);
-    box-shadow: inset 0 0 0 var(--stroke-hair) var(--line-strong);
-    background: var(--paper);
-    color: var(--ink);
-    cursor: pointer;
-  }
-  .tk-rij-knop:hover:not(:disabled) {
-    background: var(--surface);
-  }
-  /* Off at the end of the row: it recedes rather than disappearing, so the
-   * pair stays a pair and the heading does not change width. */
-  .tk-rij-knop:disabled {
-    color: var(--ink-3);
-    cursor: default;
-  }
-  /* Positioned, so it is the containing block of everything absolute inside
-   * it. A card carries a line for screen readers in .tk-sr-only, which is
-   * absolute; with nothing positioned above it, that line hung off the page
-   * rather than off the row, sat wherever its card sat — 540 across, for the
-   * third card on a phone — and pushed the page 129 wider than the glass. The
-   * row scrolls; the page must not. */
-  .tk-rij-baan {
-    position: relative;
-    display: flex;
-    gap: 16px;
-    overflow-x: auto;
-    scroll-snap-type: x proximity;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    /* Room inside the scroll box for a card's focus ring, which an overflow
-     * box would otherwise clip at every edge. The margin gives it back. */
-    margin: -4px;
-    padding: 4px;
-    scroll-padding-inline: 4px;
-  }
-  .tk-rij-baan::-webkit-scrollbar {
-    display: none;
-  }
-  @media (prefers-reduced-motion: no-preference) {
-    .tk-rij-baan {
-      scroll-behavior: smooth;
-    }
-  }
-
-  /* ---- A card in a row ---------------------------------------------------
-   * The same card in "meest geoefend" and "recent geoefend": a plate, the
-   * exercise, the way it was done, and under a rule the one line the row is
-   * about. 264 wide below 1200 and 300 from it, so the edge of the next card
-   * always shows — which is what tells a child there is more.
-   */
-  .tk-kaart {
-    display: flex;
-    flex: none;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-    width: 264px;
-    padding: 20px;
-    border: var(--stroke-hair) solid var(--line);
-    border-radius: var(--radius-card);
-    background: var(--paper);
-    color: var(--ink);
-    text-align: left;
-    scroll-snap-align: start;
-    cursor: pointer;
-  }
-  @media (min-width: 1200px) {
-    .tk-kaart {
-      width: 300px;
-    }
-  }
-  /* Hover in ink, not in the module's colour. The card is a door into one
-   * exercise, and the plate already says which module it is behind. */
-  .tk-kaart:hover {
-    border-color: var(--ink-3);
-  }
-  .tk-kaart-titel {
-    font-family: var(--font-display);
-    font-size: var(--type-card);
-    line-height: var(--type-card-lh);
-    letter-spacing: var(--type-display-ls);
-    font-weight: 600;
-  }
-  /* Room for two lines whether or not the name needs them, so a row of
-   * cards has its rules at one height. */
-  .tk-kaart-titel-twee {
-    min-height: calc(2 * var(--type-card-lh));
-  }
-  .tk-kaart-regel {
-    font-size: var(--type-button);
-    line-height: var(--type-button-lh);
-    color: var(--ink-2);
-  }
-  .tk-kaart-voet {
-    align-self: stretch;
-    margin-top: auto;
-    padding-top: 10px;
-    border-top: var(--stroke-hair) solid var(--line);
-    font-size: var(--type-button);
-    line-height: var(--type-button-lh);
-    font-variant-numeric: tabular-nums;
-    color: var(--ink-2);
-  }
   /* "Verder oefenen": a module with its bar, narrower than the exercise cards
    * above it because it says less. The bar's track is the module's tint. */
   .tk-verder {
     align-items: stretch;
     width: 236px;
   }
-  .tk-verder-kop {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
   .tk-verder .tk-progress-rail {
     background: var(--accent-tint);
   }
-  /* A module the plan has and the product does not: a dashed rule and a
-   * plate with no module in it. A shape rather than a colour, so "not yet" is
-   * legible to a child who cannot tell two greys apart. */
-  .tk-kaart[data-soon] {
-    border-style: dashed;
-    border-color: var(--line-strong);
-  }
-  .tk-kaart[data-soon] .tk-plaat {
-    background: var(--surface);
-    color: var(--ink-2);
-  }
 
-  /* ---- The tests ----------------------------------------------------------
-   * One row per test: the subject as a badge, when, and a way to take it off
-   * the list. A hairline between rows rather than a card round each: the block
-   * is already the card.
-   */
-  .tk-toets-lijst {
-    display: flex;
-    flex-direction: column;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  .tk-toets {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 4px 12px;
-    padding: 8px 0;
-  }
-  .tk-toets + .tk-toets {
-    border-top: var(--stroke-hair) solid var(--line);
-  }
-  .tk-toets-wanneer {
-    font-size: var(--type-button);
-    line-height: var(--type-button-lh);
-    font-weight: 600;
-  }
-  .tk-toets-weg {
-    min-height: var(--touch-min);
-    margin-left: auto;
-    padding: 0 4px;
-    border: 0;
-    background: transparent;
-    color: var(--ink-2);
-    font-size: var(--type-caption);
-    line-height: var(--type-caption-lh);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    cursor: pointer;
-  }
-  .tk-toets-weg:hover {
-    color: var(--ink);
-  }
   /* Which subject, as the module's mark and name in its tint. */
   .tk-vakbadge {
     display: inline-flex;
@@ -1361,47 +505,7 @@
     line-height: var(--type-caption-lh);
     font-weight: 600;
   }
-  /* The block closed, below 1200: only the dates, and the whole of it one
-   * button that opens it. */
-  .tk-toetsen-kort {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 12px 20px;
-    width: 100%;
-    min-height: var(--touch-min);
-    padding: 0;
-    border: 0;
-    background: transparent;
-    color: var(--ink);
-    text-align: left;
-    cursor: pointer;
-  }
-  .tk-toetsen-kort-item {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    font-size: var(--type-button);
-    line-height: var(--type-button-lh);
-    font-weight: 600;
-  }
 
-  /* ---- Progress ------------------------------------------------------------
-   * The level in the display face, the reeks beside it in mono, and the bar
-   * in the reeks' own material. Below 1200 the block is one row that is the
-   * way to the collection.
-   */
-  .tk-niveau {
-    font-family: var(--font-display);
-    font-size: var(--type-title);
-    line-height: var(--type-title-lh);
-    letter-spacing: var(--type-display-ls);
-    font-weight: 700;
-  }
-  .tk-niveau-klein {
-    font-size: var(--type-card);
-    line-height: var(--type-card-lh);
-  }
   /* The reeks, in its deep tone — which is text, and measured as text: every
    * deep tone clears 5.7:1 on paper (contrast.test.ts). Not in the dark theme,
    * where a deep tone on the dark paper would not, so there it is the
@@ -1414,88 +518,6 @@
     font-weight: 600;
     color: var(--held-diep);
   }
-  .tk-reeksbalk .tk-progress-rail {
-    background: var(--held-zacht);
-  }
-  .tk-reeksbalk .tk-progress-fill {
-    background: var(--held-kleur);
-  }
-  .tk-reeksbalk-dun .tk-progress-rail {
-    height: 6px;
-  }
-  .tk-voortgang-kort {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    width: 100%;
-    min-height: var(--touch-min);
-    padding: 0;
-    border: 0;
-    background: transparent;
-    color: var(--ink);
-    text-align: left;
-    cursor: pointer;
-  }
-
-  /* ---- Answered correctly ------------------------------------------------
-   * A ring and the figure beside it. The ring is ink on the sunken tone, not
-   * a material: this is how the work is going, and a material is a reward
-   * (ADR-071). The figure is the handoff's 40/48, which is not a §C step.
-   */
-  .tk-donut {
-    display: inline-grid;
-    flex: none;
-    place-items: center;
-    width: 64px;
-    height: 64px;
-    border-radius: var(--radius-full);
-    background: conic-gradient(var(--ink) 0 var(--vul, 0%), var(--sunken) var(--vul, 0%));
-  }
-  .tk-donut::after {
-    content: '';
-    width: 44px;
-    height: 44px;
-    border-radius: var(--radius-full);
-    background: var(--paper);
-  }
-  .tk-procent {
-    font-family: var(--font-display);
-    font-size: var(--type-number);
-    line-height: var(--type-number-lh);
-    letter-spacing: var(--type-display-ls);
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-  }
-
-  /* ---- A favourite ---------------------------------------------------------
-   * A row that starts a round: a small plate, the exercise and the way. A line
-   * rather than a card — four of them fit where two cards would.
-   */
-  .tk-favorieten {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  .tk-favoriet {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-    min-height: var(--touch-min);
-    padding: 8px;
-    border: 0;
-    border-radius: var(--radius-chip-lg);
-    background: transparent;
-    color: var(--ink);
-    text-align: left;
-    cursor: pointer;
-  }
-  .tk-favoriet:hover {
-    background: var(--surface);
-  }
 
   /* ---- A hero on its plate ----------------------------------------------
    * The material of a reeks as three values — the colour, its deep tone and
@@ -1507,28 +529,28 @@
    */
   [data-reeks='brons'] {
     --held-kleur: var(--reeks-brons);
-    --held-diep: var(--reeks-brons-diep);
-    --held-zacht: var(--reeks-brons-zacht);
+    --held-diep: var(--ink);
+    --held-zacht: var(--grond);
   }
   [data-reeks='zilver'] {
     --held-kleur: var(--reeks-zilver);
-    --held-diep: var(--reeks-zilver-diep);
-    --held-zacht: var(--reeks-zilver-zacht);
+    --held-diep: var(--ink);
+    --held-zacht: var(--grond);
   }
   [data-reeks='goud'] {
     --held-kleur: var(--reeks-goud);
-    --held-diep: var(--reeks-goud-diep);
-    --held-zacht: var(--reeks-goud-zacht);
+    --held-diep: var(--ink);
+    --held-zacht: var(--grond);
   }
   [data-reeks='platina'] {
     --held-kleur: var(--reeks-platina);
-    --held-diep: var(--reeks-platina-diep);
-    --held-zacht: var(--reeks-platina-zacht);
+    --held-diep: var(--ink);
+    --held-zacht: var(--grond);
   }
   [data-reeks='ultra'] {
     --held-kleur: var(--reeks-ultra);
-    --held-diep: var(--reeks-ultra-diep);
-    --held-zacht: var(--reeks-ultra-zacht);
+    --held-diep: var(--ink);
+    --held-zacht: var(--grond);
   }
   /* The hero itself is an image (ADR-098): 320 square, drawn on paper, the
    * plate a circle of 124 round the centre and the four ring slots outside it
@@ -1581,178 +603,13 @@
     inset: 11%;
     border-radius: var(--radius-full);
     background:
-      linear-gradient(var(--sunken), var(--sunken)) center / 16% 100% no-repeat,
-      linear-gradient(var(--sunken), var(--sunken)) center / 100% 16% no-repeat,
-      var(--surface);
+      linear-gradient(var(--line), var(--line)) center / 16% 100% no-repeat,
+      linear-gradient(var(--line), var(--line)) center / 100% 16% no-repeat,
+      var(--grond);
     box-shadow: inset 0 0 0 var(--stroke-hair) var(--line);
   }
   .tk-held-klein .tk-held-kist {
     inset: 0;
-  }
-
-  /* ---- "Jouw voortgang" ----------------------------------------------------
-   * The block in the column and the top of /voortgang. The chest weighs most:
-   * the stars and the large sentence on the surface, the level under it as one
-   * thin bar and one line (ADR-099). The only colours are the reeks material and
-   * the gold of the stars.
-   */
-  .tk-vg-naam {
-    font-family: var(--font-display);
-    font-size: var(--type-card);
-    line-height: var(--type-card-lh);
-    letter-spacing: var(--type-title-ls);
-    font-weight: 600;
-  }
-  .tk-vg-naam-groot {
-    font-size: var(--type-title);
-    line-height: var(--type-title-lh);
-  }
-  .tk-vg-kist {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding: 12px 16px;
-    border-radius: var(--radius-chip-lg);
-    background: var(--surface);
-  }
-  .tk-vg-kistzin {
-    font-family: var(--font-display);
-    font-size: var(--type-card);
-    line-height: var(--type-card-lh);
-    letter-spacing: var(--type-title-ls);
-    font-weight: 600;
-  }
-  .tk-vg-niveau {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  .tk-vg-niveaukop {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0 12px;
-    font-weight: 600;
-  }
-  /* The top of the page: the hero at full size, the chest beside it, and the
-   * way back to practising — beside them from 1200, under them below. */
-  .tk-vg-top {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    align-items: start;
-    gap: 24px;
-  }
-  .tk-vg-top-tekst {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    min-width: 0;
-  }
-  .tk-vg-top-knop {
-    grid-column: 1 / -1;
-  }
-  @media (max-width: 767px) {
-    .tk-vg-top {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 16px;
-    }
-    .tk-vg-top-knop .tk-button {
-      width: 100%;
-    }
-  }
-  @media (min-width: 1200px) {
-    .tk-vg-top {
-      grid-template-columns: auto minmax(0, 1fr) auto;
-      gap: 32px;
-    }
-    .tk-vg-top-knop {
-      grid-column: auto;
-    }
-  }
-  /* The twelve on /voortgang: one card each, the plate at 112 with its rings,
-   * the name, the reeks and how far towards the next, and whether it is worn.
-   * The one worn has an ink edge, the surface and a filled label, so it is
-   * found by more than a tint. */
-  .tk-heldenraster {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(18rem, 100%), 1fr));
-    gap: 16px;
-  }
-  .tk-heldkaart {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    min-width: 0;
-    padding: 16px;
-    border: var(--stroke-hair) solid var(--line);
-    border-radius: var(--radius-card);
-    background: var(--paper);
-    color: var(--ink);
-    text-align: left;
-  }
-  button.tk-heldkaart {
-    cursor: pointer;
-  }
-  button.tk-heldkaart:not([aria-pressed='true']):hover {
-    background: var(--surface);
-    border-color: var(--ink-3);
-  }
-  .tk-heldkaart[aria-pressed='true'] {
-    border-color: var(--ink);
-    background: var(--surface);
-  }
-  .tk-heldkaart-tekst {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
-    min-width: 0;
-  }
-  .tk-heldkaart-naam {
-    font-family: var(--font-display);
-    font-size: var(--type-card);
-    line-height: var(--type-card-lh);
-    letter-spacing: var(--type-title-ls);
-    font-weight: 600;
-  }
-  .tk-heldkaart-meta {
-    font-size: var(--type-caption);
-    line-height: var(--type-caption-lh);
-    color: var(--ink-2);
-    font-variant-numeric: tabular-nums;
-  }
-  .tk-heldkaart-pil {
-    margin-top: 4px;
-    padding: 4px 8px;
-    border: var(--stroke-hair) solid var(--line-strong);
-    border-radius: var(--radius-full);
-    font-family: var(--font-body);
-    font-weight: 600;
-    font-size: var(--type-label);
-    line-height: var(--type-label-lh);
-    letter-spacing: var(--type-label-ls);
-    text-transform: uppercase;
-    color: var(--ink-2);
-  }
-  .tk-heldkaart[aria-pressed='true'] .tk-heldkaart-pil {
-    border-color: var(--ink);
-    background: var(--ink);
-    color: var(--paper);
-  }
-  .tk-heldkaart-kist .tk-heldkaart-naam {
-    font-size: var(--type-button);
-    line-height: var(--type-button-lh);
-    color: var(--ink-2);
-  }
-  /* A card still reading: its parts drawn empty at their own heights. */
-  .tk-leeg {
-    display: block;
-    flex: none;
-    border-radius: var(--radius-chip-lg);
-    background: var(--surface);
-  }
-  .tk-leeg-rond {
-    border-radius: var(--radius-full);
   }
 
   /* ---- A module's own page (ADR-095) --------------------------------------
@@ -1781,28 +638,6 @@
     text-transform: uppercase;
   }
 
-  /* One step: its number and its question on a hairline. */
-  .tk-kies {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  .tk-stap {
-    padding-bottom: 10px;
-    border-bottom: var(--stroke-hair) solid var(--line);
-    font-family: var(--font-display);
-    font-size: var(--type-card);
-    line-height: var(--type-card-lh);
-    letter-spacing: var(--type-display-ls);
-    font-weight: 600;
-    color: var(--ink);
-  }
-  @media (min-width: 768px) {
-    .tk-stap {
-      font-size: var(--type-card);
-      line-height: var(--type-card-lh);
-    }
-  }
   /* The number in the module's text colour: the page's own order, told in the
    * module it belongs to. The question beside it stays ink. */
   .tk-stap-nummer {
@@ -1815,11 +650,6 @@
    * and the ground to its tint — a lightness change in the rule as well as a
    * hue in the ground.
    */
-  .tk-keuzes {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
   .tk-keuze {
     display: inline-flex;
     align-items: center;
@@ -1839,7 +669,7 @@
   /* Hover is for the ones not chosen: a hover rule that outranked the chosen
    * one would let the pointer quietly un-say what the page is saying. */
   .tk-keuze:not(:disabled):not([aria-pressed='true']):hover {
-    background: var(--surface);
+    background: var(--grond);
     border-color: var(--ink-3);
   }
   .tk-keuze[aria-pressed='true'] {
@@ -1854,11 +684,6 @@
     color: var(--ink-2);
     cursor: not-allowed;
   }
-  @media (max-width: 767px) {
-    .tk-keuze-soon {
-      display: none;
-    }
-  }
 
   /* ---- Tiles: which subject, and how to practise ---------------------------
    * A plate and a title, one column below 1200 and two from it. The plate is
@@ -1870,16 +695,6 @@
    * and that is deliberate (ADR-095): the handoff draws them this size, and a
    * tile a hand's width across is a tile a seven-year-old hits first time.
    */
-  .tk-tegels {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 12px;
-  }
-  @media (min-width: 1200px) {
-    .tk-tegels {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
   .tk-tegel {
     display: flex;
     align-items: center;
@@ -1897,7 +712,7 @@
     cursor: pointer;
   }
   .tk-tegel .tk-plaat {
-    background: var(--surface);
+    background: var(--grond);
     color: var(--ink);
   }
   @media (min-width: 1200px) {
@@ -1907,7 +722,7 @@
     }
   }
   .tk-tegel:not([aria-pressed='true']):hover {
-    background: var(--surface);
+    background: var(--grond);
     border-color: var(--ink-3);
   }
   .tk-tegel:not([aria-pressed='true']):hover .tk-plaat {
@@ -1918,7 +733,7 @@
   .tk-tegel[aria-pressed='true'] {
     padding: 19px;
     border: var(--stroke-active) solid var(--accent);
-    background: var(--accent-soft);
+    background: var(--accent-tint);
   }
   .tk-tegel[aria-pressed='true'] .tk-plaat {
     background: var(--accent-tint);
@@ -1939,17 +754,6 @@
    * the handoff shows seven on a phone, and a table a child cannot reach there
    * is a table taken away (ADR-095).
    */
-  .tk-tafels {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 8px;
-  }
-  @media (min-width: 768px) {
-    .tk-tafels {
-      grid-template-columns: repeat(6, minmax(0, 1fr));
-      gap: 12px;
-    }
-  }
   .tk-tafel {
     display: flex;
     flex-direction: column;
@@ -1976,12 +780,12 @@
     }
   }
   .tk-tafel:not([aria-pressed='true']):hover {
-    background: var(--surface);
+    background: var(--grond);
     border-color: var(--ink-3);
   }
   .tk-tafel[aria-pressed='true'] {
     border: var(--stroke-active) solid var(--accent);
-    background: var(--accent-soft);
+    background: var(--accent-tint);
     color: var(--accent-text);
   }
   /* The cijfer, after a toetsstand and nowhere else. The number gets the score
@@ -2001,39 +805,6 @@
   .tk-cijfer-why {
     color: var(--ink-2);
     flex-basis: 100%;
-  }
-
-  /* ---- Badges ----------------------------------------------------------
-   * The small hard-edged label K1 puts before a heading: "toets", and the
-   * subject that test is for. Square, because §A gives the badge no radius —
-   * it is a stamp on the page. Deliberately not a `.tk-chip`, which is a
-   * filter you can switch on: this is a fact, and nothing here is pressable.
-   */
-  .tk-badge,
-  .tk-badge-outline {
-    display: inline-flex;
-    align-items: center;
-    flex: none;
-    padding: 4px 10px;
-    border-radius: 0;
-    font-size: var(--type-button);
-    line-height: var(--type-button-lh);
-    font-weight: 600;
-  }
-  .tk-badge {
-    background: var(--ink);
-    color: var(--paper);
-  }
-  /* The quiet one: which subject the test is for. Ink on paper with a rule
-   * round it, and not the module's accent — §B allows an accent on the
-   * highlight, the progress bar and the module entrance, and a badge is none
-   * of the three. The module's own icon sits inside it instead, which is what
-   * §E does let carry a module. */
-  .tk-badge-outline {
-    gap: 8px;
-    background: var(--paper);
-    color: var(--ink);
-    box-shadow: inset 0 0 0 var(--stroke-hair) var(--line-strong);
   }
 
   /* ---- Module entrance -------------------------------------------------
@@ -2076,232 +847,19 @@
     padding-left: calc(var(--card-padding) - 7px);
   }
   .tk-module-card:disabled {
-    background: var(--surface);
+    background: var(--grond);
     border-color: var(--line);
     color: var(--ink-3);
     cursor: not-allowed;
-  }
-
-  /* ---- Layers over the page --------------------------------------------
-   * Level 2 of §D: what blocks the screen, always on a scrim of ink at 45%.
-   * A round is never interrupted by one of these — see the sheet note below.
-   */
-  .tk-scrim {
-    position: absolute;
-    inset: 0;
-    background: var(--scrim);
-  }
-  .tk-dialog {
-    background: var(--paper);
-    border-radius: var(--radius-card);
-    padding: var(--card-padding);
-    border: var(--stroke-hair) solid var(--line);
-  }
-  /* Bottom sheet: the same weight as a dialog, anchored to the thumb. It is
-   * for a choice the child asked for, never for feedback on an answer — K4 is
-   * a strip in the flow precisely so that a round is not interrupted by
-   * something you have to dismiss. */
-  .tk-sheet {
-    position: absolute;
-    inset: auto 0 0 0;
-    background: var(--paper);
-    border-radius: var(--radius-card) var(--radius-card) 0 0;
-    padding: var(--card-padding);
-  }
-
-  /* ---- Frame -----------------------------------------------------------
-   * Three postures and one component (ADR-093).
-   *
-   * From 1200 up the app bar carries the wordmark and the destinations, the
-   * modules stand in a rail of 96 on the left, and nothing lies along the
-   * bottom. Below 1200 — a tablet either way up, and a phone — the app bar is
-   * the mark, the streak and the child; the modules are one control under it
-   * that opens into a list; and the destinations lie along the bottom, where a
-   * thumb is.
-   *
-   * 1200 rather than the 1280 this used to be. The Chromebook (1366) and the
-   * laptop (1440) keep the rail, the iPads (1080 and 810) and the phones get the
-   * menu, and no size the app is tested at sits between the two numbers — so
-   * the handoff's value moves no device and is the one the design is drawn to.
-   *
-   * Which of each pair is displayed is Tailwind's `desk:` on the element, not a
-   * rule here: a component-layer `display` would lose to the utility anyway,
-   * and one place deciding it is the point.
-   *
-   * All three disappear during a round. A round screen is not wrapped in the
-   * Shell at all (ADR-041).
-   */
-  .tk-appbar {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    height: 56px;
-    /* 16 on a phone, which is the margin §D gives that size. */
-    padding: 0 16px;
-    background: var(--paper);
-    border-bottom: var(--stroke-hair) solid var(--line);
-  }
-  @media (min-width: 768px) {
-    .tk-appbar {
-      height: 64px;
-      padding: 0 20px;
-    }
-  }
-  @media (min-width: 1200px) {
-    .tk-appbar {
-      gap: 24px;
-      padding: 0 24px;
-    }
-  }
-
-  /* The logo, which is the way back to the front door. A button that looks
-   * like nothing: the mark is the affordance, and a border around it would be a
-   * second one competing with it. */
-  .tk-brand {
-    display: inline-flex;
-    align-items: center;
-    flex: none;
-    min-height: var(--touch-min);
-    padding: 0 4px;
-    border: 0;
-    border-radius: var(--radius-chip);
-    background: transparent;
-    cursor: pointer;
-  }
-  .tk-brand:hover {
-    background: var(--surface);
-  }
-
-  /* The destinations, standing in the app bar from 1200. At a reader's 200%
-   * text the row can be wider than the bar, and it scrolls inside the bar
-   * rather than pushing the page sideways. */
-  .tk-navbar {
-    align-items: center;
-    gap: 4px;
-    min-width: 0;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .tk-navbar::-webkit-scrollbar {
-    display: none;
-  }
-  .tk-navbar-item {
-    display: inline-flex;
-    align-items: center;
-    min-height: var(--touch-min);
-    padding: 0 16px;
-    border: 0;
-    border-radius: var(--radius-chip);
-    background: transparent;
-    color: var(--ink-2);
-    font-size: var(--type-button);
-    line-height: var(--type-button-lh);
-    font-weight: 600;
-    white-space: nowrap;
-    cursor: pointer;
-  }
-  .tk-navbar-item:hover {
-    background: var(--surface);
-    color: var(--ink);
-  }
-  /* Where you are: a surface under the word and the word in ink at a heavier
-   * weight. A lightness and a weight, so no hue carries it (§A). */
-  .tk-navbar-item[aria-current='page'] {
-    background: var(--surface);
-    color: var(--ink);
-    font-weight: 700;
-  }
-
-  /* The streak, as a pill at every size. Secondary ink on the surface, 5.6:1,
-   * because it is context for the work and not a headline beside it. */
-  .tk-streak {
-    display: inline-flex;
-    align-items: center;
-    flex: none;
-    gap: 8px;
-    padding: 8px 14px;
-    border-radius: var(--radius-full);
-    background: var(--surface);
-    color: var(--ink-2);
-  }
-  @media (max-width: 767px) {
-    .tk-streak {
-      gap: 6px;
-      padding: 3px 10px;
-    }
   }
 
   /* The profile switch: the child's hero and their name, in a pill with a
    * rule round it. On a phone it is the hero alone — the name stays the
    * button's accessible name, drawn nowhere, which is what .tk-sr-only does
    * and why the rules below are its rules. */
-  /* Positioned for the same reason as .tk-rij-baan: on a phone the name inside
-   * it is absolute, and it should hang off this button, not off the page. */
-  .tk-profiel {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    min-width: 0;
-    min-height: var(--touch-min);
-    padding: 0 16px 0 6px;
-    border: var(--stroke-hair) solid var(--line-strong);
-    border-radius: var(--radius-full);
-    background: var(--paper);
-    color: var(--ink);
-    font-size: var(--type-button);
-    line-height: var(--type-button-lh);
-    font-weight: 600;
-    cursor: pointer;
-  }
-  .tk-profiel:hover {
-    background: var(--surface);
-  }
-  .tk-profiel .tk-held {
-    width: 30px;
-    height: 30px;
-  }
-  .tk-profiel-naam {
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  @media (max-width: 767px) {
-    .tk-profiel {
-      justify-content: center;
-      min-width: var(--touch-min);
-      padding: 0;
-      border: 0;
-      background: transparent;
-    }
-    .tk-profiel .tk-held {
-      width: 34px;
-      height: 34px;
-    }
-    .tk-profiel-naam {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      margin: -1px;
-      padding: 0;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      border: 0;
-    }
-  }
 
   /* The rail, from 1200: 96 wide, five doors, and no mark at its head — the
    * handoff draws none, and the wordmark is a hand's width away in the bar. */
-  .tk-rail {
-    flex: none;
-    flex-direction: column;
-    gap: 6px;
-    width: 96px;
-    padding: 16px 8px;
-    background: var(--paper);
-    border-right: var(--stroke-hair) solid var(--line);
-  }
   .tk-rail-item {
     display: flex;
     flex-direction: column;
@@ -2320,7 +878,7 @@
     cursor: pointer;
   }
   .tk-rail-item:hover {
-    background: var(--surface);
+    background: var(--grond);
   }
   /* The module entrance is one of the things an accent may colour, and the
    * rail is where it does most of its work. The plate turns to paper on the
@@ -2333,73 +891,7 @@
     background: var(--paper);
   }
 
-  /* ---- The menu the rail becomes below 1200 (ADR-093) --------------------
-   * A row under the app bar with a word and a button in it; open, a panel in
-   * the flow of the page under that, holding a card of five rows. In the flow
-   * rather than over it, so nothing under it is covered while it is open and
-   * nothing has to be told to stop scrolling.
-   */
-  .tk-vakmenu-rij {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    border-bottom: var(--stroke-hair) solid var(--line);
-  }
-  .tk-vakmenu-knop {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    min-width: 0;
-    min-height: 48px;
-    padding: 0 14px 0 8px;
-    border: 0;
-    border-radius: var(--radius-full);
-    box-shadow: inset 0 0 0 var(--stroke-hair) var(--line-strong);
-    background: var(--paper);
-    color: var(--ink);
-    font-size: var(--type-button);
-    line-height: var(--type-button-lh);
-    font-weight: 600;
-    cursor: pointer;
-  }
-  .tk-vakmenu-knop:hover {
-    background: var(--surface);
-  }
   /* Open: the rule turns to ink, and the chevron turns over. */
-  .tk-vakmenu-knop[aria-expanded='true'] {
-    box-shadow: inset 0 0 0 var(--stroke-hair) var(--ink);
-  }
-  .tk-vakmenu-knop .tk-plaat {
-    width: 28px;
-    height: 28px;
-    border-radius: var(--radius-chip-lg);
-  }
-  .tk-vakmenu-paneel {
-    padding: 10px 16px 14px;
-    background: var(--surface);
-    border-bottom: var(--stroke-hair) solid var(--line);
-  }
-  @media (min-width: 768px) {
-    .tk-vakmenu-rij {
-      padding: 12px 20px;
-    }
-    .tk-vakmenu-paneel {
-      padding: 10px 20px 14px;
-    }
-  }
-  .tk-vakmenu-lijst {
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    list-style: none;
-    border: var(--stroke-hair) solid var(--line-strong);
-    border-radius: var(--radius-card);
-    background: var(--paper);
-  }
-  .tk-vakmenu-lijst li + li {
-    border-top: var(--stroke-hair) solid var(--line);
-  }
   .tk-vakmenu-optie {
     display: flex;
     align-items: center;
@@ -2417,7 +909,7 @@
     cursor: pointer;
   }
   .tk-vakmenu-optie:hover {
-    background: var(--surface);
+    background: var(--grond);
   }
   /* Inside the card's own edge, because the card clips what stands outside
    * it and a focus ring that is cut off is not a focus ring. */
@@ -2433,102 +925,6 @@
     background: var(--paper);
   }
 
-  /* ---- The tab bar, below 1200 ------------------------------------------
-   * A mark and a word per destination. Where you are is a rule across the
-   * top, a surface and a heavier word — and in ink, where the handoff draws it
-   * in topography's blue: a destination is not a module, and §B does not let
-   * an accent say which one you are on (ADR-093).
-   */
-  .tk-tabbar {
-    display: flex;
-    align-items: stretch;
-    background: var(--paper);
-    border-top: var(--stroke-hair) solid var(--line);
-  }
-  .tk-tabbar-item {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    min-height: 64px;
-    padding: 6px 4px 8px;
-    border: 0;
-    border-top: var(--stroke-active) solid transparent;
-    background: transparent;
-    color: var(--ink-2);
-    font-size: var(--type-label);
-    letter-spacing: var(--type-label-ls);
-    line-height: var(--type-label-lh);
-    font-weight: 600;
-    cursor: pointer;
-  }
-  @media (min-width: 768px) {
-    .tk-tabbar-item {
-      min-height: 68px;
-      font-size: var(--type-caption);
-      line-height: var(--type-caption-lh);
-    }
-  }
-  .tk-tabbar-item[aria-current='page'] {
-    border-top-color: var(--ink);
-    background: var(--surface);
-    color: var(--ink);
-    font-weight: 700;
-  }
-
-  /* ---- The round, on four sizes (K3) -----------------------------------
-   * Three arrangements of the same two things, and the design gives a reason
-   * for each. Beside the map where there is width and a hand on a keyboard.
-   * Above it when the tablet is turned over and there is height instead. On the
-   * map when there is neither, because a question and the thing it is about
-   * must be in view together — on 393 as much as on 1440.
-   *
-   * Written as one grid with three shapes rather than three components: the
-   * question does not move in the document, so the reading order and the tab
-   * order are the same at every size, and nothing is rendered twice.
-   *
-   * No navigation appears here at any size. That is enforced by not wrapping
-   * this screen in the Shell at all (ADR-041), not by hiding anything.
-   */
-  .tk-round-bar {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex: none;
-    padding: 12px 16px;
-    border-bottom: var(--stroke-hair) solid var(--line);
-  }
-  @media (min-width: 768px) {
-    .tk-round-bar {
-      gap: 20px;
-      padding: 0 48px;
-      height: 64px;
-    }
-  }
-
-  /* The stop, which is a cross and not a word: it is the one control that must
-   * read the same to a child who cannot yet read. 44 is the floor, and this is
-   * the one place the floor is right — leaving is not the thing we want to make
-   * easiest. */
-  .tk-stop {
-    display: flex;
-    flex: none;
-    align-items: center;
-    justify-content: center;
-    width: var(--touch-min);
-    height: var(--touch-min);
-    border: var(--stroke-hair) solid var(--line-strong);
-    border-radius: var(--radius-card);
-    background: transparent;
-    color: var(--ink);
-    cursor: pointer;
-  }
-  .tk-stop:hover {
-    background: var(--surface);
-  }
-
   /* Ten dots, which are the progress bar of §B — one of the three things a
    * module may colour. An answered question is filled, the one being asked is a
    * ring, and the rest are the empty track. They are an indication and not a
@@ -2538,129 +934,12 @@
    * button and a counter do not all fit across 393 (ADR-032's smallest phone),
    * and a progress bar missing its tail is a smaller lie than a counter that
    * is half a character wide. */
-  .tk-round-dots {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    min-width: 0;
-    overflow: hidden;
-  }
-  @media (min-width: 768px) {
-    .tk-round-dots {
-      gap: 8px;
-    }
-  }
-  .tk-round-dot {
-    width: 14px;
-    height: 14px;
-    border-radius: var(--radius-full);
-    background: var(--sunken);
-  }
-  @media (min-width: 768px) {
-    .tk-round-dot {
-      width: 18px;
-      height: 18px;
-    }
-  }
-  @media (min-width: 1024px) {
-    .tk-round-dot {
-      width: 20px;
-      height: 20px;
-    }
-  }
   .tk-round-dot-done {
     background: var(--accent);
   }
   .tk-round-dot-now {
     background: transparent;
     border: var(--stroke-active) solid var(--accent);
-  }
-
-  /* ---- The two things that share the screen ---------------------------- */
-  .tk-round-body {
-    position: relative;
-    display: grid;
-    flex: 1;
-    min-height: 0;
-    /* Two rows at every size: the question, then the map. On a phone the
-     * question used to lie on the map and pass taps through, which is what the
-     * design's phone frame reads as — and a screenshot at 393 settled it. The
-     * card is opaque, it sits at the top, and Groningen is at the top of the
-     * country, so "waar ligt Groningen" was asked with Groningen behind the
-     * question. Taps passing through do not help a child who cannot see it.
-     *
-     * It cost nothing to give up. The country is square and the phone is
-     * narrow, so the drawing is width-bound: the vertical space the overlay was
-     * winning back was space the map could not have used.
-     *
-     * The rows are named rather than left implicit — the map sizes itself from
-     * the height it is given, so a row sized by its contents is a circle and
-     * the canvas collapses to nothing inside it. */
-    grid-template-areas: 'question' 'map';
-    grid-template-rows: auto minmax(0, 1fr);
-  }
-  /* A block and not a flex row. As a flex item the canvas keeps its intrinsic
-   * width — `min-width: auto` is the flex default and a replaced element's
-   * intrinsic size is not zero — so on a phone it refused to shrink and the
-   * country ran off both edges, with the province being asked about off the
-   * screen entirely. The canvas is `width: 100%; height: 100%` and its own
-   * viewBox centres what it draws, so there is nothing for a flex row to do
-   * here that the SVG does not already do correctly. */
-  .tk-round-map {
-    grid-area: map;
-    display: block;
-    min-height: 0;
-    min-width: 0;
-    padding: 12px;
-  }
-
-  /* On paper, with its own boundary — so the contrast of the words does not
-   * depend on what is beside them. A card on a phone and a bar from the tablet
-   * up, which is the difference §D draws between a block that sits in the page
-   * and one that introduces it. */
-  .tk-round-question {
-    grid-area: question;
-    margin: 16px;
-    padding: 16px;
-    background: var(--paper);
-    border: var(--stroke-region) solid var(--line-strong);
-    border-radius: var(--radius-card);
-  }
-
-  /* Tablet upright: the bar goes above the canvas and the map takes the full
-   * width. A surface fill and a 1.5 boundary, which is what §D gives a block
-   * that is part of the page rather than lying over it. */
-  @media (min-width: 768px) {
-    .tk-round-question {
-      margin: 0;
-      padding: 24px;
-      background: var(--surface);
-      border: 0;
-      border-bottom: var(--stroke-region) solid var(--line-strong);
-      border-radius: 0;
-    }
-    .tk-round-map {
-      padding: 24px;
-    }
-  }
-
-  /* Desktop and tablet on its side: beside, because there is width to spare and
-   * the hand is on a keyboard rather than on the map. */
-  @media (min-width: 1024px) {
-    .tk-round-body {
-      grid-template-areas: 'question map';
-      grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
-      grid-template-rows: minmax(0, 1fr);
-    }
-    .tk-round-question {
-      align-self: center;
-      padding: 48px;
-      background: transparent;
-      border: 0;
-    }
-    .tk-round-map {
-      padding: 48px;
-    }
   }
 
   /* Map shapes, and the four answer states of step 7.
@@ -2811,7 +1090,7 @@
     align-items: center;
     justify-content: center;
     border-radius: var(--radius-full);
-    background: var(--surface);
+    background: var(--grond);
   }
   .tk-unwrap-row[data-reeks='brons'] .tk-unwrap {
     color: var(--reeks-brons);
@@ -2849,17 +1128,6 @@
     }
   }
 
-  .tk-sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
-  }
   /* ==== The component set, house style v2 ====================================
    * Stap 6, "Oplevering": the set of forty-six. The handoff numbers only 42 to
    * 46 (all five belong to screens out of scope); the rest go by the names the
@@ -3058,24 +1326,6 @@
     border-radius: var(--card-radius);
     background: var(--paper);
   }
-  .ln-kaart-knop {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--gap-sm);
-    width: 100%;
-    min-height: var(--touch-target);
-    padding: var(--pad-card-phone-sm);
-    border: var(--stroke-hair) solid var(--line);
-    border-radius: var(--card-radius);
-    background: var(--paper);
-    color: var(--ink);
-    text-align: left;
-    cursor: pointer;
-  }
-  .ln-kaart-knop:hover {
-    border-color: var(--control-line);
-  }
 
   /* plaat: a module's identity plate, 40 square, its tint behind an ink
    * pictogram (S2, S3). The only place the seven tints appear. */
@@ -3096,10 +1346,6 @@
   }
   .ln-plaat-leeg {
     background: var(--inset);
-  }
-  .ln-plaat-open {
-    border: var(--stroke-hair) dashed var(--line-strong);
-    background: transparent;
   }
 
   /* tegel (S2, S4): a card that is a choice. Chosen, it takes the accent's
@@ -4358,13 +2604,6 @@
     border-top: var(--stroke-hair) solid var(--line);
   }
 
-  /* The phone's start bar (ADR-095) sticks above the tab bar, which sticks
-   * to the foot of the glass below a tablet on its side. */
-  @media (max-width: 1023px) {
-    .tk-startbalk-mobiel {
-      bottom: var(--tabbar-height);
-    }
-  }
   /* ==== Vandaag (S2) ========================================================== */
 
   /* The test card: one target. The words, the three dots of the horizon, and

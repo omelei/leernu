@@ -344,24 +344,3 @@
   --card-padding: var(--pad-card-phone-sm);
 }
 
-/* ---- Names the pages still use, until each is rebuilt ------------------------
- * The stylesheet of the old house style asked for colours by names this palette
- * does not have. Each resolves to a token above rather than to a value of its
- * own, so no colour enters through here; each page's rebuild (phases 4 to 6)
- * takes its names out, and the last one out deletes this block.
- */
-:root {
-  --surface: var(--grond);
-  --sunken: var(--line);
-  --accent-soft: var(--accent-tint);
-  --reeks-brons-diep: var(--ink);
-  --reeks-brons-zacht: var(--grond);
-  --reeks-zilver-diep: var(--ink);
-  --reeks-zilver-zacht: var(--grond);
-  --reeks-goud-diep: var(--ink);
-  --reeks-goud-zacht: var(--grond);
-  --reeks-platina-diep: var(--ink);
-  --reeks-platina-zacht: var(--grond);
-  --reeks-ultra-diep: var(--ink);
-  --reeks-ultra-zacht: var(--grond);
-}
