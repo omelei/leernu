@@ -54,10 +54,10 @@ export function SpeakButton({ text }: { readonly text: string }) {
       type="button"
       aria-label={t('practice.speak')}
       aria-pressed={speaking}
-      className="flex h-touch w-touch flex-none items-center justify-center rounded-control border-2 border-ink bg-paper"
+      className="flex h-knop w-knop flex-none items-center justify-center rounded-kaart border-hair border-rand-bediening bg-kaart"
       onClick={speak}
     >
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="var(--ink)" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="var(--inkt)" aria-hidden="true">
         {speaking ? <rect x="6" y="6" width="12" height="12" /> : <path d="M8 5l11 7-11 7z" />}
       </svg>
     </button>

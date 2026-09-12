@@ -57,8 +57,8 @@ export function ProfileScreen({
     <div className="tk-page">
       <div className="tk-page-main">
         <div>
-          <h1 className="tk-display text-h1 font-semibold">{t('you.title')}</h1>
-          <p className="mt-1 text-ink-2">{t('you.nameIs', { naam: profile.naam })}</p>
+          <h1 className="tk-display text-paginakop">{t('you.title')}</h1>
+          <p className="mt-1 text-tekst-secundair">{t('you.nameIs', { naam: profile.naam })}</p>
         </div>
 
         <Week />
@@ -85,7 +85,7 @@ export function ProfileScreen({
           />
         </section>
 
-        <p className="text-ink-2">{t('you.stays')}</p>
+        <p className="text-tekst-secundair">{t('you.stays')}</p>
       </div>
 
       {aside}
@@ -144,7 +144,7 @@ function Children({ active }: { readonly active: ProfileRecord }) {
           <PupilIcon size={24} />
           <span className="min-w-0">
             <span className="block font-semibold">{child.naam}</span>
-            <span className="block text-ink-2">
+            <span className="block text-tekst-secundair">
               {child.id === active.id
                 ? t('you.practisingNow')
                 : t('you.switchTo', { naam: child.naam })}
@@ -183,7 +183,7 @@ function Children({ active }: { readonly active: ProfileRecord }) {
       )}
 
       {/* Said once, where a parent adding the second child will read it. */}
-      <p className="text-ink-2">{t('you.childExplain')}</p>
+      <p className="text-tekst-secundair">{t('you.childExplain')}</p>
     </section>
   );
 }
@@ -204,7 +204,7 @@ function Switch({
       <span className="flex items-center gap-4">
         <span className="min-w-0 flex-1">
           <span className="block font-semibold">{label}</span>
-          <span className="block text-ink-2">{why}</span>
+          <span className="block text-tekst-secundair">{why}</span>
         </span>
         {/* The state in a word as well as a shape: "aan" and "uit" survive
             being colour blind, and aria-pressed carries it to a screen reader
@@ -267,23 +267,25 @@ function Week({ now = new Date() }: { readonly now?: Date }) {
       <h2 className="tk-label">{t('you.week')}</h2>
 
       {deze.length === 0 ? (
-        <p className="text-ink-2">{t('you.weekNone')}</p>
+        <p className="text-tekst-secundair">{t('you.weekNone')}</p>
       ) : (
         <>
-          <p className="text-body">
+          <p className="text-lopend">
             {t('you.weekRounds', { rondes: deze.length, dagen, vragen: beantwoord })}
           </p>
-          <p className="text-ink-2">
+          <p className="text-tekst-secundair">
             {cijfer === null
               ? t('you.weekNoGrade')
               : t('you.weekGrade', { cijfer: formatGrade(cijfer) })}
           </p>
-          {meest ? <p className="text-ink-2">{t('you.weekMost', { set: meest[0] })}</p> : null}
+          {meest ? (
+            <p className="text-tekst-secundair">{t('you.weekMost', { set: meest[0] })}</p>
+          ) : null}
         </>
       )}
 
       {toets !== null && dagenTot !== null ? (
-        <p className="text-ink-2">
+        <p className="text-tekst-secundair">
           {dagenTot === 0
             ? t('home.testToday')
             : dagenTot === 1

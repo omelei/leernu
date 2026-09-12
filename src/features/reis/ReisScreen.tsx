@@ -96,7 +96,7 @@ export function ReisScreen({
   return (
     <div className="tk-page">
       <div className="tk-page-main">
-        <h1 className="tk-display tk-titel font-semibold">{t('reis.title')}</h1>
+        <h1 className="tk-display tk-titel">{t('reis.title')}</h1>
 
         {/* The nearest reward, beside the hero it is for. Its own name rather
             than the card's in the column: two landmarks with one label is two
@@ -113,12 +113,12 @@ export function ReisScreen({
             </div>
 
             <Sterren inKist={sterrenInKist(goed)} grootte={32} zin="kort" />
-            <p className="tk-display text-h2 font-bold">{kistZin(goed)}</p>
+            <p className="tk-display text-sectiekop">{kistZin(goed)}</p>
 
             <div className="tk-vg-niveau">
               <p className="tk-vg-niveaukop">
                 <span>{t('home.journeyLevel', { niveau: level })}</span>
-                <span className="font-normal text-ink-2">
+                <span className="font-normal text-tekst-secundair">
                   {t('reis.answered', { aantal: goed })}
                 </span>
               </p>
@@ -148,7 +148,7 @@ export function ReisScreen({
         <section className="flex flex-col gap-4" aria-label={t('reis.animals')}>
           <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
             <h2 className="tk-label">{t('reis.animals')}</h2>
-            <p className="text-ink-2">
+            <p className="text-tekst-secundair">
               {t('home.journeyHave', { aantal: helden.helden.length, totaal: AANTAL_HELDEN })}
             </p>
           </div>
@@ -219,7 +219,7 @@ export function ReisScreen({
         <section className="flex flex-col gap-3" aria-label={t('rekenen.diplomasTitle')}>
           <div>
             <h2 className="tk-label">{t('rekenen.diplomasTitle')}</h2>
-            <p className="text-ink-2">
+            <p className="text-tekst-secundair">
               {t('rekenen.diplomasCount', { aantal: diplomas.size, totaal: TAFELS.length })}
             </p>
           </div>
@@ -255,7 +255,7 @@ export function ReisScreen({
         <section className="flex flex-col gap-3" aria-label={t('reis.stamps')}>
           <div>
             <h2 className="tk-label">{t('reis.stamps')}</h2>
-            <p className="text-ink-2">
+            <p className="text-tekst-secundair">
               {t('reis.stampsHave', {
                 aantal: STAMPS.filter((stamp) => stamps.has(stamp.id)).length,
                 totaal: STAMPS.length,
@@ -272,7 +272,7 @@ export function ReisScreen({
                   <StampIcon size={24} />
                   <span className="min-w-0">
                     <span className="block font-semibold">{t(STAMP_NAME[stamp.id])}</span>
-                    <span className="block text-ink-2">
+                    <span className="block text-tekst-secundair">
                       {t(`${STAMP_NAME[stamp.id]}.criterion` as TranslationKey)}
                     </span>
                   </span>

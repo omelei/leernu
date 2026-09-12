@@ -41,7 +41,7 @@ export function Tafeldiplomas({ onKies }: { readonly onKies: (setId: string) => 
   return (
     <section className="flex flex-col gap-3" aria-label={t('rekenen.diplomasTitle')}>
       <h2 className="tk-label">{t('rekenen.diplomasTitle')}</h2>
-      <p className="text-ink-2">
+      <p className="text-tekst-secundair">
         {t('rekenen.diplomasCount', { aantal: behaald.size, totaal: TAFELS.length })}
       </p>
 

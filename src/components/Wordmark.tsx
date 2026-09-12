@@ -23,8 +23,8 @@ import { LOCKUP, LOCKUP_GLYPHS, LOCKUP_MIN_PX, LOCKUP_VAT } from '@/design/logo'
 const CLEAR_SPACE = 40 / LOCKUP.height;
 /** The drawn letters' x-height, 100 of 140. */
 const X_HEIGHT = 100 / LOCKUP.height;
-/** Source Sans 3's x-height, 486 units to the em. */
-const QUIET_X_HEIGHT = 0.486;
+/** Public Sans's x-height, 1034 units of 2000. */
+const QUIET_X_HEIGHT = 1034 / 2000;
 
 export interface WordmarkProps {
   /** Height in px, never below 26. The width follows from it. */
@@ -62,7 +62,7 @@ export function Wordmark({
         display: 'inline-flex',
         alignItems: 'baseline',
         lineHeight: 1,
-        color: tone === 'ink' ? 'var(--ink)' : 'var(--paper)',
+        color: tone === 'ink' ? 'var(--inkt)' : 'var(--kaart)',
         padding: clearSpace ? `${drawn * CLEAR_SPACE}px` : undefined,
       }}
     >
@@ -97,10 +97,10 @@ export function Wordmark({
         <span
           aria-hidden="true"
           style={{
-            fontFamily: "'Source Sans 3', system-ui, sans-serif",
+            fontFamily: 'var(--font-tekst)',
             fontWeight: 400,
             fontSize: `${(drawn * X_HEIGHT) / QUIET_X_HEIGHT}px`,
-            color: 'var(--ink-3)',
+            color: 'var(--tekst-tertiair)',
           }}
         >
           /{path}

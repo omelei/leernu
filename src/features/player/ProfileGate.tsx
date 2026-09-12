@@ -30,12 +30,12 @@ export function ProfileGate({ onReady }: { readonly onReady: (profile: ProfileRe
     <main className="mx-auto flex min-h-screen max-w-xl flex-col justify-center gap-8 p-6">
       <div>
         <Wordmark height={28} clearSpace={false} />
-        <p className="mt-1 text-ink-2">{brand.slogan}</p>
+        <p className="mt-1 text-tekst-secundair">{brand.slogan}</p>
       </div>
 
       <form onSubmit={(event) => void handleSubmit(event)} className="tk-card flex flex-col gap-4">
-        <h1 className="tk-display text-h2 font-semibold">{t('profile.title')}</h1>
-        <label htmlFor="naam" className="text-ink-2">
+        <h1 className="tk-display text-sectiekop">{t('profile.title')}</h1>
+        <label htmlFor="naam" className="text-tekst-secundair">
           {t('profile.help')}
         </label>
         <input
@@ -53,7 +53,7 @@ export function ProfileGate({ onReady }: { readonly onReady: (profile: ProfileRe
           aria-invalid={error !== null}
         />
         {error !== null && (
-          <p id="naam-error" role="alert" className="font-semibold text-bad">
+          <p id="naam-error" role="alert" className="font-semibold text-fout">
             {error}
           </p>
         )}

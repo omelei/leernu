@@ -32,7 +32,7 @@ export function VlagDiplomas({
     <section className="flex flex-col gap-3" aria-label={t('vlag.diplomasTitle')}>
       <div>
         <h2 className="tk-label">{t('vlag.diplomasTitle')}</h2>
-        <p className="text-ink-2">
+        <p className="text-tekst-secundair">
           {t('vlag.diplomasCount', { aantal: behaald.size, totaal: DIPLOMA_WERELDDELEN.length })}
         </p>
       </div>

@@ -36,7 +36,7 @@ export function Brandmark({
         width={size}
         height={size}
         viewBox={`0 0 ${MERKTEKEN.size} ${MERKTEKEN.size}`}
-        fill={tone === 'ink' ? 'var(--ink)' : 'var(--paper)'}
+        fill={tone === 'ink' ? 'var(--inkt)' : 'var(--kaart)'}
         focusable="false"
       >
         {size < MERKTEKEN_SOLID_BELOW_PX ? (
