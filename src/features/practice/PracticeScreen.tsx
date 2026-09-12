@@ -184,9 +184,10 @@ export function PracticeScreen({
       />
 
       {/* Announced separately from the heading so a screen reader hears the new
-          question on every turn, not only on the first. */}
+          question on every turn, not only on the first — with what to do, the
+          way read aloud says it, because the heading leaves that to the map. */}
       <p className="ln-sr-only" role="status" aria-live="polite">
-        {revealed ? feedbackSentence(state, naam, chosenName) : vraag}
+        {revealed ? feedbackSentence(state, naam, chosenName) : voorlezen}
       </p>
 
       <div className="ln-canvas">

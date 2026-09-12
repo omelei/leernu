@@ -255,7 +255,9 @@ test('a round of Europe draws Europe, not the Netherlands', async ({ page }) => 
 
   // A country on the map, asked for in the words a country is asked for in.
   await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
-  await expect(page.getByText('Wijs het land aan')).toBeVisible();
+  // The instruction is not on the screen (S5: the question is the heading, and
+  // there is nothing else); it is what a screen reader and read aloud say.
+  await expect(page.getByRole('status')).toContainText('Wijs het land aan');
   await expect(page.locator('svg').getByRole('button', { name: 'Spanje' })).toBeVisible();
   // The provinces are not underneath it.
   await expect(page.locator('svg').getByRole('button', { name: 'Limburg' })).toHaveCount(0);
