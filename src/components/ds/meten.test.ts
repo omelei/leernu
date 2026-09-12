@@ -7,9 +7,7 @@ describe('de punt', () => {
   });
 
   it('fills as a conic gradient from the accent to the empty track', () => {
-    expect(puntVulling(75)).toBe(
-      'conic-gradient(var(--accent) 0 75%, var(--rail-empty) 75% 100%)',
-    );
+    expect(puntVulling(75)).toBe('conic-gradient(var(--accent) 0 75%, var(--rail-empty) 75% 100%)');
   });
 
   it('never fills past its own ring, and never below empty', () => {

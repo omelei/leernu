@@ -20,19 +20,19 @@ De router is met de hand geschreven (`src/features/shell/routes.ts`), zonder
 pakket. Een ronde heeft bewust geen adres; hij wordt gekozen met `screen` in
 `App.tsx`.
 
-| Pad | Route | Scherm |
-| --- | --- | --- |
-| `/` | `home` | `HomeScreen` (voordeur, drie scrollrijen en een eigen kolom) |
-| `/onthouden` | `retention` | `RetentionScreen` (K9, tabel met itemstatus) |
-| `/jij` | `you` | `ProfileScreen` (K10) |
-| `/voortgang`, `/ontdekkingsreis` | `reis` | `ReisScreen` (helden, diploma's, stempels, ladder) |
-| `/topografie[/set]` | `module` | `ModuleScreen` |
-| `/rekenen[/set]`, `/tafels[/set]` | `module` (tafels) | `ModuleScreen` + `Tafeldiplomas` |
-| `/klokkijken[/set]`, `/klok[/set]` | `module` (klok) | `ModuleScreen` |
-| `/vlaggen[/set]` | `module` (vlaggen) | `ModuleScreen` + `VlagDiplomas` |
-| `/woordjes`, `/spelling`, `/tijdvakken` | `soon` | `ModuleSoon` |
-| `/rekenen` met meer dan één gebouwd vak | `category` | `CategoryScreen` (nu onbereikbaar) |
-| alles anders | `home` | |
+| Pad                                     | Route              | Scherm                                                       |
+| --------------------------------------- | ------------------ | ------------------------------------------------------------ |
+| `/`                                     | `home`             | `HomeScreen` (voordeur, drie scrollrijen en een eigen kolom) |
+| `/onthouden`                            | `retention`        | `RetentionScreen` (K9, tabel met itemstatus)                 |
+| `/jij`                                  | `you`              | `ProfileScreen` (K10)                                        |
+| `/voortgang`, `/ontdekkingsreis`        | `reis`             | `ReisScreen` (helden, diploma's, stempels, ladder)           |
+| `/topografie[/set]`                     | `module`           | `ModuleScreen`                                               |
+| `/rekenen[/set]`, `/tafels[/set]`       | `module` (tafels)  | `ModuleScreen` + `Tafeldiplomas`                             |
+| `/klokkijken[/set]`, `/klok[/set]`      | `module` (klok)    | `ModuleScreen`                                               |
+| `/vlaggen[/set]`                        | `module` (vlaggen) | `ModuleScreen` + `VlagDiplomas`                              |
+| `/woordjes`, `/spelling`, `/tijdvakken` | `soon`             | `ModuleSoon`                                                 |
+| `/rekenen` met meer dan één gebouwd vak | `category`         | `CategoryScreen` (nu onbereikbaar)                           |
+| alles anders                            | `home`             |                                                              |
 
 Zonder adres: `ExploreScreen`, `PracticeScreen` + `ResultScreen` (kaart),
 `SumScreen`, `KlokScreen`, `VlagScreen`, `VlagExploreScreen`, en de
@@ -123,20 +123,20 @@ Rekenen, klok en vlaggen delen `features/round/useRoundCore.ts`.
 
 ## 2. Wat de overdracht vraagt en wat er ontbreekt
 
-| Onderdeel | Staat er | Ontbreekt of wijkt af |
-| --- | --- | --- |
-| Tokens en fonts | eigen palet, drie families | het hele palet en beide families |
-| Rail met vier bestemmingen | rail met vakken, bovenbalk én tabbalk | één rail, andere labels |
-| Donker thema tijdens een ronde | systeemafhankelijk donker | donker als eigenschap van de ronde |
-| Punt als retentiemeter | `Dot` als vullend vat, voor meerdere betekenissen | conic-gradient, alleen retentie |
-| Ruit als vraagteller | bolletjes | ruiten en teller met voorloopnul |
-| Toestandsmodel | vier vormen | drie vormen volgens README, punt bij gemist |
-| Beweging bij fout | een `@keyframes`-reis van 140 ms | ruim twee seconden, ease-in-out, spoor |
-| Herhaalsysteem | vijf bakjes | "controleren", moment per kalenderdag in Europe/Amsterdam |
-| Retentie per set | voorspelling | een definitie die met "9 van 12" samenvalt |
-| Streak | rustdagen, schoolvakanties | het woord vriezer, vakantiemodus |
-| Verzameling | twaalf helden, vijf materialen | niveauladder weg, back-up en terugdraaipad |
-| Kaart | eigen projectie en paden | `provincie_2023.geojson`, trefzone uit oppervlak |
+| Onderdeel                      | Staat er                                          | Ontbreekt of wijkt af                                     |
+| ------------------------------ | ------------------------------------------------- | --------------------------------------------------------- |
+| Tokens en fonts                | eigen palet, drie families                        | het hele palet en beide families                          |
+| Rail met vier bestemmingen     | rail met vakken, bovenbalk én tabbalk             | één rail, andere labels                                   |
+| Donker thema tijdens een ronde | systeemafhankelijk donker                         | donker als eigenschap van de ronde                        |
+| Punt als retentiemeter         | `Dot` als vullend vat, voor meerdere betekenissen | conic-gradient, alleen retentie                           |
+| Ruit als vraagteller           | bolletjes                                         | ruiten en teller met voorloopnul                          |
+| Toestandsmodel                 | vier vormen                                       | drie vormen volgens README, punt bij gemist               |
+| Beweging bij fout              | een `@keyframes`-reis van 140 ms                  | ruim twee seconden, ease-in-out, spoor                    |
+| Herhaalsysteem                 | vijf bakjes                                       | "controleren", moment per kalenderdag in Europe/Amsterdam |
+| Retentie per set               | voorspelling                                      | een definitie die met "9 van 12" samenvalt                |
+| Streak                         | rustdagen, schoolvakanties                        | het woord vriezer, vakantiemodus                          |
+| Verzameling                    | twaalf helden, vijf materialen                    | niveauladder weg, back-up en terugdraaipad                |
+| Kaart                          | eigen projectie en paden                          | `provincie_2023.geojson`, trefzone uit oppervlak          |
 
 ## 3. Opslag: blijft client-side
 

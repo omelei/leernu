@@ -73,7 +73,10 @@ export function Gallery() {
 
   return (
     <main className="mx-auto flex max-w-3xl flex-col bg-grond p-6">
-      <PaginaKop titel="Componenten" meta="Alleen in ontwikkeling. Elke component in elke toestand." />
+      <PaginaKop
+        titel="Componenten"
+        meta="Alleen in ontwikkeling. Elke component in elke toestand."
+      />
 
       <Blok titel="Merk — lockup en merkteken">
         <div className={ROW}>

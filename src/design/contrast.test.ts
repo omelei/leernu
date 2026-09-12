@@ -163,17 +163,12 @@ describe('contrast, WCAG 2.1 AA', () => {
     expect(contrastRatio(token('accent'), token('grond'))).toBeLessThan(4.5);
   });
 
-  it.each([
-    ['topo'],
-    ['tafels'],
-    ['klok'],
-    ['woorden'],
-    ['spelling'],
-    ['tijdvakken'],
-    ['vlaggen'],
-  ])('carries ink on the %s tint', (name) => {
-    expect(contrastRatio(token('ink'), token(`tint-${name}`))).toBeGreaterThanOrEqual(15);
-  });
+  it.each([['topo'], ['tafels'], ['klok'], ['woorden'], ['spelling'], ['tijdvakken'], ['vlaggen']])(
+    'carries ink on the %s tint',
+    (name) => {
+      expect(contrastRatio(token('ink'), token(`tint-${name}`))).toBeGreaterThanOrEqual(15);
+    },
+  );
 
   it('gives every rung of the ladder a colour of its own', () => {
     // Five materials, five values, the same in both themes. They are drawn
