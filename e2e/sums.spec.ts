@@ -62,7 +62,9 @@ test('Oefenen is the map of the product, not a list of what is finished', async 
   // And a door that is not open says so rather than opening onto nothing,
   // which is the half of ADR-037 that survives.
   await lijst.getByRole('button', { name: /^Woordjes/ }).click();
-  await expect(page.getByText('Deze module bestaat nog niet. We zijn hem aan het maken.')).toBeVisible();
+  await expect(
+    page.getByText('Deze module bestaat nog niet. We zijn hem aan het maken.'),
+  ).toBeVisible();
 });
 
 test('the front door lists every module, at every size', async ({ page }) => {

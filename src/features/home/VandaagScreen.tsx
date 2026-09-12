@@ -228,7 +228,9 @@ function StartBalk({
 }) {
   const forms = formsFor(deel.moduleId);
   const form =
-    forms.find((kandidaat) => kandidaat.id === mode && !kandidaat.needsClock && !kandidaat.alleenToets) ??
+    forms.find(
+      (kandidaat) => kandidaat.id === mode && !kandidaat.needsClock && !kandidaat.alleenToets,
+    ) ??
     forms[0] ??
     null;
   if (form === null) return null;

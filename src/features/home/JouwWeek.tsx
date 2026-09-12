@@ -1,5 +1,12 @@
 import { VinkjeIcon } from '@/components/Icon';
-import { dagSleutel, isoWeek, plusDagen, vakantieAan, weekdag, type StreakState } from '@/game-core';
+import {
+  dagSleutel,
+  isoWeek,
+  plusDagen,
+  vakantieAan,
+  weekdag,
+  type StreakState,
+} from '@/game-core';
 import { t, type TranslationKey } from '@/i18n';
 import { telwoord } from './dagen';
 
@@ -51,7 +58,11 @@ export function JouwWeek({
           const gedaan = geoefend.has(dag);
           const naam = t(DAGNAAM[weekdag(dag)] ?? 'week.ma');
           return (
-            <li key={dag} className="ln-week-dag" aria-current={dag === vandaag ? 'date' : undefined}>
+            <li
+              key={dag}
+              className="ln-week-dag"
+              aria-current={dag === vandaag ? 'date' : undefined}
+            >
               <span className="ln-sub" aria-hidden="true">
                 {naam}
               </span>

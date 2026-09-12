@@ -53,7 +53,8 @@ const DATUM = new Intl.DateTimeFormat('nl-NL', {
 
 /** "dinsdag 15 september", for a moment or for a day key. */
 export function datumLang(dag: Date | string): string {
-  const moment = typeof dag === 'string' ? new Date(beginVanDag(dag).getTime() + 12 * 3_600_000) : dag;
+  const moment =
+    typeof dag === 'string' ? new Date(beginVanDag(dag).getTime() + 12 * 3_600_000) : dag;
   return DATUM.format(moment);
 }
 

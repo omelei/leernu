@@ -202,7 +202,8 @@ async function openToetsen(page: Page) {
 async function addTest(page: Page, date: string, subject: string) {
   await openToetsen(page);
   const wanneer = page.getByLabel('Wanneer is de toets?');
-  if (!(await wanneer.isVisible())) await page.getByRole('button', { name: 'Toets toevoegen' }).click();
+  if (!(await wanneer.isVisible()))
+    await page.getByRole('button', { name: 'Toets toevoegen' }).click();
   await wanneer.fill(date);
   await page.getByLabel('Voor welk vak?').selectOption(subject);
   await page.getByRole('button', { name: 'Toevoegen', exact: true }).click();

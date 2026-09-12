@@ -80,7 +80,11 @@ export function ToetsKaart({
     : nogTot(toets.date, nu);
 
   return (
-    <section aria-label={t('home.testTitle')} data-module={module?.id} className="flex flex-col gap-4">
+    <section
+      aria-label={t('home.testTitle')}
+      data-module={module?.id}
+      className="flex flex-col gap-4"
+    >
       <button
         type="button"
         className="ln-kaart ln-toetskaart"
