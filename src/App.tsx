@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { VandaagScreen } from '@/features/home/VandaagScreen';
 import { SideColumn } from '@/features/home/SideColumn';
 import { PracticeScreen } from '@/features/practice/PracticeScreen';
@@ -18,6 +18,7 @@ import { VerzamelingScreen } from '@/features/verzameling/VerzamelingScreen';
 import { SumScreen } from '@/features/sums/SumScreen';
 import { KlokScreen } from '@/features/klok/KlokScreen';
 import { VlagScreen } from '@/features/vlaggen/VlagScreen';
+import { UitslagKader } from '@/features/round/UitslagKader';
 import { VlagExploreScreen } from '@/features/vlaggen/VlagExploreScreen';
 import type { VlagMode } from '@/features/vlaggen/useVlagRound';
 import { isVlagFouten, isVlagMix } from '@/content/loadVlaggen';
@@ -216,13 +217,24 @@ export default function App() {
   }
 
   // A round has no navigation: no rail, no kopbalk, no tab bar — not hidden,
-  // absent. The round screens are not wrapped in the Shell.
+  // absent. The round screens are not wrapped in the Shell; their result is,
+  // because the result steps out of the round (S10), and it asks for the frame
+  // through UitslagKader.
+  const kader = (kinderen: ReactNode) => (
+    <Shell bar={bar} current="oefenen" onNavigate={goTo}>
+      {kinderen}
+    </Shell>
+  );
+  const metKader = (scherm: ReactNode) => (
+    <UitslagKader.Provider value={kader}>{scherm}</UitslagKader.Provider>
+  );
+
   if (screen.name === 'explore') {
     return <ExploreScreen setId={screen.setId} onHome={goHome} />;
   }
 
   if (screen.name === 'sums') {
-    return (
+    return metKader(
       <SumScreen
         key={`${screen.setId}-${screen.sumMode}-${screen.aantal ?? 0}-${visit}`}
         setId={screen.setId}
@@ -236,7 +248,7 @@ export default function App() {
   }
 
   if (screen.name === 'klok') {
-    return (
+    return metKader(
       <KlokScreen
         key={`${screen.setId}-${screen.klokMode}-${screen.aantal ?? 0}-${visit}`}
         setId={screen.setId}
@@ -254,7 +266,7 @@ export default function App() {
   }
 
   if (screen.name === 'vlag') {
-    return (
+    return metKader(
       <VlagScreen
         key={`${screen.setId}-${screen.vlagMode}-${screen.aantal ?? 0}-${visit}`}
         setId={screen.setId}
@@ -268,7 +280,7 @@ export default function App() {
   }
 
   if (screen.name === 'practice') {
-    return (
+    return metKader(
       <PracticeScreen
         key={`${screen.setId}-${screen.practiceMode}-${screen.aantal ?? 0}-${visit}`}
         setId={screen.setId}

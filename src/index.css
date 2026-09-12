@@ -3736,6 +3736,31 @@
     min-width: 0;
   }
 
+  /* uitslag (S10): one card of three rows, and beside it on a laptop what the
+   * round handed over — the mark, a diploma, the stars, the streak. The side
+   * column is S10's 320. */
+  .ln-uitslag {
+    display: grid;
+    gap: var(--gap-lg);
+    align-items: start;
+  }
+  @media (min-width: 1024px) {
+    .ln-uitslag {
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: var(--space-screen);
+    }
+  }
+  .ln-uitslag-hoofd,
+  .ln-uitslag-zij {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+    min-width: 0;
+  }
+  .ln-uitslag-zij:empty {
+    display: none;
+  }
+
   /* laden (S2, S5): three dots in the shape of what is coming. No wheel, no
    * shimmer, nothing that fills. */
   .ln-laden {

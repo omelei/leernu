@@ -102,6 +102,11 @@ export interface RondeKern<S, Q, T, A> {
   readonly missed: readonly T[];
   /** How many more of the set the child now remembers. Never negative. */
   readonly gained: number;
+  /** The boxes when the round began, and as they are now: what changed (S10). */
+  readonly voor: ReadonlyMap<string, ItemState>;
+  readonly na: ReadonlyMap<string, ItemState>;
+  /** The items this round asks about, once each, to name what changed. */
+  readonly items: readonly T[];
   readonly rule: RoundRule;
   /** Bliksemronde only: whole seconds left. */
   readonly secondsLeft: number | null;
@@ -146,6 +151,7 @@ export function useRoundCore<S, Q, T extends Schedulable, A>(opties: RondeKernOp
   const sessionId = useRef<string | null>(null);
   const askedAt = useRef(0);
   const masteredAtStart = useRef(0);
+  const statesAtStart = useRef<ReadonlyMap<string, ItemState>>(new Map());
   /**
    * Wall-clock end of a timed round, set once. Counting down on a tick loses
    * whatever each tick was late by, and over sixty seconds on a school
@@ -180,6 +186,7 @@ export function useRoundCore<S, Q, T extends Schedulable, A>(opties: RondeKernOp
         if (cancelled) return;
 
         masteredAtStart.current = countMastered(loadedStates, opzet.itemIds);
+        statesAtStart.current = loadedStates;
 
         setSet(opzet.set);
         setItemIds(opzet.itemIds);
@@ -350,6 +357,16 @@ export function useRoundCore<S, Q, T extends Schedulable, A>(opties: RondeKernOp
     next();
   }, [toetsstand, phase, next]);
 
+  // Once each: a round of ten from a set of four asks some of them twice.
+  const gevraagd = useMemo(() => {
+    const perId = new Map<string, T>();
+    for (const vraag of questions) {
+      const item = itemVan(vraag);
+      perId.set(item.id, item);
+    }
+    return [...perId.values()];
+  }, [questions, itemVan]);
+
   const kern: RondeKern<S, Q, T, A> = {
     phase,
     set,
@@ -363,6 +380,9 @@ export function useRoundCore<S, Q, T extends Schedulable, A>(opties: RondeKernOp
     lastCorrect,
     missed,
     gained: Math.max(0, countMastered(states, itemIds) - masteredAtStart.current),
+    voor: statesAtStart.current,
+    na: states,
+    items: gevraagd,
     rule,
     secondsLeft: rule.kind === 'tijd' ? secondsLeft : null,
     livesLeft: rule.kind === 'levens' ? livesLeft : null,

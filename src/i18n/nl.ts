@@ -831,6 +831,20 @@ export const nl = {
   'result.gainedMany': '{aantal} vragen meer die je nu onthoudt.',
   'result.gainedNone': 'Nog niets erbij. Deze komen morgen terug.',
   'result.again': 'Nog een ronde',
+  // De uitslag (S10): een kaart met drie rijen. Elke rij telt en noemt de
+  // eerste twee bij naam. Geen minuten: tijd hoort niet in de leerkern.
+  'uitslag.meta': 'Ronde van {aantal} vragen',
+  'uitslag.metaGestopt': '{gedaan} van {totaal} vragen · afgebroken',
+  'uitslag.nieuw': '{namen} onthoud je nu',
+  'uitslag.nieuwSub': 'Nieuw onthouden',
+  'uitslag.opgefrist': '{namen} opgefrist',
+  'uitslag.opgefristSubEen': 'Stond op zakken',
+  'uitslag.opgefristSubVeel': 'Stonden op zakken',
+  'uitslag.wisselenEen': '{namen} blijft wisselen',
+  'uitslag.wisselenVeel': '{namen} blijven wisselen',
+  'uitslag.wisselenSubEen': 'Komt morgen terug',
+  'uitslag.wisselenSubVeel': 'Komen morgen terug',
+  'uitslag.andere': '{namen} en {aantal} andere',
 
   // K10. Twee schakelaars in plaats van drie: de leesmodus verviel (ADR-025).
   // School en woonplaats staan er niet en komen er niet — dat zijn de twee
