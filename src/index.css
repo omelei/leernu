@@ -2684,15 +2684,25 @@
     stroke-width: var(--stroke-region);
     cursor: pointer;
   }
-  .tk-shape:hover {
-    fill: var(--sunken);
-  }
-  /* The region's group is the button (MapCanvas, AnswerShape). */
-  .tk-doel:focus {
+  /* The region's group is the button (MapCanvas, AnswerShape). Hover and
+   * keyboard focus are the same fill (stap 10), and focus adds a 3px dashed
+   * ring in ink — white on the round's dark ground — along the contour, not
+   * round the box. A zone (a small shape's circle, a city) takes the ring on
+   * itself. */
+  .tk-doel:focus,
+  .tk-zone:focus {
     outline: none;
   }
-  .tk-doel:focus .tk-shape {
-    stroke-width: 4;
+  .tk-doel:hover .tk-shape,
+  .tk-doel:focus-visible .tk-shape {
+    fill: var(--map-hover);
+  }
+  .tk-doel:focus-visible .tk-shape,
+  .tk-doel:focus-visible .tk-zone,
+  .tk-zone:focus-visible {
+    stroke: var(--ink);
+    stroke-width: var(--stroke-focus);
+    stroke-dasharray: 6 4;
   }
   /* The shape being asked about while a child types its name. The module accent
    * rather than green or red: it is a question, not a verdict, and reusing the

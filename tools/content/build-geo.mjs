@@ -30,7 +30,17 @@ const LEVELS = [
   { naam: 'detail', tolerance: 0.15, minArea: 0.3 },
 ];
 
-const SOURCE = join(process.cwd(), 'content', 'geo', '_source', 'nl-provincies.json');
+/**
+ * The provinces as the house style v2 handoff delivers them (stap 10, S25):
+ * CBS/Kadaster "provincie_gegeneraliseerd" 2023, WGS84, via cartomap. The year
+ * is in the name, so a provincial redivision is a content update — a new file
+ * next to this one — and not a rebuild of the map.
+ */
+const SOURCE = join(process.cwd(), 'content', 'geo', '_source', 'provincie_2023.geojson');
+const BRON = {
+  naam: 'CBS Gebiedsindelingen 2023 (provincie_gegeneraliseerd), via cartomap',
+  licentie: 'CC-BY-4.0',
+};
 const LABELS = join(process.cwd(), 'content', 'geo', '_source', 'nl-provincies-labelpunten.json');
 const OUT_DIR = join(process.cwd(), 'public', 'geo', 'nl');
 
@@ -48,6 +58,51 @@ function ringsOf(geometry) {
   if (geometry.type === 'Polygon') return geometry.coordinates;
   if (geometry.type === 'MultiPolygon') return geometry.coordinates.flat();
   throw new Error(`Unsupported geometry type: ${geometry.type}`);
+}
+
+/** How many rings `rewind` turned round, for the log. */
+let omgedraaid = 0;
+
+/**
+ * Every ring wound the way RFC 7946 asks: an outer ring counter-clockwise, a
+ * hole clockwise, in longitude and latitude — per polygon, before the polygons
+ * are flattened, because which ring is the outer one is only known there.
+ *
+ * The handoff's rule is d3's: a ring whose spherical area (d3.geoArea) is more
+ * than 2π encloses the rest of the globe and is wound the wrong way round. For
+ * a province a few dozen kilometres across, the planar signed area in degrees
+ * has the same sign as that test and needs no library (see projection.mjs for
+ * why this pipeline has none). The fill rule that draws a hole as a hole needs
+ * the two windings to differ, and so does the area below.
+ */
+function rewind(geometry) {
+  const polygons =
+    geometry.type === 'Polygon'
+      ? [geometry.coordinates]
+      : geometry.type === 'MultiPolygon'
+        ? geometry.coordinates
+        : null;
+  if (polygons === null) throw new Error(`Unsupported geometry type: ${geometry.type}`);
+
+  return polygons.flatMap((rings) =>
+    rings.map((ring, index) => {
+      const tegen = ringArea(ring) > 0;
+      if (tegen === (index === 0)) return ring;
+      omgedraaid += 1;
+      return [...ring].reverse();
+    }),
+  );
+}
+
+/**
+ * The surface of a shape in square view-box units: the outer rings less the
+ * holes. Wound as `rewind` leaves them, the two have opposite signs, so the
+ * sum of the signed areas is exactly that. It is what the hit zone is worked
+ * out from (stap 10, S27): the diameter of a circle with the same surface.
+ */
+function oppervlak(rings) {
+  const som = rings.reduce((totaal, ring) => totaal + ringArea(ring), 0);
+  return Number(Math.abs(som).toFixed(1));
 }
 
 function toPath(rings, decimals = 1) {
@@ -157,9 +212,10 @@ const projectedByFeature = features.map((feature) => {
     naam: feature.properties.statnaam,
     code,
     label: labelLonLat ? projector.project(labelLonLat) : null,
-    rings: ringsOf(feature.geometry).map((ring) => ring.map((c) => projector.project(c))),
+    rings: rewind(feature.geometry).map((ring) => ring.map((c) => projector.project(c))),
   };
 });
+console.log(`Rewound: ${omgedraaid} rings turned to RFC 7946 winding`);
 
 mkdirSync(OUT_DIR, { recursive: true });
 
@@ -188,6 +244,7 @@ for (const level of LEVELS) {
       d: toPath(rings),
       punt: punt ? [Number(punt[0].toFixed(1)), Number(punt[1].toFixed(1))] : null,
       bbox: boundingBox(rings),
+      oppervlak: oppervlak(rings),
     });
   }
 
@@ -202,8 +259,8 @@ for (const level of LEVELS) {
       opmerking: 'RD-shaped, not RD: no ellipsoid, no false origin, no metre scale.',
     },
     bron: {
-      naam: source._bron ?? null,
-      licentie: source._licentie ?? null,
+      naam: source._bron ?? BRON.naam,
+      licentie: source._licentie ?? BRON.licentie,
       opgehaald: source._opgehaald ?? null,
     },
     vormen,

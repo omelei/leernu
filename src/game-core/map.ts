@@ -4,8 +4,8 @@
  * All of it exists to answer one question the spec asks and no map library
  * answers for you: **can a child actually hit this?** Vlieland is roughly a
  * thousandth of the Netherlands. Rendered on a Chromebook it is four pixels
- * wide, and four pixels is not a target, it is a taunt. Spec section 8 asks for
- * 44px and this product uses 48, so anything smaller needs help.
+ * wide, and four pixels is not a target, it is a taunt. The map's rule is stap
+ * 10's (S27): a hit zone of at least 44 points, and anything smaller gets one.
  *
  * Pure and DOM-free on purpose (ADR-015): a hit target that is only correct
  * inside a browser cannot be tested, and this is exactly the kind of arithmetic
@@ -15,7 +15,8 @@
 /** [minX, minY, maxX, maxY] in view-box units. */
 export type BoundingBox = readonly [number, number, number, number];
 
-export const MIN_TOUCH_PX = 48;
+/** Stap 10, S27: the hit zone on a map is at least 44 points across. */
+export const MIN_TOUCH_PX = 44;
 
 export interface ViewFit {
   /** View-box units per CSS pixel. */
@@ -65,8 +66,35 @@ export function smallestSidePx(box: BoundingBox, fit: ViewFit): number {
   return Math.min(boxWidth(box), boxHeight(box)) * fit.pixelsPerUnit;
 }
 
-export function needsHelpTarget(box: BoundingBox, fit: ViewFit, minPx = MIN_TOUCH_PX): boolean {
-  return smallestSidePx(box, fit) < minPx;
+/**
+ * How much room a finger has on a shape, in CSS pixels.
+ *
+ * Where the shape carries its surface, stap 10's rule (S27, finding 15): the
+ * diameter of a circle with the same surface, 2·√(A/π). It comes from the
+ * data rather than from a list of names, so it holds on any map without
+ * anyone listing regions. Where it does not — a point, or a layer built
+ * without surfaces — the smallest side of the box, which is the stricter
+ * measure: Ameland's 72 by 16 is 11 pixels by its narrow side and nearer 19 by
+ * its surface.
+ */
+export function trefruimtePx(
+  box: BoundingBox,
+  fit: ViewFit,
+  oppervlak?: number | null | undefined,
+): number {
+  if (oppervlak != null && oppervlak > 0) {
+    return 2 * Math.sqrt(oppervlak / Math.PI) * fit.pixelsPerUnit;
+  }
+  return smallestSidePx(box, fit);
+}
+
+export function needsHelpTarget(
+  box: BoundingBox,
+  fit: ViewFit,
+  minPx = MIN_TOUCH_PX,
+  oppervlak?: number | null | undefined,
+): boolean {
+  return trefruimtePx(box, fit, oppervlak) < minPx;
 }
 
 export interface HelpTarget {
@@ -90,8 +118,9 @@ export function helpTargetFor(
   fit: ViewFit,
   labelPoint?: readonly [number, number] | null,
   minPx = MIN_TOUCH_PX,
+  oppervlak?: number | null | undefined,
 ): HelpTarget | null {
-  if (!needsHelpTarget(box, fit, minPx)) return null;
+  if (!needsHelpTarget(box, fit, minPx, oppervlak)) return null;
 
   const [cx, cy] = labelPoint ?? boxCentre(box);
   return { cx, cy, r: (minPx / 2) * fit.unitsPerPixel };
@@ -207,7 +236,9 @@ export function reachablePoints<
  *
  * Keyed by shape id, so a caller looks up rather than recomputes.
  */
-export function helpTargets<T extends { readonly id: string; readonly bbox: BoundingBox }>(
+export function helpTargets<
+  T extends { readonly id: string; readonly bbox: BoundingBox; readonly oppervlak?: number },
+>(
   shapes: readonly T[],
   fit: ViewFit,
   labelOf: (shape: T) => readonly [number, number] | null | undefined,
@@ -216,7 +247,7 @@ export function helpTargets<T extends { readonly id: string; readonly bbox: Boun
   const wanted: HelpTarget[] = [];
   const ids: string[] = [];
   for (const shape of shapes) {
-    const target = helpTargetFor(shape.bbox, fit, labelOf(shape), minPx);
+    const target = helpTargetFor(shape.bbox, fit, labelOf(shape), minPx, shape.oppervlak);
     if (target !== null) {
       wanted.push(target);
       ids.push(shape.id);
@@ -239,4 +270,28 @@ export function helpTargets<T extends { readonly id: string; readonly bbox: Boun
     if (r * 2 >= floor) kept.set(ids[i] as string, { cx: mine.cx, cy: mine.cy, r });
   }
   return kept;
+}
+
+/**
+ * The order a map's answers are drawn in: the smallest on top (stap 10).
+ *
+ * SVG has no z-index, so what is drawn last is what a tap lands on. A small
+ * shape's zone reaches over its neighbours; drawn before them, it would be
+ * covered where it matters most. So every shape without a zone comes first,
+ * in the order it was given — reading order, which is the tab order — and
+ * the ones with a zone after them, largest first and smallest last.
+ *
+ * The zoned shapes leave reading order for that. It is the one place they
+ * do, and only where a zone exists at all: on the provinces at any size none
+ * does, because every province clears the 44 by its surface.
+ */
+export function tekenvolgorde<
+  T extends { readonly id: string; readonly bbox: BoundingBox; readonly oppervlak?: number },
+>(shapes: readonly T[], zones: ReadonlyMap<string, unknown>): T[] {
+  const grootte = (shape: T) => shape.oppervlak ?? boxWidth(shape.bbox) * boxHeight(shape.bbox);
+  const zonder = shapes.filter((shape) => !zones.has(shape.id));
+  const met = shapes
+    .filter((shape) => zones.has(shape.id))
+    .sort((a, b) => grootte(b) - grootte(a));
+  return [...zonder, ...met];
 }
