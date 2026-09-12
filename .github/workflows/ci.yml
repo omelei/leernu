@@ -254,9 +254,34 @@ jobs:
       - run: npm ci
       - run: npm run build
         env:
-          # Repository variable. Leave it unset for a project page at
-          # /<repo>/; set it to / once a custom domain is pointed here.
-          BASE_PATH: ${{ vars.BASE_PATH || format('/{0}/', github.event.repository.name) }}
+          # The domain is pointed here, so the site is served from the root and
+          # the root is the default. It used to fall back to /<repo>/, which was
+          # right for the fortnight before www.leer.nu existed and has been a
+          # loaded gun since: clearing the repository variable would have built
+          # a page asking for /topografie/assets/index.js against a site that
+          # serves it at /assets/index.js, and Pages would have answered every
+          # one of those requests with 404.html — status 200, content type
+          # text/html, and a white screen for the child. Green run, green
+          # deploy, dead app.
+          #
+          # The variable still wins if it is set, so a fork without a domain can
+          # say so, and the step below refuses to publish a build whose page and
+          # base disagree.
+          BASE_PATH: ${{ vars.BASE_PATH || '/' }}
+      # Cheap, and it closes the only way this build can be wrong while every
+      # test passes: the tests run against a dev server that does not have a
+      # base at all, so nothing else in this file ever looks at the paths that
+      # actually ship.
+      - name: The page must ask for its assets where they will be served
+        env:
+          BASE_PATH: ${{ vars.BASE_PATH || '/' }}
+        run: |
+          if ! grep -q "src=\"${BASE_PATH}assets/" dist/index.html; then
+            echo "dist/index.html does not ask for its script under ${BASE_PATH}:"
+            grep -o 'src="[^"]*"' dist/index.html
+            exit 1
+          fi
+          echo "index.html asks for its assets under ${BASE_PATH}."
       - uses: actions/configure-pages@v5
       # If this run is a re-run, the artifact uploaded by the previous attempt
       # is still there and `deploy-pages` finds two called `github-pages` and

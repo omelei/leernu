@@ -184,6 +184,28 @@ device. Maps are pre-projected SVG paths built offline from CBS geodata and
 fetched per region set, never bundled. Fonts are self-hosted. Nothing loads from
 a third party.
 
+## Where it runs
+
+GitHub Pages, on **www.leer.nu**, published by the `deploy` job in
+`.github/workflows/ci.yml` on every push to `main` that passes. The domain is
+set in the repository's Pages settings; `public/CNAME` records it in git as
+well, and takes over if the publishing source is ever moved back to a branch.
+
+Because a static host either answers or does not, the only way to know the
+product is up is to ask it:
+
+```bash
+node tools/beschikbaarheid.mjs            # DNS, certificates, the page, every edge address
+node tools/beschikbaarheid.mjs --dns-only # for a machine that can resolve but not reach
+```
+
+`.github/workflows/beschikbaarheid.yml` runs it four times an hour and after
+every deploy, and keeps one issue labelled `beschikbaarheid` as the record: a
+failing run opens it, the first passing run closes it
+([ADR-105](docs/DECISIONS.md)). Two DNS records are still owed and the probe
+warns until they exist — the four AAAA records on the apex, and the
+`_github-pages-challenge-omelei` TXT record that verifies the domain.
+
 ## Getting started
 
 Development happens in **GitHub Codespaces** ([ADR-001](docs/DECISIONS.md)): the

@@ -4698,6 +4698,110 @@ diploma is stored once.
 
 ---
 
+## ADR-105 — The site is watched from outside, and the base path is no longer a setting anyone can clear
+
+**Status:** accepted. **Date:** 2026-09-12.
+
+### Context
+
+www.leer.nu answers `ERR_CONNECTION_CLOSED` every so often. That error is not
+the app's. It means the browser opened a connection and the far end closed it
+before one byte of HTTP came back — below the app, below the router, below
+anything in `src/`. No React can cause it and no React can fix it.
+
+What was measured on 2026-09-12, with the site in that state reported and the
+deploy of b73a7b9 green:
+
+- `www.leer.nu` is a CNAME onto `omelei.github.io`, which answers on GitHub's
+  four IPv4 and four IPv6 addresses. Correct.
+- `leer.nu` carries GitHub's four A records. It carries **no AAAA records**, so
+  the apex and the `www` it redirects to are not equally reachable: a network
+  with working IPv6 and broken IPv4 can reach one and not the other, and a
+  network with broken IPv6 has the reverse problem on `www` alone. Asymmetry
+  like that is what makes an outage look intermittent.
+- The custom domain is configured: the deploy job's own log ends
+  `Evaluated environment url: https://www.leer.nu/`.
+- The certificates for both names are valid and served on every edge address.
+- `_github-pages-challenge-omelei.leer.nu` does not exist, so the domain is not
+  verified with GitHub.
+- `BASE_PATH` was set to `/` as a repository variable, and the workflow fell
+  back to `/topografie/` if it ever was not.
+
+So the hosting is right, and on the evidence available the closed connection is
+GitHub's edge, the window while a certificate is re-issued, or a box on the
+reporting network. Which of the three cannot be decided from here, and that is
+the actual finding: **nothing in this repository has ever looked at the live
+site.** Every check we run proves the build is good. The first one to notice
+the product is unreachable is a child.
+
+A second thing came out of the same afternoon. `BASE_PATH` lived only in a
+settings page. Clear it and the next deploy publishes a page asking for
+`/topografie/assets/index.js` from a site that serves it at
+`/assets/index.js`; Pages answers that with `404.html`, which is a copy of the
+app (`tools/spa-fallback.mjs`), so the request returns **200 with content type
+`text/html`** and the browser refuses to run it. Green tests, green deploy,
+white screen, and no check anywhere that could tell.
+
+### Decision
+
+**The site is asked, from outside, four times an hour**
+(`tools/beschikbaarheid.mjs`, run by `.github/workflows/beschikbaarheid.yml`),
+and also on every deploy, which is when it is most likely to be briefly wrong.
+The probe resolves both names in both address families, then talks to **every
+edge address separately** — one bad edge out of four is invisible to anything
+that resolves once — and on each one checks the certificate, the page, the
+assets `index.html` actually asks for, and the two redirects. It imports
+nothing but Node, so a check on whether the site is up cannot fail because the
+npm registry is down.
+
+**The record is one issue, not a notification.** A failing run opens it and
+adds to it at most once an hour; the first run that passes closes it with the
+time. After a month that answers the question a screenshot never could: does it
+fail on the quarter hour after a deploy, at one address, on one family, or only
+ever in one house.
+
+**A certificate less than a day old is reported as a warning**, because GitHub
+mints a new one when the custom domain is removed and re-added, and the site
+refuses connections outright while it does. If that warning ever appears
+without anyone having touched the Pages settings, the cause is found.
+
+**`BASE_PATH` defaults to `/` in the workflow**, with the repository variable
+kept only as an override for a fork that has no domain of its own, and the
+deploy refuses to publish a build whose page and base disagree. The old default
+was right for the fortnight before the domain existed.
+
+**`public/CNAME` is in the repository.** GitHub ignores it while the publishing
+source is a workflow — the domain lives in the Pages settings — so this changes
+nothing today. It is here because the domain was written down nowhere in git at
+all, and because it is what keeps the domain if the publishing source is ever
+moved back to a branch.
+
+**Two DNS records are still owed, at TransIP, and the probe warns until they
+exist**: the four AAAA records on the apex, so both names are reachable the
+same way, and the `_github-pages-challenge-omelei` TXT record GitHub gives for
+verifying the domain, so it cannot be claimed elsewhere if it is ever unset
+here. Neither can be done from this repository.
+
+### Consequences
+
+Ninety-six runs a day of about half a minute, free on a public repository, to
+buy a timestamped history of an error that until now left no trace. One label,
+`beschikbaarheid`, and at most one open issue carrying it.
+
+The probe fails the run when the site does not answer, which means a red tick
+that nobody caused and nobody can fix by pushing. That is the point: it is the
+first thing here that is red because the product is down rather than because
+the code is wrong. Warnings — the apex AAAA records, the missing verification —
+do not fail it, because a check that is permanently red is a check nobody
+reads.
+
+It does not make the site more reliable. It makes the next report a line in a
+file instead of a guess, and if the closed connections turn out to be GitHub's
+edge rather than one household's router, this is the evidence to leave Pages
+with.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because
