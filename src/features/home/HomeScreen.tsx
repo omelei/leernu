@@ -19,6 +19,7 @@ import {
   type Onderdeel,
   type Populair,
 } from '@/features/module/onderdelen';
+import { ReeksBlok } from './ReeksBlok';
 import { ScrollRij } from './ScrollRij';
 import { FavorietenBlok, GoedBlok, VoortgangBlok } from './SideColumn';
 import { ToetsenBlok } from './ToetsenBlok';
@@ -63,6 +64,8 @@ export interface HomeScreenProps {
   readonly sticker: string | undefined;
   /** The way to the collection, which their column links to. */
   readonly onReis: () => void;
+  /** The way to the streak's own page, which their column links to as well. */
+  readonly onReeks: () => void;
   /**
    * One way into a round, whichever module it is in: the same one the child's
    * own column and the module pages use. There were three callbacks here, one
@@ -72,7 +75,7 @@ export interface HomeScreenProps {
   readonly onModule?: ((id: Module['id']) => void) | undefined;
 }
 
-export function HomeScreen({ naam, sticker, onReis, onBegin, onModule }: HomeScreenProps) {
+export function HomeScreen({ naam, sticker, onReis, onReeks, onBegin, onModule }: HomeScreenProps) {
   const [states, setStates] = useState<Map<string, ItemState> | null>(null);
   const [played, setPlayed] = useState<readonly PlayedRound[]>([]);
   const desk = useDesk();
@@ -108,6 +111,7 @@ export function HomeScreen({ naam, sticker, onReis, onBegin, onModule }: HomeScr
   );
 
   const toetsen = <ToetsenBlok />;
+  const reeks = <ReeksBlok onReeks={onReeks} />;
   const voortgang = <VoortgangBlok sticker={sticker} onReis={onReis} />;
   const goed = <GoedBlok />;
   const favorieten = <FavorietenBlok onBegin={begin} />;
@@ -122,6 +126,7 @@ export function HomeScreen({ naam, sticker, onReis, onBegin, onModule }: HomeScr
 
         <aside className="tk-home-aside">
           {toetsen}
+          {reeks}
           {voortgang}
           {goed}
           {favorieten}
@@ -130,6 +135,8 @@ export function HomeScreen({ naam, sticker, onReis, onBegin, onModule }: HomeScr
     );
   }
 
+  // Below 1200 the streak goes under the pair rather than between it: three
+  // blocks in two columns left the tests alone on half a row (ADR-110).
   return (
     <div className="tk-home">
       {kop}
@@ -137,6 +144,7 @@ export function HomeScreen({ naam, sticker, onReis, onBegin, onModule }: HomeScr
         {voortgang}
         {toetsen}
       </div>
+      {reeks}
       {rijen}
       {goed}
       {favorieten}

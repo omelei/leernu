@@ -84,6 +84,65 @@ export const nl = {
   'home.runLabel': 'Foutloos op rij',
   // "beste 12" las als een lijstje van de beste twaalf. Het is je record.
   'home.runBest': 'je record is {aantal}',
+
+  // De reeks in de rechterkolom en op zijn eigen pagina (ADR-110). Het getal is
+  // dat van de pil in de balk; het rijtje eronder zegt welke dagen erachter
+  // zitten. Nul is een zin en geen nul: "0 dagen op rij" leest als een cijfer
+  // voor een kind dat niets fout heeft gedaan.
+  'reeks.titel': 'Jouw reeks',
+  'reeks.nul': 'Oefen vandaag en begin je reeks.',
+  'reeks.een': 'dag op rij geoefend',
+  'reeks.veel': 'dagen op rij geoefend',
+  'reeks.week': 'De laatste zeven dagen',
+  'reeks.dagWel': '{dag}: geoefend',
+  'reeks.dagNiet': '{dag}: niet geoefend',
+  'reeks.vandaagWel': 'Vandaag: geoefend',
+  'reeks.vandaagNiet': 'Vandaag: nog niet geoefend',
+  'reeks.bekijk': 'Bekijk je reeks',
+  // De pagina. Wat een ronde vandaag doet, zonder te dreigen: in het weekend
+  // kost niet oefenen niets, en deze zin mag niet anders klinken.
+  'reeks.nuTitel': 'Je reeks nu',
+  'reeks.vandaagKlaar': 'Vandaag heb je al geoefend. Deze dag telt mee.',
+  'reeks.vandaagBegin': 'Eén ronde is genoeg om te beginnen.',
+  'reeks.vandaagErbij': 'Doe vandaag een ronde, dan staat je reeks op {aantal} dagen.',
+  // Alleen getallen van dingen die gebeurd zijn. Geen gemiddelde, en geen
+  // vergelijking met een ander kind of met vorige week.
+  'reeks.cijfersTitel': 'In getallen',
+  'reeks.cijferLangste': 'Langste reeks in dagen',
+  'reeks.cijferDagen': 'Dagen geoefend',
+  'reeks.cijferMaand': 'Dagen deze maand',
+  'reeks.cijferRondes': 'Rondes gespeeld',
+  'reeks.cijferVragen': 'Vragen beantwoord',
+  'reeks.cijferRustdagen': 'Rustdagen bewaard',
+  'reeks.kalenderTitel': 'De laatste vijf weken',
+  'reeks.kalGeoefend': 'geoefend',
+  'reeks.kalVandaag': 'vandaag',
+  'reeks.kalVandaagGeoefend': 'vandaag, geoefend',
+  // De vier regels van streak.ts, in woorden. Een reeks die je niet kunt
+  // voorspellen voelt oneerlijk zodra hij iets doet wat je niet verwachtte.
+  'reeks.regelsTitel': 'Zo werkt je reeks',
+  'reeks.regel1':
+    'Elke dag waarop je een ronde afmaakt, telt mee. Vier rondes op één dag zijn één dag.',
+  'reeks.regel2':
+    'In het weekend en in de schoolvakantie gaat je reeks nooit kapot. Oefen je dan toch, dan telt het wel.',
+  'reeks.regel3': 'Mis je een schooldag? Dan gebruik je een rustdag en blijft je reeks staan.',
+  'reeks.regel4': 'Elke week waarin je oefent, krijg je een rustdag. Je kunt er twee bewaren.',
+  // De dagen van de week: kort boven een streepje, voluit voor wie voorleest.
+  // Genummerd zoals Date.getDay telt: zondag is 0.
+  'dag.kort.0': 'zo',
+  'dag.kort.1': 'ma',
+  'dag.kort.2': 'di',
+  'dag.kort.3': 'wo',
+  'dag.kort.4': 'do',
+  'dag.kort.5': 'vr',
+  'dag.kort.6': 'za',
+  'dag.lang.0': 'zondag',
+  'dag.lang.1': 'maandag',
+  'dag.lang.2': 'dinsdag',
+  'dag.lang.3': 'woensdag',
+  'dag.lang.4': 'donderdag',
+  'dag.lang.5': 'vrijdag',
+  'dag.lang.6': 'zaterdag',
   // De twaalf helden (ADR-098). Een voornaam met dezelfde letter als het dier:
   // makkelijk voor te lezen in groep 4, en een naam maakt er een karakter van
   // in plaats van een soort.
