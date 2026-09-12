@@ -843,4 +843,31 @@ export const nl = {
 
   // Accessible names for things that have no visible label of their own
   'a11y.progress': 'Voortgang in deze ronde',
+
+  // De componentset van huisstijl v2. De punt zegt wat hij toont in woorden,
+  // want een cirkel die voor driekwart vol is, is voor een schermlezer niets.
+  'ds.punt': '{procent}% onthouden',
+  'ds.teller': 'Vraag {huidig} van {totaal}',
+  'ds.ruiten': '{gedaan} van de {totaal} vragen gedaan',
+  'ds.aan': 'Aan',
+  'ds.uit': 'Uit',
+  'ds.laden': 'Even geduld',
+  'ds.stoppen': 'Stoppen',
+  'ds.voorlezen': 'Voorlezen',
+  'ds.goed': 'Goed',
+  'ds.fout': 'Fout',
+  'ds.gemist': 'Het goede antwoord',
+  'ds.bijna': 'Bijna',
+  'ds.leeg': 'Leeg',
+  'ds.nogTeVinden': 'nog te vinden',
+  'ds.kist': 'Kist',
+  'ds.kistOpenNu': 'Open nu',
+  'ds.gedragen': 'Gedragen',
+  // De vijf materialen, in de volgorde van de ladder (S11). Klein geschreven:
+  // het zijn woorden onder een rondje, geen namen.
+  'materiaal.brons': 'brons',
+  'materiaal.zilver': 'zilver',
+  'materiaal.goud': 'goud',
+  'materiaal.platina': 'platina',
+  'materiaal.ultra': 'ultra',
 } as const;

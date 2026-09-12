@@ -1,38 +1,37 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
 
 /**
- * Three weights, and no fourth.
+ * knop-primair, knop-secundair, knop-tertiair (stap 2, S1 and S2).
  *
- * Primary is the way on, and a screen has one. Secondary is a real alternative
- * — "Datum wijzigen" beside "Begin de ronde". Tertiary is a link that needs a
- * hit target, which on a touch screen is most links.
+ * Primary is the way on: one per screen, always the largest, always the
+ * shortest way to practising. Secondary is a real alternative beside it.
+ * Tertiary is a link that needs a hit target. The fourth case the contract
+ * gained — the answer set of S8 — is `AntwoordKnop` in the component set,
+ * because four equal answers are not a primary and three alternatives.
  *
- * No accent variant, deliberately. A module may colour the highlight on the
- * image, the progress bar and the module entrance, and nothing else; an accent
- * button would make the way on a different colour in every module, which is
- * how a child learns to look for a colour rather than for a word.
- *
- * Height comes from --control-height, which is 56 in PO and 44 in VO. It is a
- * token rather than a prop because it follows the guise, and the guise follows
- * the age in the profile — never a choice made at a call site.
+ * No accent variant: the accent means right, chosen and progress, and a
+ * button in it would be a fourth meaning. Height is --control-height, 56 in
+ * the PO guise and 44 in VO; a token, because it follows the guise.
  */
 
 type Variant = 'primary' | 'secondary' | 'tertiary';
 
 const VARIANT_CLASS: Record<Variant, string> = {
-  primary: 'tk-button',
-  secondary: 'tk-button tk-button-secondary',
-  tertiary: 'tk-button tk-button-tertiary',
+  primary: 'ln-knop',
+  secondary: 'ln-knop ln-knop-secundair',
+  tertiary: 'ln-knop ln-knop-tertiair',
 };
 
 export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'className'> {
   readonly variant?: Variant;
   /**
-   * Waiting on something. The button keeps its size and its label, because a
-   * control that changes shape while you wait invites a second click on
-   * whatever moved into its place.
+   * Waiting on something. The button keeps its size, because a control that
+   * changes shape while you wait invites a second click on whatever moved
+   * into its place.
    */
   readonly busy?: boolean;
+  /** The whole width: the start bar on a phone. */
+  readonly full?: boolean;
   readonly className?: string;
   readonly children: ReactNode;
 }
@@ -40,13 +39,16 @@ export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
 export function Button({
   variant = 'primary',
   busy = false,
+  full = false,
   disabled = false,
   className,
   children,
   type = 'button',
   ...rest
 }: ButtonProps) {
-  const classes = [VARIANT_CLASS[variant], className].filter(Boolean).join(' ');
+  const classes = [VARIANT_CLASS[variant], full ? 'ln-knop-vol' : null, className]
+    .filter(Boolean)
+    .join(' ');
 
   return (
     <button
@@ -58,7 +60,7 @@ export function Button({
       disabled={disabled || busy}
       aria-busy={busy || undefined}
     >
-      <span className="tk-button-label">{children}</span>
+      <span className="ln-knop-label">{children}</span>
     </button>
   );
 }

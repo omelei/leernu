@@ -125,7 +125,6 @@ export function ReisScreen({
               <span className="tk-reeksbalk tk-reeksbalk-dun" data-reeks={reeks}>
                 <ProgressBar
                   value={levelProgress(goed)}
-                  showDot={false}
                   label={t('home.journeyBar', { niveau: level + 1 })}
                 />
               </span>

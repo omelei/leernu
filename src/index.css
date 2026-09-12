@@ -70,8 +70,8 @@
    * box rather than the shape, which draws a rectangle in the sea — so map
    * shapes thicken their own stroke instead (see .tk-shape). */
   :focus-visible {
-    outline: var(--stroke-active) solid var(--ink);
-    outline-offset: 2px;
+    outline: var(--stroke-focus) solid var(--ink);
+    outline-offset: var(--focus-offset);
   }
 
   /* Reduced motion removes movement, never feedback. An answer still turns
@@ -2837,6 +2837,885 @@
   }
 
   .tk-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+  /* ==== The component set, house style v2 ====================================
+   * Stap 6, "Oplevering": the set of forty-six. The handoff numbers only 42 to
+   * 46 (all five belong to screens out of scope); the rest go by the names the
+   * notitieblokken of stap 2 give them, and each rule below says which name and
+   * which screen first uses it. Every value is a token from tokens.css. The
+   * `ln-` prefix marks the new set: a `tk-` class still in use belongs to a page
+   * that has not been rebuilt yet.
+   */
+
+  /* knop-primair · knop-secundair · knop-tertiair (S1, S2). One primary per
+   * screen, always the largest and always the shortest way to practising. */
+  .ln-knop {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--gap-sm);
+    min-height: var(--control-height);
+    padding: 0 var(--pad-card);
+    border: var(--stroke-hair) solid var(--ink);
+    border-radius: var(--radius-card);
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--font-body);
+    font-size: var(--type-button);
+    line-height: var(--type-button-lh);
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+  }
+  .ln-knop:hover {
+    border-color: var(--ink-2);
+    background: var(--ink-2);
+  }
+  .ln-knop-secundair {
+    padding: 0 var(--gap-lg);
+    border-color: var(--control-line);
+    background: var(--paper);
+    color: var(--ink);
+  }
+  .ln-knop-secundair:hover {
+    border-color: var(--control-line);
+    background: var(--grond);
+  }
+  .ln-knop-tertiair {
+    min-height: var(--touch-target);
+    padding: 0 var(--gap-sm);
+    border-color: transparent;
+    background: transparent;
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .ln-knop-tertiair:hover {
+    border-color: transparent;
+    background: transparent;
+    color: var(--ink-2);
+  }
+  /* Full width, for the phone's start bar (S1, S2, S4). */
+  .ln-knop-vol {
+    width: 100%;
+  }
+  /* Off says "not now", never "wrong": it recedes into the inset and keeps
+   * its size, so nothing under it moves. */
+  .ln-knop:disabled,
+  .ln-knop[aria-disabled='true'] {
+    border-color: var(--inset);
+    background: var(--inset);
+    color: var(--ink-2);
+    cursor: not-allowed;
+  }
+  .ln-knop-tertiair:disabled {
+    border-color: transparent;
+    background: transparent;
+  }
+  /* Busy keeps the label's width and hides only its letters, so the button
+   * does not change size while it is waited on. */
+  .ln-knop[aria-busy='true'] {
+    cursor: progress;
+  }
+  .ln-knop[aria-busy='true'] > .ln-knop-label {
+    visibility: hidden;
+  }
+
+  /* antwoordset (S8, finding 13): four equal secondary buttons, never beside a
+   * primary, never in the accent, their order fixed per question. 56 under a
+   * thumb and in every round, 88 from a tablet on its side up. */
+  .ln-antwoorden {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--gap-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  @media (min-width: 768px) {
+    .ln-antwoorden {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .ln-antwoord {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-md);
+    width: 100%;
+    min-height: var(--touch);
+    padding: 0 var(--pad-card-phone-sm);
+    border: var(--stroke-hair) solid var(--control-line);
+    border-radius: var(--radius-card);
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: var(--type-button);
+    line-height: var(--type-button-lh);
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+  }
+  @media (min-width: 1024px) {
+    .ln-antwoord {
+      min-height: var(--answer-height-lg);
+    }
+  }
+  .ln-antwoord:hover:not(:disabled) {
+    background: var(--inset);
+  }
+  .ln-antwoord:disabled {
+    cursor: default;
+  }
+  .ln-antwoord .ln-teken {
+    margin-left: auto;
+  }
+
+  /* ---- The three answer states (README, "De vier vormregels") --------------
+   * Shape carries the meaning and colour adds speed, so each state differs
+   * from the others in fill and in rule before it differs in hue, and each
+   * carries its own sign. They are classes rather than components because the
+   * same state lands on a button, a row and — in phase 6 — an area of the map.
+   *
+   *   goed    closed fill and a tick
+   *   fout    hatched fill (45 degrees, a period of 8 px) and a cross
+   *   gemist  open, a double rule and a dot
+   */
+  .ln-vorm-goed {
+    border: var(--stroke-active) solid var(--good-line);
+    background: var(--good);
+    color: var(--on-good);
+  }
+  .ln-vorm-fout {
+    border: var(--stroke-active) solid var(--bad);
+    background-color: var(--bad-hatch-2);
+    background-image: repeating-linear-gradient(
+      45deg,
+      var(--bad-stripe) 0 3px,
+      transparent 3px 8px
+    );
+    color: var(--ink);
+  }
+  .ln-vorm-gemist {
+    border: 6px double var(--good-line);
+    background: transparent;
+    color: var(--ink);
+  }
+  /* The same states, holding a button's size: the rules above are thicker than
+   * the button's own, and the padding gives the difference back. */
+  .ln-antwoord.ln-vorm-goed,
+  .ln-antwoord.ln-vorm-fout {
+    padding-inline: calc(var(--pad-card-phone-sm) - 1px);
+  }
+  .ln-antwoord.ln-vorm-gemist {
+    padding-inline: calc(var(--pad-card-phone-sm) - 5px);
+  }
+  .ln-teken {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+  }
+  .ln-teken-fout {
+    color: var(--bad-mark);
+  }
+  .ln-teken-gemist {
+    color: var(--good-line);
+  }
+  .ln-teken-gemist > span {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  /* kaart (S2). Hard edges in the dark as well: there a card is told apart
+   * from its ground by its rule, never by a shadow (stap 3, finding 17). */
+  .ln-kaart {
+    padding: var(--card-padding);
+    border: var(--stroke-hair) solid var(--line);
+    border-radius: var(--card-radius);
+    background: var(--paper);
+  }
+  .ln-kaart-knop {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--gap-sm);
+    width: 100%;
+    min-height: var(--touch-target);
+    padding: var(--pad-card-phone-sm);
+    border: var(--stroke-hair) solid var(--line);
+    border-radius: var(--card-radius);
+    background: var(--paper);
+    color: var(--ink);
+    text-align: left;
+    cursor: pointer;
+  }
+  .ln-kaart-knop:hover {
+    border-color: var(--control-line);
+  }
+
+  /* plaat: a module's identity plate, 40 square, its tint behind an ink
+   * pictogram (S2, S3). The only place the seven tints appear. */
+  .ln-plaat {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-chip);
+    background: var(--module-tint);
+    color: var(--ink);
+  }
+  .ln-plaat-klein {
+    width: 32px;
+    height: 32px;
+  }
+  .ln-plaat-leeg {
+    background: var(--inset);
+  }
+  .ln-plaat-open {
+    border: var(--stroke-hair) dashed var(--line-strong);
+    background: transparent;
+  }
+
+  /* tegel (S2, S4): a card that is a choice. Chosen, it takes the accent's
+   * double weight and tint, and a diamond stands in its plate — three changes,
+   * none of them only a hue. One pixel of padding goes back for the second
+   * pixel of rule, so nothing beside a chosen tile moves. */
+  .ln-tegels {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--gap-md);
+  }
+  @media (min-width: 1366px) {
+    .ln-tegels-drie {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  .ln-tegel {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--gap-sm);
+    min-height: var(--touch-target);
+    padding: var(--pad-card-phone-sm);
+    border: var(--stroke-hair) solid var(--line);
+    border-radius: var(--radius-card);
+    background: var(--paper);
+    color: var(--ink);
+    text-align: left;
+    cursor: pointer;
+  }
+  .ln-tegel:not([aria-pressed='true']):hover {
+    border-color: var(--control-line);
+  }
+  .ln-tegel .ln-plaat {
+    background: var(--inset);
+  }
+  .ln-tegel[aria-pressed='true'] {
+    padding: calc(var(--pad-card-phone-sm) - 1px);
+    border: var(--stroke-active) solid var(--accent);
+    background: var(--accent-tint);
+  }
+  .ln-tegel[aria-pressed='true'] .ln-plaat {
+    background: var(--paper);
+  }
+  .ln-tegel-ruit {
+    display: block;
+    width: 14px;
+    height: 14px;
+    background: var(--accent);
+    transform: rotate(45deg);
+  }
+  .ln-tegel .ln-sub {
+    color: var(--ink-3);
+  }
+  .ln-tegel[aria-pressed='true'] .ln-sub {
+    color: var(--ink);
+  }
+
+  /* The one tinted area on a module page (S4): the module's tint behind the
+   * steps, and the fourth and last place its colour appears on that page. */
+  .ln-modulevlak {
+    padding: var(--pad-card-phone);
+    border-radius: var(--radius-card);
+    background: var(--module-tint);
+  }
+
+  /* lijst en rij (S2 on a phone, S3, S12): rows of 72 in one card, a hairline
+   * between them and a figure at the end in tabular numbers. */
+  .ln-lijst {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    list-style: none;
+    border: var(--stroke-hair) solid var(--line);
+    border-radius: var(--card-radius);
+    background: var(--paper);
+  }
+  .ln-lijst > li + li {
+    border-top: var(--stroke-hair) solid var(--line);
+  }
+  .ln-rij {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-md);
+    width: 100%;
+    min-height: var(--tabbar-height);
+    padding: var(--gap-md) var(--gap-lg);
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    text-align: left;
+  }
+  @media (min-width: 768px) {
+    .ln-rij {
+      padding: var(--gap-md) var(--pad-card-phone);
+    }
+  }
+  button.ln-rij,
+  a.ln-rij {
+    cursor: pointer;
+    text-decoration: none;
+  }
+  button.ln-rij:hover,
+  a.ln-rij:hover {
+    background: var(--grond);
+  }
+  /* A row's focus ring stays inside its card, which clips what stands outside
+   * it. */
+  button.ln-rij:focus-visible,
+  a.ln-rij:focus-visible {
+    outline-offset: calc(-1 * var(--stroke-focus) - 2px);
+  }
+  .ln-rij[aria-current='page'] {
+    background: var(--inset);
+  }
+  .ln-rij-tekst {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .ln-rij-dim .ln-titel {
+    color: var(--ink-3);
+  }
+
+  /* The type roles, as classes for the places a component is just a line. */
+  .ln-titel {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--type-item);
+    line-height: var(--type-item-lh);
+    font-weight: 600;
+    letter-spacing: 0;
+    color: var(--ink);
+  }
+  .ln-sub {
+    margin: 0;
+    font-size: var(--type-caption);
+    line-height: var(--type-caption-lh);
+    color: var(--ink-3);
+  }
+  .ln-tekst {
+    margin: 0;
+    font-size: var(--type-body);
+    line-height: var(--type-body-lh);
+    color: var(--ink);
+  }
+  .ln-getal {
+    font-family: var(--font-display);
+    font-size: var(--type-card);
+    line-height: var(--type-card-lh);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .ln-getal-eenheid {
+    margin-left: 4px;
+    font-family: var(--font-body);
+    font-size: var(--type-caption);
+    line-height: var(--type-caption-lh);
+    font-weight: 400;
+    color: var(--ink-3);
+  }
+
+  /* paginakop (S1, S2): display for a place, title for a page about one thing,
+   * and one meta line under it at most. */
+  .ln-paginakop {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .ln-paginakop h1 {
+    font-family: var(--font-display);
+    font-size: var(--type-display);
+    line-height: var(--type-display-lh);
+    letter-spacing: var(--type-display-ls);
+    font-weight: 700;
+  }
+  .ln-paginakop-ding h1 {
+    font-size: var(--type-title);
+    line-height: var(--type-title-lh);
+    letter-spacing: var(--type-title-ls);
+  }
+  /* sectiekop (S2): 20/26, with at most one tertiary way on at the end of the
+   * line. */
+  .ln-sectiekop {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--gap-lg);
+  }
+  .ln-sectiekop h2 {
+    font-family: var(--font-display);
+    font-size: var(--type-card);
+    line-height: var(--type-card-lh);
+    letter-spacing: 0;
+    font-weight: 600;
+  }
+
+  /* label boven een vlak (S1): 13/16, spaced out, capitals. */
+  .ln-label {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: var(--type-label);
+    line-height: var(--type-label-lh);
+    letter-spacing: var(--type-label-ls);
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+
+  /* invoerveld (S1): the label above it and never only inside it. The field
+   * grows with what is typed; nothing is ever cut off. */
+  .ln-veld-groep {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-sm);
+  }
+  .ln-veld {
+    width: 100%;
+    min-height: var(--touch);
+    padding: 15px 14px;
+    border: var(--stroke-hair) solid var(--control-line);
+    border-radius: var(--radius-card);
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: var(--type-body);
+    line-height: var(--type-body-lh);
+  }
+  .ln-veld::placeholder {
+    color: var(--ink-3);
+  }
+  .ln-veld:focus-visible {
+    border-color: var(--ink);
+  }
+  .ln-veld[aria-invalid='true'] {
+    padding: 14px 13px;
+    border: var(--stroke-active) solid var(--bad);
+  }
+  .ln-veld-fout {
+    display: flex;
+    gap: 4px;
+    margin: 0;
+    font-size: var(--type-caption);
+    line-height: var(--type-caption-lh);
+    color: var(--bad-text);
+  }
+
+  /* statuslabel (S10, S11): a fact about a row, not a control — no rule, no
+   * hit target, the word in ink on the inset. A material is written here, in
+   * ink, and never as a coloured word (S11). */
+  .ln-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    border-radius: var(--radius-chip);
+    background: var(--inset);
+    color: var(--ink-2);
+    font-family: var(--font-body);
+    font-size: var(--type-label);
+    line-height: var(--type-label-lh);
+    letter-spacing: var(--type-label-ls);
+    font-weight: 600;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .ln-chip-sterk {
+    color: var(--ink);
+  }
+  .ln-chip-accent {
+    background: var(--accent-tint);
+    color: var(--ink);
+  }
+
+  /* De punt (README): retention and nothing else. A circle whose conic fill is
+   * the share remembered; the ring keeps an empty one visible. The fill is set
+   * per dot from `puntVulling`. */
+  .ln-punt {
+    display: inline-block;
+    flex: none;
+    box-sizing: border-box;
+    border: var(--stroke-active) solid var(--accent);
+    border-radius: 50%;
+  }
+
+  /* De ruit (S5): one per question in a round, and nothing else. Filled is
+   * answered, open is still to come. No transition: the only movement in the
+   * product is the one that explains a mistake. */
+  .ln-ruiten {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ruit-gap);
+    margin: 0;
+    padding: 3px;
+    list-style: none;
+  }
+  .ln-ruit {
+    display: block;
+    width: var(--ruit);
+    height: var(--ruit);
+    box-sizing: border-box;
+    border: var(--stroke-active) solid var(--ink-3);
+    transform: rotate(45deg);
+  }
+  .ln-ruit[data-stand='gedaan'] {
+    border-color: var(--accent);
+    background: var(--accent);
+  }
+
+  /* teller (S5): the question with a leading zero, so 07 to 08 moves nothing. */
+  .ln-teller {
+    font-family: var(--font-display);
+    font-size: var(--type-card);
+    line-height: var(--type-card-lh);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+
+  /* voortgangsbalk: a rail and a fill in the accent. */
+  .ln-balk {
+    display: block;
+    height: 8px;
+    overflow: hidden;
+    border-radius: var(--radius-full);
+    background: var(--rail-empty);
+  }
+  .ln-balk-vul {
+    display: block;
+    height: 100%;
+    border-radius: var(--radius-full);
+    background: var(--accent);
+  }
+
+  /* icoonknop (S5): stop and read aloud, a paper circle at the hit target of
+   * the posture — and at 56 in every round, where --touch-target is 56. */
+  .ln-icoonknop {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: var(--touch-target);
+    height: var(--touch-target);
+    border: 0;
+    border-radius: 50%;
+    background: var(--paper);
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .ln-icoonknop:hover {
+    background: var(--inset);
+  }
+  .ln-icoonknop[aria-pressed='true'] {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  /* schakelaar (S12): position, fill and a word — never one of them alone.
+   * The whole row is the target. */
+  .ln-schakelaar {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-lg);
+    width: 100%;
+    min-height: var(--tabbar-height);
+    padding: var(--gap-md) var(--gap-lg);
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    text-align: left;
+    cursor: pointer;
+  }
+  @media (min-width: 768px) {
+    .ln-schakelaar {
+      padding: var(--gap-md) var(--pad-card-phone);
+    }
+  }
+  .ln-schakelaar:focus-visible {
+    outline-offset: calc(-1 * var(--stroke-focus) - 2px);
+  }
+  .ln-schakelaar-stand {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: var(--gap-sm);
+    font-size: var(--type-caption);
+    line-height: var(--type-caption-lh);
+    color: var(--ink-2);
+  }
+  .ln-schakelaar-baan {
+    display: inline-flex;
+    align-items: center;
+    width: 52px;
+    height: 32px;
+    padding: 0 3px;
+    box-sizing: border-box;
+    border: var(--stroke-hair) solid var(--control-line);
+    border-radius: var(--radius-full);
+    background: var(--inset);
+  }
+  .ln-schakelaar-knop {
+    width: 24px;
+    height: 24px;
+    box-sizing: border-box;
+    border: var(--stroke-hair) solid var(--control-line);
+    border-radius: 50%;
+    background: var(--paper);
+  }
+  .ln-schakelaar[aria-checked='true'] .ln-schakelaar-stand {
+    color: var(--ink);
+  }
+  .ln-schakelaar[aria-checked='true'] .ln-schakelaar-baan {
+    justify-content: flex-end;
+    border-color: var(--ink);
+    background: var(--ink);
+  }
+  .ln-schakelaar[aria-checked='true'] .ln-schakelaar-knop {
+    border-color: var(--paper);
+  }
+
+  /* dialoog en onderpaneel (S5): the one dialog in the whole of practising.
+   * Centred from a tablet up, a sheet under the thumb on a phone. No shadow:
+   * the scrim already says it lies over the page. */
+  .ln-dekvlak {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    background: var(--scrim);
+  }
+  .ln-dialoog {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+    width: 100%;
+    padding: var(--pad-card-phone);
+    border-radius: var(--radius-note) var(--radius-note) 0 0;
+    background: var(--paper);
+    color: var(--ink);
+  }
+  .ln-dialoog-greep {
+    align-self: center;
+    width: 40px;
+    height: 4px;
+    border-radius: var(--radius-full);
+    background: var(--line);
+  }
+  .ln-dialoog-knoppen {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+  }
+  @media (min-width: 768px) {
+    .ln-dekvlak {
+      align-items: center;
+    }
+    .ln-dialoog {
+      width: min(440px, calc(100% - 2 * var(--margin-screen)));
+      padding: var(--pad-panel);
+      border-radius: var(--radius-note);
+    }
+    .ln-dialoog-greep {
+      display: none;
+    }
+    .ln-dialoog-knoppen {
+      flex-direction: row;
+      gap: 8px;
+    }
+  }
+
+  /* laden (S2, S5): three dots in the shape of what is coming. No wheel, no
+   * shimmer, nothing that fills. */
+  .ln-laden {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .ln-laden > span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--ink);
+  }
+  .ln-laden > span:nth-child(2) {
+    opacity: 0.55;
+  }
+  .ln-laden > span:nth-child(3) {
+    opacity: 0.3;
+  }
+
+  /* foutmelding (S2): one shape for every error in the app, only the sentence
+   * differs. A cross and the hatch's ground as well as the colour. */
+  .ln-foutmelding {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--gap-md);
+    padding: var(--gap-lg) var(--pad-card-phone);
+    border: var(--stroke-hair) solid var(--bad);
+    border-radius: var(--radius-card);
+    background: var(--bad-hatch);
+    color: var(--ink);
+  }
+  .ln-foutmelding > .ln-teken {
+    color: var(--bad-text);
+  }
+
+  /* heldkaart, kist, lege plek (S11). The only place in the product with
+   * volume: a hero and a chest stand on the card with a shadow of their own,
+   * and the card itself never has one. The one worn has the double ink rule.
+   * The grid follows the density rule of stap 3: 2, 3, 4 and 6 across. */
+  .ln-helden {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--gap-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  @media (min-width: 768px) {
+    .ln-helden {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1024px) {
+    .ln-helden {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1366px) {
+    .ln-helden {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+  }
+  .ln-held {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--gap-sm);
+    width: 100%;
+    height: 100%;
+    padding: var(--pad-card-phone-sm);
+    border: var(--stroke-hair) solid var(--line);
+    border-radius: var(--radius-card);
+    background: var(--paper);
+    color: var(--ink);
+    text-align: center;
+  }
+  button.ln-held {
+    cursor: pointer;
+  }
+  button.ln-held:not([aria-pressed='true']):hover {
+    border-color: var(--control-line);
+  }
+  .ln-held[aria-pressed='true'] {
+    padding: calc(var(--pad-card-phone-sm) - 1px);
+    border: var(--stroke-active) solid var(--ink);
+  }
+  .ln-held-leeg {
+    border-style: dashed;
+    border-color: var(--line-strong);
+  }
+  .ln-held-leeg .ln-titel {
+    color: var(--ink-3);
+  }
+  .ln-object {
+    filter: var(--shadow-object);
+  }
+  .ln-held-cirkel {
+    display: block;
+    width: 56px;
+    height: 56px;
+    box-sizing: border-box;
+    border: var(--stroke-active) dashed var(--line-strong);
+    border-radius: 50%;
+  }
+  .ln-kist-blok {
+    display: block;
+    width: 56px;
+    height: 44px;
+    border-radius: var(--radius-chip);
+    background: var(--reeks-brons);
+  }
+
+  /* materialen (S11): the ladder, drawn once, in its order. */
+  .ln-materialen {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-lg);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .ln-materiaal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--type-caption);
+    line-height: var(--type-caption-lh);
+    color: var(--ink);
+  }
+  .ln-materiaal-rond {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+  }
+  .ln-materiaal-rond[data-reeks='brons'] {
+    background: var(--reeks-brons);
+  }
+  .ln-materiaal-rond[data-reeks='zilver'] {
+    background: var(--reeks-zilver);
+  }
+  .ln-materiaal-rond[data-reeks='goud'] {
+    background: var(--reeks-goud);
+  }
+  .ln-materiaal-rond[data-reeks='platina'] {
+    background: var(--reeks-platina);
+  }
+  .ln-materiaal-rond[data-reeks='ultra'] {
+    background: var(--reeks-ultra);
+  }
+
+  .ln-sr-only {
     position: absolute;
     width: 1px;
     height: 1px;

@@ -324,7 +324,7 @@ function VerderOefenen({
             {module.built ? (
               <>
                 <span aria-hidden="true">
-                  <ProgressBar value={stand} showDot={false} label={onthoud} />
+                  <ProgressBar value={stand} label={onthoud} />
                 </span>
                 <span className="tk-sr-only">{started ? onthoud : t('home.setNew')}</span>
               </>

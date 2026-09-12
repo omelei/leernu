@@ -30,6 +30,10 @@ const NOT_COPY: ReadonlyMap<string, string> = new Map([
     'the letters of the wordmark are a logo, drawn as text; the accessible name comes from brand.ts',
   ],
   [
+    'src/components/ds/Logo.tsx',
+    'the lockup of house style v2 sets "leer" and "nu" as SVG text; they are a logo, and the accessible name comes from brand.ts',
+  ],
+  [
     'src/design/Gallery.tsx',
     'a development-only page whose labels are query addresses for its own test, and which never ships',
   ],

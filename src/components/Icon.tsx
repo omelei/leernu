@@ -951,3 +951,110 @@ export function StarIcon(props: Omit<IconProps, 'children'>) {
     </Icon>
   );
 }
+
+/*
+ * The navigation and the round, house style v2. Each path is the one the
+ * handoff draws in stap 2 — the tab bar of S2 and the question bar of S5 — on
+ * the same 24 grid and stroke as everything above.
+ */
+
+/** Vandaag: the sun of the tab bar (S2). */
+export function VandaagIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1" />
+    </Icon>
+  );
+}
+
+/** Oefenen: the diamond, which is also topography's own mark (S2). */
+export function OefenenIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <path d="M12 3l9 9-9 9-9-9z" />
+    </Icon>
+  );
+}
+
+/** Verzameling: a medal on its ribbon (S2, "Helden"). */
+export function VerzamelingIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <circle cx="12" cy="8.5" r="5.5" />
+      <path d="M8.5 12.5L7 21l5-2.5 5 2.5-1.5-8.5" />
+    </Icon>
+  );
+}
+
+/** Jij: a head and shoulders (S2). */
+export function JijIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <circle cx="12" cy="8" r="3.5" />
+      <path d="M5 20v-1.5L9 15h6l4 3.5V20" />
+    </Icon>
+  );
+}
+
+/** Stoppen: the cross in the question bar (S5). */
+export function StopIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <path d="M7 7l10 10M17 7L7 17" />
+    </Icon>
+  );
+}
+
+/** Voorlezen: a loudspeaker and two lines of sound (S5). */
+export function VoorleesIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <path d="M4 9h4l5-4v14l-5-4H4z" />
+      <path d="M17 9.5v5M20.5 7v10" />
+    </Icon>
+  );
+}
+
+/**
+ * The tick of a right answer and the cross of a wrong one (S6, S7): three
+ * wide, heavier than an icon on purpose, because on a closed area or a hatch
+ * a stroke of two disappears.
+ */
+export function VinkjeIcon({ size = 24, label }: Omit<IconProps, 'children' | 'tone'>) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={3}
+      focusable="false"
+      role={label ? 'img' : undefined}
+      aria-hidden={label ? undefined : true}
+    >
+      {label ? <title>{label}</title> : null}
+      <path d="M4 12.5l5 5L20 6.5" />
+    </svg>
+  );
+}
+
+export function KruisIcon({ size = 24, label }: Omit<IconProps, 'children' | 'tone'>) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={3}
+      focusable="false"
+      role={label ? 'img' : undefined}
+      aria-hidden={label ? undefined : true}
+    >
+      {label ? <title>{label}</title> : null}
+      <path d="M5 5l14 14M19 5L5 19" />
+    </svg>
+  );
+}

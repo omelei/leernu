@@ -56,6 +56,10 @@
   --ink-3: #666c67; /* Tekst tertiair                  5.15:1 on paper, 4.58:1 on grond */
   --line: #d8d6cc; /* Rand licht */
   --line-strong: #c1beb2; /* Rand sterk (schermkader) */
+  /* One tone deeper than the ground: an empty plate, a chip, the track of a
+   * switch that is off, a field waiting for input. Not in the README table;
+   * drawn 74 times in stap 2 and named in stap 3 ("de inzet"). */
+  --inset: #e3e0d4;
   --accent: #327f48; /* Accent groen (goed, nadruk)     4.71:1 on paper */
   --accent-tint: #eafbec; /* Accent groen licht (vlak) */
   --accent-text: #2c5c3a; /* Accent groen donker             7.23:1 on the light green */
@@ -135,6 +139,10 @@
   --type-number-lh: 2.75rem;
   --type-number-lg: 3rem; /* Groot getal 48/48 */
   --type-number-lg-lh: 3rem;
+  --type-item: 1.0625rem; /* The title of a card, a row or a tile: Archivo 600
+                              17/24, as stap 2 draws every one of them. Not in the
+                              README table, which gives 17/24 only to the button. */
+  --type-item-lh: 1.5rem;
   --type-body: 1rem; /* Lopende tekst 16/26 */
   --type-body-lh: 1.625rem;
   --type-button: 1.0625rem; /* Knoptekst 17/24, weight 600 */
@@ -158,7 +166,8 @@
   --stroke-hair: 1px; /* 1 px on light */
   --stroke-region: 1.5px; /* the contour of a map area (S5) */
   --stroke-active: 2px; /* 2 px for emphasis or a chosen state */
-  --stroke-focus: 3px; /* the dashed focus ring on the map */
+  --stroke-focus: 3px; /* the focus ring: solid ink on a control, dashed paper on the map */
+  --focus-offset: 3px;
 
   /* ---- Distance ----------------------------------------------------------- */
   --space-section: 64px; /* between sections */
@@ -180,6 +189,21 @@
   --touch-min: 44px; /* wijzer (desktop) */
   --touch-tablet: 48px; /* tablet */
   --touch: 56px; /* duim (telefoon), and in a round always */
+  /* The one a control asks for: 44 with a pointer, 48 on a tablet, 56 under a
+   * thumb. The width decides, below. A round overrides it to 56. */
+  --touch-target: var(--touch-min);
+
+  /* ---- Details the screens draw and the table leaves out --------------------- */
+  /* The rule round a control that is not the primary one: tertiary ink on the
+   * light ground (S1, S8), 5.15:1 on paper. */
+  --control-line: var(--ink-3);
+  /* What stands on the closed green of a right answer: 4.71:1 in both themes. */
+  --on-good: #fbfaf6;
+  /* One answer of four in a round, from a tablet on its side up (S8). */
+  --answer-height-lg: 88px;
+  /* The diamonds that count a round's questions (S5). */
+  --ruit: 12px;
+  --ruit-gap: 5px;
 
   /* The density of the PO guise: what VO changes, and nothing more. */
   --control-height: var(--touch);
@@ -213,6 +237,16 @@
     --margin-screen: 24px;
   }
 }
+@media (max-width: 1279px) {
+  :root {
+    --touch-target: var(--touch-tablet);
+  }
+}
+@media (max-width: 767px) {
+  :root {
+    --touch-target: var(--touch);
+  }
+}
 
 /* ---- The round: the dark theme --------------------------------------------
  * The same names, other values. Ink and paper swap roles and the ground goes
@@ -227,6 +261,7 @@
   --paper: #252c26; /* Vlak / kaartvenster */
   --map-land: #2f3831; /* Landvlak op de kaart */
   --rail-empty: #3a413b; /* Balk leeg / rail */
+  --inset: #3a413b;
   --line: #566056; /* Rand op donker: 2.18:1 on vlak, decoration only */
   /* The rule that has to identify a control. The handoff's own rule colour on
    * dark measures 2.18:1 against the vlak, under the 3:1 a control boundary
@@ -235,6 +270,8 @@
   --map-hover: #3e4a40; /* Hover-vulling provincie */
   --map-border: #7c867d; /* Grenslijn kaart */
   --map-water: var(--grond);
+  --control-line: var(--line-strong);
+  --touch-target: var(--touch); /* in a round, always 56 */
   --accent: #7fd494; /* Accent groen op donker          8.01:1 on vlak */
   --accent-text: #7fd494;
   --accent-tint: var(--paper);
