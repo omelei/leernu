@@ -119,12 +119,12 @@ describe('the ways of practising', () => {
       .filter((form) => !form.alleenToets)
       .map((form) => form.id);
 
-  it('offers four ways as tiles and the oefentoets, and no typing, even with the clock on', () => {
+  it('offers three ways as tiles and the oefentoets, and no typing, even with the clock on', () => {
+    // Overleven is in the list and not on the page: a game form (house style v2).
     expect(tegels('vlag-europa-bekend', true)).toEqual([
       'vlag-zoeken',
       'vlag-meerkeuze',
       'ontdekken',
-      'overleven',
     ]);
     const ids = formsFor('vlaggen').map((form) => form.id);
     expect(ids).not.toContain('hoe-heet-dit');

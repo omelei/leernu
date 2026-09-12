@@ -442,8 +442,12 @@ export function offeredForms(
   setId: string | null,
   krap = false,
 ): readonly PracticeForm[] {
+  // Overleven is one of the game forms, and those are not part of the learning
+  // core (house style v2): a round that ends on three lives is a game, and its
+  // tile is absent rather than locked. The rule stays, for when they are built.
   const offered = forms
     .filter((form) => clock || !form.needsClock)
+    .filter((form) => form.rule?.kind !== 'levens')
     .filter((form) => setId === null || !form.geldtVoor || form.geldtVoor(setId))
     .slice(0, MAX_FORMS);
 

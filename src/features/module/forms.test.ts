@@ -106,8 +106,11 @@ describe('the ways of practising', () => {
   it('offers the clock module every one of its ways, on every step', () => {
     // Nothing here is set-dependent: there is no mix a way stops making sense
     // on, the way exploring does on the map, and no set a diploma belongs to.
+    // Every one but overleven, which is a game form and not on the page
+    // (house style v2).
+    const opDePagina = KLOK_FORMS.filter((form) => form.rule?.kind !== 'levens');
     for (const setId of ['klok-heel', 'klok-half', 'klok-kwart', 'klok-vijf', 'klok-mix']) {
-      expect(offeredForms(KLOK_FORMS, true, setId).length, setId).toBe(KLOK_FORMS.length);
+      expect(offeredForms(KLOK_FORMS, true, setId).length, setId).toBe(opDePagina.length);
     }
   });
 
@@ -116,7 +119,9 @@ describe('the ways of practising', () => {
     // while still counting would be a worse lie than no switch.
     const off = offeredForms(TOPO_FORMS, false, 'nl-provincies').map((form) => form.id);
     expect(off).not.toContain('bliksemronde');
-    expect(off).toContain('overleven');
+    // Nor the lives: overleven is a game form, not the learning core.
+    expect(off).not.toContain('overleven');
+    expect(off).toContain('ontdekken');
 
     expect(offeredForms(TOPO_FORMS, true, 'nl-provincies').map((form) => form.id)).toContain(
       'bliksemronde',

@@ -14,7 +14,7 @@ import { expect, test, type Page } from '@playwright/test';
 async function signIn(page: Page, naam: string) {
   await page.goto('/');
   await page.getByPlaceholder('Je naam').fill(naam);
-  await page.getByRole('button', { name: 'Beginnen' }).click();
+  await page.getByRole('button', { name: 'Verder', exact: true }).click();
   // The name is in the app bar now, beside the streak — K1 puts the profile
   // switch top right, so that is where "you are signed in" is visible.
   await expect(page.getByRole('banner').getByRole('button', { name: naam })).toBeVisible();
@@ -22,9 +22,9 @@ async function signIn(page: Page, naam: string) {
 
 async function startTable(page: Page, tafel: number, hoe: RegExp) {
   await page.goto('/rekenen');
-  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Kies je ronde' })).toBeVisible();
 
-  const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
+  const wat = page.getByRole('region', { name: /Waarover/ });
   const hoeStap = page.getByRole('region', { name: /Hoe wil je/ });
 
   // Step 1 is five subjects now, and the tables are one of them. Which table is
@@ -43,50 +43,46 @@ async function startTable(page: Page, tafel: number, hoe: RegExp) {
 
 /** The one way out of K2, whatever was chosen. See e2e/app.spec.ts. */
 async function start(page: Page) {
-  await page.locator('.tk-choose-start button').click();
+  await page.locator('.ln-start-knop').click();
 }
 
-test('the rail is the map of the product, not a list of what is finished', async ({
-  page,
-}, testInfo) => {
-  // Only at a desk: below 1200 the modules are the menu under the app bar
-  // instead (ADR-093), which e2e/shell.spec.ts walks. The test below covers
-  // the front door's own list, at every size.
-  test.skip(!['chromebook', 'desktop-1440'].includes(testInfo.project.name), 'no rail below 1200');
-
+test('Oefenen is the map of the product, not a list of what is finished', async ({ page }) => {
   await signIn(page, 'Sam');
+  await page.goto('/oefenen');
 
-  // ADR-051. Five doors, of which three are not open yet — a rail with only
-  // the two built ones does not read as a short list, it reads as the whole
-  // product, and a child could not tell what leer.nu is for.
-  const rail = page.getByRole('navigation', { name: 'Modules' });
-  await expect(rail.getByRole('button')).toHaveCount(5);
-
-  for (const naam of ['Topo', 'Rekenen', 'Klok', 'Taal', 'Vlaggen']) {
-    await expect(rail.getByRole('button', { name: naam, exact: true })).toBeVisible();
+  // ADR-051, on S3 now rather than in the rail: every module is a row, the
+  // ones not open yet as well — a list with only the built ones would read as
+  // the whole product, and a child could not tell what leer.nu is for.
+  const lijst = page.getByRole('list', { name: 'Waar wil je in oefenen?' });
+  const namen = ['Topografie', 'Tafels', 'Klokkijken', 'Woordjes', 'Spelling', 'Tijdvakken'];
+  for (const naam of [...namen, 'Vlaggen']) {
+    await expect(lijst.getByRole('button', { name: new RegExp(`^${naam}`) })).toBeVisible();
   }
 
   // And a door that is not open says so rather than opening onto nothing,
-  // which is the half of ADR-037 that survives. Klokkijken used to be the
-  // example here and is open now, so this asks the next one along.
-  await rail.getByRole('button', { name: 'Taal', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'Taal' })).toBeVisible();
+  // which is the half of ADR-037 that survives.
+  await lijst.getByRole('button', { name: /^Woordjes/ }).click();
+  await expect(
+    page.getByText('Deze module bestaat nog niet. We zijn hem aan het maken.'),
+  ).toBeVisible();
 });
 
-test('the front door lists every module, at every size', async ({ page }) => {
+test('a new child finds a table to start with on Vandaag, at every size', async ({ page }) => {
   await signIn(page, 'Fien');
 
-  // The phone has no rail, so this is the only way to a module there — and on
-  // a laptop it stands beside the rail, which is what K1 draws.
+  // Before any round, Verder oefenen holds the starters (S2): one set per
+  // module, the tables among them.
   const lijst = page.getByRole('region', { name: 'Verder oefenen' });
+  // The list is read from IndexedDB and fills in after the first paint; a
+  // press before that can land on a card that is about to move.
+  await expect(page.locator('.ln-verder')).not.toHaveAttribute('aria-busy', 'true');
+  await lijst.getByRole('button', { name: /Tafel van 2/ }).click();
 
-  for (const naam of ['Rekenen', 'Klok', 'Taal', 'Vlaggen']) {
-    await expect(lijst.getByRole('button', { name: new RegExp(naam) })).toBeVisible();
-  }
-
-  await lijst.getByRole('button', { name: /Rekenen/ }).click();
-  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Tafel van 7', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Kies je ronde' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Tafel van 2', exact: true })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
 });
 
 test('the tables have an address of their own', async ({ page }) => {
@@ -94,7 +90,7 @@ test('the tables have an address of their own', async ({ page }) => {
   // The slug still works — it has been written down — and it is the same page.
   await page.goto('/tafels');
 
-  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Kies je ronde' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Tafel van 7', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Tafel van 12', exact: true })).toBeVisible();
 });
@@ -107,7 +103,7 @@ test('rekenen is the word a parent looks for, and it is the page itself', async 
   // page here with a single card on it saying "Rekenen", which charged a child
   // a click to be told what they had already typed. Tafels sits under rekenen;
   // klokkijken sits beside it (ADR-044).
-  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Kies je ronde' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Tafel van 3', exact: true })).toBeVisible();
 });
 
@@ -121,7 +117,7 @@ test('a set has an address, and the page opens on it', async ({ page }) => {
   // Scoped to step 1, because the start button names the chosen set as well —
   // which is what K2 puts it there for, and which makes an unscoped query for
   // the set name ambiguous on exactly the page that opened on it.
-  const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
+  const wat = page.getByRole('region', { name: /Waarover/ });
 
   await page.goto('/rekenen/tafel-7');
   await expect(page.getByRole('button', { name: 'Tafel van 7', exact: true })).toHaveAttribute(
@@ -167,7 +163,8 @@ test('typing a table: right, wrong, and not knowing', async ({ page }) => {
   await expect(page.getByRole('status')).toContainText('999');
 
   await page.getByRole('button', { name: 'Volgende vraag' }).click();
-  await page.getByRole('button', { name: 'Ik weet het niet' }).click();
+  await page.getByPlaceholder('Antwoord').fill('999');
+  await page.getByRole('button', { name: 'Kijk na' }).click();
   await expect(page.getByRole('button', { name: 'Volgende vraag' })).toBeVisible();
 });
 
@@ -203,52 +200,23 @@ test('a finished table says what changed, not only what was scored', async ({ pa
 });
 
 /**
- * The clock and the lives, over all twelve tables rather than the chosen one.
- * Ten sums is over long before a minute is, and a child who reaches for the
- * clock is one who already knows a table.
+ * No clock in the learning core (house style v2): time and speed belong to the
+ * game forms with a clock, which are not built. So the lightning round is not
+ * offered, and Jij has no switch that would bring it back.
  */
-test('a survival round of tables runs on lives, not on ten questions', async ({ page }) => {
-  await signIn(page, 'Lieke');
-  await startTable(page, 1, /^Overleven\b/);
-
-  await expect(page.getByPlaceholder('Antwoord')).toBeVisible();
-
-  // No dots: there is no ten to count towards.
-  await expect(page.getByRole('progressbar')).toHaveCount(0);
-
-  const levens = page
-    .getByRole('banner')
-    .locator('div')
-    .filter({ hasText: /^levens\d$/ });
-  await expect(levens).toContainText('3');
-
-  await page.getByPlaceholder('Antwoord').fill('999');
-  await page.getByRole('button', { name: 'Kijk na' }).click();
-  await expect(levens).toContainText('2');
-
-  // Saying you do not know still costs nothing, here as on the map (ADR-048).
-  await page.getByRole('button', { name: 'Volgende vraag' }).click();
-  await page.getByRole('button', { name: 'Ik weet het niet' }).click();
-  await expect(levens).toContainText('2');
-});
-
-test('the lightning round is offered only once the clock is on', async ({ page }) => {
+test('the lightning round is not offered, and nothing switches it on', async ({ page }) => {
   await signIn(page, 'Timo');
 
-  const bliksem = page
-    .getByRole('region', { name: /Hoe wil je/ })
-    .getByRole('button', { name: /^Bliksemronde\b/ });
-
   await page.goto('/rekenen');
-  await expect(bliksem).toHaveCount(0);
+  await expect(
+    page
+      .getByRole('region', { name: /Hoe wil je/ })
+      .getByRole('button', { name: /^Bliksemronde\b/ }),
+  ).toHaveCount(0);
 
-  const clock = page.getByRole('button', { name: /Klok bij het oefenen/ });
   await page.goto('/jij');
-  await clock.click();
-  await expect(clock).toHaveAttribute('aria-pressed', 'true');
-
-  await page.goto('/rekenen');
-  await expect(bliksem).toBeVisible();
+  await expect(page.getByRole('switch', { name: /Vragen voorlezen/ })).toBeVisible();
+  await expect(page.getByRole('switch', { name: /tijd|klok/i })).toHaveCount(0);
 });
 
 /**
@@ -263,7 +231,7 @@ test('rekenen offers six subjects, and never more than six', async ({ page }) =>
   await signIn(page, 'Bram');
   await page.goto('/rekenen');
 
-  const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
+  const wat = page.getByRole('region', { name: /Waarover/ });
 
   for (const naam of [
     'Tafels',
@@ -286,7 +254,7 @@ test('a subject with many sets asks which, instead of showing all of them', asyn
   await signIn(page, 'Sten');
   await page.goto('/rekenen');
 
-  const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
+  const wat = page.getByRole('region', { name: /Waarover/ });
 
   // Each second question is a step of its own, named by what it asks, so its
   // answers are the buttons in that region and nothing else — not the chips
@@ -406,7 +374,7 @@ test('the topomix asks about more than one kind of thing in one round', async ({
   await signIn(page, 'Jill');
   await page.goto('/topografie/mix');
 
-  const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
+  const wat = page.getByRole('region', { name: /Waarover/ });
   // "Topo-mix" rather than "Mix": the tile says which module's mix it is, the
   // way Rekenmix always did. The address is untouched — /topografie/mix still
   // opens it, because a rename that breaks a link a parent wrote down is a

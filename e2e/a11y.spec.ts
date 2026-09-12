@@ -23,7 +23,7 @@ async function scan(page: Page) {
 async function signIn(page: Page, naam: string) {
   await page.goto('/');
   await page.getByPlaceholder('Je naam').fill(naam);
-  await page.getByRole('button', { name: 'Beginnen' }).click();
+  await page.getByRole('button', { name: 'Verder', exact: true }).click();
 
   // The name is in the app bar now, beside the streak — K1 puts the profile
   // switch top right, so that is where "you are signed in" is visible.
@@ -47,7 +47,7 @@ const STEDEN: Keuze = [/^Steden/, /^Steden van Nederland$/];
 type Keuze = readonly [RegExp] | readonly [RegExp, RegExp];
 
 async function kiesOnderwerp(page: Page, [vak, chip]: Keuze) {
-  const what = page.getByRole('region', { name: /Kies een onderwerp/ });
+  const what = page.getByRole('region', { name: /Waarover/ });
 
   // First rather than exact: after the card is pressed its chips are in the
   // same region, and a chip's accessible name is the set's full name.
@@ -67,7 +67,7 @@ async function kiesOnderwerp(page: Page, [vak, chip]: Keuze) {
  */
 async function startRound(page: Page, set: Keuze, way: RegExp) {
   await page.goto('/topografie');
-  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Kies je ronde' })).toBeVisible();
 
   await kiesOnderwerp(page, set);
   await page
@@ -77,12 +77,12 @@ async function startRound(page: Page, set: Keuze, way: RegExp) {
   // The wrapper rather than the label: the label is the combination in words
   // and its measure comes from the round, so matching on "vragen" was quietly
   // asserting which modes exist — and one of the mode cards ends in it too.
-  await page.locator('.tk-choose-start button').click();
+  await page.locator('.ln-start-knop').click();
 }
 
 test('the name screen has no violations', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Wie ben jij?' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Hoe heet je?' })).toBeVisible();
 
   const results = await scan(page);
   expect(results.violations).toEqual([]);
@@ -107,7 +107,7 @@ test('the module pages have no violations, in each of their four shapes', async 
   await signIn(page, 'Nour');
 
   await page.goto('/topografie');
-  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Kies je ronde' })).toBeVisible();
   expect((await scan(page)).violations).toEqual([]);
 
   await page.goto('/rekenen');
@@ -123,24 +123,31 @@ test('the module pages have no violations, in each of their four shapes', async 
   await expect(page.getByRole('button', { name: /^Halve uren/ })).toBeVisible();
   expect((await scan(page)).violations).toEqual([]);
 
+  // Named as Oefenen names it, the row a child pressed to get here.
   await page.goto('/woordjes');
-  await expect(page.getByRole('heading', { name: 'Taal' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Woordjes', level: 1 })).toBeVisible();
   expect((await scan(page)).violations).toEqual([]);
 });
 
 /**
- * The collection: twelve heroes, twelve diplomas and ten stamps, most of them
- * not earned yet. It is the densest page in the product and the one where the
- * temptation to say "not yet" with a colour alone is strongest, so it is worth
- * a scan of its own (ADR-076).
+ * The collection (S11): twelve places, most of them empty for a new child. It
+ * is the page where the temptation to say "not yet" with a colour alone is
+ * strongest, so it is worth a scan of its own — and so are Oefenen (S3), which
+ * dims the modules that are not built, and Jij (S12), which has the switches.
  */
-test('the collection page has no violations', async ({ page }) => {
+test('the collection, Oefenen and Jij have no violations', async ({ page }) => {
   await signIn(page, 'Lieve');
 
-  await page.goto('/voortgang');
-  // Level one: the card in the column beside it carries the same name, which
-  // is right — it is the short view of this page and links to it.
-  await expect(page.getByRole('heading', { name: 'Jouw voortgang', level: 1 })).toBeVisible();
+  await page.goto('/verzameling');
+  await expect(page.getByRole('heading', { name: 'Verzameling', level: 1 })).toBeVisible();
+  expect((await scan(page)).violations).toEqual([]);
+
+  await page.goto('/oefenen');
+  await expect(page.getByRole('heading', { name: 'Waar wil je in oefenen?' })).toBeVisible();
+  expect((await scan(page)).violations).toEqual([]);
+
+  await page.goto('/jij');
+  await expect(page.getByRole('heading', { name: 'Jij', exact: true })).toBeVisible();
   expect((await scan(page)).violations).toEqual([]);
 });
 
@@ -181,6 +188,7 @@ test('the result screen has no violations', async ({ page }) => {
   await signIn(page, 'Yara');
   await startRound(page, PROVINCIES, /Aanwijzen/);
   await page.getByRole('button', { name: 'Stoppen' }).click();
+  await page.getByRole('button', { name: 'Afbreken' }).click();
   await expect(page.getByRole('button', { name: 'Terug naar start' })).toBeVisible();
 
   expect((await scan(page)).violations).toEqual([]);
@@ -200,9 +208,12 @@ test('a keyboard reaches the map and can answer with it', async ({ page }) => {
   let reached: string | null = null;
   for (let i = 0; i < 30 && reached === null; i++) {
     await page.keyboard.press('Tab');
+    // A region of the map is a group holding its shape and its ring; the group
+    // is the button (MapCanvas, AnswerShape).
     reached = await page.evaluate(() => {
       const active = document.activeElement;
-      return active?.tagName.toLowerCase() === 'path' ? active.getAttribute('aria-label') : null;
+      const opDeKaart = active?.closest('svg') != null && active.getAttribute('role') === 'button';
+      return opDeKaart ? active.getAttribute('aria-label') : null;
     });
   }
 

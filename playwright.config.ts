@@ -84,6 +84,14 @@ export default defineConfig({
       name: 'android',
       use: { ...devices['Pixel 7'] },
     },
+    {
+      // The third size house style v2 is checked at (1366, 1024 and 393): a
+      // tablet on its side, the narrowest size with the rail. Screenshots only;
+      // the flows are covered at the six sizes above.
+      name: 'tablet-1024',
+      testMatch: /screens\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'], viewport: { width: 1024, height: 768 } },
+    },
   ],
   webServer: {
     command: 'npm run build && npm run preview -- --port 4173',

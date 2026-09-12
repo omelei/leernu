@@ -11,41 +11,46 @@ import { expect, test, type Page } from '@playwright/test';
 async function signIn(page: Page, naam: string) {
   await page.goto('/');
   await page.getByPlaceholder('Je naam').fill(naam);
-  await page.getByRole('button', { name: 'Beginnen' }).click();
+  await page.getByRole('button', { name: 'Verder', exact: true }).click();
   await expect(page.getByRole('banner').getByRole('button', { name: naam })).toBeVisible();
 }
 
 async function kies(page: Page, pad: string, onderwerp: RegExp, hoe: RegExp) {
   await page.goto(pad);
   await page
-    .getByRole('region', { name: /Kies een onderwerp/ })
+    .getByRole('region', { name: /Waarover/ })
     .getByRole('button', { name: onderwerp })
     .click();
   await page
     .getByRole('region', { name: /Hoe wil je/ })
     .getByRole('button', { name: hoe })
     .click();
-  await page.locator('.tk-choose-start button').click();
+  await page.locator('.ln-start-knop').click();
 }
 
-/** Says "ik weet het niet" to every question, to the end of the round. */
+/**
+ * Answers every question with the first of the four, to the end of the round.
+ * Most of those are wrong, which is what this file needs: mistakes to practise.
+ * A round has no "ik weet het niet" any more (S5 draws no action during a
+ * question), so a wrong choice is how a mistake is made.
+ */
 async function weetHetNiet(page: Page) {
   const klaar = page.getByRole('button', { name: 'Terug naar start' });
-  const weetNiet = page.getByRole('button', { name: 'Ik weet het niet' });
+  const opties = page.getByRole('group', { name: /^Kies/ });
   const volgende = page.getByRole('button', { name: 'Volgende vraag' });
 
   for (let vraag = 0; vraag < 40; vraag++) {
-    await expect(klaar.or(volgende).or(weetNiet).first()).toBeVisible();
+    await expect(klaar.or(volgende).or(opties).first()).toBeVisible();
     if (await klaar.isVisible()) return;
     if (await volgende.isVisible()) await volgende.click();
-    else await weetNiet.click();
+    else await opties.getByRole('button').first().click();
   }
   throw new Error('De ronde hield niet op.');
 }
 
 test('the clock offers the faces you did not know', async ({ page }) => {
   await signIn(page, 'Ties');
-  const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
+  const wat = page.getByRole('region', { name: /Waarover/ });
 
   await page.goto('/klokkijken');
   await expect(wat.getByRole('button', { name: /^Oefen je fouten/ })).toHaveCount(0);
@@ -59,7 +64,7 @@ test('the clock offers the faces you did not know', async ({ page }) => {
     .getByRole('region', { name: /Hoe wil je/ })
     .getByRole('button', { name: /^Meerkeuze/ })
     .click();
-  await page.locator('.tk-choose-start button').click();
+  await page.locator('.ln-start-knop').click();
   await expect(page.getByRole('group', { name: 'Kies hoe laat het is' })).toBeVisible();
 });
 
@@ -69,7 +74,7 @@ test('topography offers the places you did not know, on their own map', async ({
   await weetHetNiet(page);
 
   await page.goto('/topografie');
-  const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
+  const wat = page.getByRole('region', { name: /Waarover/ });
   await expect(wat.getByRole('button', { name: /^Oefen je fouten/ })).toBeVisible();
 
   // And it has an address, the one word, like the mix.

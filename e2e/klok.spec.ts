@@ -13,21 +13,21 @@ import { expect, test, type Page } from '@playwright/test';
 async function signIn(page: Page, naam: string) {
   await page.goto('/');
   await page.getByPlaceholder('Je naam').fill(naam);
-  await page.getByRole('button', { name: 'Beginnen' }).click();
+  await page.getByRole('button', { name: 'Verder', exact: true }).click();
   await expect(page.getByRole('banner').getByRole('button', { name: naam })).toBeVisible();
 }
 
 /** Step 1, step 2, start. The one way into a round, whatever was chosen. */
 async function startKlok(page: Page, onderwerp: RegExp, hoe: RegExp) {
   await page.goto('/klokkijken');
-  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Kies je ronde' })).toBeVisible();
 
-  const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
+  const wat = page.getByRole('region', { name: /Waarover/ });
   const hoeStap = page.getByRole('region', { name: /Hoe wil je/ });
 
   await wat.getByRole('button', { name: onderwerp }).click();
   await hoeStap.getByRole('button', { name: hoe }).click();
-  await page.locator('.tk-choose-start button').click();
+  await page.locator('.ln-start-knop').click();
 }
 
 test('the clock has a module page in the same shape as the other two', async ({ page }) => {
@@ -36,7 +36,7 @@ test('the clock has a module page in the same shape as the other two', async ({ 
 
   // Four steps and a mix, one set each. No region row — a clock is not
   // anywhere — and no chips, because no subject here holds more than one set.
-  const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
+  const wat = page.getByRole('region', { name: /Waarover/ });
   for (const naam of ['Hele uren', 'Halve uren', 'Kwartieren', 'Vijf minuten', 'Klokmix']) {
     await expect(wat.getByRole('button', { name: new RegExp(`^${naam}`) })).toBeVisible();
   }
@@ -56,7 +56,7 @@ test('the clock answers to the short word as well as its own', async ({ page }) 
 
   // "Klok" is what the rail says and what a child would type. Both land here.
   await page.goto('/klok');
-  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Kies je ronde' })).toBeVisible();
   await expect(page.getByRole('button', { name: /^Kwartieren/ })).toBeVisible();
 });
 
@@ -64,7 +64,7 @@ test('a step of the clock has an address, and the page opens on it', async ({ pa
   await signIn(page, 'Iris');
   await page.goto('/klokkijken/kwartieren');
 
-  const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
+  const wat = page.getByRole('region', { name: /Waarover/ });
   await expect(wat.getByRole('button', { name: /^Kwartieren/ })).toHaveAttribute(
     'aria-pressed',
     'true',
@@ -120,23 +120,19 @@ test('typing a time takes every way a child writes one', async ({ page }) => {
   await expect(page.getByRole('status')).toContainText(':');
 
   await page.getByRole('button', { name: 'Volgende vraag' }).click();
-  await page.getByRole('button', { name: 'Ik weet het niet' }).click();
+  await page.getByPlaceholder('7:30').fill('1');
+  await page.getByRole('button', { name: 'Kijk na' }).click();
   await expect(page.getByRole('button', { name: 'Volgende vraag' })).toBeVisible();
 });
 
-test('the clock is a door in the rail like the other two', async ({ page }, testInfo) => {
-  // Below 1200 the same door is in the menu (ADR-093); shell.spec.ts opens it.
-  test.skip(!['chromebook', 'desktop-1440'].includes(testInfo.project.name), 'no rail below 1200');
-
+test('the clock is a row on Oefenen like the other modules', async ({ page }) => {
   await signIn(page, 'Timo');
 
-  const rail = page.getByRole('navigation', { name: 'Modules' });
-  await rail.getByRole('button', { name: 'Klok', exact: true }).click();
+  // The rail holds the four places now; the modules are the rows of Oefenen.
+  await page.goto('/oefenen');
+  await page.getByRole('button', { name: /^Klokkijken/ }).click();
 
   // A door that is open opens onto the chooser, not onto "binnenkort".
-  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
-  await expect(rail.getByRole('button', { name: 'Klok', exact: true })).toHaveAttribute(
-    'aria-current',
-    'page',
-  );
+  await expect(page.getByRole('heading', { name: 'Kies je ronde' })).toBeVisible();
+  await expect(page).toHaveURL(/\/klokkijken$/);
 });

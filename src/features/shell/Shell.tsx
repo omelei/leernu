@@ -1,185 +1,127 @@
 import type { ComponentType, ReactNode } from 'react';
 import { brand } from '@/config/brand';
-import { Wordmark } from '@/components/Wordmark';
-import { Brandmark } from '@/components/Brandmark';
-import { FamilyIcon, FreezerIcon, PupilIcon, TodayIcon, type IconProps } from '@/components/Icon';
-import { t } from '@/i18n';
-import { MODULE_ICON } from './moduleIcons';
+import { Logo } from '@/components/ds';
 import {
-  BUILT_DESTINATIONS,
-  RAIL_MODULES,
-  NAVIGATION_MINIMUM,
-  type Destination,
-  type Module,
-} from './modules';
-import { VakMenu } from './VakMenu';
+  JijIcon,
+  OefenenIcon,
+  VandaagIcon,
+  VerzamelingIcon,
+  type IconProps,
+} from '@/components/Icon';
+import { t } from '@/i18n';
+import { DESTINATIONS, type Destination } from './modules';
 
 /**
- * The frame around everything that is not a round, in three postures
- * (ADR-093).
+ * The frame around everything that is not a round (stap 2; stap 7, point 12).
  *
- * **From 1200 up** there is a mouse at eye level. The app bar carries the
- * wordmark and the destinations, and the modules stand in a rail on the left.
+ * **One navigation, in two postures.** The four destinations — Vandaag,
+ * Oefenen, Verzameling, Jij — stand in a rail of 88 on the left from a tablet
+ * on its side up (1024, stap 3), and lie in a tab bar of 72 along the bottom
+ * below it, where a thumb is. Never both: which one is displayed is CSS, and
+ * the other is `display: none`, so a screen reader meets one list of four.
+ * There are no tabs across the top any more, and the modules are no longer in
+ * the frame at all: they are the page Oefenen.
  *
- * **Below 1200** — a tablet either way up, and a phone — the app bar is the
- * mark, the streak and the child. The modules are one control under it that
- * opens into the same list, and the destinations lie along the bottom where a
- * thumb is. A tablet used to get the rail lying along the bottom and the
- * destinations in the app bar; the handoff swaps them, so both kinds of device
- * in a child's hand are held the same way.
- *
- * Exactly one of each pair is displayed at any width — rail or menu, app bar
- * row or tab bar — so nothing is offered twice. Which one is CSS: the menu's
- * list is not in the document until it is opened, so a closed menu and the rail
- * never both answer to "Modules".
+ * **The kopbalk** carries the logo — the way back to Vandaag — and, on the
+ * right, the stars and the child. A module's own page puts the module where
+ * the logo was (S4).
  *
  * **Nothing here appears during a round.** Not hidden: not rendered. A round
- * screen is not wrapped in this component at all (ADR-041), and
- * e2e/shell.spec.ts asserts it from the outside.
+ * screen is not wrapped in this component at all (ADR-041), and the rail
+ * disappears with it — completely, not dimmed (README).
  */
 
-/** A mark per destination, for the tab bar, where a row of words is read rather than recognised. */
-const DESTINATION_ICON: Record<Destination['id'], ComponentType<Omit<IconProps, 'children'>>> = {
-  vandaag: TodayIcon,
-  onthouden: FreezerIcon,
-  vrienden: FamilyIcon,
-  jij: PupilIcon,
+const ICOON: Record<Destination['id'], ComponentType<Omit<IconProps, 'children'>>> = {
+  vandaag: VandaagIcon,
+  oefenen: OefenenIcon,
+  verzameling: VerzamelingIcon,
+  jij: JijIcon,
 };
 
 export interface ShellProps {
   readonly children: ReactNode;
   /**
-   * Which destination is showing, when one is.
-   *
-   * Not all of them are: a module page is not Vandaag, and a screen that is not
-   * a destination marks nothing, which is the truth and is also what a screen
-   * reader should hear.
+   * Which destination is showing. A module's page belongs to Oefenen; a
+   * screen that is none of the four marks nothing, which is the truth and is
+   * what a screen reader should hear.
    */
-  readonly current?: Destination['id'];
-  readonly onNavigate?: (id: Destination['id']) => void;
-  /** Which module is open, so the rail and the menu can say so truthfully. */
-  readonly currentModule?: Module['id'];
-  readonly onModule?: (id: Module['id']) => void;
-  /** The streak, the profile switch — whatever the app bar is carrying today. */
+  readonly current?: Destination['id'] | undefined;
+  readonly onNavigate?: ((id: Destination['id']) => void) | undefined;
+  /** The right-hand end of the kopbalk: the stars and the child. */
   readonly bar?: ReactNode;
-  /**
-   * The two lists, injectable so the frame can be tested with more than the
-   * entries that exist today. Nothing in the app passes them.
-   */
-  readonly modules?: readonly Module[];
-  readonly destinations?: readonly Destination[];
+  /** What stands where the logo does, on a module's own page (S4). */
+  readonly kop?: ReactNode;
+  /** Injectable so the frame can be tested apart from the real list. */
+  readonly destinations?: readonly Destination[] | undefined;
 }
 
 export function Shell({
   children,
   current,
   onNavigate,
-  currentModule,
-  onModule,
   bar,
-  modules = RAIL_MODULES,
-  destinations = BUILT_DESTINATIONS,
+  kop,
+  destinations = DESTINATIONS,
 }: ShellProps) {
-  // A tab bar with one destination is a label you cannot press, so it waits
-  // until there is somewhere to go. The modules no longer wait: ADR-051 makes
-  // them the map of the product rather than an index of what is finished.
-  const showModules = modules.length >= NAVIGATION_MINIMUM;
-  const showDestinations = destinations.length >= NAVIGATION_MINIMUM;
-
-  const destinationItems = destinations.map((destination) => ({
+  const items = destinations.map((destination) => ({
     ...destination,
     label: t(destination.name),
-    Icon: DESTINATION_ICON[destination.id],
+    Icon: ICOON[destination.id],
   }));
 
   return (
-    <div className="flex min-h-screen flex-col bg-paper">
-      <header className="tk-appbar flex-none">
-        {/* The logo, and the way back to the front door. The wordmark where
-            there is room for it; the mark alone below 1200, where the bar is
-            the mark, the streak and the child. */}
-        <button
-          type="button"
-          className="tk-brand"
-          aria-label={t('nav.home', { merk: brand.name })}
-          onClick={() => onNavigate?.('vandaag')}
-        >
-          <span className="hidden desk:inline-flex">
-            <Wordmark size={30} clearSpace={false} />
-          </span>
-          <Brandmark size={32} className="hidden md:inline-flex desk:hidden" />
-          <Brandmark size={28} className="inline-flex md:hidden" />
-        </button>
-
-        {showDestinations ? (
-          <nav aria-label={t('nav.destinations')} className="tk-navbar hidden desk:flex">
-            {destinationItems.map((destination) => (
-              <button
-                key={destination.id}
-                type="button"
-                aria-current={destination.id === current ? 'page' : undefined}
-                className="tk-navbar-item"
-                onClick={() => onNavigate?.(destination.id)}
-              >
-                {destination.label}
-              </button>
-            ))}
-          </nav>
-        ) : null}
-
+    <div className="ln-app">
+      <header className="ln-kopbalk">
+        {kop ?? (
+          <button
+            type="button"
+            className="ln-kopbalk-merk"
+            aria-label={t('nav.home', { merk: brand.name })}
+            onClick={() => onNavigate?.('vandaag')}
+          >
+            <span className="ln-kopbalk-logo">
+              <Logo hoogte={20} />
+            </span>
+          </button>
+        )}
         {bar}
       </header>
 
-      {showModules ? (
-        <div className="flex-none desk:hidden">
-          <VakMenu modules={modules} current={currentModule} onModule={onModule} />
-        </div>
-      ) : null}
-
-      <div className="flex min-h-0 flex-1">
-        {showModules ? (
-          <nav aria-label={t('nav.modules')} className="tk-rail hidden desk:flex">
-            {modules.map((module) => {
-              const ModuleIcon = MODULE_ICON[module.id];
-
-              return (
-                <button
-                  key={module.id}
-                  type="button"
-                  data-module={module.id}
-                  aria-current={module.id === currentModule ? 'page' : undefined}
-                  className="tk-rail-item"
-                  onClick={() => onModule?.(module.id)}
-                >
-                  <span className="tk-plaat tk-plaat-rail">
-                    <ModuleIcon size={20} />
-                  </span>
-                  {t(module.name)}
-                </button>
-              );
-            })}
-          </nav>
-        ) : null}
-
-        <main className="tk-grond min-h-0 min-w-0 flex-1">{children}</main>
-      </div>
-
-      {showDestinations ? (
-        <nav aria-label={t('nav.destinations')} className="tk-tabbar flex-none desk:hidden">
-          {destinationItems.map(({ id, label, Icon }) => (
+      <div className="ln-app-midden">
+        <nav aria-label={t('nav.destinations')} className="ln-rail">
+          {items.map(({ id, label, Icon }) => (
             <button
               key={id}
               type="button"
               aria-current={id === current ? 'page' : undefined}
-              className="tk-tabbar-item"
+              className="ln-rail-knop"
               onClick={() => onNavigate?.(id)}
             >
-              <Icon size={24} />
+              <span className="ln-rail-plaat" aria-hidden="true">
+                <Icon size={18} />
+              </span>
               {label}
             </button>
           ))}
         </nav>
-      ) : null}
+
+        <main className="ln-main">{children}</main>
+      </div>
+
+      <nav aria-label={t('nav.destinations')} className="ln-tabbar">
+        {items.map(({ id, label, Icon }) => (
+          <button
+            key={id}
+            type="button"
+            aria-current={id === current ? 'page' : undefined}
+            className="ln-tabbar-knop"
+            onClick={() => onNavigate?.(id)}
+          >
+            <Icon size={24} />
+            <span className="ln-tabbar-label">{label}</span>
+          </button>
+        ))}
+      </nav>
     </div>
   );
 }

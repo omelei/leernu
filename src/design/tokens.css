@@ -1,0 +1,345 @@
+/*
+ * The design tokens of leer.nu, house style v2 — every colour, typeface, type
+ * size, radius, distance, hit target and shadow the product uses, and nothing
+ * else. Source: design_handoff_leernu/README.md, "Ontwerptokens", with the
+ * values it leaves out taken from the screens of stap 2 where they are drawn
+ * (see docs/huisstijl-v2/00-inventarisatie.md §8). No value here is invented.
+ *
+ * This is the only file in the repository allowed to name a colour, a font
+ * family or a type size. Components read these through Tailwind
+ * (tailwind.config.ts) or through var(); a lint rule refuses a hex in TS, and
+ * contrast.test.ts measures the pairs below against the stylesheet itself.
+ *
+ * Two themes. Light is the product. Dark is a round: a round screen sets
+ * data-thema="ronde" on <html> while it asks, and takes it off for the result
+ * (README, "Kleur — donker thema (tijdens een ronde)"). There is no dark theme
+ * that follows the system any more; the handoff draws none.
+ *
+ * Token names are English, like the rest of the code, with the handoff's own
+ * Dutch name in the comment beside each so the way back to the source is one
+ * glance.
+ */
+
+/* ---- Typefaces ------------------------------------------------------------
+ * Archivo 600 and 700, Public Sans 400 and 600, both from Google Fonts and
+ * served from our own domain: the files were fetched once from
+ * fonts.gstatic.com and live in public/fonts. A font request from a child's
+ * browser to a third party is the thing this product exists not to do
+ * (e2e/network.spec.ts). Each family is one variable file carrying exactly the
+ * weights asked for; `swap` shows the text at once in the fallback rather than
+ * leaving a question invisible while a font arrives.
+ */
+@font-face {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 600 700;
+  font-display: swap;
+  src: url('/fonts/archivo-latin-wght.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Public Sans';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url('/fonts/public-sans-latin-wght.woff2') format('woff2');
+}
+
+:root {
+  color-scheme: light;
+
+  /* ---- Colour, light ---------------------------------------------------- */
+  --canvas: #dcd9cd; /* Canvas (buiten het scherm) */
+  --grond: #efede4; /* Papier (schermgrond) — what a page stands on */
+  --paper: #fbfaf6; /* Kaart / paneel */
+  --ink: #1a201b; /* Inkt (tekst, primaire knop)   15.88:1 on paper */
+  --ink-2: #525953; /* Tekst secundair                 6.90:1 on paper, 6.15:1 on grond */
+  --ink-3: #666c67; /* Tekst tertiair                  5.15:1 on paper, 4.58:1 on grond */
+  --line: #d8d6cc; /* Rand licht */
+  --line-strong: #c1beb2; /* Rand sterk (schermkader) */
+  /* One tone deeper than the ground: an empty plate, a chip, the track of a
+   * switch that is off, a field waiting for input. Not in the README table;
+   * drawn 74 times in stap 2 and named in stap 3 ("de inzet"). */
+  --inset: #e3e0d4;
+  --accent: #327f48; /* Accent groen (goed, nadruk)     4.71:1 on paper */
+  --accent-tint: #eafbec; /* Accent groen licht (vlak) */
+  --accent-text: #2c5c3a; /* Accent groen donker             7.23:1 on the light green */
+
+  /* Goed: a closed area and a tick. The fill is the accent green in both
+   * themes (stap 10 draws it so on the dark map); the line takes the theme's
+   * own accent. */
+  --good: #327f48;
+  --good-line: var(--accent);
+
+  /* Fout on the light ground, which the handoff draws in S7 and S10 but does
+   * not list in its table: the rule and the tint of the hatch. Outside a round
+   * a wrong answer only ever appears in a result, and it is always a hatch
+   * and a cross as well as this colour. */
+  --bad: #b0554e; /* fout                            4.72:1 on paper */
+  --bad-line: #b0554e;
+  --bad-text: #b0554e;
+  --bad-mark: #b0554e;
+  --bad-hatch: #ffe6e2; /* the ground of the hatch */
+  --bad-hatch-2: #ffe6e2;
+  --bad-stripe: rgb(176 85 78 / 28%); /* the stripes of the hatch, S7 */
+
+  /* The map, light. Only a module page shows it outside a round. */
+  --map-land: var(--paper);
+  --map-water: var(--grond);
+  --map-hover: var(--grond);
+  --map-border: var(--ink);
+  --rail-empty: var(--line); /* the empty part of a bar */
+
+  /* ---- The seven module tints (S3) -----------------------------------------
+   * A module's colour is its tint and nothing else: the plate behind its
+   * pictogram, in ink, and the one tinted area on its own page. Selection,
+   * progress and "right" are the accent green in every module. */
+  --tint-topo: #eafbec;
+  --tint-tafels: #e8f9ff;
+  --tint-klok: #fff5e7;
+  --tint-woorden: #f8f3ff;
+  --tint-spelling: #e2fbfc;
+  --tint-tijdvakken: #f8f7e3;
+  --tint-vlaggen: #fff4f2;
+  --module-tint: var(--tint-topo);
+
+  /* ---- The five materials of the collection (S11) ---------------------------
+   * One value each and the same in both themes: a material that changed with
+   * the theme would stop being a material (stap 3, finding 18). They are drawn,
+   * never written — the name of a material is a label in ink beside the hero. */
+  --reeks-brons: #a8724d;
+  --reeks-zilver: #9fa5ac;
+  --reeks-goud: #cbaa56;
+  --reeks-platina: #b6c8cb;
+  --reeks-ultra: #956ed2;
+
+  /* ---- Typography -------------------------------------------------------
+   * Archivo for headings, numbers and the labels on a map; Public Sans for
+   * running text, buttons and tables. rem rather than px, so the reader's own
+   * text size reaches every step (ADR-033); 1rem is 16px.
+   *
+   * The scale is the PO guise. VO is a second set of the same names under
+   * [data-gedaante='vo'] below, so a component never learns which guise it is
+   * in (stap 11). Nothing sets that attribute yet.
+   */
+  --font-display: 'Archivo', system-ui, sans-serif;
+  --font-body: 'Public Sans', system-ui, sans-serif;
+
+  --type-display: 2.5rem; /* Paginakop 40/44 */
+  --type-display-lh: 2.75rem;
+  --type-display-ls: -0.015em;
+  --type-title: 1.75rem; /* Sectiekop 28/34 */
+  --type-title-lh: 2.125rem;
+  --type-title-ls: -0.01em;
+  --type-card: 1.25rem; /* Kaartkop 20/26, weight 600 */
+  --type-card-lh: 1.625rem;
+  --type-question: 2rem; /* Vraag in een ronde 32/36 */
+  --type-question-lh: 2.25rem;
+  --type-question-ls: -0.015em;
+  --type-number: 2.75rem; /* Groot getal 44/44 */
+  --type-number-lh: 2.75rem;
+  --type-number-lg: 3rem; /* Groot getal 48/48 */
+  --type-number-lg-lh: 3rem;
+  --type-item: 1.0625rem; /* The title of a card, a row or a tile: Archivo 600
+                              17/24, as stap 2 draws every one of them. Not in the
+                              README table, which gives 17/24 only to the button. */
+  --type-item-lh: 1.5rem;
+  --type-body: 1rem; /* Lopende tekst 16/26 */
+  --type-body-lh: 1.625rem;
+  --type-button: 1.0625rem; /* Knoptekst 17/24, weight 600 */
+  --type-button-lh: 1.5rem;
+  --type-label: 0.8125rem; /* Label boven een vlak 13/16, uppercase, weight 600 */
+  --type-label-lh: 1rem;
+  --type-label-ls: 0.08em;
+  --type-caption: 0.875rem; /* Bijschrift 14/20 */
+  --type-caption-lh: 1.25rem;
+
+  /* ---- Shape ------------------------------------------------------------ */
+  --radius-chip: 6px; /* chip, identity plate, stop and read-aloud buttons */
+  --radius-chip-lg: 8px; /* chip groot */
+  --radius-card-vo: 10px; /* kaart in VO */
+  --radius-card: 12px; /* kaart */
+  --radius-card-phone: 14px; /* telefoonkaart */
+  --radius-surface: 16px; /* vlak in een ronde */
+  --radius-note: 20px; /* notitieblok */
+  --radius-full: 999px; /* the dot, the diamond's circle of a hit zone, a pill */
+
+  --stroke-hair: 1px; /* 1 px on light */
+  --stroke-region: 1.5px; /* the contour of a map area (S5) */
+  --stroke-active: 2px; /* 2 px for emphasis or a chosen state */
+  --stroke-focus: 3px; /* the focus ring: solid ink on a control, dashed paper on the map */
+  --focus-offset: 3px;
+
+  /* ---- Distance ----------------------------------------------------------- */
+  --space-section: 64px; /* between sections */
+  --space-screen: 24px; /* between screens */
+  --gap-lg: 16px; /* inside a card */
+  --gap-md: 12px;
+  --gap-sm: 10px;
+  --pad-panel: 32px; /* paneel */
+  --pad-card: 24px; /* kaart */
+  --pad-card-phone: 20px; /* kaart telefoon */
+  --pad-card-phone-sm: 16px;
+  --margin-screen: 32px; /* 32 at 1366, 24 at a tablet, 16 at 393 */
+  --pagina-boven: 64px; /* from the kopbalk to the first heading (S1, S2) */
+  --blok-gap: 48px; /* between the blocks of a page (S2) */
+  --content-max: 1120px; /* the content column of S2 */
+  --measure: 640px; /* the reading measure (stap 3) */
+  --rail-width: 88px;
+  --tabbar-height: 72px;
+
+  /* ---- Hit targets ------------------------------------------------------ */
+  --touch-min: 44px; /* wijzer (desktop) */
+  --touch-tablet: 48px; /* tablet */
+  --touch: 56px; /* duim (telefoon), and in a round always */
+  /* The one a control asks for: 44 with a pointer, 48 on a tablet, 56 under a
+   * thumb. The width decides, below. A round overrides it to 56. */
+  --touch-target: var(--touch-min);
+
+  /* ---- Details the screens draw and the table leaves out --------------------- */
+  /* The rule round a control that is not the primary one: tertiary ink on the
+   * light ground (S1, S8), 5.15:1 on paper. */
+  --control-line: var(--ink-3);
+  /* What stands on the closed green of a right answer: 4.71:1 in both themes. */
+  --on-good: #fbfaf6;
+  /* One answer of four in a round, from a tablet on its side up (S8). */
+  --answer-height-lg: 88px;
+  /* The diamonds that count a round's questions (S5). */
+  --ruit: 12px;
+  --ruit-gap: 5px;
+
+  /* The density of the PO guise: what VO changes, and nothing more. */
+  --control-height: var(--touch);
+  --card-radius: var(--radius-card);
+  --card-padding: var(--pad-card);
+
+  /* ---- Shadow: on reward images only --------------------------------------- */
+  --shadow-object: drop-shadow(0 10px 18px rgb(26 32 27 / 22%));
+  /* The dim behind the one dialog in a round (S5), and behind a bottom sheet. */
+  --scrim: rgb(26 32 27 / 60%);
+}
+
+/* The phone step. The display heading and the section heading shrink; running
+ * text never does (stap 2: "leestekst blijft 16/26"). A tablet keeps 40/44. */
+@media (max-width: 767px) {
+  :root {
+    --type-display: 2rem; /* 32/36 */
+    --type-display-lh: 2.25rem;
+    --type-title: 1.5rem; /* 24/30 */
+    --type-title-lh: 1.875rem;
+    --type-question: 1.5rem; /* 24/30: the handoff gives no phone value for the
+                                question and draws it at the title's phone step */
+    --type-question-lh: 1.875rem;
+    --margin-screen: 16px;
+    --card-padding: var(--pad-card-phone);
+    --card-radius: var(--radius-card-phone);
+  }
+}
+@media (min-width: 768px) and (max-width: 1365px) {
+  :root {
+    --margin-screen: 24px;
+  }
+}
+/* A tablet on its side keeps 768 of height and gains a row, so the page
+ * closes up: 64 to 48 above the heading, 48 to 32 between blocks (stap 3). */
+@media (min-width: 1024px) and (max-width: 1365px) {
+  :root {
+    --pagina-boven: 48px;
+    --blok-gap: 32px;
+  }
+}
+@media (max-width: 1279px) {
+  :root {
+    --touch-target: var(--touch-tablet);
+  }
+}
+@media (max-width: 767px) {
+  :root {
+    --touch-target: var(--touch);
+  }
+}
+
+/* ---- The round: the dark theme --------------------------------------------
+ * The same names, other values. Ink and paper swap roles and the ground goes
+ * deepest; nothing is dimmed with transparency (stap 3, "omkeren is geen
+ * dimmen"). The primary button therefore turns over too — paper-light with ink
+ * on it — and stays the lightest thing on the screen.
+ */
+[data-thema='ronde'] {
+  color-scheme: dark;
+
+  --grond: #1a201b; /* Grond */
+  --paper: #252c26; /* Vlak / kaartvenster */
+  --map-land: #2f3831; /* Landvlak op de kaart */
+  --rail-empty: #3a413b; /* Balk leeg / rail */
+  --inset: #3a413b;
+  --line: #566056; /* Rand op donker: 2.18:1 on vlak, decoration only */
+  /* The rule that has to identify a control. The handoff's own rule colour on
+   * dark measures 2.18:1 against the vlak, under the 3:1 a control boundary
+   * needs, so a control uses the map's border line instead: 3.79:1. */
+  --line-strong: #7c867d;
+  --map-hover: #3e4a40; /* Hover-vulling provincie */
+  --map-border: #7c867d; /* Grenslijn kaart */
+  --map-water: var(--grond);
+  --control-line: var(--line-strong);
+  --touch-target: var(--touch); /* in a round, always 56 */
+  --accent: #7fd494; /* Accent groen op donker          8.01:1 on vlak */
+  --accent-text: #7fd494;
+  --accent-tint: var(--paper);
+  --ink: #fbfaf6; /* Tekst op donker                 13.71:1 on vlak */
+  --ink-2: #b9beb9; /* Tekst secundair op donker        7.59:1 on vlak */
+  --ink-3: #8c948c; /* Tekst tertiair op donker         4.59:1 on vlak */
+
+  --bad: #c98a8a; /* Fout — rand                     5.10:1 on vlak */
+  --bad-line: #e8b3b3; /* Fout — rand, on the map         5.72:1 on its hatch */
+  --bad-text: #f2b8b8; /* Fout — tekst                    8.40:1 on vlak */
+  --bad-mark: #f6d9d9; /* Fout — tekst, the cross        7.86:1 on its hatch */
+  --bad-hatch: #5a3636; /* Fout — arceringsgrond, on the map */
+  --bad-hatch-2: #4a3030; /* Fout — arceringsgrond, on a vlak */
+  --bad-stripe: #e8b3b3;
+
+  --shadow-object: drop-shadow(0 10px 18px rgb(0 0 0 / 55%));
+}
+
+/* ---- A module asks for its tint as one variable --------------------------- */
+[data-module='topo'] {
+  --module-tint: var(--tint-topo);
+}
+[data-module='tafels'] {
+  --module-tint: var(--tint-tafels);
+}
+[data-module='klok'] {
+  --module-tint: var(--tint-klok);
+}
+[data-module='woorden'] {
+  --module-tint: var(--tint-woorden);
+}
+[data-module='spelling'] {
+  --module-tint: var(--tint-spelling);
+}
+[data-module='tijdvakken'] {
+  --module-tint: var(--tint-tijdvakken);
+}
+[data-module='vlaggen'] {
+  --module-tint: var(--tint-vlaggen);
+}
+
+/* ---- The VO guise (stap 11) -------------------------------------------------
+ * Type scale and density, and nothing else: logo, palette, tints, components,
+ * the dot and the answer shapes are identical. The schakeltabel in stap 11 is
+ * the whole list. Nothing in the product sets this attribute yet.
+ */
+[data-gedaante='vo'] {
+  --type-display: 1.75rem; /* 28/32 */
+  --type-display-lh: 2rem;
+  --type-card: 1.0625rem; /* 17/24 */
+  --type-card-lh: 1.5rem;
+  --type-number: 1.5rem; /* 24/28 */
+  --type-number-lh: 1.75rem;
+  --type-body: 0.9375rem; /* 15/22 */
+  --type-body-lh: 1.375rem;
+  --type-button: 0.9375rem; /* 15/22 */
+  --type-button-lh: 1.375rem;
+  --control-height: var(--touch-min);
+  --card-radius: var(--radius-card-vo);
+  --card-padding: var(--pad-card-phone-sm);
+}

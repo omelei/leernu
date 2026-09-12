@@ -1,5 +1,5 @@
 import { openDB, type DBSchema, type IDBPDatabase } from 'idb';
-import type { ItemState, ModeId, Niveau } from '@/game-core';
+import type { HolidayPeriod, ItemState, ModeId, Niveau } from '@/game-core';
 
 /**
  * The local store (DATAMODEL.md, part A). This is the whole database: there is
@@ -130,6 +130,11 @@ export interface StreakRecord {
    */
   foutloosNu?: number;
   foutloosBeste?: number;
+  /**
+   * Holiday mode (house style v2): every period it was on, the open one
+   * ending on '9999-12-31'. Absent on rows written before, which reads as none.
+   */
+  eigenVakanties?: HolidayPeriod[];
 }
 
 /**

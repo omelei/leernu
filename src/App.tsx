@@ -1,21 +1,23 @@
-import { useEffect, useState } from 'react';
-import { HomeScreen } from '@/features/home/HomeScreen';
-import { SideColumn } from '@/features/home/SideColumn';
+import { useEffect, useState, type ReactNode } from 'react';
+import { VandaagScreen } from '@/features/home/VandaagScreen';
 import { PracticeScreen } from '@/features/practice/PracticeScreen';
 import { ExploreScreen } from '@/features/explore/ExploreScreen';
 import { ProfileGate } from '@/features/player/ProfileGate';
+import { JijScreen } from '@/features/player/JijScreen';
 import { Gallery } from '@/design/Gallery';
 import { Shell } from '@/features/shell/Shell';
-import { TopBar } from '@/features/shell/TopBar';
-import { RetentionScreen } from '@/features/retention/RetentionScreen';
+import { KopbalkRechts, ModuleKop } from '@/features/shell/Kopbalk';
 import { MODULES, type Destination, type Module } from '@/features/shell/modules';
 import { useRoute } from '@/features/shell/useRoute';
 import { ModuleSoon } from '@/features/shell/ModuleSoon';
 import { CategoryScreen } from '@/features/shell/CategoryScreen';
 import { ModuleScreen } from '@/features/module/ModuleScreen';
+import { OefenenScreen } from '@/features/oefenen/OefenenScreen';
+import { VerzamelingScreen } from '@/features/verzameling/VerzamelingScreen';
 import { SumScreen } from '@/features/sums/SumScreen';
 import { KlokScreen } from '@/features/klok/KlokScreen';
 import { VlagScreen } from '@/features/vlaggen/VlagScreen';
+import { UitslagKader } from '@/features/round/UitslagKader';
 import { VlagExploreScreen } from '@/features/vlaggen/VlagExploreScreen';
 import type { VlagMode } from '@/features/vlaggen/useVlagRound';
 import { isVlagFouten, isVlagMix } from '@/content/loadVlaggen';
@@ -26,8 +28,6 @@ import {
   asVlagMode,
   type Onderdeel,
 } from '@/features/module/onderdelen';
-import { ProfileScreen } from '@/features/player/ProfileScreen';
-import { ReisScreen } from '@/features/reis/ReisScreen';
 import type { Route } from '@/features/shell/routes';
 import { getProfile, setSticker } from '@/store/profile';
 import type { ModeId } from '@/game-core';
@@ -44,7 +44,6 @@ import type { ProfileRecord } from '@/store/db';
 
 type Screen =
   | { name: 'home' }
-  | { name: 'retention' }
   | {
       name: 'practice';
       setId: RoundSetId;
@@ -77,14 +76,21 @@ type Screen =
   | { name: 'vlag-ontdek'; setId: string };
 type Boot = { status: 'loading' } | { status: 'ready'; profile: ProfileRecord | null };
 
+/** Which route each of the four destinations opens. */
+const BESTEMMING: Record<Destination['id'], Route> = {
+  vandaag: { name: 'home' },
+  oefenen: { name: 'oefenen' },
+  verzameling: { name: 'verzameling' },
+  jij: { name: 'you' },
+};
+
 /**
- * Eight screens and a router of about sixty lines.
+ * The screens and a router of about sixty lines.
  *
- * This comment used to say a router would be furniture until there was more
- * than one module. There still is one; the reason changed. A module has an
- * address now, and §A's "leer.nu/topografie" only reads as a sentence if the
- * path is real. Hand-rolled rather than a package: the whole map is literal
- * paths with one optional segment and no nesting.
+ * A module has an address, and so does each of the four destinations of the
+ * rail — Vandaag, Oefenen, Verzameling, Jij — and nothing else does. Hand-rolled
+ * rather than a package: the whole map is literal paths with one optional
+ * segment and no nesting.
  *
  * A round has no address, on purpose. It is something you are in the middle of,
  * and a URL that resumed one halfway would either lie about the progress or
@@ -100,8 +106,6 @@ export default function App() {
   const [visit, setVisit] = useState(0);
   const [route, go] = useRoute();
 
-  // The tab bar's four destinations, two of which exist. Mapping them here
-  // rather than inside the Shell keeps the frame ignorant of what a screen is.
   const goHome = () => {
     go({ name: 'home' });
     setScreen({ name: 'home' });
@@ -114,30 +118,22 @@ export default function App() {
     go(module.built ? { name: 'module', module, setId: null } : { name: 'soon', module });
   };
 
-  const bar =
-    boot.status === 'ready' && boot.profile ? (
-      <TopBar profile={boot.profile} onProfile={() => go({ name: 'you' })} />
-    ) : null;
-
   const goTo = (id: Destination['id']) => {
-    const next: Route =
-      id === 'onthouden'
-        ? { name: 'retention' }
-        : id === 'jij'
-          ? { name: 'you' }
-          : { name: 'home' };
-    go(next);
+    go(BESTEMMING[id]);
     setScreen({ name: 'home' });
   };
+
+  const bar =
+    boot.status === 'ready' && boot.profile ? (
+      <KopbalkRechts profile={boot.profile} onProfiel={() => go({ name: 'you' })} />
+    ) : null;
 
   /**
    * One way into a round, wherever in the app it is pressed.
    *
    * Exploring is the odd one: it is a way of practising as far as a child is
    * concerned and it is not a round, so it is the one mode that opens a
-   * different screen. That branch belongs here rather than in the page, because
-   * the page's job is to say what was chosen and this is the thing that knows
-   * what a screen is.
+   * different screen.
    */
   const beginRonde = (
     deel: Onderdeel,
@@ -147,8 +143,6 @@ export default function App() {
   ) => {
     setVisit(visit + 1);
 
-    // Flags explore on a screen of their own, like the map, and the mix and
-    // the child's own mistakes have nothing to explore (`forms.ts`).
     if (deel.moduleId === 'vlaggen') {
       if (mode === 'ontdekken' && !isVlagMix(deel.setId) && !isVlagFouten(deel.setId)) {
         setScreen({ name: 'vlag-ontdek', setId: deel.setId });
@@ -168,8 +162,7 @@ export default function App() {
       return;
     }
     // Exploring is one set's own layer, so the mix has no way of exploring and
-    // does not offer one (`forms.ts`). A stored favourite from before that rule
-    // could still ask for it, and it points instead than fails.
+    // does not offer one (`forms.ts`).
     if (mode === 'ontdekken' && !isMixSet(deel.setId) && !isFoutenSet(deel.setId)) {
       setScreen({ name: 'explore', setId: deel.setId as SetId });
       return;
@@ -184,9 +177,9 @@ export default function App() {
   };
 
   /**
-   * The hero a child chose, written through and held here, because the app
-   * bar shows it too: a choice that only redrew the card it was made on would
-   * look like it had not been saved.
+   * The hero a child chose, written through and held here, because the
+   * kopbalk shows it too: a choice that only redrew the card it was made on
+   * would look like it had not been saved.
    */
   const chooseSticker = (id: string) => {
     void setSticker(id).then((updated) => {
@@ -195,13 +188,8 @@ export default function App() {
   };
 
   /**
-   * A new screen starts at the top.
-   *
-   * There is no page load between screens — the router swaps a component — so
-   * the browser keeps the scroll position of the one before. On a phone that
-   * meant arriving at the chooser already scrolled past its own heading, with
-   * the wordmark cut in half, because the button that opens it sits below the
-   * fold on the screen you press it from.
+   * A new screen starts at the top. There is no page load between screens, so
+   * the browser would otherwise keep the scroll position of the one before.
    */
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -214,8 +202,7 @@ export default function App() {
   // The component gallery, in development only. import.meta.env.DEV is
   // replaced with a literal at build time, so this branch and everything under
   // it is dropped from the production bundle rather than hidden in it —
-  // asserted by tools/report-bundle-size.mjs, because "should be tree-shaken"
-  // is a belief until something checks.
+  // asserted by tools/report-bundle-size.mjs.
   if (import.meta.env.DEV && window.location.hash === '#componenten') {
     return <Gallery />;
   }
@@ -228,17 +215,25 @@ export default function App() {
     return <ProfileGate onReady={(profile) => setBoot({ status: 'ready', profile })} />;
   }
 
-  // Explore and practice are rounds, and a round has no navigation: no rail,
-  // no bar, no tab bar, only the stop cross, the progress dots and the
-  // read-aloud button. They are not wrapped in the Shell rather than having it
-  // hidden inside them — there is nothing in the document to tab into, and
-  // nothing that can be forgotten on the way back out.
+  // A round has no navigation: no rail, no kopbalk, no tab bar — not hidden,
+  // absent. The round screens are not wrapped in the Shell; their result is,
+  // because the result steps out of the round (S10), and it asks for the frame
+  // through UitslagKader.
+  const kader = (kinderen: ReactNode) => (
+    <Shell bar={bar} current="oefenen" onNavigate={goTo}>
+      {kinderen}
+    </Shell>
+  );
+  const metKader = (scherm: ReactNode) => (
+    <UitslagKader.Provider value={kader}>{scherm}</UitslagKader.Provider>
+  );
+
   if (screen.name === 'explore') {
     return <ExploreScreen setId={screen.setId} onHome={goHome} />;
   }
 
   if (screen.name === 'sums') {
-    return (
+    return metKader(
       <SumScreen
         key={`${screen.setId}-${screen.sumMode}-${screen.aantal ?? 0}-${visit}`}
         setId={screen.setId}
@@ -247,12 +242,12 @@ export default function App() {
         toetsstand={screen.toetsstand}
         onHome={goHome}
         onAgain={() => setVisit(visit + 1)}
-      />
+      />,
     );
   }
 
   if (screen.name === 'klok') {
-    return (
+    return metKader(
       <KlokScreen
         key={`${screen.setId}-${screen.klokMode}-${screen.aantal ?? 0}-${visit}`}
         setId={screen.setId}
@@ -261,7 +256,7 @@ export default function App() {
         toetsstand={screen.toetsstand}
         onHome={goHome}
         onAgain={() => setVisit(visit + 1)}
-      />
+      />,
     );
   }
 
@@ -270,7 +265,7 @@ export default function App() {
   }
 
   if (screen.name === 'vlag') {
-    return (
+    return metKader(
       <VlagScreen
         key={`${screen.setId}-${screen.vlagMode}-${screen.aantal ?? 0}-${visit}`}
         setId={screen.setId}
@@ -279,12 +274,12 @@ export default function App() {
         toetsstand={screen.toetsstand}
         onHome={goHome}
         onAgain={() => setVisit(visit + 1)}
-      />
+      />,
     );
   }
 
   if (screen.name === 'practice') {
-    return (
+    return metKader(
       <PracticeScreen
         key={`${screen.setId}-${screen.practiceMode}-${screen.aantal ?? 0}-${visit}`}
         setId={screen.setId}
@@ -293,103 +288,98 @@ export default function App() {
         toetsstand={screen.toetsstand}
         onHome={goHome}
         onAgain={() => setVisit(visit + 1)}
-      />
+      />,
     );
   }
 
-  /** The way to the collection, from the card that says where the journey is. */
-  const goReis = () => go({ name: 'reis' });
+  const goVerzameling = () => go({ name: 'verzameling' });
 
-  /** The child's own column, which every screen inside the shell carries. */
-  const eigenKolom = (
-    <SideColumn sticker={boot.profile.avatarConfig.sticker} onReis={goReis} onBegin={beginRonde} />
-  );
-
-  // Everything there is to collect: twelve heroes in five reeksen, twelve
-  // diplomas, ten stamps, and what each of them costs. Reached from the journey card and by its own
-  // address, never from the tab bar — it is the long view of one card rather
-  // than a fifth section of the product (ADR-076).
-  if (route.name === 'reis') {
+  if (route.name === 'oefenen') {
     return (
-      <Shell bar={bar} onNavigate={goTo} onModule={goModule}>
-        <ReisScreen
-          sticker={boot.profile.avatarConfig.sticker}
-          onSticker={chooseSticker}
-          onVerder={(vak) => (vak === null ? goHome() : goModule(vak))}
-          aside={eigenKolom}
-        />
+      <Shell bar={bar} current="oefenen" onNavigate={goTo}>
+        <OefenenScreen onModule={goModule} />
       </Shell>
     );
   }
 
-  // A word a parent looks for, holding more than one module. Unreachable while
-  // rekenen is the only category and the tables are the whole of it — that
-  // address opens the tables themselves (see routes.ts).
-  if (route.name === 'category') {
+  if (route.name === 'verzameling') {
     return (
-      <Shell bar={bar} onNavigate={goTo} onModule={goModule}>
-        <CategoryScreen
-          category={route.category}
-          onOpen={(module) => go({ name: 'module', module, setId: null })}
-          aside={eigenKolom}
-        />
-      </Shell>
-    );
-  }
-
-  // A module's address is where you choose a round in it: what, then how, then
-  // a start button that says what it is starting. It is also why /topografie is
-  // not the home screen — the front door is every module, this is one of them.
-  if (route.name === 'module') {
-    return (
-      <Shell bar={bar} onNavigate={goTo} onModule={goModule} currentModule={route.module.id}>
-        <ModuleScreen
-          module={route.module}
-          naam={boot.profile.naam}
-          setId={route.setId}
-          onSet={(setId) => go({ name: 'module', module: route.module, setId })}
-          onStart={beginRonde}
-          aside={eigenKolom}
-        />
-      </Shell>
-    );
-  }
-
-  // A module the plan has and the product does not. Reached only by typing the
-  // address: ADR-037 keeps it out of the rail, because a rail entry is an offer
-  // and this is an answer to a question the child asked.
-  if (route.name === 'soon') {
-    return (
-      <Shell bar={bar} onNavigate={goTo} onModule={goModule} currentModule={route.module.id}>
-        <ModuleSoon module={route.module} onOpen={goModule} aside={eigenKolom} />
+      <Shell bar={bar} current="verzameling" onNavigate={goTo}>
+        <VerzamelingScreen sticker={boot.profile.avatarConfig.sticker} onSticker={chooseSticker} />
       </Shell>
     );
   }
 
   if (route.name === 'you') {
     return (
-      <Shell bar={bar} current="jij" onNavigate={goTo} onModule={goModule}>
-        <ProfileScreen profile={boot.profile} aside={eigenKolom} />
+      <Shell bar={bar} current="jij" onNavigate={goTo}>
+        <JijScreen profile={boot.profile} onVerzameling={goVerzameling} />
       </Shell>
     );
   }
 
-  if (route.name === 'retention' || screen.name === 'retention') {
+  // A word a parent looks for, holding more than one module. Unreachable while
+  // the tables are the whole of rekenen (see routes.ts).
+  if (route.name === 'category') {
     return (
-      <Shell bar={bar} current="onthouden" onNavigate={goTo} onModule={goModule}>
-        <RetentionScreen aside={eigenKolom} />
+      <Shell bar={bar} current="oefenen" onNavigate={goTo}>
+        <CategoryScreen
+          category={route.category}
+          onOpen={(module) => go({ name: 'module', module, setId: null })}
+        />
       </Shell>
     );
   }
+
+  // A module's address is where you choose a round in it: what, then how, then
+  // a start button that says what it is starting. It belongs to Oefenen, and
+  // the module stands where the logo does (S4).
+  if (route.name === 'module') {
+    return (
+      <Shell
+        bar={bar}
+        current="oefenen"
+        onNavigate={goTo}
+        kop={<ModuleKop module={route.module} onTerug={() => goTo('oefenen')} />}
+      >
+        <ModuleScreen
+          module={route.module}
+          setId={route.setId}
+          onSet={(setId) => go({ name: 'module', module: route.module, setId })}
+          onStart={beginRonde}
+        />
+      </Shell>
+    );
+  }
+
+  // A module the plan has and the product does not: its page says so.
+  if (route.name === 'soon') {
+    return (
+      <Shell
+        bar={bar}
+        current="oefenen"
+        onNavigate={goTo}
+        kop={<ModuleKop module={route.module} onTerug={() => goTo('oefenen')} />}
+      >
+        <ModuleSoon module={route.module} onOpen={goModule} />
+      </Shell>
+    );
+  }
+
+  /** A card on Vandaag: its module's page, with that set chosen. */
+  const goSet = (deel: Onderdeel) => {
+    const module = MODULES.find((candidate) => candidate.id === deel.moduleId);
+    if (module) go({ name: 'module', module, setId: deel.setId });
+  };
 
   return (
-    <Shell bar={bar} current="vandaag" onNavigate={goTo} onModule={goModule}>
-      <HomeScreen
-        naam={boot.profile.naam}
+    <Shell bar={bar} current="vandaag" onNavigate={goTo}>
+      <VandaagScreen
         sticker={boot.profile.avatarConfig.sticker}
-        onReis={goReis}
         onBegin={beginRonde}
-        onModule={goModule}
+        onSet={goSet}
+        onOefenen={() => goTo('oefenen')}
+        onVerzameling={goVerzameling}
       />
     </Shell>
   );

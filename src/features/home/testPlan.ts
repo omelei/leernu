@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { dayKey } from '@/game-core';
+import { dagenTussen, dayKey } from '@/game-core';
 import { BUILT_MODULES, type Module } from '@/features/shell/modules';
 import { getSetting, setSetting } from '@/store/profile';
 
@@ -149,15 +149,10 @@ export function useTestPlan(now = new Date()): TestPlan {
 }
 
 /**
- * How many days from today, negative once the test has been.
- *
- * Both ends are taken back to local midnight before they are subtracted, so a
- * test set for tomorrow reads as one day away at eleven at night as well as at
- * eight in the morning.
+ * How many calendar days from today, negative once the test has been. Days in
+ * Europe/Amsterdam (ADR-106), so a test set for tomorrow reads as one day away
+ * at eleven at night as well as at eight in the morning.
  */
 export function daysUntil(date: string, now: Date): number {
-  const [year, month, day] = date.split('-').map(Number);
-  const target = new Date(year ?? 1970, (month ?? 1) - 1, day ?? 1);
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  return Math.round((target.getTime() - today.getTime()) / 86_400_000);
+  return dagenTussen(dayKey(now), date);
 }

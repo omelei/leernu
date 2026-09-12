@@ -1,3 +1,5 @@
+import { dagSleutel, isoWeek, plusDagen, weekdag } from './kalender';
+
 /**
  * The day streak, and the rules that stop it from being a punishment.
  *
@@ -20,10 +22,16 @@
  * for every week in which the child practised, two can be saved. One illness,
  * one school trip, one bad week does not erase two months of work.
  *
- * All dates here are calendar days in local time, formatted as YYYY-MM-DD. A
- * streak is about days a child lived through, not about hours elapsed, and
- * timestamps invite a bug where practising at 23:59 and again at 00:01 counts
- * as two days — which it is, and as one day, which it feels like.
+ * **The freezer is a rest day.** "Vriezer" is the handoff's word for what this
+ * file calls a rest day. **Holiday mode** is the child's own holiday, switched
+ * on and off on Jij: while it is on, no day is a school day, exactly as in a
+ * school holiday, and practising still counts.
+ *
+ * All dates here are calendar days in Europe/Amsterdam, formatted as
+ * YYYY-MM-DD (ADR-106) — the same days a review falls on, from the same place
+ * (kalender.ts). A streak is about days a child lived through, not about hours
+ * elapsed, and timestamps invite a bug where practising at 23:59 and again at
+ * 00:01 counts as two days — which it is, and as one day, which it feels like.
  */
 
 export interface HolidayPeriod {
@@ -42,9 +50,18 @@ export interface StreakState {
   readonly rustdagen: number;
   /** ISO week key (YYYY-Www) in which the last rest day was earned. */
   readonly rustdagWeek: string | null;
+  /**
+   * The child's own holidays: every period holiday mode was on, the one still
+   * on ending on OPEN_EIND. Absent on rows written before it existed, which
+   * reads as none.
+   */
+  readonly eigenVakanties?: readonly HolidayPeriod[];
 }
 
 export const MAX_RUSTDAGEN = 2;
+
+/** The end of a holiday that is still on. Later than any day there will be. */
+export const OPEN_EIND = '9999-12-31';
 
 export function emptyStreak(): StreakState {
   return {
@@ -56,52 +73,48 @@ export function emptyStreak(): StreakState {
   };
 }
 
-/** YYYY-MM-DD in local time. Not toISOString, which is UTC and shifts the day. */
+/** The calendar day in Amsterdam of a moment, YYYY-MM-DD. */
 export function dayKey(date: Date): string {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
-
-function parseDay(key: string): Date {
-  const [year, month, day] = key.split('-').map(Number);
-  return new Date(year ?? 1970, (month ?? 1) - 1, day ?? 1);
+  return dagSleutel(date);
 }
 
 /** ISO week key, YYYY-Www — the unit a rest day is earned in. */
 export function weekKey(date: Date): string {
-  const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-  // ISO weeks run Monday to Sunday and belong to the year of their Thursday.
-  const dayOfWeek = (d.getDay() + 6) % 7;
-  d.setDate(d.getDate() - dayOfWeek + 3);
-  const firstThursday = new Date(d.getFullYear(), 0, 4);
-  const firstDayOfWeek = (firstThursday.getDay() + 6) % 7;
-  firstThursday.setDate(firstThursday.getDate() - firstDayOfWeek + 3);
-  const week = 1 + Math.round((d.getTime() - firstThursday.getTime()) / (7 * 86_400_000));
-  return `${d.getFullYear()}-W${String(week).padStart(2, '0')}`;
+  return isoWeek(dagSleutel(date));
+}
+
+function isWeekendDag(key: string): boolean {
+  const dag = weekdag(key);
+  return dag === 0 || dag === 6;
+}
+
+function isVakantieDag(key: string, holidays: readonly HolidayPeriod[]): boolean {
+  return holidays.some((period) => key >= period.start && key <= period.eind);
+}
+
+function isSchoolDag(key: string, holidays: readonly HolidayPeriod[]): boolean {
+  return !isWeekendDag(key) && !isVakantieDag(key, holidays);
 }
 
 export function isWeekend(date: Date): boolean {
-  const day = date.getDay();
-  return day === 0 || day === 6;
+  return isWeekendDag(dagSleutel(date));
 }
 
 export function isHoliday(date: Date, holidays: readonly HolidayPeriod[]): boolean {
-  const key = dayKey(date);
-  return holidays.some((period) => key >= period.start && key <= period.eind);
+  return isVakantieDag(dagSleutel(date), holidays);
 }
 
 /** A day the child was expected to practise: not a weekend, not a holiday. */
 export function isSchoolDay(date: Date, holidays: readonly HolidayPeriod[]): boolean {
-  return !isWeekend(date) && !isHoliday(date, holidays);
+  return isSchoolDag(dagSleutel(date), holidays);
 }
 
 /**
  * School days strictly between two dates — the days that were missed.
  *
  * Exclusive at both ends on purpose: the day last practised was not missed, and
- * the day being counted is being practised right now.
+ * the day being counted is being practised right now. Walked on day keys, so
+ * the answer is the same whatever zone the device is in.
  */
 export function missedSchoolDays(
   from: string,
@@ -109,18 +122,57 @@ export function missedSchoolDays(
   holidays: readonly HolidayPeriod[],
 ): number {
   let missed = 0;
-  const cursor = parseDay(from);
-  const end = parseDay(to);
-
-  cursor.setDate(cursor.getDate() + 1);
+  let cursor = plusDagen(from, 1);
   // A guard rather than a while(true): a corrupt date should not hang the app,
-  // and nobody's streak spans two years of daily practice yet.
-  for (let guard = 0; cursor < end && guard < 3650; guard++) {
-    if (isSchoolDay(cursor, holidays)) missed++;
-    cursor.setDate(cursor.getDate() + 1);
+  // and nobody's streak spans ten years of daily practice yet.
+  for (let guard = 0; cursor < to && guard < 3650; guard++) {
+    if (isSchoolDag(cursor, holidays)) missed++;
+    cursor = plusDagen(cursor, 1);
   }
 
   return missed;
+}
+
+/** The school holidays and the child's own, together: every day nobody asked for. */
+function vrijeDagen(
+  state: StreakState,
+  holidays: readonly HolidayPeriod[],
+): readonly HolidayPeriod[] {
+  return [...holidays, ...(state.eigenVakanties ?? [])];
+}
+
+/** Whether holiday mode is on. */
+export function vakantieAan(state: StreakState): boolean {
+  return (state.eigenVakanties ?? []).some((period) => period.eind === OPEN_EIND);
+}
+
+/**
+ * Switches holiday mode on or off.
+ *
+ * On, from today: today is already a holiday, so a child who switches it on in
+ * the morning and practises anyway still has that day counted for them. Off,
+ * the holiday ends yesterday and today is an ordinary day again; switched off
+ * on the day it was switched on, it leaves no holiday behind at all.
+ */
+export function zetVakantie(state: StreakState, aan: boolean, op: Date): StreakState {
+  const vandaag = dagSleutel(op);
+  const perioden = state.eigenVakanties ?? [];
+
+  if (aan) {
+    if (vakantieAan(state)) return state;
+    return {
+      ...state,
+      eigenVakanties: [...perioden, { naam: 'vakantiemodus', start: vandaag, eind: OPEN_EIND }],
+    };
+  }
+
+  if (!vakantieAan(state)) return state;
+  const gisteren = plusDagen(vandaag, -1);
+  const gesloten = perioden.flatMap((period) => {
+    if (period.eind !== OPEN_EIND) return [period];
+    return period.start > gisteren ? [] : [{ ...period, eind: gisteren }];
+  });
+  return { ...state, eigenVakanties: gesloten };
 }
 
 export interface StreakChange {
@@ -161,7 +213,7 @@ export function recordActivity(
   if (state.laatsteActieveDag === null) {
     streak = 1;
   } else {
-    const missed = missedSchoolDays(state.laatsteActieveDag, today, holidays);
+    const missed = missedSchoolDays(state.laatsteActieveDag, today, vrijeDagen(state, holidays));
     if (missed === 0) {
       streak = state.huidigeStreak + 1;
     } else if (missed <= rustdagen) {
@@ -191,6 +243,7 @@ export function recordActivity(
       laatsteActieveDag: today,
       rustdagen,
       rustdagWeek: state.rustdagWeek === thisWeek ? state.rustdagWeek : thisWeek,
+      ...(state.eigenVakanties ? { eigenVakanties: state.eigenVakanties } : {}),
     },
     counted: true,
     rustdagenGebruikt,
@@ -216,7 +269,7 @@ export function currentStreak(
   const today = dayKey(now);
   if (state.laatsteActieveDag === today) return state.huidigeStreak;
 
-  const missed = missedSchoolDays(state.laatsteActieveDag, today, holidays);
+  const missed = missedSchoolDays(state.laatsteActieveDag, today, vrijeDagen(state, holidays));
   return missed <= state.rustdagen ? state.huidigeStreak : 0;
 }
 
@@ -228,9 +281,8 @@ export function currentStreak(
  * The day streak above measures turning up. This one measures getting it right,
  * and it is the only number in the product that a single wrong answer takes
  * away — which is exactly why it is not allowed to be the one a child is shown
- * first (ADR-072). It sits under the day streak in the child's own column, it
- * keeps its best alongside its current, and losing it costs nothing else: no
- * coins, no level, no stamp.
+ * first (ADR-072). It keeps its best alongside its current, and losing it costs
+ * nothing else: no coins, no level, no stamp.
  *
  * It runs across rounds and across modules on purpose. "Twaalf goed op rij" is
  * a thing a child says about themselves, not about one round of one table, and
