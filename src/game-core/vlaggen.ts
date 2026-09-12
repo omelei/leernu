@@ -10,13 +10,7 @@ import type { Schedulable } from './leitner';
 
 /** Where a flag belongs. The six werelddelen of /topografie, and home. */
 export type Werelddeel =
-  | 'afrika'
-  | 'azie'
-  | 'europa'
-  | 'noord-amerika'
-  | 'zuid-amerika'
-  | 'oceanie'
-  | 'nederland';
+  'afrika' | 'azie' | 'europa' | 'noord-amerika' | 'zuid-amerika' | 'oceanie' | 'nederland';
 
 /** How well known a flag is. "Bekende vlaggen" is the first of these. */
 export type VlagKlasse = 'bekend' | 'normaal' | 'lastig';
@@ -139,7 +133,10 @@ export function vlagAfleiders(input: VlagAfleiderInput): VlagItem[] {
       ? [lijkt, buur]
       : fase === 'werelddeel'
         ? [buur]
-        : [(vlag) => !lijkt(vlag) && (isProvincie(antwoord) || !buur(vlag)), (vlag) => !lijkt(vlag)];
+        : [
+            (vlag) => !lijkt(vlag) && (isProvincie(antwoord) || !buur(vlag)),
+            (vlag) => !lijkt(vlag),
+          ];
 
   const gekozen: VlagItem[] = [];
   const genomen = new Set<string>();

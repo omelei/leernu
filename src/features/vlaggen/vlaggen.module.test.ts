@@ -132,7 +132,10 @@ describe('the ways of practising', () => {
   });
 
   it('has an oefentoets that asks both ways round', () => {
-    const toets = toetsVormVan('vlaggen', offeredForms(formsFor('vlaggen'), false, 'vlag-europa-bekend'));
+    const toets = toetsVormVan(
+      'vlaggen',
+      offeredForms(formsFor('vlaggen'), false, 'vlag-europa-bekend'),
+    );
     expect(toets?.id).toBe('vlag-gemengd');
     expect(toets?.alleenToets).toBe(true);
 
@@ -164,7 +167,9 @@ describe('the ways of practising', () => {
 
 describe('the addresses', () => {
   it('gives every set of flags an address that opens on it', () => {
-    for (const deel of startbareOnderdelen().filter((kandidaat) => kandidaat.moduleId === 'vlaggen')) {
+    for (const deel of startbareOnderdelen().filter(
+      (kandidaat) => kandidaat.moduleId === 'vlaggen',
+    )) {
       const route = { name: 'module', module: vlaggen, setId: deel.setId } as const;
       expect(routeFor(pathFor(route)), deel.setId).toEqual(route);
     }

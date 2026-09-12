@@ -243,12 +243,12 @@ maar één spelling heeft. Welke landen erin staan en waarom: zie
 
 ## Vlaggen — provincies
 
-|                   |                                                                  |
-| ----------------- | ---------------------------------------------------------------- |
-| **Bron**          | Wikimedia Commons, één bestand per provincie                     |
+|                   |                                                                   |
+| ----------------- | ----------------------------------------------------------------- |
+| **Bron**          | Wikimedia Commons, één bestand per provincie                      |
 | **Licentie**      | Elk van de twaalf is op Commons gemarkeerd als **publiek domein** |
-| **Gecontroleerd** | 12 september 2026, via de API van Commons (`LicenseShortName`)   |
-| **Gebouwd door**  | `tools/content/build-vlaggen.mjs`                                |
+| **Gecontroleerd** | 12 september 2026, via de API van Commons (`LicenseShortName`)    |
+| **Gebouwd door**  | `tools/content/build-vlaggen.mjs`                                 |
 
 De bestandsnamen staan in het script, in de spelling waar Commons naar
 doorverwijst. De provincienamen en hoofdsteden komen uit

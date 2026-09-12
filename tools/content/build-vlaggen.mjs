@@ -172,9 +172,10 @@ function verhoudingVan(svg, naam) {
   const hoog = /\sheight\s*=\s*["']\s*([\d.]+)\s*(?:px)?\s*["']/.exec(root);
   if (breed && hoog) return Number(breed[1]) / Number(hoog[1]);
 
-  const vak = /\sviewBox\s*=\s*["']\s*([-\d.eE]+)[\s,]+([-\d.eE]+)[\s,]+([\d.eE]+)[\s,]+([\d.eE]+)/.exec(
-    root,
-  );
+  const vak =
+    /\sviewBox\s*=\s*["']\s*([-\d.eE]+)[\s,]+([-\d.eE]+)[\s,]+([\d.eE]+)[\s,]+([\d.eE]+)/.exec(
+      root,
+    );
   if (vak) return Number(vak[3]) / Number(vak[4]);
   fail(`${naam}: geen breedte en hoogte en geen viewBox`);
 }
@@ -287,7 +288,9 @@ function provincieData() {
  */
 function leesRedactie() {
   const samen = { landen: {}, provincies: {} };
-  for (const bestand of readdirSync(REDACTIE).filter((naam) => naam.endsWith('.json')).sort()) {
+  for (const bestand of readdirSync(REDACTIE)
+    .filter((naam) => naam.endsWith('.json'))
+    .sort()) {
     const inhoud = leesJson(join(REDACTIE, bestand));
     for (const soort of ['landen', 'provincies']) {
       for (const [iso, tekst] of Object.entries(inhoud[soort] ?? {})) {
@@ -346,7 +349,12 @@ async function main() {
   const lidVan = (iso) => groepen.filter((groep) => groep.leden.includes(iso)).map((g) => g.id);
 
   const landen = LANDEN.map((iso) => {
-    const tekst = redactieVan(redactie.landen, iso, ['klasse', 'hoofdstad', 'beschrijving', 'weetje']);
+    const tekst = redactieVan(redactie.landen, iso, [
+      'klasse',
+      'hoofdstad',
+      'beschrijving',
+      'weetje',
+    ]);
     const { naam, aliassen, werelddelen, topo } = namen.get(iso);
     return {
       id: `vlag-${iso.toLowerCase()}`,

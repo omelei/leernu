@@ -141,7 +141,9 @@ export function VlagScreen({
                   ? t('vlag.correct', { naam: vlag.naam })
                   : t('vlag.wrong', { naam: vlag.naam })}
               </p>
-              <p className="text-body text-ink-2">{feedbackSub(state.lastCorrect, state.given, zoeken)}</p>
+              <p className="text-body text-ink-2">
+                {feedbackSub(state.lastCorrect, state.given, zoeken)}
+              </p>
               <button ref={nextButton} type="button" className="tk-button mt-4" onClick={next}>
                 {t('practice.next')}
               </button>

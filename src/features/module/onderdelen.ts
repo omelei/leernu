@@ -2,12 +2,7 @@ import { isDue, type ItemState, type ModeId, type Schedulable } from '@/game-cor
 import { loadItemSets } from '@/content/loadSets';
 import { isMix, loadSumSet, loadSumSets, MIX_IDS } from '@/content/loadSums';
 import { KLOK_MIX_ID, loadKlokSet, loadKlokSets } from '@/content/loadKlok';
-import {
-  loadVlagSet,
-  loadVlagSets,
-  type VlagOnderwerp,
-  type VlagSet,
-} from '@/content/loadVlaggen';
+import { loadVlagSet, loadVlagSets, type VlagOnderwerp, type VlagSet } from '@/content/loadVlaggen';
 import { t, type TranslationKey } from '@/i18n';
 import type { Module } from '@/features/shell/modules';
 import type { PlayedRound } from '@/store/progress';
@@ -1003,7 +998,12 @@ export function asKlokMode(mode: ModeId): KlokMode {
   return KLOK_MODES.includes(mode) ? (mode as KlokMode) : 'klok-meerkeuze';
 }
 
-const VLAG_MODES: readonly ModeId[] = ['vlag-zoeken', 'vlag-meerkeuze', 'vlag-gemengd', 'overleven'];
+const VLAG_MODES: readonly ModeId[] = [
+  'vlag-zoeken',
+  'vlag-meerkeuze',
+  'vlag-gemengd',
+  'overleven',
+];
 
 export function asVlagMode(mode: ModeId): VlagMode {
   return VLAG_MODES.includes(mode) ? (mode as VlagMode) : 'vlag-zoeken';

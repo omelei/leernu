@@ -91,7 +91,13 @@ describe('vlagAfleiders', () => {
 
   it('starts far away: other werelddelen, and nothing that looks alike', () => {
     for (let seed = 1; seed < 40; seed++) {
-      const uit = vlagAfleiders({ antwoord: NL, pool: ALLE, fase: 'ver', aantal: 3, rng: rngVan(seed) });
+      const uit = vlagAfleiders({
+        antwoord: NL,
+        pool: ALLE,
+        fase: 'ver',
+        aantal: 3,
+        rng: rngVan(seed),
+      });
       expect(uit.every((v) => !v.werelddelen.includes('europa'))).toBe(true);
       expect(uit.map((v) => v.iso)).not.toContain('PY');
     }
@@ -112,8 +118,19 @@ describe('vlagAfleiders', () => {
 
   it('and ends with the look-alikes first, wherever they are', () => {
     for (let seed = 1; seed < 40; seed++) {
-      const uit = vlagAfleiders({ antwoord: NL, pool: ALLE, fase: 'groep', aantal: 3, rng: rngVan(seed) });
-      expect(uit.slice(0, 2).map((v) => v.iso).sort()).toEqual(['LU', 'PY']);
+      const uit = vlagAfleiders({
+        antwoord: NL,
+        pool: ALLE,
+        fase: 'groep',
+        aantal: 3,
+        rng: rngVan(seed),
+      });
+      expect(
+        uit
+          .slice(0, 2)
+          .map((v) => v.iso)
+          .sort(),
+      ).toEqual(['LU', 'PY']);
       // The third is from the same werelddeel, since the group has run out.
       expect(uit[2]?.werelddelen).toContain('europa');
     }
@@ -136,7 +153,13 @@ describe('vlagAfleiders', () => {
 describe('vlagOpties', () => {
   it('holds the answer exactly once, among its wrong answers', () => {
     for (let seed = 1; seed < 40; seed++) {
-      const opties = vlagOpties({ antwoord: NL, pool: ALLE, fase: 'groep', aantal: 3, rng: rngVan(seed) });
+      const opties = vlagOpties({
+        antwoord: NL,
+        pool: ALLE,
+        fase: 'groep',
+        aantal: 3,
+        rng: rngVan(seed),
+      });
       expect(opties).toHaveLength(4);
       expect(opties.filter((v) => v.id === NL.id)).toHaveLength(1);
     }
@@ -145,7 +168,13 @@ describe('vlagOpties', () => {
   it('does not always put the answer in the same place', () => {
     const plekken = new Set(
       Array.from({ length: 40 }, (_, seed) =>
-        vlagOpties({ antwoord: NL, pool: ALLE, fase: 'ver', aantal: 3, rng: rngVan(seed + 1) }).indexOf(NL),
+        vlagOpties({
+          antwoord: NL,
+          pool: ALLE,
+          fase: 'ver',
+          aantal: 3,
+          rng: rngVan(seed + 1),
+        }).indexOf(NL),
       ),
     );
     expect(plekken.size).toBeGreaterThan(1);

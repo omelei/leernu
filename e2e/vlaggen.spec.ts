@@ -113,7 +113,9 @@ test('a set of flags has an address, and the page opens on it', async ({ page })
   ).toHaveAttribute('aria-pressed', 'true');
 });
 
-test('Vlag zoeken: a name, flags to choose from, and the round in the history', async ({ page }) => {
+test('Vlag zoeken: a name, flags to choose from, and the round in the history', async ({
+  page,
+}) => {
   await signIn(page, 'Lotte');
   await kies(page, 'Europa', /^Bekende vlaggen/, /^Vlag zoeken/);
   await start(page);
@@ -132,7 +134,9 @@ test('Meerkeuze: a flag, four names, and the round in the history', async ({ pag
   await kies(page, 'Nederland', /^Provincievlaggen/, /^Meerkeuze/);
   await start(page);
 
-  await expect(page.getByRole('group', { name: 'Kies een naam' }).getByRole('button')).toHaveCount(4);
+  await expect(page.getByRole('group', { name: 'Kies een naam' }).getByRole('button')).toHaveCount(
+    4,
+  );
   await speel(page);
   await inGeschiedenis(page, 'Provincievlaggen');
 });
@@ -162,7 +166,10 @@ test('Ontdekken: a flag, where it is, its capital and one fact', async ({ page }
   await kies(page, 'Europa', /^Alle vlaggen/, /^Ontdekken/);
   await start(page);
 
-  await page.getByRole('navigation').getByRole('button', { name: 'Nederland', exact: true }).click();
+  await page
+    .getByRole('navigation')
+    .getByRole('button', { name: 'Nederland', exact: true })
+    .click();
   await expect(page.getByRole('heading', { level: 2, name: 'Nederland' })).toBeVisible();
   await expect(page.getByText('Amsterdam')).toBeVisible();
   await expect(page.getByRole('img', { name: 'De vlag van Nederland' })).toBeVisible();
