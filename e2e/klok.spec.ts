@@ -133,5 +133,5 @@ test('the clock is a row on Oefenen like the other modules', async ({ page }) =>
 
   // A door that is open opens onto the chooser, not onto "binnenkort".
   await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
-  await expect(page).toHaveURL(/\/klok$/);
+  await expect(page).toHaveURL(/\/klokkijken$/);
 });

@@ -206,9 +206,12 @@ test('a keyboard reaches the map and can answer with it', async ({ page }) => {
   let reached: string | null = null;
   for (let i = 0; i < 30 && reached === null; i++) {
     await page.keyboard.press('Tab');
+    // A region of the map is a group holding its shape and its ring; the group
+    // is the button (MapCanvas, AnswerShape).
     reached = await page.evaluate(() => {
       const active = document.activeElement;
-      return active?.tagName.toLowerCase() === 'path' ? active.getAttribute('aria-label') : null;
+      const opDeKaart = active?.closest('svg') != null && active.getAttribute('role') === 'button';
+      return opDeKaart ? active.getAttribute('aria-label') : null;
     });
   }
 

@@ -67,20 +67,19 @@ test('Oefenen is the map of the product, not a list of what is finished', async 
   ).toBeVisible();
 });
 
-test('the front door lists every module, at every size', async ({ page }) => {
+test('a new child finds a table to start with on Vandaag, at every size', async ({ page }) => {
   await signIn(page, 'Fien');
 
-  // The phone has no rail, so this is the only way to a module there — and on
-  // a laptop it stands beside the rail, which is what K1 draws.
+  // Before any round, Verder oefenen holds the starters (S2): one set per
+  // module, the tables among them.
   const lijst = page.getByRole('region', { name: 'Verder oefenen' });
+  await lijst.getByRole('button', { name: /Tafel van 2/ }).click();
 
-  for (const naam of ['Rekenen', 'Klok', 'Taal', 'Vlaggen']) {
-    await expect(lijst.getByRole('button', { name: new RegExp(naam) })).toBeVisible();
-  }
-
-  await lijst.getByRole('button', { name: /Rekenen/ }).click();
   await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Tafel van 7', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Tafel van 2', exact: true })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
 });
 
 test('the tables have an address of their own', async ({ page }) => {
