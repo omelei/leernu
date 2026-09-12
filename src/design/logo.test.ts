@@ -23,9 +23,7 @@ function lowerEdges(peil: string): string {
  */
 describe('the logo is the one in docs/logo', () => {
   it('draws the wordmark on the same box', () => {
-    expect(svg('woordbeeld-inkt.svg')).toContain(
-      `viewBox="0 0 ${LOCKUP.width} ${LOCKUP.height}"`,
-    );
+    expect(svg('woordbeeld-inkt.svg')).toContain(`viewBox="0 0 ${LOCKUP.width} ${LOCKUP.height}"`);
   });
 
   it('copies every letter path for path', () => {
