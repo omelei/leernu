@@ -640,6 +640,17 @@ export const nl = {
   'vlag.explore.werelddeel': 'Werelddeel',
   'vlag.explore.land': 'Land',
   'vlag.explore.hoofdstad': 'Hoofdstad',
+  // Het vlaggendiploma (ADR-104): twintig vlaggen van een werelddeel, negen van
+  // de tien goed, en pas aan het eind hoor je hoe het ging.
+  'mode.vlag-diploma': 'Vlaggendiploma',
+  'way.vlag-diploma': 'Negen van de tien goed, en pas aan het eind zie je hoe het ging',
+  'vlag.diplomasTitle': 'Jouw vlaggendiploma’s',
+  'vlag.diplomasCount': '{aantal} van de {totaal} gehaald',
+  'vlag.diplomaHave': '{deel}: vlaggendiploma gehaald',
+  'vlag.diplomaWant': '{deel}: nog geen vlaggendiploma',
+  'vlag.diplomaEarned': 'Vlaggendiploma gehaald: {deel}',
+  'vlag.diplomaMissed':
+    'Nog geen diploma: {goed} van de {totaal} goed. Met {nodig} goed is hij van jou.',
 
   'result.title': 'Ronde klaar',
   // The one place the word "score" is allowed: the result of one round. It is

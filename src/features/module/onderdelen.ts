@@ -1091,6 +1091,7 @@ const VLAG_MODES: readonly ModeId[] = [
   'vlag-meerkeuze',
   'vlag-gemengd',
   'overleven',
+  'vlag-diploma',
 ];
 
 export function asVlagMode(mode: ModeId): VlagMode {

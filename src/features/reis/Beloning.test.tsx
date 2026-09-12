@@ -29,6 +29,7 @@ function uitkomst(deel: Partial<RoundOutcome>): RoundOutcome {
     totalXp: 0,
     stamps: [],
     diploma: null,
+    vlagDiploma: null,
     sterren: { erbij: 0, inKist: 0 },
     kistenTeGoed: 0,
     ...deel,

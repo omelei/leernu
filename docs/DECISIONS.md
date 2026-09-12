@@ -4644,6 +4644,60 @@ at once.
 
 ---
 
+## ADR-104 — The vlaggendiploma: a werelddeel, twenty flags, nine in ten
+
+**Status:** accepted — 2026-09-12. Planned in ADR-102 and built as phase 2 on
+the product owner's word.
+
+### Context
+
+The brief asked for a diploma per werelddeel on the model of the tafeldiploma:
+twenty questions, at least eighteen right, no hints, and a tile on the page.
+Two things in it do not fit every werelddeel as written. Zuid-Amerika has
+twelve flags and Oceanië fourteen, so twenty questions is more than there is.
+And "no hints" has to mean something in a product where the only hint is the
+answer arriving half a second after a question.
+
+### Decision
+
+**One per werelddeel, six in all**, sat on _Alle vlaggen_ of that werelddeel
+and nowhere else: not the world, which is not a werelddeel; not the provinces,
+which are home; and not the well-known flags, which would be a certificate for
+the easy half. It is the last tile, as the tafeldiploma is, because it is the
+test at the end of the practice rather than a way in.
+
+**Twenty questions, or every flag where there are fewer, and nine in ten
+right**: eighteen of twenty, eleven of Zuid-Amerika's twelve, thirteen of
+Oceanië's fourteen. The bar is the brief's own, applied as a proportion, in
+whole numbers (`vlagdiplomaDrempel`). A child is never asked the same flag
+twice in one diploma to make up a number.
+
+**No hints means no feedback until the end.** A diploma always runs the way
+the oefentoets runs (ADR-085), whatever the page passed, and ends with the mark
+and one line: earned, or how many right answers it would have taken. It asks
+both ways round, and the wrong answers get harder as it goes, as in every round
+of flags (ADR-102). Unlike the tafeldiploma it does not stop at the first
+mistake: ten facts recited in order are passed flawlessly, twenty flags from
+fifty-four are passed with a mark.
+
+**"Hoeveel vragen?" is not asked under it.** A way can now say its length is
+part of what it is (`vasteLengte`), which is also why the tafeldiploma never
+showed the step; there it only fell out of a table having nothing shorter.
+
+**The six are a wall with the gaps showing**, on the flags page — pressing one
+chooses the werelddeel, all its flags and the diploma at once — and on the
+collection page beside the tafeldiploma's. They are stored in the same place
+under ids of the same shape (`diploma-vlag-europa`), so nothing about the
+storage moved.
+
+### Consequences
+
+A page of flags on a whole werelddeel holds six ways, the ceiling. The collection
+page has one more section. A child who passes again has passed again; the
+diploma is stored once.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because

@@ -1,4 +1,5 @@
-import { t } from '@/i18n';
+import { vlagdiplomaDrempel } from '@/game-core';
+import { t, type TranslationKey } from '@/i18n';
 import { Beloning } from '@/features/reis/Beloning';
 import { RoundMark } from '@/components/RoundMark';
 import { Vlag } from './Vlag';
@@ -52,6 +53,26 @@ export function VlagResultScreen({
 
       {state.toetsstand ? (
         <RoundMark goed={state.correctCount} totaal={state.answeredCount} />
+      ) : null}
+
+      {/* The diploma, if this was one: earned, or how far off it was. Said in
+          the only unit that means anything here, right answers (ADR-104). */}
+      {state.mode === 'vlag-diploma' && state.reward ? (
+        state.reward.vlagDiploma ? (
+          <p className="tk-badge-outline w-fit">
+            {t('vlag.diplomaEarned', {
+              deel: t(`regio.${state.reward.vlagDiploma}` as TranslationKey),
+            })}
+          </p>
+        ) : (
+          <p className="text-ink-2">
+            {t('vlag.diplomaMissed', {
+              goed: state.correctCount,
+              totaal: state.total,
+              nodig: vlagdiplomaDrempel(state.total),
+            })}
+          </p>
+        )
       ) : null}
 
       <Beloning reward={state.reward} />

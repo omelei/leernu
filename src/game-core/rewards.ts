@@ -258,3 +258,78 @@ export function tableOfDiploma(id: string): number | null {
   const tafel = Number(match[1]);
   return tafel >= 1 && tafel <= 12 ? tafel : null;
 }
+
+// ---------------------------------------------------------------------------
+
+/**
+ * The werelddelen a vlaggendiploma is sat for (ADR-104). Six: the world is not
+ * a werelddeel, and the provinces are home rather than a part of the world.
+ */
+export const DIPLOMA_WERELDDELEN = [
+  'afrika',
+  'azie',
+  'europa',
+  'noord-amerika',
+  'zuid-amerika',
+  'oceanie',
+] as const;
+
+export type DiplomaWerelddeel = (typeof DIPLOMA_WERELDDELEN)[number];
+
+function alsDiplomaWerelddeel(deel: string | undefined): DiplomaWerelddeel | null {
+  return (DIPLOMA_WERELDDELEN as readonly string[]).includes(deel ?? '')
+    ? (deel as DiplomaWerelddeel)
+    : null;
+}
+
+/**
+ * The werelddeel a set is the whole of — `vlag-europa-alle` — which is the
+ * only set a vlaggendiploma is sat on. A diploma for "bekende vlaggen" would be
+ * a certificate for the easy half.
+ */
+export function diplomaWerelddeelVanSet(setId: string): DiplomaWerelddeel | null {
+  return alsDiplomaWerelddeel(/^vlag-(.+)-alle$/.exec(setId)?.[1]);
+}
+
+/** Twenty questions, which is the vlaggendiploma. */
+export const VLAGDIPLOMA_VRAGEN = 20;
+
+/**
+ * How many questions the diploma of a werelddeel with this many flags asks:
+ * twenty, or every flag where there are fewer — Zuid-Amerika has twelve, and
+ * asking one of them twice to make up the number would be testing memory of
+ * the last two minutes.
+ */
+export function vlagdiplomaVragen(vlaggen: number): number {
+  return Math.min(VLAGDIPLOMA_VRAGEN, vlaggen);
+}
+
+/**
+ * How many of them must be right: nine in ten, rounded up. Eighteen of twenty,
+ * which is what was asked for, and the same bar where there are fewer: eleven
+ * of Zuid-Amerika's twelve, thirteen of Oceanië's fourteen. Whole numbers, so
+ * the arithmetic has no floating point in it to argue with.
+ */
+export function vlagdiplomaDrempel(vragen: number): number {
+  return Math.ceil((vragen * 9) / 10);
+}
+
+/**
+ * The vlaggendiploma: the whole round answered, and nine in ten of it right.
+ *
+ * Not "one mistake and you sit it again", which is the tafeldiploma. A table
+ * is ten facts a child recites in order; twenty flags from fifty-four is a
+ * test, and a Dutch test is passed with a mark rather than with perfection.
+ */
+export function vlagDiplomaFor(snapshot: RewardSnapshot): string | null {
+  if (snapshot.mode !== 'vlag-diploma') return null;
+  const deel = diplomaWerelddeelVanSet(snapshot.setId);
+  if (deel === null || !snapshot.completeRound) return null;
+  if (snapshot.correct < vlagdiplomaDrempel(vlagdiplomaVragen(snapshot.setSize))) return null;
+  return `diploma-vlag-${deel}`;
+}
+
+/** Which werelddeel a stored vlaggendiploma is for, or null if the row is not one. */
+export function werelddeelVanDiploma(id: string): DiplomaWerelddeel | null {
+  return alsDiplomaWerelddeel(/^diploma-vlag-(.+)$/.exec(id)?.[1]);
+}
