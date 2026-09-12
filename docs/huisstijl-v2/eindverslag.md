@@ -45,8 +45,8 @@ pagina twee keer doen (inventarisatie §9).
 eigen domein, de typeschaal, radii, lijndiktes, afstanden en de raakmaten
 44 / 48 / 56 (in een ronde altijd 56). De zeven moduletinten staan alleen op
 de identiteitsplaat. In TypeScript staat geen hexwaarde (ESLint), en buiten
-`tokens.css` staat er ook in CSS geen. Het blok met oude namen onderaan is
-teruggebracht tot wat nog in gebruik is (zie "Wat blijft staan").
+`tokens.css` staat er ook in CSS geen. Het tijdelijke blok met oude
+kleurnamen is weg: elke regel verwijst rechtstreeks naar een token.
 
 ### Componentset
 
