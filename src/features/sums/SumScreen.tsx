@@ -64,7 +64,7 @@ export function SumScreen({
   if (state.error !== null) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-6">
-        <p className="tk-display text-h2">{t('practice.mapFailed')}</p>
+        <p className="tk-display text-title">{t('practice.mapFailed')}</p>
         <button type="button" className="tk-button" onClick={onHome}>
           {t('result.home')}
         </button>
@@ -146,7 +146,7 @@ export function SumScreen({
         <div className="tk-round-question">
           {revealed ? (
             <>
-              <p className="tk-display text-h2 font-semibold">
+              <p className="tk-display text-title font-semibold">
                 {state.lastCorrect
                   ? t('sums.correct', { som, antwoord: sum.antwoord })
                   : t('sums.wrong', { som, antwoord: sum.antwoord })}
@@ -178,7 +178,7 @@ export function SumScreen({
                   a screen reader gets one and the eye has somewhere to land in
                   a column that is otherwise a label and a box. The sum itself
                   is beside it, where the map is on the other screen. */}
-              <h1 className="tk-display mt-1 text-h1 font-semibold">{t('sums.prompt')}</h1>
+              <h1 className="tk-display mt-1 text-display font-semibold">{t('sums.prompt')}</h1>
               {typing ? (
                 <SumField key={state.index} onSubmit={submit} />
               ) : (

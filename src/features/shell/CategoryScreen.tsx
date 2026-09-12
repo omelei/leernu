@@ -36,7 +36,7 @@ export function CategoryScreen({
     <div className="tk-page">
       <div className="tk-page-main">
         <div className="flex flex-col gap-2">
-          <h1 className="tk-display text-h1 font-semibold">{t(category.name)}</h1>
+          <h1 className="tk-display text-display font-semibold">{t(category.name)}</h1>
           <p className="text-ink-2">{t('category.holds')}</p>
         </div>
 

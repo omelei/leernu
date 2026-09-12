@@ -266,7 +266,7 @@ export function GoedBlok() {
           />
           <div className="min-w-0">
             <p className="tk-procent">{`${procent}%`}</p>
-            <p className="text-label text-ink-2">
+            <p className="text-button text-ink-2">
               {t('home.accuracyOf', { goed: accuracy.correct, totaal: accuracy.answered })}
             </p>
           </div>
@@ -321,10 +321,10 @@ export function FavorietenBlok({
                     <ModuleIcon size={20} />
                   </span>
                   <span className="min-w-0">
-                    <span className="block truncate text-label font-semibold">
+                    <span className="block truncate text-button font-semibold">
                       {naamVan(favoriet.deel)}
                     </span>
-                    <span className="block truncate text-label text-ink-2">
+                    <span className="block truncate text-button text-ink-2">
                       {t(`mode.${favoriet.mode}` as TranslationKey)}
                     </span>
                   </span>

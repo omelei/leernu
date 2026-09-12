@@ -33,7 +33,7 @@ export function VlagResultScreen({
     <main className="mx-auto flex w-full max-w-2xl flex-col gap-8 p-6" data-module="vlaggen">
       <div>
         <p className="tk-label">{t('result.title')}</p>
-        <h1 className="tk-display text-h1 font-semibold">{t('result.changed')}</h1>
+        <h1 className="tk-display text-display font-semibold">{t('result.changed')}</h1>
         <p className="mt-2 text-body">
           {state.gained === 0
             ? t('result.gainedNone')

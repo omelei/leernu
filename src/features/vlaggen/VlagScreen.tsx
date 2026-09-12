@@ -60,7 +60,7 @@ export function VlagScreen({
   if (state.error !== null) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-6">
-        <p className="tk-display text-h2">{t('vlag.failed')}</p>
+        <p className="tk-display text-title">{t('vlag.failed')}</p>
         <button type="button" className="tk-button" onClick={onHome}>
           {t('result.home')}
         </button>
@@ -136,7 +136,7 @@ export function VlagScreen({
         <div className="tk-round-question">
           {revealed ? (
             <>
-              <p className="tk-display text-h2 font-semibold">
+              <p className="tk-display text-title font-semibold">
                 {state.lastCorrect
                   ? t('vlag.correct', { naam: vlag.naam })
                   : t('vlag.wrong', { naam: vlag.naam })}
@@ -153,7 +153,7 @@ export function VlagScreen({
               <p className="tk-label">{instruction}</p>
               {/* The heading is the question when a name is asked for a flag:
                   the name itself, and flags on the stage to choose from. */}
-              <h1 className="tk-display mt-1 text-h1 font-semibold">
+              <h1 className="tk-display mt-1 text-display font-semibold">
                 {zoeken ? vlag.naam : t('vlag.prompt')}
               </h1>
               {zoeken ? null : (

@@ -94,7 +94,7 @@ export function ExploreScreen({
       <header className="flex flex-none items-center gap-6 border-b border-line px-6 py-4">
         <div className="min-w-0">
           <p className="tk-label">{t('explore.kind')}</p>
-          <h1 className="tk-display truncate text-h1 font-semibold">{set?.naam ?? ''}</h1>
+          <h1 className="tk-display truncate text-display font-semibold">{set?.naam ?? ''}</h1>
         </div>
 
         {chosen !== null && <SpeakButton text={spoken} />}
@@ -135,8 +135,8 @@ export function ExploreScreen({
                     aria-current={picked ? 'true' : undefined}
                     className={
                       picked
-                        ? 'w-full rounded-control border-2 border-ink bg-surface px-4 py-3 text-left font-semibold'
-                        : 'w-full rounded-control border-2 border-transparent px-4 py-3 text-left'
+                        ? 'w-full rounded-chip border-2 border-ink bg-surface px-4 py-3 text-left font-semibold'
+                        : 'w-full rounded-chip border-2 border-transparent px-4 py-3 text-left'
                     }
                     onClick={() => setChosenId(picked ? null : item.id)}
                   >
@@ -174,7 +174,7 @@ export function ExploreScreen({
               <p className="text-ink-2">{t('explore.nothingChosen')}</p>
             ) : (
               <>
-                <h2 className="tk-display text-h2 font-semibold">{chosen.naam}</h2>
+                <h2 className="tk-display text-title font-semibold">{chosen.naam}</h2>
                 {chosen.weetje !== undefined && <p className="mt-1">{chosen.weetje}</p>}
               </>
             )}

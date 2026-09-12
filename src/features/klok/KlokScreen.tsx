@@ -74,7 +74,7 @@ export function KlokScreen({
   if (state.error !== null) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-6">
-        <p className="tk-display text-h2">{t('practice.mapFailed')}</p>
+        <p className="tk-display text-title">{t('practice.mapFailed')}</p>
         <button type="button" className="tk-button" onClick={onHome}>
           {t('result.home')}
         </button>
@@ -167,7 +167,7 @@ export function KlokScreen({
         <div className="tk-round-question">
           {revealed ? (
             <>
-              <p className="tk-display text-h2 font-semibold">
+              <p className="tk-display text-title font-semibold">
                 {state.lastCorrect
                   ? t('klok.correct', { tijd: klokVoluit(tijd) })
                   : t('klok.wrong', { tijd: klokVoluit(tijd) })}
@@ -195,7 +195,7 @@ export function KlokScreen({
                   On the mode that asks the other way round, the heading *is*
                   the question: the time, in words, and nothing on the stage
                   but the four faces to choose between. */}
-              <h1 className="tk-display mt-1 text-h1 font-semibold">
+              <h1 className="tk-display mt-1 text-display font-semibold">
                 {andersom ? woorden : t('klok.prompt')}
               </h1>
               {typing ? <KlokField key={state.index} onSubmit={submit} /> : null}

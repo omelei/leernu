@@ -57,7 +57,7 @@ export function ProfileScreen({
     <div className="tk-page">
       <div className="tk-page-main">
         <div>
-          <h1 className="tk-display text-h1 font-semibold">{t('you.title')}</h1>
+          <h1 className="tk-display text-display font-semibold">{t('you.title')}</h1>
           <p className="mt-1 text-ink-2">{t('you.nameIs', { naam: profile.naam })}</p>
         </div>
 

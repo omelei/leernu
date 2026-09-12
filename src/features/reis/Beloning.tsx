@@ -33,7 +33,7 @@ export function Beloning({ reward }: { readonly reward: RoundOutcome | null }) {
 
   return (
     <section className="tk-card flex flex-col gap-4" aria-label={t('result.beloningTitle')}>
-      <h2 className="tk-display text-h2 font-bold">{kop}</h2>
+      <h2 className="tk-display text-title font-bold">{kop}</h2>
 
       {/* The chest reads the row itself rather than being handed what came out
           of it: a chest is now a choice, and a choice cannot be settled before

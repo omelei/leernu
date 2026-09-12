@@ -83,7 +83,7 @@ const TEGELMERKEN: readonly (readonly [string, ComponentType<Omit<IconProps, 'ch
 export function Gallery() {
   return (
     <main className="mx-auto flex max-w-2xl flex-col p-6">
-      <h1 className="tk-display text-h1 font-semibold">Componenten</h1>
+      <h1 className="tk-display text-display font-semibold">Componenten</h1>
       <p className="mt-2 text-ink-2">Alleen in ontwikkeling. Elke component in elke toestand.</p>
 
       <h2 className={HEADING}>Merk</h2>
@@ -265,12 +265,12 @@ export function Gallery() {
         <div className="p-4 text-ink-2">De pagina eronder.</div>
         <div className="tk-scrim" />
         <div className="tk-sheet">
-          <p className="tk-display text-h3 font-semibold">Onderpaneel</p>
+          <p className="tk-display text-card font-semibold">Onderpaneel</p>
           <p className="mt-2 text-ink-2">Schaduw 2, op een dekvlak van inkt op 45%.</p>
         </div>
       </div>
       <div className="tk-dialog mt-3">
-        <p className="tk-display text-h3 font-semibold">Een dialoog</p>
+        <p className="tk-display text-card font-semibold">Een dialoog</p>
         <p className="mt-2 text-ink-2">Zelfde gewicht, midden op het scherm.</p>
       </div>
 

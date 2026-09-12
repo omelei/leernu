@@ -112,7 +112,7 @@ export function PracticeScreen({
   if (state.error !== null) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-6">
-        <p className="tk-display text-h2">{t('practice.mapFailed')}</p>
+        <p className="tk-display text-title">{t('practice.mapFailed')}</p>
         <button type="button" className="tk-button" onClick={onHome}>
           {t('result.home')}
         </button>
@@ -235,7 +235,7 @@ export function PracticeScreen({
                 <div className="min-w-0">
                   {/* The heading is the right answer, not the word "fout" (K6):
                       first what it is, and only then what the child chose. */}
-                  <p className="tk-display text-h2 font-semibold">
+                  <p className="tk-display text-title font-semibold">
                     {state.lastCorrect
                       ? t('practice.correct', { naam })
                       : nearMiss
@@ -257,7 +257,7 @@ export function PracticeScreen({
           ) : (
             <>
               <p className="tk-label">{label}</p>
-              <h1 className="tk-display mt-1 text-h1 font-semibold">{vraag}</h1>
+              <h1 className="tk-display mt-1 text-display font-semibold">{vraag}</h1>
               {typing ? <AnswerField key={state.index} onSubmit={submit} /> : null}
               {choosing && state.question.options ? (
                 <OptionList key={state.index} options={state.question.options} onChoose={choose} />

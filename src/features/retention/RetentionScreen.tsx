@@ -57,7 +57,7 @@ export function RetentionScreen({ aside }: { readonly aside: ReactNode }) {
   return (
     <div className="tk-page">
       <div className="tk-page-main">
-        <h1 className="tk-display text-h1 font-semibold">{t('retention.title')}</h1>
+        <h1 className="tk-display text-display font-semibold">{t('retention.title')}</h1>
 
         {/* Which set. Pills rather than a select: five options, all worth
             seeing, and a select on a touch screen is a menu that covers the

@@ -113,7 +113,7 @@ export function ReisScreen({
             </div>
 
             <Sterren inKist={sterrenInKist(goed)} grootte={32} zin="kort" />
-            <p className="tk-display text-h2 font-bold">{kistZin(goed)}</p>
+            <p className="tk-display text-title font-bold">{kistZin(goed)}</p>
 
             <div className="tk-vg-niveau">
               <p className="tk-vg-niveaukop">

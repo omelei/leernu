@@ -47,7 +47,7 @@ export function SterTeller({ correct }: { readonly correct: number }) {
             <StarIcon size={20} />
           </span>
         </span>
-        <b className="tk-display text-h2 font-bold tabular-nums">
+        <b className="tk-display text-title font-bold tabular-nums">
           {t('practice.counterStarValue', { aantal: inSter, totaal: GOED_PER_STER })}
         </b>
       </span>

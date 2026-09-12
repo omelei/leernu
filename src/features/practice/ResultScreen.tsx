@@ -37,7 +37,7 @@ export function ResultScreen({
           they could not have. */}
       <div>
         <p className="tk-label">{t('result.title')}</p>
-        <h1 className="tk-display text-h1 font-semibold">{t('result.changed')}</h1>
+        <h1 className="tk-display text-display font-semibold">{t('result.changed')}</h1>
         <p className="text-body">
           {state.gained === 0
             ? t('result.gainedNone')
@@ -79,7 +79,7 @@ export function ResultScreen({
             <ul className="flex flex-col gap-2">
               {state.missed.map((item) => (
                 <li key={item.id} className="tk-card">
-                  <p className="tk-display text-h3 font-semibold">{item.naam}</p>
+                  <p className="tk-display text-card font-semibold">{item.naam}</p>
                   {item.weetje !== undefined && <p className="text-ink-2">{item.weetje}</p>}
                 </li>
               ))}

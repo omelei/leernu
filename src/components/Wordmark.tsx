@@ -71,7 +71,7 @@ export function Wordmark({
       style={{
         display: 'inline-flex',
         alignItems: 'baseline',
-        fontFamily: "'Space Grotesk', system-ui, sans-serif",
+        fontFamily: 'var(--font-display)',
         fontWeight: 700,
         fontSize: `${size}px`,
         letterSpacing: '-0.035em',
@@ -100,7 +100,7 @@ export function Wordmark({
         <span
           aria-hidden="true"
           style={{
-            fontFamily: "'Source Sans 3', system-ui, sans-serif",
+            fontFamily: 'var(--font-body)',
             fontWeight: 400,
             letterSpacing: 0,
             color: 'var(--ink-3)',

@@ -30,8 +30,8 @@ export function Counter({
       <b
         className={
           urgent
-            ? 'tk-display text-h2 font-bold tabular-nums text-bad'
-            : 'tk-display text-h2 font-bold tabular-nums'
+            ? 'tk-display text-title font-bold tabular-nums text-bad'
+            : 'tk-display text-title font-bold tabular-nums'
         }
       >
         {value}
