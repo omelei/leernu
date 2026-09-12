@@ -77,10 +77,7 @@ export function SumScreen({
   const spoken = `${som}. ${t('sums.prompt')}`;
 
   const toestanden = revealed
-    ? antwoordToestanden(
-        state.given === null ? null : String(state.given),
-        String(sum.antwoord),
-      )
+    ? antwoordToestanden(state.given === null ? null : String(state.given), String(sum.antwoord))
     : null;
 
   return (

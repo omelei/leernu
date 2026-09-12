@@ -539,4 +539,3 @@ test('explore names a city, places it, and scores nothing', async ({ page }) => 
   // that is chosen here, so the label is where the fact lives.
   await expect(steden).toHaveAccessibleName(/nog niet geoefend/);
 });
-
