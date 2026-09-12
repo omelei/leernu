@@ -64,9 +64,7 @@ export function OefenenScreen({ onModule }: { readonly onModule: (id: Module['id
     return (
       <span className="ln-getal">
         <span aria-hidden="true">{`${goed} / ${ids.length}`}</span>
-        <span className="ln-sr-only">
-          {t('oefenen.standLabel', { goed, totaal: ids.length })}
-        </span>
+        <span className="ln-sr-only">{t('oefenen.standLabel', { goed, totaal: ids.length })}</span>
       </span>
     );
   }

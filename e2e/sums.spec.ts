@@ -242,7 +242,9 @@ test('the lightning round is not offered, and nothing switches it on', async ({ 
 
   await page.goto('/rekenen');
   await expect(
-    page.getByRole('region', { name: /Hoe wil je/ }).getByRole('button', { name: /^Bliksemronde\b/ }),
+    page
+      .getByRole('region', { name: /Hoe wil je/ })
+      .getByRole('button', { name: /^Bliksemronde\b/ }),
   ).toHaveCount(0);
 
   await page.goto('/jij');

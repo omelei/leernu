@@ -148,7 +148,9 @@ function Kinderen({ active }: { readonly active: ProfileRecord }) {
             key={kind.id}
             titel={kind.naam}
             sub={
-              kind.id === active.id ? t('you.practisingNow') : t('you.switchTo', { naam: kind.naam })
+              kind.id === active.id
+                ? t('you.practisingNow')
+                : t('you.switchTo', { naam: kind.naam })
             }
             huidig={kind.id === active.id}
             onClick={kind.id === active.id ? undefined : () => void geefBeurt(kind.id)}
