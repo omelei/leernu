@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>00 · Kader — kopbalk, logo, rail, tabbalk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=Public+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  /* Tokens uit de overdracht (README §Kleur). Alleen wat het kader gebruikt. */
+  :root {
+    --ground: #EFEDE4; --paper: #FBFAF6; --inset: #E3E0D4;
+    --ink: #1A201B; --ink-2: #525953; --ink-3: #666C67;
+    --line: #D8D6CC; --line-strong: #C1BEB2;
+    --accent: #327F48; --accent-tint: #EAFBEC;
+    --warn: #8A4B00; --warn-tint: #FFF5E7;
+    --display: 'Archivo', 'Arial Narrow', Arial, sans-serif;
+    --text: 'Public Sans', 'Segoe UI', Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--ground); color: var(--ink); font: 400 16px/24px var(--text); }
+  /* 1500 so a 1366 frame fits inside a section at its true size. */
+  .page { max-width: 1500px; margin: 0 auto; padding: 48px 32px 96px; }
+  h1 { font: 700 40px/44px var(--display); letter-spacing: -0.01em; margin: 0 0 8px; }
+  h2 { font: 700 28px/32px var(--display); margin: 0 0 4px; }
+  h3 { font: 600 17px/24px var(--display); margin: 24px 0 8px; }
+  p { margin: 0 0 12px; max-width: 72ch; }
+  .lead { color: var(--ink-2); font-size: 18px; line-height: 28px; }
+  section { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 32px; margin-top: 32px; }
+  .nr { font: 600 13px/16px var(--text); color: var(--ink-3); letter-spacing: 0.06em; text-transform: uppercase; }
+  code { font: 14px/20px ui-monospace, Consolas, monospace; background: var(--inset); padding: 1px 5px; border-radius: 4px; }
+  .scroll { overflow-x: auto; padding-bottom: 8px; }
+  .row { display: flex; gap: 32px; flex-wrap: wrap; align-items: flex-start; }
+  .label { font: 600 13px/16px var(--text); color: var(--ink-2); margin: 16px 0 8px; }
+
+  /* Specificatietabellen: ontwerp naast nu live. */
+  table { border-collapse: collapse; width: 100%; font-size: 14px; line-height: 20px; margin-top: 8px; }
+  th, td { text-align: left; vertical-align: top; padding: 8px 12px; border-bottom: 1px solid var(--line); }
+  th { font-weight: 600; color: var(--ink-2); background: var(--ground); }
+  td:first-child { font-weight: 600; white-space: nowrap; }
+  .diff { background: var(--warn-tint); }
+  .same { color: var(--ink-3); }
+
+  /* ---- Het kader zelf, op ware grootte ---------------------------------- */
+  .frame { background: var(--ground); border: 1px solid var(--line-strong); border-radius: 8px; overflow: hidden; flex: none; }
+  .w1366 { width: 1366px; } .w1024 { width: 1024px; } .w393 { width: 393px; }
+  .ico { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  .kopbalk { height: 56px; background: var(--paper); border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; }
+  .w1024 .kopbalk { padding: 0 24px; }
+  .w393 .kopbalk { padding: 0 16px; }
+  .kopbalk .logo { height: 20px; width: auto; display: block; }
+  .w393 .kopbalk .logo { height: 18px; }
+  .kop-rechts { display: flex; align-items: center; gap: 16px; }
+  .sterren { font: 600 20px/24px var(--display); font-variant-numeric: tabular-nums; }
+  .sterren small { font: 400 14px/20px var(--text); color: var(--ink-3); }
+  .held { width: 36px; height: 36px; border-radius: 999px; box-shadow: 0 6px 16px -4px rgba(26, 32, 27, 0.22); display: block; }
+  .naam { font: 400 16px/22px var(--text); }
+
+  .modulekop { display: flex; align-items: center; gap: 12px; }
+  .plaat32 { width: 32px; height: 32px; border-radius: 6px; background: var(--accent-tint); display: grid; place-items: center; }
+  .plaat32 .ico { width: 16px; height: 16px; }
+  .modulenaam { font: 600 17px/24px var(--display); }
+  .terug { width: 44px; height: 44px; display: grid; place-items: center; margin-left: -12px; }
+  .terug .ico { width: 20px; height: 20px; }
+
+  .body { display: flex; height: 420px; }
+  .w393 .body { height: 520px; flex-direction: column; }
+  .rail { width: 88px; flex: none; background: var(--paper); border-right: 1px solid var(--line); display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 16px 0; }
+  .plaat { width: 40px; height: 40px; border-radius: 6px; background: var(--inset); display: grid; place-items: center; color: var(--ink); }
+  .plaat.aan { background: var(--accent-tint); outline: 2px solid var(--ink); outline-offset: 2px; }
+  .w1024 .plaat { width: 48px; height: 48px; }
+  .w1024 .plaat .ico { width: 20px; height: 20px; }
+  /* Variant B draagt een woord onder de plaat: bestemmingen herken je minder snel dan vakken. */
+  .rail.b { gap: 8px; }
+  .railitem { display: flex; flex-direction: column; align-items: center; gap: 4px; width: 72px; padding: 6px 0; border-radius: 8px; font: 400 13px/16px var(--text); color: var(--ink-2); }
+  .railitem.aan { color: var(--ink); font-weight: 600; }
+  .railitem.aan .plaat { background: var(--accent-tint); }
+
+  .inhoud { flex: 1; padding: 64px 32px 0; min-width: 0; }
+  .w1024 .inhoud { padding: 48px 24px 0; }
+  .w393 .inhoud { padding: 24px 16px 0; }
+  .blok { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; height: 88px; margin-bottom: 16px; }
+  .blok.kop { background: none; border: 0; height: auto; font: 700 40px/44px var(--display); margin-bottom: 24px; color: var(--ink); }
+  .w393 .blok.kop { font-size: 32px; line-height: 36px; }
+  .raster { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .w1024 .raster { grid-template-columns: repeat(3, 1fr); }
+  .w393 .raster { grid-template-columns: 1fr; }
+
+  .tabbalk { height: 72px; flex: none; background: var(--paper); border-top: 1px solid var(--line); display: flex; justify-content: space-around; align-items: center; margin-top: auto; }
+  .tab { min-width: 56px; display: flex; flex-direction: column; align-items: center; gap: 2px; font: 400 13px/16px var(--text); color: var(--ink-2); }
+  .tab .ico { width: 24px; height: 24px; stroke: var(--ink-3); }
+  .tab.aan { font-weight: 600; color: var(--ink); }
+  .tab.aan .ico { stroke: var(--ink); }
+
+  /* Schaal voor schermen die smaller zijn dan het kader. */
+  .schaal-note { font-size: 13px; color: var(--ink-3); margin-top: 6px; }
+
+  /* Keuzes */
+  .keuze { border: 1px solid var(--line); border-radius: 12px; padding: 20px 24px; margin-top: 16px; background: var(--paper); }
+  .keuze h3 { margin-top: 0; }
+  .opties { display: grid; gap: 8px; margin: 12px 0; }
+  .optie { display: flex; gap: 12px; align-items: baseline; }
+  .vak { flex: none; width: 18px; height: 18px; border: 2px solid var(--ink); border-radius: 4px; transform: translateY(3px); }
+  .bron { font-size: 13px; color: var(--ink-3); }
+  .jouw { border-top: 1px dashed var(--line-strong); padding-top: 10px; margin-top: 8px; color: var(--ink-3); font-size: 14px; }
+</style>
+</head>
+<body>
+
+<!-- Pictogrammen: 24er raster, lijn 2, ronde kappen (overdracht Stap 2). -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-topo" viewBox="0 0 24 24"><path d="M12 3l9 9-9 9-9-9z"/></symbol>
+  <symbol id="i-tafels" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7"/></symbol>
+  <symbol id="i-klok" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5.5l3.5 2"/></symbol>
+  <symbol id="i-woorden" viewBox="0 0 24 24"><path d="M4 6h16v10H10l-4 4v-4H4z"/></symbol>
+  <symbol id="i-tijdvakken" viewBox="0 0 24 24"><path d="M3 12h18M8 7v10M16 7v10"/></symbol>
+  <symbol id="i-vlaggen" viewBox="0 0 24 24"><path d="M6 3v18M6 5h13l-3.5 3.5L19 12H6"/></symbol>
+  <symbol id="i-vandaag" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></symbol>
+  <symbol id="i-oefenen" viewBox="0 0 24 24"><path d="M12 3l9 9-9 9-9-9z"/></symbol>
+  <symbol id="i-helden" viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="5.5"/><path d="M8.5 12.5L7 21l5-2.5 5 2.5-1.5-8.5"/></symbol>
+  <symbol id="i-jij" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 20v-1.5L9 15h6l4 3.5V20"/></symbol>
+  <symbol id="i-terug" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+  <!-- Het logo: lockup-inkt.svg uit de overdracht, zonder de metadata. -->
+  <symbol id="lockup" viewBox="0 0 560 140">
+    <g transform="translate(0,7) scale(1.3125)">
+      <clipPath id="onderhelft"><rect x="0" y="48" width="96" height="48"/></clipPath>
+      <path d="M48 10 86 48 48 86 10 48Z" fill="#1A201B" clip-path="url(#onderhelft)"/>
+      <path d="M48 10 86 48 48 86 10 48Z" fill="none" stroke="#1A201B" stroke-width="13"/>
+    </g>
+    <g transform="translate(213,5)" fill="#1A201B" font-family="Archivo, Arial, sans-serif" font-weight="700" font-size="100" letter-spacing="-3.5">
+      <text x="0" y="100">leer</text>
+      <path d="M196 71 210.5 85.5 196 100 181.5 85.5Z"/>
+      <text x="225" y="100">nu</text>
+    </g>
+  </symbol>
+</svg>
+
+<div class="page">
+  <div class="nr">Schermen · 00</div>
+  <h1>Kader: kopbalk, logo, rail, tabbalk</h1>
+  <p class="lead">Wat om elk scherm met navigatie heen staat. Het ontwerp komt uit de overdracht (Stap 2 op 1366 en 393, Stap 3 voor de tablet). Onder elk onderdeel staat wat er nu live staat; oranje regels verschillen. Onderaan staan de keuzes die eerst gemaakt moeten worden, pas daarna wordt er gebouwd.</p>
+  <p class="bron">Gelden voor: S2, S3, S4, S11, S12. Geen kopbalk op S1 en S10; geen navigatie tijdens de ronde (S5–S9), volledig weg en niet gedimd.</p>
+
+  <!-- ================================================================ -->
+  <section id="logo">
+    <div class="nr">1</div>
+    <h2>Logo</h2>
+    <p>De lockup: het merkteken (een ruit, onderste helft gevuld) plus het woordbeeld <em>leer◆nu</em> in Archivo 700. In een balk altijd <code>lockup-inkt.svg</code>, 20 px hoog op laptop en tablet, 18 px op de telefoon. De slogan staat nooit naast het woordbeeld, alleen gestapeld eronder.</p>
+
+    <div class="row">
+      <div>
+        <div class="label">20 px · laptop en tablet</div>
+        <svg class="logo" style="height:20px;width:80px" role="img" aria-label="leer.nu"><use href="#lockup"/></svg>
+      </div>
+      <div>
+        <div class="label">18 px · telefoon</div>
+        <svg class="logo" style="height:18px;width:72px" role="img" aria-label="leer.nu"><use href="#lockup"/></svg>
+      </div>
+      <div>
+        <div class="label">Vergroot, om te lezen</div>
+        <svg style="height:56px;width:224px" role="img" aria-label="leer.nu"><use href="#lockup"/></svg>
+      </div>
+    </div>
+
+    <table>
+      <tr><th></th><th>Ontwerp</th><th>Nu live</th></tr>
+      <tr class="diff"><td>Vorm</td><td>Lockup: ruit + <em>leer◆nu</em></td><td>Woordbeeld met de punt (<code>Wordmark</code>), of alleen het merkteken (<code>Brandmark</code>)</td></tr>
+      <tr class="diff"><td>Laptop</td><td>Lockup, 20 px hoog</td><td>Woordbeeld, maat 30 (vanaf 1200 breed)</td></tr>
+      <tr class="diff"><td>Tablet</td><td>Lockup, 20 px hoog</td><td>Alleen merkteken, 32 px (768–1199)</td></tr>
+      <tr class="diff"><td>Telefoon</td><td>Lockup, 18 px hoog</td><td>Alleen merkteken, 28 px</td></tr>
+      <tr class="same"><td>Gedrag</td><td>Knop naar Vandaag</td><td>Knop naar Vandaag (“leer.nu, naar Vandaag”)</td></tr>
+    </table>
+  </section>
+
+  <!-- ================================================================ -->
+  <section id="kopbalk">
+    <div class="nr">2</div>
+    <h2>Kopbalk</h2>
+    <p>Eén regel van 56 px op papier met een haarlijn eronder. Links het logo, rechts het sterrental en de held van het kind. Op de voordeur staat de naam ernaast. Op een modulepagina maakt het logo plaats voor het vak zelf.</p>
+
+    <h3>2a · Standaard (S2 Voordeur)</h3>
+    <div class="label">1366 · laptop</div>
+    <div class="scroll"><div class="frame w1366">
+      <div class="kopbalk">
+        <svg class="logo" style="width:80px" role="img" aria-label="leer.nu"><use href="#lockup"/></svg>
+        <div class="kop-rechts">
+          <span class="sterren">1.148 <small>sterren</small></span>
+          <img class="held" src="beelden/vos-zilver.png" alt="">
+          <span class="naam">Sofie</span>
+        </div>
+      </div>
+    </div></div>
+
+    <div class="row">
+      <div>
+        <div class="label">393 · telefoon</div>
+        <div class="frame w393">
+          <div class="kopbalk">
+            <svg class="logo" style="width:72px" role="img" aria-label="leer.nu"><use href="#lockup"/></svg>
+            <div class="kop-rechts">
+              <span class="sterren">1.148</span>
+              <img class="held" src="beelden/vos-zilver.png" alt="">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3>2b · Modulepagina (S4)</h3>
+        <div class="label">393 · telefoon, met terug</div>
+        <div class="frame w393">
+          <div class="kopbalk">
+            <div class="modulekop">
+              <span class="terug"><svg class="ico"><use href="#i-terug"/></svg></span>
+              <span class="plaat32"><svg class="ico"><use href="#i-topo"/></svg></span>
+              <span class="modulenaam">Topo</span>
+            </div>
+            <div class="kop-rechts">
+              <span class="sterren">1.148</span>
+              <img class="held" src="beelden/vos-zilver.png" alt="">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="label">1366 · modulepagina, laptop</div>
+    <div class="scroll"><div class="frame w1366">
+      <div class="kopbalk">
+        <div class="modulekop">
+          <span class="plaat32"><svg class="ico"><use href="#i-topo"/></svg></span>
+          <span class="modulenaam">Topo</span>
+        </div>
+        <div class="kop-rechts">
+          <span class="sterren">1.148 <small>sterren</small></span>
+          <img class="held" src="beelden/vos-zilver.png" alt="">
+        </div>
+      </div>
+    </div></div>
+
+    <table>
+      <tr><th></th><th>Ontwerp</th><th>Nu live</th></tr>
+      <tr class="diff"><td>Hoogte</td><td>56 op elke maat</td><td>56 telefoon, 64 vanaf 768</td></tr>
+      <tr class="diff"><td>Zijmarge</td><td>32 laptop · 24 tablet · 16 telefoon</td><td>24 laptop · 20 tablet · 16 telefoon</td></tr>
+      <tr class="same"><td>Grond, lijn</td><td>Papier <code>#FBFAF6</code>, haarlijn <code>#D8D6CC</code> onder</td><td>Zelfde</td></tr>
+      <tr class="diff"><td>Midden</td><td>Leeg</td><td>Vanaf 1200: de bestemmingen als woorden (Vandaag · Onthouden · Jij)</td></tr>
+      <tr class="diff"><td>Rechts, getal</td><td>Sterren: “1.148” Archivo 600 20/24, cijfers even breed; “sterren” Public Sans 14/20 <code>#666C67</code>; op de telefoon zonder het woord</td><td>Reeks-pil: vlam + “n dagen op rij”, op elke maat</td></tr>
+      <tr class="diff"><td>Rechts, held</td><td>Held 36 rond met zachte schaduw</td><td>Held op zijn plaat, 30, in een knop met de naam</td></tr>
+      <tr class="diff"><td>Naam</td><td>Alleen op de voordeur (S2), Public Sans 16/22</td><td>Overal naast de held, op de telefoon verborgen</td></tr>
+      <tr class="diff"><td>Modulepagina</td><td>Plaat 32 (radius 6, tint van het vak, icoon 16) + naam Archivo 600 17/24 in plaats van het logo; telefoon: terug-pijl in 44×44 ervoor</td><td>Logo blijft staan; het vak staat in de rail en in de pagina zelf</td></tr>
+    </table>
+  </section>
+
+  <!-- ================================================================ -->
+  <section id="rail">
+    <div class="nr">3</div>
+    <h2>Linkerbalk (rail)</h2>
+    <p>88 px breed, op papier, haarlijn rechts. Een kolom platen van 40×40 (radius 6) met 12 px ertussen, 16 px van boven. Actief: de tint van het vak; anders de inzetkleur <code>#E3E0D4</code>. Iconen 18 px, inkt, lijn 2. In het tekenbord zonder woorden.</p>
+    <p>Het tekenbord en de overdracht spreken elkaar hier tegen, zie keuze K1. Daarom staan er twee varianten.</p>
+
+    <h3>3a · Variant A — vakken (zoals getekend in Stap 2)</h3>
+    <div class="scroll"><div class="frame w1366">
+      <div class="kopbalk">
+        <svg class="logo" style="width:80px" role="img" aria-label="leer.nu"><use href="#lockup"/></svg>
+        <div class="kop-rechts">
+          <span class="sterren">1.148 <small>sterren</small></span>
+          <img class="held" src="beelden/vos-zilver.png" alt="">
+          <span class="naam">Sofie</span>
+        </div>
+      </div>
+      <div class="body">
+        <nav class="rail" aria-label="Vakken">
+          <span class="plaat aan" title="Topo"><svg class="ico"><use href="#i-topo"/></svg></span>
+          <span class="plaat" title="Rekenen"><svg class="ico"><use href="#i-tafels"/></svg></span>
+          <span class="plaat" title="Klok"><svg class="ico"><use href="#i-klok"/></svg></span>
+          <span class="plaat" title="Taal"><svg class="ico"><use href="#i-woorden"/></svg></span>
+          <span class="plaat" title="Spelling"><svg class="ico"><use href="#i-woorden"/></svg></span>
+          <span class="plaat" title="Tijdvakken"><svg class="ico"><use href="#i-tijdvakken"/></svg></span>
+          <span class="plaat" title="Vlaggen"><svg class="ico"><use href="#i-vlaggen"/></svg></span>
+        </nav>
+        <div class="inhoud">
+          <div class="blok kop">Zaterdag</div>
+          <div class="blok"></div>
+          <div class="raster"><div class="blok"></div><div class="blok"></div><div class="blok"></div><div class="blok"></div></div>
+        </div>
+      </div>
+    </div></div>
+    <p class="schaal-note">Actief staat hier Topo, met een inktrand als tweede drager naast de kleur (vormregel 4). Het tekenbord toont alleen de tint; die rand is mijn toevoeging, zie K4.</p>
+
+    <h3>3b · Variant B — bestemmingen (zoals de overdracht voorschrijft)</h3>
+    <div class="scroll"><div class="frame w1366">
+      <div class="kopbalk">
+        <svg class="logo" style="width:80px" role="img" aria-label="leer.nu"><use href="#lockup"/></svg>
+        <div class="kop-rechts">
+          <span class="sterren">1.148 <small>sterren</small></span>
+          <img class="held" src="beelden/vos-zilver.png" alt="">
+          <span class="naam">Sofie</span>
+        </div>
+      </div>
+      <div class="body">
+        <nav class="rail b" aria-label="Waar je heen kunt">
+          <span class="railitem aan"><span class="plaat"><svg class="ico"><use href="#i-vandaag"/></svg></span>Vandaag</span>
+          <span class="railitem"><span class="plaat"><svg class="ico"><use href="#i-oefenen"/></svg></span>Oefenen</span>
+          <span class="railitem"><span class="plaat"><svg class="ico"><use href="#i-helden"/></svg></span>Helden</span>
+          <span class="railitem"><span class="plaat"><svg class="ico"><use href="#i-jij"/></svg></span>Jij</span>
+        </nav>
+        <div class="inhoud">
+          <div class="blok kop">Zaterdag</div>
+          <div class="blok"></div>
+          <div class="raster"><div class="blok"></div><div class="blok"></div><div class="blok"></div><div class="blok"></div></div>
+        </div>
+      </div>
+    </div></div>
+    <p class="schaal-note">Dezelfde vier als de tabbalk op de telefoon, zodat een kind op elk apparaat dezelfde plekken ziet. De vakken staan dan op Oefenen (S3 Vakmenu). Woorden onder de platen zijn een voorstel: het tekenbord heeft ze niet, maar vier bestemmingen herken je minder snel dan zeven vakken.</p>
+
+    <h3>3c · Tablet liggend (1024)</h3>
+    <div class="scroll"><div class="frame w1024">
+      <div class="kopbalk">
+        <svg class="logo" style="width:80px" role="img" aria-label="leer.nu"><use href="#lockup"/></svg>
+        <div class="kop-rechts">
+          <span class="sterren">1.148 <small>sterren</small></span>
+          <img class="held" src="beelden/vos-zilver.png" alt="">
+          <span class="naam">Sofie</span>
+        </div>
+      </div>
+      <div class="body" style="height:360px">
+        <nav class="rail" aria-label="Vakken">
+          <span class="plaat aan"><svg class="ico"><use href="#i-topo"/></svg></span>
+          <span class="plaat"><svg class="ico"><use href="#i-tafels"/></svg></span>
+          <span class="plaat"><svg class="ico"><use href="#i-klok"/></svg></span>
+          <span class="plaat"><svg class="ico"><use href="#i-woorden"/></svg></span>
+          <span class="plaat"><svg class="ico"><use href="#i-vlaggen"/></svg></span>
+        </nav>
+        <div class="inhoud">
+          <div class="blok kop">Zaterdag</div>
+          <div class="raster"><div class="blok"></div><div class="blok"></div><div class="blok"></div></div>
+        </div>
+      </div>
+    </div></div>
+    <p class="schaal-note">Zelfde rail, maar platen 48 omdat er met een vinger gewezen wordt; marge 24, raster 3 kolommen, 48 boven de kop. Sterren en naam blijven.</p>
+
+    <table>
+      <tr><th></th><th>Ontwerp</th><th>Nu live</th></tr>
+      <tr class="diff"><td>Breedte</td><td>88</td><td>96</td></tr>
+      <tr class="diff"><td>Vanaf</td><td>1024 breed (tablet liggend en groter)</td><td>1200 breed; daaronder een uitklapmenu “Vakken” onder de kopbalk</td></tr>
+      <tr class="diff"><td>Inhoud</td><td>Tekenbord: 7 vakken · overdracht: de 4 bestemmingen (K1)</td><td>5 vakken: Topo, Rekenen, Taal, Klok, Vlaggen</td></tr>
+      <tr class="diff"><td>Plaat</td><td>40×40, radius 6; 48×48 op de tablet</td><td>36×36 in een knop van minstens 72 hoog</td></tr>
+      <tr class="diff"><td>Tussenruimte</td><td>12</td><td>6</td></tr>
+      <tr class="diff"><td>Woorden</td><td>Geen</td><td>Naam van het vak onder de plaat</td></tr>
+      <tr class="diff"><td>Actief</td><td>Plaat in de tint van het vak</td><td>Hele knop in de tint, plaat wordt papier, woord in accentinkt</td></tr>
+      <tr class="same"><td>Icoon</td><td>18, inkt, lijn 2, ronde kappen</td><td>20, zelfde tekenstijl</td></tr>
+      <tr class="same"><td>In een ronde</td><td>Weg, niet gedimd</td><td>Weg, niet gerenderd</td></tr>
+    </table>
+  </section>
+
+  <!-- ================================================================ -->
+  <section id="tabbalk">
+    <div class="nr">4</div>
+    <h2>Tabbalk (telefoon en tablet staand)</h2>
+    <p>Onder 1024 breed vervalt de rail en staan de vier bestemmingen onderaan, waar de duim is. 72 px hoog, papier, haarlijn boven, gelijk verdeeld. Elk item minstens 56 breed, icoon 24, woord Public Sans 13/16. Actief: 600 in inkt; anders 400 in <code>#525953</code>, icoon in <code>#666C67</code>.</p>
+
+    <div class="row">
+      <div>
+        <div class="label">393 · telefoon, S2</div>
+        <div class="frame w393">
+          <div class="kopbalk">
+            <svg class="logo" style="width:72px" role="img" aria-label="leer.nu"><use href="#lockup"/></svg>
+            <div class="kop-rechts">
+              <span class="sterren">1.148</span>
+              <img class="held" src="beelden/vos-zilver.png" alt="">
+            </div>
+          </div>
+          <div class="body">
+            <div class="inhoud">
+              <div class="blok kop">Zaterdag</div>
+              <div class="raster"><div class="blok"></div><div class="blok"></div><div class="blok"></div></div>
+            </div>
+            <nav class="tabbalk" aria-label="Waar je heen kunt">
+              <span class="tab aan"><svg class="ico"><use href="#i-vandaag"/></svg>Vandaag</span>
+              <span class="tab"><svg class="ico"><use href="#i-oefenen"/></svg>Oefenen</span>
+              <span class="tab"><svg class="ico"><use href="#i-helden"/></svg>Helden</span>
+              <span class="tab"><svg class="ico"><use href="#i-jij"/></svg>Jij</span>
+            </nav>
+          </div>
+        </div>
+      </div>
+      <div style="flex:1;min-width:320px">
+        <table>
+          <tr><th></th><th>Ontwerp</th><th>Nu live</th></tr>
+          <tr class="diff"><td>Vanaf</td><td>Onder 1024</td><td>Onder 1200</td></tr>
+          <tr class="diff"><td>Hoogte</td><td>72</td><td>64, 68 vanaf 768</td></tr>
+          <tr class="diff"><td>Items</td><td>Vandaag · Oefenen · Helden/Verzameling · Jij (K2)</td><td>Vandaag · Onthouden · Jij (Vrienden nog niet gebouwd)</td></tr>
+          <tr class="diff"><td>Iconen</td><td>Zon · ruit · medaille · persoon</td><td>Zon · vriezer · (familie) · leerling</td></tr>
+          <tr class="diff"><td>Woord</td><td>13/16; actief 600</td><td>13–15; actief 700</td></tr>
+          <tr class="diff"><td>Actief</td><td>Alleen gewicht en inkt</td><td>Inktstreep boven + vlak in de inzetkleur + 700</td></tr>
+          <tr class="diff"><td>Vakken</td><td>Via Oefenen (S3)</td><td>Uitklapmenu “Vakken” onder de kopbalk</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <section id="wanneer">
+    <div class="nr">5</div>
+    <h2>Welke navigatie op welke maat</h2>
+    <p>Regel uit de overdracht: <strong>rail of tabbalk, nooit beide</strong>, en elke pagina heeft precies één kopbalk.</p>
+    <table>
+      <tr><th>Breedte</th><th>Ontwerp</th><th>Nu live</th></tr>
+      <tr><td>1366 en breder</td><td>Kopbalk + rail 88, marge 32, raster 4</td><td class="diff">Kopbalk met bestemmingen + rail 96 (twee navigaties)</td></tr>
+      <tr><td>1024 liggend</td><td>Kopbalk + rail 88 (platen 48), marge 24, raster 3</td><td class="diff">Kopbalk + uitklapmenu Vakken + tabbalk</td></tr>
+      <tr><td>768 staand</td><td>Kopbalk + tabbalk 72, kaarten 2 naast elkaar</td><td class="diff">Kopbalk + uitklapmenu Vakken + tabbalk</td></tr>
+      <tr><td>393 telefoon</td><td>Kopbalk + tabbalk 72, marge 16</td><td class="diff">Kopbalk + uitklapmenu Vakken + tabbalk</td></tr>
+      <tr><td>Tijdens een ronde</td><td>Geen kopbalk-navigatie, geen rail, geen tabbalk</td><td class="same">Zelfde</td></tr>
+    </table>
+  </section>
+
+  <!-- ================================================================ -->
+  <section id="keuzes">
+    <div class="nr">6</div>
+    <h2>Keuzes voordat er gebouwd wordt</h2>
+    <p>Kruis per keuze een optie aan, of schrijf eronder wat je anders wilt. De eerste optie is steeds wat het ontwerp zegt.</p>
+
+    <div class="keuze">
+      <h3>K1 · Wat staat er in de rail?</h3>
+      <div class="opties">
+        <div class="optie"><span class="vak"></span><span><strong>Vakken</strong> (variant A) — zoals het tekenbord van Stap 2. Dan staan de bestemmingen op de laptop nergens, want de kopbalk heeft geen tabs meer.</span></div>
+        <div class="optie"><span class="vak"></span><span><strong>Bestemmingen</strong> (variant B) — zoals de overdracht voorschrijft (README, open punt 2). Zelfde vier als op de telefoon; vakken via Oefenen.</span></div>
+        <div class="optie"><span class="vak"></span><span><strong>Laten zoals nu</strong> — vakken in de rail, bestemmingen als woorden in de kopbalk. Houdt twee navigaties.</span></div>
+      </div>
+      <div class="jouw">Jouw keuze / opmerking:</div>
+    </div>
+
+    <div class="keuze">
+      <h3>K2 · Hoe heet de derde bestemming?</h3>
+      <div class="opties">
+        <div class="optie"><span class="vak"></span><span><strong>Helden</strong> — zoals in de tabbalk van het tekenbord.</span></div>
+        <div class="optie"><span class="vak"></span><span><strong>Verzameling</strong> — zoals de README voorschrijft (en S11 heet).</span></div>
+        <div class="optie"><span class="vak"></span><span><strong>Onthouden</strong> — zoals nu live, als tweede bestemming.</span></div>
+      </div>
+      <div class="jouw">Jouw keuze / opmerking:</div>
+    </div>
+
+    <div class="keuze">
+      <h3>K3 · Wat staat rechts in de kopbalk?</h3>
+      <div class="opties">
+        <div class="optie"><span class="vak"></span><span><strong>Sterren + held</strong> (+ naam op de voordeur) — ontwerp.</span></div>
+        <div class="optie"><span class="vak"></span><span><strong>Reeks + held + naam</strong> — zoals nu.</span></div>
+        <div class="optie"><span class="vak"></span><span><strong>Sterren, reeks én held</strong> — beide getallen.</span></div>
+      </div>
+      <div class="jouw">Jouw keuze / opmerking:</div>
+    </div>
+
+    <div class="keuze">
+      <h3>K4 · Woorden en actieve staat in de rail</h3>
+      <div class="opties">
+        <div class="optie"><span class="vak"></span><span><strong>Geen woorden, actief alleen de tint</strong> — letterlijk het tekenbord.</span></div>
+        <div class="optie"><span class="vak"></span><span><strong>Geen woorden, actief tint + inktrand</strong> — tekenbord plus vormregel 4 (kleur nooit als enige drager). Mijn advies.</span></div>
+        <div class="optie"><span class="vak"></span><span><strong>Woorden eronder</strong> — zoals nu, en zoals variant B.</span></div>
+      </div>
+      <div class="jouw">Jouw keuze / opmerking:</div>
+    </div>
+
+    <div class="keuze">
+      <h3>K5 · Vanaf welke breedte de rail?</h3>
+      <div class="opties">
+        <div class="optie"><span class="vak"></span><span><strong>1024</strong> — ontwerp: tablet liggend krijgt de rail, staand de tabbalk. Het uitklapmenu “Vakken” verdwijnt.</span></div>
+        <div class="optie"><span class="vak"></span><span><strong>1200</strong> — zoals nu.</span></div>
+      </div>
+      <div class="jouw">Jouw keuze / opmerking:</div>
+    </div>
+
+    <div class="keuze">
+      <h3>K6 · Logo in de balk</h3>
+      <div class="opties">
+        <div class="optie"><span class="vak"></span><span><strong>Lockup op elke maat</strong> (20 / 18 px) — ontwerp.</span></div>
+        <div class="optie"><span class="vak"></span><span><strong>Woordbeeld op laptop, merkteken alleen daaronder</strong> — zoals nu.</span></div>
+      </div>
+      <div class="jouw">Jouw keuze / opmerking:</div>
+    </div>
+
+    <div class="keuze">
+      <h3>K7 · Modulepagina: vak in plaats van logo?</h3>
+      <div class="opties">
+        <div class="optie"><span class="vak"></span><span><strong>Ja</strong> — plaat + naam van het vak links, terug-pijl op de telefoon (ontwerp S4).</span></div>
+        <div class="optie"><span class="vak"></span><span><strong>Nee</strong> — logo blijft, het vak staat alleen in de pagina (zoals nu).</span></div>
+      </div>
+      <div class="jouw">Jouw keuze / opmerking:</div>
+    </div>
+  </section>
+</div>
+</body>
+</html>
