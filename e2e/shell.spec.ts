@@ -150,8 +150,10 @@ test('keeps the wordmark and the question legible at 200% text', async ({ page }
       }
       return false;
     };
+    // The parts of a drawing are named by the drawing, not one by one.
+    const drawn = (el: Element) => el.tagName.toLowerCase() !== 'svg' && el.closest('svg') !== null;
     return [...document.querySelectorAll('body *')]
-      .filter((el) => el.getBoundingClientRect().right > edge && !heldBack(el))
+      .filter((el) => el.getBoundingClientRect().right > edge && !heldBack(el) && !drawn(el))
       .slice(0, 12)
       .map((el) => {
         const name = [el.tagName.toLowerCase(), ...el.classList].join('.');
