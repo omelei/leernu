@@ -126,7 +126,7 @@ function optiesVoor(tijd: KlokItem, rng: () => number): KlokItem[] {
  * switch the other two modules carry and the same argument (ADR-085).
  *
  * @param alleen "Herhaal je fouten": the ids of the faces the last round got
- *   wrong, which are then the whole round (ADR-110). Null for a normal round.
+ *   wrong, which are then the whole round (ADR-111). Null for a normal round.
  */
 export function useKlokRound(
   setId: string,
@@ -152,7 +152,7 @@ export function useKlokRound(
       // stopwatch is one who can already read the thing.
       const eigen = rule.kind === 'fixed' ? loaded.items : klokPool(setId);
       // "Herhaal je fouten": the last round's misses and nothing else, from
-      // the whole face if the round reached that far (ADR-110).
+      // the whole face if the round reached that far (ADR-111).
       const alles = alleen ? alleenDeze(alleen, loaded.items, klokPool(setId)) : eigen;
       // "Oefen je fouten": only the faces with a mistake against them, read
       // from the boxes as the round starts (ADR-103).

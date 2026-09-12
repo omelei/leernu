@@ -97,7 +97,7 @@ function samengesteld(): VlagSet[] {
 
   // Home first, then the row's own order. The page no longer opens on a set
   // when the address names none, and it opens on the world rather than on
-  // home (`eersteRegio`, ADR-110); this order is only the order of the list.
+  // home (`eersteRegio`, ADR-111); this order is only the order of the list.
   const thuisEerst = ['nederland', ...VLAG_REGIOS.filter((regio) => regio !== 'nederland')];
 
   for (const regio of thuisEerst as VlagRegio[]) {

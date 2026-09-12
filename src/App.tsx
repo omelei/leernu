@@ -58,7 +58,7 @@ type Screen =
       practiceMode: PracticeMode;
       aantal: number | null;
       toetsstand: boolean;
-      /** "Herhaal je fouten": the only items this round asks (ADR-110). */
+      /** "Herhaal je fouten": the only items this round asks (ADR-111). */
       alleen: readonly string[] | null;
     }
   | { name: 'explore'; setId: SetId }
@@ -204,7 +204,7 @@ export default function App() {
   };
 
   /**
-   * "Herhaal je fouten" (ADR-110): the same set straight away, asking what the
+   * "Herhaal je fouten" (ADR-111): the same set straight away, asking what the
    * round just finished got wrong and nothing else — as practice, with the
    * answers shown, in a way that has a length (`round/herhaal.ts`).
    */

@@ -8,7 +8,7 @@ import { PremiumLabel } from '@/features/module/PremiumLabel';
  * Beside "Nog een ronde" rather than instead of it, and secondary: another
  * round is still the way on, and this is the shorter way back over what just
  * went wrong — exactly those, straight away, while the child still remembers
- * getting them wrong (ADR-110). Premium, like the list of mistakes on the
+ * getting them wrong (ADR-111). Premium, like the list of mistakes on the
  * module page; the label is there before the account is.
  */
 export function HerhaalFouten({

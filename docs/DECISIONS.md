@@ -4989,7 +4989,7 @@ it.
 
 ---
 
-## ADR-110 — The chooser answers nothing for the child; premium is labelled before it is locked
+## ADR-111 — The chooser answers nothing for the child; premium is labelled before it is locked
 
 **Status:** accepted. **Date:** 2026-09-12. Asked for by the product owner.
 

@@ -453,7 +453,7 @@ export interface RoundState {
  *   "the answers come at the end" can be done to pointing, to choosing and to
  *   typing alike, and step 2 holds six at most (ADR-085).
  * @param alleen "Herhaal je fouten": the ids of the items the last round got
- *   wrong, which are then the whole round (ADR-110). Null for a normal round.
+ *   wrong, which are then the whole round (ADR-111). Null for a normal round.
  */
 export function useRound(
   setId: RoundSetId,
@@ -559,7 +559,7 @@ export function useRound(
         // The rest of the map stays loaded and named: a child who points at
         // the wrong province is still told which one it was.
         // "Herhaal je fouten" asks the last round's misses and nothing else
-        // (ADR-110), with the same map loaded behind them.
+        // (ADR-111), with the same map loaded behind them.
         const vraagbaar = alleen
           ? alleenDeze(alleen, all)
           : isFoutenSet(setId)

@@ -78,7 +78,7 @@ export function regiosVan(moduleId: Module['id']): readonly Regio[] {
  * widest first, the way an atlas is; the page opens where a Dutch child starts,
  * which is home.
  *
- * Flags open on the world (ADR-110). Nederland on the flags page is the twelve
+ * Flags open on the world (ADR-111). Nederland on the flags page is the twelve
  * provincievlaggen, and a child who comes for flags comes for the countries'.
  */
 export function eersteRegio(moduleId: Module['id'], regios: readonly Regio[]): Regio['id'] | null {

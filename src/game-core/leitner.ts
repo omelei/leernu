@@ -243,7 +243,7 @@ export function metFouten<T extends Schedulable>(
  * Exactly these items, once each, in the order asked — from whichever of the
  * lists holds them.
  *
- * What "Herhaal je fouten" asks after a round (ADR-110): the misses of that
+ * What "Herhaal je fouten" asks after a round (ADR-111): the misses of that
  * round and nothing else. More than one list because a round that ran on a
  * clock or on lives reached past its own set, and its misses came with it. An
  * id no list holds any more is dropped rather than asked as nothing.

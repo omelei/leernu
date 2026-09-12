@@ -661,7 +661,7 @@
     color: var(--accent-text);
   }
   /* Not yet: which numbered steps still wait, where the chips will be, and the
-   * Start button beside it switched off (ADR-110). */
+   * Start button beside it switched off (ADR-111). */
   .tk-startbalk-nog {
     margin: 12px 0 0;
     color: var(--tekst-secundair);
@@ -2443,7 +2443,7 @@
     color: var(--accent-text);
   }
 
-  /* Premium (ADR-110): what will need an account, said on the tile before there
+  /* Premium (ADR-111): what will need an account, said on the tile before there
    * is one. The quiet badge's look — ink on paper, a rule round it — at a
    * label's size, so it reads as a fact about the tile and not as one more
    * thing on it to press. At the end of a tile, with the tick after it. */

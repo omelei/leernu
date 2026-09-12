@@ -2,7 +2,7 @@ import type { ModeId } from '@/game-core';
 import { t } from '@/i18n';
 
 /**
- * What will need an account, marked before there is one (ADR-110).
+ * What will need an account, marked before there is one (ADR-111).
  *
  * Four things: the bliksemronde, the diplomas, the oefentoets, and every way of
  * going back over your own mistakes — the "Oefen je fouten" subject and

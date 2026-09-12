@@ -106,7 +106,7 @@ function optieAantal(set: VlagSet, richting: VlagRichting): number {
 
 /**
  * @param alleen "Herhaal je fouten": the ids of the flags the last round got
- *   wrong, which are then the whole round (ADR-110). Null for a normal round.
+ *   wrong, which are then the whole round (ADR-111). Null for a normal round.
  */
 export function useVlagRound(
   setId: string,
@@ -128,7 +128,7 @@ export function useVlagRound(
       if (!set) throw new Error(`Onbekende vlaggenset: ${setId}`);
 
       const eigen = rule.kind === 'fixed' ? set.items : vlagPool(setId);
-      // "Herhaal je fouten": the last round's misses and nothing else (ADR-110).
+      // "Herhaal je fouten": the last round's misses and nothing else (ADR-111).
       const basis = alleen ? alleenDeze(alleen, set.items, vlagPool(setId)) : eigen;
       const pool = isVlagFouten(setId) && !alleen ? metFouten(basis, states) : basis;
 

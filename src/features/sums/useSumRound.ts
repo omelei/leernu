@@ -126,7 +126,7 @@ function optionsFor(sum: SumItem, rng: () => number): number[] {
  *   child who has only ever practised with the answer arriving half a second
  *   later has practised something no test will ask of them.
  * @param alleen "Herhaal je fouten": the ids of the sums the last round got
- *   wrong, which are then the whole round (ADR-110). Null for a normal round.
+ *   wrong, which are then the whole round (ADR-111). Null for a normal round.
  */
 export function useSumRound(
   setId: string,
@@ -156,7 +156,7 @@ export function useSumRound(
       const eigen = rule.kind === 'fixed' ? loaded.items : sumPool(setId);
       // "Herhaal je fouten" is what the last round got wrong and nothing else,
       // wherever it came from: a minute of tables reaches past the chosen one
-      // (ADR-110).
+      // (ADR-111).
       const alles = alleen ? alleenDeze(alleen, loaded.items, sumPool(setId)) : eigen;
       // "Oefen je fouten" is every sum this child has ever had wrong, in the
       // scheduler's order, which puts the ones they keep missing first. Read

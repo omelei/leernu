@@ -3,7 +3,7 @@ import { isPremiumOnderwerp, isPremiumVorm, metPremium } from './premium';
 import { eersteRegio, TOPO_REGIOS } from './regios';
 
 /**
- * What will need an account, marked before there is one (ADR-110), and the
+ * What will need an account, marked before there is one (ADR-111), and the
  * map each page opens on.
  */
 describe('premium', () => {

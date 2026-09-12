@@ -4,7 +4,7 @@ import { KLOK_ROUND_RULE, type KlokMode } from '@/features/klok/useKlokRound';
 import { VLAG_ROUND_RULE, type VlagMode } from '@/features/vlaggen/useVlagRound';
 
 /**
- * Which way "Herhaal je fouten" asks in (ADR-110).
+ * Which way "Herhaal je fouten" asks in (ADR-111).
  *
  * The same way the round was asked, if that way has a length: three misses
  * are three questions. A minute and three lives have no length, and a diploma

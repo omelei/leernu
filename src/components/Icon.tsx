@@ -718,7 +718,7 @@ export function LandIcon(props: Omit<IconProps, 'children'>) {
 /**
  * A grid: the flags that look alike, laid side by side. It was the tables' mark
  * until the tables took the sign itself (ADR-100), and the keersommen' until
- * they took it in turn (ADR-110).
+ * they took it in turn (ADR-111).
  */
 export function GridIcon(props: Omit<IconProps, 'children'>) {
   return (
@@ -811,7 +811,7 @@ export function MinuutIcon(props: Omit<IconProps, 'children'>) {
 
 /**
  * Keersommen: the times sign, the one the sums themselves are written with.
- * It was the tables' mark until the tables got a table (ADR-110).
+ * It was the tables' mark until the tables got a table (ADR-111).
  *
  * An operator beside `PlusIcon` rather than `WrongIcon` again: the plus's two
  * strokes at the plus's length, turned an eighth, so the rekenen row reads
@@ -832,7 +832,7 @@ export function KeerIcon(props: Omit<IconProps, 'children'>) {
  *
  * The pun is the point. A child who cannot read "tafels" yet knows what a tafel
  * looks like, and the times sign went to the keersommen beside it, which are
- * the sums past the tables that the sign is left to name (ADR-110). The top is
+ * the sums past the tables that the sign is left to name (ADR-111). The top is
  * a slab rather than one line, so at 20px it is still a table and not
  * `MinIcon` on legs.
  */

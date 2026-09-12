@@ -441,7 +441,7 @@ export const nl = {
   'start.nogKiezen': 'Nog even kiezen',
   'start.kiesNogStap': 'Kies nog bij stap {stap}',
   'start.kiesNogStappen': 'Kies nog bij stap {stappen} en {laatste}',
-  // Wat straks alleen met een account kan (ADR-110). Het label staat er al; de
+  // Wat straks alleen met een account kan (ADR-111). Het label staat er al; de
   // functie werkt nog voor iedereen, want inloggen bestaat nog niet.
   'premium.label': 'Premium',
 
@@ -785,7 +785,7 @@ export const nl = {
   'result.gainedMany': '{aantal} vragen meer die je nu onthoudt.',
   'result.gainedNone': 'Nog niets erbij. Deze komen morgen terug.',
   'result.again': 'Nog een ronde',
-  // Alleen wat er in deze ronde fout ging, meteen nog een keer (ADR-110).
+  // Alleen wat er in deze ronde fout ging, meteen nog een keer (ADR-111).
   'result.herhaalFouten': 'Herhaal je fouten',
 
   // K10. Twee schakelaars in plaats van drie: de leesmodus verviel (ADR-025).

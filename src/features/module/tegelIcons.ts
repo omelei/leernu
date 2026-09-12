@@ -87,7 +87,7 @@ export const ONDERWERP_ICON: Record<string, TileIcon> = {
   'oceanie-landen': LandIcon,
   'wereld-landen': LandIcon,
   // Rekenen. The kinds of sum are their own sign, × : + −, and the tables are a
-  // table: the word a child already knows the picture of (ADR-110).
+  // table: the word a child already knows the picture of (ADR-111).
   tafels: TafelIcon,
   keer: KeerIcon,
   delen: DeelIcon,

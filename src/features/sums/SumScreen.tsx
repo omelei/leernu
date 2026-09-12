@@ -50,7 +50,7 @@ export function SumScreen({
   readonly toetsstand?: boolean;
   readonly onHome: () => void;
   readonly onAgain: () => void;
-  /** "Herhaal je fouten": the ids this round asks and nothing else (ADR-110). */
+  /** "Herhaal je fouten": the ids this round asks and nothing else (ADR-111). */
   readonly alleen?: readonly string[] | null;
   readonly onHerhaal: (ids: readonly string[]) => void;
 }) {

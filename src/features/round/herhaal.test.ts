@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { herhaalKaartVorm, herhaalKlokVorm, herhaalSomVorm, herhaalVlagVorm } from './herhaal';
 
-/** "Herhaal je fouten" asks in a way that has a length, as practice (ADR-110). */
+/** "Herhaal je fouten" asks in a way that has a length, as practice (ADR-111). */
 describe('the way a repeat of the mistakes is asked', () => {
   it('keeps a way that has a length', () => {
     expect(herhaalKaartVorm('hoe-heet-dit')).toBe('hoe-heet-dit');

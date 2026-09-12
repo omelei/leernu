@@ -61,7 +61,7 @@ import { useSmallScreen } from '@/features/shell/useSmallScreen';
  * second question is the keypad. Klokkijken has no where and one set per
  * subject, so it asks two things. The steps are numbered by the page.
  *
- * **Nothing is answered for the child** (ADR-110). The page used to open with
+ * **Nothing is answered for the child** (ADR-111). The page used to open with
  * the first subject, its first set and the first way already pressed, so the
  * start bar was full before a question had been answered. Now only the map has
  * a default — Nederland, or the world on the flags page — and an address that
@@ -186,7 +186,7 @@ export function ModuleScreen({
   // The ways that are tiles. A way only the oefentoets asks in is reached by
   // pressing the oefentoets, and never offered beside it (ADR-102).
   const tegels = forms.filter((candidate) => !candidate.alleenToets);
-  // No way until one is pressed (ADR-110).
+  // No way until one is pressed (ADR-111).
   const gekozenManier = tegels.find((candidate) => candidate.id === formId) ?? null;
   // The oefentoets is a way of its own (ADR-100). It answers the way a test
   // asks, by typing, and hears back only at the end — so pressing it chooses
@@ -389,7 +389,7 @@ export function ModuleScreen({
                   // A subject with one set chooses it. One whose sets are a
                   // second question opens that question and chooses nothing
                   // yet: the table of one is not what a child who pressed
-                  // "Tafels" asked for (ADR-110). Pressed again while open it
+                  // "Tafels" asked for (ADR-111). Pressed again while open it
                   // does nothing, so a chosen table of seven stays chosen.
                   onClick={() => {
                     if (open) return;
