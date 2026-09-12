@@ -290,8 +290,6 @@ export function tekenvolgorde<
 >(shapes: readonly T[], zones: ReadonlyMap<string, unknown>): T[] {
   const grootte = (shape: T) => shape.oppervlak ?? boxWidth(shape.bbox) * boxHeight(shape.bbox);
   const zonder = shapes.filter((shape) => !zones.has(shape.id));
-  const met = shapes
-    .filter((shape) => zones.has(shape.id))
-    .sort((a, b) => grootte(b) - grootte(a));
+  const met = shapes.filter((shape) => zones.has(shape.id)).sort((a, b) => grootte(b) - grootte(a));
   return [...zonder, ...met];
 }
