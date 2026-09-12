@@ -1,0 +1,290 @@
+{
+  "_uitleg": "Redactie voor de vlaggen van Azië. Cyprus staat in europa.json: het staat op beide kaarten, maar de tekst hoort op één plek. Hoofdsteden volgen de VN (UNdata).",
+  "landen": {
+    "AF": {
+      "klasse": "normaal",
+      "hoofdstad": "Kabul",
+      "beschrijving": "Drie staande banen: zwart, rood en groen, met een wit wapen in het midden.",
+      "weetje": "Zwart staat voor het verleden, rood voor de strijd en groen voor de toekomst."
+    },
+    "AM": {
+      "klasse": "normaal",
+      "hoofdstad": "Jerevan",
+      "beschrijving": "Drie liggende banen: rood, blauw en oranje.",
+      "weetje": "Oranje staat voor het harde werk van de mensen."
+    },
+    "AZ": {
+      "klasse": "normaal",
+      "hoofdstad": "Bakoe",
+      "beschrijving": "Liggend blauw, rood en groen, met een witte halve maan en een ster.",
+      "weetje": "De ster naast de halve maan heeft acht punten."
+    },
+    "BH": {
+      "klasse": "lastig",
+      "hoofdstad": "Manama",
+      "beschrijving": "Wit aan de stokkant en rood, met een kartelrand van vijf punten.",
+      "weetje": "De vijf witte punten staan voor de vijf zuilen van de islam."
+    },
+    "BD": {
+      "klasse": "normaal",
+      "hoofdstad": "Dhaka",
+      "beschrijving": "Donkergroen met een rood rondje dat iets naar de stokkant staat.",
+      "weetje": "Het rondje staat een beetje naar links, zodat het in het midden lijkt als de vlag wappert."
+    },
+    "BT": {
+      "klasse": "lastig",
+      "hoofdstad": "Thimphu",
+      "beschrijving": "Schuin verdeeld in geel en oranje, met een witte draak.",
+      "weetje": "Het land heet ook het land van de donderdraak; daarom staat er een draak op."
+    },
+    "BN": {
+      "klasse": "lastig",
+      "hoofdstad": "Bandar Seri Begawan",
+      "beschrijving": "Geel met schuine witte en zwarte banen en een rood wapen.",
+      "weetje": "Geel is de kleur van de sultan, de koning van het land."
+    },
+    "KH": {
+      "klasse": "normaal",
+      "hoofdstad": "Phnom Penh",
+      "beschrijving": "Blauw, een brede rode baan en blauw, met een witte tempel.",
+      "weetje": "De tempel is Angkor Wat, een van de grootste tempels ter wereld."
+    },
+    "CN": {
+      "klasse": "bekend",
+      "hoofdstad": "Peking",
+      "beschrijving": "Rood met linksboven een grote gele ster en vier kleine gele sterren.",
+      "weetje": "De vier kleine sterren staan in een boog rond de grote ster."
+    },
+    "PH": {
+      "klasse": "normaal",
+      "hoofdstad": "Manilla",
+      "beschrijving": "Blauw boven en rood onder, met een witte driehoek met een zon en drie sterren.",
+      "weetje": "In oorlogstijd hangt de vlag andersom, met rood boven."
+    },
+    "GE": {
+      "klasse": "normaal",
+      "hoofdstad": "Tbilisi",
+      "beschrijving": "Wit met een groot rood kruis en vier kleine rode kruisen.",
+      "weetje": "Er staan vijf kruisen op: één groot en vier kleine."
+    },
+    "IN": {
+      "klasse": "bekend",
+      "hoofdstad": "New Delhi",
+      "beschrijving": "Liggend oranje, wit en groen, met een blauw wiel in het midden.",
+      "weetje": "Het blauwe wiel heeft 24 spaken."
+    },
+    "ID": {
+      "klasse": "normaal",
+      "hoofdstad": "Jakarta",
+      "beschrijving": "Twee liggende banen: rood boven, wit onder.",
+      "weetje": "Hij lijkt precies op de vlag van Monaco; alleen de vorm is anders."
+    },
+    "IQ": {
+      "klasse": "normaal",
+      "hoofdstad": "Bagdad",
+      "beschrijving": "Liggend rood, wit en zwart, met groene Arabische letters in het midden.",
+      "weetje": "De groene letters betekenen 'God is groot'."
+    },
+    "IR": {
+      "klasse": "normaal",
+      "hoofdstad": "Teheran",
+      "beschrijving": "Liggend groen, wit en rood, met een rood teken in het midden.",
+      "weetje": "Langs de randen van de witte baan staat 22 keer dezelfde tekst."
+    },
+    "IL": {
+      "klasse": "normaal",
+      "hoofdstad": "Jeruzalem",
+      "hoofdstadNoot": "Zo noemt Israël het. De Verenigde Naties erkennen Jeruzalem niet als hoofdstad.",
+      "beschrijving": "Wit met twee liggende blauwe banen en een blauwe ster met zes punten.",
+      "weetje": "De ster is de Davidster, en de blauwe banen komen van een gebedsmantel."
+    },
+    "JP": {
+      "klasse": "bekend",
+      "hoofdstad": "Tokio",
+      "beschrijving": "Wit met een rood rondje in het midden.",
+      "weetje": "Het rode rondje is de zon: het land heet ook het land van de rijzende zon."
+    },
+    "YE": {
+      "klasse": "normaal",
+      "hoofdstad": "Sanaa",
+      "beschrijving": "Drie liggende banen: rood, wit en zwart.",
+      "weetje": "Het is de vlag van Egypte zonder de gouden adelaar."
+    },
+    "JO": {
+      "klasse": "normaal",
+      "hoofdstad": "Amman",
+      "beschrijving": "Liggend zwart, wit en groen, met een rode driehoek met een witte ster.",
+      "weetje": "De witte ster heeft zeven punten."
+    },
+    "KZ": {
+      "klasse": "normaal",
+      "hoofdstad": "Astana",
+      "beschrijving": "Lichtblauw met een gele zon, een vogel en een gouden patroon aan de stokkant.",
+      "weetje": "Onder de zon vliegt een steppearend."
+    },
+    "KG": {
+      "klasse": "normaal",
+      "hoofdstad": "Bisjkek",
+      "beschrijving": "Rood met een gele zon en daarin gekruiste lijnen.",
+      "weetje": "In de zon zie je het dak van een joert, een ronde tent van nomaden."
+    },
+    "KW": {
+      "klasse": "normaal",
+      "hoofdstad": "Koeweit-Stad",
+      "beschrijving": "Liggend groen, wit en rood, met een zwart vlak aan de stokkant.",
+      "weetje": "Het zwarte vlak is geen driehoek: het heeft vier hoeken."
+    },
+    "LA": {
+      "klasse": "normaal",
+      "hoofdstad": "Vientiane",
+      "beschrijving": "Rood, een brede blauwe baan en rood, met een wit rondje.",
+      "weetje": "Het witte rondje is de volle maan boven de rivier de Mekong."
+    },
+    "LB": {
+      "klasse": "normaal",
+      "hoofdstad": "Beiroet",
+      "beschrijving": "Rood, een brede witte baan en rood, met een groene boom.",
+      "weetje": "De boom is een ceder, die in de bergen van het land groeit."
+    },
+    "MY": {
+      "klasse": "normaal",
+      "hoofdstad": "Kuala Lumpur",
+      "hoofdstadNoot": "Het bestuur zit in Putrajaya.",
+      "beschrijving": "Rode en witte strepen, met een blauw vlak met een gele maan en ster.",
+      "weetje": "Er zijn veertien strepen, en de ster heeft veertien punten."
+    },
+    "MN": {
+      "klasse": "normaal",
+      "hoofdstad": "Ulaanbaatar",
+      "beschrijving": "Staand rood, blauw en rood, met een geel teken aan de stokkant.",
+      "weetje": "Het gele teken heet de soyombo en bevat vuur, een zon en een maan."
+    },
+    "MM": {
+      "klasse": "normaal",
+      "hoofdstad": "Naypyidaw",
+      "beschrijving": "Liggend geel, groen en rood, met een grote witte ster.",
+      "weetje": "De witte ster staat voor één land dat bij elkaar hoort."
+    },
+    "NP": {
+      "klasse": "normaal",
+      "hoofdstad": "Kathmandu",
+      "beschrijving": "Twee rode driehoeken boven elkaar met een blauwe rand, met een witte maan en een witte zon.",
+      "weetje": "Het is de enige vlag van een land die geen rechthoek is."
+    },
+    "KP": {
+      "klasse": "normaal",
+      "hoofdstad": "Pyongyang",
+      "beschrijving": "Blauw, een brede rode baan met witte randen, en een rode ster in een witte cirkel.",
+      "weetje": "De rode ster staat in een witte cirkel aan de stokkant."
+    },
+    "UZ": {
+      "klasse": "normaal",
+      "hoofdstad": "Tasjkent",
+      "beschrijving": "Liggend blauw, wit en groen met rode randen, en een witte maan met twaalf sterren.",
+      "weetje": "De twaalf sterren staan voor de twaalf maanden."
+    },
+    "OM": {
+      "klasse": "lastig",
+      "hoofdstad": "Muscat",
+      "beschrijving": "Een staande rode baan aan de stokkant, en wit, rood en groen, met een wapen met zwaarden.",
+      "weetje": "In het wapen zie je een dolk en twee gekruiste zwaarden."
+    },
+    "TL": {
+      "klasse": "lastig",
+      "hoofdstad": "Dili",
+      "beschrijving": "Rood met een gele en een zwarte driehoek en een witte ster.",
+      "weetje": "Het land bestaat pas sinds 2002 en is een van de jongste landen."
+    },
+    "PK": {
+      "klasse": "normaal",
+      "hoofdstad": "Islamabad",
+      "beschrijving": "Donkergroen met een witte baan aan de stokkant en een witte halve maan en ster.",
+      "weetje": "De witte baan staat voor de mensen in het land die geen moslim zijn."
+    },
+    "QA": {
+      "klasse": "normaal",
+      "hoofdstad": "Doha",
+      "beschrijving": "Wit aan de stokkant en bruinrood, met een kartelrand van negen punten.",
+      "weetje": "De vlag is meer dan twee keer zo lang als hij hoog is."
+    },
+    "SA": {
+      "klasse": "normaal",
+      "hoofdstad": "Riyad",
+      "beschrijving": "Groen met witte Arabische letters en een wit zwaard.",
+      "weetje": "Er staat een geloofsbelijdenis op, en daarom hangt deze vlag nooit halfstok."
+    },
+    "SG": {
+      "klasse": "normaal",
+      "hoofdstad": "Singapore",
+      "beschrijving": "Rood boven en wit onder, met een witte maan en vijf sterren.",
+      "weetje": "De vijf sterren staan in een cirkel."
+    },
+    "LK": {
+      "klasse": "normaal",
+      "hoofdstad": "Colombo",
+      "hoofdstadNoot": "Het parlement zit in Sri Jayawardenepura Kotte.",
+      "beschrijving": "Een gele leeuw met een zwaard op donkerrood, met een groene en een oranje baan aan de stokkant.",
+      "weetje": "De leeuw houdt een zwaard vast."
+    },
+    "SY": {
+      "klasse": "normaal",
+      "hoofdstad": "Damascus",
+      "beschrijving": "Liggend groen, wit en zwart, met drie rode sterren in het midden.",
+      "weetje": "Deze vlag werd in 2025 weer de vlag van het land, net als vroeger."
+    },
+    "TJ": {
+      "klasse": "lastig",
+      "hoofdstad": "Doesjanbe",
+      "beschrijving": "Rood, een brede witte baan en groen, met een gouden kroon en zeven sterren.",
+      "weetje": "Boven de kroon staan zeven sterren in een boog."
+    },
+    "TW": {
+      "klasse": "normaal",
+      "hoofdstad": "Taipei",
+      "beschrijving": "Rood met linksboven een blauw vlak met een witte zon met twaalf stralen.",
+      "weetje": "De witte zon heeft twaalf stralen, net zoveel als er maanden zijn."
+    },
+    "TH": {
+      "klasse": "normaal",
+      "hoofdstad": "Bangkok",
+      "beschrijving": "Rood, wit, een brede blauwe baan, wit en rood.",
+      "weetje": "Blauw in het midden is de kleur van de koning."
+    },
+    "TR": {
+      "klasse": "bekend",
+      "hoofdstad": "Ankara",
+      "beschrijving": "Rood met een witte halve maan en ster.",
+      "weetje": "Ook Tunesië en Azerbeidzjan hebben een halve maan en ster op hun vlag."
+    },
+    "TM": {
+      "klasse": "lastig",
+      "hoofdstad": "Asjchabad",
+      "beschrijving": "Groen met een rode staande baan vol patronen, en een witte maan met vijf sterren.",
+      "weetje": "In de rode baan staan vijf tapijtpatronen, want het land is beroemd om zijn tapijten."
+    },
+    "AE": {
+      "klasse": "normaal",
+      "hoofdstad": "Abu Dhabi",
+      "beschrijving": "Een staande rode baan aan de stokkant, en liggend groen, wit en zwart.",
+      "weetje": "Het land bestaat uit zeven emiraten, en ze delen deze ene vlag."
+    },
+    "VN": {
+      "klasse": "normaal",
+      "hoofdstad": "Hanoi",
+      "beschrijving": "Rood met een grote gele ster in het midden.",
+      "weetje": "De vijf punten van de ster staan voor vijf groepen mensen die samen het land opbouwen."
+    },
+    "KR": {
+      "klasse": "bekend",
+      "hoofdstad": "Seoel",
+      "beschrijving": "Wit met een rood-blauw rondje en vier zwarte tekens van streepjes.",
+      "weetje": "Het rondje is yin en yang: twee dingen die samen één geheel vormen."
+    },
+    "MV": {
+      "klasse": "lastig",
+      "hoofdstad": "Malé",
+      "beschrijving": "Rood met een groen vlak in het midden en een witte halve maan.",
+      "weetje": "Het groene vlak staat voor de palmbomen op de eilanden."
+    }
+  }
+}

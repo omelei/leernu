@@ -1,0 +1,143 @@
+{
+  "_uitleg": "Redactie voor de vlaggen van Noord-Amerika. Hoofdsteden volgen de VN (UNdata), de beschrijving noemt het land nooit, het weetje is één zin over kleuren of tekens.",
+  "landen": {
+    "AG": {
+      "klasse": "lastig",
+      "hoofdstad": "Saint John's",
+      "beschrijving": "Rood, met in het midden een driehoek van zwart, blauw en wit en een gele opkomende zon.",
+      "weetje": "De zon komt op boven de zee: het begin van een nieuwe tijd."
+    },
+    "BS": {
+      "klasse": "lastig",
+      "hoofdstad": "Nassau",
+      "beschrijving": "Liggend aquablauw, geel en aquablauw, met een zwarte driehoek aan de stokkant.",
+      "weetje": "Het aquablauw is de kleur van de zee rond de eilanden."
+    },
+    "BB": {
+      "klasse": "lastig",
+      "hoofdstad": "Bridgetown",
+      "beschrijving": "Staand blauw, goud en blauw, met een zwarte drietand in het midden.",
+      "weetje": "De drietand is de speer van Neptunus, de god van de zee."
+    },
+    "BZ": {
+      "klasse": "lastig",
+      "hoofdstad": "Belmopan",
+      "beschrijving": "Blauw met een rode rand boven en onder, en een wit rondje met een wapen.",
+      "weetje": "Op het wapen staan twee mensen; er zijn maar weinig vlaggen met mensen erop."
+    },
+    "CA": {
+      "klasse": "bekend",
+      "hoofdstad": "Ottawa",
+      "beschrijving": "Rood, een wit vierkant met een rood blad, en weer rood.",
+      "weetje": "Het blad komt van de esdoorn, een boom waar je siroop van maakt."
+    },
+    "CR": {
+      "klasse": "normaal",
+      "hoofdstad": "San José",
+      "beschrijving": "Blauw, wit, een brede rode baan, wit en blauw.",
+      "weetje": "Hij lijkt op de vlag van Thailand, maar blauw en rood hebben van plek geruild."
+    },
+    "CU": {
+      "klasse": "bekend",
+      "hoofdstad": "Havana",
+      "beschrijving": "Blauwe en witte strepen, met een rode driehoek met een witte ster.",
+      "weetje": "De drie blauwe strepen stonden voor de drie delen van het eiland."
+    },
+    "DM": {
+      "klasse": "lastig",
+      "hoofdstad": "Roseau",
+      "beschrijving": "Groen met een kruis van geel, zwart en wit, en een rode cirkel met een papegaai.",
+      "weetje": "De papegaai leeft nergens anders op de wereld dan op dit eiland."
+    },
+    "DO": {
+      "klasse": "normaal",
+      "hoofdstad": "Santo Domingo",
+      "beschrijving": "Een wit kruis met blauwe en rode vlakken en een wapen in het midden.",
+      "weetje": "In het wapen staat een bijbel; het is de enige vlag van een land met een bijbel erop."
+    },
+    "SV": {
+      "klasse": "normaal",
+      "hoofdstad": "San Salvador",
+      "beschrijving": "Liggend blauw, wit en blauw, met een wapen met vulkanen.",
+      "weetje": "In het wapen staan vijf vulkanen."
+    },
+    "GD": {
+      "klasse": "lastig",
+      "hoofdstad": "Saint George's",
+      "beschrijving": "Een rode rand met zes sterren, gele en groene vlakken, en een nootmuskaat.",
+      "weetje": "Op de vlag staat een nootmuskaat, een specerij die op het eiland groeit."
+    },
+    "GT": {
+      "klasse": "normaal",
+      "hoofdstad": "Guatemala-Stad",
+      "beschrijving": "Staand lichtblauw, wit en lichtblauw, met een wapen met een vogel.",
+      "weetje": "De vogel is een quetzal, en zo heet ook het geld van het land."
+    },
+    "HT": {
+      "klasse": "normaal",
+      "hoofdstad": "Port-au-Prince",
+      "beschrijving": "Blauw boven en rood onder, met een wapen met een palmboom.",
+      "weetje": "Een verhaal zegt dat het wit uit de Franse vlag werd geknipt, en dat blauw en rood overbleven."
+    },
+    "HN": {
+      "klasse": "normaal",
+      "hoofdstad": "Tegucigalpa",
+      "beschrijving": "Liggend blauw, wit en blauw, met vijf blauwe sterren in het midden.",
+      "weetje": "De vijf sterren staan voor vijf landen die ooit één land waren."
+    },
+    "JM": {
+      "klasse": "bekend",
+      "hoofdstad": "Kingston",
+      "beschrijving": "Een geel schuin kruis, met groene vlakken boven en onder en zwarte opzij.",
+      "weetje": "Het is de enige vlag van een land zonder rood, wit of blauw."
+    },
+    "MX": {
+      "klasse": "bekend",
+      "hoofdstad": "Mexico-Stad",
+      "beschrijving": "Staand groen, wit en rood, met in het midden een adelaar die een slang eet.",
+      "weetje": "Een oud verhaal zegt dat de stad gebouwd moest worden waar een adelaar op een cactus een slang at."
+    },
+    "NI": {
+      "klasse": "normaal",
+      "hoofdstad": "Managua",
+      "beschrijving": "Liggend blauw, wit en blauw, met een driehoek met vulkanen en een regenboog.",
+      "weetje": "In het wapen staat een regenboog, dus er zit ook paars in de vlag."
+    },
+    "PA": {
+      "klasse": "normaal",
+      "hoofdstad": "Panama-Stad",
+      "beschrijving": "Vier vakken: wit met een blauwe ster, rood, blauw, en wit met een rode ster.",
+      "weetje": "De vlag bestaat uit vier vakken, net als een raam."
+    },
+    "KN": {
+      "klasse": "lastig",
+      "hoofdstad": "Basseterre",
+      "beschrijving": "Een schuine zwarte baan met gele randen en twee witte sterren, tussen groen en rood.",
+      "weetje": "De twee witte sterren staan voor hoop en vrijheid."
+    },
+    "LC": {
+      "klasse": "lastig",
+      "hoofdstad": "Castries",
+      "beschrijving": "Lichtblauw met een zwarte en een gele driehoek met een witte rand.",
+      "weetje": "De driehoeken lijken op twee spitse bergen op het eiland."
+    },
+    "VC": {
+      "klasse": "lastig",
+      "hoofdstad": "Kingstown",
+      "beschrijving": "Staand blauw, een brede gele baan en groen, met drie groene ruiten.",
+      "weetje": "De drie ruiten vormen samen een V, van Vincent."
+    },
+    "TT": {
+      "klasse": "normaal",
+      "hoofdstad": "Port of Spain",
+      "beschrijving": "Rood met een schuine zwarte baan met witte randen.",
+      "weetje": "Zwart staat voor kracht, wit voor de zee en rood voor de warmte van de zon."
+    },
+    "US": {
+      "klasse": "bekend",
+      "hoofdstad": "Washington D.C.",
+      "beschrijving": "Rode en witte strepen, met linksboven een blauw vlak met veel witte sterren.",
+      "weetje": "Er staan 50 sterren op, één voor elke staat, en 13 strepen voor de eerste staten."
+    }
+  }
+}

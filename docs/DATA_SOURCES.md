@@ -206,6 +206,56 @@ omdat het land zichzelf hernoemd heeft en de bron dat nog niet volgt — Eswatin
 
 ---
 
+## Vlaggen — landen
+
+|                   |                                                                                                              |
+| ----------------- | ------------------------------------------------------------------------------------------------------------ |
+| **Bron**          | `fonttools/region-flags`, vastgezet op commit `c7f54514b5094f124e53c5e58c776c857f757a04`                     |
+| **Vindplaats**    | https://github.com/fonttools/region-flags — `svg/`                                                           |
+| **Licentie**      | Publiek domein, of vrijgesteld van auteursrecht naar het recht van het land zelf (zie `COPYING` in die repo) |
+| **Opgehaald**     | 12 september 2026                                                                                            |
+| **Gebruikt voor** | `public/vlaggen/*.svg` en `content/vlaggen/vlaggen.json`, 196 landen                                         |
+| **Gebouwd door**  | `tools/content/build-vlaggen.mjs`                                                                            |
+
+region-flags haalt elke vlag van Wikimedia Commons en heeft gecontroleerd dat
+hij in het publiek domein ligt. Acht vlaggen zijn daar niet als publiek domein
+gemarkeerd maar vrijgesteld door nationaal recht: Armenië, Azerbeidzjan,
+Kazachstan, Kirgizië, Maleisië, Mexico, Moldavië en Servië. Dat staat per vlag in
+het veld `licentie` van de dataset, omdat "publiek domein" voor die acht het
+verkeerde woord zou zijn.
+
+**Twee vlaggen komen van Commons zelf**, omdat het land zijn vlag heeft
+veranderd nadat region-flags ze voor het laatst bijwerkte: **Kirgizië** (andere
+zonnestralen, december 2023) en **Syrië** (terug naar de onafhankelijkheidsvlag,
+2025). Beide zijn op Commons als publiek domein gemarkeerd, gecontroleerd op
+12 september 2026.
+
+De bestanden zijn ongewijzigd overgenomen, op één ding na: een bestand zonder
+`viewBox` krijgt er een, anders schaalt een `<img>` het niet. De verhouding van
+elke vlag wordt uit het bestand zelf gelezen en in de dataset gezet. Zo past de
+app elke vlag in een kader van 4:3 zonder hem bij te snijden of uit te rekken:
+Nepal (geen rechthoek), Zwitserland en Vaticaanstad (vierkant) en Qatar (heel
+lang) houden hun eigen vorm.
+
+**Namen en werelddelen** komen uit de landensets van /topografie, zodat een land
+maar één spelling heeft. Welke landen erin staan en waarom: zie
+`content/vlaggen/AFBAKENING.md`.
+
+## Vlaggen — provincies
+
+|                   |                                                                   |
+| ----------------- | ----------------------------------------------------------------- |
+| **Bron**          | Wikimedia Commons, één bestand per provincie                      |
+| **Licentie**      | Elk van de twaalf is op Commons gemarkeerd als **publiek domein** |
+| **Gecontroleerd** | 12 september 2026, via de API van Commons (`LicenseShortName`)    |
+| **Gebouwd door**  | `tools/content/build-vlaggen.mjs`                                 |
+
+De bestandsnamen staan in het script, in de spelling waar Commons naar
+doorverwijst. De provincienamen en hoofdsteden komen uit
+`content/sets/nl-provincies.json` en `nl-hoofdsteden.json`.
+
+---
+
 ## Nog niet in gebruik
 
 Voorbereid maar nog niet opgehaald; licentie vooraf te verifiëren zoals

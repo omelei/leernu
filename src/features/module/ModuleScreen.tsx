@@ -151,7 +151,10 @@ export function ModuleScreen({
   // page, at the end of the row.
   const krap = teDrukOmAanTeWijzen(chosen?.setId ?? null, chosen?.items.length ?? 0, kleinScherm);
   const forms = offeredForms(formsFor(module.id), prefs.timer, chosen?.setId ?? null, krap);
-  const gekozenManier = forms.find((candidate) => candidate.id === formId) ?? forms[0] ?? null;
+  // The ways that are tiles. A way only the oefentoets asks in is reached by
+  // pressing the oefentoets, and never offered beside it (ADR-102).
+  const tegels = forms.filter((candidate) => !candidate.alleenToets);
+  const gekozenManier = tegels.find((candidate) => candidate.id === formId) ?? tegels[0] ?? null;
   // The oefentoets is a way of its own (ADR-100). It answers the way a test
   // asks, by typing, and hears back only at the end — so pressing it chooses
   // the way as well, and pressing any other way leaves it.
@@ -386,7 +389,7 @@ export function ModuleScreen({
           <Stap nummer={stap.hoe} label={t('choose.stepHow')} />
 
           <div className="tk-tegels">
-            {forms.map((candidate) => {
+            {tegels.map((candidate) => {
               const FormIcon = candidate.icon;
               const gekozenVorm = !alsToets && candidate.id === form?.id;
 
@@ -420,7 +423,9 @@ export function ModuleScreen({
               <button
                 type="button"
                 className="tk-tegel"
-                aria-label={`${t('choose.testMode')}. ${t('choose.testModeWhy')}`}
+                // "Je typt zonder hulp" is what the toets is everywhere a test
+                // types; where it asks in a way of its own, that way says it.
+                aria-label={`${t('choose.testMode')}. ${t(toetsVorm.alleenToets ? toetsVorm.reason : 'choose.testModeWhy')}`}
                 aria-pressed={alsToets}
                 onClick={() => setToetsstand(true)}
               >

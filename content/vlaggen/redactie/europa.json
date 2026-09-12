@@ -1,0 +1,282 @@
+{
+  "_uitleg": "Redactie voor de vlaggen van Europa. Hoofdsteden volgen de VN (UNdata), de beschrijving is wat een schermlezer voorleest en noemt het land nooit, het weetje is één zin over kleuren of tekens.",
+  "landen": {
+    "AL": {
+      "klasse": "normaal",
+      "hoofdstad": "Tirana",
+      "beschrijving": "Rood met in het midden een zwarte adelaar met twee koppen.",
+      "weetje": "De adelaar heeft twee koppen en kijkt tegelijk naar links en naar rechts."
+    },
+    "AD": {
+      "klasse": "lastig",
+      "hoofdstad": "Andorra la Vella",
+      "beschrijving": "Drie staande banen blauw, geel en rood, met een wapen in het midden.",
+      "weetje": "Zonder het wapen lijkt deze vlag op die van Roemenië en Tsjaad."
+    },
+    "BY": {
+      "klasse": "normaal",
+      "hoofdstad": "Minsk",
+      "beschrijving": "Rood boven, een smallere groene baan onder, en een rood-wit patroon aan de stokkant.",
+      "weetje": "Het patroon aan de stokkant komt van oude geweven doeken."
+    },
+    "BE": {
+      "klasse": "bekend",
+      "hoofdstad": "Brussel",
+      "beschrijving": "Drie staande banen: zwart, geel en rood.",
+      "weetje": "De kleuren komen uit een oud wapen: een gele leeuw op zwart met rode klauwen."
+    },
+    "BA": {
+      "klasse": "normaal",
+      "hoofdstad": "Sarajevo",
+      "beschrijving": "Blauw met een gele driehoek en een rij witte sterren langs de schuine kant.",
+      "weetje": "De gele driehoek lijkt op de vorm van het land."
+    },
+    "BG": {
+      "klasse": "normaal",
+      "hoofdstad": "Sofia",
+      "beschrijving": "Drie liggende banen: wit, groen en rood.",
+      "weetje": "Wit, groen en rood, net als Hongarije, maar in een andere volgorde."
+    },
+    "CY": {
+      "klasse": "normaal",
+      "hoofdstad": "Nicosia",
+      "beschrijving": "Wit met in het midden een oranje vorm van een eiland en twee groene takken.",
+      "weetje": "De vorm van het eiland staat op de vlag, en de olijftakken betekenen vrede."
+    },
+    "DK": {
+      "klasse": "bekend",
+      "hoofdstad": "Kopenhagen",
+      "beschrijving": "Rood met een wit liggend kruis dat naar de stokkant is geschoven.",
+      "weetje": "Dit is de oudste vlag die een land nog steeds gebruikt."
+    },
+    "DE": {
+      "klasse": "bekend",
+      "hoofdstad": "Berlijn",
+      "beschrijving": "Drie liggende banen: zwart, rood en goud.",
+      "weetje": "Zwart, rood en goud waren al 200 jaar geleden de kleuren van mensen die één Duitsland wilden."
+    },
+    "EE": {
+      "klasse": "normaal",
+      "hoofdstad": "Tallinn",
+      "beschrijving": "Drie liggende banen: blauw, zwart en wit.",
+      "weetje": "Blauw is de lucht, zwart de aarde en wit de sneeuw."
+    },
+    "FI": {
+      "klasse": "bekend",
+      "hoofdstad": "Helsinki",
+      "beschrijving": "Wit met een blauw liggend kruis dat naar de stokkant is geschoven.",
+      "weetje": "Blauw en wit staan voor de meren en de sneeuw."
+    },
+    "FR": {
+      "klasse": "bekend",
+      "hoofdstad": "Parijs",
+      "beschrijving": "Drie staande banen: blauw, wit en rood.",
+      "weetje": "Blauw en rood zijn de kleuren van Parijs, wit was de kleur van de koning."
+    },
+    "GR": {
+      "klasse": "bekend",
+      "hoofdstad": "Athene",
+      "beschrijving": "Negen blauwe en witte strepen, met linksboven een wit kruis op blauw.",
+      "weetje": "Er wordt gezegd dat de negen strepen de negen lettergrepen zijn van de strijdkreet 'Vrijheid of de dood'."
+    },
+    "HU": {
+      "klasse": "normaal",
+      "hoofdstad": "Boedapest",
+      "beschrijving": "Drie liggende banen: rood, wit en groen.",
+      "weetje": "Het zijn de kleuren van de Italiaanse vlag, maar de banen liggen."
+    },
+    "IE": {
+      "klasse": "bekend",
+      "hoofdstad": "Dublin",
+      "beschrijving": "Drie staande banen: groen, wit en oranje.",
+      "weetje": "Groen en oranje staan voor twee groepen Ieren, en wit in het midden voor vrede tussen hen."
+    },
+    "IS": {
+      "klasse": "normaal",
+      "hoofdstad": "Reykjavik",
+      "beschrijving": "Blauw met een rood kruis met een witte rand, naar de stokkant geschoven.",
+      "weetje": "Rood is het vuur van de vulkanen, wit het ijs en blauw de zee."
+    },
+    "IT": {
+      "klasse": "bekend",
+      "hoofdstad": "Rome",
+      "beschrijving": "Drie staande banen: groen, wit en rood.",
+      "weetje": "Hij lijkt op de vlag van Frankrijk, maar dan met groen in plaats van blauw."
+    },
+    "XK": {
+      "klasse": "lastig",
+      "hoofdstad": "Pristina",
+      "beschrijving": "Blauw met in het midden een gele vorm van een land en zes witte sterren erboven.",
+      "weetje": "De zes sterren staan voor de groepen mensen die in het land wonen."
+    },
+    "HR": {
+      "klasse": "normaal",
+      "hoofdstad": "Zagreb",
+      "beschrijving": "Rood, wit en blauw in liggende banen, met een rood-wit geblokt wapen in het midden.",
+      "weetje": "Het rood-witte schaakbord zie je ook op de shirts van het Kroatische voetbalteam."
+    },
+    "LV": {
+      "klasse": "normaal",
+      "hoofdstad": "Riga",
+      "beschrijving": "Donkerrood met een smalle witte liggende baan in het midden.",
+      "weetje": "Het donkere rood is zo bijzonder dat het een eigen naam heeft: Lets rood."
+    },
+    "LI": {
+      "klasse": "lastig",
+      "hoofdstad": "Vaduz",
+      "beschrijving": "Blauw boven en rood onder, met linksboven een gouden kroon.",
+      "weetje": "De kroon kwam erbij toen bleek dat de vlag precies leek op die van Haïti."
+    },
+    "LT": {
+      "klasse": "normaal",
+      "hoofdstad": "Vilnius",
+      "beschrijving": "Drie liggende banen: geel, groen en rood.",
+      "weetje": "Geel is de zon, groen zijn de bossen en rood is de moed van de mensen."
+    },
+    "LU": {
+      "klasse": "normaal",
+      "hoofdstad": "Luxemburg",
+      "beschrijving": "Drie liggende banen: rood, wit en lichtblauw.",
+      "weetje": "Hij lijkt bijna precies op de Nederlandse vlag, maar het blauw is lichter."
+    },
+    "MT": {
+      "klasse": "normaal",
+      "hoofdstad": "Valletta",
+      "beschrijving": "Een staande witte en rode helft, met linksboven een klein grijs kruis.",
+      "weetje": "Het kruis is een medaille die het eiland kreeg voor zijn moed in de oorlog."
+    },
+    "MD": {
+      "klasse": "lastig",
+      "hoofdstad": "Chisinau",
+      "beschrijving": "Drie staande banen blauw, geel en rood, met een adelaar in het midden.",
+      "weetje": "De adelaar houdt een kruis in zijn snavel."
+    },
+    "MC": {
+      "klasse": "normaal",
+      "hoofdstad": "Monaco",
+      "beschrijving": "Twee liggende banen: rood boven, wit onder.",
+      "weetje": "Hij is bijna gelijk aan de vlag van Indonesië, alleen iets minder lang."
+    },
+    "ME": {
+      "klasse": "lastig",
+      "hoofdstad": "Podgorica",
+      "beschrijving": "Rood met een gouden rand en een gouden adelaar met twee koppen.",
+      "weetje": "De gouden rand loopt helemaal om de vlag heen."
+    },
+    "NL": {
+      "klasse": "bekend",
+      "hoofdstad": "Amsterdam",
+      "hoofdstadNoot": "De regering zit in Den Haag.",
+      "beschrijving": "Drie liggende banen: rood, wit en blauw.",
+      "weetje": "Vroeger was de bovenste baan oranje, de kleur van Willem van Oranje."
+    },
+    "MK": {
+      "klasse": "lastig",
+      "hoofdstad": "Skopje",
+      "beschrijving": "Rood met een gele zon waarvan acht brede stralen tot de rand lopen.",
+      "weetje": "De acht stralen van de zon lopen door tot aan de rand van de vlag."
+    },
+    "NO": {
+      "klasse": "bekend",
+      "hoofdstad": "Oslo",
+      "beschrijving": "Rood met een blauw kruis met een witte rand, naar de stokkant geschoven.",
+      "weetje": "Hij heeft dezelfde kleuren als de vlaggen van Frankrijk en Nederland: rood, wit en blauw."
+    },
+    "UA": {
+      "klasse": "bekend",
+      "hoofdstad": "Kyiv",
+      "beschrijving": "Twee liggende banen: blauw boven, geel onder.",
+      "weetje": "Blauw is de lucht en geel zijn de graanvelden eronder."
+    },
+    "AT": {
+      "klasse": "bekend",
+      "hoofdstad": "Wenen",
+      "beschrijving": "Drie liggende banen: rood, wit en rood.",
+      "weetje": "Een oud verhaal zegt dat een hertog na een gevecht een rode jas had, met alleen een witte band onder zijn riem."
+    },
+    "PL": {
+      "klasse": "bekend",
+      "hoofdstad": "Warschau",
+      "beschrijving": "Twee liggende banen: wit boven, rood onder.",
+      "weetje": "Draai hem om en je hebt bijna de vlag van Indonesië."
+    },
+    "PT": {
+      "klasse": "bekend",
+      "hoofdstad": "Lissabon",
+      "beschrijving": "Groen aan de stokkant en rood, met een wapen op de grens ertussen.",
+      "weetje": "In het wapen zit een oud instrument waarmee zeevaarders de weg vonden op zee."
+    },
+    "RO": {
+      "klasse": "normaal",
+      "hoofdstad": "Boekarest",
+      "beschrijving": "Drie staande banen: blauw, geel en rood.",
+      "weetje": "Hij is bijna gelijk aan de vlag van Tsjaad; alleen het blauw is iets lichter."
+    },
+    "RU": {
+      "klasse": "bekend",
+      "hoofdstad": "Moskou",
+      "beschrijving": "Drie liggende banen: wit, blauw en rood.",
+      "weetje": "Er wordt gezegd dat tsaar Peter de Grote deze kleuren koos nadat hij in Nederland was geweest."
+    },
+    "SM": {
+      "klasse": "lastig",
+      "hoofdstad": "San Marino",
+      "beschrijving": "Wit boven en lichtblauw onder, met een wapen in het midden.",
+      "weetje": "Op het wapen staan drie torens op drie bergtoppen."
+    },
+    "RS": {
+      "klasse": "normaal",
+      "hoofdstad": "Belgrado",
+      "beschrijving": "Drie liggende banen: rood, blauw en wit, met een wapen aan de stokkant.",
+      "weetje": "Het zijn de banen van de Russische vlag, maar dan ondersteboven."
+    },
+    "SI": {
+      "klasse": "normaal",
+      "hoofdstad": "Ljubljana",
+      "beschrijving": "Wit, blauw en rood in liggende banen, met linksboven een wapen met een berg.",
+      "weetje": "Op het wapen staat de berg Triglav, de hoogste berg van het land."
+    },
+    "SK": {
+      "klasse": "normaal",
+      "hoofdstad": "Bratislava",
+      "beschrijving": "Wit, blauw en rood in liggende banen, met een wapen met een wit dubbel kruis.",
+      "weetje": "Het wapen toont een dubbel kruis op drie blauwe heuvels."
+    },
+    "ES": {
+      "klasse": "bekend",
+      "hoofdstad": "Madrid",
+      "beschrijving": "Rood, een brede gele baan en weer rood, met een wapen aan de stokkant.",
+      "weetje": "De gele baan is twee keer zo breed als elke rode."
+    },
+    "CZ": {
+      "klasse": "normaal",
+      "hoofdstad": "Praag",
+      "beschrijving": "Wit boven, rood onder en een blauwe driehoek aan de stokkant.",
+      "weetje": "De blauwe driehoek kwam erbij omdat de vlag anders gelijk was aan die van Polen."
+    },
+    "VA": {
+      "klasse": "lastig",
+      "hoofdstad": "Vaticaanstad",
+      "beschrijving": "Een vierkante vlag: een staande gele en witte helft, met twee sleutels en een kroon.",
+      "weetje": "Het is een van de twee vierkante vlaggen; de andere is die van Zwitserland."
+    },
+    "GB": {
+      "klasse": "bekend",
+      "hoofdstad": "Londen",
+      "beschrijving": "Blauw met een rood kruis en rode en witte schuine kruisen.",
+      "weetje": "Er zitten drie kruizen in één vlag: van Engeland, Schotland en Ierland."
+    },
+    "SE": {
+      "klasse": "bekend",
+      "hoofdstad": "Stockholm",
+      "beschrijving": "Blauw met een geel liggend kruis dat naar de stokkant is geschoven.",
+      "weetje": "Blauw en geel komen uit een oud wapen met drie gouden kronen."
+    },
+    "CH": {
+      "klasse": "bekend",
+      "hoofdstad": "Bern",
+      "beschrijving": "Een vierkante rode vlag met een wit kruis.",
+      "weetje": "Het Rode Kruis gebruikt deze vlag, maar dan met de kleuren omgedraaid."
+    }
+  }
+}

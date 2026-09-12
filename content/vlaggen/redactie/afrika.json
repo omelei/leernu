@@ -1,0 +1,333 @@
+{
+  "_uitleg": "Redactie voor de vlaggen van Afrika. Hoofdsteden volgen de VN (UNdata), de beschrijving is wat een schermlezer voorleest en noemt het land nooit, het weetje is één zin over kleuren of tekens.",
+  "landen": {
+    "DZ": {
+      "klasse": "normaal",
+      "hoofdstad": "Algiers",
+      "beschrijving": "Een staande groene en witte helft, met een rode halve maan en ster in het midden.",
+      "weetje": "De halve maan en ster staan precies op de grens tussen groen en wit."
+    },
+    "AO": {
+      "klasse": "normaal",
+      "hoofdstad": "Luanda",
+      "beschrijving": "Rood boven en zwart onder, met een geel half tandwiel en een kapmes.",
+      "weetje": "Het tandwiel staat voor de mensen in de fabrieken, het kapmes voor de boeren."
+    },
+    "BJ": {
+      "klasse": "normaal",
+      "hoofdstad": "Porto-Novo",
+      "hoofdstadNoot": "Cotonou is de stad van de handel.",
+      "beschrijving": "Een groene staande baan aan de stokkant, met geel boven en rood onder.",
+      "weetje": "Groen, geel en rood zie je op veel Afrikaanse vlaggen; ze komen van de vlag van Ethiopië."
+    },
+    "BW": {
+      "klasse": "normaal",
+      "hoofdstad": "Gaborone",
+      "beschrijving": "Lichtblauw met een zwarte liggende baan met witte randen.",
+      "weetje": "Lichtblauw is de kleur van water en regen, en regen is heel belangrijk in dit droge land."
+    },
+    "BF": {
+      "klasse": "normaal",
+      "hoofdstad": "Ouagadougou",
+      "beschrijving": "Rood boven en groen onder, met een gele ster in het midden.",
+      "weetje": "De gele ster is het licht dat de weg wijst."
+    },
+    "BI": {
+      "klasse": "lastig",
+      "hoofdstad": "Gitega",
+      "beschrijving": "Een wit schuin kruis op rode en groene vlakken, met in het midden drie rode sterren.",
+      "weetje": "De drie sterren staan voor de drie volken die in het land wonen."
+    },
+    "CF": {
+      "klasse": "lastig",
+      "hoofdstad": "Bangui",
+      "beschrijving": "Vier liggende banen blauw, wit, groen en geel, een staande rode baan en een gele ster.",
+      "weetje": "Het is een van de weinige vlaggen met zowel liggende als staande banen."
+    },
+    "KM": {
+      "klasse": "lastig",
+      "hoofdstad": "Moroni",
+      "beschrijving": "Liggende banen geel, wit, rood en blauw, met een groene driehoek, een halve maan en vier sterren.",
+      "weetje": "Elke ster staat voor een van de vier eilanden."
+    },
+    "CG": {
+      "klasse": "normaal",
+      "hoofdstad": "Brazzaville",
+      "beschrijving": "Een schuine gele baan tussen groen linksboven en rood rechtsonder.",
+      "weetje": "De banen lopen schuin, van linksonder naar rechtsboven."
+    },
+    "CD": {
+      "klasse": "normaal",
+      "hoofdstad": "Kinshasa",
+      "beschrijving": "Lichtblauw met een schuine rode baan met gele randen, en linksboven een gele ster.",
+      "weetje": "Het lichtblauw staat voor vrede."
+    },
+    "DJ": {
+      "klasse": "lastig",
+      "hoofdstad": "Djibouti",
+      "beschrijving": "Lichtblauw boven en groen onder, met een witte driehoek met een rode ster.",
+      "weetje": "Lichtblauw staat voor de zee en de lucht, groen voor het land."
+    },
+    "EG": {
+      "klasse": "bekend",
+      "hoofdstad": "Caïro",
+      "beschrijving": "Drie liggende banen rood, wit en zwart, met een gouden adelaar in het midden.",
+      "weetje": "De gouden adelaar is de adelaar van Saladin, een beroemde sultan van lang geleden."
+    },
+    "GQ": {
+      "klasse": "lastig",
+      "hoofdstad": "Malabo",
+      "beschrijving": "Liggend groen, wit en rood, met een blauwe driehoek en een wapen met een boom.",
+      "weetje": "Op het wapen staan een grote boom en zes sterren voor de delen van het land."
+    },
+    "ER": {
+      "klasse": "lastig",
+      "hoofdstad": "Asmara",
+      "beschrijving": "Een rode driehoek met een gouden olijftak in een krans, met groen boven en blauw onder.",
+      "weetje": "De olijftak betekent vrede."
+    },
+    "SZ": {
+      "klasse": "lastig",
+      "hoofdstad": "Mbabane",
+      "hoofdstadNoot": "Het parlement zit in Lobamba.",
+      "beschrijving": "Blauw, geel en een brede rode baan, met een zwart-wit schild en twee speren.",
+      "weetje": "Het schild is zwart en wit: zwarte en witte mensen die vreedzaam samenleven."
+    },
+    "ET": {
+      "klasse": "normaal",
+      "hoofdstad": "Addis Abeba",
+      "beschrijving": "Liggend groen, geel en rood, met een blauwe schijf met een gele ster.",
+      "weetje": "Groen, geel en rood werden de kleuren van heel veel Afrikaanse vlaggen."
+    },
+    "GA": {
+      "klasse": "normaal",
+      "hoofdstad": "Libreville",
+      "beschrijving": "Drie liggende banen: groen, geel en blauw.",
+      "weetje": "Geel is de evenaar die door het land loopt, blauw is de zee."
+    },
+    "GM": {
+      "klasse": "normaal",
+      "hoofdstad": "Banjul",
+      "beschrijving": "Rood, blauw en groen in liggende banen, met smalle witte randen om het blauw.",
+      "weetje": "De blauwe baan is de rivier de Gambia, die dwars door het land stroomt."
+    },
+    "GH": {
+      "klasse": "normaal",
+      "hoofdstad": "Accra",
+      "beschrijving": "Rood, geel en groen in liggende banen, met een zwarte ster in het midden.",
+      "weetje": "De zwarte ster staat voor de vrijheid van Afrika."
+    },
+    "GN": {
+      "klasse": "normaal",
+      "hoofdstad": "Conakry",
+      "beschrijving": "Drie staande banen: rood, geel en groen.",
+      "weetje": "Het is de vlag van Mali, maar dan andersom."
+    },
+    "GW": {
+      "klasse": "lastig",
+      "hoofdstad": "Bissau",
+      "beschrijving": "Een staande rode baan met een zwarte ster, met geel boven en groen onder.",
+      "weetje": "De zwarte ster staat voor de mensen van Afrika."
+    },
+    "CI": {
+      "klasse": "normaal",
+      "hoofdstad": "Yamoussoukro",
+      "hoofdstadNoot": "Het bestuur zit in Abidjan.",
+      "beschrijving": "Drie staande banen: oranje, wit en groen.",
+      "weetje": "Het is de Ierse vlag in spiegelbeeld."
+    },
+    "CV": {
+      "klasse": "lastig",
+      "hoofdstad": "Praia",
+      "beschrijving": "Blauw met een witte en een rode streep en een cirkel van tien gele sterren.",
+      "weetje": "De tien sterren zijn de tien eilanden."
+    },
+    "CM": {
+      "klasse": "normaal",
+      "hoofdstad": "Yaoundé",
+      "beschrijving": "Staand groen, rood en geel, met een gele ster in het midden.",
+      "weetje": "De ster heet de ster van eenheid."
+    },
+    "KE": {
+      "klasse": "bekend",
+      "hoofdstad": "Nairobi",
+      "beschrijving": "Zwart, rood en groen in liggende banen met witte randen, en een schild met twee speren.",
+      "weetje": "Het schild en de speren zijn van de Masai, een volk dat in het land woont."
+    },
+    "LS": {
+      "klasse": "lastig",
+      "hoofdstad": "Maseru",
+      "beschrijving": "Liggend blauw, wit en groen, met een zwarte hoed in het midden.",
+      "weetje": "De hoed is een mokorotlo, een strooien hoed die de mensen daar dragen."
+    },
+    "LR": {
+      "klasse": "normaal",
+      "hoofdstad": "Monrovia",
+      "beschrijving": "Rode en witte strepen, met een witte ster op een blauw vlak in de hoek.",
+      "weetje": "Hij lijkt op de vlag van de Verenigde Staten, maar met maar één ster."
+    },
+    "LY": {
+      "klasse": "normaal",
+      "hoofdstad": "Tripoli",
+      "beschrijving": "Liggend rood, zwart en groen, met een witte halve maan en ster.",
+      "weetje": "De zwarte baan is twee keer zo breed als de andere twee."
+    },
+    "MG": {
+      "klasse": "normaal",
+      "hoofdstad": "Antananarivo",
+      "beschrijving": "Een witte staande baan aan de stokkant, met rood boven en groen onder.",
+      "weetje": "Er staat geen enkel teken op: alleen drie kleuren."
+    },
+    "MW": {
+      "klasse": "normaal",
+      "hoofdstad": "Lilongwe",
+      "beschrijving": "Liggend zwart, rood en groen, met een rode opkomende zon.",
+      "weetje": "De zon komt op: dat staat voor hoop voor heel Afrika."
+    },
+    "ML": {
+      "klasse": "normaal",
+      "hoofdstad": "Bamako",
+      "beschrijving": "Drie staande banen: groen, geel en rood.",
+      "weetje": "Het is de vlag van Guinee, maar dan andersom."
+    },
+    "MA": {
+      "klasse": "bekend",
+      "hoofdstad": "Rabat",
+      "beschrijving": "Rood met in het midden een groene ster van lijnen.",
+      "weetje": "De groene ster is getekend met één lijn die rondgaat."
+    },
+    "MR": {
+      "klasse": "normaal",
+      "hoofdstad": "Nouakchott",
+      "beschrijving": "Groen met een gele halve maan en ster, en een rode baan boven en onder.",
+      "weetje": "De rode banen kwamen er in 2017 bij."
+    },
+    "MU": {
+      "klasse": "lastig",
+      "hoofdstad": "Port Louis",
+      "beschrijving": "Vier liggende banen: rood, blauw, geel en groen.",
+      "weetje": "Het is een van de weinige vlaggen met vier even brede banen."
+    },
+    "MZ": {
+      "klasse": "normaal",
+      "hoofdstad": "Maputo",
+      "beschrijving": "Groen, zwart en geel met witte randen, een rode driehoek en een geweer, een schoffel en een boek.",
+      "weetje": "Het is de enige vlag van een land met een geweer erop."
+    },
+    "NA": {
+      "klasse": "normaal",
+      "hoofdstad": "Windhoek",
+      "beschrijving": "Een schuine rode baan met witte randen, blauw linksboven met een gele zon, en groen rechtsonder.",
+      "weetje": "De gele zon heeft twaalf punten."
+    },
+    "NE": {
+      "klasse": "normaal",
+      "hoofdstad": "Niamey",
+      "beschrijving": "Liggend oranje, wit en groen, met een oranje rondje in het midden.",
+      "weetje": "Het oranje rondje is de zon, en de vlag is bijna vierkant."
+    },
+    "NG": {
+      "klasse": "bekend",
+      "hoofdstad": "Abuja",
+      "beschrijving": "Drie staande banen: groen, wit en groen.",
+      "weetje": "Groen staat voor de bossen en het land, wit voor vrede."
+    },
+    "UG": {
+      "klasse": "normaal",
+      "hoofdstad": "Kampala",
+      "beschrijving": "Zes liggende banen zwart, geel en rood, met een grijze vogel in een witte cirkel.",
+      "weetje": "De vogel is een kroonkraanvogel, met een kuif als een kroontje."
+    },
+    "RW": {
+      "klasse": "normaal",
+      "hoofdstad": "Kigali",
+      "beschrijving": "Liggend lichtblauw, geel en groen, met rechtsboven een gele zon.",
+      "weetje": "De gele zon staat voor licht en kennis."
+    },
+    "ST": {
+      "klasse": "lastig",
+      "hoofdstad": "Sao Tomé",
+      "beschrijving": "Groen, geel en groen, met een rode driehoek en twee zwarte sterren.",
+      "weetje": "De twee sterren zijn de twee grote eilanden."
+    },
+    "SN": {
+      "klasse": "normaal",
+      "hoofdstad": "Dakar",
+      "beschrijving": "Staand groen, geel en rood, met een groene ster in het midden.",
+      "weetje": "Hij lijkt op de vlag van Mali, maar heeft een groene ster."
+    },
+    "SL": {
+      "klasse": "normaal",
+      "hoofdstad": "Freetown",
+      "beschrijving": "Drie liggende banen: groen, wit en blauw.",
+      "weetje": "Blauw staat voor de haven van de hoofdstad aan de zee."
+    },
+    "SD": {
+      "klasse": "normaal",
+      "hoofdstad": "Khartoum",
+      "beschrijving": "Liggend rood, wit en zwart, met een groene driehoek aan de stokkant.",
+      "weetje": "Hij lijkt op de vlaggen van Egypte en Irak, maar heeft een groene driehoek."
+    },
+    "SO": {
+      "klasse": "normaal",
+      "hoofdstad": "Mogadishu",
+      "beschrijving": "Lichtblauw met een witte ster in het midden.",
+      "weetje": "De vijf punten van de ster staan voor de plekken waar Somaliërs wonen."
+    },
+    "TZ": {
+      "klasse": "normaal",
+      "hoofdstad": "Dodoma",
+      "beschrijving": "Een schuine zwarte baan met gele randen, groen linksboven en blauw rechtsonder.",
+      "weetje": "Blauw staat voor de zee en de meren, zoals het Victoriameer."
+    },
+    "TG": {
+      "klasse": "normaal",
+      "hoofdstad": "Lomé",
+      "beschrijving": "Groene en gele strepen, met linksboven een rood vlak met een witte ster.",
+      "weetje": "De vijf strepen staan voor de vijf delen van het land."
+    },
+    "TD": {
+      "klasse": "normaal",
+      "hoofdstad": "N'Djamena",
+      "beschrijving": "Drie staande banen: blauw, geel en rood.",
+      "weetje": "Hij is bijna gelijk aan de vlag van Roemenië; alleen het blauw is iets donkerder."
+    },
+    "TN": {
+      "klasse": "normaal",
+      "hoofdstad": "Tunis",
+      "beschrijving": "Rood met een witte schijf, en daarin een rode halve maan en ster.",
+      "weetje": "Hij lijkt op de vlag van Turkije, maar de maan en ster staan in een witte cirkel."
+    },
+    "ZM": {
+      "klasse": "normaal",
+      "hoofdstad": "Lusaka",
+      "beschrijving": "Groen met rechtsonder staande banen rood, zwart en oranje, en een oranje adelaar erboven.",
+      "weetje": "De adelaar vliegt boven de banen en staat voor vrijheid."
+    },
+    "ZW": {
+      "klasse": "normaal",
+      "hoofdstad": "Harare",
+      "beschrijving": "Groene, gele, rode en zwarte strepen, met een witte driehoek met een gele vogel en een rode ster.",
+      "weetje": "De vogel is een beeld van steen dat in oude ruïnes in het land werd gevonden."
+    },
+    "ZA": {
+      "klasse": "bekend",
+      "hoofdstad": "Pretoria",
+      "hoofdstadNoot": "Het parlement zit in Kaapstad en de hoogste rechter in Bloemfontein.",
+      "beschrijving": "Een liggende groene Y met witte en gele randen, een zwarte driehoek, rood boven en blauw onder.",
+      "weetje": "Er zitten zes kleuren in, meer dan in bijna elke andere vlag."
+    },
+    "SS": {
+      "klasse": "lastig",
+      "hoofdstad": "Juba",
+      "beschrijving": "Liggend zwart, rood en groen met witte randen, en een blauwe driehoek met een gele ster.",
+      "weetje": "Het is een van de jongste vlaggen: het land bestaat pas sinds 2011."
+    },
+    "SC": {
+      "klasse": "lastig",
+      "hoofdstad": "Victoria",
+      "beschrijving": "Vijf schuine banen blauw, geel, rood, wit en groen die vanuit linksonder uitwaaieren.",
+      "weetje": "De banen waaieren uit als stralen, een teken dat het land vooruitgaat."
+    }
+  }
+}

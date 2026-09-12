@@ -21,3 +21,6 @@ content/geo/_source/
 
 # Prompts and notes handed to Claude Code. Working material, not the project.
 Claude outputs/
+
+# Raw flag files: refetch with tools/content/build-vlaggen.mjs.
+content/vlaggen/_source/

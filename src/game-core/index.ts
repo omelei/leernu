@@ -7,6 +7,7 @@ export * from './retention';
 export * from './grade';
 export * from './sums';
 export * from './klok';
+export * from './vlaggen';
 export * from './streak';
 export * from './rewards';
 export * from './collection';

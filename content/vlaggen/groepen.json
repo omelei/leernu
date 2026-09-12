@@ -1,0 +1,135 @@
+{
+  "_uitleg": "Vlaggen die kinderen door elkaar halen. Een vlag mag in meer dan een groep staan. Deze groepen voeden 'Lijkt op elkaar' en de lastigste afleiders (vanaf vraag 8). Elke groep noemt waarom: een groep zonder reden is een mening.",
+  "groepen": [
+    {
+      "id": "rood-wit-blauw-liggend",
+      "leden": ["NL", "LU", "PY"],
+      "reden": "Rood, wit en blauw in liggende banen; alleen de tint blauw en het wapen verschillen."
+    },
+    {
+      "id": "blauw-geel-rood-staand",
+      "leden": ["TD", "RO", "AD", "MD"],
+      "reden": "Blauw, geel en rood in staande banen; Tsjaad en Roemenië zijn bijna gelijk."
+    },
+    {
+      "id": "rood-boven-wit",
+      "leden": ["ID", "MC", "PL"],
+      "reden": "Twee banen rood en wit; bij Polen staat het wit boven."
+    },
+    {
+      "id": "wit-blauw-rood",
+      "leden": ["RU", "SK", "SI", "RS", "HR"],
+      "reden": "Wit, blauw en rood in liggende banen, soms met een wapen erop."
+    },
+    {
+      "id": "groen-wit-oranje",
+      "leden": ["IE", "CI", "IT"],
+      "reden": "Drie staande banen met wit in het midden; Ierland en Ivoorkust zijn elkaars spiegelbeeld."
+    },
+    {
+      "id": "groen-wit-rood-staand",
+      "leden": ["IT", "MX"],
+      "reden": "Groen, wit en rood in staande banen; Mexico heeft een adelaar in het midden."
+    },
+    {
+      "id": "zuiderkruis",
+      "leden": ["AU", "NZ"],
+      "reden": "Blauw met de Britse vlag in de hoek en de sterren van het Zuiderkruis."
+    },
+    {
+      "id": "britse-vlag-in-de-hoek",
+      "leden": ["GB", "AU", "NZ", "FJ", "TV"],
+      "reden": "De Britse vlag zit in de hoek, of is de hele vlag."
+    },
+    {
+      "id": "scandinavisch-kruis",
+      "leden": ["NO", "IS", "DK", "SE", "FI"],
+      "reden": "Een liggend kruis dat naar links is geschoven."
+    },
+    {
+      "id": "rood-wit-zwart",
+      "leden": ["EG", "IQ", "SY", "YE"],
+      "reden": "Rood, wit en zwart in liggende banen; alleen het teken in het midden verschilt."
+    },
+    {
+      "id": "groen-geel-rood-staand",
+      "leden": ["ML", "GN", "SN", "CM"],
+      "reden": "Groen, geel en rood in staande banen, in een andere volgorde of met een ster."
+    },
+    {
+      "id": "blauw-wit-blauw",
+      "leden": ["HN", "NI", "SV", "GT"],
+      "reden": "Blauw, wit en blauw; de landen van Midden-Amerika hadden ooit één vlag."
+    },
+    {
+      "id": "geel-blauw-rood",
+      "leden": ["CO", "EC", "VE"],
+      "reden": "Geel, blauw en rood in liggende banen; ze kwamen samen uit één land voort."
+    },
+    {
+      "id": "zwart-geel-rood",
+      "leden": ["BE", "DE"],
+      "reden": "Zwart, geel en rood; bij België staan de banen, bij Duitsland liggen ze."
+    },
+    {
+      "id": "rood-wit-rood",
+      "leden": ["AT", "LV"],
+      "reden": "Rood, wit en rood in liggende banen; Letland is donkerder rood met een smalle witte baan."
+    },
+    {
+      "id": "wit-groen-rood",
+      "leden": ["HU", "BG"],
+      "reden": "Wit, groen en rood in liggende banen, in een andere volgorde."
+    },
+    {
+      "id": "geel-groen-rood",
+      "leden": ["LT", "BO", "GH", "ET"],
+      "reden": "Geel, groen en rood in liggende banen, in een andere volgorde of met een teken."
+    },
+    {
+      "id": "rondje-in-het-midden",
+      "leden": ["JP", "BD", "PW"],
+      "reden": "Eén rondje op een effen vlag."
+    },
+    {
+      "id": "maan-en-ster-op-rood",
+      "leden": ["TR", "TN"],
+      "reden": "Een witte halve maan en ster op rood."
+    },
+    {
+      "id": "strepen-en-sterren",
+      "leden": ["US", "LR", "MY"],
+      "reden": "Rode en witte strepen met een blauw vlak in de hoek."
+    },
+    {
+      "id": "oranje-wit-groen",
+      "leden": ["IN", "NE"],
+      "reden": "Oranje, wit en groen in liggende banen met een rondje in het midden."
+    },
+    {
+      "id": "driehoek-en-drie-banen",
+      "leden": ["JO", "SD", "KW", "AE"],
+      "reden": "Zwart, wit, groen en rood: drie banen en een driehoek of blok aan de stokkant."
+    },
+    {
+      "id": "kartelrand",
+      "leden": ["QA", "BH"],
+      "reden": "Wit aan de stokkant met een kartelrand, en rood of bruinrood."
+    },
+    {
+      "id": "rood-wit-blauw-strepen",
+      "leden": ["TH", "CR"],
+      "reden": "Rood, wit en blauw in vijf liggende banen met een brede baan in het midden."
+    },
+    {
+      "id": "blauw-boven-rood",
+      "leden": ["HT", "LI"],
+      "reden": "Blauw boven, rood onder; op de Olympische Spelen van 1936 bleken ze gelijk."
+    },
+    {
+      "id": "lichtblauw-wit-zon",
+      "leden": ["AR", "UY"],
+      "reden": "Lichtblauw en wit met een gouden zon."
+    }
+  ]
+}

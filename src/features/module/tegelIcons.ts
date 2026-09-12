@@ -5,6 +5,7 @@ import {
   DeelIcon,
   EilandIcon,
   EuropaIcon,
+  FlagIcon,
   GlobeIcon,
   GridIcon,
   HalfUurIcon,
@@ -21,6 +22,7 @@ import {
   PlusIcon,
   ProvincieIcon,
   StadIcon,
+  StarIcon,
   UurIcon,
   WaterIcon,
   WrongIcon,
@@ -105,6 +107,20 @@ export const ONDERWERP_ICON: Record<string, TileIcon> = {
 };
 
 /**
+ * Flags, by the subject at the end of the set id — `vlag-europa-bekend` is
+ * "bekend". The subject is the same idea in every werelddeel, so it takes the
+ * same mark in every one, the way the seven "Landen" do above.
+ */
+const VLAG_ONDERWERP_ICON: Record<string, TileIcon> = {
+  bekend: StarIcon,
+  alle: FlagIcon,
+  lijkt: GridIcon,
+  mix: MixIcon,
+  provincies: ProvincieIcon,
+  fouten: WrongIcon,
+};
+
+/**
  * A subject with no mark of its own falls back to the mix.
  *
  * Not to nothing. A tile whose icon failed to resolve would be a word with a
@@ -112,7 +128,8 @@ export const ONDERWERP_ICON: Record<string, TileIcon> = {
  * layout bug wearing the clothes of a content one.
  */
 export function onderwerpIcon(id: string): TileIcon {
-  return ONDERWERP_ICON[id] ?? MixIcon;
+  const vlag = /^vlag-.+-([a-z]+)$/.exec(id)?.[1];
+  return ONDERWERP_ICON[id] ?? (vlag ? VLAG_ONDERWERP_ICON[vlag] : undefined) ?? MixIcon;
 }
 
 export function regioIcon(id: string): TileIcon {

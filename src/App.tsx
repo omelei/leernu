@@ -15,10 +15,15 @@ import { CategoryScreen } from '@/features/shell/CategoryScreen';
 import { ModuleScreen } from '@/features/module/ModuleScreen';
 import { SumScreen } from '@/features/sums/SumScreen';
 import { KlokScreen } from '@/features/klok/KlokScreen';
+import { VlagScreen } from '@/features/vlaggen/VlagScreen';
+import { VlagExploreScreen } from '@/features/vlaggen/VlagExploreScreen';
+import type { VlagMode } from '@/features/vlaggen/useVlagRound';
+import { isVlagFouten, isVlagMix } from '@/content/loadVlaggen';
 import {
   asKlokMode,
   asPracticeMode,
   asSumMode,
+  asVlagMode,
   type Onderdeel,
 } from '@/features/module/onderdelen';
 import { ProfileScreen } from '@/features/player/ProfileScreen';
@@ -60,7 +65,15 @@ type Screen =
       klokMode: KlokMode;
       aantal: number | null;
       toetsstand: boolean;
-    };
+    }
+  | {
+      name: 'vlag';
+      setId: string;
+      vlagMode: VlagMode;
+      aantal: number | null;
+      toetsstand: boolean;
+    }
+  | { name: 'vlag-ontdek'; setId: string };
 type Boot = { status: 'loading' } | { status: 'ready'; profile: ProfileRecord | null };
 
 /**
@@ -133,6 +146,17 @@ export default function App() {
   ) => {
     setVisit(visit + 1);
 
+    // Flags explore on a screen of their own, like the map, and the mix and
+    // the child's own mistakes have nothing to explore (`forms.ts`).
+    if (deel.moduleId === 'vlaggen') {
+      if (mode === 'ontdekken' && !isVlagMix(deel.setId) && !isVlagFouten(deel.setId)) {
+        setScreen({ name: 'vlag-ontdek', setId: deel.setId });
+        return;
+      }
+      const vlagMode = asVlagMode(mode);
+      setScreen({ name: 'vlag', setId: deel.setId, vlagMode, aantal, toetsstand });
+      return;
+    }
     if (deel.moduleId === 'klok') {
       const klokMode = asKlokMode(mode);
       setScreen({ name: 'klok', setId: deel.setId, klokMode, aantal, toetsstand });
@@ -232,6 +256,24 @@ export default function App() {
         key={`${screen.setId}-${screen.klokMode}-${screen.aantal ?? 0}-${visit}`}
         setId={screen.setId}
         mode={screen.klokMode}
+        aantal={screen.aantal}
+        toetsstand={screen.toetsstand}
+        onHome={goHome}
+        onAgain={() => setVisit(visit + 1)}
+      />
+    );
+  }
+
+  if (screen.name === 'vlag-ontdek') {
+    return <VlagExploreScreen setId={screen.setId} onHome={goHome} />;
+  }
+
+  if (screen.name === 'vlag') {
+    return (
+      <VlagScreen
+        key={`${screen.setId}-${screen.vlagMode}-${screen.aantal ?? 0}-${visit}`}
+        setId={screen.setId}
+        mode={screen.vlagMode}
         aantal={screen.aantal}
         toetsstand={screen.toetsstand}
         onHome={goHome}
@@ -345,18 +387,7 @@ export default function App() {
         naam={boot.profile.naam}
         sticker={boot.profile.avatarConfig.sticker}
         onReis={goReis}
-        onStart={(setId, practiceMode) => {
-          setVisit(visit + 1);
-          setScreen({ name: 'practice', setId, practiceMode, aantal: null, toetsstand: false });
-        }}
-        onStartSum={(setId, sumMode) => {
-          setVisit(visit + 1);
-          setScreen({ name: 'sums', setId, sumMode, aantal: null, toetsstand: false });
-        }}
-        onStartKlok={(setId, klokMode) => {
-          setVisit(visit + 1);
-          setScreen({ name: 'klok', setId, klokMode, aantal: null, toetsstand: false });
-        }}
+        onBegin={beginRonde}
         onModule={goModule}
       />
     </Shell>

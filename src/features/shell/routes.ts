@@ -1,3 +1,4 @@
+import { loadVlagSet } from '@/content/loadVlaggen';
 import { CATEGORIES, MODULES, type Category, type Module } from './modules';
 
 /**
@@ -120,7 +121,16 @@ const SLUG_SET = new Map(
 const REKENEN_SLUG =
   /^(?:tafel|deel)-(?:[1-9]|1[0-2])$|^(?:plus|min)-(?:20|100|1000)$|^keer-(?:100|1000)$/;
 
+/**
+ * Flags answer to where and what, in the order the page asks them —
+ * leer.nu/vlaggen/europa-bekend — and the provinces to the one word a parent
+ * would type. The set ids carry a `vlag-` prefix the address does not need.
+ */
+const VLAG_PROVINCIES = 'vlag-nederland-provincies';
+
 export function setSlug(setId: string): string {
+  if (setId === VLAG_PROVINCIES) return 'provincies';
+  if (setId.startsWith('vlag-')) return setId.slice('vlag-'.length);
   return SET_SLUG[setId] ?? setId;
 }
 
@@ -150,6 +160,10 @@ function setIdFor(module: Module, slug: string): string | null {
     return REKENEN_MIX[slug] ?? null;
   }
   if (module.id === 'klok') return KLOK_SLUG[slug] ?? null;
+  if (module.id === 'vlaggen') {
+    const id = slug === 'provincies' ? VLAG_PROVINCIES : `vlag-${slug}`;
+    return loadVlagSet(id) ? id : null;
+  }
   return SLUG_SET.get(slug) ?? null;
 }
 

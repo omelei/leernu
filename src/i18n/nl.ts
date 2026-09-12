@@ -571,6 +571,63 @@ export const nl = {
   'way.klok-welke-klok': 'Van de tijd naar de wijzers — andersom dus',
   'way.klok-typen': 'Schrijf de tijd zelf op — voor de toets',
 
+  // Vlaggen (ADR-102). Een onderwerp is één of twee woorden, zoals bij
+  // topografie; de rij erboven zegt al waar.
+  'onderwerp.vlaggen.bekend': 'Bekende vlaggen',
+  'onderwerp.vlaggen.bekend.uitleg': 'De vlaggen die de meeste kinderen kennen',
+  'onderwerp.vlaggen.alle': 'Alle vlaggen',
+  'onderwerp.vlaggen.alle.uitleg': 'Elke vlag van dit deel van de wereld',
+  'onderwerp.vlaggen.lijkt': 'Lijkt op elkaar',
+  'onderwerp.vlaggen.lijkt.uitleg': 'Vlaggen die je makkelijk door elkaar haalt',
+  'onderwerp.vlaggen.mix': 'Vlaggenmix',
+  'onderwerp.vlaggen.mix.uitleg': 'Alle landen en provincies door elkaar',
+  'onderwerp.vlaggen.provincies': 'Provincievlaggen',
+  'onderwerp.vlaggen.provincies.uitleg': 'De vlaggen van de twaalf provincies',
+  'onderwerp.vlaggen.fouten.uitleg': 'De vlaggen die je eerder fout had',
+  // De naam van een set: wat de startbalk, de kaarten en de favorieten tonen.
+  'vlag.regio.wereld': 'de wereld',
+  'vlag.set.bekend': 'Bekende vlaggen van {regio}',
+  'vlag.set.alle': 'Alle vlaggen van {regio}',
+  'vlag.set.lijkt': 'Vlaggen van {regio} die op elkaar lijken',
+  'vlag.set.mix': 'Vlaggenmix',
+  'vlag.set.provincies': 'Provincievlaggen',
+  'vlag.set.fouten': 'Jouw fouten met vlaggen van {regio}',
+  'vlag.set.foutenWereld': 'Al jouw fouten met vlaggen',
+  'vlag.set.foutenNederland': 'Jouw fouten met provincievlaggen',
+  'vlag.en': 'en',
+  // "Vlag zoeken" en niet "Welke vlag?": de naam van een oefenvorm komt in de
+  // startzin terecht, net als "Klok zoeken".
+  'mode.vlag-zoeken': 'Vlag zoeken',
+  'mode.vlag-meerkeuze': 'Meerkeuze',
+  // Alleen de oefentoets vraagt zo, en zo heet hij dan ook in de lijst van
+  // wat je laatst hebt geoefend.
+  'mode.vlag-gemengd': 'Oefentoets',
+  'way.vlag-zoeken': 'Kies de vlag die bij de naam hoort',
+  'way.vlag-meerkeuze': 'Kies de naam die bij de vlag hoort',
+  'way.vlag-gemengd':
+    'Je kiest zonder hulp, vlaggen en namen door elkaar. Aan het eind zie je wat goed was en krijg je een cijfer.',
+  'vlag.zoekLabel': 'Welke vlag hoort hierbij?',
+  'vlag.meerkeuzeLabelLand': 'Van welk land is deze vlag?',
+  'vlag.meerkeuzeLabelProvincie': 'Van welke provincie is deze vlag?',
+  'vlag.prompt': 'Kijk goed naar de vlag.',
+  'vlag.optiesLabel': 'Kies een vlag',
+  'vlag.namenLabel': 'Kies een naam',
+  'vlag.alt': 'De vlag van {naam}',
+  'vlag.correct': 'Goed! Dit is de vlag van {naam}.',
+  'vlag.wrong': 'Dit is de vlag van {naam}.',
+  'vlag.wrongSubVlag': 'Jij koos de vlag van {gekozen}.',
+  'vlag.wrongSubNaam': 'Jij koos {gekozen}.',
+  'vlag.dontKnowSub': 'Nu weet je hem.',
+  'vlag.practiceMore': 'Deze vlaggen moet je nog oefenen',
+  'vlag.loading': 'Vlaggen worden geladen…',
+  'vlag.failed': 'De vlaggen konden niet geladen worden.',
+  'vlag.explore.kind': 'Ontdek de vlaggen',
+  'vlag.explore.hint': 'Kies een naam. Je ziet meteen de vlag.',
+  'vlag.explore.nothingChosen': 'Kies een vlag uit de lijst.',
+  'vlag.explore.werelddeel': 'Werelddeel',
+  'vlag.explore.land': 'Land',
+  'vlag.explore.hoofdstad': 'Hoofdstad',
+
   'result.title': 'Ronde klaar',
   // The one place the word "score" is allowed: the result of one round. It is
   // never a word for how much a child knows (ADR-030).

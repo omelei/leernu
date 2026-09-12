@@ -39,7 +39,7 @@ export const MODULES: readonly Module[] = [
   { id: 'woorden', name: 'module.woorden', built: false },
   { id: 'spelling', name: 'module.spelling', built: false },
   { id: 'tijdvakken', name: 'module.tijdvakken', built: false },
-  { id: 'vlaggen', name: 'module.vlaggen', built: false },
+  { id: 'vlaggen', name: 'module.vlaggen', built: true },
 ];
 
 export const BUILT_MODULES = MODULES.filter((module) => module.built);

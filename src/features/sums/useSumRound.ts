@@ -1,36 +1,24 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useCallback } from 'react';
 import {
-  COMBO_THRESHOLD,
   composeRound,
-  countMastered,
-  emptyState,
   judgeSum,
-  review,
   sumDistractors,
   type ItemState,
   type RoundRule,
-  type StreakChange,
   type SumItem,
   type SumSet,
 } from '@/game-core';
 import { loadSumSet, sumPool } from '@/content/loadSums';
-import { finishSession, loadItemStates, saveAnswer, startSession } from '@/store/progress';
-import { recordRoundFinished } from '@/store/streakStore';
-import { applyRoundRewards, type RoundOutcome } from '@/store/rewardStore';
+import { useRoundCore, type RondeFase, type RondeKern } from '@/features/round/useRoundCore';
 
 /**
  * One round of tables.
  *
- * This is a second copy of the round wiring, and that is a decision rather than
- * an accident (ADR-049). `useRound` is six hundred lines of map: geometry to
- * load, an answer layer, a name index, near misses, touch targets. A round of
- * sums shares none of it and shares the two things that matter — the Leitner
- * schedule and what gets written down — by importing them.
- *
- * Pulling a common round out of the two now would mean guessing which parts are
- * general from a sample of two, and the guess would be made under the map's
- * shape because the map got there first. The third module is when that guess
- * becomes an observation.
+ * What a round of sums shares with every other round — the schedule, the
+ * session record, the three ways it ends, the combo, the streak and the
+ * rewards — lives in `useRoundCore` (ADR-101). What is left here is what makes
+ * it sums: which sums, in which order, with which four numbers, and how a typed
+ * answer is judged.
  *
  * A round is the whole table. Ten sums is what a table has and what the design
  * puts on the module card, and "de tafel van 7 ken ik" is only sayable about
@@ -47,7 +35,7 @@ export type SumMode = 'som-typen' | 'som-meerkeuze' | 'bliksemronde' | 'overleve
  *
  * The clock and the lives are the same two the map offers and for the same
  * reason (ADR-021): pressure, and neither of them punishes. They run over all
- * twelve tables rather than the chosen one; see the pool in `boot` below.
+ * twelve tables rather than the chosen one; see the pool in `stel` below.
  */
 
 export const SUM_ROUND_RULE: Record<SumMode, RoundRule> = {
@@ -94,7 +82,7 @@ export function typesTheSum(mode: SumMode): boolean {
   return mode !== 'som-meerkeuze';
 }
 
-export type SumPhase = 'loading' | 'asking' | 'revealed' | 'finished';
+export type SumPhase = RondeFase;
 
 export interface SumQuestion {
   readonly sum: SumItem;
@@ -102,40 +90,19 @@ export interface SumQuestion {
   readonly options: readonly number[] | null;
 }
 
-export interface SumRoundState {
-  readonly phase: SumPhase;
-  readonly set: SumSet | null;
+/**
+ * The round as the screens read it: the shared bookkeeping, and which way it
+ * was asked. `given` is the number the child answered, or null when they said
+ * they did not know. `toetsstand` is needed twice — while the round runs, so
+ * nothing is coloured in between, and afterwards, because a round that asked
+ * without helping is the one round in this product that has earned a mark.
+ */
+export type SumRoundState = RondeKern<SumSet, SumQuestion, SumItem, number> & {
   readonly mode: SumMode;
-  readonly question: SumQuestion | null;
-  readonly index: number;
-  readonly total: number;
-  readonly correctCount: number;
-  readonly answeredCount: number;
-  readonly combo: number;
-  /** What the child answered, or null when they said they did not know. */
-  readonly given: number | null;
-  readonly lastCorrect: boolean;
-  readonly missed: readonly SumItem[];
-  /** How many more sums in this table the child now remembers. Never negative. */
-  readonly gained: number;
-  /** How this round ends. The result screen needs it to count honestly. */
-  readonly rule: RoundRule;
-  /** Bliksemronde only: whole seconds left. */
-  readonly secondsLeft: number | null;
-  /** Overleven only: lives remaining. */
-  readonly livesLeft: number | null;
-  readonly streak: StreakChange | null;
-  readonly reward: RoundOutcome | null;
-  /**
-   * Whether this round kept its answers to itself until the end (ADR-085).
-   *
-   * The screen needs it twice: while the round runs, so nothing is coloured in
-   * between; and afterwards, because a round that asked without helping is the
-   * one round in this product that has earned a mark.
-   */
-  readonly toetsstand: boolean;
-  readonly error: string | null;
-}
+};
+
+/** The item a question is about, for the core. At module level so it is stable. */
+const somVan = (question: SumQuestion): SumItem => question.sum;
 
 /**
  * The sums this child has got wrong at least once, hardest first.
@@ -170,13 +137,10 @@ function optionsFor(sum: SumItem, rng: () => number): number[] {
 /**
  * @param aantal how many sums the child asked for, or null for the round's own
  *   length. A diploma ignores it: it is the whole table or it is not a diploma.
- */
-/**
- * Toetsstand: a round that keeps its answers to itself until the end.
- *
- * The same switch the map's rounds carry, and the same argument (ADR-085): a
- * child who has only ever practised with the answer arriving half a second
- * later has practised something no test will ask of them.
+ * @param toetsstand a round that keeps its answers to itself until the end —
+ *   the same switch the map's rounds carry, and the same argument (ADR-085): a
+ *   child who has only ever practised with the answer arriving half a second
+ *   later has practised something no test will ask of them.
  */
 export function useSumRound(
   setId: string,
@@ -184,165 +148,72 @@ export function useSumRound(
   aantal: number | null = null,
   toetsstand = false,
 ) {
-  const [set, setSet] = useState<SumSet | null>(null);
-  const [questions, setQuestions] = useState<SumQuestion[]>([]);
-  const [states, setStates] = useState<Map<string, ItemState>>(new Map());
-  const [phase, setPhase] = useState<SumPhase>('loading');
-  const [index, setIndex] = useState(0);
-  const [given, setGiven] = useState<number | null>(null);
-  const [lastCorrect, setLastCorrect] = useState(false);
-  const [correctCount, setCorrectCount] = useState(0);
-  const [answeredCount, setAnswered] = useState(0);
-  const [combo, setCombo] = useState(0);
-  const [comboAnswers, setComboAnswers] = useState(0);
-  const [missed, setMissed] = useState<SumItem[]>([]);
-  const [streak, setStreak] = useState<StreakChange | null>(null);
-  const [reward, setReward] = useState<RoundOutcome | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const { kern, settle, next, stop } = useRoundCore<SumSet, SumQuestion, SumItem, number>({
+    setId,
+    mode,
+    basisRegel: SUM_ROUND_RULE[mode],
+    aantal: mode === 'tafeldiploma' ? null : aantal,
+    toetsstand,
+    itemVan: somVan,
+    stoptBijFout: stopsOnAMistake(mode),
+    stel: (states, rule) => {
+      const loaded = loadSumSet(setId);
+      if (!loaded) throw new Error(`Onbekende tafel: ${setId}`);
 
-  // Memoised: `rule` is a dependency of the effect that composes the round, so
-  // a fresh object every render would start a new round on every render.
-  const rule = useMemo<RoundRule>(() => {
-    const base = SUM_ROUND_RULE[mode];
-    if (mode === 'tafeldiploma') return base;
-    return aantal !== null && base.kind === 'fixed' ? { kind: 'fixed', aantal } : base;
-  }, [mode, aantal]);
-  const [secondsLeft, setSecondsLeft] = useState(rule.kind === 'tijd' ? rule.seconden : 0);
-  const [livesLeft, setLivesLeft] = useState(rule.kind === 'levens' ? rule.levens : 0);
+      // A fixed round is the chosen set. A round that ends on a clock or on
+      // lives draws from everything of the same kind, because ten sums would
+      // run out long before the minute does — and a child who reaches for the
+      // clock is one who already knows a table, not one still learning this
+      // one. What it does not do is reach across kinds: a minute of tables
+      // stays a minute of tables (`sumPool`).
+      const alles = rule.kind === 'fixed' ? loaded.items : sumPool(setId);
+      // "Oefen je fouten" is every sum this child has ever had wrong, in the
+      // scheduler's order, which puts the ones they keep missing first. Read
+      // from the boxes at the moment the round starts rather than from a list
+      // made when the page loaded: a child who has just put one right should
+      // not be asked it again because a card was stale (ADR-078).
+      const pool = setId === 'fouten' ? metFouten(alles, states) : alles;
 
-  const sessionId = useRef<string | null>(null);
-  const askedAt = useRef(0);
-  const masteredAtStart = useRef(0);
-  /**
-   * Wall-clock end of a timed round, set once. Counting down on a tick loses
-   * whatever each tick was late by, and over sixty seconds on a school
-   * Chromebook that is not nothing.
-   */
-  const deadline = useRef<number | null>(null);
+      // In the order the scheduler wants it: what a child keeps missing comes
+      // round first, even inside ten sums. A diploma is the exception and
+      // asks the table straight through.
+      const picked = inTableOrder(mode)
+        ? [...loaded.items].slice(0, rule.kind === 'fixed' ? rule.aantal : loaded.items.length)
+        : composeRound({
+            items: pool,
+            states,
+            size: rule.kind === 'fixed' ? rule.aantal : pool.length,
+            now: new Date(),
+          });
 
-  useEffect(() => {
-    let cancelled = false;
-
-    async function boot() {
-      try {
-        const loaded = loadSumSet(setId);
-        if (!loaded) throw new Error(`Onbekende tafel: ${setId}`);
-
-        const loadedStates = await loadItemStates();
-        if (cancelled) return;
-
-        // A fixed round is the chosen set. A round that ends on a clock or on
-        // lives draws from everything of the same kind, because ten sums would
-        // run out long before the minute does — and a child who reaches for the
-        // clock is one who already knows a table, not one still learning this
-        // one. What it does not do is reach across kinds: a minute of tables
-        // stays a minute of tables (`sumPool`).
-        const alles = rule.kind === 'fixed' ? loaded.items : sumPool(setId);
-        // "Oefen je fouten" is every sum this child has ever had wrong, in the
-        // scheduler's order, which puts the ones they keep missing first. Read
-        // from the boxes at the moment the round starts rather than from a list
-        // made when the page loaded: a child who has just put one right should
-        // not be asked it again because a card was stale (ADR-078).
-        const pool = setId === 'fouten' ? metFouten(alles, loadedStates) : alles;
-
-        // In the order the scheduler wants it: what a child keeps missing comes
-        // round first, even inside ten sums. A diploma is the exception and
-        // asks the table straight through.
-        const picked = inTableOrder(mode)
-          ? [...loaded.items].slice(0, rule.kind === 'fixed' ? rule.aantal : loaded.items.length)
-          : composeRound({
-              items: pool,
-              states: loadedStates,
-              size: rule.kind === 'fixed' ? rule.aantal : pool.length,
-              now: new Date(),
-            });
-
-        const round = picked.map((sum) => ({
+      return {
+        set: loaded,
+        itemIds: loaded.items.map((sum) => sum.id),
+        questions: picked.map((sum) => ({
           sum,
           options: typesTheSum(mode) ? null : optionsFor(sum, Math.random),
-        }));
+        })),
+      };
+    },
+  });
 
-        sessionId.current = await startSession(
-          mode,
-          round.map((question) => question.sum.id),
-          setId,
-        );
-        if (cancelled) return;
-
-        masteredAtStart.current = countMastered(
-          loadedStates,
-          loaded.items.map((sum) => sum.id),
-        );
-
-        setSet(loaded);
-        setStates(loadedStates);
-        setQuestions(round);
-        setPhase(round.length > 0 ? 'asking' : 'finished');
-        askedAt.current = performance.now();
-        if (rule.kind === 'tijd') deadline.current = Date.now() + rule.seconden * 1000;
-      } catch (cause) {
-        if (!cancelled) setError(cause instanceof Error ? cause.message : String(cause));
-      }
-    }
-
-    void boot();
-    return () => {
-      cancelled = true;
-    };
-  }, [setId, mode, rule]);
-
-  const question = questions[index] ?? null;
+  const question = kern.question;
 
   /** One answer, however it arrived: typed, chosen, or not given at all. */
-  const settle = useCallback(
-    (answer: number | null, spendsALife = true) => {
-      if (phase !== 'asking' || !question || !sessionId.current) return;
-
-      const correct = answer !== null && answer === question.sum.antwoord;
-      const responseMs = Math.round(performance.now() - askedAt.current);
-      const previous = states.get(question.sum.id) ?? emptyState(question.sum.id);
-      const nextState = review(previous, correct, new Date());
-
-      setGiven(answer);
-      setLastCorrect(correct);
-      setPhase('revealed');
-
-      const nextCombo = correct ? combo + 1 : 0;
-      setCombo(nextCombo);
-      if (nextCombo >= COMBO_THRESHOLD) setComboAnswers(comboAnswers + 1);
-      setAnswered(answeredCount + 1);
-      if (correct) setCorrectCount(correctCount + 1);
-      else setMissed([...missed, question.sum]);
-
-      setStates(new Map(states).set(question.sum.id, nextState));
-
-      if (!correct && spendsALife && rule.kind === 'levens') setLivesLeft(livesLeft - 1);
-
-      void saveAnswer({
-        sessionId: sessionId.current,
-        mode,
-        itemId: question.sum.id,
+  const answer = useCallback(
+    (given: number | null, spendsALife = true) => {
+      if (!question) return;
+      const correct = given !== null && given === question.sum.antwoord;
+      settle({
         correct,
-        responseMs,
+        given,
         // ADR-048's distinction, in the other module: not knowing and getting
         // it wrong are different things to have done.
-        chosen: correct ? null : answer === null ? 'weet-niet' : String(answer),
-        nextState,
+        recorded: correct ? null : given === null ? 'weet-niet' : String(given),
+        spendsALife,
       });
     },
-    [
-      phase,
-      question,
-      states,
-      combo,
-      comboAnswers,
-      answeredCount,
-      correctCount,
-      missed,
-      mode,
-      rule,
-      livesLeft,
-    ],
+    [question, settle],
   );
 
   const submit = useCallback(
@@ -352,136 +223,15 @@ export function useSumRound(
       // Judged by game-core so the rule lives in one place; parsed here only to
       // show the child what they answered.
       const correct = judgeSum(typed, question.sum);
-      settle(correct ? question.sum.antwoord : Number(cleaned));
+      answer(correct ? question.sum.antwoord : Number(cleaned));
     },
-    [question, settle],
+    [question, answer],
   );
 
-  const choose = useCallback((value: number) => settle(value), [settle]);
-  const giveUp = useCallback(() => settle(null, false), [settle]);
+  const choose = useCallback((value: number) => answer(value), [answer]);
+  const giveUp = useCallback(() => answer(null, false), [answer]);
 
-  const finish = useCallback(() => {
-    if (phase === 'finished') return;
-    setPhase('finished');
-    if (sessionId.current) void finishSession(sessionId.current, correctCount, answeredCount);
+  const state: SumRoundState = { ...kern, mode };
 
-    void recordRoundFinished().then((change) => {
-      setStreak(change);
-
-      const ids = (set?.items ?? []).map((sum) => sum.id);
-      void applyRoundRewards({
-        correct: correctCount,
-        answered: answeredCount,
-        comboAnswers,
-        snapshot: {
-          setId,
-          perfectRound: answeredCount > 0 && correctCount === answeredCount,
-          completeRound: answeredCount === questions.length,
-          streakDays: change.state.huidigeStreak,
-          mastered: countMastered(states, ids),
-          setSize: ids.length,
-          roundsFinished: 1,
-          mode,
-          correct: correctCount,
-        },
-      }).then(setReward);
-    });
-  }, [phase, correctCount, answeredCount, comboAnswers, set, setId, mode, questions, states]);
-
-  const next = useCallback(() => {
-    if (phase !== 'revealed') return;
-
-    // Out of lives, out of questions, or — in a diploma — out of the attempt,
-    // because one wrong answer ends it. A timed round ends on the clock
-    // instead, which is the interval below.
-    if (
-      (rule.kind === 'levens' && livesLeft <= 0) ||
-      (stopsOnAMistake(mode) && !lastCorrect) ||
-      index + 1 >= questions.length
-    ) {
-      finish();
-      return;
-    }
-
-    setIndex(index + 1);
-    setGiven(null);
-    setPhase('asking');
-    askedAt.current = performance.now();
-  }, [phase, index, questions, finish, rule, livesLeft, mode, lastCorrect]);
-
-  /**
-   * The clock. Four ticks a second so the number is not up to a second behind
-   * what it claims, and it reads the deadline rather than counting down, so a
-   * busy frame costs no time.
-   *
-   * WCAG 2.2.1 wants time limits adjustable, with an exception where the limit
-   * is the activity. Here it is: a bliksemronde without a clock is just typing.
-   * The two learning modes have no clock at all.
-   */
-  useEffect(() => {
-    if (rule.kind !== 'tijd') return;
-    if (phase === 'loading' || phase === 'finished') return;
-
-    const tick = () => {
-      const over = Math.max(0, Math.ceil(((deadline.current ?? 0) - Date.now()) / 1000));
-      setSecondsLeft(over);
-      if (over === 0) finish();
-    };
-    tick();
-    const id = setInterval(tick, 250);
-    return () => clearInterval(id);
-  }, [rule, phase, finish]);
-
-  /**
-   * A timed round moves on by itself: making a child press Volgende while a
-   * clock runs is charging them for the button. A wrong answer gets twice as
-   * long, because the thing worth seeing is what it actually was.
-   */
-  useEffect(() => {
-    if (toetsstand || rule.kind !== 'tijd' || phase !== 'revealed') return;
-    const id = setTimeout(next, lastCorrect ? 900 : 1800);
-    return () => clearTimeout(id);
-  }, [toetsstand, rule, phase, lastCorrect, next]);
-
-  /**
-   * And a toetsstand moves on at once, with nothing shown in between. Before
-   * the paint rather than after it: `useEffect` would let the revealed frame
-   * reach the screen for a sixtieth of a second, and a green flash nobody can
-   * read is worse than either telling a child or not telling them.
-   */
-  useLayoutEffect(() => {
-    if (!toetsstand || phase !== 'revealed') return;
-    next();
-  }, [toetsstand, phase, next]);
-
-  const state: SumRoundState = {
-    phase,
-    set,
-    mode,
-    question,
-    index,
-    total: questions.length,
-    correctCount,
-    answeredCount,
-    combo,
-    given,
-    lastCorrect,
-    missed,
-    gained: Math.max(
-      0,
-      countMastered(
-        states,
-        (set?.items ?? []).map((sum) => sum.id),
-      ) - masteredAtStart.current,
-    ),
-    rule,
-    secondsLeft: rule.kind === 'tijd' ? secondsLeft : null,
-    livesLeft: rule.kind === 'levens' ? livesLeft : null,
-    streak,
-    reward,
-    toetsstand,
-    error,
-  };
-
-  return { state, submit, choose, giveUp, next, stop: finish };
+  return { state, submit, choose, giveUp, next, stop };
 }

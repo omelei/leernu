@@ -4,8 +4,8 @@ Practice for Dutch primary and lower-secondary education. Short rounds, a map
 that fills the screen, and progress a child can feel. No advertising, no
 tracking, no account required.
 
-Three modules today: **topografie**, **rekenen** and **klokkijken**. Four more
-are planned and they stand in the rail beside the three that exist
+Four modules today: **topografie**, **rekenen**, **klokkijken** and **vlaggen**.
+Three more are planned and they stand in the rail beside the four that exist
 ([ADR-051](docs/DECISIONS.md)), because a rail that showed only what was
 finished made the product look like it stopped there. What none of them does is pretend: a module that is not built
 says so on its own page and points at the ones that are.
@@ -72,6 +72,17 @@ of four faces says it, which is the half a child who has learned to recognise
 twelve pictures has never been asked. And "half acht" is half past _seven_ —
 that one rule is what the module is for and what the wrong answers are built
 from.
+
+Vlaggen hangs off topography: the same row of werelddelen, and then the
+well-known flags, all of them, or the ones that look alike — 196 countries and
+the twelve provinces ([ADR-102](docs/DECISIONS.md)). A child finds the flag for
+a name, or the name for a flag, and the wrong answers get closer as the round
+goes on: first flags from the other side of the world, then from the same
+werelddeel, and at the end Tsjaad beside Roemenië. There is no typing — spelling
+"Kirgizië" is a spelling test — and a screen reader describes each flag rather
+than naming it, because the name is the answer. Which countries count, and why
+Taiwan is in and Palestina is not, is written down in
+[content/vlaggen/AFBAKENING.md](content/vlaggen/AFBAKENING.md).
 
 Every module offers a **mix**: the Rekenmix shuffles all four operations — in
 three difficulties, from the level every set has always carried
