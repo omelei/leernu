@@ -12,7 +12,7 @@ import {
   type StreakState,
 } from '@/game-core';
 import kalender from '../../content/vakanties.json';
-import { getDb } from './db';
+import { getDb, type StreakRecord } from './db';
 import { activeChildId } from './children';
 
 /**
@@ -111,7 +111,14 @@ export async function loadRun(): Promise<FlawlessRun> {
 export async function recordAnswerFlawless(correct: boolean): Promise<FlawlessRun> {
   const db = await getDb();
   const id = await activeChildId();
-  const row = (await db.get('streak', id)) ?? { id, ...emptyStreak() };
+  const row: StreakRecord = (await db.get('streak', id)) ?? {
+    id,
+    huidigeStreak: 0,
+    langsteStreak: 0,
+    laatsteActieveDag: null,
+    rustdagen: 0,
+    rustdagWeek: null,
+  };
   const run = recordAnswerRun({ nu: row.foutloosNu ?? 0, beste: row.foutloosBeste ?? 0 }, correct);
 
   await db.put('streak', { ...row, id, foutloosNu: run.nu, foutloosBeste: run.beste });
