@@ -238,7 +238,7 @@ export function ModuleScreen({
               handoff drops the name on a phone; a chooser that asks "wat wil
               je oefenen?" of nobody in particular is a form, and asked of Fem
               it is a question (ADR-095). */}
-          <h1 className="tk-display tk-titel font-semibold">{t('choose.title', { naam })}</h1>
+          <h1 className="tk-display tk-titel">{t('choose.title', { naam })}</h1>
 
           {/* The reason this week has a reason, but only on the page it is
               about. */}

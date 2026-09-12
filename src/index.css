@@ -1401,6 +1401,7 @@
     font-size: var(--type-paginakop);
     line-height: var(--type-paginakop-lh);
     letter-spacing: var(--type-paginakop-ls);
+    font-weight: var(--type-paginakop-weight);
   }
 
   .tk-home-kop {

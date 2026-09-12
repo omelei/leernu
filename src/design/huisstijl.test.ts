@@ -216,6 +216,16 @@ describe('the old vocabulary is gone', () => {
     expect(offenders(stray, sourceFiles(join(ROOT, 'src'), /\.tsx$/))).toEqual([]);
   });
 
+  it('and a heading takes its weight from its role', () => {
+    // text-paginakop and .tk-titel carry 700, a card's heading 600. A
+    // font-semibold beside them wins in the cascade and quietly sets a page
+    // heading at the wrong weight — which is how four of them first shipped.
+    const role = String.raw`(?:tk-titel|text-(?:paginakop|sectiekop|vraag|getal|getal-groot))\b`;
+    const weight = String.raw`\bfont-(?:semibold|bold)\b`;
+    const doubled = new RegExp(`${role}[^'"\`]*${weight}|${weight}[^'"\`]*${role}`);
+    expect(offenders(doubled, sourceFiles(join(ROOT, 'src'), /\.tsx$/))).toEqual([]);
+  });
+
   it('and no inline style picks its own typeface', () => {
     const inline = /fontFamily:\s*['"`](?!var\(--font-(?:kop|tekst)\))/;
     expect(offenders(inline, sourceFiles(join(ROOT, 'src'), /\.tsx$/))).toEqual([]);

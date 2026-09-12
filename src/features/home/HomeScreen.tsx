@@ -94,7 +94,7 @@ export function HomeScreen({ naam, sticker, onReis, onBegin, onModule }: HomeScr
 
   const kop = (
     <div className="tk-home-kop">
-      <h1 className="tk-display tk-titel font-semibold">{t('home.welcome', { naam })}</h1>
+      <h1 className="tk-display tk-titel">{t('home.welcome', { naam })}</h1>
       <p className="text-lopend text-tekst-secundair">{t('home.todayOpen')}</p>
     </div>
   );

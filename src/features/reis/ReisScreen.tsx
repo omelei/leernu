@@ -96,7 +96,7 @@ export function ReisScreen({
   return (
     <div className="tk-page">
       <div className="tk-page-main">
-        <h1 className="tk-display tk-titel font-semibold">{t('reis.title')}</h1>
+        <h1 className="tk-display tk-titel">{t('reis.title')}</h1>
 
         {/* The nearest reward, beside the hero it is for. Its own name rather
             than the card's in the column: two landmarks with one label is two
