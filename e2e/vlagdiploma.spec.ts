@@ -21,7 +21,16 @@ async function speel(page: Page) {
   const namen = page.getByRole('group', { name: 'Kies een naam' });
 
   for (let vraag = 0; vraag < 40; vraag++) {
-    await expect(klaar.or(volgende).or(vlaggen).or(namen).first()).toBeVisible();
+    try {
+      await expect(klaar.or(volgende).or(vlaggen).or(namen).first()).toBeVisible();
+    } catch (error) {
+      // Say where the round stood, which the locator alone cannot: which
+      // question, and what the screen said instead of asking it.
+      const scherm = (await page.locator('body').innerText()).slice(0, 1500);
+      throw new Error(
+        `Vraag ${vraag + 1}: niets om te beantwoorden. Op het scherm:\n${scherm}\n\n${String(error)}`,
+      );
+    }
     if (await klaar.isVisible()) return;
     // A diploma says nothing until the end, so there is never a "next".
     await expect(volgende).toHaveCount(0);
