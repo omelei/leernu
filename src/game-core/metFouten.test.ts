@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { emptyState, metFouten, type ItemState } from './index';
+import { alleenDeze, emptyState, metFouten, type ItemState } from './index';
 
 const staat = (itemId: string, foutCount: number): [string, ItemState] => [
   itemId,
@@ -16,5 +16,18 @@ describe('metFouten', () => {
 
   it('is empty for a child who has not got anything wrong', () => {
     expect(metFouten(items, new Map())).toEqual([]);
+  });
+});
+
+describe('alleenDeze', () => {
+  const eigen = [{ id: 'a' }, { id: 'b' }];
+  const verder = [{ id: 'b' }, { id: 'x' }];
+
+  it('asks exactly the ids given, in their order, from whichever list holds them', () => {
+    expect(alleenDeze(['x', 'a'], eigen, verder).map((item) => item.id)).toEqual(['x', 'a']);
+  });
+
+  it('asks an item once, and drops an id no list holds', () => {
+    expect(alleenDeze(['b', 'b', 'weg'], eigen, verder).map((item) => item.id)).toEqual(['b']);
   });
 });

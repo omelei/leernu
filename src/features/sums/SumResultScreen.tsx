@@ -3,6 +3,7 @@ import { sumText } from '@/game-core';
 import type { SumRoundState } from './useSumRound';
 import { Beloning } from '@/features/reis/Beloning';
 import { RoundMark } from '@/components/RoundMark';
+import { HerhaalFouten } from '@/features/round/HerhaalFouten';
 
 /**
  * K8 for the tables.
@@ -20,10 +21,12 @@ export function SumResultScreen({
   state,
   onHome,
   onAgain,
+  onHerhaal,
 }: {
   readonly state: SumRoundState;
   readonly onHome: () => void;
   readonly onAgain: () => void;
+  readonly onHerhaal: (ids: readonly string[]) => void;
 }) {
   // Only a fixed round has a total to fall short of. "Je stopte na 3 van de
   // 120" would be a lie about a round that was never going to ask 120.
@@ -98,6 +101,7 @@ export function SumResultScreen({
         <button type="button" className="tk-button" onClick={onAgain}>
           {t('result.again')}
         </button>
+        <HerhaalFouten missed={state.missed} onHerhaal={onHerhaal} />
         <button type="button" className="tk-button tk-button-secondary" onClick={onHome}>
           {t('result.home')}
         </button>

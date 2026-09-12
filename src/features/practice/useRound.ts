@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import {
+  alleenDeze,
   buildOptions,
   composeRound,
   COMBO_THRESHOLD,
@@ -451,12 +452,15 @@ export interface RoundState {
  *   A switch on whichever way was chosen rather than a seventh card in step 2:
  *   "the answers come at the end" can be done to pointing, to choosing and to
  *   typing alike, and step 2 holds six at most (ADR-085).
+ * @param alleen "Herhaal je fouten": the ids of the items the last round got
+ *   wrong, which are then the whole round (ADR-110). Null for a normal round.
  */
 export function useRound(
   setId: RoundSetId,
   practiceMode: PracticeMode,
   aantal: number | null = null,
   toetsstand = false,
+  alleen: readonly string[] | null = null,
 ) {
   const [geo, setGeo] = useState<GeoSet | null>(null);
   /** One layer per set the round can reach. A single set leaves one entry. */
@@ -554,7 +558,13 @@ export function useRound(
         // "Oefen je fouten" asks only what has a mistake against it (ADR-103).
         // The rest of the map stays loaded and named: a child who points at
         // the wrong province is still told which one it was.
-        const vraagbaar = isFoutenSet(setId) ? metFouten(all, loadedStates) : all;
+        // "Herhaal je fouten" asks the last round's misses and nothing else
+        // (ADR-110), with the same map loaded behind them.
+        const vraagbaar = alleen
+          ? alleenDeze(alleen, all)
+          : isFoutenSet(setId)
+            ? metFouten(all, loadedStates)
+            : all;
         const picked = composeRound({
           items: vraagbaar,
           states: loadedStates,
@@ -617,7 +627,7 @@ export function useRound(
     return () => {
       cancelled = true;
     };
-  }, [setId, rule, practiceMode]);
+  }, [setId, rule, practiceMode, alleen]);
 
   const namesById = useMemo(() => {
     const map = new Map<string, string>();

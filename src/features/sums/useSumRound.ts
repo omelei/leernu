@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import {
+  alleenDeze,
   composeRound,
   judgeSum,
   metFouten,
@@ -124,12 +125,15 @@ function optionsFor(sum: SumItem, rng: () => number): number[] {
  *   the same switch the map's rounds carry, and the same argument (ADR-085): a
  *   child who has only ever practised with the answer arriving half a second
  *   later has practised something no test will ask of them.
+ * @param alleen "Herhaal je fouten": the ids of the sums the last round got
+ *   wrong, which are then the whole round (ADR-110). Null for a normal round.
  */
 export function useSumRound(
   setId: string,
   mode: SumMode,
   aantal: number | null = null,
   toetsstand = false,
+  alleen: readonly string[] | null = null,
 ) {
   const { kern, settle, next, stop } = useRoundCore<SumSet, SumQuestion, SumItem, number>({
     setId,
@@ -149,13 +153,17 @@ export function useSumRound(
       // clock is one who already knows a table, not one still learning this
       // one. What it does not do is reach across kinds: a minute of tables
       // stays a minute of tables (`sumPool`).
-      const alles = rule.kind === 'fixed' ? loaded.items : sumPool(setId);
+      const eigen = rule.kind === 'fixed' ? loaded.items : sumPool(setId);
+      // "Herhaal je fouten" is what the last round got wrong and nothing else,
+      // wherever it came from: a minute of tables reaches past the chosen one
+      // (ADR-110).
+      const alles = alleen ? alleenDeze(alleen, loaded.items, sumPool(setId)) : eigen;
       // "Oefen je fouten" is every sum this child has ever had wrong, in the
       // scheduler's order, which puts the ones they keep missing first. Read
       // from the boxes at the moment the round starts rather than from a list
       // made when the page loaded: a child who has just put one right should
       // not be asked it again because a card was stale (ADR-078).
-      const pool = setId === 'fouten' ? metFouten(alles, states) : alles;
+      const pool = setId === 'fouten' && !alleen ? metFouten(alles, states) : alles;
 
       // In the order the scheduler wants it: what a child keeps missing comes
       // round first, even inside ten sums. A diploma is the exception and

@@ -77,6 +77,8 @@ export function PracticeScreen({
   toetsstand = false,
   onHome,
   onAgain,
+  alleen = null,
+  onHerhaal,
 }: {
   readonly setId: RoundSetId;
   readonly practiceMode: PracticeMode;
@@ -94,12 +96,16 @@ export function PracticeScreen({
   readonly onHome: () => void;
   /** Another round of the same thing: K8's one primary button. */
   readonly onAgain: () => void;
+  /** "Herhaal je fouten": the ids this round asks and nothing else (ADR-110). */
+  readonly alleen?: readonly string[] | null;
+  readonly onHerhaal: (ids: readonly string[]) => void;
 }) {
   const { state, pick, choose, submit, giveUp, next, stop } = useRound(
     setId,
     practiceMode,
     aantal,
     toetsstand,
+    alleen,
   );
   const prefs = usePreferences();
   const nextButton = useRef<HTMLButtonElement>(null);
@@ -122,7 +128,7 @@ export function PracticeScreen({
   }
 
   if (state.phase === 'finished')
-    return <ResultScreen state={state} onHome={onHome} onAgain={onAgain} />;
+    return <ResultScreen state={state} onHome={onHome} onAgain={onAgain} onHerhaal={onHerhaal} />;
 
   if (state.phase === 'loading' || !state.geo || !state.answers || !state.question) {
     return (

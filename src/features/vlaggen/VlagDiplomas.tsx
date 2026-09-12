@@ -3,6 +3,7 @@ import { DiplomaIcon } from '@/components/Icon';
 import { DIPLOMA_WERELDDELEN, type DiplomaWerelddeel } from '@/game-core';
 import { t, type TranslationKey } from '@/i18n';
 import { loadVlagDiplomas } from '@/store/rewardStore';
+import { PremiumLabel } from '@/features/module/PremiumLabel';
 
 /**
  * Six vlaggendiploma's, one per werelddeel, with the gaps showing (ADR-104).
@@ -31,7 +32,10 @@ export function VlagDiplomas({
   return (
     <section className="flex flex-col gap-3" aria-label={t('vlag.diplomasTitle')}>
       <div>
-        <h2 className="tk-label">{t('vlag.diplomasTitle')}</h2>
+        <div className="flex flex-wrap items-center gap-2">
+          <h2 className="tk-label">{t('vlag.diplomasTitle')}</h2>
+          <PremiumLabel hoorbaar />
+        </div>
         <p className="text-tekst-secundair">
           {t('vlag.diplomasCount', { aantal: behaald.size, totaal: DIPLOMA_WERELDDELEN.length })}
         </p>

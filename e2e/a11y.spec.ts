@@ -111,9 +111,14 @@ test('the module pages have no violations, in each of their four shapes', async 
   expect((await scan(page)).violations).toEqual([]);
 
   await page.goto('/rekenen');
-  // The chips, which are step 1's second question and the one control on the
+  // The keypad, which is step 1's second question and the one control on the
   // page whose visible label is deliberately shorter than its meaning: "12" is
-  // what the eye gets and "Tafel van 12" is what a screen reader gets.
+  // what the eye gets and "Tafel van 12" is what a screen reader gets. Nothing
+  // is pressed when the page opens, so it waits for Tafels.
+  await page
+    .getByRole('region', { name: /Kies een onderwerp/ })
+    .getByRole('button', { name: /^Tafels/ })
+    .click();
   await expect(page.getByRole('button', { name: 'Tafel van 12', exact: true })).toBeVisible();
   expect((await scan(page)).violations).toEqual([]);
 

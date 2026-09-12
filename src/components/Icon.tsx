@@ -716,9 +716,9 @@ export function LandIcon(props: Omit<IconProps, 'children'>) {
 }
 
 /**
- * Keersommen: the grid a big keersom is split in — 6 × 14 as a block of six by
- * ten and a block of six by four. It was the tables' mark until the tables took
- * the sign itself (ADR-100).
+ * A grid: the flags that look alike, laid side by side. It was the tables' mark
+ * until the tables took the sign itself (ADR-100), and the keersommen' until
+ * they took it in turn (ADR-110).
  */
 export function GridIcon(props: Omit<IconProps, 'children'>) {
   return (
@@ -810,7 +810,8 @@ export function MinuutIcon(props: Omit<IconProps, 'children'>) {
 }
 
 /**
- * Tafels: the times sign, the one the sums themselves are written with.
+ * Keersommen: the times sign, the one the sums themselves are written with.
+ * It was the tables' mark until the tables got a table (ADR-110).
  *
  * An operator beside `PlusIcon` rather than `WrongIcon` again: the plus's two
  * strokes at the plus's length, turned an eighth, so the rekenen row reads
@@ -822,6 +823,24 @@ export function KeerIcon(props: Omit<IconProps, 'children'>) {
   return (
     <Icon {...props}>
       <path d="M7 7l10 10M17 7L7 17" />
+    </Icon>
+  );
+}
+
+/**
+ * Tafels: a table — a top and two legs.
+ *
+ * The pun is the point. A child who cannot read "tafels" yet knows what a tafel
+ * looks like, and the times sign went to the keersommen beside it, which are
+ * the sums past the tables that the sign is left to name (ADR-110). The top is
+ * a slab rather than one line, so at 20px it is still a table and not
+ * `MinIcon` on legs.
+ */
+export function TafelIcon(props: Omit<IconProps, 'children'>) {
+  return (
+    <Icon {...props}>
+      <path d="M3 8h18v3H3z" strokeLinejoin="round" />
+      <path d="M6 11v9M18 11v9" />
     </Icon>
   );
 }

@@ -2,6 +2,7 @@ import { vlagdiplomaDrempel } from '@/game-core';
 import { t, type TranslationKey } from '@/i18n';
 import { Beloning } from '@/features/reis/Beloning';
 import { RoundMark } from '@/components/RoundMark';
+import { HerhaalFouten } from '@/features/round/HerhaalFouten';
 import { Vlag } from './Vlag';
 import type { VlagRoundState } from './useVlagRound';
 
@@ -22,10 +23,12 @@ export function VlagResultScreen({
   state,
   onHome,
   onAgain,
+  onHerhaal,
 }: {
   readonly state: VlagRoundState;
   readonly onHome: () => void;
   readonly onAgain: () => void;
+  readonly onHerhaal: (ids: readonly string[]) => void;
 }) {
   const stoppedEarly = state.rule.kind === 'fixed' && state.answeredCount < state.total;
 
@@ -106,6 +109,7 @@ export function VlagResultScreen({
         <button type="button" className="tk-button" onClick={onAgain}>
           {t('result.again')}
         </button>
+        <HerhaalFouten missed={state.missed} onHerhaal={onHerhaal} />
         <button type="button" className="tk-button tk-button-secondary" onClick={onHome}>
           {t('result.home')}
         </button>

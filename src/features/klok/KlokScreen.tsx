@@ -42,6 +42,8 @@ export function KlokScreen({
   toetsstand = false,
   onHome,
   onAgain,
+  alleen = null,
+  onHerhaal,
 }: {
   readonly setId: string;
   readonly mode: KlokMode;
@@ -58,12 +60,16 @@ export function KlokScreen({
   readonly toetsstand?: boolean;
   readonly onHome: () => void;
   readonly onAgain: () => void;
+  /** "Herhaal je fouten": the ids this round asks and nothing else (ADR-110). */
+  readonly alleen?: readonly string[] | null;
+  readonly onHerhaal: (ids: readonly string[]) => void;
 }) {
   const { state, submit, choose, giveUp, next, stop } = useKlokRound(
     setId,
     mode,
     aantal,
     toetsstand,
+    alleen,
   );
   const prefs = usePreferences();
   const nextButton = useRef<HTMLButtonElement>(null);
@@ -84,7 +90,9 @@ export function KlokScreen({
   }
 
   if (state.phase === 'finished')
-    return <KlokResultScreen state={state} onHome={onHome} onAgain={onAgain} />;
+    return (
+      <KlokResultScreen state={state} onHome={onHome} onAgain={onAgain} onHerhaal={onHerhaal} />
+    );
 
   if (state.phase === 'loading' || !state.question) {
     return (

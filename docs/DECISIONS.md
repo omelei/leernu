@@ -4989,6 +4989,62 @@ it.
 
 ---
 
+## ADR-110 — The chooser answers nothing for the child; premium is labelled before it is locked
+
+**Status:** accepted. **Date:** 2026-09-12. Asked for by the product owner.
+
+### Context
+
+A module page opened with its first subject, that subject's first set and the
+first way of practising already pressed, so "Klaar om te starten" was full and
+Start worked before the child had answered a single question. The owner asked
+for the bar to fill, and Start to work, only once every step has an answer.
+
+In the same round of feedback: flags should open on the world; the child
+should be able to repeat only the answers a round got wrong; the bliksemronde,
+the diplomas, the oefentoetsen and the mistakes will be for signed-in users,
+and are to be labelled so now, with no sign-in built; and the tables and the
+keersommen swap marks — the tables get a table, the keersommen the ×.
+
+### Decision
+
+**Nothing is pre-chosen but the map.** Topography opens on Nederland and flags
+on the world (`eersteRegio`). The subject, the set and the way wait for a
+press. An address that names a set still answers what it names. A subject
+whose sets are a second question — the tables, the ranges, the cities — opens
+that question and chooses nothing yet. "Hoeveel vragen?" keeps its default,
+pressed, because the round's own length is an answer.
+
+**The start bar is always drawn.** Until every numbered step has an answer it
+says which steps still wait ("Kies nog bij stap 2 en 3") and Start is
+disabled, not absent: a button that appears at the end is one a child has to
+go looking for. Before there is a set, a way offered for some sets only — the
+two diplomas, Ontdekken — is not drawn, so a tile cannot vanish from under a
+finger. The page is keyed on the module, so a way chosen on one page is not
+still chosen on the next.
+
+**"Herhaal je fouten" after a round.** Every result screen with a miss offers
+it beside "Nog een ronde": a round of exactly those items, straight away. It
+asks in the same way if that way has a length; a minute, three lives, a diploma
+or an oefentoets come back as practice, with the answers shown
+(`round/herhaal.ts`). The items are narrowed as the round starts
+(`alleenDeze`, beside `metFouten`), so the boxes move as they would anywhere.
+
+**Premium is a label, not a lock.** The bliksemronde, both diplomas (the tiles
+and the two walls), the oefentoets, every "Oefen je fouten" and "Herhaal je
+fouten" carry it, and a screen reader hears it at the end of the name.
+Everything still works for everyone. `features/module/premium.ts` is the one
+list of what an account will gate.
+
+### Consequences
+
+A child presses two or three times more before a round than before, and every
+press is one they meant. The e2e specs choose every step explicitly. When
+accounts arrive, gating is a change to `premium.ts` and to what a tile does
+when pressed, not a search through the screens.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because

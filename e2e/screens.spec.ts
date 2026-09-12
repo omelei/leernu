@@ -39,6 +39,11 @@ async function chooseAndStart(page: Page, way: RegExp) {
   await page.goto('/topografie');
   await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
 
+  // Nothing is chosen for the child any more, so the subject is pressed too.
+  await page
+    .getByRole('region', { name: /Kies een onderwerp/ })
+    .getByRole('button', { name: /^Provincies/ })
+    .click();
   const how = page.getByRole('region', { name: /Hoe wil je/ });
   await how.getByRole('button', { name: way }).click();
   await start(page);
@@ -187,10 +192,20 @@ test('the tables: choosing one, and a sum', async ({ page }, testInfo) => {
   // pointing at one.
   await page.goto('/rekenen');
   await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
+
+  // Nothing is chosen when the page opens, so the picture is taken once the
+  // child has answered every step: the keypad open and the start bar ready.
+  await page
+    .getByRole('region', { name: /Kies een onderwerp/ })
+    .getByRole('button', { name: /^Tafels/ })
+    .click();
+  await page.getByRole('button', { name: 'Tafel van 1', exact: true }).click();
+  await page
+    .getByRole('region', { name: /Hoe wil je/ })
+    .getByRole('button', { name: /Zelf typen/ })
+    .click();
   await shoot(page, size, '10-tafels');
 
-  // The page opens on the table of one and on typing, so the start button is
-  // enough to get into a round.
   await start(page);
 
   await expect(page.getByPlaceholder('Antwoord')).toBeVisible(READY);

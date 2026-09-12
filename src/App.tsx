@@ -41,6 +41,12 @@ import {
 } from '@/features/practice/useRound';
 import type { SumMode } from '@/features/sums/useSumRound';
 import type { KlokMode } from '@/features/klok/useKlokRound';
+import {
+  herhaalKaartVorm,
+  herhaalKlokVorm,
+  herhaalSomVorm,
+  herhaalVlagVorm,
+} from '@/features/round/herhaal';
 import type { ProfileRecord } from '@/store/db';
 
 type Screen =
@@ -52,6 +58,8 @@ type Screen =
       practiceMode: PracticeMode;
       aantal: number | null;
       toetsstand: boolean;
+      /** "Herhaal je fouten": the only items this round asks (ADR-110). */
+      alleen: readonly string[] | null;
     }
   | { name: 'explore'; setId: SetId }
   | {
@@ -60,6 +68,7 @@ type Screen =
       sumMode: SumMode;
       aantal: number | null;
       toetsstand: boolean;
+      alleen: readonly string[] | null;
     }
   | {
       name: 'klok';
@@ -67,6 +76,7 @@ type Screen =
       klokMode: KlokMode;
       aantal: number | null;
       toetsstand: boolean;
+      alleen: readonly string[] | null;
     }
   | {
       name: 'vlag';
@@ -74,6 +84,7 @@ type Screen =
       vlagMode: VlagMode;
       aantal: number | null;
       toetsstand: boolean;
+      alleen: readonly string[] | null;
     }
   | { name: 'vlag-ontdek'; setId: string };
 type Boot = { status: 'loading' } | { status: 'ready'; profile: ProfileRecord | null };
@@ -156,16 +167,23 @@ export default function App() {
         return;
       }
       const vlagMode = asVlagMode(mode);
-      setScreen({ name: 'vlag', setId: deel.setId, vlagMode, aantal, toetsstand });
+      setScreen({ name: 'vlag', setId: deel.setId, vlagMode, aantal, toetsstand, alleen: null });
       return;
     }
     if (deel.moduleId === 'klok') {
       const klokMode = asKlokMode(mode);
-      setScreen({ name: 'klok', setId: deel.setId, klokMode, aantal, toetsstand });
+      setScreen({ name: 'klok', setId: deel.setId, klokMode, aantal, toetsstand, alleen: null });
       return;
     }
     if (deel.moduleId !== 'topo') {
-      setScreen({ name: 'sums', setId: deel.setId, sumMode: asSumMode(mode), aantal, toetsstand });
+      setScreen({
+        name: 'sums',
+        setId: deel.setId,
+        sumMode: asSumMode(mode),
+        aantal,
+        toetsstand,
+        alleen: null,
+      });
       return;
     }
     // Exploring is one set's own layer, so the mix has no way of exploring and
@@ -181,7 +199,34 @@ export default function App() {
       practiceMode: asPracticeMode(mode),
       aantal,
       toetsstand,
+      alleen: null,
     });
+  };
+
+  /**
+   * "Herhaal je fouten" (ADR-110): the same set straight away, asking what the
+   * round just finished got wrong and nothing else — as practice, with the
+   * answers shown, in a way that has a length (`round/herhaal.ts`).
+   */
+  const herhaal = (ids: readonly string[]) => {
+    if (ids.length === 0) return;
+    const alleen = [...ids];
+    const aantal = alleen.length;
+    setVisit(visit + 1);
+
+    if (screen.name === 'practice') {
+      const practiceMode = herhaalKaartVorm(screen.practiceMode);
+      setScreen({ ...screen, practiceMode, aantal, toetsstand: false, alleen });
+    } else if (screen.name === 'sums') {
+      const sumMode = herhaalSomVorm(screen.sumMode);
+      setScreen({ ...screen, sumMode, aantal, toetsstand: false, alleen });
+    } else if (screen.name === 'klok') {
+      const klokMode = herhaalKlokVorm(screen.klokMode);
+      setScreen({ ...screen, klokMode, aantal, toetsstand: false, alleen });
+    } else if (screen.name === 'vlag') {
+      const vlagMode = herhaalVlagVorm(screen.vlagMode);
+      setScreen({ ...screen, vlagMode, aantal, toetsstand: false, alleen });
+    }
   };
 
   /**
@@ -248,6 +293,8 @@ export default function App() {
         toetsstand={screen.toetsstand}
         onHome={goHome}
         onAgain={() => setVisit(visit + 1)}
+        alleen={screen.alleen}
+        onHerhaal={herhaal}
       />
     );
   }
@@ -262,6 +309,8 @@ export default function App() {
         toetsstand={screen.toetsstand}
         onHome={goHome}
         onAgain={() => setVisit(visit + 1)}
+        alleen={screen.alleen}
+        onHerhaal={herhaal}
       />
     );
   }
@@ -280,6 +329,8 @@ export default function App() {
         toetsstand={screen.toetsstand}
         onHome={goHome}
         onAgain={() => setVisit(visit + 1)}
+        alleen={screen.alleen}
+        onHerhaal={herhaal}
       />
     );
   }
@@ -294,6 +345,8 @@ export default function App() {
         toetsstand={screen.toetsstand}
         onHome={goHome}
         onAgain={() => setVisit(visit + 1)}
+        alleen={screen.alleen}
+        onHerhaal={herhaal}
       />
     );
   }
@@ -362,7 +415,10 @@ export default function App() {
   if (route.name === 'module') {
     return (
       <Shell bar={bar} onNavigate={goTo} onModule={goModule} currentModule={route.module.id}>
+        {/* Keyed on the module, so a way or a map chosen on one module's page
+            is not still chosen on the next one's. */}
         <ModuleScreen
+          key={route.module.id}
           module={route.module}
           naam={boot.profile.naam}
           setId={route.setId}

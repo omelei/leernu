@@ -46,6 +46,17 @@ async function start(page: Page) {
   await page.locator('.tk-choose-start button').click();
 }
 
+/**
+ * Step 1 on rekenen: the tables. Nothing is pressed when the page opens — only
+ * an address chooses a set — so the keypad and the diploma wall wait for this.
+ */
+async function kiesTafels(page: Page) {
+  await page
+    .getByRole('region', { name: /Kies een onderwerp/ })
+    .getByRole('button', { name: /^Tafels/ })
+    .click();
+}
+
 test('the rail is the map of the product, not a list of what is finished', async ({
   page,
 }, testInfo) => {
@@ -86,6 +97,8 @@ test('the front door lists every module, at every size', async ({ page }) => {
 
   await lijst.getByRole('button', { name: /Rekenen/ }).click();
   await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
+  // Nothing is chosen for the child any more, so the keypad waits for Tafels.
+  await kiesTafels(page);
   await expect(page.getByRole('button', { name: 'Tafel van 7', exact: true })).toBeVisible();
 });
 
@@ -95,6 +108,7 @@ test('the tables have an address of their own', async ({ page }) => {
   await page.goto('/tafels');
 
   await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
+  await kiesTafels(page);
   await expect(page.getByRole('button', { name: 'Tafel van 7', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Tafel van 12', exact: true })).toBeVisible();
 });
@@ -108,6 +122,16 @@ test('rekenen is the word a parent looks for, and it is the page itself', async 
   // a click to be told what they had already typed. Tafels sits under rekenen;
   // klokkijken sits beside it (ADR-044).
   await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
+
+  // Nothing is chosen for the child: no subject pressed, and a start bar that
+  // is there but cannot start until every step has an answer.
+  const tafels = page
+    .getByRole('region', { name: /Kies een onderwerp/ })
+    .getByRole('button', { name: /^Tafels/ });
+  await expect(tafels).toHaveAttribute('aria-pressed', 'false');
+  await expect(page.locator('.tk-choose-start button')).toBeDisabled();
+
+  await kiesTafels(page);
   await expect(page.getByRole('button', { name: 'Tafel van 3', exact: true })).toBeVisible();
 });
 
@@ -392,6 +416,8 @@ test('a diploma passed goes on the wall, where the gaps are the point', async ({
   await expect(page.getByText('Diploma gehaald: tafel van 1')).toBeVisible();
 
   await page.goto('/rekenen');
+  // The wall is under the tables and nowhere else, so it waits for Tafels too.
+  await kiesTafels(page);
   const muur = page.getByRole('region', { name: /tafeldiploma/i });
   await expect(muur.getByRole('button', { name: 'Tafel van 1: diploma gehaald' })).toBeVisible();
   await expect(muur.getByRole('button', { name: 'Tafel van 7: nog geen diploma' })).toBeVisible();

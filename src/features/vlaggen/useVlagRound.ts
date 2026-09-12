@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import {
   afleiderFase,
+  alleenDeze,
   composeRound,
   metFouten,
   OPTIES,
@@ -103,11 +104,16 @@ function optieAantal(set: VlagSet, richting: VlagRichting): number {
   return richting === 'zoeken' && set.onderwerp === 'alle' ? OPTIES_ALLES : OPTIES;
 }
 
+/**
+ * @param alleen "Herhaal je fouten": the ids of the flags the last round got
+ *   wrong, which are then the whole round (ADR-110). Null for a normal round.
+ */
 export function useVlagRound(
   setId: string,
   mode: VlagMode,
   aantal: number | null = null,
   toetsstand = false,
+  alleen: readonly string[] | null = null,
 ) {
   const { kern, settle, next, stop } = useRoundCore<VlagSet, VlagQuestion, VlagItem, VlagItem>({
     setId,
@@ -121,8 +127,10 @@ export function useVlagRound(
       const set = loadVlagSet(setId);
       if (!set) throw new Error(`Onbekende vlaggenset: ${setId}`);
 
-      const basis = rule.kind === 'fixed' ? set.items : vlagPool(setId);
-      const pool = isVlagFouten(setId) ? metFouten(basis, states) : basis;
+      const eigen = rule.kind === 'fixed' ? set.items : vlagPool(setId);
+      // "Herhaal je fouten": the last round's misses and nothing else (ADR-110).
+      const basis = alleen ? alleenDeze(alleen, set.items, vlagPool(setId)) : eigen;
+      const pool = isVlagFouten(setId) && !alleen ? metFouten(basis, states) : basis;
 
       const picked = composeRound({
         items: pool,

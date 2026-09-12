@@ -23,6 +23,7 @@ import {
   ProvincieIcon,
   StadIcon,
   StarIcon,
+  TafelIcon,
   UurIcon,
   WaterIcon,
   WrongIcon,
@@ -85,10 +86,10 @@ export const ONDERWERP_ICON: Record<string, TileIcon> = {
   'zuid-amerika-landen': LandIcon,
   'oceanie-landen': LandIcon,
   'wereld-landen': LandIcon,
-  // Rekenen. The four kinds of sum are their own sign, × : + −, and the
-  // keersommen past the tables are the grid a big keersom is split in (ADR-100).
-  tafels: KeerIcon,
-  keer: GridIcon,
+  // Rekenen. The kinds of sum are their own sign, × : + −, and the tables are a
+  // table: the word a child already knows the picture of (ADR-110).
+  tafels: TafelIcon,
+  keer: KeerIcon,
   delen: DeelIcon,
   plus: PlusIcon,
   min: MinIcon,

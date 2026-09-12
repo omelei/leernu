@@ -71,15 +71,20 @@ test('flags have a module page in the shape topography has', async ({ page }) =>
   await signIn(page, 'Noor');
   await page.goto('/vlaggen');
 
-  // Where, in the same eight words as topography, opening on home.
+  // Where, in the same eight words as topography, opening on the world: flags
+  // are mostly other countries', and nothing but the region is chosen for you.
   const waar = page.getByRole('region', { name: 'Waar op de kaart?' });
   await expect(waar.getByRole('button')).toHaveCount(8);
-  const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
-  await expect(wat.getByRole('button', { name: /^Provincievlaggen/ })).toHaveAttribute(
+  await expect(waar.getByRole('button', { name: 'Wereld', exact: true })).toHaveAttribute(
     'aria-pressed',
     'true',
   );
+  const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
+  await expect(wat.getByRole('button', { name: /^Vlaggenmix/ })).toBeVisible();
+
   // Nederland has one subject and nothing else to choose.
+  await waar.getByRole('button', { name: 'Nederland', exact: true }).click();
+  await expect(wat.getByRole('button', { name: /^Provincievlaggen/ })).toBeVisible();
   await expect(wat.getByRole('button')).toHaveCount(1);
 
   await waar.getByRole('button', { name: 'Europa', exact: true }).click();
@@ -89,6 +94,8 @@ test('flags have a module page in the shape topography has', async ({ page }) =>
   await expect(wat.getByRole('button', { name: /^Vlaggenmix/ })).toHaveCount(0);
 
   // Four ways and the oefentoets, and no typing: spelling is not the point.
+  // A set first, because the ways are the ways of a chosen set.
+  await wat.getByRole('button', { name: /^Bekende vlaggen/ }).click();
   const hoe = page.getByRole('region', { name: /Hoe wil je/ });
   for (const naam of ['Vlag zoeken', 'Meerkeuze', 'Ontdekken', 'Overleven', 'Oefentoets']) {
     await expect(hoe.getByRole('button', { name: new RegExp(`^${naam}`) })).toBeVisible();

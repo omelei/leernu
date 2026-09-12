@@ -5,6 +5,7 @@ import { setsInRound, type RoundState } from './useRound';
 import { STAMP_NAME } from '@/features/reis/stampNames';
 import { Beloning } from '@/features/reis/Beloning';
 import { RoundMark } from '@/components/RoundMark';
+import { HerhaalFouten } from '@/features/round/HerhaalFouten';
 
 /**
  * The screen after a round. Spec section 4.6 asks for exactly three things and
@@ -19,10 +20,12 @@ export function ResultScreen({
   state,
   onHome,
   onAgain,
+  onHerhaal,
 }: {
   readonly state: RoundState;
   readonly onHome: () => void;
   readonly onAgain: () => void;
+  readonly onHerhaal: (ids: readonly string[]) => void;
 }) {
   const missedIds = new Set(
     state.missed.map((item) => item.geometrieRef).filter((id): id is string => id !== undefined),
@@ -112,6 +115,7 @@ export function ResultScreen({
         <button type="button" className="tk-button" onClick={onAgain}>
           {t('result.again')}
         </button>
+        <HerhaalFouten missed={state.missed} onHerhaal={onHerhaal} />
         <button type="button" className="tk-button tk-button-secondary" onClick={onHome}>
           {t('result.home')}
         </button>
