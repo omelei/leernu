@@ -1,0 +1,65 @@
+{
+  "_uitleg": "Redactie voor de twaalf provincievlaggen. De hoofdstad komt uit content/sets/nl-hoofdsteden.json en staat hier dus niet. De beschrijving noemt de provincie nooit.",
+  "provincies": {
+    "NL-GR": {
+      "klasse": "normaal",
+      "beschrijving": "Een groen kruis met witte randen, op rode en blauwe vlakken.",
+      "weetje": "Groen en wit zijn de kleuren van de stad, rood en blauw die van het land eromheen."
+    },
+    "NL-FR": {
+      "klasse": "normaal",
+      "beschrijving": "Schuine blauwe en witte banen, met rode hartvormige bladeren op het wit.",
+      "weetje": "De rode 'hartjes' zijn pompeblêden: bladeren van een waterplant."
+    },
+    "NL-DR": {
+      "klasse": "normaal",
+      "beschrijving": "Wit met twee smalle rode strepen, en daartussen een zwarte burcht en zes rode sterren.",
+      "weetje": "De zes sterren staan voor de zes oude delen van de provincie."
+    },
+    "NL-OV": {
+      "klasse": "normaal",
+      "beschrijving": "Rood, geel en rood, met een blauwe golvende streep door het midden.",
+      "weetje": "De blauwe golvende streep is de rivier de IJssel."
+    },
+    "NL-FL": {
+      "klasse": "normaal",
+      "beschrijving": "Blauw boven met een witte lelie, groen onder, en een gele golvende streep ertussen.",
+      "weetje": "De witte lelie verwijst naar Cornelis Lely, die de Afsluitdijk bedacht."
+    },
+    "NL-GE": {
+      "klasse": "normaal",
+      "beschrijving": "Drie liggende banen: blauw, geel en zwart.",
+      "weetje": "De kleuren komen uit twee oude wapens: een blauwe en een zwarte leeuw op geel."
+    },
+    "NL-UT": {
+      "klasse": "normaal",
+      "beschrijving": "Wit boven en rood onder, met linksboven een rood vak met een wit kruis.",
+      "weetje": "Het rode vak met het witte kruis is het wapen van de stad."
+    },
+    "NL-NH": {
+      "klasse": "normaal",
+      "beschrijving": "Drie liggende banen: geel, rood en blauw.",
+      "weetje": "Geel en rood komen uit het wapen van Holland, blauw uit dat van West-Friesland."
+    },
+    "NL-ZH": {
+      "klasse": "normaal",
+      "beschrijving": "Geel met een rode leeuw.",
+      "weetje": "De rode leeuw op geel is de leeuw van het oude Holland."
+    },
+    "NL-ZE": {
+      "klasse": "normaal",
+      "beschrijving": "Blauwe en witte golvende strepen, met een wapen met een rode leeuw die uit het water komt.",
+      "weetje": "De leeuw worstelt zich uit het water, want de provincie vecht al eeuwen tegen de zee."
+    },
+    "NL-NB": {
+      "klasse": "normaal",
+      "beschrijving": "Rode en witte blokken, als een schaakbord.",
+      "weetje": "Dit blokjespatroon wordt Brabants bont genoemd."
+    },
+    "NL-LI": {
+      "klasse": "normaal",
+      "beschrijving": "Wit boven met een rode leeuw, een smalle blauwe streep, en geel onder.",
+      "weetje": "De blauwe streep is de rivier de Maas, die door de hele provincie stroomt."
+    }
+  }
+}

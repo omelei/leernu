@@ -1,0 +1,89 @@
+{
+  "_uitleg": "Redactie voor de vlaggen van Oceanië. Hoofdsteden volgen de VN (UNdata), de beschrijving noemt het land nooit, het weetje is één zin over kleuren of tekens.",
+  "landen": {
+    "AU": {
+      "klasse": "bekend",
+      "hoofdstad": "Canberra",
+      "beschrijving": "Donkerblauw met de Britse vlag linksboven, een grote witte ster eronder en vijf witte sterren rechts.",
+      "weetje": "Rechts staat het Zuiderkruis, een sterrenbeeld dat je alleen op het zuidelijk halfrond ziet."
+    },
+    "FJ": {
+      "klasse": "normaal",
+      "hoofdstad": "Suva",
+      "beschrijving": "Lichtblauw met de Britse vlag linksboven en een wapen rechts.",
+      "weetje": "Op het wapen staan suikerriet, een kokospalm, bananen en een duif."
+    },
+    "KI": {
+      "klasse": "lastig",
+      "hoofdstad": "Bairiki",
+      "beschrijving": "Rood boven met een gele vogel en een zon, en blauwe en witte golven onder.",
+      "weetje": "De gele vogel is een fregatvogel die boven de zee vliegt."
+    },
+    "MH": {
+      "klasse": "lastig",
+      "hoofdstad": "Majuro",
+      "beschrijving": "Blauw met twee schuine banen, oranje en wit, en een witte ster met veel punten.",
+      "weetje": "De ster heeft 24 punten, één voor elk deel van het land."
+    },
+    "FM": {
+      "klasse": "lastig",
+      "hoofdstad": "Palikir",
+      "beschrijving": "Lichtblauw met vier witte sterren in een ruit.",
+      "weetje": "De vier sterren zijn de vier deelstaten."
+    },
+    "NR": {
+      "klasse": "lastig",
+      "hoofdstad": "Yaren",
+      "beschrijving": "Blauw met een smalle gele liggende baan en een witte ster met twaalf punten.",
+      "weetje": "De gele baan is de evenaar, en de ster ligt er net onder, net als het eiland."
+    },
+    "NZ": {
+      "klasse": "bekend",
+      "hoofdstad": "Wellington",
+      "beschrijving": "Donkerblauw met de Britse vlag linksboven en vier rode sterren met een witte rand.",
+      "weetje": "Australië heeft witte sterren, dit land rode."
+    },
+    "PW": {
+      "klasse": "lastig",
+      "hoofdstad": "Melekeok",
+      "beschrijving": "Lichtblauw met een geel rondje dat iets naar de stokkant staat.",
+      "weetje": "Het gele rondje is de volle maan boven de zee."
+    },
+    "PG": {
+      "klasse": "normaal",
+      "hoofdstad": "Port Moresby",
+      "beschrijving": "Schuin verdeeld: rood met een gele vogel, en zwart met vijf witte sterren.",
+      "weetje": "De vogel is een paradijsvogel, met prachtige lange veren."
+    },
+    "SB": {
+      "klasse": "lastig",
+      "hoofdstad": "Honiara",
+      "beschrijving": "Een schuine gele baan tussen blauw met vijf witte sterren en groen.",
+      "weetje": "De vijf sterren stonden voor de vijf grote groepen eilanden."
+    },
+    "WS": {
+      "klasse": "lastig",
+      "hoofdstad": "Apia",
+      "beschrijving": "Rood met linksboven een blauw vlak met vijf witte sterren.",
+      "weetje": "De sterren vormen het Zuiderkruis."
+    },
+    "TO": {
+      "klasse": "lastig",
+      "hoofdstad": "Nuku'alofa",
+      "beschrijving": "Rood met linksboven een wit vlak met een rood kruis.",
+      "weetje": "In de wet van het land staat dat deze vlag nooit mag veranderen."
+    },
+    "TV": {
+      "klasse": "lastig",
+      "hoofdstad": "Funafuti",
+      "beschrijving": "Lichtblauw met de Britse vlag linksboven en negen gele sterren.",
+      "weetje": "De negen sterren liggen zoals de negen eilanden op de kaart."
+    },
+    "VU": {
+      "klasse": "lastig",
+      "hoofdstad": "Port Vila",
+      "beschrijving": "Rood boven en groen onder, met een zwarte driehoek met een gele Y, een gekrulde slagtand en twee varens.",
+      "weetje": "Op de vlag staat de gekrulde slagtand van een varken, een teken van rijkdom."
+    }
+  }
+}

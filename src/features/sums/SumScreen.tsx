@@ -6,6 +6,7 @@ import { usePreferences } from '@/features/player/settings';
 import { RoundProgress } from '@/features/practice/RoundProgress';
 import { SterTeller } from '@/features/reis/SterTeller';
 import { StopButton } from '@/features/practice/StopButton';
+import { Counter } from '@/features/round/Teller';
 import { useSumRound, stopsOnAMistake, typesTheSum, type SumMode } from './useSumRound';
 import { SumResultScreen } from './SumResultScreen';
 
@@ -207,38 +208,6 @@ export function SumScreen({
           <p className="tk-sum tk-display tabular-nums">{som}</p>
         </div>
       </div>
-    </div>
-  );
-}
-
-/**
- * The same counter the map's round bar uses, and the same reason it is kept off
- * a phone in a round that has dots: the bar at 393 cannot hold a stop, ten
- * dots, a read-aloud button and a counter as well.
- */
-function Counter({
-  label,
-  value,
-  urgent = false,
-  onlyWide = false,
-}: {
-  readonly label: string;
-  readonly value: string;
-  readonly urgent?: boolean;
-  readonly onlyWide?: boolean;
-}) {
-  return (
-    <div className={onlyWide ? 'hidden flex-col items-end md:flex' : 'flex flex-col items-end'}>
-      <span className="tk-label">{label}</span>
-      <b
-        className={
-          urgent
-            ? 'tk-display text-h2 font-bold tabular-nums text-bad'
-            : 'tk-display text-h2 font-bold tabular-nums'
-        }
-      >
-        {value}
-      </b>
     </div>
   );
 }

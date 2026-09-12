@@ -60,13 +60,15 @@ export const TOPO_REGIOS: readonly Regio[] = [
 /**
  * The regions a module divides its subjects by, or none.
  *
- * Only topography has any, and the shape is a list rather than a flag so that
- * rekenen — which has no geography to divide — simply gets an empty one and
- * the page draws no row. A module with one region would draw a row of one,
- * which is a label you cannot press, so the row waits for two.
+ * Topography and flags have them, and it is the same row: flags hang off
+ * topography — the same child learns the same werelddelen — so they ask where
+ * in the same words, in the same order (ADR-102). The shape is a list rather
+ * than a flag so that rekenen, which has no geography to divide, simply gets
+ * an empty one and the page draws no row. A module with one region would draw
+ * a row of one, which is a label you cannot press, so the row waits for two.
  */
 export function regiosVan(moduleId: Module['id']): readonly Regio[] {
-  return moduleId === 'topo' ? TOPO_REGIOS : [];
+  return moduleId === 'topo' || moduleId === 'vlaggen' ? TOPO_REGIOS : [];
 }
 
 /**

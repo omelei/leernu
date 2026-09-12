@@ -95,4 +95,10 @@ export type ModeId =
   // question and the answer swapped — what a child is looking at differs.
   | 'klok-meerkeuze'
   | 'klok-welke-klok'
-  | 'klok-typen';
+  | 'klok-typen'
+  // Flags ask both ways round too: which flag belongs to this name, and which
+  // name belongs to this flag. The third is the oefentoets's own, which
+  // alternates between the two and is never offered as a tile of its own.
+  | 'vlag-zoeken'
+  | 'vlag-meerkeuze'
+  | 'vlag-gemengd';

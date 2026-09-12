@@ -2,6 +2,12 @@ import { isDue, type ItemState, type ModeId, type Schedulable } from '@/game-cor
 import { loadItemSets } from '@/content/loadSets';
 import { isMix, loadSumSet, loadSumSets, MIX_IDS } from '@/content/loadSums';
 import { KLOK_MIX_ID, loadKlokSet, loadKlokSets } from '@/content/loadKlok';
+import {
+  loadVlagSet,
+  loadVlagSets,
+  type VlagOnderwerp,
+  type VlagSet,
+} from '@/content/loadVlaggen';
 import { t, type TranslationKey } from '@/i18n';
 import type { Module } from '@/features/shell/modules';
 import type { PlayedRound } from '@/store/progress';
@@ -14,6 +20,8 @@ import {
 } from '@/features/practice/useRound';
 import type { SumMode } from '@/features/sums/useSumRound';
 import type { KlokMode } from '@/features/klok/useKlokRound';
+import type { VlagMode } from '@/features/vlaggen/useVlagRound';
+import { vlagSetNaam } from '@/features/vlaggen/vlagNamen';
 
 /**
  * Every set of every built module, and the subjects they are grouped under.
@@ -55,7 +63,7 @@ export const SET_NAME_KEY: Record<SetId, TranslationKey> = {
  * whole; the clock is ten, because ten faces is a round and a hundred and
  * forty-four of them is an afternoon.
  */
-export const ROUND_SIZE = { topo: 15, tafels: 10, klok: 10 } as const;
+export const ROUND_SIZE = { topo: 15, tafels: 10, klok: 10, vlaggen: 10 } as const;
 
 /** How many favourites the column on the right holds. */
 export const FAVOURITES_SHOWN = 4;
@@ -75,16 +83,18 @@ export const POPULAR_SHOWN = 5;
  * gespeeld" would have to be invented, and this product does not put invented
  * numbers in front of children.
  *
- * So they are named as what they are: the ones to start with. The two that a
- * Dutch child meets first in topography and in rekenen, and the first step of
- * the clock — the fifth card the row has held since it started to scroll.
+ * So they are named as what they are: the ones to start with. The first a
+ * Dutch child meets in topography, in rekenen and on the clock, and two ways
+ * into flags. Five, because that is what the row holds (ADR-094): the flags
+ * took the places of the capitals and the sums to twenty, which were each a
+ * second card for a module that already had one (ADR-102).
  */
 const STARTERS: readonly { readonly setId: string; readonly mode: ModeId }[] = [
   { setId: 'nl-provincies', mode: 'wijs-aan' },
   { setId: 'tafel-2', mode: 'som-typen' },
   { setId: 'klok-heel', mode: 'klok-meerkeuze' },
-  { setId: 'nl-hoofdsteden', mode: 'wijs-aan' },
-  { setId: 'plus-20', mode: 'som-typen' },
+  { setId: 'vlag-europa-bekend', mode: 'vlag-meerkeuze' },
+  { setId: 'vlag-wereld-bekend', mode: 'vlag-zoeken' },
 ];
 
 /**
@@ -387,6 +397,95 @@ function klokOnderwerpen(): Onderwerp[] {
 }
 
 // ---------------------------------------------------------------------------
+// Vlaggen
+
+function vlagOnderdeel(set: VlagSet): Onderdeel {
+  return {
+    moduleId: 'vlaggen',
+    setId: set.id,
+    naam: null,
+    literalNaam: vlagSetNaam(set),
+    kortNaam: null,
+    mix: set.onderwerp === 'mix',
+    items: set.items,
+    roundSize: ROUND_SIZE.vlaggen,
+  };
+}
+
+/**
+ * The sets progress is counted over: every country once and every province
+ * once. Every other set of flags holds the same items under a second name —
+ * "Bekende vlaggen van Europa" is a part of the world's — and a total that
+ * added them would count Belgium four times.
+ */
+function vlagOnderdelen(): Onderdeel[] {
+  return ['vlag-wereld-alle', 'vlag-nederland-provincies']
+    .map((id) => loadVlagSet(id))
+    .filter((set): set is VlagSet => set !== undefined)
+    .map(vlagOnderdeel);
+}
+
+const VLAG_ONDERWERP: Record<VlagOnderwerp, { naam: TranslationKey; uitleg: TranslationKey }> = {
+  bekend: { naam: 'onderwerp.vlaggen.bekend', uitleg: 'onderwerp.vlaggen.bekend.uitleg' },
+  alle: { naam: 'onderwerp.vlaggen.alle', uitleg: 'onderwerp.vlaggen.alle.uitleg' },
+  lijkt: { naam: 'onderwerp.vlaggen.lijkt', uitleg: 'onderwerp.vlaggen.lijkt.uitleg' },
+  mix: { naam: 'onderwerp.vlaggen.mix', uitleg: 'onderwerp.vlaggen.mix.uitleg' },
+  provincies: {
+    naam: 'onderwerp.vlaggen.provincies',
+    uitleg: 'onderwerp.vlaggen.provincies.uitleg',
+  },
+  fouten: { naam: 'onderwerp.fouten', uitleg: 'onderwerp.vlaggen.fouten.uitleg' },
+};
+
+/**
+ * Flags' subjects, one set each, under the region they belong to — the shape
+ * topography has (ADR-083, ADR-102).
+ *
+ * The world and every werelddeel offer the well-known flags, all of them, and
+ * the ones that look alike; the world alone offers the mix; Nederland offers
+ * the provinces and nothing else, which is the page's one asymmetry and is
+ * drawn the way rekenen draws its own — one tile, already chosen. A subject
+ * that would hold fewer than four flags is not offered (`MIN_VLAGGEN`).
+ *
+ * "Oefen je fouten" appears in a region once this child has got five of its
+ * flags wrong, the way it appears under rekenen (ADR-078).
+ */
+function vlagOnderwerpen(known: ReadonlyMap<string, ItemState>): Onderwerp[] {
+  return loadVlagSets().flatMap((set): Onderwerp[] => {
+    const tekst = VLAG_ONDERWERP[set.onderwerp];
+    const deel = vlagOnderdeel(set);
+
+    if (set.onderwerp === 'fouten') {
+      const fout = set.items.filter((vlag) => (known.get(vlag.id)?.foutCount ?? 0) > 0);
+      if (fout.length < MIN_FOUTEN) return [];
+      return [
+        {
+          moduleId: 'vlaggen',
+          id: set.id,
+          naam: tekst.naam,
+          uitleg: tekst.uitleg,
+          keuze: null,
+          regio: set.regio,
+          sets: [{ ...deel, items: fout }],
+        },
+      ];
+    }
+
+    return [
+      {
+        moduleId: 'vlaggen',
+        id: set.id,
+        naam: tekst.naam,
+        uitleg: tekst.uitleg,
+        keuze: null,
+        regio: set.regio,
+        sets: [deel],
+      },
+    ];
+  });
+}
+
+// ---------------------------------------------------------------------------
 
 /**
  * Every set that is a set of its own: the unit progress is counted over.
@@ -396,7 +495,7 @@ function klokOnderwerpen(): Onderwerp[] {
  * sums in rekenen and that they remember four hundred of a set of ten.
  */
 export function onderdelen(): Onderdeel[] {
-  return [...topoOnderdelen(), ...rekenOnderdelen(), ...klokOnderdelen()];
+  return [...topoOnderdelen(), ...rekenOnderdelen(), ...klokOnderdelen(), ...vlagOnderdelen()];
 }
 
 /** Every set a round can be started on, mixes included. Used to name a round. */
@@ -409,6 +508,7 @@ export function startbareOnderdelen(): Onderdeel[] {
     ...rekenMixen(),
     ...klokOnderdelen(),
     ...(klok === null ? [] : [klok]),
+    ...loadVlagSets().map(vlagOnderdeel),
   ];
 }
 
@@ -427,6 +527,7 @@ export function onderwerpenVan(
 ): Onderwerp[] {
   if (moduleId === 'topo') return topoOnderwerpen();
   if (moduleId === 'klok') return klokOnderwerpen();
+  if (moduleId === 'vlaggen') return vlagOnderwerpen(known);
 
   if (moduleId !== 'tafels') return [];
 
@@ -900,4 +1001,10 @@ export function asSumMode(mode: ModeId): SumMode {
 
 export function asKlokMode(mode: ModeId): KlokMode {
   return KLOK_MODES.includes(mode) ? (mode as KlokMode) : 'klok-meerkeuze';
+}
+
+const VLAG_MODES: readonly ModeId[] = ['vlag-zoeken', 'vlag-meerkeuze', 'vlag-gemengd', 'overleven'];
+
+export function asVlagMode(mode: ModeId): VlagMode {
+  return VLAG_MODES.includes(mode) ? (mode as VlagMode) : 'vlag-zoeken';
 }

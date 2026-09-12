@@ -1,0 +1,78 @@
+{
+  "_uitleg": "Redactie voor de vlaggen van Zuid-Amerika. Hoofdsteden volgen de VN (UNdata), de beschrijving noemt het land nooit, het weetje is één zin over kleuren of tekens.",
+  "landen": {
+    "AR": {
+      "klasse": "bekend",
+      "hoofdstad": "Buenos Aires",
+      "beschrijving": "Liggend lichtblauw, wit en lichtblauw, met een gouden zon met een gezicht.",
+      "weetje": "De zon heeft een gezicht en heet de Meizon."
+    },
+    "BO": {
+      "klasse": "normaal",
+      "hoofdstad": "Sucre",
+      "hoofdstadNoot": "De regering zit in La Paz.",
+      "beschrijving": "Drie liggende banen: rood, geel en groen, met een wapen in het midden.",
+      "weetje": "Rood staat voor moed, geel voor de schatten in de bodem en groen voor de natuur."
+    },
+    "BR": {
+      "klasse": "bekend",
+      "hoofdstad": "Brasilia",
+      "beschrijving": "Groen met een gele ruit en daarin een blauwe bol met sterren en een witte band.",
+      "weetje": "De sterren laten de sterrenhemel zien op de dag dat het land een republiek werd."
+    },
+    "CL": {
+      "klasse": "bekend",
+      "hoofdstad": "Santiago",
+      "beschrijving": "Wit boven en rood onder, met linksboven een blauw vierkant met een witte ster.",
+      "weetje": "De witte ster wijst de weg naar vooruitgang."
+    },
+    "CO": {
+      "klasse": "bekend",
+      "hoofdstad": "Bogota",
+      "beschrijving": "Liggend geel, blauw en rood; het geel is de helft van de vlag.",
+      "weetje": "De gele baan is net zo breed als de blauwe en de rode samen."
+    },
+    "EC": {
+      "klasse": "normaal",
+      "hoofdstad": "Quito",
+      "beschrijving": "Liggend geel, blauw en rood, met een wapen met een grote vogel.",
+      "weetje": "Boven op het wapen zit een condor, een van de grootste vogels die kunnen vliegen."
+    },
+    "GY": {
+      "klasse": "lastig",
+      "hoofdstad": "Georgetown",
+      "beschrijving": "Groen met een gele pijlpunt met een witte rand, en een rode driehoek met een zwarte rand.",
+      "weetje": "Deze vlag heet de Gouden Pijlpunt."
+    },
+    "PY": {
+      "klasse": "normaal",
+      "hoofdstad": "Asunción",
+      "beschrijving": "Rood, wit en blauw in liggende banen, met een rond wapen in het midden.",
+      "weetje": "De voorkant en de achterkant van de vlag hebben een ander wapen."
+    },
+    "PE": {
+      "klasse": "normaal",
+      "hoofdstad": "Lima",
+      "beschrijving": "Drie staande banen: rood, wit en rood.",
+      "weetje": "Een oud verhaal zegt dat de kleuren komen van flamingo's met rode vleugels en witte borst."
+    },
+    "SR": {
+      "klasse": "normaal",
+      "hoofdstad": "Paramaribo",
+      "beschrijving": "Groen, wit, een brede rode baan, wit en groen, met een gele ster.",
+      "weetje": "Het land hoorde lang bij het Koninkrijk der Nederlanden en kreeg deze vlag in 1975."
+    },
+    "UY": {
+      "klasse": "normaal",
+      "hoofdstad": "Montevideo",
+      "beschrijving": "Negen witte en blauwe strepen, met linksboven een gouden zon.",
+      "weetje": "De zon is dezelfde Meizon als op de vlag van Argentinië."
+    },
+    "VE": {
+      "klasse": "normaal",
+      "hoofdstad": "Caracas",
+      "beschrijving": "Liggend geel, blauw en rood, met een boog van acht witte sterren.",
+      "weetje": "De achtste ster kwam er in 2006 bij."
+    }
+  }
+}

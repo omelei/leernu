@@ -4514,6 +4514,95 @@ tables and the clock do.
 
 ---
 
+## ADR-102 — Vlaggen is a module, it hangs off topography, and it does not type
+
+**Status:** accepted — 2026-09-12. Scope and choice structure decided by the
+product owner; where the code and the brief disagreed, the brief was put to
+them before anything was built.
+
+### Context
+
+The fourth module of the rail, and the one ADR-051 has shown as coming since
+there were two. The same child learns werelddelen, countries and provinces on
+/topografie, so flags are not a new subject so much as a second question about
+the same places.
+
+### Decision
+
+**The page is topography's.** The same row of eight regions, in the same words
+and order (`regiosVan`); then a subject in one or two words; then how; then how
+many. The world and each werelddeel offer _Bekende vlaggen_, _Alle vlaggen_ and
+_Lijkt op elkaar_; the world alone offers the _Vlaggenmix_ of every country and
+province; Nederland offers _Provincievlaggen_ and nothing else, already chosen.
+A subject that would hold fewer than four flags is not offered, so Oceanië has
+no "bekende vlaggen" rather than a round of two.
+
+**No set is a file** (ADR-062). A set is a region and a subject, composed from
+one dataset, so the flag of Belgium is one Leitner box whichever set asked it.
+Progress is counted over every country and province once.
+
+**Five ways, and no typing.** _Vlag zoeken_ gives a name and shows four flags —
+six on a set that holds a whole werelddeel — and is named after the rule the
+clock already follows: pictures as options are "{thing} zoeken", words are
+_Meerkeuze_. _Meerkeuze_ shows a flag and four names. _Ontdekken_ shows a flag
+with its werelddeel, capital and one fact, and is also where a child looks one
+up. _Overleven_ alternates the two directions over three lives. The
+_Oefentoets_ alternates them over ten questions without feedback and ends in a
+mark; it is the one module whose toets does not type, so its way is marked
+`alleenToets` and is never a tile of its own. Typing is left out on purpose:
+spelling "Kirgizië" tests spelling, not recognising a flag. No bliksemronde.
+
+**The wrong answers get harder as the round goes** (`afleiderFase`): questions
+one to three stand a flag beside flags from other werelddelen that look nothing
+like it, four to seven beside flags from the same werelddeel, and from the
+eighth the look-alikes come first — Tsjaad beside Roemenië. The look-alikes are
+26 groups in `content/vlaggen/groepen.json`, each with its reason. A province
+never stands beside a country.
+
+**Which flags** is in `content/vlaggen/AFBAKENING.md`: the 193 member states of
+the United Nations, Kosovo and Vaticaanstad, and Taiwan as a deliberate
+exception; not Palestina; no territories. 196, and the twelve provinces.
+Capitals follow the United Nations, with the UN's own footnote where it has
+one. Pictures come from `fonttools/region-flags` at one pinned commit, two of
+them from Commons because the country changed its flag since
+(`docs/DATA_SOURCES.md`). Every picture keeps its own shape in a frame of 4:3.
+
+**What a screen reader hears never gives the answer away.** Each flag carries a
+description — "drie liggende banen: rood, wit en blauw" — which is its name as
+an option in _Vlag zoeken_. The name comes with the feedback.
+
+**"Oefen je fouten"** comes to flags the way ADR-078 brought it to the tables:
+a subject in a region once five of its flags were wrong, holding exactly those.
+It is the answer to "practise exactly the set I got wrong in the toets".
+
+### What was asked for and is not done, because the code does otherwise
+
+Each was put to the product owner (2026-09-12) and the code's behaviour kept:
+
+- A wrong answer does not come back in the same round. No round in the product
+  does that (ADR-101).
+- Overleven keeps no high score per region. Nothing in the product does, and a
+  second kind of progress is not what a new module should bring.
+- The last choices on the page are not remembered, and an address names a set
+  but not a way or a length — as on every module page.
+- The first question is "Waar op de kaart?", in topography's words.
+- "Hoeveel vragen?" offers what `questionChoices` offers everywhere, including
+  under the oefentoets.
+
+### Consequences
+
+`HomeScreen` starts rounds through the same `beginRonde` the child's column and
+the module pages use, instead of one callback per module; the round bar's
+counter is one component instead of three copies. The front door's five
+starters are one per module for topography, rekenen and the clock and two for
+flags, which took the places of the second topography and rekenen cards.
+
+What the module does not have yet: a _Vlaggendiploma_ per werelddeel — twenty
+questions, eighteen right, no hints — on the model of the tafeldiploma. It is
+planned and deliberately not started.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because

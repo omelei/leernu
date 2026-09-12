@@ -5,15 +5,18 @@ import {
   DiplomaIcon,
   ExploreIcon,
   KeyboardIcon,
+  PaperIcon,
   PointIcon,
   ShieldIcon,
   type IconProps,
 } from '@/components/Icon';
 import type { ModeId, RoundRule } from '@/game-core';
 import { t, type TranslationKey } from '@/i18n';
+import { isVlagFouten, isVlagMix } from '@/content/loadVlaggen';
 import { isMixSet, ROUND_RULE, SETS, type SetId } from '@/features/practice/useRound';
 import { SUM_ROUND_RULE } from '@/features/sums/useSumRound';
 import { KLOK_ROUND_RULE } from '@/features/klok/useKlokRound';
+import { VLAG_ROUND_RULE } from '@/features/vlaggen/useVlagRound';
 
 /**
  * The ways of practising a module offers, in order of weight, each with a face.
@@ -66,6 +69,16 @@ export interface PracticeForm {
    * one on a mix would mean inventing a certificate no school hands out.
    */
   readonly geldtVoor?: (setId: string) => boolean;
+  /**
+   * The way only the oefentoets asks in, never a tile of its own.
+   *
+   * Every other module's oefentoets answers in one of its own ways — typing —
+   * so pressing the toets chooses a tile that is already there. Flags cannot
+   * type (ADR-102), and the test they get alternates between the two ways that
+   * exist; that alternation is a way of asking a child is never offered on its
+   * own.
+   */
+  readonly alleenToets?: boolean;
 }
 
 /** One glance, not a scroll. See the note above. */
@@ -285,15 +298,87 @@ export const KLOK_FORMS: readonly PracticeForm[] = [
 ];
 
 /**
+ * Flags: the name to the flag, the flag to the name, then looking, then the
+ * lives — and the oefentoets, which asks both ways round (ADR-102).
+ *
+ * **No typing, on purpose.** Topography and rekenen have it, and it stays out
+ * of here: spelling "Azerbeidzjan" or "Kirgizië" is a spelling test, and this
+ * is about knowing a flag when you see one. Consistency with the other modules
+ * is not a reason to add it.
+ *
+ * **Vlag zoeken first**, because it is the clock's "Klok zoeken" with flags:
+ * the name is given and the picture is the answer, which is the half a child
+ * who knows a few flags by sight is least practised in. It is named after the
+ * rule the other modules follow: when the options are pictures the way is
+ * "{thing} zoeken", when they are words it is Meerkeuze.
+ *
+ * No bliksemronde. The plan for this module lists five ways and not six.
+ */
+export const VLAG_FORMS: readonly PracticeForm[] = [
+  {
+    id: 'vlag-zoeken',
+    name: 'mode.vlag-zoeken',
+    reason: 'way.vlag-zoeken',
+    icon: PointIcon,
+    rule: VLAG_ROUND_RULE['vlag-zoeken'],
+    seconds: 12,
+    needsClock: false,
+  },
+  {
+    id: 'vlag-meerkeuze',
+    name: 'mode.vlag-meerkeuze',
+    reason: 'way.vlag-meerkeuze',
+    icon: ChoiceIcon,
+    rule: VLAG_ROUND_RULE['vlag-meerkeuze'],
+    seconds: 10,
+    needsClock: false,
+  },
+  {
+    id: 'ontdekken',
+    name: 'mode.ontdekken',
+    reason: 'way.ontdekken',
+    icon: ExploreIcon,
+    rule: null,
+    seconds: null,
+    needsClock: false,
+    // Where a child meets a set, and a mix of everything or a list of their
+    // own mistakes is not where anyone meets anything.
+    geldtVoor: (setId) => !isVlagMix(setId) && !isVlagFouten(setId),
+  },
+  {
+    id: 'overleven',
+    name: 'mode.overleven',
+    reason: 'way.overleven',
+    icon: ShieldIcon,
+    rule: VLAG_ROUND_RULE.overleven,
+    seconds: null,
+    needsClock: false,
+  },
+  {
+    id: 'vlag-gemengd',
+    name: 'mode.vlag-gemengd',
+    reason: 'way.vlag-gemengd',
+    icon: PaperIcon,
+    rule: VLAG_ROUND_RULE['vlag-gemengd'],
+    seconds: 12,
+    needsClock: false,
+    alleenToets: true,
+  },
+];
+
+/**
  * The way the oefentoets answers in, per module: typing, because that is what a
  * test asks — the name unaided, the sum unaided, the time written out. The
  * oefentoets is a tile of its own and pressing it chooses this way too, so a
  * child is never asked to pick a way a test does not have (ADR-100).
+ *
+ * Flags cannot type, so their toets asks both ways round instead (ADR-102).
  */
 const TOETS_VORM: Record<string, ModeId> = {
   topo: 'hoe-heet-dit',
   tafels: 'som-typen',
   klok: 'klok-typen',
+  vlaggen: 'vlag-gemengd',
 };
 
 /** The way the oefentoets uses, if this page offers it; null otherwise. */
@@ -307,6 +392,7 @@ export function toetsVormVan(
 export function formsFor(moduleId: string): readonly PracticeForm[] {
   if (moduleId === 'tafels') return SUM_FORMS;
   if (moduleId === 'klok') return KLOK_FORMS;
+  if (moduleId === 'vlaggen') return VLAG_FORMS;
   return TOPO_FORMS;
 }
 

@@ -1,0 +1,4740 @@
+{
+  "_generated": "Geschreven door tools/content/build-vlaggen.mjs. Handmatige wijzigingen gaan bij de volgende run verloren.",
+  "contentVersie": "2026-09-12",
+  "bron": {
+    "landen": "fonttools/region-flags@c7f54514b5094f124e53c5e58c776c857f757a04",
+    "provincies": "Wikimedia Commons, elk bestand gemarkeerd als publiek domein"
+  },
+  "landen": [
+    {
+      "id": "vlag-af",
+      "iso": "AF",
+      "naam": "Afghanistan",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Kabul",
+      "beschrijving": "Drie staande banen: zwart, rood en groen, met een wit wapen in het midden.",
+      "weetje": "Zwart staat voor het verleden, rood voor de strijd en groen voor de toekomst.",
+      "beeld": "vlaggen/af.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-afghanistan",
+        "wl-land-afghanistan"
+      ]
+    },
+    {
+      "id": "vlag-al",
+      "iso": "AL",
+      "naam": "Albanië",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Tirana",
+      "beschrijving": "Rood met in het midden een zwarte adelaar met twee koppen.",
+      "weetje": "De adelaar heeft twee koppen en kijkt tegelijk naar links en naar rechts.",
+      "beeld": "vlaggen/al.svg",
+      "verhouding": 1.4,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-albanie",
+        "wl-land-albanie"
+      ]
+    },
+    {
+      "id": "vlag-dz",
+      "iso": "DZ",
+      "naam": "Algerije",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Algiers",
+      "beschrijving": "Een staande groene en witte helft, met een rode halve maan en ster in het midden.",
+      "weetje": "De halve maan en ster staan precies op de grens tussen groen en wit.",
+      "beeld": "vlaggen/dz.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-algerije",
+        "wl-land-algerije"
+      ]
+    },
+    {
+      "id": "vlag-ad",
+      "iso": "AD",
+      "naam": "Andorra",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "lastig",
+      "groepen": [
+        "blauw-geel-rood-staand"
+      ],
+      "hoofdstad": "Andorra la Vella",
+      "beschrijving": "Drie staande banen blauw, geel en rood, met een wapen in het midden.",
+      "weetje": "Zonder het wapen lijkt deze vlag op die van Roemenië en Tsjaad.",
+      "beeld": "vlaggen/ad.svg",
+      "verhouding": 1.4286,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-andorra"
+      ]
+    },
+    {
+      "id": "vlag-ao",
+      "iso": "AO",
+      "naam": "Angola",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Luanda",
+      "beschrijving": "Rood boven en zwart onder, met een geel half tandwiel en een kapmes.",
+      "weetje": "Het tandwiel staat voor de mensen in de fabrieken, het kapmes voor de boeren.",
+      "beeld": "vlaggen/ao.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-angola",
+        "wl-land-angola"
+      ]
+    },
+    {
+      "id": "vlag-ag",
+      "iso": "AG",
+      "naam": "Antigua en Barbuda",
+      "aliassen": [],
+      "werelddelen": [
+        "noord-amerika"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Saint John's",
+      "beschrijving": "Rood, met in het midden een driehoek van zwart, blauw en wit en een gele opkomende zon.",
+      "weetje": "De zon komt op boven de zee: het begin van een nieuwe tijd.",
+      "beeld": "vlaggen/ag.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "na-land-antigua-en-barbuda"
+      ]
+    },
+    {
+      "id": "vlag-ar",
+      "iso": "AR",
+      "naam": "Argentinië",
+      "aliassen": [],
+      "werelddelen": [
+        "zuid-amerika"
+      ],
+      "klasse": "bekend",
+      "groepen": [
+        "lichtblauw-wit-zon"
+      ],
+      "hoofdstad": "Buenos Aires",
+      "beschrijving": "Liggend lichtblauw, wit en lichtblauw, met een gouden zon met een gezicht.",
+      "weetje": "De zon heeft een gezicht en heet de Meizon.",
+      "beeld": "vlaggen/ar.svg",
+      "verhouding": 1.6,
+      "licentie": "publiek-domein",
+      "topo": [
+        "za-land-argentinie",
+        "wl-land-argentinie"
+      ]
+    },
+    {
+      "id": "vlag-am",
+      "iso": "AM",
+      "naam": "Armenië",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Jerevan",
+      "beschrijving": "Drie liggende banen: rood, blauw en oranje.",
+      "weetje": "Oranje staat voor het harde werk van de mensen.",
+      "beeld": "vlaggen/am.svg",
+      "verhouding": 2,
+      "licentie": "vrijgesteld-nationaal",
+      "topo": [
+        "az-land-armenie",
+        "wl-land-armenie"
+      ]
+    },
+    {
+      "id": "vlag-au",
+      "iso": "AU",
+      "naam": "Australië",
+      "aliassen": [],
+      "werelddelen": [
+        "oceanie"
+      ],
+      "klasse": "bekend",
+      "groepen": [
+        "zuiderkruis",
+        "britse-vlag-in-de-hoek"
+      ],
+      "hoofdstad": "Canberra",
+      "beschrijving": "Donkerblauw met de Britse vlag linksboven, een grote witte ster eronder en vijf witte sterren rechts.",
+      "weetje": "Rechts staat het Zuiderkruis, een sterrenbeeld dat je alleen op het zuidelijk halfrond ziet.",
+      "beeld": "vlaggen/au.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "oc-land-australie",
+        "wl-land-australie"
+      ]
+    },
+    {
+      "id": "vlag-az",
+      "iso": "AZ",
+      "naam": "Azerbeidzjan",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Bakoe",
+      "beschrijving": "Liggend blauw, rood en groen, met een witte halve maan en een ster.",
+      "weetje": "De ster naast de halve maan heeft acht punten.",
+      "beeld": "vlaggen/az.svg",
+      "verhouding": 2,
+      "licentie": "vrijgesteld-nationaal",
+      "topo": [
+        "az-land-azerbeidzjan",
+        "wl-land-azerbeidzjan"
+      ]
+    },
+    {
+      "id": "vlag-bs",
+      "iso": "BS",
+      "naam": "Bahama's",
+      "aliassen": [],
+      "werelddelen": [
+        "noord-amerika"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Nassau",
+      "beschrijving": "Liggend aquablauw, geel en aquablauw, met een zwarte driehoek aan de stokkant.",
+      "weetje": "Het aquablauw is de kleur van de zee rond de eilanden.",
+      "beeld": "vlaggen/bs.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "na-land-bahama-s",
+        "wl-land-bahama-s"
+      ]
+    },
+    {
+      "id": "vlag-bh",
+      "iso": "BH",
+      "naam": "Bahrein",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "lastig",
+      "groepen": [
+        "kartelrand"
+      ],
+      "hoofdstad": "Manama",
+      "beschrijving": "Wit aan de stokkant en rood, met een kartelrand van vijf punten.",
+      "weetje": "De vijf witte punten staan voor de vijf zuilen van de islam.",
+      "beeld": "vlaggen/bh.svg",
+      "verhouding": 1.6667,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-bahrein"
+      ]
+    },
+    {
+      "id": "vlag-bd",
+      "iso": "BD",
+      "naam": "Bangladesh",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "rondje-in-het-midden"
+      ],
+      "hoofdstad": "Dhaka",
+      "beschrijving": "Donkergroen met een rood rondje dat iets naar de stokkant staat.",
+      "weetje": "Het rondje staat een beetje naar links, zodat het in het midden lijkt als de vlag wappert.",
+      "beeld": "vlaggen/bd.svg",
+      "verhouding": 1.6667,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-bangladesh",
+        "wl-land-bangladesh"
+      ]
+    },
+    {
+      "id": "vlag-bb",
+      "iso": "BB",
+      "naam": "Barbados",
+      "aliassen": [],
+      "werelddelen": [
+        "noord-amerika"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Bridgetown",
+      "beschrijving": "Staand blauw, goud en blauw, met een zwarte drietand in het midden.",
+      "weetje": "De drietand is de speer van Neptunus, de god van de zee.",
+      "beeld": "vlaggen/bb.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "na-land-barbados"
+      ]
+    },
+    {
+      "id": "vlag-by",
+      "iso": "BY",
+      "naam": "Belarus",
+      "aliassen": [
+        "Wit-Rusland"
+      ],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Minsk",
+      "beschrijving": "Rood boven, een smallere groene baan onder, en een rood-wit patroon aan de stokkant.",
+      "weetje": "Het patroon aan de stokkant komt van oude geweven doeken.",
+      "beeld": "vlaggen/by.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-belarus",
+        "wl-land-belarus"
+      ]
+    },
+    {
+      "id": "vlag-be",
+      "iso": "BE",
+      "naam": "België",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "bekend",
+      "groepen": [
+        "zwart-geel-rood"
+      ],
+      "hoofdstad": "Brussel",
+      "beschrijving": "Drie staande banen: zwart, geel en rood.",
+      "weetje": "De kleuren komen uit een oud wapen: een gele leeuw op zwart met rode klauwen.",
+      "beeld": "vlaggen/be.svg",
+      "verhouding": 1.1538,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-belgie",
+        "wl-land-belgie"
+      ]
+    },
+    {
+      "id": "vlag-bz",
+      "iso": "BZ",
+      "naam": "Belize",
+      "aliassen": [],
+      "werelddelen": [
+        "noord-amerika"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Belmopan",
+      "beschrijving": "Blauw met een rode rand boven en onder, en een wit rondje met een wapen.",
+      "weetje": "Op het wapen staan twee mensen; er zijn maar weinig vlaggen met mensen erop.",
+      "beeld": "vlaggen/bz.svg",
+      "verhouding": 1.6667,
+      "licentie": "publiek-domein",
+      "topo": [
+        "na-land-belize",
+        "wl-land-belize"
+      ]
+    },
+    {
+      "id": "vlag-bj",
+      "iso": "BJ",
+      "naam": "Benin",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Porto-Novo",
+      "hoofdstadNoot": "Cotonou is de stad van de handel.",
+      "beschrijving": "Een groene staande baan aan de stokkant, met geel boven en rood onder.",
+      "weetje": "Groen, geel en rood zie je op veel Afrikaanse vlaggen; ze komen van de vlag van Ethiopië.",
+      "beeld": "vlaggen/bj.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-benin",
+        "wl-land-benin"
+      ]
+    },
+    {
+      "id": "vlag-bt",
+      "iso": "BT",
+      "naam": "Bhutan",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Thimphu",
+      "beschrijving": "Schuin verdeeld in geel en oranje, met een witte draak.",
+      "weetje": "Het land heet ook het land van de donderdraak; daarom staat er een draak op.",
+      "beeld": "vlaggen/bt.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-bhutan",
+        "wl-land-bhutan"
+      ]
+    },
+    {
+      "id": "vlag-bo",
+      "iso": "BO",
+      "naam": "Bolivia",
+      "aliassen": [],
+      "werelddelen": [
+        "zuid-amerika"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "geel-groen-rood"
+      ],
+      "hoofdstad": "Sucre",
+      "hoofdstadNoot": "De regering zit in La Paz.",
+      "beschrijving": "Drie liggende banen: rood, geel en groen, met een wapen in het midden.",
+      "weetje": "Rood staat voor moed, geel voor de schatten in de bodem en groen voor de natuur.",
+      "beeld": "vlaggen/bo.svg",
+      "verhouding": 1.4667,
+      "licentie": "publiek-domein",
+      "topo": [
+        "za-land-bolivia",
+        "wl-land-bolivia"
+      ]
+    },
+    {
+      "id": "vlag-ba",
+      "iso": "BA",
+      "naam": "Bosnië en Herzegovina",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Sarajevo",
+      "beschrijving": "Blauw met een gele driehoek en een rij witte sterren langs de schuine kant.",
+      "weetje": "De gele driehoek lijkt op de vorm van het land.",
+      "beeld": "vlaggen/ba.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-bosnie-en-herzegovina",
+        "wl-land-bosnie-en-herzegovina"
+      ]
+    },
+    {
+      "id": "vlag-bw",
+      "iso": "BW",
+      "naam": "Botswana",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Gaborone",
+      "beschrijving": "Lichtblauw met een zwarte liggende baan met witte randen.",
+      "weetje": "Lichtblauw is de kleur van water en regen, en regen is heel belangrijk in dit droge land.",
+      "beeld": "vlaggen/bw.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-botswana",
+        "wl-land-botswana"
+      ]
+    },
+    {
+      "id": "vlag-br",
+      "iso": "BR",
+      "naam": "Brazilië",
+      "aliassen": [],
+      "werelddelen": [
+        "zuid-amerika"
+      ],
+      "klasse": "bekend",
+      "groepen": [],
+      "hoofdstad": "Brasilia",
+      "beschrijving": "Groen met een gele ruit en daarin een blauwe bol met sterren en een witte band.",
+      "weetje": "De sterren laten de sterrenhemel zien op de dag dat het land een republiek werd.",
+      "beeld": "vlaggen/br.svg",
+      "verhouding": 1.4286,
+      "licentie": "publiek-domein",
+      "topo": [
+        "za-land-brazilie",
+        "wl-land-brazilie"
+      ]
+    },
+    {
+      "id": "vlag-bn",
+      "iso": "BN",
+      "naam": "Brunei",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Bandar Seri Begawan",
+      "beschrijving": "Geel met schuine witte en zwarte banen en een rood wapen.",
+      "weetje": "Geel is de kleur van de sultan, de koning van het land.",
+      "beeld": "vlaggen/bn.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-brunei",
+        "wl-land-brunei"
+      ]
+    },
+    {
+      "id": "vlag-bg",
+      "iso": "BG",
+      "naam": "Bulgarije",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "wit-groen-rood"
+      ],
+      "hoofdstad": "Sofia",
+      "beschrijving": "Drie liggende banen: wit, groen en rood.",
+      "weetje": "Wit, groen en rood, net als Hongarije, maar in een andere volgorde.",
+      "beeld": "vlaggen/bg.svg",
+      "verhouding": 1.6667,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-bulgarije",
+        "wl-land-bulgarije"
+      ]
+    },
+    {
+      "id": "vlag-bf",
+      "iso": "BF",
+      "naam": "Burkina Faso",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Ouagadougou",
+      "beschrijving": "Rood boven en groen onder, met een gele ster in het midden.",
+      "weetje": "De gele ster is het licht dat de weg wijst.",
+      "beeld": "vlaggen/bf.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-burkina-faso",
+        "wl-land-burkina-faso"
+      ]
+    },
+    {
+      "id": "vlag-bi",
+      "iso": "BI",
+      "naam": "Burundi",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Gitega",
+      "beschrijving": "Een wit schuin kruis op rode en groene vlakken, met in het midden drie rode sterren.",
+      "weetje": "De drie sterren staan voor de drie volken die in het land wonen.",
+      "beeld": "vlaggen/bi.svg",
+      "verhouding": 1.6667,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-burundi",
+        "wl-land-burundi"
+      ]
+    },
+    {
+      "id": "vlag-kh",
+      "iso": "KH",
+      "naam": "Cambodja",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Phnom Penh",
+      "beschrijving": "Blauw, een brede rode baan en blauw, met een witte tempel.",
+      "weetje": "De tempel is Angkor Wat, een van de grootste tempels ter wereld.",
+      "beeld": "vlaggen/kh.svg",
+      "verhouding": 1.5625,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-cambodja",
+        "wl-land-cambodja"
+      ]
+    },
+    {
+      "id": "vlag-ca",
+      "iso": "CA",
+      "naam": "Canada",
+      "aliassen": [],
+      "werelddelen": [
+        "noord-amerika"
+      ],
+      "klasse": "bekend",
+      "groepen": [],
+      "hoofdstad": "Ottawa",
+      "beschrijving": "Rood, een wit vierkant met een rood blad, en weer rood.",
+      "weetje": "Het blad komt van de esdoorn, een boom waar je siroop van maakt.",
+      "beeld": "vlaggen/ca.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "na-land-canada",
+        "wl-land-canada"
+      ]
+    },
+    {
+      "id": "vlag-cf",
+      "iso": "CF",
+      "naam": "Centraal-Afrikaanse Republiek",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Bangui",
+      "beschrijving": "Vier liggende banen blauw, wit, groen en geel, een staande rode baan en een gele ster.",
+      "weetje": "Het is een van de weinige vlaggen met zowel liggende als staande banen.",
+      "beeld": "vlaggen/cf.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-centraal-afrikaanse-republiek",
+        "wl-land-centraal-afrikaanse-republiek"
+      ]
+    },
+    {
+      "id": "vlag-cl",
+      "iso": "CL",
+      "naam": "Chili",
+      "aliassen": [],
+      "werelddelen": [
+        "zuid-amerika"
+      ],
+      "klasse": "bekend",
+      "groepen": [],
+      "hoofdstad": "Santiago",
+      "beschrijving": "Wit boven en rood onder, met linksboven een blauw vierkant met een witte ster.",
+      "weetje": "De witte ster wijst de weg naar vooruitgang.",
+      "beeld": "vlaggen/cl.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "za-land-chili",
+        "wl-land-chili"
+      ]
+    },
+    {
+      "id": "vlag-cn",
+      "iso": "CN",
+      "naam": "China",
+      "aliassen": [
+        "Volksrepubliek China"
+      ],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "bekend",
+      "groepen": [],
+      "hoofdstad": "Peking",
+      "beschrijving": "Rood met linksboven een grote gele ster en vier kleine gele sterren.",
+      "weetje": "De vier kleine sterren staan in een boog rond de grote ster.",
+      "beeld": "vlaggen/cn.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-china",
+        "wl-land-china"
+      ]
+    },
+    {
+      "id": "vlag-co",
+      "iso": "CO",
+      "naam": "Colombia",
+      "aliassen": [],
+      "werelddelen": [
+        "zuid-amerika"
+      ],
+      "klasse": "bekend",
+      "groepen": [
+        "geel-blauw-rood"
+      ],
+      "hoofdstad": "Bogota",
+      "beschrijving": "Liggend geel, blauw en rood; het geel is de helft van de vlag.",
+      "weetje": "De gele baan is net zo breed als de blauwe en de rode samen.",
+      "beeld": "vlaggen/co.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "za-land-colombia",
+        "wl-land-colombia"
+      ]
+    },
+    {
+      "id": "vlag-km",
+      "iso": "KM",
+      "naam": "Comoren",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Moroni",
+      "beschrijving": "Liggende banen geel, wit, rood en blauw, met een groene driehoek, een halve maan en vier sterren.",
+      "weetje": "Elke ster staat voor een van de vier eilanden.",
+      "beeld": "vlaggen/km.svg",
+      "verhouding": 1.6667,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-comoren"
+      ]
+    },
+    {
+      "id": "vlag-cg",
+      "iso": "CG",
+      "naam": "Congo-Brazzaville",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Brazzaville",
+      "beschrijving": "Een schuine gele baan tussen groen linksboven en rood rechtsonder.",
+      "weetje": "De banen lopen schuin, van linksonder naar rechtsboven.",
+      "beeld": "vlaggen/cg.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-congo-brazzaville",
+        "wl-land-congo-brazzaville"
+      ]
+    },
+    {
+      "id": "vlag-cd",
+      "iso": "CD",
+      "naam": "Congo-Kinshasa",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Kinshasa",
+      "beschrijving": "Lichtblauw met een schuine rode baan met gele randen, en linksboven een gele ster.",
+      "weetje": "Het lichtblauw staat voor vrede.",
+      "beeld": "vlaggen/cd.svg",
+      "verhouding": 1.3333,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-congo-kinshasa",
+        "wl-land-congo-kinshasa"
+      ]
+    },
+    {
+      "id": "vlag-cr",
+      "iso": "CR",
+      "naam": "Costa Rica",
+      "aliassen": [],
+      "werelddelen": [
+        "noord-amerika"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "rood-wit-blauw-strepen"
+      ],
+      "hoofdstad": "San José",
+      "beschrijving": "Blauw, wit, een brede rode baan, wit en blauw.",
+      "weetje": "Hij lijkt op de vlag van Thailand, maar blauw en rood hebben van plek geruild.",
+      "beeld": "vlaggen/cr.svg",
+      "verhouding": 1.6667,
+      "licentie": "publiek-domein",
+      "topo": [
+        "na-land-costa-rica",
+        "wl-land-costa-rica"
+      ]
+    },
+    {
+      "id": "vlag-cu",
+      "iso": "CU",
+      "naam": "Cuba",
+      "aliassen": [],
+      "werelddelen": [
+        "noord-amerika"
+      ],
+      "klasse": "bekend",
+      "groepen": [],
+      "hoofdstad": "Havana",
+      "beschrijving": "Blauwe en witte strepen, met een rode driehoek met een witte ster.",
+      "weetje": "De drie blauwe strepen stonden voor de drie delen van het eiland.",
+      "beeld": "vlaggen/cu.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "na-land-cuba",
+        "wl-land-cuba"
+      ]
+    },
+    {
+      "id": "vlag-cy",
+      "iso": "CY",
+      "naam": "Cyprus",
+      "aliassen": [],
+      "werelddelen": [
+        "azie",
+        "europa"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Nicosia",
+      "beschrijving": "Wit met in het midden een oranje vorm van een eiland en twee groene takken.",
+      "weetje": "De vorm van het eiland staat op de vlag, en de olijftakken betekenen vrede.",
+      "beeld": "vlaggen/cy.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-cyprus",
+        "eu-land-cyprus",
+        "wl-land-cyprus"
+      ]
+    },
+    {
+      "id": "vlag-dk",
+      "iso": "DK",
+      "naam": "Denemarken",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "bekend",
+      "groepen": [
+        "scandinavisch-kruis"
+      ],
+      "hoofdstad": "Kopenhagen",
+      "beschrijving": "Rood met een wit liggend kruis dat naar de stokkant is geschoven.",
+      "weetje": "Dit is de oudste vlag die een land nog steeds gebruikt.",
+      "beeld": "vlaggen/dk.svg",
+      "verhouding": 1.3214,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-denemarken",
+        "wl-land-denemarken"
+      ]
+    },
+    {
+      "id": "vlag-dj",
+      "iso": "DJ",
+      "naam": "Djibouti",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Djibouti",
+      "beschrijving": "Lichtblauw boven en groen onder, met een witte driehoek met een rode ster.",
+      "weetje": "Lichtblauw staat voor de zee en de lucht, groen voor het land.",
+      "beeld": "vlaggen/dj.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-djibouti",
+        "wl-land-djibouti"
+      ]
+    },
+    {
+      "id": "vlag-dm",
+      "iso": "DM",
+      "naam": "Dominica",
+      "aliassen": [],
+      "werelddelen": [
+        "noord-amerika"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Roseau",
+      "beschrijving": "Groen met een kruis van geel, zwart en wit, en een rode cirkel met een papegaai.",
+      "weetje": "De papegaai leeft nergens anders op de wereld dan op dit eiland.",
+      "beeld": "vlaggen/dm.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "na-land-dominica"
+      ]
+    },
+    {
+      "id": "vlag-do",
+      "iso": "DO",
+      "naam": "Dominicaanse Republiek",
+      "aliassen": [],
+      "werelddelen": [
+        "noord-amerika"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Santo Domingo",
+      "beschrijving": "Een wit kruis met blauwe en rode vlakken en een wapen in het midden.",
+      "weetje": "In het wapen staat een bijbel; het is de enige vlag van een land met een bijbel erop.",
+      "beeld": "vlaggen/do.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "na-land-dominicaanse-republiek",
+        "wl-land-dominicaanse-republiek"
+      ]
+    },
+    {
+      "id": "vlag-de",
+      "iso": "DE",
+      "naam": "Duitsland",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "bekend",
+      "groepen": [
+        "zwart-geel-rood"
+      ],
+      "hoofdstad": "Berlijn",
+      "beschrijving": "Drie liggende banen: zwart, rood en goud.",
+      "weetje": "Zwart, rood en goud waren al 200 jaar geleden de kleuren van mensen die één Duitsland wilden.",
+      "beeld": "vlaggen/de.svg",
+      "verhouding": 1.6667,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-duitsland",
+        "wl-land-duitsland"
+      ]
+    },
+    {
+      "id": "vlag-ec",
+      "iso": "EC",
+      "naam": "Ecuador",
+      "aliassen": [],
+      "werelddelen": [
+        "zuid-amerika"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "geel-blauw-rood"
+      ],
+      "hoofdstad": "Quito",
+      "beschrijving": "Liggend geel, blauw en rood, met een wapen met een grote vogel.",
+      "weetje": "Boven op het wapen zit een condor, een van de grootste vogels die kunnen vliegen.",
+      "beeld": "vlaggen/ec.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "za-land-ecuador",
+        "wl-land-ecuador"
+      ]
+    },
+    {
+      "id": "vlag-eg",
+      "iso": "EG",
+      "naam": "Egypte",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "bekend",
+      "groepen": [
+        "rood-wit-zwart"
+      ],
+      "hoofdstad": "Caïro",
+      "beschrijving": "Drie liggende banen rood, wit en zwart, met een gouden adelaar in het midden.",
+      "weetje": "De gouden adelaar is de adelaar van Saladin, een beroemde sultan van lang geleden.",
+      "beeld": "vlaggen/eg.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-egypte",
+        "wl-land-egypte"
+      ]
+    },
+    {
+      "id": "vlag-sv",
+      "iso": "SV",
+      "naam": "El Salvador",
+      "aliassen": [],
+      "werelddelen": [
+        "noord-amerika"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "blauw-wit-blauw"
+      ],
+      "hoofdstad": "San Salvador",
+      "beschrijving": "Liggend blauw, wit en blauw, met een wapen met vulkanen.",
+      "weetje": "In het wapen staan vijf vulkanen.",
+      "beeld": "vlaggen/sv.svg",
+      "verhouding": 1.7725,
+      "licentie": "publiek-domein",
+      "topo": [
+        "na-land-el-salvador",
+        "wl-land-el-salvador"
+      ]
+    },
+    {
+      "id": "vlag-gq",
+      "iso": "GQ",
+      "naam": "Equatoriaal-Guinea",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Malabo",
+      "beschrijving": "Liggend groen, wit en rood, met een blauwe driehoek en een wapen met een boom.",
+      "weetje": "Op het wapen staan een grote boom en zes sterren voor de delen van het land.",
+      "beeld": "vlaggen/gq.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-equatoriaal-guinea",
+        "wl-land-equatoriaal-guinea"
+      ]
+    },
+    {
+      "id": "vlag-er",
+      "iso": "ER",
+      "naam": "Eritrea",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Asmara",
+      "beschrijving": "Een rode driehoek met een gouden olijftak in een krans, met groen boven en blauw onder.",
+      "weetje": "De olijftak betekent vrede.",
+      "beeld": "vlaggen/er.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-eritrea",
+        "wl-land-eritrea"
+      ]
+    },
+    {
+      "id": "vlag-ee",
+      "iso": "EE",
+      "naam": "Estland",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Tallinn",
+      "beschrijving": "Drie liggende banen: blauw, zwart en wit.",
+      "weetje": "Blauw is de lucht, zwart de aarde en wit de sneeuw.",
+      "beeld": "vlaggen/ee.svg",
+      "verhouding": 1.5714,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-estland",
+        "wl-land-estland"
+      ]
+    },
+    {
+      "id": "vlag-sz",
+      "iso": "SZ",
+      "naam": "Eswatini",
+      "aliassen": [
+        "Swaziland"
+      ],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Mbabane",
+      "hoofdstadNoot": "Het parlement zit in Lobamba.",
+      "beschrijving": "Blauw, geel en een brede rode baan, met een zwart-wit schild en twee speren.",
+      "weetje": "Het schild is zwart en wit: zwarte en witte mensen die vreedzaam samenleven.",
+      "beeld": "vlaggen/sz.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-eswatini",
+        "wl-land-eswatini"
+      ]
+    },
+    {
+      "id": "vlag-et",
+      "iso": "ET",
+      "naam": "Ethiopië",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "geel-groen-rood"
+      ],
+      "hoofdstad": "Addis Abeba",
+      "beschrijving": "Liggend groen, geel en rood, met een blauwe schijf met een gele ster.",
+      "weetje": "Groen, geel en rood werden de kleuren van heel veel Afrikaanse vlaggen.",
+      "beeld": "vlaggen/et.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-ethiopie",
+        "wl-land-ethiopie"
+      ]
+    },
+    {
+      "id": "vlag-fj",
+      "iso": "FJ",
+      "naam": "Fiji",
+      "aliassen": [],
+      "werelddelen": [
+        "oceanie"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "britse-vlag-in-de-hoek"
+      ],
+      "hoofdstad": "Suva",
+      "beschrijving": "Lichtblauw met de Britse vlag linksboven en een wapen rechts.",
+      "weetje": "Op het wapen staan suikerriet, een kokospalm, bananen en een duif.",
+      "beeld": "vlaggen/fj.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "oc-land-fiji",
+        "wl-land-fiji"
+      ]
+    },
+    {
+      "id": "vlag-ph",
+      "iso": "PH",
+      "naam": "Filipijnen",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Manilla",
+      "beschrijving": "Blauw boven en rood onder, met een witte driehoek met een zon en drie sterren.",
+      "weetje": "In oorlogstijd hangt de vlag andersom, met rood boven.",
+      "beeld": "vlaggen/ph.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-filipijnen",
+        "wl-land-filipijnen"
+      ]
+    },
+    {
+      "id": "vlag-fi",
+      "iso": "FI",
+      "naam": "Finland",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "bekend",
+      "groepen": [
+        "scandinavisch-kruis"
+      ],
+      "hoofdstad": "Helsinki",
+      "beschrijving": "Wit met een blauw liggend kruis dat naar de stokkant is geschoven.",
+      "weetje": "Blauw en wit staan voor de meren en de sneeuw.",
+      "beeld": "vlaggen/fi.svg",
+      "verhouding": 1.6364,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-finland",
+        "wl-land-finland"
+      ]
+    },
+    {
+      "id": "vlag-fr",
+      "iso": "FR",
+      "naam": "Frankrijk",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "bekend",
+      "groepen": [],
+      "hoofdstad": "Parijs",
+      "beschrijving": "Drie staande banen: blauw, wit en rood.",
+      "weetje": "Blauw en rood zijn de kleuren van Parijs, wit was de kleur van de koning.",
+      "beeld": "vlaggen/fr.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-frankrijk",
+        "wl-land-frankrijk"
+      ]
+    },
+    {
+      "id": "vlag-ga",
+      "iso": "GA",
+      "naam": "Gabon",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Libreville",
+      "beschrijving": "Drie liggende banen: groen, geel en blauw.",
+      "weetje": "Geel is de evenaar die door het land loopt, blauw is de zee.",
+      "beeld": "vlaggen/ga.svg",
+      "verhouding": 1.3333,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-gabon",
+        "wl-land-gabon"
+      ]
+    },
+    {
+      "id": "vlag-gm",
+      "iso": "GM",
+      "naam": "Gambia",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Banjul",
+      "beschrijving": "Rood, blauw en groen in liggende banen, met smalle witte randen om het blauw.",
+      "weetje": "De blauwe baan is de rivier de Gambia, die dwars door het land stroomt.",
+      "beeld": "vlaggen/gm.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-gambia",
+        "wl-land-gambia"
+      ]
+    },
+    {
+      "id": "vlag-ge",
+      "iso": "GE",
+      "naam": "Georgië",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Tbilisi",
+      "beschrijving": "Wit met een groot rood kruis en vier kleine rode kruisen.",
+      "weetje": "Er staan vijf kruisen op: één groot en vier kleine.",
+      "beeld": "vlaggen/ge.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-georgie",
+        "wl-land-georgie"
+      ]
+    },
+    {
+      "id": "vlag-gh",
+      "iso": "GH",
+      "naam": "Ghana",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "geel-groen-rood"
+      ],
+      "hoofdstad": "Accra",
+      "beschrijving": "Rood, geel en groen in liggende banen, met een zwarte ster in het midden.",
+      "weetje": "De zwarte ster staat voor de vrijheid van Afrika.",
+      "beeld": "vlaggen/gh.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-ghana",
+        "wl-land-ghana"
+      ]
+    },
+    {
+      "id": "vlag-gd",
+      "iso": "GD",
+      "naam": "Grenada",
+      "aliassen": [],
+      "werelddelen": [
+        "noord-amerika"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Saint George's",
+      "beschrijving": "Een rode rand met zes sterren, gele en groene vlakken, en een nootmuskaat.",
+      "weetje": "Op de vlag staat een nootmuskaat, een specerij die op het eiland groeit.",
+      "beeld": "vlaggen/gd.svg",
+      "verhouding": 1.6667,
+      "licentie": "publiek-domein",
+      "topo": [
+        "na-land-grenada"
+      ]
+    },
+    {
+      "id": "vlag-gr",
+      "iso": "GR",
+      "naam": "Griekenland",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "bekend",
+      "groepen": [],
+      "hoofdstad": "Athene",
+      "beschrijving": "Negen blauwe en witte strepen, met linksboven een wit kruis op blauw.",
+      "weetje": "Er wordt gezegd dat de negen strepen de negen lettergrepen zijn van de strijdkreet 'Vrijheid of de dood'.",
+      "beeld": "vlaggen/gr.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-griekenland",
+        "wl-land-griekenland"
+      ]
+    },
+    {
+      "id": "vlag-gt",
+      "iso": "GT",
+      "naam": "Guatemala",
+      "aliassen": [],
+      "werelddelen": [
+        "noord-amerika"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "blauw-wit-blauw"
+      ],
+      "hoofdstad": "Guatemala-Stad",
+      "beschrijving": "Staand lichtblauw, wit en lichtblauw, met een wapen met een vogel.",
+      "weetje": "De vogel is een quetzal, en zo heet ook het geld van het land.",
+      "beeld": "vlaggen/gt.svg",
+      "verhouding": 1.6,
+      "licentie": "publiek-domein",
+      "topo": [
+        "na-land-guatemala",
+        "wl-land-guatemala"
+      ]
+    },
+    {
+      "id": "vlag-gn",
+      "iso": "GN",
+      "naam": "Guinee",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "groen-geel-rood-staand"
+      ],
+      "hoofdstad": "Conakry",
+      "beschrijving": "Drie staande banen: rood, geel en groen.",
+      "weetje": "Het is de vlag van Mali, maar dan andersom.",
+      "beeld": "vlaggen/gn.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-guinee",
+        "wl-land-guinee"
+      ]
+    },
+    {
+      "id": "vlag-gw",
+      "iso": "GW",
+      "naam": "Guinee-Bissau",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Bissau",
+      "beschrijving": "Een staande rode baan met een zwarte ster, met geel boven en groen onder.",
+      "weetje": "De zwarte ster staat voor de mensen van Afrika.",
+      "beeld": "vlaggen/gw.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-guinee-bissau",
+        "wl-land-guinee-bissau"
+      ]
+    },
+    {
+      "id": "vlag-gy",
+      "iso": "GY",
+      "naam": "Guyana",
+      "aliassen": [],
+      "werelddelen": [
+        "zuid-amerika"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Georgetown",
+      "beschrijving": "Groen met een gele pijlpunt met een witte rand, en een rode driehoek met een zwarte rand.",
+      "weetje": "Deze vlag heet de Gouden Pijlpunt.",
+      "beeld": "vlaggen/gy.svg",
+      "verhouding": 1.6667,
+      "licentie": "publiek-domein",
+      "topo": [
+        "za-land-guyana",
+        "wl-land-guyana"
+      ]
+    },
+    {
+      "id": "vlag-ht",
+      "iso": "HT",
+      "naam": "Haïti",
+      "aliassen": [],
+      "werelddelen": [
+        "noord-amerika"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "blauw-boven-rood"
+      ],
+      "hoofdstad": "Port-au-Prince",
+      "beschrijving": "Blauw boven en rood onder, met een wapen met een palmboom.",
+      "weetje": "Een verhaal zegt dat het wit uit de Franse vlag werd geknipt, en dat blauw en rood overbleven.",
+      "beeld": "vlaggen/ht.svg",
+      "verhouding": 1.6667,
+      "licentie": "publiek-domein",
+      "topo": [
+        "na-land-haiti",
+        "wl-land-haiti"
+      ]
+    },
+    {
+      "id": "vlag-hn",
+      "iso": "HN",
+      "naam": "Honduras",
+      "aliassen": [],
+      "werelddelen": [
+        "noord-amerika"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "blauw-wit-blauw"
+      ],
+      "hoofdstad": "Tegucigalpa",
+      "beschrijving": "Liggend blauw, wit en blauw, met vijf blauwe sterren in het midden.",
+      "weetje": "De vijf sterren staan voor vijf landen die ooit één land waren.",
+      "beeld": "vlaggen/hn.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "na-land-honduras",
+        "wl-land-honduras"
+      ]
+    },
+    {
+      "id": "vlag-hu",
+      "iso": "HU",
+      "naam": "Hongarije",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "wit-groen-rood"
+      ],
+      "hoofdstad": "Boedapest",
+      "beschrijving": "Drie liggende banen: rood, wit en groen.",
+      "weetje": "Het zijn de kleuren van de Italiaanse vlag, maar de banen liggen.",
+      "beeld": "vlaggen/hu.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-hongarije",
+        "wl-land-hongarije"
+      ]
+    },
+    {
+      "id": "vlag-ie",
+      "iso": "IE",
+      "naam": "Ierland",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "bekend",
+      "groepen": [
+        "groen-wit-oranje"
+      ],
+      "hoofdstad": "Dublin",
+      "beschrijving": "Drie staande banen: groen, wit en oranje.",
+      "weetje": "Groen en oranje staan voor twee groepen Ieren, en wit in het midden voor vrede tussen hen.",
+      "beeld": "vlaggen/ie.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-ierland",
+        "wl-land-ierland"
+      ]
+    },
+    {
+      "id": "vlag-is",
+      "iso": "IS",
+      "naam": "IJsland",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "scandinavisch-kruis"
+      ],
+      "hoofdstad": "Reykjavik",
+      "beschrijving": "Blauw met een rood kruis met een witte rand, naar de stokkant geschoven.",
+      "weetje": "Rood is het vuur van de vulkanen, wit het ijs en blauw de zee.",
+      "beeld": "vlaggen/is.svg",
+      "verhouding": 1.3889,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-ijsland",
+        "wl-land-ijsland"
+      ]
+    },
+    {
+      "id": "vlag-in",
+      "iso": "IN",
+      "naam": "India",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "bekend",
+      "groepen": [
+        "oranje-wit-groen"
+      ],
+      "hoofdstad": "New Delhi",
+      "beschrijving": "Liggend oranje, wit en groen, met een blauw wiel in het midden.",
+      "weetje": "Het blauwe wiel heeft 24 spaken.",
+      "beeld": "vlaggen/in.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-india",
+        "wl-land-india"
+      ]
+    },
+    {
+      "id": "vlag-id",
+      "iso": "ID",
+      "naam": "Indonesië",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "rood-boven-wit"
+      ],
+      "hoofdstad": "Jakarta",
+      "beschrijving": "Twee liggende banen: rood boven, wit onder.",
+      "weetje": "Hij lijkt precies op de vlag van Monaco; alleen de vorm is anders.",
+      "beeld": "vlaggen/id.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-indonesie",
+        "wl-land-indonesie"
+      ]
+    },
+    {
+      "id": "vlag-iq",
+      "iso": "IQ",
+      "naam": "Irak",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "rood-wit-zwart"
+      ],
+      "hoofdstad": "Bagdad",
+      "beschrijving": "Liggend rood, wit en zwart, met groene Arabische letters in het midden.",
+      "weetje": "De groene letters betekenen 'God is groot'.",
+      "beeld": "vlaggen/iq.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-irak",
+        "wl-land-irak"
+      ]
+    },
+    {
+      "id": "vlag-ir",
+      "iso": "IR",
+      "naam": "Iran",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Teheran",
+      "beschrijving": "Liggend groen, wit en rood, met een rood teken in het midden.",
+      "weetje": "Langs de randen van de witte baan staat 22 keer dezelfde tekst.",
+      "beeld": "vlaggen/ir.svg",
+      "verhouding": 1.75,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-iran",
+        "wl-land-iran"
+      ]
+    },
+    {
+      "id": "vlag-il",
+      "iso": "IL",
+      "naam": "Israël",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Jeruzalem",
+      "hoofdstadNoot": "Zo noemt Israël het. De Verenigde Naties erkennen Jeruzalem niet als hoofdstad.",
+      "beschrijving": "Wit met twee liggende blauwe banen en een blauwe ster met zes punten.",
+      "weetje": "De ster is de Davidster, en de blauwe banen komen van een gebedsmantel.",
+      "beeld": "vlaggen/il.svg",
+      "verhouding": 1.375,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-israel",
+        "wl-land-israel"
+      ]
+    },
+    {
+      "id": "vlag-it",
+      "iso": "IT",
+      "naam": "Italië",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "bekend",
+      "groepen": [
+        "groen-wit-oranje",
+        "groen-wit-rood-staand"
+      ],
+      "hoofdstad": "Rome",
+      "beschrijving": "Drie staande banen: groen, wit en rood.",
+      "weetje": "Hij lijkt op de vlag van Frankrijk, maar dan met groen in plaats van blauw.",
+      "beeld": "vlaggen/it.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-italie",
+        "wl-land-italie"
+      ]
+    },
+    {
+      "id": "vlag-ci",
+      "iso": "CI",
+      "naam": "Ivoorkust",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "groen-wit-oranje"
+      ],
+      "hoofdstad": "Yamoussoukro",
+      "hoofdstadNoot": "Het bestuur zit in Abidjan.",
+      "beschrijving": "Drie staande banen: oranje, wit en groen.",
+      "weetje": "Het is de Ierse vlag in spiegelbeeld.",
+      "beeld": "vlaggen/ci.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-ivoorkust",
+        "wl-land-ivoorkust"
+      ]
+    },
+    {
+      "id": "vlag-jm",
+      "iso": "JM",
+      "naam": "Jamaica",
+      "aliassen": [],
+      "werelddelen": [
+        "noord-amerika"
+      ],
+      "klasse": "bekend",
+      "groepen": [],
+      "hoofdstad": "Kingston",
+      "beschrijving": "Een geel schuin kruis, met groene vlakken boven en onder en zwarte opzij.",
+      "weetje": "Het is de enige vlag van een land zonder rood, wit of blauw.",
+      "beeld": "vlaggen/jm.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "na-land-jamaica",
+        "wl-land-jamaica"
+      ]
+    },
+    {
+      "id": "vlag-jp",
+      "iso": "JP",
+      "naam": "Japan",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "bekend",
+      "groepen": [
+        "rondje-in-het-midden"
+      ],
+      "hoofdstad": "Tokio",
+      "beschrijving": "Wit met een rood rondje in het midden.",
+      "weetje": "Het rode rondje is de zon: het land heet ook het land van de rijzende zon.",
+      "beeld": "vlaggen/jp.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-japan",
+        "wl-land-japan"
+      ]
+    },
+    {
+      "id": "vlag-ye",
+      "iso": "YE",
+      "naam": "Jemen",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "rood-wit-zwart"
+      ],
+      "hoofdstad": "Sanaa",
+      "beschrijving": "Drie liggende banen: rood, wit en zwart.",
+      "weetje": "Het is de vlag van Egypte zonder de gouden adelaar.",
+      "beeld": "vlaggen/ye.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-jemen",
+        "wl-land-jemen"
+      ]
+    },
+    {
+      "id": "vlag-jo",
+      "iso": "JO",
+      "naam": "Jordanië",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "driehoek-en-drie-banen"
+      ],
+      "hoofdstad": "Amman",
+      "beschrijving": "Liggend zwart, wit en groen, met een rode driehoek met een witte ster.",
+      "weetje": "De witte ster heeft zeven punten.",
+      "beeld": "vlaggen/jo.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-jordanie",
+        "wl-land-jordanie"
+      ]
+    },
+    {
+      "id": "vlag-cv",
+      "iso": "CV",
+      "naam": "Kaapverdië",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Praia",
+      "beschrijving": "Blauw met een witte en een rode streep en een cirkel van tien gele sterren.",
+      "weetje": "De tien sterren zijn de tien eilanden.",
+      "beeld": "vlaggen/cv.svg",
+      "verhouding": 1.7,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-kaapverdie"
+      ]
+    },
+    {
+      "id": "vlag-cm",
+      "iso": "CM",
+      "naam": "Kameroen",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "groen-geel-rood-staand"
+      ],
+      "hoofdstad": "Yaoundé",
+      "beschrijving": "Staand groen, rood en geel, met een gele ster in het midden.",
+      "weetje": "De ster heet de ster van eenheid.",
+      "beeld": "vlaggen/cm.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-kameroen",
+        "wl-land-kameroen"
+      ]
+    },
+    {
+      "id": "vlag-kz",
+      "iso": "KZ",
+      "naam": "Kazachstan",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Astana",
+      "beschrijving": "Lichtblauw met een gele zon, een vogel en een gouden patroon aan de stokkant.",
+      "weetje": "Onder de zon vliegt een steppearend.",
+      "beeld": "vlaggen/kz.svg",
+      "verhouding": 2,
+      "licentie": "vrijgesteld-nationaal",
+      "topo": [
+        "az-land-kazachstan",
+        "wl-land-kazachstan"
+      ]
+    },
+    {
+      "id": "vlag-ke",
+      "iso": "KE",
+      "naam": "Kenia",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "bekend",
+      "groepen": [],
+      "hoofdstad": "Nairobi",
+      "beschrijving": "Zwart, rood en groen in liggende banen met witte randen, en een schild met twee speren.",
+      "weetje": "Het schild en de speren zijn van de Masai, een volk dat in het land woont.",
+      "beeld": "vlaggen/ke.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-kenia",
+        "wl-land-kenia"
+      ]
+    },
+    {
+      "id": "vlag-kg",
+      "iso": "KG",
+      "naam": "Kirgizië",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Bisjkek",
+      "beschrijving": "Rood met een gele zon en daarin gekruiste lijnen.",
+      "weetje": "In de zon zie je het dak van een joert, een ronde tent van nomaden.",
+      "beeld": "vlaggen/kg.svg",
+      "verhouding": 1.6667,
+      "licentie": "vrijgesteld-nationaal",
+      "topo": [
+        "az-land-kirgizie",
+        "wl-land-kirgizie"
+      ]
+    },
+    {
+      "id": "vlag-ki",
+      "iso": "KI",
+      "naam": "Kiribati",
+      "aliassen": [],
+      "werelddelen": [
+        "oceanie"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Bairiki",
+      "beschrijving": "Rood boven met een gele vogel en een zon, en blauwe en witte golven onder.",
+      "weetje": "De gele vogel is een fregatvogel die boven de zee vliegt.",
+      "beeld": "vlaggen/ki.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "oc-land-kiribati"
+      ]
+    },
+    {
+      "id": "vlag-kw",
+      "iso": "KW",
+      "naam": "Koeweit",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "driehoek-en-drie-banen"
+      ],
+      "hoofdstad": "Koeweit-Stad",
+      "beschrijving": "Liggend groen, wit en rood, met een zwart vlak aan de stokkant.",
+      "weetje": "Het zwarte vlak is geen driehoek: het heeft vier hoeken.",
+      "beeld": "vlaggen/kw.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-koeweit",
+        "wl-land-koeweit"
+      ]
+    },
+    {
+      "id": "vlag-xk",
+      "iso": "XK",
+      "naam": "Kosovo",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Pristina",
+      "beschrijving": "Blauw met in het midden een gele vorm van een land en zes witte sterren erboven.",
+      "weetje": "De zes sterren staan voor de groepen mensen die in het land wonen.",
+      "beeld": "vlaggen/xk.svg",
+      "verhouding": 1.4,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-kosovo",
+        "wl-land-kosovo"
+      ]
+    },
+    {
+      "id": "vlag-hr",
+      "iso": "HR",
+      "naam": "Kroatië",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "wit-blauw-rood"
+      ],
+      "hoofdstad": "Zagreb",
+      "beschrijving": "Rood, wit en blauw in liggende banen, met een rood-wit geblokt wapen in het midden.",
+      "weetje": "Het rood-witte schaakbord zie je ook op de shirts van het Kroatische voetbalteam.",
+      "beeld": "vlaggen/hr.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-kroatie",
+        "wl-land-kroatie"
+      ]
+    },
+    {
+      "id": "vlag-la",
+      "iso": "LA",
+      "naam": "Laos",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Vientiane",
+      "beschrijving": "Rood, een brede blauwe baan en rood, met een wit rondje.",
+      "weetje": "Het witte rondje is de volle maan boven de rivier de Mekong.",
+      "beeld": "vlaggen/la.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-laos",
+        "wl-land-laos"
+      ]
+    },
+    {
+      "id": "vlag-ls",
+      "iso": "LS",
+      "naam": "Lesotho",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Maseru",
+      "beschrijving": "Liggend blauw, wit en groen, met een zwarte hoed in het midden.",
+      "weetje": "De hoed is een mokorotlo, een strooien hoed die de mensen daar dragen.",
+      "beeld": "vlaggen/ls.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-lesotho",
+        "wl-land-lesotho"
+      ]
+    },
+    {
+      "id": "vlag-lv",
+      "iso": "LV",
+      "naam": "Letland",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "rood-wit-rood"
+      ],
+      "hoofdstad": "Riga",
+      "beschrijving": "Donkerrood met een smalle witte liggende baan in het midden.",
+      "weetje": "Het donkere rood is zo bijzonder dat het een eigen naam heeft: Lets rood.",
+      "beeld": "vlaggen/lv.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-letland",
+        "wl-land-letland"
+      ]
+    },
+    {
+      "id": "vlag-lb",
+      "iso": "LB",
+      "naam": "Libanon",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Beiroet",
+      "beschrijving": "Rood, een brede witte baan en rood, met een groene boom.",
+      "weetje": "De boom is een ceder, die in de bergen van het land groeit.",
+      "beeld": "vlaggen/lb.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-libanon",
+        "wl-land-libanon"
+      ]
+    },
+    {
+      "id": "vlag-lr",
+      "iso": "LR",
+      "naam": "Liberia",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "strepen-en-sterren"
+      ],
+      "hoofdstad": "Monrovia",
+      "beschrijving": "Rode en witte strepen, met een witte ster op een blauw vlak in de hoek.",
+      "weetje": "Hij lijkt op de vlag van de Verenigde Staten, maar met maar één ster.",
+      "beeld": "vlaggen/lr.svg",
+      "verhouding": 1.9,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-liberia",
+        "wl-land-liberia"
+      ]
+    },
+    {
+      "id": "vlag-ly",
+      "iso": "LY",
+      "naam": "Libië",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Tripoli",
+      "beschrijving": "Liggend rood, zwart en groen, met een witte halve maan en ster.",
+      "weetje": "De zwarte baan is twee keer zo breed als de andere twee.",
+      "beeld": "vlaggen/ly.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-libie",
+        "wl-land-libie"
+      ]
+    },
+    {
+      "id": "vlag-li",
+      "iso": "LI",
+      "naam": "Liechtenstein",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "lastig",
+      "groepen": [
+        "blauw-boven-rood"
+      ],
+      "hoofdstad": "Vaduz",
+      "beschrijving": "Blauw boven en rood onder, met linksboven een gouden kroon.",
+      "weetje": "De kroon kwam erbij toen bleek dat de vlag precies leek op die van Haïti.",
+      "beeld": "vlaggen/li.svg",
+      "verhouding": 1.6667,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-liechtenstein"
+      ]
+    },
+    {
+      "id": "vlag-lt",
+      "iso": "LT",
+      "naam": "Litouwen",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "geel-groen-rood"
+      ],
+      "hoofdstad": "Vilnius",
+      "beschrijving": "Drie liggende banen: geel, groen en rood.",
+      "weetje": "Geel is de zon, groen zijn de bossen en rood is de moed van de mensen.",
+      "beeld": "vlaggen/lt.svg",
+      "verhouding": 1.6667,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-litouwen",
+        "wl-land-litouwen"
+      ]
+    },
+    {
+      "id": "vlag-lu",
+      "iso": "LU",
+      "naam": "Luxemburg",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "rood-wit-blauw-liggend"
+      ],
+      "hoofdstad": "Luxemburg",
+      "beschrijving": "Drie liggende banen: rood, wit en lichtblauw.",
+      "weetje": "Hij lijkt bijna precies op de Nederlandse vlag, maar het blauw is lichter.",
+      "beeld": "vlaggen/lu.svg",
+      "verhouding": 1.6667,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-luxemburg",
+        "wl-land-luxemburg"
+      ]
+    },
+    {
+      "id": "vlag-mg",
+      "iso": "MG",
+      "naam": "Madagaskar",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Antananarivo",
+      "beschrijving": "Een witte staande baan aan de stokkant, met rood boven en groen onder.",
+      "weetje": "Er staat geen enkel teken op: alleen drie kleuren.",
+      "beeld": "vlaggen/mg.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-madagaskar",
+        "wl-land-madagaskar"
+      ]
+    },
+    {
+      "id": "vlag-mw",
+      "iso": "MW",
+      "naam": "Malawi",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Lilongwe",
+      "beschrijving": "Liggend zwart, rood en groen, met een rode opkomende zon.",
+      "weetje": "De zon komt op: dat staat voor hoop voor heel Afrika.",
+      "beeld": "vlaggen/mw.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-malawi",
+        "wl-land-malawi"
+      ]
+    },
+    {
+      "id": "vlag-mv",
+      "iso": "MV",
+      "naam": "Maldiven",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Malé",
+      "beschrijving": "Rood met een groen vlak in het midden en een witte halve maan.",
+      "weetje": "Het groene vlak staat voor de palmbomen op de eilanden.",
+      "beeld": "vlaggen/mv.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": []
+    },
+    {
+      "id": "vlag-my",
+      "iso": "MY",
+      "naam": "Maleisië",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "strepen-en-sterren"
+      ],
+      "hoofdstad": "Kuala Lumpur",
+      "hoofdstadNoot": "Het bestuur zit in Putrajaya.",
+      "beschrijving": "Rode en witte strepen, met een blauw vlak met een gele maan en ster.",
+      "weetje": "Er zijn veertien strepen, en de ster heeft veertien punten.",
+      "beeld": "vlaggen/my.svg",
+      "verhouding": 2,
+      "licentie": "vrijgesteld-nationaal",
+      "topo": [
+        "az-land-maleisie",
+        "wl-land-maleisie"
+      ]
+    },
+    {
+      "id": "vlag-ml",
+      "iso": "ML",
+      "naam": "Mali",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "groen-geel-rood-staand"
+      ],
+      "hoofdstad": "Bamako",
+      "beschrijving": "Drie staande banen: groen, geel en rood.",
+      "weetje": "Het is de vlag van Guinee, maar dan andersom.",
+      "beeld": "vlaggen/ml.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-mali",
+        "wl-land-mali"
+      ]
+    },
+    {
+      "id": "vlag-mt",
+      "iso": "MT",
+      "naam": "Malta",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Valletta",
+      "beschrijving": "Een staande witte en rode helft, met linksboven een klein grijs kruis.",
+      "weetje": "Het kruis is een medaille die het eiland kreeg voor zijn moed in de oorlog.",
+      "beeld": "vlaggen/mt.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-malta"
+      ]
+    },
+    {
+      "id": "vlag-ma",
+      "iso": "MA",
+      "naam": "Marokko",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "bekend",
+      "groepen": [],
+      "hoofdstad": "Rabat",
+      "beschrijving": "Rood met in het midden een groene ster van lijnen.",
+      "weetje": "De groene ster is getekend met één lijn die rondgaat.",
+      "beeld": "vlaggen/ma.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-marokko",
+        "wl-land-marokko"
+      ]
+    },
+    {
+      "id": "vlag-mh",
+      "iso": "MH",
+      "naam": "Marshalleilanden",
+      "aliassen": [],
+      "werelddelen": [
+        "oceanie"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Majuro",
+      "beschrijving": "Blauw met twee schuine banen, oranje en wit, en een witte ster met veel punten.",
+      "weetje": "De ster heeft 24 punten, één voor elk deel van het land.",
+      "beeld": "vlaggen/mh.svg",
+      "verhouding": 1.9,
+      "licentie": "publiek-domein",
+      "topo": []
+    },
+    {
+      "id": "vlag-mr",
+      "iso": "MR",
+      "naam": "Mauritanië",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Nouakchott",
+      "beschrijving": "Groen met een gele halve maan en ster, en een rode baan boven en onder.",
+      "weetje": "De rode banen kwamen er in 2017 bij.",
+      "beeld": "vlaggen/mr.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-mauritanie",
+        "wl-land-mauritanie"
+      ]
+    },
+    {
+      "id": "vlag-mu",
+      "iso": "MU",
+      "naam": "Mauritius",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Port Louis",
+      "beschrijving": "Vier liggende banen: rood, blauw, geel en groen.",
+      "weetje": "Het is een van de weinige vlaggen met vier even brede banen.",
+      "beeld": "vlaggen/mu.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": []
+    },
+    {
+      "id": "vlag-mx",
+      "iso": "MX",
+      "naam": "Mexico",
+      "aliassen": [],
+      "werelddelen": [
+        "noord-amerika"
+      ],
+      "klasse": "bekend",
+      "groepen": [
+        "groen-wit-rood-staand"
+      ],
+      "hoofdstad": "Mexico-Stad",
+      "beschrijving": "Staand groen, wit en rood, met in het midden een adelaar die een slang eet.",
+      "weetje": "Een oud verhaal zegt dat de stad gebouwd moest worden waar een adelaar op een cactus een slang at.",
+      "beeld": "vlaggen/mx.svg",
+      "verhouding": 1.75,
+      "licentie": "vrijgesteld-nationaal",
+      "topo": [
+        "na-land-mexico",
+        "wl-land-mexico"
+      ]
+    },
+    {
+      "id": "vlag-fm",
+      "iso": "FM",
+      "naam": "Micronesia",
+      "aliassen": [],
+      "werelddelen": [
+        "oceanie"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Palikir",
+      "beschrijving": "Lichtblauw met vier witte sterren in een ruit.",
+      "weetje": "De vier sterren zijn de vier deelstaten.",
+      "beeld": "vlaggen/fm.svg",
+      "verhouding": 1.9,
+      "licentie": "publiek-domein",
+      "topo": []
+    },
+    {
+      "id": "vlag-md",
+      "iso": "MD",
+      "naam": "Moldavië",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "lastig",
+      "groepen": [
+        "blauw-geel-rood-staand"
+      ],
+      "hoofdstad": "Chisinau",
+      "beschrijving": "Drie staande banen blauw, geel en rood, met een adelaar in het midden.",
+      "weetje": "De adelaar houdt een kruis in zijn snavel.",
+      "beeld": "vlaggen/md.svg",
+      "verhouding": 2,
+      "licentie": "vrijgesteld-nationaal",
+      "topo": [
+        "eu-land-moldavie",
+        "wl-land-moldavie"
+      ]
+    },
+    {
+      "id": "vlag-mc",
+      "iso": "MC",
+      "naam": "Monaco",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "rood-boven-wit"
+      ],
+      "hoofdstad": "Monaco",
+      "beschrijving": "Twee liggende banen: rood boven, wit onder.",
+      "weetje": "Hij is bijna gelijk aan de vlag van Indonesië, alleen iets minder lang.",
+      "beeld": "vlaggen/mc.svg",
+      "verhouding": 1.25,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-monaco"
+      ]
+    },
+    {
+      "id": "vlag-mn",
+      "iso": "MN",
+      "naam": "Mongolië",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Ulaanbaatar",
+      "beschrijving": "Staand rood, blauw en rood, met een geel teken aan de stokkant.",
+      "weetje": "Het gele teken heet de soyombo en bevat vuur, een zon en een maan.",
+      "beeld": "vlaggen/mn.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-mongolie",
+        "wl-land-mongolie"
+      ]
+    },
+    {
+      "id": "vlag-me",
+      "iso": "ME",
+      "naam": "Montenegro",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Podgorica",
+      "beschrijving": "Rood met een gouden rand en een gouden adelaar met twee koppen.",
+      "weetje": "De gouden rand loopt helemaal om de vlag heen.",
+      "beeld": "vlaggen/me.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-montenegro",
+        "wl-land-montenegro"
+      ]
+    },
+    {
+      "id": "vlag-mz",
+      "iso": "MZ",
+      "naam": "Mozambique",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Maputo",
+      "beschrijving": "Groen, zwart en geel met witte randen, een rode driehoek en een geweer, een schoffel en een boek.",
+      "weetje": "Het is de enige vlag van een land met een geweer erop.",
+      "beeld": "vlaggen/mz.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-mozambique",
+        "wl-land-mozambique"
+      ]
+    },
+    {
+      "id": "vlag-mm",
+      "iso": "MM",
+      "naam": "Myanmar",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Naypyidaw",
+      "beschrijving": "Liggend geel, groen en rood, met een grote witte ster.",
+      "weetje": "De witte ster staat voor één land dat bij elkaar hoort.",
+      "beeld": "vlaggen/mm.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-myanmar",
+        "wl-land-myanmar"
+      ]
+    },
+    {
+      "id": "vlag-na",
+      "iso": "NA",
+      "naam": "Namibië",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Windhoek",
+      "beschrijving": "Een schuine rode baan met witte randen, blauw linksboven met een gele zon, en groen rechtsonder.",
+      "weetje": "De gele zon heeft twaalf punten.",
+      "beeld": "vlaggen/na.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-namibie",
+        "wl-land-namibie"
+      ]
+    },
+    {
+      "id": "vlag-nr",
+      "iso": "NR",
+      "naam": "Nauru",
+      "aliassen": [],
+      "werelddelen": [
+        "oceanie"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Yaren",
+      "beschrijving": "Blauw met een smalle gele liggende baan en een witte ster met twaalf punten.",
+      "weetje": "De gele baan is de evenaar, en de ster ligt er net onder, net als het eiland.",
+      "beeld": "vlaggen/nr.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "oc-land-nauru"
+      ]
+    },
+    {
+      "id": "vlag-nl",
+      "iso": "NL",
+      "naam": "Nederland",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "bekend",
+      "groepen": [
+        "rood-wit-blauw-liggend"
+      ],
+      "hoofdstad": "Amsterdam",
+      "hoofdstadNoot": "De regering zit in Den Haag.",
+      "beschrijving": "Drie liggende banen: rood, wit en blauw.",
+      "weetje": "Vroeger was de bovenste baan oranje, de kleur van Willem van Oranje.",
+      "beeld": "vlaggen/nl.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-nederland",
+        "wl-land-nederland"
+      ]
+    },
+    {
+      "id": "vlag-np",
+      "iso": "NP",
+      "naam": "Nepal",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Kathmandu",
+      "beschrijving": "Twee rode driehoeken boven elkaar met een blauwe rand, met een witte maan en een witte zon.",
+      "weetje": "Het is de enige vlag van een land die geen rechthoek is.",
+      "beeld": "vlaggen/np.svg",
+      "verhouding": 0.8203,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-nepal",
+        "wl-land-nepal"
+      ]
+    },
+    {
+      "id": "vlag-ni",
+      "iso": "NI",
+      "naam": "Nicaragua",
+      "aliassen": [],
+      "werelddelen": [
+        "noord-amerika"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "blauw-wit-blauw"
+      ],
+      "hoofdstad": "Managua",
+      "beschrijving": "Liggend blauw, wit en blauw, met een driehoek met vulkanen en een regenboog.",
+      "weetje": "In het wapen staat een regenboog, dus er zit ook paars in de vlag.",
+      "beeld": "vlaggen/ni.svg",
+      "verhouding": 1.6667,
+      "licentie": "publiek-domein",
+      "topo": [
+        "na-land-nicaragua",
+        "wl-land-nicaragua"
+      ]
+    },
+    {
+      "id": "vlag-nz",
+      "iso": "NZ",
+      "naam": "Nieuw-Zeeland",
+      "aliassen": [],
+      "werelddelen": [
+        "oceanie"
+      ],
+      "klasse": "bekend",
+      "groepen": [
+        "zuiderkruis",
+        "britse-vlag-in-de-hoek"
+      ],
+      "hoofdstad": "Wellington",
+      "beschrijving": "Donkerblauw met de Britse vlag linksboven en vier rode sterren met een witte rand.",
+      "weetje": "Australië heeft witte sterren, dit land rode.",
+      "beeld": "vlaggen/nz.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "oc-land-nieuw-zeeland",
+        "wl-land-nieuw-zeeland"
+      ]
+    },
+    {
+      "id": "vlag-ne",
+      "iso": "NE",
+      "naam": "Niger",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "oranje-wit-groen"
+      ],
+      "hoofdstad": "Niamey",
+      "beschrijving": "Liggend oranje, wit en groen, met een oranje rondje in het midden.",
+      "weetje": "Het oranje rondje is de zon, en de vlag is bijna vierkant.",
+      "beeld": "vlaggen/ne.svg",
+      "verhouding": 1.1667,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-niger",
+        "wl-land-niger"
+      ]
+    },
+    {
+      "id": "vlag-ng",
+      "iso": "NG",
+      "naam": "Nigeria",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "bekend",
+      "groepen": [],
+      "hoofdstad": "Abuja",
+      "beschrijving": "Drie staande banen: groen, wit en groen.",
+      "weetje": "Groen staat voor de bossen en het land, wit voor vrede.",
+      "beeld": "vlaggen/ng.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-nigeria",
+        "wl-land-nigeria"
+      ]
+    },
+    {
+      "id": "vlag-kp",
+      "iso": "KP",
+      "naam": "Noord-Korea",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Pyongyang",
+      "beschrijving": "Blauw, een brede rode baan met witte randen, en een rode ster in een witte cirkel.",
+      "weetje": "De rode ster staat in een witte cirkel aan de stokkant.",
+      "beeld": "vlaggen/kp.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-noord-korea",
+        "wl-land-noord-korea"
+      ]
+    },
+    {
+      "id": "vlag-mk",
+      "iso": "MK",
+      "naam": "Noord-Macedonië",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Skopje",
+      "beschrijving": "Rood met een gele zon waarvan acht brede stralen tot de rand lopen.",
+      "weetje": "De acht stralen van de zon lopen door tot aan de rand van de vlag.",
+      "beeld": "vlaggen/mk.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-noord-macedonie",
+        "wl-land-noord-macedonie"
+      ]
+    },
+    {
+      "id": "vlag-no",
+      "iso": "NO",
+      "naam": "Noorwegen",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "bekend",
+      "groepen": [
+        "scandinavisch-kruis"
+      ],
+      "hoofdstad": "Oslo",
+      "beschrijving": "Rood met een blauw kruis met een witte rand, naar de stokkant geschoven.",
+      "weetje": "Hij heeft dezelfde kleuren als de vlaggen van Frankrijk en Nederland: rood, wit en blauw.",
+      "beeld": "vlaggen/no.svg",
+      "verhouding": 1.375,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-noorwegen",
+        "wl-land-noorwegen"
+      ]
+    },
+    {
+      "id": "vlag-ug",
+      "iso": "UG",
+      "naam": "Oeganda",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Kampala",
+      "beschrijving": "Zes liggende banen zwart, geel en rood, met een grijze vogel in een witte cirkel.",
+      "weetje": "De vogel is een kroonkraanvogel, met een kuif als een kroontje.",
+      "beeld": "vlaggen/ug.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-oeganda",
+        "wl-land-oeganda"
+      ]
+    },
+    {
+      "id": "vlag-ua",
+      "iso": "UA",
+      "naam": "Oekraïne",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "bekend",
+      "groepen": [],
+      "hoofdstad": "Kyiv",
+      "beschrijving": "Twee liggende banen: blauw boven, geel onder.",
+      "weetje": "Blauw is de lucht en geel zijn de graanvelden eronder.",
+      "beeld": "vlaggen/ua.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-oekraine",
+        "wl-land-oekraine"
+      ]
+    },
+    {
+      "id": "vlag-uz",
+      "iso": "UZ",
+      "naam": "Oezbekistan",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Tasjkent",
+      "beschrijving": "Liggend blauw, wit en groen met rode randen, en een witte maan met twaalf sterren.",
+      "weetje": "De twaalf sterren staan voor de twaalf maanden.",
+      "beeld": "vlaggen/uz.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-oezbekistan",
+        "wl-land-oezbekistan"
+      ]
+    },
+    {
+      "id": "vlag-om",
+      "iso": "OM",
+      "naam": "Oman",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Muscat",
+      "beschrijving": "Een staande rode baan aan de stokkant, en wit, rood en groen, met een wapen met zwaarden.",
+      "weetje": "In het wapen zie je een dolk en twee gekruiste zwaarden.",
+      "beeld": "vlaggen/om.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-oman",
+        "wl-land-oman"
+      ]
+    },
+    {
+      "id": "vlag-tl",
+      "iso": "TL",
+      "naam": "Oost-Timor",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Dili",
+      "beschrijving": "Rood met een gele en een zwarte driehoek en een witte ster.",
+      "weetje": "Het land bestaat pas sinds 2002 en is een van de jongste landen.",
+      "beeld": "vlaggen/tl.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-oost-timor",
+        "wl-land-oost-timor"
+      ]
+    },
+    {
+      "id": "vlag-at",
+      "iso": "AT",
+      "naam": "Oostenrijk",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "bekend",
+      "groepen": [
+        "rood-wit-rood"
+      ],
+      "hoofdstad": "Wenen",
+      "beschrijving": "Drie liggende banen: rood, wit en rood.",
+      "weetje": "Een oud verhaal zegt dat een hertog na een gevecht een rode jas had, met alleen een witte band onder zijn riem.",
+      "beeld": "vlaggen/at.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-oostenrijk",
+        "wl-land-oostenrijk"
+      ]
+    },
+    {
+      "id": "vlag-pk",
+      "iso": "PK",
+      "naam": "Pakistan",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Islamabad",
+      "beschrijving": "Donkergroen met een witte baan aan de stokkant en een witte halve maan en ster.",
+      "weetje": "De witte baan staat voor de mensen in het land die geen moslim zijn.",
+      "beeld": "vlaggen/pk.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-pakistan",
+        "wl-land-pakistan"
+      ]
+    },
+    {
+      "id": "vlag-pw",
+      "iso": "PW",
+      "naam": "Palau",
+      "aliassen": [],
+      "werelddelen": [
+        "oceanie"
+      ],
+      "klasse": "lastig",
+      "groepen": [
+        "rondje-in-het-midden"
+      ],
+      "hoofdstad": "Melekeok",
+      "beschrijving": "Lichtblauw met een geel rondje dat iets naar de stokkant staat.",
+      "weetje": "Het gele rondje is de volle maan boven de zee.",
+      "beeld": "vlaggen/pw.svg",
+      "verhouding": 1.6,
+      "licentie": "publiek-domein",
+      "topo": []
+    },
+    {
+      "id": "vlag-pa",
+      "iso": "PA",
+      "naam": "Panama",
+      "aliassen": [],
+      "werelddelen": [
+        "noord-amerika"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Panama-Stad",
+      "beschrijving": "Vier vakken: wit met een blauwe ster, rood, blauw, en wit met een rode ster.",
+      "weetje": "De vlag bestaat uit vier vakken, net als een raam.",
+      "beeld": "vlaggen/pa.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "na-land-panama",
+        "wl-land-panama"
+      ]
+    },
+    {
+      "id": "vlag-pg",
+      "iso": "PG",
+      "naam": "Papoea-Nieuw-Guinea",
+      "aliassen": [],
+      "werelddelen": [
+        "oceanie"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Port Moresby",
+      "beschrijving": "Schuin verdeeld: rood met een gele vogel, en zwart met vijf witte sterren.",
+      "weetje": "De vogel is een paradijsvogel, met prachtige lange veren.",
+      "beeld": "vlaggen/pg.svg",
+      "verhouding": 1.3333,
+      "licentie": "publiek-domein",
+      "topo": [
+        "oc-land-papoea-nieuw-guinea",
+        "wl-land-papoea-nieuw-guinea"
+      ]
+    },
+    {
+      "id": "vlag-py",
+      "iso": "PY",
+      "naam": "Paraguay",
+      "aliassen": [],
+      "werelddelen": [
+        "zuid-amerika"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "rood-wit-blauw-liggend"
+      ],
+      "hoofdstad": "Asunción",
+      "beschrijving": "Rood, wit en blauw in liggende banen, met een rond wapen in het midden.",
+      "weetje": "De voorkant en de achterkant van de vlag hebben een ander wapen.",
+      "beeld": "vlaggen/py.svg",
+      "verhouding": 1.8182,
+      "licentie": "publiek-domein",
+      "topo": [
+        "za-land-paraguay",
+        "wl-land-paraguay"
+      ]
+    },
+    {
+      "id": "vlag-pe",
+      "iso": "PE",
+      "naam": "Peru",
+      "aliassen": [],
+      "werelddelen": [
+        "zuid-amerika"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Lima",
+      "beschrijving": "Drie staande banen: rood, wit en rood.",
+      "weetje": "Een oud verhaal zegt dat de kleuren komen van flamingo's met rode vleugels en witte borst.",
+      "beeld": "vlaggen/pe.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "za-land-peru",
+        "wl-land-peru"
+      ]
+    },
+    {
+      "id": "vlag-pl",
+      "iso": "PL",
+      "naam": "Polen",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "bekend",
+      "groepen": [
+        "rood-boven-wit"
+      ],
+      "hoofdstad": "Warschau",
+      "beschrijving": "Twee liggende banen: wit boven, rood onder.",
+      "weetje": "Draai hem om en je hebt bijna de vlag van Indonesië.",
+      "beeld": "vlaggen/pl.svg",
+      "verhouding": 1.6,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-polen",
+        "wl-land-polen"
+      ]
+    },
+    {
+      "id": "vlag-pt",
+      "iso": "PT",
+      "naam": "Portugal",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "bekend",
+      "groepen": [],
+      "hoofdstad": "Lissabon",
+      "beschrijving": "Groen aan de stokkant en rood, met een wapen op de grens ertussen.",
+      "weetje": "In het wapen zit een oud instrument waarmee zeevaarders de weg vonden op zee.",
+      "beeld": "vlaggen/pt.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-portugal",
+        "wl-land-portugal"
+      ]
+    },
+    {
+      "id": "vlag-qa",
+      "iso": "QA",
+      "naam": "Qatar",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "kartelrand"
+      ],
+      "hoofdstad": "Doha",
+      "beschrijving": "Wit aan de stokkant en bruinrood, met een kartelrand van negen punten.",
+      "weetje": "De vlag is meer dan twee keer zo lang als hij hoog is.",
+      "beeld": "vlaggen/qa.svg",
+      "verhouding": 2.5455,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-qatar",
+        "wl-land-qatar"
+      ]
+    },
+    {
+      "id": "vlag-ro",
+      "iso": "RO",
+      "naam": "Roemenië",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "blauw-geel-rood-staand"
+      ],
+      "hoofdstad": "Boekarest",
+      "beschrijving": "Drie staande banen: blauw, geel en rood.",
+      "weetje": "Hij is bijna gelijk aan de vlag van Tsjaad; alleen het blauw is iets lichter.",
+      "beeld": "vlaggen/ro.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-roemenie",
+        "wl-land-roemenie"
+      ]
+    },
+    {
+      "id": "vlag-ru",
+      "iso": "RU",
+      "naam": "Rusland",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "bekend",
+      "groepen": [
+        "wit-blauw-rood"
+      ],
+      "hoofdstad": "Moskou",
+      "beschrijving": "Drie liggende banen: wit, blauw en rood.",
+      "weetje": "Er wordt gezegd dat tsaar Peter de Grote deze kleuren koos nadat hij in Nederland was geweest.",
+      "beeld": "vlaggen/ru.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-rusland",
+        "wl-land-rusland"
+      ]
+    },
+    {
+      "id": "vlag-rw",
+      "iso": "RW",
+      "naam": "Rwanda",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Kigali",
+      "beschrijving": "Liggend lichtblauw, geel en groen, met rechtsboven een gele zon.",
+      "weetje": "De gele zon staat voor licht en kennis.",
+      "beeld": "vlaggen/rw.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-rwanda",
+        "wl-land-rwanda"
+      ]
+    },
+    {
+      "id": "vlag-kn",
+      "iso": "KN",
+      "naam": "Saint Kitts en Nevis",
+      "aliassen": [],
+      "werelddelen": [
+        "noord-amerika"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Basseterre",
+      "beschrijving": "Een schuine zwarte baan met gele randen en twee witte sterren, tussen groen en rood.",
+      "weetje": "De twee witte sterren staan voor hoop en vrijheid.",
+      "beeld": "vlaggen/kn.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "na-land-saint-kitts-en-nevis"
+      ]
+    },
+    {
+      "id": "vlag-lc",
+      "iso": "LC",
+      "naam": "Saint Lucia",
+      "aliassen": [],
+      "werelddelen": [
+        "noord-amerika"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Castries",
+      "beschrijving": "Lichtblauw met een zwarte en een gele driehoek met een witte rand.",
+      "weetje": "De driehoeken lijken op twee spitse bergen op het eiland.",
+      "beeld": "vlaggen/lc.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "na-land-saint-lucia"
+      ]
+    },
+    {
+      "id": "vlag-vc",
+      "iso": "VC",
+      "naam": "Saint Vincent en de Grenadines",
+      "aliassen": [],
+      "werelddelen": [
+        "noord-amerika"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Kingstown",
+      "beschrijving": "Staand blauw, een brede gele baan en groen, met drie groene ruiten.",
+      "weetje": "De drie ruiten vormen samen een V, van Vincent.",
+      "beeld": "vlaggen/vc.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "na-land-saint-vincent-en-de-grenadines"
+      ]
+    },
+    {
+      "id": "vlag-sb",
+      "iso": "SB",
+      "naam": "Salomonseilanden",
+      "aliassen": [],
+      "werelddelen": [
+        "oceanie"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Honiara",
+      "beschrijving": "Een schuine gele baan tussen blauw met vijf witte sterren en groen.",
+      "weetje": "De vijf sterren stonden voor de vijf grote groepen eilanden.",
+      "beeld": "vlaggen/sb.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "oc-land-salomonseilanden",
+        "wl-land-salomonseilanden"
+      ]
+    },
+    {
+      "id": "vlag-ws",
+      "iso": "WS",
+      "naam": "Samoa",
+      "aliassen": [],
+      "werelddelen": [
+        "oceanie"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Apia",
+      "beschrijving": "Rood met linksboven een blauw vlak met vijf witte sterren.",
+      "weetje": "De sterren vormen het Zuiderkruis.",
+      "beeld": "vlaggen/ws.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": []
+    },
+    {
+      "id": "vlag-sm",
+      "iso": "SM",
+      "naam": "San Marino",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "San Marino",
+      "beschrijving": "Wit boven en lichtblauw onder, met een wapen in het midden.",
+      "weetje": "Op het wapen staan drie torens op drie bergtoppen.",
+      "beeld": "vlaggen/sm.svg",
+      "verhouding": 1.3333,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-san-marino"
+      ]
+    },
+    {
+      "id": "vlag-st",
+      "iso": "ST",
+      "naam": "Sao Tomé en Principe",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Sao Tomé",
+      "beschrijving": "Groen, geel en groen, met een rode driehoek en twee zwarte sterren.",
+      "weetje": "De twee sterren zijn de twee grote eilanden.",
+      "beeld": "vlaggen/st.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-sao-tome-en-principe"
+      ]
+    },
+    {
+      "id": "vlag-sa",
+      "iso": "SA",
+      "naam": "Saoedi-Arabië",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Riyad",
+      "beschrijving": "Groen met witte Arabische letters en een wit zwaard.",
+      "weetje": "Er staat een geloofsbelijdenis op, en daarom hangt deze vlag nooit halfstok.",
+      "beeld": "vlaggen/sa.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-saoedi-arabie",
+        "wl-land-saoedi-arabie"
+      ]
+    },
+    {
+      "id": "vlag-sn",
+      "iso": "SN",
+      "naam": "Senegal",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "groen-geel-rood-staand"
+      ],
+      "hoofdstad": "Dakar",
+      "beschrijving": "Staand groen, geel en rood, met een groene ster in het midden.",
+      "weetje": "Hij lijkt op de vlag van Mali, maar heeft een groene ster.",
+      "beeld": "vlaggen/sn.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-senegal",
+        "wl-land-senegal"
+      ]
+    },
+    {
+      "id": "vlag-rs",
+      "iso": "RS",
+      "naam": "Servië",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "wit-blauw-rood"
+      ],
+      "hoofdstad": "Belgrado",
+      "beschrijving": "Drie liggende banen: rood, blauw en wit, met een wapen aan de stokkant.",
+      "weetje": "Het zijn de banen van de Russische vlag, maar dan ondersteboven.",
+      "beeld": "vlaggen/rs.svg",
+      "verhouding": 1.5,
+      "licentie": "vrijgesteld-nationaal",
+      "topo": [
+        "eu-land-servie",
+        "wl-land-servie"
+      ]
+    },
+    {
+      "id": "vlag-sc",
+      "iso": "SC",
+      "naam": "Seychellen",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Victoria",
+      "beschrijving": "Vijf schuine banen blauw, geel, rood, wit en groen die vanuit linksonder uitwaaieren.",
+      "weetje": "De banen waaieren uit als stralen, een teken dat het land vooruitgaat.",
+      "beeld": "vlaggen/sc.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": []
+    },
+    {
+      "id": "vlag-sl",
+      "iso": "SL",
+      "naam": "Sierra Leone",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Freetown",
+      "beschrijving": "Drie liggende banen: groen, wit en blauw.",
+      "weetje": "Blauw staat voor de haven van de hoofdstad aan de zee.",
+      "beeld": "vlaggen/sl.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-sierra-leone",
+        "wl-land-sierra-leone"
+      ]
+    },
+    {
+      "id": "vlag-sg",
+      "iso": "SG",
+      "naam": "Singapore",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Singapore",
+      "beschrijving": "Rood boven en wit onder, met een witte maan en vijf sterren.",
+      "weetje": "De vijf sterren staan in een cirkel.",
+      "beeld": "vlaggen/sg.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-singapore"
+      ]
+    },
+    {
+      "id": "vlag-si",
+      "iso": "SI",
+      "naam": "Slovenië",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "wit-blauw-rood"
+      ],
+      "hoofdstad": "Ljubljana",
+      "beschrijving": "Wit, blauw en rood in liggende banen, met linksboven een wapen met een berg.",
+      "weetje": "Op het wapen staat de berg Triglav, de hoogste berg van het land.",
+      "beeld": "vlaggen/si.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-slovenie",
+        "wl-land-slovenie"
+      ]
+    },
+    {
+      "id": "vlag-sk",
+      "iso": "SK",
+      "naam": "Slowakije",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "wit-blauw-rood"
+      ],
+      "hoofdstad": "Bratislava",
+      "beschrijving": "Wit, blauw en rood in liggende banen, met een wapen met een wit dubbel kruis.",
+      "weetje": "Het wapen toont een dubbel kruis op drie blauwe heuvels.",
+      "beeld": "vlaggen/sk.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-slowakije",
+        "wl-land-slowakije"
+      ]
+    },
+    {
+      "id": "vlag-sd",
+      "iso": "SD",
+      "naam": "Soedan",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "driehoek-en-drie-banen"
+      ],
+      "hoofdstad": "Khartoum",
+      "beschrijving": "Liggend rood, wit en zwart, met een groene driehoek aan de stokkant.",
+      "weetje": "Hij lijkt op de vlaggen van Egypte en Irak, maar heeft een groene driehoek.",
+      "beeld": "vlaggen/sd.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-soedan",
+        "wl-land-soedan"
+      ]
+    },
+    {
+      "id": "vlag-so",
+      "iso": "SO",
+      "naam": "Somalië",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Mogadishu",
+      "beschrijving": "Lichtblauw met een witte ster in het midden.",
+      "weetje": "De vijf punten van de ster staan voor de plekken waar Somaliërs wonen.",
+      "beeld": "vlaggen/so.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-somalie",
+        "wl-land-somalie"
+      ]
+    },
+    {
+      "id": "vlag-es",
+      "iso": "ES",
+      "naam": "Spanje",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "bekend",
+      "groepen": [],
+      "hoofdstad": "Madrid",
+      "beschrijving": "Rood, een brede gele baan en weer rood, met een wapen aan de stokkant.",
+      "weetje": "De gele baan is twee keer zo breed als elke rode.",
+      "beeld": "vlaggen/es.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-spanje",
+        "wl-land-spanje"
+      ]
+    },
+    {
+      "id": "vlag-lk",
+      "iso": "LK",
+      "naam": "Sri Lanka",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Colombo",
+      "hoofdstadNoot": "Het parlement zit in Sri Jayawardenepura Kotte.",
+      "beschrijving": "Een gele leeuw met een zwaard op donkerrood, met een groene en een oranje baan aan de stokkant.",
+      "weetje": "De leeuw houdt een zwaard vast.",
+      "beeld": "vlaggen/lk.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-sri-lanka",
+        "wl-land-sri-lanka"
+      ]
+    },
+    {
+      "id": "vlag-sr",
+      "iso": "SR",
+      "naam": "Suriname",
+      "aliassen": [],
+      "werelddelen": [
+        "zuid-amerika"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Paramaribo",
+      "beschrijving": "Groen, wit, een brede rode baan, wit en groen, met een gele ster.",
+      "weetje": "Het land hoorde lang bij het Koninkrijk der Nederlanden en kreeg deze vlag in 1975.",
+      "beeld": "vlaggen/sr.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "za-land-suriname",
+        "wl-land-suriname"
+      ]
+    },
+    {
+      "id": "vlag-sy",
+      "iso": "SY",
+      "naam": "Syrië",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "rood-wit-zwart"
+      ],
+      "hoofdstad": "Damascus",
+      "beschrijving": "Liggend groen, wit en zwart, met drie rode sterren in het midden.",
+      "weetje": "Deze vlag werd in 2025 weer de vlag van het land, net als vroeger.",
+      "beeld": "vlaggen/sy.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-syrie",
+        "wl-land-syrie"
+      ]
+    },
+    {
+      "id": "vlag-tj",
+      "iso": "TJ",
+      "naam": "Tadzjikistan",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Doesjanbe",
+      "beschrijving": "Rood, een brede witte baan en groen, met een gouden kroon en zeven sterren.",
+      "weetje": "Boven de kroon staan zeven sterren in een boog.",
+      "beeld": "vlaggen/tj.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-tadzjikistan",
+        "wl-land-tadzjikistan"
+      ]
+    },
+    {
+      "id": "vlag-tw",
+      "iso": "TW",
+      "naam": "Taiwan",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Taipei",
+      "beschrijving": "Rood met linksboven een blauw vlak met een witte zon met twaalf stralen.",
+      "weetje": "De witte zon heeft twaalf stralen, net zoveel als er maanden zijn.",
+      "beeld": "vlaggen/tw.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-taiwan",
+        "wl-land-taiwan"
+      ]
+    },
+    {
+      "id": "vlag-tz",
+      "iso": "TZ",
+      "naam": "Tanzania",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Dodoma",
+      "beschrijving": "Een schuine zwarte baan met gele randen, groen linksboven en blauw rechtsonder.",
+      "weetje": "Blauw staat voor de zee en de meren, zoals het Victoriameer.",
+      "beeld": "vlaggen/tz.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-tanzania",
+        "wl-land-tanzania"
+      ]
+    },
+    {
+      "id": "vlag-th",
+      "iso": "TH",
+      "naam": "Thailand",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "rood-wit-blauw-strepen"
+      ],
+      "hoofdstad": "Bangkok",
+      "beschrijving": "Rood, wit, een brede blauwe baan, wit en rood.",
+      "weetje": "Blauw in het midden is de kleur van de koning.",
+      "beeld": "vlaggen/th.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-thailand",
+        "wl-land-thailand"
+      ]
+    },
+    {
+      "id": "vlag-tg",
+      "iso": "TG",
+      "naam": "Togo",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Lomé",
+      "beschrijving": "Groene en gele strepen, met linksboven een rood vlak met een witte ster.",
+      "weetje": "De vijf strepen staan voor de vijf delen van het land.",
+      "beeld": "vlaggen/tg.svg",
+      "verhouding": 1.618,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-togo",
+        "wl-land-togo"
+      ]
+    },
+    {
+      "id": "vlag-to",
+      "iso": "TO",
+      "naam": "Tonga",
+      "aliassen": [],
+      "werelddelen": [
+        "oceanie"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Nuku'alofa",
+      "beschrijving": "Rood met linksboven een wit vlak met een rood kruis.",
+      "weetje": "In de wet van het land staat dat deze vlag nooit mag veranderen.",
+      "beeld": "vlaggen/to.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": []
+    },
+    {
+      "id": "vlag-tt",
+      "iso": "TT",
+      "naam": "Trinidad en Tobago",
+      "aliassen": [],
+      "werelddelen": [
+        "noord-amerika"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Port of Spain",
+      "beschrijving": "Rood met een schuine zwarte baan met witte randen.",
+      "weetje": "Zwart staat voor kracht, wit voor de zee en rood voor de warmte van de zon.",
+      "beeld": "vlaggen/tt.svg",
+      "verhouding": 1.6667,
+      "licentie": "publiek-domein",
+      "topo": [
+        "na-land-trinidad-en-tobago",
+        "wl-land-trinidad-en-tobago"
+      ]
+    },
+    {
+      "id": "vlag-td",
+      "iso": "TD",
+      "naam": "Tsjaad",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "blauw-geel-rood-staand"
+      ],
+      "hoofdstad": "N'Djamena",
+      "beschrijving": "Drie staande banen: blauw, geel en rood.",
+      "weetje": "Hij is bijna gelijk aan de vlag van Roemenië; alleen het blauw is iets donkerder.",
+      "beeld": "vlaggen/td.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-tsjaad",
+        "wl-land-tsjaad"
+      ]
+    },
+    {
+      "id": "vlag-cz",
+      "iso": "CZ",
+      "naam": "Tsjechië",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Praag",
+      "beschrijving": "Wit boven, rood onder en een blauwe driehoek aan de stokkant.",
+      "weetje": "De blauwe driehoek kwam erbij omdat de vlag anders gelijk was aan die van Polen.",
+      "beeld": "vlaggen/cz.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-tsjechie",
+        "wl-land-tsjechie"
+      ]
+    },
+    {
+      "id": "vlag-tn",
+      "iso": "TN",
+      "naam": "Tunesië",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "maan-en-ster-op-rood"
+      ],
+      "hoofdstad": "Tunis",
+      "beschrijving": "Rood met een witte schijf, en daarin een rode halve maan en ster.",
+      "weetje": "Hij lijkt op de vlag van Turkije, maar de maan en ster staan in een witte cirkel.",
+      "beeld": "vlaggen/tn.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-tunesie",
+        "wl-land-tunesie"
+      ]
+    },
+    {
+      "id": "vlag-tr",
+      "iso": "TR",
+      "naam": "Turkije",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "bekend",
+      "groepen": [
+        "maan-en-ster-op-rood"
+      ],
+      "hoofdstad": "Ankara",
+      "beschrijving": "Rood met een witte halve maan en ster.",
+      "weetje": "Ook Tunesië en Azerbeidzjan hebben een halve maan en ster op hun vlag.",
+      "beeld": "vlaggen/tr.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-turkije",
+        "wl-land-turkije"
+      ]
+    },
+    {
+      "id": "vlag-tm",
+      "iso": "TM",
+      "naam": "Turkmenistan",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Asjchabad",
+      "beschrijving": "Groen met een rode staande baan vol patronen, en een witte maan met vijf sterren.",
+      "weetje": "In de rode baan staan vijf tapijtpatronen, want het land is beroemd om zijn tapijten.",
+      "beeld": "vlaggen/tm.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-turkmenistan",
+        "wl-land-turkmenistan"
+      ]
+    },
+    {
+      "id": "vlag-tv",
+      "iso": "TV",
+      "naam": "Tuvalu",
+      "aliassen": [],
+      "werelddelen": [
+        "oceanie"
+      ],
+      "klasse": "lastig",
+      "groepen": [
+        "britse-vlag-in-de-hoek"
+      ],
+      "hoofdstad": "Funafuti",
+      "beschrijving": "Lichtblauw met de Britse vlag linksboven en negen gele sterren.",
+      "weetje": "De negen sterren liggen zoals de negen eilanden op de kaart.",
+      "beeld": "vlaggen/tv.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "oc-land-tuvalu"
+      ]
+    },
+    {
+      "id": "vlag-uy",
+      "iso": "UY",
+      "naam": "Uruguay",
+      "aliassen": [],
+      "werelddelen": [
+        "zuid-amerika"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "lichtblauw-wit-zon"
+      ],
+      "hoofdstad": "Montevideo",
+      "beschrijving": "Negen witte en blauwe strepen, met linksboven een gouden zon.",
+      "weetje": "De zon is dezelfde Meizon als op de vlag van Argentinië.",
+      "beeld": "vlaggen/uy.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "za-land-uruguay",
+        "wl-land-uruguay"
+      ]
+    },
+    {
+      "id": "vlag-vu",
+      "iso": "VU",
+      "naam": "Vanuatu",
+      "aliassen": [],
+      "werelddelen": [
+        "oceanie"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Port Vila",
+      "beschrijving": "Rood boven en groen onder, met een zwarte driehoek met een gele Y, een gekrulde slagtand en twee varens.",
+      "weetje": "Op de vlag staat de gekrulde slagtand van een varken, een teken van rijkdom.",
+      "beeld": "vlaggen/vu.svg",
+      "verhouding": 1.6667,
+      "licentie": "publiek-domein",
+      "topo": [
+        "oc-land-vanuatu",
+        "wl-land-vanuatu"
+      ]
+    },
+    {
+      "id": "vlag-va",
+      "iso": "VA",
+      "naam": "Vaticaanstad",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Vaticaanstad",
+      "beschrijving": "Een vierkante vlag: een staande gele en witte helft, met twee sleutels en een kroon.",
+      "weetje": "Het is een van de twee vierkante vlaggen; de andere is die van Zwitserland.",
+      "beeld": "vlaggen/va.svg",
+      "verhouding": 1,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-vaticaanstad"
+      ]
+    },
+    {
+      "id": "vlag-ve",
+      "iso": "VE",
+      "naam": "Venezuela",
+      "aliassen": [],
+      "werelddelen": [
+        "zuid-amerika"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "geel-blauw-rood"
+      ],
+      "hoofdstad": "Caracas",
+      "beschrijving": "Liggend geel, blauw en rood, met een boog van acht witte sterren.",
+      "weetje": "De achtste ster kwam er in 2006 bij.",
+      "beeld": "vlaggen/ve.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "za-land-venezuela",
+        "wl-land-venezuela"
+      ]
+    },
+    {
+      "id": "vlag-gb",
+      "iso": "GB",
+      "naam": "Verenigd Koninkrijk",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "bekend",
+      "groepen": [
+        "britse-vlag-in-de-hoek"
+      ],
+      "hoofdstad": "Londen",
+      "beschrijving": "Blauw met een rood kruis en rode en witte schuine kruisen.",
+      "weetje": "Er zitten drie kruizen in één vlag: van Engeland, Schotland en Ierland.",
+      "beeld": "vlaggen/gb.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-verenigd-koninkrijk",
+        "wl-land-verenigd-koninkrijk"
+      ]
+    },
+    {
+      "id": "vlag-ae",
+      "iso": "AE",
+      "naam": "Verenigde Arabische Emiraten",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "normaal",
+      "groepen": [
+        "driehoek-en-drie-banen"
+      ],
+      "hoofdstad": "Abu Dhabi",
+      "beschrijving": "Een staande rode baan aan de stokkant, en liggend groen, wit en zwart.",
+      "weetje": "Het land bestaat uit zeven emiraten, en ze delen deze ene vlag.",
+      "beeld": "vlaggen/ae.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-verenigde-arabische-emiraten",
+        "wl-land-verenigde-arabische-emiraten"
+      ]
+    },
+    {
+      "id": "vlag-us",
+      "iso": "US",
+      "naam": "Verenigde Staten",
+      "aliassen": [
+        "Verenigde Staten van Amerika",
+        "Amerika",
+        "VS"
+      ],
+      "werelddelen": [
+        "noord-amerika"
+      ],
+      "klasse": "bekend",
+      "groepen": [
+        "strepen-en-sterren"
+      ],
+      "hoofdstad": "Washington D.C.",
+      "beschrijving": "Rode en witte strepen, met linksboven een blauw vlak met veel witte sterren.",
+      "weetje": "Er staan 50 sterren op, één voor elke staat, en 13 strepen voor de eerste staten.",
+      "beeld": "vlaggen/us.svg",
+      "verhouding": 1.9,
+      "licentie": "publiek-domein",
+      "topo": [
+        "na-land-verenigde-staten",
+        "wl-land-verenigde-staten"
+      ]
+    },
+    {
+      "id": "vlag-vn",
+      "iso": "VN",
+      "naam": "Vietnam",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Hanoi",
+      "beschrijving": "Rood met een grote gele ster in het midden.",
+      "weetje": "De vijf punten van de ster staan voor vijf groepen mensen die samen het land opbouwen.",
+      "beeld": "vlaggen/vn.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-vietnam",
+        "wl-land-vietnam"
+      ]
+    },
+    {
+      "id": "vlag-zm",
+      "iso": "ZM",
+      "naam": "Zambia",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Lusaka",
+      "beschrijving": "Groen met rechtsonder staande banen rood, zwart en oranje, en een oranje adelaar erboven.",
+      "weetje": "De adelaar vliegt boven de banen en staat voor vrijheid.",
+      "beeld": "vlaggen/zm.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-zambia",
+        "wl-land-zambia"
+      ]
+    },
+    {
+      "id": "vlag-zw",
+      "iso": "ZW",
+      "naam": "Zimbabwe",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Harare",
+      "beschrijving": "Groene, gele, rode en zwarte strepen, met een witte driehoek met een gele vogel en een rode ster.",
+      "weetje": "De vogel is een beeld van steen dat in oude ruïnes in het land werd gevonden.",
+      "beeld": "vlaggen/zw.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-zimbabwe",
+        "wl-land-zimbabwe"
+      ]
+    },
+    {
+      "id": "vlag-za",
+      "iso": "ZA",
+      "naam": "Zuid-Afrika",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "bekend",
+      "groepen": [],
+      "hoofdstad": "Pretoria",
+      "hoofdstadNoot": "Het parlement zit in Kaapstad en de hoogste rechter in Bloemfontein.",
+      "beschrijving": "Een liggende groene Y met witte en gele randen, een zwarte driehoek, rood boven en blauw onder.",
+      "weetje": "Er zitten zes kleuren in, meer dan in bijna elke andere vlag.",
+      "beeld": "vlaggen/za.svg",
+      "verhouding": 1.4981,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-zuid-afrika",
+        "wl-land-zuid-afrika"
+      ]
+    },
+    {
+      "id": "vlag-kr",
+      "iso": "KR",
+      "naam": "Zuid-Korea",
+      "aliassen": [],
+      "werelddelen": [
+        "azie"
+      ],
+      "klasse": "bekend",
+      "groepen": [],
+      "hoofdstad": "Seoel",
+      "beschrijving": "Wit met een rood-blauw rondje en vier zwarte tekens van streepjes.",
+      "weetje": "Het rondje is yin en yang: twee dingen die samen één geheel vormen.",
+      "beeld": "vlaggen/kr.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "az-land-zuid-korea",
+        "wl-land-zuid-korea"
+      ]
+    },
+    {
+      "id": "vlag-ss",
+      "iso": "SS",
+      "naam": "Zuid-Soedan",
+      "aliassen": [],
+      "werelddelen": [
+        "afrika"
+      ],
+      "klasse": "lastig",
+      "groepen": [],
+      "hoofdstad": "Juba",
+      "beschrijving": "Liggend zwart, rood en groen met witte randen, en een blauwe driehoek met een gele ster.",
+      "weetje": "Het is een van de jongste vlaggen: het land bestaat pas sinds 2011.",
+      "beeld": "vlaggen/ss.svg",
+      "verhouding": 2,
+      "licentie": "publiek-domein",
+      "topo": [
+        "af-land-zuid-soedan",
+        "wl-land-zuid-soedan"
+      ]
+    },
+    {
+      "id": "vlag-se",
+      "iso": "SE",
+      "naam": "Zweden",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "bekend",
+      "groepen": [
+        "scandinavisch-kruis"
+      ],
+      "hoofdstad": "Stockholm",
+      "beschrijving": "Blauw met een geel liggend kruis dat naar de stokkant is geschoven.",
+      "weetje": "Blauw en geel komen uit een oud wapen met drie gouden kronen.",
+      "beeld": "vlaggen/se.svg",
+      "verhouding": 1.6,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-zweden",
+        "wl-land-zweden"
+      ]
+    },
+    {
+      "id": "vlag-ch",
+      "iso": "CH",
+      "naam": "Zwitserland",
+      "aliassen": [],
+      "werelddelen": [
+        "europa"
+      ],
+      "klasse": "bekend",
+      "groepen": [],
+      "hoofdstad": "Bern",
+      "beschrijving": "Een vierkante rode vlag met een wit kruis.",
+      "weetje": "Het Rode Kruis gebruikt deze vlag, maar dan met de kleuren omgedraaid.",
+      "beeld": "vlaggen/ch.svg",
+      "verhouding": 1,
+      "licentie": "publiek-domein",
+      "topo": [
+        "eu-land-zwitserland",
+        "wl-land-zwitserland"
+      ]
+    }
+  ],
+  "provincies": [
+    {
+      "id": "vlag-nl-gr",
+      "iso": "NL-GR",
+      "naam": "Groningen",
+      "aliassen": [],
+      "werelddelen": [
+        "nederland"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Groningen",
+      "beschrijving": "Een groen kruis met witte randen, op rode en blauwe vlakken.",
+      "weetje": "Groen en wit zijn de kleuren van de stad, rood en blauw die van het land eromheen.",
+      "beeld": "vlaggen/nl-gr.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "nl-prov-groningen"
+      ]
+    },
+    {
+      "id": "vlag-nl-fr",
+      "iso": "NL-FR",
+      "naam": "Fryslân",
+      "aliassen": [
+        "Friesland"
+      ],
+      "werelddelen": [
+        "nederland"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Leeuwarden",
+      "beschrijving": "Schuine blauwe en witte banen, met rode hartvormige bladeren op het wit.",
+      "weetje": "De rode 'hartjes' zijn pompeblêden: bladeren van een waterplant.",
+      "beeld": "vlaggen/nl-fr.svg",
+      "verhouding": 1.4444,
+      "licentie": "publiek-domein",
+      "topo": [
+        "nl-prov-fryslan"
+      ]
+    },
+    {
+      "id": "vlag-nl-dr",
+      "iso": "NL-DR",
+      "naam": "Drenthe",
+      "aliassen": [],
+      "werelddelen": [
+        "nederland"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Assen",
+      "beschrijving": "Wit met twee smalle rode strepen, en daartussen een zwarte burcht en zes rode sterren.",
+      "weetje": "De zes sterren staan voor de zes oude delen van de provincie.",
+      "beeld": "vlaggen/nl-dr.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "nl-prov-drenthe"
+      ]
+    },
+    {
+      "id": "vlag-nl-ov",
+      "iso": "NL-OV",
+      "naam": "Overijssel",
+      "aliassen": [],
+      "werelddelen": [
+        "nederland"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Zwolle",
+      "beschrijving": "Rood, geel en rood, met een blauwe golvende streep door het midden.",
+      "weetje": "De blauwe golvende streep is de rivier de IJssel.",
+      "beeld": "vlaggen/nl-ov.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "nl-prov-overijssel"
+      ]
+    },
+    {
+      "id": "vlag-nl-fl",
+      "iso": "NL-FL",
+      "naam": "Flevoland",
+      "aliassen": [],
+      "werelddelen": [
+        "nederland"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Lelystad",
+      "beschrijving": "Blauw boven met een witte lelie, groen onder, en een gele golvende streep ertussen.",
+      "weetje": "De witte lelie verwijst naar Cornelis Lely, die de Afsluitdijk bedacht.",
+      "beeld": "vlaggen/nl-fl.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "nl-prov-flevoland"
+      ]
+    },
+    {
+      "id": "vlag-nl-ge",
+      "iso": "NL-GE",
+      "naam": "Gelderland",
+      "aliassen": [],
+      "werelddelen": [
+        "nederland"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Arnhem",
+      "beschrijving": "Drie liggende banen: blauw, geel en zwart.",
+      "weetje": "De kleuren komen uit twee oude wapens: een blauwe en een zwarte leeuw op geel.",
+      "beeld": "vlaggen/nl-ge.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "nl-prov-gelderland"
+      ]
+    },
+    {
+      "id": "vlag-nl-ut",
+      "iso": "NL-UT",
+      "naam": "Utrecht",
+      "aliassen": [],
+      "werelddelen": [
+        "nederland"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Utrecht",
+      "beschrijving": "Wit boven en rood onder, met linksboven een rood vak met een wit kruis.",
+      "weetje": "Het rode vak met het witte kruis is het wapen van de stad.",
+      "beeld": "vlaggen/nl-ut.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "nl-prov-utrecht"
+      ]
+    },
+    {
+      "id": "vlag-nl-nh",
+      "iso": "NL-NH",
+      "naam": "Noord-Holland",
+      "aliassen": [],
+      "werelddelen": [
+        "nederland"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Haarlem",
+      "beschrijving": "Drie liggende banen: geel, rood en blauw.",
+      "weetje": "Geel en rood komen uit het wapen van Holland, blauw uit dat van West-Friesland.",
+      "beeld": "vlaggen/nl-nh.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "nl-prov-noord-holland"
+      ]
+    },
+    {
+      "id": "vlag-nl-zh",
+      "iso": "NL-ZH",
+      "naam": "Zuid-Holland",
+      "aliassen": [],
+      "werelddelen": [
+        "nederland"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Den Haag",
+      "beschrijving": "Geel met een rode leeuw.",
+      "weetje": "De rode leeuw op geel is de leeuw van het oude Holland.",
+      "beeld": "vlaggen/nl-zh.svg",
+      "verhouding": 1.5015,
+      "licentie": "publiek-domein",
+      "topo": [
+        "nl-prov-zuid-holland"
+      ]
+    },
+    {
+      "id": "vlag-nl-ze",
+      "iso": "NL-ZE",
+      "naam": "Zeeland",
+      "aliassen": [],
+      "werelddelen": [
+        "nederland"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Middelburg",
+      "beschrijving": "Blauwe en witte golvende strepen, met een wapen met een rode leeuw die uit het water komt.",
+      "weetje": "De leeuw worstelt zich uit het water, want de provincie vecht al eeuwen tegen de zee.",
+      "beeld": "vlaggen/nl-ze.svg",
+      "verhouding": 1.502,
+      "licentie": "publiek-domein",
+      "topo": [
+        "nl-prov-zeeland"
+      ]
+    },
+    {
+      "id": "vlag-nl-nb",
+      "iso": "NL-NB",
+      "naam": "Noord-Brabant",
+      "aliassen": [
+        "Brabant"
+      ],
+      "werelddelen": [
+        "nederland"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "'s-Hertogenbosch",
+      "beschrijving": "Rode en witte blokken, als een schaakbord.",
+      "weetje": "Dit blokjespatroon wordt Brabants bont genoemd.",
+      "beeld": "vlaggen/nl-nb.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "nl-prov-noord-brabant"
+      ]
+    },
+    {
+      "id": "vlag-nl-li",
+      "iso": "NL-LI",
+      "naam": "Limburg",
+      "aliassen": [],
+      "werelddelen": [
+        "nederland"
+      ],
+      "klasse": "normaal",
+      "groepen": [],
+      "hoofdstad": "Maastricht",
+      "beschrijving": "Wit boven met een rode leeuw, een smalle blauwe streep, en geel onder.",
+      "weetje": "De blauwe streep is de rivier de Maas, die door de hele provincie stroomt.",
+      "beeld": "vlaggen/nl-li.svg",
+      "verhouding": 1.5,
+      "licentie": "publiek-domein",
+      "topo": [
+        "nl-prov-limburg"
+      ]
+    }
+  ],
+  "groepen": [
+    {
+      "id": "rood-wit-blauw-liggend",
+      "leden": [
+        "vlag-nl",
+        "vlag-lu",
+        "vlag-py"
+      ],
+      "reden": "Rood, wit en blauw in liggende banen; alleen de tint blauw en het wapen verschillen."
+    },
+    {
+      "id": "blauw-geel-rood-staand",
+      "leden": [
+        "vlag-td",
+        "vlag-ro",
+        "vlag-ad",
+        "vlag-md"
+      ],
+      "reden": "Blauw, geel en rood in staande banen; Tsjaad en Roemenië zijn bijna gelijk."
+    },
+    {
+      "id": "rood-boven-wit",
+      "leden": [
+        "vlag-id",
+        "vlag-mc",
+        "vlag-pl"
+      ],
+      "reden": "Twee banen rood en wit; bij Polen staat het wit boven."
+    },
+    {
+      "id": "wit-blauw-rood",
+      "leden": [
+        "vlag-ru",
+        "vlag-sk",
+        "vlag-si",
+        "vlag-rs",
+        "vlag-hr"
+      ],
+      "reden": "Wit, blauw en rood in liggende banen, soms met een wapen erop."
+    },
+    {
+      "id": "groen-wit-oranje",
+      "leden": [
+        "vlag-ie",
+        "vlag-ci",
+        "vlag-it"
+      ],
+      "reden": "Drie staande banen met wit in het midden; Ierland en Ivoorkust zijn elkaars spiegelbeeld."
+    },
+    {
+      "id": "groen-wit-rood-staand",
+      "leden": [
+        "vlag-it",
+        "vlag-mx"
+      ],
+      "reden": "Groen, wit en rood in staande banen; Mexico heeft een adelaar in het midden."
+    },
+    {
+      "id": "zuiderkruis",
+      "leden": [
+        "vlag-au",
+        "vlag-nz"
+      ],
+      "reden": "Blauw met de Britse vlag in de hoek en de sterren van het Zuiderkruis."
+    },
+    {
+      "id": "britse-vlag-in-de-hoek",
+      "leden": [
+        "vlag-gb",
+        "vlag-au",
+        "vlag-nz",
+        "vlag-fj",
+        "vlag-tv"
+      ],
+      "reden": "De Britse vlag zit in de hoek, of is de hele vlag."
+    },
+    {
+      "id": "scandinavisch-kruis",
+      "leden": [
+        "vlag-no",
+        "vlag-is",
+        "vlag-dk",
+        "vlag-se",
+        "vlag-fi"
+      ],
+      "reden": "Een liggend kruis dat naar links is geschoven."
+    },
+    {
+      "id": "rood-wit-zwart",
+      "leden": [
+        "vlag-eg",
+        "vlag-iq",
+        "vlag-sy",
+        "vlag-ye"
+      ],
+      "reden": "Rood, wit en zwart in liggende banen; alleen het teken in het midden verschilt."
+    },
+    {
+      "id": "groen-geel-rood-staand",
+      "leden": [
+        "vlag-ml",
+        "vlag-gn",
+        "vlag-sn",
+        "vlag-cm"
+      ],
+      "reden": "Groen, geel en rood in staande banen, in een andere volgorde of met een ster."
+    },
+    {
+      "id": "blauw-wit-blauw",
+      "leden": [
+        "vlag-hn",
+        "vlag-ni",
+        "vlag-sv",
+        "vlag-gt"
+      ],
+      "reden": "Blauw, wit en blauw; de landen van Midden-Amerika hadden ooit één vlag."
+    },
+    {
+      "id": "geel-blauw-rood",
+      "leden": [
+        "vlag-co",
+        "vlag-ec",
+        "vlag-ve"
+      ],
+      "reden": "Geel, blauw en rood in liggende banen; ze kwamen samen uit één land voort."
+    },
+    {
+      "id": "zwart-geel-rood",
+      "leden": [
+        "vlag-be",
+        "vlag-de"
+      ],
+      "reden": "Zwart, geel en rood; bij België staan de banen, bij Duitsland liggen ze."
+    },
+    {
+      "id": "rood-wit-rood",
+      "leden": [
+        "vlag-at",
+        "vlag-lv"
+      ],
+      "reden": "Rood, wit en rood in liggende banen; Letland is donkerder rood met een smalle witte baan."
+    },
+    {
+      "id": "wit-groen-rood",
+      "leden": [
+        "vlag-hu",
+        "vlag-bg"
+      ],
+      "reden": "Wit, groen en rood in liggende banen, in een andere volgorde."
+    },
+    {
+      "id": "geel-groen-rood",
+      "leden": [
+        "vlag-lt",
+        "vlag-bo",
+        "vlag-gh",
+        "vlag-et"
+      ],
+      "reden": "Geel, groen en rood in liggende banen, in een andere volgorde of met een teken."
+    },
+    {
+      "id": "rondje-in-het-midden",
+      "leden": [
+        "vlag-jp",
+        "vlag-bd",
+        "vlag-pw"
+      ],
+      "reden": "Eén rondje op een effen vlag."
+    },
+    {
+      "id": "maan-en-ster-op-rood",
+      "leden": [
+        "vlag-tr",
+        "vlag-tn"
+      ],
+      "reden": "Een witte halve maan en ster op rood."
+    },
+    {
+      "id": "strepen-en-sterren",
+      "leden": [
+        "vlag-us",
+        "vlag-lr",
+        "vlag-my"
+      ],
+      "reden": "Rode en witte strepen met een blauw vlak in de hoek."
+    },
+    {
+      "id": "oranje-wit-groen",
+      "leden": [
+        "vlag-in",
+        "vlag-ne"
+      ],
+      "reden": "Oranje, wit en groen in liggende banen met een rondje in het midden."
+    },
+    {
+      "id": "driehoek-en-drie-banen",
+      "leden": [
+        "vlag-jo",
+        "vlag-sd",
+        "vlag-kw",
+        "vlag-ae"
+      ],
+      "reden": "Zwart, wit, groen en rood: drie banen en een driehoek of blok aan de stokkant."
+    },
+    {
+      "id": "kartelrand",
+      "leden": [
+        "vlag-qa",
+        "vlag-bh"
+      ],
+      "reden": "Wit aan de stokkant met een kartelrand, en rood of bruinrood."
+    },
+    {
+      "id": "rood-wit-blauw-strepen",
+      "leden": [
+        "vlag-th",
+        "vlag-cr"
+      ],
+      "reden": "Rood, wit en blauw in vijf liggende banen met een brede baan in het midden."
+    },
+    {
+      "id": "blauw-boven-rood",
+      "leden": [
+        "vlag-ht",
+        "vlag-li"
+      ],
+      "reden": "Blauw boven, rood onder; op de Olympische Spelen van 1936 bleken ze gelijk."
+    },
+    {
+      "id": "lichtblauw-wit-zon",
+      "leden": [
+        "vlag-ar",
+        "vlag-uy"
+      ],
+      "reden": "Lichtblauw en wit met een gouden zon."
+    }
+  ]
+}

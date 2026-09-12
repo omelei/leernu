@@ -7,6 +7,7 @@ import { MapCanvas } from './MapCanvas';
 import { RoundProgress } from './RoundProgress';
 import { SterTeller } from '@/features/reis/SterTeller';
 import { StopButton } from './StopButton';
+import { Counter } from '@/features/round/Teller';
 import { ResultScreen } from './ResultScreen';
 import {
   choosesTheAnswer,
@@ -389,43 +390,6 @@ function AnswerField({ onSubmit }: { readonly onSubmit: (value: string) => void 
         {t('practice.check')}
       </button>
     </form>
-  );
-}
-
-/**
- * `urgent` is never the only signal that something is running out: the number
- * itself is already counting down in plain sight, and a child who cannot tell
- * the red from the ink still reads "0:07".
- */
-function Counter({
-  label,
-  value,
-  urgent = false,
-  onlyWide = false,
-}: {
-  readonly label: string;
-  readonly value: string;
-  readonly urgent?: boolean;
-  /**
-   * Kept off the phone. The round bar at 393 cannot hold the stop, twelve dots,
-   * the read-aloud button and a counter as well, and of those the combo is the
-   * one that says nothing at the start of a round.
-   */
-  readonly onlyWide?: boolean;
-}) {
-  return (
-    <div className={onlyWide ? 'hidden flex-col items-end md:flex' : 'flex flex-col items-end'}>
-      <span className="tk-label">{label}</span>
-      <b
-        className={
-          urgent
-            ? 'tk-display text-h2 font-bold tabular-nums text-bad'
-            : 'tk-display text-h2 font-bold tabular-nums'
-        }
-      >
-        {value}
-      </b>
-    </div>
   );
 }
 

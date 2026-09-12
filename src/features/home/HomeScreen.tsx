@@ -8,9 +8,6 @@ import { t, type TranslationKey } from '@/i18n';
 import { loadItemStates, loadPlayedRounds } from '@/store/progress';
 import type { PlayedRound } from '@/store/progress';
 import {
-  asKlokMode,
-  asPracticeMode,
-  asSumMode,
   geplaatst,
   meestGeoefend,
   naamVan,
@@ -22,9 +19,6 @@ import {
   type Onderdeel,
   type Populair,
 } from '@/features/module/onderdelen';
-import type { PracticeMode, SetId } from '@/features/practice/useRound';
-import type { SumMode } from '@/features/sums/useSumRound';
-import type { KlokMode } from '@/features/klok/useKlokRound';
 import { ScrollRij } from './ScrollRij';
 import { FavorietenBlok, GoedBlok, VoortgangBlok } from './SideColumn';
 import { ToetsenBlok } from './ToetsenBlok';
@@ -69,23 +63,16 @@ export interface HomeScreenProps {
   readonly sticker: string | undefined;
   /** The way to the collection, which their column links to. */
   readonly onReis: () => void;
-  readonly onStart: (setId: SetId, practiceMode: PracticeMode) => void;
-  /** A table, in a chosen way. */
-  readonly onStartSum: (setId: string, sumMode: SumMode) => void;
-  /** A step of the clock, in a chosen way. */
-  readonly onStartKlok: (setId: string, klokMode: KlokMode) => void;
+  /**
+   * One way into a round, whichever module it is in: the same one the child's
+   * own column and the module pages use. There were three callbacks here, one
+   * per module, and a fourth module would have made it four.
+   */
+  readonly onBegin: (deel: Onderdeel, mode: ModeId) => void;
   readonly onModule?: ((id: Module['id']) => void) | undefined;
 }
 
-export function HomeScreen({
-  naam,
-  sticker,
-  onReis,
-  onStart,
-  onStartSum,
-  onStartKlok,
-  onModule,
-}: HomeScreenProps) {
+export function HomeScreen({ naam, sticker, onReis, onBegin, onModule }: HomeScreenProps) {
   const [states, setStates] = useState<Map<string, ItemState> | null>(null);
   const [played, setPlayed] = useState<readonly PlayedRound[]>([]);
   const desk = useDesk();
@@ -103,11 +90,7 @@ export function HomeScreen({
   const populair = meestGeoefend(gespeeld);
 
   /** One way into a round, wherever on this screen it is pressed. */
-  const begin = (deel: Onderdeel, mode: ModeId) => {
-    if (deel.moduleId === 'topo') onStart(deel.setId as SetId, asPracticeMode(mode));
-    else if (deel.moduleId === 'klok') onStartKlok(deel.setId, asKlokMode(mode));
-    else onStartSum(deel.setId, asSumMode(mode));
-  };
+  const begin = onBegin;
 
   const kop = (
     <div className="tk-home-kop">

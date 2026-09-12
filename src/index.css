@@ -1089,6 +1089,89 @@
     flex: 0 0 40px;
   }
 
+  /* ---- Flags (ADR-102) -------------------------------------------------
+   * Every flag stands in a frame of 4 by 3, and keeps its own shape inside
+   * it: `Vlag.tsx` works out the width from the flag's own proportions, so
+   * nothing is cropped or stretched and the frame has its size before the
+   * picture arrives. The outline follows the flag's edge rather than the
+   * frame's — a drop shadow traces the shape itself — so Japan's white has an
+   * edge and Nepal is not drawn in a box. */
+  .tk-vlag {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+  }
+  .tk-vlag img {
+    display: block;
+    height: auto;
+    filter: drop-shadow(0 0 1px var(--ink-3));
+  }
+  .tk-vlag-podium {
+    width: 100%;
+    max-width: 32rem;
+    margin-inline: auto;
+  }
+
+  /* The flags to choose from. Two by two at every size, like the clock
+   * faces; three by two from a tablet where there are six, because three rows
+   * of two push the last flags below a laptop's fold. */
+  .tk-vlag-keuze {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    width: 100%;
+    max-width: 32rem;
+    margin-inline: auto;
+  }
+  @media (min-width: 768px) {
+    .tk-vlag-keuze-zes {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      max-width: 42rem;
+    }
+  }
+  .tk-vlag-optie {
+    display: block;
+    min-height: var(--touch);
+    padding: 12px;
+    border: var(--stroke-hair) solid var(--line-strong);
+    border-radius: var(--radius-card);
+    background: var(--paper);
+    cursor: pointer;
+  }
+  .tk-vlag-optie:hover {
+    background: var(--surface);
+    border-color: var(--ink-3);
+  }
+
+  /* The flags still to practise, shown as well as named. */
+  .tk-vlag-lijst {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+  }
+  .tk-vlag-gemist {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: var(--touch);
+    padding: 8px 12px;
+    border: var(--stroke-hair) solid var(--line-strong);
+    border-radius: var(--radius-field);
+    font-weight: 600;
+  }
+  .tk-vlag-gemist .tk-vlag {
+    width: 48px;
+    flex: 0 0 48px;
+  }
+  .tk-vlag-feiten {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 32px;
+    margin-top: 8px;
+  }
+
   /* ---- Multiple choice, K5 ---------------------------------------------
    * Two by two where there is width, one under the other where there is not,
    * so no option is ever the odd one at the end of a row. `auto-fit` with a
