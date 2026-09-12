@@ -40,7 +40,19 @@ const SOURCE = join(process.cwd(), 'content', 'geo', '_source', 'provincie_2023.
 const BRON = {
   naam: 'CBS Gebiedsindelingen 2023 (provincie_gegeneraliseerd), via cartomap',
   licentie: 'CC-BY-4.0',
+  // The day it came with the handoff; it is not fetched (see fetch-source.mjs).
+  opgehaald: '2026-09-12',
 };
+
+/**
+ * The frame every Dutch layer is projected into. The waters, the islands and
+ * the capitals are built from the full-resolution provinces (fetch-source.mjs)
+ * and fitted to their extent; the handoff's generalised outline reaches a
+ * fraction less far, and a view box fitted to it would sit 1.3 units narrower
+ * than theirs — every capital a hair off its province. So the provinces are
+ * drawn from the handoff's file in the frame the other layers already share.
+ */
+const FRAME = join(process.cwd(), 'content', 'geo', '_source', 'nl-provincies.json');
 const LABELS = join(process.cwd(), 'content', 'geo', '_source', 'nl-provincies-labelpunten.json');
 const OUT_DIR = join(process.cwd(), 'public', 'geo', 'nl');
 
@@ -200,8 +212,9 @@ try {
 }
 
 // One projector for the whole set, so every detail level lines up pixel for
-// pixel. Fitting each level separately would make them drift apart on zoom.
-const allPoints = features.flatMap((f) => ringsOf(f.geometry).flat());
+// pixel — and fitted to the shared frame (FRAME above), so every layer does.
+const frame = JSON.parse(readFileSync(FRAME, 'utf8'));
+const allPoints = frame.features.flatMap((f) => ringsOf(f.geometry).flat());
 const projector = makeProjector(allPoints, SIZE, PADDING, RD_CENTRE);
 
 const projectedByFeature = features.map((feature) => {
@@ -261,7 +274,7 @@ for (const level of LEVELS) {
     bron: {
       naam: source._bron ?? BRON.naam,
       licentie: source._licentie ?? BRON.licentie,
-      opgehaald: source._opgehaald ?? null,
+      opgehaald: source._opgehaald ?? BRON.opgehaald,
     },
     vormen,
   };
