@@ -171,7 +171,9 @@ test('Ontdekken: a flag, where it is, its capital and one fact', async ({ page }
     .getByRole('button', { name: 'Nederland', exact: true })
     .click();
   await expect(page.getByRole('heading', { level: 2, name: 'Nederland' })).toBeVisible();
-  await expect(page.getByText('Amsterdam')).toBeVisible();
+  // In the facts, not in the sentence the read-aloud button says, which holds
+  // the capital as well.
+  await expect(page.getByRole('definition').filter({ hasText: 'Amsterdam' })).toBeVisible();
   await expect(page.getByRole('img', { name: 'De vlag van Nederland' })).toBeVisible();
 
   // Nothing was asked, so nothing is in the history — and the way out is home.
