@@ -2,8 +2,11 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
+/* eslint-disable no-restricted-syntax -- the one place a hex is quoted on
+   purpose: the handoff's table, to hold the stylesheet to it letter for letter. */
+
 /**
- * The house style, held in place (ADR-106, docs/HUISSTIJL.md).
+ * The house style, held in place (ADR-109, docs/HUISSTIJL.md).
  *
  * The tokens come from design_handoff_leernu/README.md and are definitive. This
  * file is what makes that true for the next page as well as for this one: a new

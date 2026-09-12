@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
 /**
- * The house style in the running app (ADR-106).
+ * The house style in the running app (ADR-109).
  *
  * The unit tests hold the tokens to the handoff's values; this holds that the
  * page actually uses them: the ground is the handoff's papier, headings are

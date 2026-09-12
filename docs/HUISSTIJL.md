@@ -2,7 +2,7 @@
 
 De huisstijl van leer.nu komt uit de overdracht `design_handoff_leernu` (in
 `topo-prive`, README onder "Ontwerptokens"). De waarden daarin zijn definitief.
-Dit blad zegt hoe je een scherm bouwt dat erbij hoort; ADR-106 zegt waarom het
+Dit blad zegt hoe je een scherm bouwt dat erbij hoort; ADR-109 zegt waarom het
 zo staat.
 
 ## Waar de waarden staan

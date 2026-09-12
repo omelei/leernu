@@ -84,7 +84,7 @@ const ALLOWED_SELECTORS: ReadonlyMap<string, string> = new Map([
 
 /**
  * Where an accent may be *defined* rather than used: the light theme and the
- * round's (ADR-106). The accent is the handoff's green in both; a module no
+ * round's (ADR-109). The accent is the handoff's green in both; a module no
  * longer resolves one of its own, and keeps its colour for its plate only.
  */
 const DEFINITION_SELECTORS = /^(:root|\[data-thema='ronde'\])$/;

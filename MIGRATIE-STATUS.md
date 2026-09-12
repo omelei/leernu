@@ -14,7 +14,7 @@ Er komt geen tweede tokenbestand. De teruggedraaide huisstijl v2 zette zijn toke
 
 ## 2. Stap 2: de huisstijl is doorgevoerd
 
-Klaar (ADR-106). De tokens van de overdracht zijn niet meer "ernaast": ze zijn
+Klaar (ADR-109). De tokens van de overdracht zijn niet meer "ernaast": ze zijn
 de enige. Het oude vocabulaire is weg uit `src/index.css`, `tailwind.config.ts`
 en elke component, en `src/design/huisstijl.test.ts` laat de build falen als
 het terugkomt. Hoe je een nieuw scherm bouwt staat in `docs/HUISSTIJL.md`.

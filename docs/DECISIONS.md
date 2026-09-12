@@ -4802,7 +4802,7 @@ with.
 
 ---
 
-## ADR-106 — The handoff's house style, as tokens, across the whole app; a round is dark
+## ADR-109 — The handoff's house style, as tokens, across the whole app; a round is dark
 
 **Status:** accepted. **Date:** 2026-09-12.
 

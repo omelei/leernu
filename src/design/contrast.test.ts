@@ -24,7 +24,7 @@ const css = readFileSync(CSS_PATH, 'utf8');
 type Theme = 'licht' | 'ronde';
 
 /**
- * The two themes, read apart (ADR-106).
+ * The two themes, read apart (ADR-109).
  *
  * Light is `:root`. The round's is the block `data-thema="ronde"` switches on,
  * which redefines the same role names — `--kaart`, `--inkt`, `--nadruk` — with

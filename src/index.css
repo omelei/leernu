@@ -1,5 +1,5 @@
 /*
- * The house style, from design_handoff_leernu/README.md (ADR-106). The
+ * The house style, from design_handoff_leernu/README.md (ADR-109). The
  * handoff's tokens are definitive — colour, type, space, radius, hit targets —
  * and this is the one file that holds them. docs/HUISSTIJL.md says how to
  * build a new screen with them; src/design/huisstijl.test.ts fails a build
@@ -92,7 +92,7 @@
     --scrim: rgb(26 32 27 / 45%);
     /* What is chosen, done, or being asked about: the handoff's green. The
      * accent rule (accent.test.ts) still says where it may go; what changed is
-     * that it no longer changes colour per module (ADR-106). */
+     * that it no longer changes colour per module (ADR-109). */
     --accent: var(--nadruk);
     --accent-text: var(--nadruk-tekst);
     --accent-tint: var(--nadruk-vlak);
@@ -375,7 +375,7 @@
     --module-tint: var(--vlaggen-tint);
   }
 
-  /* ---- A round is dark (ADR-106) -------------------------------------------
+  /* ---- A round is dark (ADR-109) -------------------------------------------
    * The handoff's second table, switched on by data-thema="ronde" on the root
    * of every round screen. Not the system's dark mode — that is gone: the
    * product is light, except while a child is answering, where the dark ground
