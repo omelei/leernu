@@ -29,11 +29,13 @@ import {
   type Onderdeel,
 } from '@/features/module/onderdelen';
 import { Blok } from './Blok';
+import { ReeksBlok } from './ReeksBlok';
 import { ToetsenBlok } from './ToetsenBlok';
 
 /**
- * The child's own column: the tests that are coming, how far along the journey
- * is, how the whole of it is going, and where they keep going back to.
+ * The child's own column: the tests that are coming, how many days in a row
+ * they have practised, how far along the journey is, how the whole of it is
+ * going, and where they keep going back to.
  *
  * It is the same column on every page inside the shell, because it is what the
  * app knows about the child, and that does not change when they walk into
@@ -54,21 +56,27 @@ import { ToetsenBlok } from './ToetsenBlok';
 export function SideColumn({
   sticker,
   onReis,
+  onReeks,
   onBegin,
 }: {
   /** Which hero this child wears, so the journey shows theirs. */
   readonly sticker: string | undefined;
   /** The way to the collection, which is what the journey card leads to. */
   readonly onReis: () => void;
+  /** The way to the streak's own page, which is what the streak block leads to. */
+  readonly onReeks: () => void;
   readonly onBegin: (deel: Onderdeel, mode: ModeId) => void;
 }) {
   const desk = useDesk();
   const toetsen = <ToetsenBlok key="toetsen" />;
+  const reeks = <ReeksBlok key="reeks" onReeks={onReeks} />;
   const voortgang = <VoortgangBlok key="voortgang" sticker={sticker} onReis={onReis} />;
 
+  // The streak stands between the tests and the progress card at both widths:
+  // whichever of the two comes first, it comes second (ADR-110).
   return (
     <aside className="tk-home-aside">
-      {desk ? [toetsen, voortgang] : [voortgang, toetsen]}
+      {desk ? [toetsen, reeks, voortgang] : [voortgang, reeks, toetsen]}
       <GoedBlok />
       <FavorietenBlok onBegin={onBegin} />
     </aside>

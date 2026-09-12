@@ -1490,6 +1490,131 @@
     color: var(--tekst-secundair);
   }
 
+  /* ---- The streak ---------------------------------------------------------
+   * Days in a row, and the seven days behind the number (ADR-110). The number
+   * in the heading face beside the streak's own mark, the words after it at a
+   * button's size. The row is seven bars under seven names: ink where a round
+   * was finished, the empty-bar tone where none was. No accent, because
+   * turning up is not about one module.
+   */
+  .tk-reeks-getal {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 10px;
+  }
+  .tk-reeks-aantal {
+    font-family: var(--font-kop);
+    font-size: var(--type-getal);
+    line-height: var(--type-getal-lh);
+    font-weight: var(--type-getal-weight);
+    font-variant-numeric: tabular-nums;
+  }
+  .tk-reeks-zin {
+    font-size: var(--type-knop);
+    line-height: var(--type-knop-lh);
+    font-weight: 600;
+  }
+  .tk-weekrij {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .tk-weekdag {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .tk-weekdag-naam {
+    font-size: var(--type-bijschrift);
+    line-height: var(--type-bijschrift-lh);
+    font-weight: 600;
+    color: var(--tekst-secundair);
+  }
+  .tk-weekdag[data-geoefend='ja'] .tk-weekdag-naam {
+    color: var(--inkt);
+  }
+  .tk-weekdag-balk {
+    display: block;
+    width: 100%;
+    height: 6px;
+    background: var(--balk-leeg);
+  }
+  .tk-weekdag[data-geoefend='ja'] .tk-weekdag-balk {
+    background: var(--inkt);
+  }
+  /* The numbers on the streak's page: one tile each, what it counts above and
+   * the count under it, on the ground tone as the chest's box is. */
+  .tk-cijfers {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(10rem, 100%), 1fr));
+    gap: 12px;
+  }
+  .tk-cijfer {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px 16px;
+    border-radius: var(--radius-chip-groot);
+    background: var(--papier);
+  }
+  .tk-cijfer-getal {
+    font-family: var(--font-kop);
+    font-size: var(--type-sectiekop);
+    line-height: var(--type-sectiekop-lh);
+    letter-spacing: var(--type-sectiekop-ls);
+    font-weight: var(--type-sectiekop-weight);
+    font-variant-numeric: tabular-nums;
+  }
+  /* The calendar: five weeks of seven squares, the date in each. A practised
+   * day is ink with its date in the card's tone, today has a ring outside its
+   * square, and a day still to come is only a hairline. The weekday names are
+   * the label above an area, so the dates are what the eye reads. */
+  .tk-kalender {
+    width: 100%;
+    max-width: 28rem;
+    border-collapse: separate;
+    border-spacing: 6px;
+    table-layout: fixed;
+  }
+  .tk-kalender th {
+    padding-bottom: 2px;
+    font-family: var(--font-tekst);
+    font-size: var(--type-vlaklabel);
+    line-height: var(--type-vlaklabel-lh);
+    letter-spacing: var(--type-vlaklabel-ls);
+    font-weight: var(--type-vlaklabel-weight);
+    text-transform: uppercase;
+    color: var(--tekst-secundair);
+  }
+  .tk-kalender td {
+    padding: 0;
+  }
+  .tk-kal-dag {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1;
+    border-radius: var(--radius-chip-groot);
+    background: var(--papier);
+    color: var(--tekst-secundair);
+    font-size: var(--type-bijschrift);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .tk-kal-dag[data-geoefend='ja'] {
+    background: var(--inkt);
+    color: var(--kaart);
+  }
+  .tk-kal-dag[data-vandaag='ja'] {
+    outline: var(--stroke-active) solid var(--inkt);
+    outline-offset: 2px;
+  }
+  .tk-kal-dag[data-later='ja'] {
+    border: var(--stroke-hair) solid var(--rand-licht);
+    background: transparent;
+  }
+
   /* ---- The plate ---------------------------------------------------------
    * A module's pictogram on the module's own tint (ADR-094). It is how the
    * handoff says "this is about topography" wherever a card, a row or a line is

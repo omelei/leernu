@@ -9,6 +9,7 @@ export * from './sums';
 export * from './klok';
 export * from './vlaggen';
 export * from './streak';
+export * from './oefendagen';
 export * from './rewards';
 export * from './collection';
 export * from './helden';

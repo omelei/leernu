@@ -4915,6 +4915,80 @@ four shape rules — and holding for pages that do not exist yet.
 
 ---
 
+## ADR-110 — Days in a row get a block in the child's own column, and a page of their own
+
+**Status:** accepted. **Date:** 2026-09-12.
+
+### Context
+
+The streak was a pill in the app bar ("5 dagen op rij") and one line on the
+result screen. The owner asked for it in the right-hand column, between the
+tests and the progress card, drawn the way their sketch draws it: the last
+seven days as a row of names — wo do vr za zo ma di — each over a bar that is
+dark where the child practised and light where they did not. Under it a button,
+"Bekijk je reeks", to a page with the numbers behind it.
+
+The streak's own record cannot draw that. It holds a count, the longest count
+and the last day it moved (`StreakState`), which is everything the rules in
+`streak.ts` need and nothing about which days made the count.
+
+### Decision
+
+**The days come from the rounds.** Every finished round already carries the
+moment it ended (`sessions.geeindigd`), per child since ADR-046.
+`game-core/oefendagen.ts` turns those moments into calendar days through the
+streak's own `dayKey`, so a day is the same day to both. No new store, no new
+field, no migration: a second record of which days were practised could one day
+disagree with the first, and the first already exists.
+
+**The number is the app bar's.** The block reads `currentStreak` against today,
+the call the pill makes, so the column and the bar cannot show two counts. The
+row is the seven days ending today rather than the calendar week, because on a
+Monday a calendar week is one empty day.
+
+**The row and the number may disagree, and that is right.** A weekend without a
+round is a light bar and does not break the count; a missed school day bridged
+by a rest day is a light bar under an unbroken number. The row shows what
+happened, the number shows what counts, and the page says in words why the two
+can differ: the four rules of `streak.ts`, written out.
+
+**Where it stands.** From 1200 the column reads tests, streak, progress. Below
+1200 the column puts progress first (ADR-094) and the streak stays second,
+between the two. On the front door below 1200, where progress and tests are a
+pair side by side on a tablet, the streak comes directly under the pair at full
+width rather than splitting it, which would leave the tests alone on half a row.
+
+**The page, /reeks, is the long view of the block**, reached from it and by its
+address and never from the tab bar, as the collection is (ADR-076). It holds the
+number and the row, what a round today would do, six counts — the longest
+streak, days practised, days this month, rounds, questions, rest days in hand —
+a table of the last five weeks, and the rules. It compares with nothing: no
+other child, no average, no last week.
+
+**It is drawn in the house style of ADR-109** and nothing else: ink for a day
+that counts, the empty-bar tone for one that does not, the ground tone under the
+numbers, Archivo for the figures. No accent, because turning up is not about one
+module, and no shadow.
+
+**Nought is a sentence.** "Oefen vandaag en begin je reeks", not "0 dagen op
+rij", which reads as a mark on a child who has done nothing wrong.
+
+### Consequences
+
+Two reads where the pill makes one: the streak's row and every session. The
+sessions are already read whole by the front door's history
+(`loadPlayedRounds`), they are one device's own, and they are small.
+
+A day is practised when a round with at least one answer ended on it, the rule
+the front door's history already uses. A round nobody answered a question in is
+not practice there and is not a dark bar here.
+
+The block's button leads to the page it is on when the page is open, as the
+progress card's does on /voortgang. Hiding it there would move every block under
+it.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because

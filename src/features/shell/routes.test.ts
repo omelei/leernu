@@ -185,6 +185,13 @@ describe('the addresses', () => {
     expect(routeFor('/ontdekkingsreis')).toEqual({ name: 'reis' });
   });
 
+  it('gives the streak an address, reached from the block that shows it', () => {
+    // Like the collection: the long view of one block in the child's own
+    // column, not a fifth tab (ADR-110).
+    expect(routeFor('/reeks')).toEqual({ name: 'reeks' });
+    expect(pathFor({ name: 'reeks' })).toMatch(/\/reeks$/);
+  });
+
   it('keeps the retention screen at a word a child could type', () => {
     expect(RETENTION_SLUG).toBe('onthouden');
     expect(routeFor('/onthouden')).toEqual({ name: 'retention' });

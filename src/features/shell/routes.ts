@@ -188,6 +188,8 @@ export type Route =
   | { readonly name: 'you' }
   /** The collection: every animal, diploma and stamp there is to get. */
   | { readonly name: 'reis' }
+  /** The streak: the days in a row, the days behind them, and how it works. */
+  | { readonly name: 'reeks' }
   /** A module that exists, opened on one of its sets or on its own first. */
   | { readonly name: 'module'; readonly module: Module; readonly setId: string | null }
   /** A module the plan has but the product does not yet. */
@@ -214,6 +216,8 @@ export const REIS_SLUG = 'voortgang';
  * that will not open. The old word still resolves; nothing links to it.
  */
 export const REIS_SLUG_OUD = 'ontdekkingsreis';
+/** The streak's page, reached from the streak block the way the collection is (ADR-110). */
+export const REEKS_SLUG = 'reeks';
 
 /**
  * Vite serves from `/` on a domain of our own and from `/<repo>/` on Pages
@@ -254,6 +258,7 @@ export function routeFor(pathname: string): Route {
   if (slug === RETENTION_SLUG) return { name: 'retention' };
   if (slug === YOU_SLUG) return { name: 'you' };
   if (slug === REIS_SLUG || slug === REIS_SLUG_OUD) return { name: 'reis' };
+  if (slug === REEKS_SLUG) return { name: 'reeks' };
 
   const [head = '', tail] = slug.split('/');
 
@@ -281,6 +286,7 @@ function slugFor(route: Route): string {
   if (route.name === 'retention') return RETENTION_SLUG;
   if (route.name === 'you') return YOU_SLUG;
   if (route.name === 'reis') return REIS_SLUG;
+  if (route.name === 'reeks') return REEKS_SLUG;
   if (route.name === 'category') return route.category.id;
   if (route.name === 'soon') return MODULE_SLUG[route.module.id];
 
