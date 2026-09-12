@@ -20,7 +20,7 @@ async function signIn(page: Page, naam: string) {
 async function startRound(page: Page) {
   await page.goto('/topografie');
   await page
-    .getByRole('region', { name: /Kies een onderwerp/ })
+    .getByRole('region', { name: /Waarover/ })
     .getByRole('button', { name: /^Provincies/ })
     .click();
   await page
@@ -30,7 +30,7 @@ async function startRound(page: Page) {
   // The wrapper rather than the label: the label is the combination in words
   // and its measure comes from the round, so matching on "vragen" was quietly
   // asserting which modes exist — and one of the mode cards ends in it too.
-  await page.locator('.tk-choose-start button').click();
+  await page.locator('.ln-start-knop').click();
   await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
 }
 
@@ -186,9 +186,9 @@ test('on a phone the start button stays in reach', async ({ page }, testInfo) =>
 
   await signIn(page, 'Mees');
   await page.goto('/topografie');
-  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Kies je ronde' })).toBeVisible();
 
-  const start = page.locator('.tk-choose-start button');
+  const start = page.locator('.ln-start-knop');
 
   // In reach before anything has been scrolled: stuck to the foot of the glass.
   await expect(start).toBeInViewport();
@@ -199,7 +199,7 @@ test('on a phone the start button stays in reach', async ({ page }, testInfo) =>
   if (box === null) throw new Error('the start button has no box');
   const geraakt = await page.evaluate(
     ({ x, y }) =>
-      (document.elementFromPoint(x, y)?.closest('.tk-choose-start button') ?? null) !== null,
+      (document.elementFromPoint(x, y)?.closest('.ln-start-knop') ?? null) !== null,
     { x: box.x + box.width / 2, y: box.y + box.height / 2 },
   );
   expect(geraakt, 'a press on the start button does not land on it').toBe(true);

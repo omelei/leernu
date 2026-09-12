@@ -20,12 +20,12 @@ async function signIn(page: Page, naam: string) {
 /** Where, what, how, start: the one way into a round, whatever was chosen. */
 async function kies(page: Page, regio: string, onderwerp: RegExp, hoe: RegExp) {
   await page.goto('/vlaggen');
-  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Kies je ronde' })).toBeVisible();
 
   const waar = page.getByRole('region', { name: 'Waar op de kaart?' });
   await waar.getByRole('button', { name: regio, exact: true }).click();
 
-  const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
+  const wat = page.getByRole('region', { name: /Waarover/ });
   await wat.getByRole('button', { name: onderwerp }).click();
 
   const hoeStap = page.getByRole('region', { name: /Hoe wil je/ });
@@ -33,7 +33,7 @@ async function kies(page: Page, regio: string, onderwerp: RegExp, hoe: RegExp) {
 }
 
 async function start(page: Page) {
-  await page.locator('.tk-choose-start button').click();
+  await page.locator('.ln-start-knop').click();
 }
 
 /**
@@ -74,7 +74,7 @@ test('flags have a module page in the shape topography has', async ({ page }) =>
   // Where, in the same eight words as topography, opening on home.
   const waar = page.getByRole('region', { name: 'Waar op de kaart?' });
   await expect(waar.getByRole('button')).toHaveCount(8);
-  const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
+  const wat = page.getByRole('region', { name: /Waarover/ });
   await expect(wat.getByRole('button', { name: /^Provincievlaggen/ })).toHaveAttribute(
     'aria-pressed',
     'true',
@@ -88,12 +88,14 @@ test('flags have a module page in the shape topography has', async ({ page }) =>
   }
   await expect(wat.getByRole('button', { name: /^Vlaggenmix/ })).toHaveCount(0);
 
-  // Four ways and the oefentoets, and no typing: spelling is not the point.
+  // Three ways, and no typing: spelling is not the point.
   const hoe = page.getByRole('region', { name: /Hoe wil je/ });
-  for (const naam of ['Vlag zoeken', 'Meerkeuze', 'Ontdekken', 'Overleven', 'Oefentoets']) {
+  for (const naam of ['Vlag zoeken', 'Meerkeuze', 'Ontdekken']) {
     await expect(hoe.getByRole('button', { name: new RegExp(`^${naam}`) })).toBeVisible();
   }
   await expect(hoe.getByRole('button', { name: /^Zelf typen/ })).toHaveCount(0);
+  // The oefentoets is beside Start, not a way among the ways (S4).
+  await expect(page.getByRole('button', { name: /^Oefentoets/ })).toBeVisible();
 
   await waar.getByRole('button', { name: 'Wereld', exact: true }).click();
   await expect(wat.getByRole('button', { name: /^Vlaggenmix/ })).toBeVisible();
@@ -103,7 +105,7 @@ test('a set of flags has an address, and the page opens on it', async ({ page })
   await signIn(page, 'Daan');
   await page.goto('/vlaggen/europa-bekend');
 
-  const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
+  const wat = page.getByRole('region', { name: /Waarover/ });
   await expect(wat.getByRole('button', { name: /^Bekende vlaggen/ })).toHaveAttribute(
     'aria-pressed',
     'true',
@@ -141,19 +143,10 @@ test('Meerkeuze: a flag, four names, and the round in the history', async ({ pag
   await inGeschiedenis(page, 'Provincievlaggen');
 });
 
-test('Overleven: three lives, both ways round, and it ends', async ({ page }) => {
-  await signIn(page, 'Mila');
-  await kies(page, 'Zuid-Amerika', /^Alle vlaggen/, /^Overleven/);
-  await start(page);
-
-  await expect(page.getByText('levens', { exact: true })).toBeVisible();
-  await speel(page);
-  await inGeschiedenis(page, 'Alle vlaggen van Zuid-Amerika');
-});
-
 test('Oefentoets: no answers until the end, and then a mark', async ({ page }) => {
   await signIn(page, 'Jesse');
-  await kies(page, 'Afrika', /^Bekende vlaggen/, /^Oefentoets/);
+  await kies(page, 'Afrika', /^Bekende vlaggen/, /^Vlag zoeken/);
+  await page.getByRole('button', { name: /^Oefentoets/ }).click();
   await start(page);
 
   await speel(page);

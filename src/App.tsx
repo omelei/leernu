@@ -343,11 +343,9 @@ export default function App() {
       >
         <ModuleScreen
           module={route.module}
-          naam={boot.profile.naam}
           setId={route.setId}
           onSet={(setId) => go({ name: 'module', module: route.module, setId })}
           onStart={beginRonde}
-          aside={eigenKolom}
         />
       </Shell>
     );

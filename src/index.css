@@ -3155,6 +3155,24 @@
     border-radius: var(--radius-card);
     background: var(--module-tint);
   }
+  /* The numbered steps inside it (S4): a section heading over tiles. */
+  .ln-kiesstappen {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-lg);
+  }
+  .ln-kiesstappen > section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-sm);
+  }
+  /* A region the plan has and the product does not: its words say so. */
+  .ln-tegel:disabled {
+    cursor: default;
+  }
+  .ln-tegel:disabled .ln-titel {
+    color: var(--ink-3);
+  }
 
   /* lijst en rij (S2 on a phone, S3, S12): rows of 72 in one card, a hairline
    * between them and a figure at the end in tabular numbers. */

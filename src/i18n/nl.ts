@@ -399,16 +399,19 @@ export const nl = {
   'way.ontdekken': 'Rondkijken, geen vragen',
   'way.bliksemronde': 'Zo veel mogelijk in een minuut — voor als het al zit',
   'way.overleven': 'Doorgaan tot je levens op zijn — voor als het al zit',
-  // Bij naam, net als de begroeting op de voordeur. "Wat wil je oefenen?" aan
-  // niemand in het bijzonder is een formulier; aan Fem gevraagd is het een
-  // vraag, en zij is degene die hem beantwoordt.
-  'choose.title': 'Wat wil je oefenen, {naam}?',
-  // "Waarover" was een woord dat niemand van tien hardop zegt. Deze zegt wat
-  // de stap van je vraagt in plaats van waar hij over gaat.
-  // De nummers staan niet meer in de tekst: de pagina telt zelf, want
-  // topografie heeft een stap meer dan rekenen en één vaste "1 ·" in de copy
-  // zou op één van de twee pagina's het verkeerde getal zijn.
-  'choose.stepWhat': 'Kies een onderwerp',
+  // S4: de pagina gaat over één ding, dus een titel en geen begroeting. De
+  // naam staat al rechtsboven in de kopbalk.
+  'choose.title': 'Kies je ronde',
+  // De metaregel onder de titel (S4): waar op de kaart, en hoeveel onderwerpen.
+  'choose.meta': '{aantal} onderwerpen',
+  'choose.metaEen': 'één onderwerp',
+  // Het woord uit S4. De nummers staan niet in de tekst: de pagina telt zelf,
+  // want topografie heeft een stap meer dan rekenen.
+  'choose.stepWhat': 'Waarover',
+  // De regel onder een onderwerptegel. "Gekozen" in woorden, want een tegel
+  // die gekozen is mag dat niet alleen met kleur zeggen.
+  'choose.items': '{aantal} items',
+  'choose.itemsGekozen': 'Gekozen · {aantal} items',
   // "Van makkelijk naar moeilijk" stond in de kop en is eruit. Het was een
   // toelichting op de volgorde, niet de vraag zelf, en het maakte van een kop
   // van vier woorden een zin van acht — op een telefoon twee regels lang.
@@ -438,6 +441,13 @@ export const nl = {
   // hele ding, want dat staat in het label.
   'choose.go': 'Start',
   'choose.goLabel': 'Start: {wat}',
+  // S4: de primaire knop draagt de combinatie letterlijk, zonder tijd — tijd
+  // hoort niet in de leerkern.
+  'choose.goZin': 'Start · {wat}',
+  // De toetsstand als tertiaire knop naast Start (S4). De stand staat in de
+  // woorden, niet in een kleur.
+  'choose.toetsUit': 'Oefentoets uit',
+  'choose.toetsAan': 'Oefentoets aan',
   // Hoe lang de ronde duurt, waar er meer dan één eerlijk antwoord is. Tien is
   // wat een ronde altijd was en blijft de standaard; de rest bestaat omdat de
   // Rekenmix vijfhonderd sommen heeft.

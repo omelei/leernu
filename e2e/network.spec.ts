@@ -43,7 +43,7 @@ test('never asks a third party for anything', async ({ page, baseURL }) => {
 
   await page.goto('/topografie');
   await page
-    .getByRole('region', { name: /Kies een onderwerp/ })
+    .getByRole('region', { name: /Waarover/ })
     .getByRole('button', { name: /^Provincies/ })
     .click();
   await page
@@ -53,7 +53,7 @@ test('never asks a third party for anything', async ({ page, baseURL }) => {
   // The wrapper rather than the label: the label is the combination in words
   // and its measure comes from the round, so matching on "vragen" was quietly
   // asserting which modes exist — and one of the mode cards ends in it too.
-  await page.locator('.tk-choose-start button').click();
+  await page.locator('.ln-start-knop').click();
   await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
 
   // Fonts load lazily on first paint of the face that needs them, so give the

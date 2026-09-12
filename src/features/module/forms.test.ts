@@ -116,7 +116,9 @@ describe('the ways of practising', () => {
     // while still counting would be a worse lie than no switch.
     const off = offeredForms(TOPO_FORMS, false, 'nl-provincies').map((form) => form.id);
     expect(off).not.toContain('bliksemronde');
-    expect(off).toContain('overleven');
+    // Nor the lives: overleven is a game form, not the learning core.
+    expect(off).not.toContain('overleven');
+    expect(off).toContain('ontdekken');
 
     expect(offeredForms(TOPO_FORMS, true, 'nl-provincies').map((form) => form.id)).toContain(
       'bliksemronde',

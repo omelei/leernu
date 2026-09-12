@@ -18,14 +18,14 @@ async function signIn(page: Page, naam: string) {
 async function kies(page: Page, pad: string, onderwerp: RegExp, hoe: RegExp) {
   await page.goto(pad);
   await page
-    .getByRole('region', { name: /Kies een onderwerp/ })
+    .getByRole('region', { name: /Waarover/ })
     .getByRole('button', { name: onderwerp })
     .click();
   await page
     .getByRole('region', { name: /Hoe wil je/ })
     .getByRole('button', { name: hoe })
     .click();
-  await page.locator('.tk-choose-start button').click();
+  await page.locator('.ln-start-knop').click();
 }
 
 /** Says "ik weet het niet" to every question, to the end of the round. */
@@ -45,7 +45,7 @@ async function weetHetNiet(page: Page) {
 
 test('the clock offers the faces you did not know', async ({ page }) => {
   await signIn(page, 'Ties');
-  const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
+  const wat = page.getByRole('region', { name: /Waarover/ });
 
   await page.goto('/klokkijken');
   await expect(wat.getByRole('button', { name: /^Oefen je fouten/ })).toHaveCount(0);
@@ -59,7 +59,7 @@ test('the clock offers the faces you did not know', async ({ page }) => {
     .getByRole('region', { name: /Hoe wil je/ })
     .getByRole('button', { name: /^Meerkeuze/ })
     .click();
-  await page.locator('.tk-choose-start button').click();
+  await page.locator('.ln-start-knop').click();
   await expect(page.getByRole('group', { name: 'Kies hoe laat het is' })).toBeVisible();
 });
 
@@ -69,7 +69,7 @@ test('topography offers the places you did not know, on their own map', async ({
   await weetHetNiet(page);
 
   await page.goto('/topografie');
-  const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
+  const wat = page.getByRole('region', { name: /Waarover/ });
   await expect(wat.getByRole('button', { name: /^Oefen je fouten/ })).toBeVisible();
 
   // And it has an address, the one word, like the mix.

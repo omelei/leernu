@@ -47,7 +47,7 @@ const STEDEN: Keuze = [/^Steden/, /^Steden van Nederland$/];
 type Keuze = readonly [RegExp] | readonly [RegExp, RegExp];
 
 async function kiesOnderwerp(page: Page, [vak, chip]: Keuze) {
-  const what = page.getByRole('region', { name: /Kies een onderwerp/ });
+  const what = page.getByRole('region', { name: /Waarover/ });
 
   // First rather than exact: after the card is pressed its chips are in the
   // same region, and a chip's accessible name is the set's full name.
@@ -67,7 +67,7 @@ async function kiesOnderwerp(page: Page, [vak, chip]: Keuze) {
  */
 async function startRound(page: Page, set: Keuze, way: RegExp) {
   await page.goto('/topografie');
-  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Kies je ronde' })).toBeVisible();
 
   await kiesOnderwerp(page, set);
   await page
@@ -77,7 +77,7 @@ async function startRound(page: Page, set: Keuze, way: RegExp) {
   // The wrapper rather than the label: the label is the combination in words
   // and its measure comes from the round, so matching on "vragen" was quietly
   // asserting which modes exist — and one of the mode cards ends in it too.
-  await page.locator('.tk-choose-start button').click();
+  await page.locator('.ln-start-knop').click();
 }
 
 test('the name screen has no violations', async ({ page }) => {
@@ -107,7 +107,7 @@ test('the module pages have no violations, in each of their four shapes', async 
   await signIn(page, 'Nour');
 
   await page.goto('/topografie');
-  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Kies je ronde' })).toBeVisible();
   expect((await scan(page)).violations).toEqual([]);
 
   await page.goto('/rekenen');

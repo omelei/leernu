@@ -23,7 +23,7 @@ const STEDEN: Keuze = [/^Steden/, /^Steden van Nederland$/];
 type Keuze = readonly [RegExp] | readonly [RegExp, RegExp];
 
 async function kiesOnderwerp(page: Page, [vak, chip]: Keuze) {
-  const what = page.getByRole('region', { name: /Kies een onderwerp/ });
+  const what = page.getByRole('region', { name: /Waarover/ });
 
   // First rather than exact: after the card is pressed its chips are in the
   // same region, and a chip's accessible name is the set's full name.
@@ -48,7 +48,7 @@ async function kiesOnderwerp(page: Page, [vak, chip]: Keuze) {
  */
 async function startRound(page: Page, set: Keuze, way: RegExp, toetsstand = false) {
   await page.goto('/topografie');
-  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Kies je ronde' })).toBeVisible();
 
   await kiesOnderwerp(page, set);
   await page
@@ -68,19 +68,7 @@ async function startRound(page: Page, set: Keuze, way: RegExp, toetsstand = fals
  * matched on "vragen" was quietly asserting which modes exist.
  */
 async function start(page: Page) {
-  await page.locator('.tk-choose-start button').click();
-}
-
-/**
- * A round with a clock or with lives on it.
- *
- * These were chips that started a round the moment they were pressed. They are
- * ways of practising like the other four now, so getting into one is the same
- * three steps as anything else — which is the point: the two heaviest rounds
- * in the product were the only two nobody read a description of first.
- */
-async function startChallenge(page: Page, naam: string) {
-  await startRound(page, PROVINCIES, new RegExp(`^${naam}\\b`));
+  await page.locator('.ln-start-knop').click();
 }
 
 async function signIn(page: Page, naam: string) {
@@ -252,7 +240,7 @@ test('a round of Europe draws Europe, not the Netherlands', async ({ page }) => 
 
   await page.getByRole('button', { name: /^Europa/ }).click();
 
-  const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
+  const wat = page.getByRole('region', { name: /Waarover/ });
   await expect(wat.getByRole('button', { name: /^Landen/ })).toBeVisible();
   // And the Dutch subjects are gone: a region is a filter, not a heading.
   await expect(wat.getByRole('button', { name: /^Provincies/ })).toHaveCount(0);
@@ -280,7 +268,7 @@ test('the countries of the world have an address of their own', async ({ page })
   await signIn(page, 'Noor');
   await page.goto('/topografie/wereld');
 
-  const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
+  const wat = page.getByRole('region', { name: /Waarover/ });
   await expect(wat.getByRole('button', { name: /^Landen/ })).toHaveAttribute(
     'aria-pressed',
     'true',
@@ -539,7 +527,7 @@ test('explore names a city, places it, and scores nothing', async ({ page }) => 
   // the sets live now.
   await page.goto('/topografie');
   const steden = page
-    .getByRole('region', { name: /Kies een onderwerp/ })
+    .getByRole('region', { name: /Waarover/ })
     .getByRole('button', { name: /^Steden/ })
     .first();
   // The accessible name and not the visible text: a subject tile shows an icon
@@ -548,13 +536,6 @@ test('explore names a city, places it, and scores nothing', async ({ page }) => 
   // that is chosen here, so the label is where the fact lives.
   await expect(steden).toHaveAccessibleName(/nog niet geoefend/);
 });
-
-/** Answers the current province question wrongly, whatever it happens to be. */
-async function answerWrongly(page: Page) {
-  const vraag = await page.getByRole('heading', { name: /Waar ligt / }).textContent();
-  const fout = vraag?.includes('Limburg') ? 'Groningen' : 'Limburg';
-  await page.locator('svg').getByRole('button', { name: fout, exact: true }).click();
-}
 
 /**
  * "Ik weet het niet", drawn on K3 at every size. It is the one control that
@@ -572,39 +553,3 @@ test('a child can say they do not know, and is shown the answer', async ({ page 
   await expect(page.getByRole('button', { name: 'Volgende vraag' })).toBeVisible();
 });
 
-test('saying you do not know costs no life', async ({ page }) => {
-  await signIn(page, 'Nora');
-  await startChallenge(page, 'Overleven');
-
-  const levens = page
-    .getByRole('banner')
-    .locator('div')
-    .filter({ hasText: /^levens\d$/ });
-  await expect(levens).toContainText('3');
-
-  await page.getByRole('button', { name: 'Ik weet het niet' }).click();
-  await expect(page.getByRole('button', { name: 'Volgende vraag' })).toBeVisible();
-
-  // A wrong guess costs one; this does not, or nobody would ever press it.
-  await expect(levens).toContainText('3');
-});
-
-/** Overleven ends when the lives do, and a life is lost only for a wrong answer. */
-test('overleven spends a life on a wrong answer', async ({ page }) => {
-  await signIn(page, 'Lieke');
-  await startChallenge(page, 'Overleven');
-
-  await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
-  const levens = page
-    .getByRole('banner')
-    .locator('div')
-    .filter({ hasText: /^levens\d$/ });
-  await expect(levens).toContainText('3');
-
-  await answerWrongly(page);
-  await expect(levens).toContainText('2');
-
-  await page.getByRole('button', { name: 'Volgende vraag' }).click();
-  await answerWrongly(page);
-  await expect(levens).toContainText('1');
-});

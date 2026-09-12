@@ -44,7 +44,7 @@ test('six vlaggendiploma’s, and one press chooses a whole werelddeel to sit', 
     'aria-pressed',
     'true',
   );
-  const wat = page.getByRole('region', { name: /Kies een onderwerp/ });
+  const wat = page.getByRole('region', { name: /Waarover/ });
   await expect(wat.getByRole('button', { name: /^Alle vlaggen/ })).toHaveAttribute(
     'aria-pressed',
     'true',
@@ -57,7 +57,7 @@ test('six vlaggendiploma’s, and one press chooses a whole werelddeel to sit', 
   // A diploma is its own length.
   await expect(page.getByRole('region', { name: 'Hoeveel vragen?' })).toHaveCount(0);
 
-  await page.locator('.tk-choose-start button').click();
+  await page.locator('.ln-start-knop').click();
   await speel(page);
 
   await expect(page.getByText(/^Vlaggendiploma gehaald|^Nog geen diploma/)).toBeVisible();
