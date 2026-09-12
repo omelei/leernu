@@ -93,11 +93,15 @@ export function VlagExploreScreen({
         </nav>
 
         <main className="flex min-h-0 flex-none basis-1/2 flex-col md:flex-1 md:basis-auto">
-          <div className="flex min-h-0 flex-1 items-center justify-center p-6">
+          {/* Clipped, and the flag bound by the height it is given: on a phone
+              this is half a screen shared with the facts, and a flag sized to
+              the width alone overflowed onto the header and took the tap meant
+              for "Klaar". */}
+          <div className="flex min-h-0 flex-1 items-center justify-center overflow-hidden p-6">
             {chosen === null ? (
               <p className="text-ink-2">{t('vlag.explore.nothingChosen')}</p>
             ) : (
-              <div className="tk-vlag-podium">
+              <div className="tk-vlag-podium tk-vlag-podium-hoog">
                 <Vlag vlag={chosen} alt={t('vlag.alt', { naam: chosen.naam })} lazy={false} />
               </div>
             )}

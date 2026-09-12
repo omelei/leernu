@@ -1113,6 +1113,15 @@
     max-width: 32rem;
     margin-inline: auto;
   }
+  /* Where the flag shares a screen with a list and its facts, it is bound by
+   * the height it is given as well as the width: 4 by 3 of whichever runs out
+   * first. */
+  .tk-vlag-podium-hoog {
+    width: auto;
+    height: 100%;
+    max-width: 100%;
+    aspect-ratio: 4 / 3;
+  }
 
   /* The flags to choose from. Two by two at every size, like the clock
    * faces; three by two from a tablet where there are six, because three rows
