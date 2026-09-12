@@ -101,4 +101,7 @@ export type ModeId =
   // alternates between the two and is never offered as a tile of its own.
   | 'vlag-zoeken'
   | 'vlag-meerkeuze'
-  | 'vlag-gemengd';
+  | 'vlag-gemengd'
+  // The test at the end of a werelddeel: twenty flags, nine in ten right, and
+  // nothing said until the end (ADR-104).
+  | 'vlag-diploma';

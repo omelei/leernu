@@ -82,7 +82,9 @@ werelddeel, and at the end Tsjaad beside Roemenië. There is no typing — spell
 "Kirgizië" is a spelling test — and a screen reader describes each flag rather
 than naming it, because the name is the answer. Which countries count, and why
 Taiwan is in and Palestina is not, is written down in
-[content/vlaggen/AFBAKENING.md](content/vlaggen/AFBAKENING.md).
+[content/vlaggen/AFBAKENING.md](content/vlaggen/AFBAKENING.md). Each of the six
+werelddelen has a **vlaggendiploma**: twenty of its flags, nine in ten right,
+and nothing said until the end ([ADR-104](docs/DECISIONS.md)).
 
 Every module offers a **mix**: the Rekenmix shuffles all four operations — in
 three difficulties, from the level every set has always carried

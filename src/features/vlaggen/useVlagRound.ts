@@ -5,6 +5,7 @@ import {
   metFouten,
   OPTIES,
   OPTIES_ALLES,
+  VLAGDIPLOMA_VRAGEN,
   vlagOpties,
   type RoundRule,
   type VlagItem,
@@ -41,15 +42,35 @@ import { voorlaad } from './vlagSrc';
  * round, which is what the tables and the clock do (ADR-101).
  */
 
-export type VlagMode = 'vlag-zoeken' | 'vlag-meerkeuze' | 'vlag-gemengd' | 'overleven';
+export type VlagMode =
+  | 'vlag-zoeken'
+  | 'vlag-meerkeuze'
+  | 'vlag-gemengd'
+  | 'overleven'
+  | 'vlag-diploma';
 
-/** Ten questions, about two minutes, and three lives for overleven. */
+/**
+ * Ten questions, about two minutes, and three lives for overleven. The diploma
+ * asks twenty — fewer on a werelddeel that has fewer flags, which the round
+ * gets for free by being composed from the set (ADR-104).
+ */
 export const VLAG_ROUND_RULE: Record<VlagMode, RoundRule> = {
   'vlag-zoeken': { kind: 'fixed', aantal: 10 },
   'vlag-meerkeuze': { kind: 'fixed', aantal: 10 },
   'vlag-gemengd': { kind: 'fixed', aantal: 10 },
   overleven: { kind: 'levens', levens: 3 },
+  'vlag-diploma': { kind: 'fixed', aantal: VLAGDIPLOMA_VRAGEN },
 };
+
+/**
+ * A diploma is sat, not practised: nothing is said until the end, so it is
+ * always asked the way the oefentoets asks (ADR-085), whatever the page passed.
+ * "Geen hints" in the brief, and in this product the only hint there is is the
+ * answer arriving half a second later.
+ */
+function isDiploma(mode: VlagMode): boolean {
+  return mode === 'vlag-diploma';
+}
 
 /** Which way round one question is asked. */
 export type VlagRichting = 'zoeken' | 'meerkeuze';
@@ -96,8 +117,9 @@ export function useVlagRound(
     setId,
     mode,
     basisRegel: VLAG_ROUND_RULE[mode],
-    aantal,
-    toetsstand,
+    // A diploma is its own length, like the tafeldiploma.
+    aantal: isDiploma(mode) ? null : aantal,
+    toetsstand: toetsstand || isDiploma(mode),
     itemVan: vlagVan,
     stel: (states, rule) => {
       const set = loadVlagSet(setId);

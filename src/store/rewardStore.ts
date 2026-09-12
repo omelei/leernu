@@ -5,6 +5,9 @@ import {
   sterrenInKist,
   sterrenVoor,
   tableOfDiploma,
+  vlagDiplomaFor,
+  werelddeelVanDiploma,
+  type DiplomaWerelddeel,
   type RewardSnapshot,
   type StampId,
 } from '@/game-core';
@@ -34,6 +37,8 @@ export interface RoundOutcome {
   readonly stamps: readonly StampId[];
   /** The table this round earned a diploma for, or null. */
   readonly diploma: number | null;
+  /** The werelddeel this round earned a vlaggendiploma for, or null (ADR-104). */
+  readonly vlagDiploma: DiplomaWerelddeel | null;
   /**
    * The stars this round added, and how many of the next chest's five are there
    * now. Worked out from the count of correct answers either side of the round,
@@ -76,6 +81,17 @@ export async function loadDiplomas(): Promise<Set<number>> {
   return tafels;
 }
 
+/** The werelddelen this child has a vlaggendiploma for, from the same store. */
+export async function loadVlagDiplomas(): Promise<Set<DiplomaWerelddeel>> {
+  const held = await loadStamps();
+  const delen = new Set<DiplomaWerelddeel>();
+  for (const id of held) {
+    const deel = werelddeelVanDiploma(id);
+    if (deel !== null) delen.add(deel);
+  }
+  return delen;
+}
+
 /**
  * Applies a finished round: adds what was earned, awards any stamp the round
  * newly satisfies, and reports all of it — including any chest the round paid
@@ -116,6 +132,11 @@ export async function applyRoundRewards(params: {
   if (diplomaId !== null) {
     await db.put('kindBadges', { kindId, badgeId: diplomaId, behaaldOp });
   }
+  // And the vlaggendiploma, beside it and in the same store (ADR-104).
+  const vlagDiplomaId = vlagDiplomaFor(params.snapshot);
+  if (vlagDiplomaId !== null) {
+    await db.put('kindBadges', { kindId, badgeId: vlagDiplomaId, behaaldOp });
+  }
 
   // Every one of this round's answers is already written by now, so the total
   // afterwards is read from the store and the round's own count subtracted
@@ -129,6 +150,7 @@ export async function applyRoundRewards(params: {
     totalXp,
     stamps: earned,
     diploma: diplomaId === null ? null : tableOfDiploma(diplomaId),
+    vlagDiploma: vlagDiplomaId === null ? null : werelddeelVanDiploma(vlagDiplomaId),
     sterren: { erbij: sterrenVoor(na) - sterrenVoor(voor), inKist: sterrenInKist(na) },
     kistenTeGoed: await kistenOpenstaand(),
   };

@@ -10,7 +10,7 @@ import {
   ShieldIcon,
   type IconProps,
 } from '@/components/Icon';
-import type { ModeId, RoundRule } from '@/game-core';
+import { diplomaWerelddeelVanSet, type ModeId, type RoundRule } from '@/game-core';
 import { t, type TranslationKey } from '@/i18n';
 import { isVlagFouten, isVlagMix } from '@/content/loadVlaggen';
 import { loadItemSets } from '@/content/loadSets';
@@ -87,6 +87,13 @@ export interface PracticeForm {
    * own.
    */
   readonly alleenToets?: boolean;
+  /**
+   * A way whose length is part of what it is. A vlaggendiploma asks twenty
+   * because that is the diploma, so "Hoeveel vragen?" is not asked under it —
+   * the reason a tafeldiploma never showed the step, said out loud rather than
+   * falling out of a table of ten having nothing shorter to offer.
+   */
+  readonly vasteLengte?: boolean;
 }
 
 /** One glance, not a scroll. See the note above. */
@@ -364,6 +371,21 @@ export const VLAG_FORMS: readonly PracticeForm[] = [
     needsClock: false,
   },
   {
+    // Last of the tiles, for the tafeldiploma's reason: it is not practice but
+    // the test at the end of it. Offered on the whole of a werelddeel and
+    // nowhere else — a diploma for the well-known flags would be a certificate
+    // for the easy half (ADR-104).
+    id: 'vlag-diploma',
+    name: 'mode.vlag-diploma',
+    reason: 'way.vlag-diploma',
+    icon: DiplomaIcon,
+    rule: VLAG_ROUND_RULE['vlag-diploma'],
+    seconds: 12,
+    needsClock: false,
+    vasteLengte: true,
+    geldtVoor: (setId) => diplomaWerelddeelVanSet(setId) !== null,
+  },
+  {
     id: 'vlag-gemengd',
     name: 'mode.vlag-gemengd',
     reason: 'way.vlag-gemengd',
@@ -532,7 +554,7 @@ const HEEL_TOT = 100;
  * definition, and a set of ten has one honest answer.
  */
 export function questionChoices(form: PracticeForm, setSize: number): number[] {
-  if (form.rule === null || form.rule.kind !== 'fixed') return [];
+  if (form.rule === null || form.rule.kind !== 'fixed' || form.vasteLengte) return [];
   const korter = [...new Set([...QUESTION_CHOICES, form.rule.aantal])]
     .filter((count) => count < setSize)
     .sort((a, b) => a - b);

@@ -12,6 +12,7 @@ import { useSmallScreen } from '@/features/shell/useSmallScreen';
 import { t, type TranslationKey } from '@/i18n';
 import { loadAccuracy, loadPlayedRounds } from '@/store/progress';
 import { loadDiplomas, loadStamps } from '@/store/rewardStore';
+import { VlagDiplomas } from '@/features/vlaggen/VlagDiplomas';
 import { Kistkeuze } from './Kistkeuze';
 import { STAMP_NAME } from './stampNames';
 import { heldVan, reeksVan, useHelden } from './useHelden';
@@ -244,6 +245,10 @@ export function ReisScreen({
             ))}
           </div>
         </section>
+
+        {/* The six vlaggendiploma's, as the twelve tafeldiploma's above: on the
+            flags page a way in, here one of the things there are (ADR-104). */}
+        <VlagDiplomas />
 
         {/* The ten stamps, with the criterion beside every one of them — a child
             who cannot say what earned it cannot earn another one on purpose. */}

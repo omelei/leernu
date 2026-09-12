@@ -9,6 +9,7 @@ import type { Module } from '@/features/shell/modules';
 import { usePreferences } from '@/features/player/settings';
 import { useTestPlan } from '@/features/home/testPlan';
 import { Tafeldiplomas } from './Tafeldiplomas';
+import { VlagDiplomas } from '@/features/vlaggen/VlagDiplomas';
 import {
   itemsVan,
   naamVan,
@@ -498,6 +499,19 @@ export function ModuleScreen({
             onKies={(tafel) => {
               onSet(tafel);
               setFormId('tafeldiploma');
+              setToetsstand(false);
+            }}
+          />
+        ) : null}
+
+        {/* Six vlaggendiploma's on the flags page (ADR-104). Pressing one answers
+            every step at once: that werelddeel, all its flags, the diploma. */}
+        {module.id === 'vlaggen' ? (
+          <VlagDiplomas
+            onKies={(deel) => {
+              setRegio(deel);
+              onSet(`vlag-${deel}-alle`);
+              setFormId('vlag-diploma');
               setToetsstand(false);
             }}
           />
