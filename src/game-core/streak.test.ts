@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { beginVanDag } from './kalender';
 import {
   currentStreak,
   dayKey,
@@ -8,16 +9,21 @@ import {
   isSchoolDay,
   missedSchoolDays,
   recordActivity,
+  vakantieAan,
   weekKey,
+  zetVakantie,
   type HolidayPeriod,
   type StreakState,
 } from './streak';
 
-/** All weekdays verified: 7 Sept 2026 is a Monday, 12–13 Sept a weekend. */
-const day = (key: string) => {
-  const [y, m, d] = key.split('-').map(Number);
-  return new Date(y ?? 1970, (m ?? 1) - 1, d ?? 1);
-};
+/**
+ * Noon on a calendar day in Amsterdam, as an instant. Not a local Date: CI runs
+ * in UTC and this was written in Amsterdam, and a test that builds its days in
+ * the machine's own zone tests that zone rather than the streak.
+ *
+ * All weekdays verified: 7 Sept 2026 is a Monday, 12–13 Sept a weekend.
+ */
+const day = (key: string) => new Date(beginVanDag(key).getTime() + 12 * 3_600_000);
 
 const KERST: HolidayPeriod[] = [{ naam: 'Kerstvakantie', start: '2026-12-19', eind: '2027-01-03' }];
 
@@ -26,9 +32,10 @@ function after(state: StreakState, key: string, holidays: HolidayPeriod[] = []) 
 }
 
 describe('dayKey', () => {
-  it('uses the local calendar day, not UTC', () => {
-    // Late in the evening in a positive offset, toISOString would say tomorrow.
-    expect(dayKey(new Date(2026, 8, 7, 23, 30))).toBe('2026-09-07');
+  it('uses the calendar day in Amsterdam, not UTC', () => {
+    // Half past midnight on the 8th there is still the 7th in UTC.
+    expect(dayKey(new Date('2026-09-07T22:30:00Z'))).toBe('2026-09-08');
+    expect(dayKey(new Date('2026-09-07T21:30:00Z'))).toBe('2026-09-07');
   });
 });
 
@@ -192,6 +199,56 @@ describe('currentStreak', () => {
     const state = after(emptyStreak(), '2026-09-07');
     expect(currentStreak(state, day('2026-09-09'))).toBe(1); // one rest day covers it
     expect(currentStreak(state, day('2026-09-14'))).toBe(0); // four days, one rest day
+  });
+});
+
+describe('holiday mode', () => {
+  it('is off until it is switched on, and says so', () => {
+    const state = zetVakantie(emptyStreak(), true, day('2026-09-07'));
+    expect(vakantieAan(emptyStreak())).toBe(false);
+    expect(vakantieAan(state)).toBe(true);
+    expect(vakantieAan(zetVakantie(state, false, day('2026-09-11')))).toBe(false);
+  });
+
+  it('keeps a streak over the days it was on, without spending a freezer', () => {
+    // Practised Friday 4 September, away Monday to Thursday, back Friday.
+    let state = after(emptyStreak(), '2026-09-04');
+    state = zetVakantie(state, true, day('2026-09-07'));
+    state = zetVakantie(state, false, day('2026-09-11'));
+
+    const change = recordActivity(state, day('2026-09-11'));
+    expect(change.state.huidigeStreak).toBe(2);
+    expect(change.rustdagenGebruikt).toBe(0);
+    expect(change.broken).toBe(false);
+  });
+
+  it('still counts a day practised while it is on', () => {
+    let state = after(emptyStreak(), '2026-09-07');
+    state = zetVakantie(state, true, day('2026-09-08'));
+    const change = recordActivity(state, day('2026-09-09'));
+    expect(change.counted).toBe(true);
+    expect(change.state.huidigeStreak).toBe(2);
+  });
+
+  it('ends yesterday when switched off, so today is a school day again', () => {
+    let state = zetVakantie(emptyStreak(), true, day('2026-09-07'));
+    state = zetVakantie(state, false, day('2026-09-10'));
+    expect(state.eigenVakanties).toEqual([
+      { naam: 'vakantiemodus', start: '2026-09-07', eind: '2026-09-09' },
+    ]);
+  });
+
+  it('leaves nothing behind when switched off on the day it was switched on', () => {
+    let state = zetVakantie(emptyStreak(), true, day('2026-09-07'));
+    state = zetVakantie(state, false, day('2026-09-07'));
+    expect(state.eigenVakanties).toEqual([]);
+  });
+
+  it('keeps the streak standing while it is on', () => {
+    let state = after(emptyStreak(), '2026-09-04');
+    state = zetVakantie(state, true, day('2026-09-07'));
+    // Two weeks later, still on: nothing was missed.
+    expect(currentStreak(state, day('2026-09-18'))).toBe(1);
   });
 });
 
