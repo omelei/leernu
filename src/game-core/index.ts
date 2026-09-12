@@ -14,3 +14,4 @@ export * from './streak';
 export * from './rewards';
 export * from './collection';
 export * from './helden';
+export * from './beloning';
