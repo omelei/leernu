@@ -74,6 +74,29 @@
   src: url('/fonts/ibm-plex-mono-latin-500-normal.woff2') format('woff2');
 }
 
+/*
+ * The handoff's two families (design_handoff_leernu/README.md, "Typografie"),
+ * ready but not yet switched on: Archivo 600 and 700 for headings, numbers and
+ * card labels, Public Sans 400 and 600 for running text, buttons and tables.
+ * A browser fetches a face only once some text asks for its family, and no
+ * rule does yet — so these cost nothing until --font-kop and --font-tekst are
+ * put to use. One variable file per family, carrying exactly those weights.
+ */
+@font-face {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 600 700;
+  font-display: swap;
+  src: url('/fonts/archivo-latin-wght.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Public Sans';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url('/fonts/public-sans-latin-wght.woff2') format('woff2');
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -306,6 +329,144 @@
      * The smaller step exists only in VO, where §C calls it "klein". */
     --type-small: 1.0625rem; /* 17px */
     --type-small-lh: 1.5rem; /* 24px */
+
+    /* ==== The handoff's tokens, written alongside ===========================
+     * design_handoff_leernu/README.md, "Ontwerptokens". Nothing reads these
+     * yet — no rule, no component and no Tailwind class in use — so the app
+     * renders exactly as it did. MIGRATIE-STATUS.md maps every token above to
+     * its successor here, or says it has none.
+     *
+     * Named for their role, in the handoff's own Dutch, and none shares a name
+     * with a token above. The one the handoff calls "accent" is taken, since
+     * --accent is the module's resolved accent, so its green is named for
+     * what it does: --nadruk.
+     */
+
+    /* ---- Colour, light. Ratios as text, on kaart / on papier ------------- */
+    --canvas: #dcd9cd; /* canvas, outside the screen */
+    --papier: #efede4; /* papier, the ground of a screen */
+    --kaart: #fbfaf6; /* kaart / paneel */
+    --inkt: #1a201b; /* inkt: text and the primary button   15.88 / 14.14 */
+    --tekst-secundair: #525953; /*                             6.90 / 6.15 */
+    --tekst-tertiair: #666c67; /*                               5.15 / 4.58 */
+    --rand-licht: #d8d6cc; /* 1px, carries no text              1.40 on kaart */
+    --rand-sterk: #c1beb2; /* the screen's frame                 1.78 on kaart */
+    --nadruk: #327f48; /* accent groen: goed, nadruk   4.71 / 4.20 — text on kaart only */
+    --nadruk-vlak: #eafbec; /* accent groen licht */
+    --nadruk-tekst: #2c5c3a; /* accent groen donker          7.23 on nadruk-vlak */
+
+    /* ---- Colour, dark: the set of a round -------------------------------
+     * Its own names and fixed values rather than a theme, because it follows
+     * a round and not the system: the system's dark mode further down leaves
+     * every one of these alone. Ratios as text, on grond / on vlak.
+     */
+    --donker-grond: #1a201b; /* grond */
+    --donker-vlak: #252c26; /* vlak / kaartvenster */
+    --donker-land: #2f3831; /* landvlak op de kaart */
+    --donker-land-hover: #3e4a40; /* hover-vulling provincie; focus takes the same */
+    --donker-rail: #3a413b; /* balk leeg / rail */
+    --donker-rand: #566056; /* rand op donker                   2.53 on grond */
+    --donker-grenslijn: #7c867d; /* grenslijn kaart              3.21 on land */
+    --donker-nadruk: #7fd494; /* accent groen op donker         9.28 / 8.01 */
+    --donker-tekst: #fbfaf6; /*                                  15.88 / 13.71 */
+    --donker-tekst-secundair: #b9beb9; /*                         8.79 / 7.59 */
+    --donker-tekst-tertiair: #8c948c; /*                          5.31 / 4.59 */
+    /* Fout comes as the README's pairs: the first of each for a tile in a
+     * round (stap 8), the second for a province on the map (stap 10). The
+     * README lists the hatching grounds the other way round; these follow the
+     * screens. Wrong is a hatched area and a cross, never the colour alone. */
+    --donker-fout-rand: #c98a8a; /*                              5.10 on vlak */
+    --donker-fout-tekst: #f2b8b8; /*                      7.02 on its hatching */
+    --donker-fout-arcering: #4a3030;
+    --donker-fout-rand-kaart: #e8b3b3; /*                        6.66 on land */
+    --donker-fout-tekst-kaart: #f6d9d9; /*                7.86 on its hatching */
+    --donker-fout-arcering-kaart: #5a3636;
+
+    /* ---- Typefaces, ready and not yet switched on (see @font-face) ------- */
+    --font-kop: 'Archivo', system-ui, sans-serif; /* 600 and 700 */
+    --font-tekst: 'Public Sans', system-ui, sans-serif; /* 400 and 600 */
+
+    /* ---- Type scale, PO ---------------------------------------------------
+     * In rem for the reason given at the html rule below; the README's px are
+     * in the comments. Paginakop to getal-groot set in --font-kop, lopend to
+     * bijschrift in --font-tekst. The label is uppercase and running text
+     * takes text-wrap: pretty — rules rather than values, so they arrive with
+     * the components.
+     */
+    --type-paginakop: 2.5rem; /* 40px */
+    --type-paginakop-lh: 2.75rem; /* 44px */
+    --type-paginakop-ls: -0.015em;
+    --type-paginakop-weight: 700;
+    --type-sectiekop: 1.75rem; /* 28px */
+    --type-sectiekop-lh: 2.125rem; /* 34px */
+    --type-sectiekop-ls: -0.01em;
+    --type-sectiekop-weight: 700;
+    --type-kaartkop: 1.25rem; /* 20px */
+    --type-kaartkop-lh: 1.625rem; /* 26px */
+    --type-kaartkop-weight: 600;
+    --type-vraag: 2rem; /* 32px, the question in a round */
+    --type-vraag-lh: 2.25rem; /* 36px */
+    --type-vraag-ls: -0.015em;
+    --type-vraag-weight: 700;
+    /* Clock, counter, percentage: the README allows 44 or 48, so both. */
+    --type-getal: 2.75rem; /* 44px */
+    --type-getal-lh: 2.75rem; /* 44px */
+    --type-getal-weight: 700;
+    --type-getal-groot: 3rem; /* 48px */
+    --type-getal-groot-lh: 3rem; /* 48px */
+    --type-getal-groot-weight: 700;
+    --type-lopend: 1rem; /* 16px, running text */
+    --type-lopend-lh: 1.625rem; /* 26px */
+    --type-lopend-weight: 400;
+    --type-knop: 1.0625rem; /* 17px */
+    --type-knop-lh: 1.5rem; /* 24px */
+    --type-knop-weight: 600;
+    --type-vlaklabel: 0.8125rem; /* 13px, the label above an area */
+    --type-vlaklabel-lh: 1rem; /* 16px */
+    --type-vlaklabel-ls: 0.08em;
+    --type-vlaklabel-weight: 600;
+    --type-bijschrift: 0.875rem; /* 14px */
+    --type-bijschrift-lh: 1.25rem; /* 20px */
+    --type-bijschrift-weight: 400;
+
+    /* ---- Radius ---------------------------------------------------------- */
+    --radius-chip: 6px;
+    --radius-chip-groot: 8px;
+    --radius-kaart-vo: 10px;
+    --radius-kaart: 12px;
+    --radius-kaart-telefoon: 14px;
+    --radius-rondevlak: 16px; /* an area in a round */
+    --radius-notitieblok: 20px; /* the handoff's note pad; see MIGRATIE-STATUS.md */
+
+    /* ---- Space ------------------------------------------------------------
+     * 20 and 10 fall outside the spacing scale in tailwind.config.ts, so these
+     * are read through var() and get no spacing class, like --card-padding.
+     * Borders are --stroke-hair and --stroke-active above, which already are
+     * the README's 1px and 2px.
+     */
+    --padding-paneel: 32px;
+    --padding-kaart: 24px; /* PO */
+    --padding-kaart-telefoon: 20px;
+    --padding-kaart-vo: 16px;
+    --padding-scherm: 32px; /* 16px on a phone, below */
+    --gap-sectie: 64px;
+    --gap-kaart-ruim: 16px; /* inside a card: 16, 12 or 10 */
+    --gap-kaart: 12px;
+    --gap-kaart-krap: 10px;
+
+    /* The one shadow: on a reward image, and nowhere else. The arguments of a
+     * drop-shadow() filter rather than a box-shadow. */
+    --schaduw-beloning: 0 10px 18px rgb(26 32 27 / 22%);
+
+    /* ---- Hit targets ------------------------------------------------------
+     * The pointer and the thumb are the numbers --touch-min and --touch
+     * already carry; the names say where each one applies.
+     */
+    --touch-wijzer: 44px; /* pointer, desktop */
+    --touch-tablet: 48px;
+    --touch-duim: 56px; /* thumb, phone */
+    --touch-ronde: 56px; /* during a round, always */
+    --touch-vo: 44px; /* a VO button: the floor, never less */
   }
 
   /* PO on a phone, 393-412. The heading shrinks; the reading text never does,
@@ -318,6 +479,9 @@
       --type-h1-lh: 2.375rem; /* 38px */
       --type-h2: 1.5rem; /* 24px */
       --type-h2-lh: 1.875rem; /* 30px */
+
+      /* The handoff's screen padding at 393, alongside. */
+      --padding-scherm: 16px;
     }
   }
 

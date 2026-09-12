@@ -30,6 +30,13 @@ export default {
       touch: 'var(--touch)',
       'touch-min': 'var(--touch-min)',
       'touch-board': 'var(--touch-board)',
+      // The handoff's hit targets, alongside until the components move over
+      // (MIGRATIE-STATUS.md).
+      'touch-wijzer': 'var(--touch-wijzer)',
+      'touch-tablet': 'var(--touch-tablet)',
+      'touch-duim': 'var(--touch-duim)',
+      'touch-ronde': 'var(--touch-ronde)',
+      'touch-vo': 'var(--touch-vo)',
     },
     fontSize: {
       // Styleguide §C, as tokens rather than numbers: one set of classes,
@@ -59,6 +66,67 @@ export default {
       // §C scale — it is a category marker, not a reading size — which is
       // why it keeps an absolute value.
       eyebrow: ['11px', { lineHeight: '16px', letterSpacing: '0.08em' }],
+
+      // The handoff's PO scale, alongside the one above until the components
+      // move over (MIGRATIE-STATUS.md). The weight belongs to the role here,
+      // so it travels with the size; the family does not fit in a font size
+      // and is font-kop or font-tekst beside it.
+      paginakop: [
+        'var(--type-paginakop)',
+        {
+          lineHeight: 'var(--type-paginakop-lh)',
+          letterSpacing: 'var(--type-paginakop-ls)',
+          fontWeight: 'var(--type-paginakop-weight)',
+        },
+      ],
+      sectiekop: [
+        'var(--type-sectiekop)',
+        {
+          lineHeight: 'var(--type-sectiekop-lh)',
+          letterSpacing: 'var(--type-sectiekop-ls)',
+          fontWeight: 'var(--type-sectiekop-weight)',
+        },
+      ],
+      kaartkop: [
+        'var(--type-kaartkop)',
+        { lineHeight: 'var(--type-kaartkop-lh)', fontWeight: 'var(--type-kaartkop-weight)' },
+      ],
+      vraag: [
+        'var(--type-vraag)',
+        {
+          lineHeight: 'var(--type-vraag-lh)',
+          letterSpacing: 'var(--type-vraag-ls)',
+          fontWeight: 'var(--type-vraag-weight)',
+        },
+      ],
+      getal: [
+        'var(--type-getal)',
+        { lineHeight: 'var(--type-getal-lh)', fontWeight: 'var(--type-getal-weight)' },
+      ],
+      'getal-groot': [
+        'var(--type-getal-groot)',
+        { lineHeight: 'var(--type-getal-groot-lh)', fontWeight: 'var(--type-getal-groot-weight)' },
+      ],
+      lopend: [
+        'var(--type-lopend)',
+        { lineHeight: 'var(--type-lopend-lh)', fontWeight: 'var(--type-lopend-weight)' },
+      ],
+      knop: [
+        'var(--type-knop)',
+        { lineHeight: 'var(--type-knop-lh)', fontWeight: 'var(--type-knop-weight)' },
+      ],
+      vlaklabel: [
+        'var(--type-vlaklabel)',
+        {
+          lineHeight: 'var(--type-vlaklabel-lh)',
+          letterSpacing: 'var(--type-vlaklabel-ls)',
+          fontWeight: 'var(--type-vlaklabel-weight)',
+        },
+      ],
+      bijschrift: [
+        'var(--type-bijschrift)',
+        { lineHeight: 'var(--type-bijschrift-lh)', fontWeight: 'var(--type-bijschrift-weight)' },
+      ],
     },
     extend: {
       // The one width of our own. From here up the page has a rail on the
@@ -142,17 +210,73 @@ export default {
           text: 'var(--vlaggen-text)',
           tint: 'var(--vlaggen-tint)',
         },
+
+        // The handoff's palette, alongside the one above until the components
+        // move over (MIGRATIE-STATUS.md). Named for the role, like the
+        // semantics: nadruk is the handoff's "accent groen", renamed because
+        // accent is already the module's. Unlike --ink-3, tekst-tertiair
+        // clears AA for text on both kaart and papier, so it is here.
+        canvas: 'var(--canvas)',
+        papier: 'var(--papier)',
+        kaart: 'var(--kaart)',
+        inkt: 'var(--inkt)',
+        tekst: {
+          secundair: 'var(--tekst-secundair)',
+          tertiair: 'var(--tekst-tertiair)',
+        },
+        rand: {
+          licht: 'var(--rand-licht)',
+          sterk: 'var(--rand-sterk)',
+        },
+        nadruk: {
+          DEFAULT: 'var(--nadruk)',
+          vlak: 'var(--nadruk-vlak)',
+          tekst: 'var(--nadruk-tekst)',
+        },
+        // The set of a round, by its own names rather than a dark: variant,
+        // because it follows the round and not the system.
+        donker: {
+          grond: 'var(--donker-grond)',
+          vlak: 'var(--donker-vlak)',
+          land: 'var(--donker-land)',
+          'land-hover': 'var(--donker-land-hover)',
+          rail: 'var(--donker-rail)',
+          rand: 'var(--donker-rand)',
+          grenslijn: 'var(--donker-grenslijn)',
+          nadruk: 'var(--donker-nadruk)',
+          tekst: 'var(--donker-tekst)',
+          'tekst-secundair': 'var(--donker-tekst-secundair)',
+          'tekst-tertiair': 'var(--donker-tekst-tertiair)',
+          'fout-rand': 'var(--donker-fout-rand)',
+          'fout-tekst': 'var(--donker-fout-tekst)',
+          'fout-arcering': 'var(--donker-fout-arcering)',
+          'fout-rand-kaart': 'var(--donker-fout-rand-kaart)',
+          'fout-tekst-kaart': 'var(--donker-fout-tekst-kaart)',
+          'fout-arcering-kaart': 'var(--donker-fout-arcering-kaart)',
+        },
       },
       fontFamily: {
         sans: ['Source Sans 3', 'system-ui', 'sans-serif'],
         display: ['Space Grotesk', 'system-ui', 'sans-serif'],
         mono: ['IBM Plex Mono', 'ui-monospace', 'monospace'],
+        // The handoff's two, ready and not yet switched on: no element asks
+        // for either, so the browser fetches neither.
+        kop: 'var(--font-kop)',
+        tekst: 'var(--font-tekst)',
       },
       borderRadius: {
         flat: 'var(--radius-flat)',
         field: 'var(--radius-field)',
         control: 'var(--radius-control)',
         card: 'var(--radius-card)',
+        // The handoff's radii, alongside (MIGRATIE-STATUS.md).
+        chip: 'var(--radius-chip)',
+        'chip-groot': 'var(--radius-chip-groot)',
+        'kaart-vo': 'var(--radius-kaart-vo)',
+        kaart: 'var(--radius-kaart)',
+        'kaart-telefoon': 'var(--radius-kaart-telefoon)',
+        rondevlak: 'var(--radius-rondevlak)',
+        notitieblok: 'var(--radius-notitieblok)',
       },
       borderWidth: {
         hair: 'var(--stroke-hair)',
@@ -166,6 +290,11 @@ export default {
         // There is no class for it because there is nothing to apply.
         1: 'var(--shadow-1)',
         2: 'var(--shadow-2)',
+      },
+      // The handoff's one shadow, on a reward image only. A filter rather
+      // than a box-shadow, so that it follows the drawing and not its box.
+      dropShadow: {
+        beloning: 'var(--schaduw-beloning)',
       },
     },
   },
