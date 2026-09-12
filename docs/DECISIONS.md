@@ -4829,8 +4829,7 @@ four shape rules — and holding for pages that do not exist yet.
 - **Layout, navigation and behaviour do not change.** This is the look, not a
   rebuild.
 - **A round is dark.** `data-thema="ronde"` on the root of the six round screens
-  redefines the same roles with the dark set, and every hit target in it goes to
-  56. The system's dark mode is dropped: outside a round the product is light.
+  redefines the same roles with the dark set, and every hit target in it goes to 56. The system's dark mode is dropped: outside a round the product is light.
 - **The accent is the handoff's green.** A module keeps its own colour for its
   plate and the two badges that name it; chosen, done and asked-about are green
   in every module.

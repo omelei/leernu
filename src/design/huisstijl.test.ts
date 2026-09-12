@@ -168,7 +168,10 @@ describe('the stylesheet uses them and nothing else', () => {
     const lines = cssCode
       .split('\n')
       .filter((line) => /font-family:/.test(line))
-      .filter((line) => !/font-family:\s*(var\(--font-(kop|tekst)\)|inherit|'(Archivo|Public Sans)')/.test(line));
+      .filter(
+        (line) =>
+          !/font-family:\s*(var\(--font-(kop|tekst)\)|inherit|'(Archivo|Public Sans)')/.test(line),
+      );
     expect(lines).toEqual([]);
   });
 

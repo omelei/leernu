@@ -278,7 +278,9 @@ function Week({ now = new Date() }: { readonly now?: Date }) {
               ? t('you.weekNoGrade')
               : t('you.weekGrade', { cijfer: formatGrade(cijfer) })}
           </p>
-          {meest ? <p className="text-tekst-secundair">{t('you.weekMost', { set: meest[0] })}</p> : null}
+          {meest ? (
+            <p className="text-tekst-secundair">{t('you.weekMost', { set: meest[0] })}</p>
+          ) : null}
         </>
       )}
 

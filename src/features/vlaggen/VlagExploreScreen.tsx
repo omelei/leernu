@@ -46,9 +46,7 @@ export function VlagExploreScreen({
       <header className="flex flex-none items-center gap-6 border-b border-rand-licht px-6 py-4">
         <div className="min-w-0">
           <p className="tk-label">{t('vlag.explore.kind')}</p>
-          <h1 className="tk-display truncate text-paginakop">
-            {set ? vlagSetNaam(set) : ''}
-          </h1>
+          <h1 className="tk-display truncate text-paginakop">{set ? vlagSetNaam(set) : ''}</h1>
         </div>
 
         {chosen !== null && <SpeakButton text={spoken} />}

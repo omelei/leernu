@@ -84,7 +84,9 @@ export function Gallery() {
   return (
     <main className="mx-auto flex max-w-2xl flex-col p-6">
       <h1 className="tk-display text-paginakop">Componenten</h1>
-      <p className="mt-2 text-tekst-secundair">Alleen in ontwikkeling. Elke component in elke toestand.</p>
+      <p className="mt-2 text-tekst-secundair">
+        Alleen in ontwikkeling. Elke component in elke toestand.
+      </p>
 
       <h2 className={HEADING}>Merk</h2>
       <div className={ROW}>

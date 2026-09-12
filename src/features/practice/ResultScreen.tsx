@@ -80,7 +80,9 @@ export function ResultScreen({
               {state.missed.map((item) => (
                 <li key={item.id} className="tk-card">
                   <p className="tk-display text-kaartkop font-semibold">{item.naam}</p>
-                  {item.weetje !== undefined && <p className="text-tekst-secundair">{item.weetje}</p>}
+                  {item.weetje !== undefined && (
+                    <p className="text-tekst-secundair">{item.weetje}</p>
+                  )}
                 </li>
               ))}
             </ul>

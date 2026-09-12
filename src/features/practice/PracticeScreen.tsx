@@ -232,7 +232,9 @@ export function PracticeScreen({
           {revealed ? (
             <>
               <div className="flex items-start gap-4">
-                <UitkomstTeken uitkomst={state.lastCorrect ? 'goed' : nearMiss ? 'bijna' : 'fout'} />
+                <UitkomstTeken
+                  uitkomst={state.lastCorrect ? 'goed' : nearMiss ? 'bijna' : 'fout'}
+                />
                 <div className="min-w-0">
                   {/* The heading is the right answer, not the word "fout" (K6):
                       first what it is, and only then what the child chose. */}
@@ -243,7 +245,9 @@ export function PracticeScreen({
                         ? t('practice.almost')
                         : t('practice.wrong', { naam })}
                   </p>
-                  <p className="text-lopend text-tekst-secundair">{feedbackDetail(state, naam, chosenName)}</p>
+                  <p className="text-lopend text-tekst-secundair">
+                    {feedbackDetail(state, naam, chosenName)}
+                  </p>
                 </div>
               </div>
 
