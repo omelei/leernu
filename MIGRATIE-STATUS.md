@@ -12,9 +12,29 @@ De huisstijl uit `design_handoff_leernu/` (buiten de repo, in `topo-prive/Leveri
 
 Er komt geen tweede tokenbestand. De teruggedraaide huisstijl v2 zette zijn tokens in `src/design/tokens.css`; dat herhalen we niet.
 
-## 2. Stap 1: de tokens staan ernaast
+## 2. Stap 2: de huisstijl is doorgevoerd
 
-Klaar. Nog niets ingeschakeld.
+Klaar (ADR-106). De tokens van de overdracht zijn niet meer "ernaast": ze zijn
+de enige. Het oude vocabulaire is weg uit `src/index.css`, `tailwind.config.ts`
+en elke component, en `src/design/huisstijl.test.ts` laat de build falen als
+het terugkomt. Hoe je een nieuw scherm bouwt staat in `docs/HUISSTIJL.md`.
+
+- Kleur, typografie, radius, ruimte, schaduw en trefmaten volgen de tokentabel.
+- Archivo en Public Sans zijn de enige lettertypen; de oude drie zijn uit
+  `public/fonts/` verwijderd.
+- Een ronde is donker: `data-thema="ronde"` op de wortel van de zes
+  rondeschermen. Het donkere thema via de systeeminstelling is vervallen.
+- Het accent is overal het groen van de overdracht. Een module houdt haar
+  kleur alleen voor de plaat en de twee badges die haar noemen.
+- Na een antwoord toont elke ronde hetzelfde teken (`UitkomstTeken`).
+- Indeling, navigatie en gedrag zijn niet veranderd.
+
+De tabel hieronder is nu geschiedenis: hij zegt waar elk oud token heen ging.
+Waar hij "vervalt" zegt, is de keuze in stap 2 gemaakt zoals in sectie 5.
+
+## 2a. Stap 1: de tokens stonden ernaast
+
+Klaar in `71dddef`. Toen nog niets ingeschakeld.
 
 - In `src/index.css`, onderaan het `:root`-blok: het lichte palet, de donkere set (`--donker-*`), de twee fontfamilies, de typografische schaal voor PO, radius, padding en gaps, de beloningsschaduw en de trefmaten.
 - Archivo (600, 700) en Public Sans (400, 600) staan als `@font-face` klaar, uit `public/fonts/` op ons eigen domein. Geen regel vraagt om die families, dus geen browser haalt ze op.
@@ -131,3 +151,15 @@ Klaar. Nog niets ingeschakeld.
 6. **`--radius-notitieblok`** (20) is de radius van het notitieblok náást de schermen in de overdracht, geen onderdeel van het product. Overgenomen omdat de opdracht alle radii vroeg. Vervalt waarschijnlijk.
 7. **Contrast.** `--nadruk` haalt als tekst 4,71:1 op kaart maar 4,20:1 op papier, dus op de schermgrond is groene tekst `--nadruk-tekst` (6,63:1). `--tekst-tertiair` haalt op papier 4,58:1, net boven de grens. Deze paren staan nog niet in `contrast.test.ts`; dat hoort bij de stap die ze in gebruik neemt.
 8. **Buiten deze stap.** De VO-schaal, de hoofdletters van het label en `text-wrap: pretty` zijn regels, geen waarden, en komen met de componenten. "24 tussen schermen" is de tussenruimte op het overdrachtscanvas en is niet overgenomen.
+
+## 5. Hoe stap 2 de open punten besliste
+
+1. **`--nadruk`** blijft de naam van het groen, en `--accent` wijst er nu naar: het accent is overal het groen van de overdracht, in plaats van per module een eigen kleur.
+2. **Fout op licht** komt uit de schermen: tekst en rand `#b0554e` op een paneel `#ffe6e2` (S1, stap 2), en de arcering uit de legenda van stap 10, `#c98a8a` op `#f3e3e3`. Als tekst staat dit rood op een kaart (4,72:1), niet op de grond (4,21:1).
+3. **Module-accenten** blijven, alleen voor de plaat en de twee badges die een module noemen (`--module`, `--module-tekst`, `--module-tint`). Gekozen, klaar en gevraagd zijn het groen.
+4. **De vijf materialen** blijven met hun eigen waarden: ze zijn beloning, geen rol.
+5. **20/16** is gelezen als 20 op de telefoon en 16 in VO, en is zo gebouwd (`--kaart-padding`). 44 of 48 werd `text-getal` en `text-getal-groot`.
+6. **`--radius-notitieblok`** is vervallen: het notitieblok is geen onderdeel van het product.
+7. **Contrast** van alle nieuwe paren, licht en in een ronde, staat in `contrast.test.ts`.
+8. **De regels**: het label is hoofdletters in `.tk-label`, `text-wrap: pretty` staat op elke `p`, VO schakelt schaal, dichtheid en knophoogte onder `[data-guise='vo']`.
+9. **Wat de tabel niet geeft** en uit de schermen komt: de rand van een bediening is `--tekst-tertiair` (`--rand-bediening`), knoppen en velden hebben radius 12 en opties 6, en koppen stappen op de telefoon terug naar 24/30 (pagina), 20/26 (sectie) en 24/30 (vraag), zoals de schermen op 393 ze zetten.

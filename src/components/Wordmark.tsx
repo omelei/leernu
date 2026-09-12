@@ -8,7 +8,7 @@ import { Dot } from './Dot';
  * Live text rather than an image, and deliberately so.
  *
  * The delivered wordmark SVGs set the name as <text> in
- * font-family="Space Grotesk, sans-serif", with no font attached and nothing
+ * font-family="Archivo", with no font attached and nothing
  * embedded. That makes no third-party request — checked, and worth saying,
  * because it was expected to and it does not — but it does mean the file only
  * renders correctly on a machine that happens to have the face installed, and
@@ -20,7 +20,7 @@ import { Dot } from './Dot';
  * puts it at 41% of the font size — 36 at 88, 26 at 64, 41 at 100. A logo is
  * what it looks like, so the drawings win. Flagged for the styleguide.
  *
- *   font          Space Grotesk 700, letter-spacing -3.5%, line-height 1
+ *   font          Archivo 700, letter-spacing -3.5%, line-height 1
  *   dot           41% of the font size, sitting on the baseline
  *   spacing       6px either side of the dot at 88px, so 0.068em
  *   fill          62%, and in the wordmark never animated
@@ -63,7 +63,7 @@ export function Wordmark({
   className,
 }: WordmarkProps) {
   const dotSize = Math.round(size * WORDMARK_DOT_RATIO);
-  const colour = tone === 'ink' ? 'var(--ink)' : 'var(--paper)';
+  const colour = tone === 'ink' ? 'var(--inkt)' : 'var(--kaart)';
 
   return (
     <span
@@ -71,7 +71,7 @@ export function Wordmark({
       style={{
         display: 'inline-flex',
         alignItems: 'baseline',
-        fontFamily: "'Space Grotesk', system-ui, sans-serif",
+        fontFamily: 'var(--font-kop)',
         fontWeight: 700,
         fontSize: `${size}px`,
         letterSpacing: '-0.035em',
@@ -100,10 +100,10 @@ export function Wordmark({
         <span
           aria-hidden="true"
           style={{
-            fontFamily: "'Source Sans 3', system-ui, sans-serif",
+            fontFamily: 'var(--font-tekst)',
             fontWeight: 400,
             letterSpacing: 0,
-            color: 'var(--ink-3)',
+            color: 'var(--tekst-tertiair)',
           }}
         >
           /{path}

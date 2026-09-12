@@ -8,6 +8,7 @@ import { RoundProgress } from './RoundProgress';
 import { SterTeller } from '@/features/reis/SterTeller';
 import { StopButton } from './StopButton';
 import { Counter } from '@/features/round/Teller';
+import { UitkomstTeken } from '@/features/round/UitkomstTeken';
 import { ResultScreen } from './ResultScreen';
 import {
   choosesTheAnswer,
@@ -112,7 +113,7 @@ export function PracticeScreen({
   if (state.error !== null) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-6">
-        <p className="tk-display text-h2">{t('practice.mapFailed')}</p>
+        <p className="tk-display text-sectiekop">{t('practice.mapFailed')}</p>
         <button type="button" className="tk-button" onClick={onHome}>
           {t('result.home')}
         </button>
@@ -126,7 +127,7 @@ export function PracticeScreen({
   if (state.phase === 'loading' || !state.geo || !state.answers || !state.question) {
     return (
       <main className="flex min-h-screen items-center justify-center p-6" aria-busy="true">
-        <p className="text-ink-2">{t('practice.loading')}</p>
+        <p className="text-tekst-secundair">{t('practice.loading')}</p>
       </main>
     );
   }
@@ -161,7 +162,7 @@ export function PracticeScreen({
         : 'wrong';
 
   return (
-    <div className="flex h-screen flex-col bg-paper">
+    <div className="flex h-screen flex-col bg-papier" data-thema="ronde">
       {/* Everything that is not the question or the map, on one line at the top.
           No navigation at any size — this screen is not wrapped in the Shell at
           all (ADR-041), so there is nothing to hide. */}
@@ -231,18 +232,18 @@ export function PracticeScreen({
           {revealed ? (
             <>
               <div className="flex items-start gap-4">
-                <FeedbackIcon kind={state.lastCorrect ? 'good' : nearMiss ? 'near' : 'bad'} />
+                <UitkomstTeken uitkomst={state.lastCorrect ? 'goed' : nearMiss ? 'bijna' : 'fout'} />
                 <div className="min-w-0">
                   {/* The heading is the right answer, not the word "fout" (K6):
                       first what it is, and only then what the child chose. */}
-                  <p className="tk-display text-h2 font-semibold">
+                  <p className="tk-display text-sectiekop">
                     {state.lastCorrect
                       ? t('practice.correct', { naam })
                       : nearMiss
                         ? t('practice.almost')
                         : t('practice.wrong', { naam })}
                   </p>
-                  <p className="text-body text-ink-2">{feedbackDetail(state, naam, chosenName)}</p>
+                  <p className="text-lopend text-tekst-secundair">{feedbackDetail(state, naam, chosenName)}</p>
                 </div>
               </div>
 
@@ -257,7 +258,7 @@ export function PracticeScreen({
           ) : (
             <>
               <p className="tk-label">{label}</p>
-              <h1 className="tk-display mt-1 text-h1 font-semibold">{vraag}</h1>
+              <h1 className="tk-display mt-1 text-vraag">{vraag}</h1>
               {typing ? <AnswerField key={state.index} onSubmit={submit} /> : null}
               {choosing && state.question.options ? (
                 <OptionList key={state.index} options={state.question.options} onChoose={choose} />
@@ -369,7 +370,7 @@ function AnswerField({ onSubmit }: { readonly onSubmit: (value: string) => void 
   return (
     <form
       onSubmit={handle}
-      className="flex flex-none items-center gap-3 border-t border-line bg-paper px-6 py-4"
+      className="flex flex-none items-center gap-3 border-t border-rand-licht bg-kaart px-6 py-4"
     >
       <label htmlFor="antwoord" className="tk-sr-only">
         {t('practice.typeQuestion')}
@@ -398,33 +399,4 @@ function klok(seconden: number): string {
   const m = Math.floor(seconden / 60);
   const sec = seconden % 60;
   return `${m}:${String(sec).padStart(2, '0')}`;
-}
-
-function FeedbackIcon({ kind }: { readonly kind: 'good' | 'near' | 'bad' }) {
-  // A shape, not only a colour. The near miss gets its own mark — neither a
-  // tick nor a cross — because it is genuinely a third outcome and dressing it
-  // as either would undo the point of ADR-017.
-  const background =
-    kind === 'good' ? 'var(--good)' : kind === 'near' ? 'var(--ink)' : 'var(--bad)';
-
-  return (
-    <span
-      aria-hidden="true"
-      className="flex h-8 w-8 flex-none items-center justify-center"
-      style={{ background }}
-    >
-      <svg
-        viewBox="0 0 24 24"
-        width="20"
-        height="20"
-        fill="none"
-        stroke="var(--paper)"
-        strokeWidth={3}
-      >
-        {kind === 'good' && <path d="M4 12l5 5L20 6" />}
-        {kind === 'bad' && <path d="M6 6l12 12M18 6L6 18" />}
-        {kind === 'near' && <path d="M5 12h14M13 6l6 6-6 6" />}
-      </svg>
-    </span>
-  );
 }

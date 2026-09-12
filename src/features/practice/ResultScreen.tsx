@@ -37,19 +37,19 @@ export function ResultScreen({
           they could not have. */}
       <div>
         <p className="tk-label">{t('result.title')}</p>
-        <h1 className="tk-display text-h1 font-semibold">{t('result.changed')}</h1>
-        <p className="text-body">
+        <h1 className="tk-display text-paginakop">{t('result.changed')}</h1>
+        <p className="text-lopend">
           {state.gained === 0
             ? t('result.gainedNone')
             : state.gained === 1
               ? t('result.gainedOne')
               : t('result.gainedMany', { aantal: state.gained })}
         </p>
-        <p className="mt-2 text-ink-2">
+        <p className="mt-2 text-tekst-secundair">
           {t('result.score', { goed: state.correctCount, totaal: state.answeredCount })}
         </p>
         {state.rule.kind === 'fixed' && state.answeredCount < state.total && (
-          <p className="text-ink-2">
+          <p className="text-tekst-secundair">
             {t('result.stoppedEarly', { gedaan: state.answeredCount, totaal: state.total })}
           </p>
         )}
@@ -71,7 +71,7 @@ export function ResultScreen({
       <Beloning reward={state.reward} />
 
       {state.missed.length === 0 ? (
-        <p className="text-body">{t('result.allCorrect')}</p>
+        <p className="text-lopend">{t('result.allCorrect')}</p>
       ) : (
         <div className="flex flex-col gap-6 md:flex-row md:items-start">
           <section className="md:w-1/2">
@@ -79,8 +79,8 @@ export function ResultScreen({
             <ul className="flex flex-col gap-2">
               {state.missed.map((item) => (
                 <li key={item.id} className="tk-card">
-                  <p className="tk-display text-h3 font-semibold">{item.naam}</p>
-                  {item.weetje !== undefined && <p className="text-ink-2">{item.weetje}</p>}
+                  <p className="tk-display text-kaartkop font-semibold">{item.naam}</p>
+                  {item.weetje !== undefined && <p className="text-tekst-secundair">{item.weetje}</p>}
                 </li>
               ))}
             </ul>
@@ -98,7 +98,7 @@ export function ResultScreen({
               <div className="tk-card flex justify-center">
                 <ReviewMap background={state.geo} answers={state.answers} highlighted={missedIds} />
               </div>
-              <p className="mt-2 text-ink-2">{t('result.mapHelp')}</p>
+              <p className="mt-2 text-tekst-secundair">{t('result.mapHelp')}</p>
             </section>
           )}
         </div>
@@ -152,8 +152,8 @@ function ReviewMap({
         <path
           key={vorm.id}
           d={vorm.d}
-          fill="var(--paper)"
-          stroke="var(--ink-3)"
+          fill="var(--kaart)"
+          stroke="var(--tekst-tertiair)"
           strokeWidth={1}
           strokeLinejoin="round"
         />
@@ -205,7 +205,7 @@ function StreakLine({ state }: { readonly state: RoundState }) {
   const days = streak.state.huidigeStreak;
 
   return (
-    <p className="mt-2 text-ink-2">
+    <p className="mt-2 text-tekst-secundair">
       {days === 1
         ? streak.broken
           ? t('result.streakGrewOne')
@@ -252,7 +252,7 @@ function RewardLine({ state }: { readonly state: RoundState }) {
           {/* The criterion beside the name, always. A reward you cannot explain
               is a riddle, and a child who does not know what earned it cannot
               earn another one on purpose. */}
-          <span className="block text-ink-2">
+          <span className="block text-tekst-secundair">
             {t(`${STAMP_NAME[stamp]}.criterion` as TranslationKey)}
           </span>
         </p>

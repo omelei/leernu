@@ -80,7 +80,7 @@ export function ExploreScreen({
   if (!geo || !answers) {
     return (
       <main className="flex min-h-screen items-center justify-center p-6" aria-busy="true">
-        <p className="text-ink-2">{t('practice.loading')}</p>
+        <p className="text-tekst-secundair">{t('practice.loading')}</p>
       </main>
     );
   }
@@ -90,11 +90,11 @@ export function ExploreScreen({
   const spoken = chosen === null ? '' : `${chosen.naam}. ${chosen.weetje ?? ''}`.trim();
 
   return (
-    <div className="flex h-screen flex-col bg-paper">
-      <header className="flex flex-none items-center gap-6 border-b border-line px-6 py-4">
+    <div className="flex h-screen flex-col bg-papier" data-thema="ronde">
+      <header className="flex flex-none items-center gap-6 border-b border-rand-licht px-6 py-4">
         <div className="min-w-0">
           <p className="tk-label">{t('explore.kind')}</p>
-          <h1 className="tk-display truncate text-h1 font-semibold">{set?.naam ?? ''}</h1>
+          <h1 className="tk-display truncate text-paginakop">{set?.naam ?? ''}</h1>
         </div>
 
         {chosen !== null && <SpeakButton text={spoken} />}
@@ -121,9 +121,9 @@ export function ExploreScreen({
             names none for this column. Spelled out so it stays a decision. */}
         <nav
           aria-label={t('explore.listLabel')}
-          className="flex min-h-0 flex-1 flex-col border-t border-line md:w-[320px] md:flex-none md:border-r md:border-t-0"
+          className="flex min-h-0 flex-1 flex-col border-t border-rand-licht md:w-[320px] md:flex-none md:border-r md:border-t-0"
         >
-          <p className="flex-none px-6 py-3 text-ink-2">{t('explore.hint')}</p>
+          <p className="flex-none px-6 py-3 text-tekst-secundair">{t('explore.hint')}</p>
 
           <ul className="min-h-0 flex-1 overflow-y-auto px-3 pb-3">
             {items.map((item) => {
@@ -135,8 +135,8 @@ export function ExploreScreen({
                     aria-current={picked ? 'true' : undefined}
                     className={
                       picked
-                        ? 'w-full rounded-control border-2 border-ink bg-surface px-4 py-3 text-left font-semibold'
-                        : 'w-full rounded-control border-2 border-transparent px-4 py-3 text-left'
+                        ? 'w-full rounded-chip border-2 border-inkt px-4 py-3 text-left font-semibold'
+                        : 'w-full rounded-chip border-2 border-transparent px-4 py-3 text-left'
                     }
                     onClick={() => setChosenId(picked ? null : item.id)}
                   >
@@ -169,12 +169,12 @@ export function ExploreScreen({
 
           {/* Reserved rather than appearing, so choosing something does not shove
               the map upward and lose the place a child was looking at. */}
-          <div className="min-h-[7rem] flex-none border-t border-line px-6 py-4">
+          <div className="min-h-[7rem] flex-none border-t border-rand-licht px-6 py-4">
             {chosen === null ? (
-              <p className="text-ink-2">{t('explore.nothingChosen')}</p>
+              <p className="text-tekst-secundair">{t('explore.nothingChosen')}</p>
             ) : (
               <>
-                <h2 className="tk-display text-h2 font-semibold">{chosen.naam}</h2>
+                <h2 className="tk-display text-sectiekop">{chosen.naam}</h2>
                 {chosen.weetje !== undefined && <p className="mt-1">{chosen.weetje}</p>}
               </>
             )}

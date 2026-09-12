@@ -150,7 +150,7 @@ export function ScrollRij({
           {children}
         </div>
       ) : (
-        <p className="text-ink-2">{leeg}</p>
+        <p className="text-tekst-secundair">{leeg}</p>
       )}
     </section>
   );

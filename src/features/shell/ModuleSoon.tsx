@@ -42,7 +42,7 @@ export function ModuleSoon({
             {t('soon.subtitle')}
           </span>
           <h1 className="tk-display tk-titel font-semibold">{t(module.name)}</h1>
-          <p className="text-ink-2">{t('soon.body')}</p>
+          <p className="text-tekst-secundair">{t('soon.body')}</p>
         </div>
 
         <section className="flex flex-col gap-3" aria-label={t('soon.instead')}>
@@ -62,7 +62,7 @@ export function ModuleSoon({
                 <BuiltIcon size={24} />
                 <span className="min-w-0">
                   <span className="block font-semibold">{t(built.name)}</span>
-                  <span className="block text-ink-2">{t('soon.insteadLine')}</span>
+                  <span className="block text-tekst-secundair">{t('soon.insteadLine')}</span>
                 </span>
               </button>
             );

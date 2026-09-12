@@ -256,8 +256,8 @@ export function MapCanvas({
       role="group"
     >
       <defs>
-        {/* The wrong-answer texture: white ground with narrow red stripes at 45
-            degrees, faint enough that the shape underneath stays readable. */}
+        {/* The wrong-answer texture: the handoff's hatch, 45 degrees with a
+            period of 8, in the colours the map has for wrong. */}
         <pattern
           id="tk-hatch"
           width="8"
@@ -265,8 +265,8 @@ export function MapCanvas({
           patternTransform="rotate(45)"
           patternUnits="userSpaceOnUse"
         >
-          <rect width="8" height="8" fill="var(--paper)" />
-          <rect width="3" height="8" fill="var(--bad)" opacity="0.25" />
+          <rect width="8" height="8" fill="var(--fout-kaart-grond)" />
+          <rect width="3" height="8" fill="var(--fout-kaart-streep)" />
         </pattern>
       </defs>
 
@@ -478,7 +478,7 @@ function AnswerShape({
             cy={help.cy}
             r={help.r * 0.75}
             fill="none"
-            stroke="var(--ink)"
+            stroke="var(--inkt)"
             strokeWidth={1.5}
             strokeDasharray="4 4"
             opacity={0.3}
@@ -528,20 +528,20 @@ function CityMarker({
   // dot and the full one — are what tell them apart, exactly as on an area.
   const fill =
     state === 'correct'
-      ? 'var(--good)'
+      ? 'var(--nadruk)'
       : state === 'wrong'
-        ? 'var(--bad)'
+        ? 'url(#tk-hatch)'
         : state === 'asked'
           ? 'var(--accent-tint)'
-          : 'var(--paper)';
+          : 'var(--kaart)';
   const stroke =
     state === 'correct'
-      ? 'var(--good)'
+      ? 'var(--nadruk)'
       : state === 'wrong'
-        ? 'var(--bad)'
+        ? 'var(--fout-kaart-rand)'
         : state === 'asked'
           ? 'var(--accent)'
-          : 'var(--ink)';
+          : 'var(--inkt)';
 
   return (
     <g>
@@ -551,7 +551,7 @@ function CityMarker({
           cy={y}
           r={radius * 0.6}
           fill="none"
-          stroke="var(--ink)"
+          stroke="var(--inkt)"
           strokeWidth={2}
           strokeDasharray="4 4"
           opacity={0.35}
@@ -602,7 +602,7 @@ function TravelPath({
         y1={from[1]}
         x2={to[0]}
         y2={to[1]}
-        stroke="var(--ink)"
+        stroke="var(--inkt)"
         strokeWidth={3}
         strokeDasharray="6 6"
       />
@@ -617,7 +617,7 @@ function TravelPath({
           cx={from[0] + dx * stone.at}
           cy={from[1] + dy * stone.at}
           r={stone.r}
-          fill="var(--ink)"
+          fill="var(--inkt)"
           opacity={stone.opacity}
         />
       ))}
@@ -625,7 +625,7 @@ function TravelPath({
         cx={to[0]}
         cy={to[1]}
         r={11}
-        fill="var(--ink)"
+        fill="var(--inkt)"
         style={
           {
             animation: 'tk-travel .32s cubic-bezier(.2,.7,.3,1) 1',
@@ -662,10 +662,10 @@ function MapLabel({
         width={width}
         height={26}
         rx={4}
-        fill="var(--paper)"
+        fill="var(--kaart)"
         opacity={0.94}
       />
-      <text x={x} y={top + 5} textAnchor="middle" fill="var(--ink)" fontSize={15} fontWeight={700}>
+      <text x={x} y={top + 5} textAnchor="middle" fill="var(--inkt)" fontSize={15} fontWeight={700}>
         {text}
       </text>
     </g>

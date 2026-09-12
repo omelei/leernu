@@ -7,6 +7,7 @@ import { RoundProgress } from '@/features/practice/RoundProgress';
 import { SterTeller } from '@/features/reis/SterTeller';
 import { StopButton } from '@/features/practice/StopButton';
 import { Counter } from '@/features/round/Teller';
+import { UitkomstTeken } from '@/features/round/UitkomstTeken';
 import { useSumRound, stopsOnAMistake, typesTheSum, type SumMode } from './useSumRound';
 import { SumResultScreen } from './SumResultScreen';
 
@@ -64,7 +65,7 @@ export function SumScreen({
   if (state.error !== null) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-6">
-        <p className="tk-display text-h2">{t('practice.mapFailed')}</p>
+        <p className="tk-display text-sectiekop">{t('practice.mapFailed')}</p>
         <button type="button" className="tk-button" onClick={onHome}>
           {t('result.home')}
         </button>
@@ -78,7 +79,7 @@ export function SumScreen({
   if (state.phase === 'loading' || !state.question) {
     return (
       <main className="flex min-h-screen items-center justify-center p-6" aria-busy="true">
-        <p className="text-ink-2">{t('practice.loading')}</p>
+        <p className="text-tekst-secundair">{t('practice.loading')}</p>
       </main>
     );
   }
@@ -92,7 +93,7 @@ export function SumScreen({
   const spoken = `${som}. ${t('sums.prompt')}`;
 
   return (
-    <div className="flex h-screen flex-col bg-paper" data-module="tafels">
+    <div className="flex h-screen flex-col bg-papier" data-module="tafels" data-thema="ronde">
       <header className="tk-round-bar">
         <StopButton onStop={stop} />
         {/* The dots, except in the endless rounds, which have no ten to count
@@ -146,18 +147,23 @@ export function SumScreen({
         <div className="tk-round-question">
           {revealed ? (
             <>
-              <p className="tk-display text-h2 font-semibold">
-                {state.lastCorrect
-                  ? t('sums.correct', { som, antwoord: sum.antwoord })
-                  : t('sums.wrong', { som, antwoord: sum.antwoord })}
-              </p>
-              <p className="text-body text-ink-2">
-                {state.lastCorrect
-                  ? ''
-                  : state.given === null
-                    ? t('sums.dontKnowSub')
-                    : t('sums.wrongSub', { gegeven: state.given })}
-              </p>
+              <div className="flex items-start gap-4">
+                <UitkomstTeken uitkomst={state.lastCorrect ? 'goed' : 'fout'} />
+                <div className="min-w-0">
+                  <p className="tk-display text-sectiekop">
+                    {state.lastCorrect
+                      ? t('sums.correct', { som, antwoord: sum.antwoord })
+                      : t('sums.wrong', { som, antwoord: sum.antwoord })}
+                  </p>
+                  <p className="text-lopend text-tekst-secundair">
+                    {state.lastCorrect
+                      ? ''
+                      : state.given === null
+                        ? t('sums.dontKnowSub')
+                        : t('sums.wrongSub', { gegeven: state.given })}
+                  </p>
+                </div>
+              </div>
               {/* A timed round moves on by itself, so there is nothing to
                   press and nothing to charge a child for pressing. */}
               {state.rule.kind !== 'tijd' && (
@@ -178,7 +184,7 @@ export function SumScreen({
                   a screen reader gets one and the eye has somewhere to land in
                   a column that is otherwise a label and a box. The sum itself
                   is beside it, where the map is on the other screen. */}
-              <h1 className="tk-display mt-1 text-h1 font-semibold">{t('sums.prompt')}</h1>
+              <h1 className="tk-display mt-1 text-vraag">{t('sums.prompt')}</h1>
               {typing ? (
                 <SumField key={state.index} onSubmit={submit} />
               ) : (

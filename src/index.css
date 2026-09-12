@@ -1,87 +1,23 @@
 /*
- * The design system, taken from docs/leer.nu Styleguide.dc.html and
- * docs/leer.nu oefenkaart.html.
+ * The house style, from design_handoff_leernu/README.md (ADR-106). The
+ * handoff's tokens are definitive — colour, type, space, radius, hit targets —
+ * and this is the one file that holds them. docs/HUISSTIJL.md says how to
+ * build a new screen with them; src/design/huisstijl.test.ts fails a build
+ * that steps outside them.
  *
- * This is the only file allowed to name a colour — enforced by a lint rule, not
- * a convention. Token names are English to match the rest of the code, with the
- * design's own Dutch name in a comment so the mapping back to the source is one
- * glance rather than a guess.
+ * This is the only file allowed to name a colour — a lint rule refuses a hex
+ * in TypeScript, and huisstijl.test.ts refuses one in a rule here. Token names
+ * are the handoff's own Dutch role names, so the mapping back to the source is
+ * one glance rather than a guess.
  *
  * Fonts are served from /public/fonts. The design files pull them from Google;
  * we do not. A font request from a child's browser to a third party is exactly
  * the thing this product exists not to do.
  */
 
-/* Source Sans 3 — body */
-@font-face {
-  font-family: 'Source Sans 3';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('/fonts/source-sans-3-latin-400-normal.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'Source Sans 3';
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url('/fonts/source-sans-3-latin-600-normal.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'Source Sans 3';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url('/fonts/source-sans-3-latin-700-normal.woff2') format('woff2');
-}
-
-/* Space Grotesk — questions, numbers, anything that carries weight */
-@font-face {
-  font-family: 'Space Grotesk';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url('/fonts/space-grotesk-latin-500-normal.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'Space Grotesk';
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url('/fonts/space-grotesk-latin-600-normal.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'Space Grotesk';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url('/fonts/space-grotesk-latin-700-normal.woff2') format('woff2');
-}
-
-/* IBM Plex Mono — the small uppercase labels above a question */
-@font-face {
-  font-family: 'IBM Plex Mono';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('/fonts/ibm-plex-mono-latin-400-normal.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'IBM Plex Mono';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url('/fonts/ibm-plex-mono-latin-500-normal.woff2') format('woff2');
-}
-
-/*
- * The handoff's two families (design_handoff_leernu/README.md, "Typografie"),
- * ready but not yet switched on: Archivo 600 and 700 for headings, numbers and
- * card labels, Public Sans 400 and 600 for running text, buttons and tables.
- * A browser fetches a face only once some text asks for its family, and no
- * rule does yet — so these cost nothing until --font-kop and --font-tekst are
- * put to use. One variable file per family, carrying exactly those weights.
- */
+/* Archivo 600 and 700: headings, numbers, the labels of cards. Public Sans 400
+ * and 600: running text, buttons, tables. One variable file per family,
+ * carrying exactly those weights. */
 @font-face {
   font-family: 'Archivo';
   font-style: normal;
@@ -103,70 +39,109 @@
 
 @layer base {
   /*
-   * Every value below is transcribed from styleguide §B, §C and §D, and every
-   * ratio in a comment was re-measured from the hex rather than copied — see
-   * src/design/contrast.test.ts, which reads this file and fails on a drift.
+   * Every ratio in a comment was measured from the hex rather than copied —
+   * src/design/contrast.test.ts reads this file and fails on a drift, and
+   * huisstijl.test.ts holds every value of the handoff's table to the letter.
    */
   :root {
-    /* ---- Surfaces, styleguide §B "moederpalet" ---------------------------- */
-    --paper: #fafaf7; /* --papier */
-    --surface: #f0f0ec; /* --oppervlak */
-    --sunken: #e5e5df; /* --diep */
-    /* The ground a page stands on, between the app bar and the tab bar, with
-     * its cards and the child's own column on it in paper — how the design
-     * canvas "Jouw voortgang" lays everything out. Every text colour clears
-     * 4.5:1 on it (contrast.test.ts). */
-    --grond: var(--sunken);
-    --line: #d6d6cf; /* --lijn        1.40:1, carries no text */
-    --line-strong: #b7b8b0; /* --lijnsterk   1.91:1 */
+    /* ---- Colour, light: the handoff's table ------------------------------
+     * Ratios as text, on kaart / on papier. */
+    --canvas: #dcd9cd; /* outside the screen */
+    --papier: #efede4; /* the ground of a screen */
+    --kaart: #fbfaf6; /* card and panel, and the frame round the page */
+    --inkt: #1a201b; /* text and the primary button              15.88 / 14.14 */
+    --tekst-secundair: #525953; /*                                  6.90 / 6.15 */
+    --tekst-tertiair: #666c67; /*                                    5.15 / 4.58 */
+    --rand-licht: #d8d6cc; /* 1px, carries no text                   1.40 on kaart */
+    --rand-sterk: #c1beb2; /* the screen's frame                      1.78 on kaart */
+    --nadruk: #327f48; /* accent groen: goed, nadruk     4.71 / 4.20 — text on kaart only */
+    --nadruk-vlak: #eafbec; /* accent groen licht */
+    --nadruk-tekst: #2c5c3a; /* accent groen donker              7.23 on nadruk-vlak */
 
-    /* Ink */
-    --ink: #1d221c; /* --tekst      15.47:1 on paper */
-    --ink-2: #5a5f59; /* --tekst2      6.24:1 */
-    --ink-3: #7d827b; /* --tekst3      3.75:1 — see the note in contrast.test.ts */
-
-    /* ---- Semantics, styleguide §B ----------------------------------------
-     * Outside the accent system: a module may never borrow one of these, and
-     * an accent may never mean right or wrong. Never carried by colour alone
-     * either — every state also has a shape and a word (§7).
+    /* ---- Roles the table leaves to the screens ---------------------------
+     * Each is one of the table's colours put to a named use, or a value read
+     * off the screens where the table is silent. In a round every one of them
+     * takes its dark value (below), so a component names the role and is right
+     * in both.
      */
-    --good: #287c42; /* --goed          paper on it 4.96:1 */
-    --good-text: #006e4a; /* --goedTekst */
-    --bad: #b02a2d; /* --fout          paper on it 6.25:1 */
-    --attention: #bd871c; /* --aandacht      ink on it 5.12:1; on paper only 3.02:1 */
-    --attention-text: #855a00; /* --aandachtTekst on paper 5.80:1 — the one that may be text */
-    --neutral: #5c6b7a; /* --neutraal      paper on it 5.23:1 */
+    /* The edge of a control. The screens draw every field, option and
+     * secondary button in the tertiary ink — 5.15:1, where the light rule's
+     * 1.40 would fail WCAG 1.4.11 for the one line that says "press here". */
+    --rand-bediening: var(--tekst-tertiair);
+    /* What a control turns to under the pointer, and the fill of a chosen row. */
+    --vlak-hover: var(--papier);
+    /* The empty part of a bar, and an empty dot. */
+    --balk-leeg: var(--rand-licht);
+    /* Wrong, in the light. The table gives wrong only for the round; the
+     * screens draw an error's text and edge in #b0554e on a #ffe6e2 panel (S1,
+     * stap 2), and stap 10's legend hatches #c98a8a on #f3e3e3. Text in this
+     * red stands on a card: 4.72 there, 4.21 on the ground. */
+    --fout: #b0554e;
+    --fout-vlak: #ffe6e2;
+    --fout-tekst: var(--inkt); /* on the hatching */
+    --fout-arcering-grond: #f3e3e3;
+    --fout-arcering-streep: #c98a8a;
+    /* The same on the map, where the round has a pair of its own. */
+    --fout-kaart-rand: var(--fout);
+    --fout-kaart-grond: var(--fout-arcering-grond);
+    --fout-kaart-streep: var(--fout-arcering-streep);
+    /* The map: land a step down from the card it lies on, borders in ink. */
+    --map-land: var(--papier);
+    --map-grens: var(--inkt);
+    /* Behind a dialog. */
+    --scrim: rgb(26 32 27 / 45%);
+    /* What is chosen, done, or being asked about: the handoff's green. The
+     * accent rule (accent.test.ts) still says where it may go; what changed is
+     * that it no longer changes colour per module (ADR-106). */
+    --accent: var(--nadruk);
+    --accent-text: var(--nadruk-tekst);
+    --accent-tint: var(--nadruk-vlak);
+
+    /* ---- Colour, dark: the set of a round, the table's second half -------
+     * Written once, here, and switched on by [data-thema='ronde'] below, which
+     * points the roles above at them. Ratios as text, on grond / on vlak.
+     */
+    --donker-grond: #1a201b; /* grond */
+    --donker-vlak: #252c26; /* vlak / kaartvenster */
+    --donker-land: #2f3831; /* landvlak op de kaart */
+    --donker-land-hover: #3e4a40; /* hover-vulling provincie; focus takes the same */
+    --donker-rail: #3a413b; /* balk leeg / rail */
+    --donker-rand: #566056; /* rand op donker                     2.53 on grond */
+    --donker-grenslijn: #7c867d; /* grenslijn kaart                3.21 on land */
+    --donker-nadruk: #7fd494; /* accent groen op donker           9.28 / 8.01 */
+    --donker-tekst: #fbfaf6; /*                                    15.88 / 13.71 */
+    --donker-tekst-secundair: #b9beb9; /*                           8.79 / 7.59 */
+    --donker-tekst-tertiair: #8c948c; /*                            5.31 / 4.59 */
+    /* Fout comes as the README's pairs: the first of each for a tile in a
+     * round (stap 8), the second for a province on the map (stap 10). The
+     * README lists the hatching grounds the other way round; these follow the
+     * screens. Wrong is a hatched area and a cross, never the colour alone. */
+    --donker-fout-rand: #c98a8a; /*                                5.10 on vlak */
+    --donker-fout-tekst: #f2b8b8; /*                        7.02 on its hatching */
+    --donker-fout-arcering: #4a3030;
+    --donker-fout-rand-kaart: #e8b3b3; /*                          6.66 on land */
+    --donker-fout-tekst-kaart: #f6d9d9; /*                  7.86 on its hatching */
+    --donker-fout-arcering-kaart: #5a3636;
 
     /* ---- The collection's five materials, ADR-071 -------------------------
-     * Outside both scales above and deliberately so: a material is not a module
-     * and not a semantic. It says which reeks of the collection an animal
-     * belongs to — bronze, silver, gold, platinum, ultra — and it is the only
-     * place in this product where a colour is a reward.
-     *
-     * The ladder is the one every ten-year-old already knows from the games
-     * they play outside this product, which is the whole reason it was renamed:
-     * "zwart" and "diamant" were two words that said nothing about how far
-     * along you were, and "platina" and "ultra" say it without a legend.
-     *
-     * Every one of them clears 3:1 against paper *and* against the dark paper,
-     * because they carry a drawing rather than text and §A's floor for a
-     * graphical object is three. One value each rather than a light and a dark:
-     * a material that changed hue between themes would stop being a material.
-     * Measured in contrast.test.ts.
+     * Outside the handoff's table and deliberately so: a material is not a
+     * role. It says which reeks of the collection a hero belongs to — bronze,
+     * silver, gold, platinum, ultra — and it is the only place in this product
+     * where a colour is a reward. They carry a drawing rather than text, so
+     * the floor is 3:1 on a card; gold is also the stars in a round's bar, so it
+     * is measured on the round's ground too (contrast.test.ts).
      */
-    --reeks-brons: #a4602a; /* 4.69:1 on paper, 3.82:1 on dark */
-    --reeks-zilver: #6b7883; /* 4.33:1, 4.14:1 */
-    --reeks-goud: #8f8213; /* 3.74:1, 4.79:1 */
-    --reeks-platina: #3f7f8f; /* 4.32:1, 4.14:1 */
-    --reeks-ultra: #8a4fc9; /* 4.97:1, 3.61:1 */
+    --reeks-brons: #a4602a;
+    --reeks-zilver: #6b7883;
+    --reeks-goud: #8f8213;
+    --reeks-platina: #3f7f8f;
+    --reeks-ultra: #8a4fc9;
 
     /* The plate a hero stands on (ADR-094): each material as its colour, a
      * deep tone along the plate's foot and a soft tone round its rim. The deep
-     * tone is also the word for the reeks on paper, so it is measured as text —
-     * every one clears 5.7:1. One value each, for the reason the colours have
-     * one: a material does not change with the theme. The silhouette on the
-     * plate is the light of the page in the light theme, and stays that light
-     * in the dark one. */
+     * tone is also the word for the reeks on a card, so it is measured as text.
+     * The silhouette on the plate is the card's light, and stays that light
+     * wherever the plate stands. */
     --reeks-brons-diep: #7d4720;
     --reeks-brons-zacht: #f3e3d5;
     --reeks-zilver-diep: #4f5a63;
@@ -177,221 +152,49 @@
     --reeks-platina-zacht: #dceaed;
     --reeks-ultra-diep: #6b3aa0;
     --reeks-ultra-zacht: #eadff7;
-    --reeks-licht: #fafaf7;
+    --reeks-licht: #fbfaf6;
 
-    /* ---- Module accents, styleguide §B and ADR-028 ------------------------
-     * One ring: lightness 0.55, chroma 0.125, only the hue differs — measured
-     * exactly so for four of the seven. Tafels sits at C 0.116, tijdvakken at
-     * C 0.119, and vlaggen at C 0.096 / L 0.565 because that hue does not fit
-     * in sRGB at 0.125, which is why vlaggen reads a little duller than the
-     * rest. The styleguide's claim that only the hue varies is not quite true
-     * as built; the colours are right, the sentence about them is not.
-     *
-     * A module never reaches for these names directly. It sets
-     * data-module="…" and reads --accent, --accent-text and --accent-tint, so
-     * that an eighth module is a block of CSS and a content entry rather than
-     * a change to any component.
+    /* ---- A module's own colour, for its plate only -------------------------
+     * The handoff's table has no module colours, and in the screens a module
+     * shows as its pictogram on its own tint and nowhere else. So that is all
+     * these are for: the plate and the two badges that name a module, resolved
+     * from data-module below. Chosen, done and asked-about are the accent
+     * above — the same green in every module.
      */
-    --topo: #2e75b7; /* 1 topografie   hue 249.8° */
-    --topo-text: #005a9d; /*                on tint 5.80:1 */
+    --topo: #2e75b7;
+    --topo-text: #005a9d; /* on tint 5.80:1 */
     --topo-tint: #d7eaff;
-
-    --tafels: #008863; /* 2 tafels       hue 165.8° */
-    --tafels-text: #006e4a; /*                on tint 5.21:1 */
+    --tafels: #008863;
+    --tafels-text: #006e4a; /* on tint 5.21:1 */
     --tafels-tint: #d3f0e3;
-
-    --klok: #a9591f; /* 3 klokkijken   hue  52.0°, ADR-028 */
-    --klok-text: #823c00; /*                on tint 6.47:1 */
+    --klok: #a9591f;
+    --klok-text: #823c00; /* on tint 6.47:1 */
     --klok-tint: #ffe0cd;
-
-    --woorden: #6f64b6; /* 4 woordjes     hue 287.7° */
-    --woorden-text: #56489b; /*                on tint 6.09:1 */
+    --woorden: #6f64b6;
+    --woorden-text: #56489b; /* on tint 6.09:1 */
     --woorden-tint: #e6e5ff;
-
-    --spelling: #965598; /* 5 spelling     hue 326.0° */
-    --spelling-text: #7c397e; /*                on tint 6.15:1 */
+    --spelling: #965598;
+    --spelling-text: #7c397e; /* on tint 6.15:1 */
     --spelling-tint: #f5e0f5;
-
-    --tijdvakken: #797600; /* 6 tijdvakken   hue 108.0° */
-    --tijdvakken-text: #605c00; /*                on tint 5.67:1 */
+    --tijdvakken: #797600;
+    --tijdvakken-text: #605c00; /* on tint 5.67:1 */
     --tijdvakken-tint: #eaead0;
-
-    --vlaggen: #00868e; /* 7 vlaggen      hue 202.2° */
-    --vlaggen-text: #006b74; /*                on tint 5.14:1 */
+    --vlaggen: #00868e;
+    --vlaggen-text: #006b74; /* on tint 5.14:1 */
     --vlaggen-tint: #ceeff1;
+    --module: var(--topo);
+    --module-tekst: var(--topo-text);
+    --module-tint: var(--topo-tint);
 
-    /* The soft step, lighter than the tint (ADR-094): what a chosen tile and
-     * the start bar stand on. Every word on it is ink or the module's text
-     * colour, both already measured against the tint, which is darker — so
-     * nothing here needs a text variant of its own. Topo, rekenen and klok are
-     * the handoff's values; the other four are the same step on their own hue. */
-    --topo-soft: #f2f8ff;
-    --tafels-soft: #f1faf5;
-    --klok-soft: #fdf7f2;
-    --woorden-soft: #f7f6ff;
-    --spelling-soft: #fbf4fb;
-    --tijdvakken-soft: #f9f9ee;
-    --vlaggen-soft: #f0fafa;
-
-    /* The resolved accent. Topography is the default because it is the only
-     * module that exists; the mapping blocks below override it per module. */
-    --accent: var(--topo);
-    --accent-text: var(--topo-text);
-    --accent-tint: var(--topo-tint);
-    --accent-soft: var(--topo-soft);
-
-    /* ---- The map ---------------------------------------------------------
-     * Land is the surface tone so the country reads as part of the page
-     * rather than a picture pasted onto it.
-     */
-    --map-land: var(--surface);
-    --map-water: var(--paper);
-
-    /* ---- Hit targets, styleguide §D --------------------------------------
-     * Three values, not one. 44 is the floor WCAG 2.2 asks for and the only
-     * number that is a rule; 56 is what PO and any finger actually get, and
-     * is therefore the default; 72 is the digibord, out of scope but costing
-     * nothing to keep. brand.minTouchTargetPx carries the floor, because that
-     * is what its name promises — see ADR-032.
-     */
-    --touch-min: 44px;
-    --touch: 56px;
-    --touch-board: 72px;
-
-    /* ---- Corner radii, styleguide §D ------------------------------------- */
-    --radius-flat: 0px; /* table, map area, practice canvas, heatmap cell */
-    --radius-field: 2px; /* input, select, tab */
-    --radius-control: 6px; /* button, message, card in VO */
-    --radius-card: 12px; /* card in PO, dialog, bottom sheet */
-    --radius-full: 999px; /* chip, label, progress bar, the dot */
-    /* Two the handoff adds for the plates (ADR-094): a module's mark on its
-     * tint at 40-44, and the smaller one in a list. */
-    --radius-plaat: 10px;
-    --radius-klein: 8px;
-    /* The start bar and the keypad of tables on a module page (ADR-095). */
-    --radius-balk: 14px;
-
-    /* ---- Stroke widths, styleguide §D ------------------------------------
-     * Named apart from the --line colours on purpose: --line is what a rule
-     * looks like, --stroke-* is how thick it is, and conflating them is how a
-     * 1.5px border ends up 1px on one screen.
-     */
-    --stroke-hair: 1px; /* divider, table rule */
-    --stroke-region: 1.5px; /* boundary between two map areas */
-    --stroke-active: 2px; /* icon line, active border, focus ring */
-    --stroke-answer: 3px; /* answer state */
-
-    /* ---- Elevation, styleguide §D ----------------------------------------
-     * Level 0 is no shadow at all and covers well over ninety percent: things
-     * that lie in the screen are separated by a line or a surface, not by
-     * depth. Level 1 is what hovers over it. Level 2 is what blocks it, and
-     * always sits on the scrim.
-     */
-    --shadow-1: 0 2px 6px rgb(29 34 28 / 10%);
-    --shadow-2: 0 12px 32px rgb(29 34 28 / 18%);
-    --scrim: rgb(29 34 28 / 45%);
-    /* The two shadows the handoff allows, and no others (ADR-094): the list of
-     * modules as it opens under its button, and a hero's plate, which is an
-     * object standing on the page rather than a surface lying in it. */
-    --shadow-menu: 0 10px 24px rgb(29 34 28 / 14%);
-    --shadow-held: 0 2px 4px rgb(29 34 28 / 18%);
-
-    /* ---- Density, styleguide §D ------------------------------------------
-     * PO takes one step up from VO for inner margins and row spacing: where
-     * VO takes 16, PO takes 24. Every other distance is the same, so this is
-     * four tokens rather than a second set of components.
-     */
-    --control-height: var(--touch);
-    --card-radius: var(--radius-card);
-    --card-padding: 24px;
-    --row-gap: 24px;
-    /* ---- Type scale, styleguide §C — PO 8-12, desktop --------------------
-     * Two guises, one set of classes. The tokens switch underneath, so a
-     * component says text-h1 and never has to know which guise it is in. The
-     * guise follows the age in the child's profile, never a preference of the
-     * pupil's — and there is no age field yet, so PO is simply the default.
-     */
-    --type-score: 3.75rem; /* 60px */
-    --type-score-lh: 3.75rem; /* 60px */
-    --type-score-ls: -0.03em;
-    --type-h1: 2.5rem; /* 40px */
-    --type-h1-lh: 3rem; /* 48px */
-    --type-h1-ls: -0.02em;
-    --type-h2: 1.75rem; /* 28px */
-    --type-h2-lh: 2.25rem; /* 36px */
-    --type-h3: 1.375rem; /* 22px */
-    --type-h3-lh: 1.875rem; /* 30px */
-    --type-body: 1.25rem; /* 20px */
-    --type-body-lh: 2rem; /* 32px */
-    --type-label: 1.0625rem; /* 17px */
-    --type-label-lh: 1.5rem; /* 24px */
-    /* PO has no step below the label: metadata in PO is set at label size.
-     * The smaller step exists only in VO, where §C calls it "klein". */
-    --type-small: 1.0625rem; /* 17px */
-    --type-small-lh: 1.5rem; /* 24px */
-
-    /* ==== The handoff's tokens, written alongside ===========================
-     * design_handoff_leernu/README.md, "Ontwerptokens". Nothing reads these
-     * yet — no rule, no component and no Tailwind class in use — so the app
-     * renders exactly as it did. MIGRATIE-STATUS.md maps every token above to
-     * its successor here, or says it has none.
-     *
-     * Named for their role, in the handoff's own Dutch, and none shares a name
-     * with a token above. The one the handoff calls "accent" is taken, since
-     * --accent is the module's resolved accent, so its green is named for
-     * what it does: --nadruk.
-     */
-
-    /* ---- Colour, light. Ratios as text, on kaart / on papier ------------- */
-    --canvas: #dcd9cd; /* canvas, outside the screen */
-    --papier: #efede4; /* papier, the ground of a screen */
-    --kaart: #fbfaf6; /* kaart / paneel */
-    --inkt: #1a201b; /* inkt: text and the primary button   15.88 / 14.14 */
-    --tekst-secundair: #525953; /*                             6.90 / 6.15 */
-    --tekst-tertiair: #666c67; /*                               5.15 / 4.58 */
-    --rand-licht: #d8d6cc; /* 1px, carries no text              1.40 on kaart */
-    --rand-sterk: #c1beb2; /* the screen's frame                 1.78 on kaart */
-    --nadruk: #327f48; /* accent groen: goed, nadruk   4.71 / 4.20 — text on kaart only */
-    --nadruk-vlak: #eafbec; /* accent groen licht */
-    --nadruk-tekst: #2c5c3a; /* accent groen donker          7.23 on nadruk-vlak */
-
-    /* ---- Colour, dark: the set of a round -------------------------------
-     * Its own names and fixed values rather than a theme, because it follows
-     * a round and not the system: the system's dark mode further down leaves
-     * every one of these alone. Ratios as text, on grond / on vlak.
-     */
-    --donker-grond: #1a201b; /* grond */
-    --donker-vlak: #252c26; /* vlak / kaartvenster */
-    --donker-land: #2f3831; /* landvlak op de kaart */
-    --donker-land-hover: #3e4a40; /* hover-vulling provincie; focus takes the same */
-    --donker-rail: #3a413b; /* balk leeg / rail */
-    --donker-rand: #566056; /* rand op donker                   2.53 on grond */
-    --donker-grenslijn: #7c867d; /* grenslijn kaart              3.21 on land */
-    --donker-nadruk: #7fd494; /* accent groen op donker         9.28 / 8.01 */
-    --donker-tekst: #fbfaf6; /*                                  15.88 / 13.71 */
-    --donker-tekst-secundair: #b9beb9; /*                         8.79 / 7.59 */
-    --donker-tekst-tertiair: #8c948c; /*                          5.31 / 4.59 */
-    /* Fout comes as the README's pairs: the first of each for a tile in a
-     * round (stap 8), the second for a province on the map (stap 10). The
-     * README lists the hatching grounds the other way round; these follow the
-     * screens. Wrong is a hatched area and a cross, never the colour alone. */
-    --donker-fout-rand: #c98a8a; /*                              5.10 on vlak */
-    --donker-fout-tekst: #f2b8b8; /*                      7.02 on its hatching */
-    --donker-fout-arcering: #4a3030;
-    --donker-fout-rand-kaart: #e8b3b3; /*                        6.66 on land */
-    --donker-fout-tekst-kaart: #f6d9d9; /*                7.86 on its hatching */
-    --donker-fout-arcering-kaart: #5a3636;
-
-    /* ---- Typefaces, ready and not yet switched on (see @font-face) ------- */
+    /* ---- Typefaces (see @font-face) --------------------------------------- */
     --font-kop: 'Archivo', system-ui, sans-serif; /* 600 and 700 */
     --font-tekst: 'Public Sans', system-ui, sans-serif; /* 400 and 600 */
 
-    /* ---- Type scale, PO ---------------------------------------------------
+    /* ---- Type scale, PO ----------------------------------------------------
      * In rem for the reason given at the html rule below; the README's px are
-     * in the comments. Paginakop to getal-groot set in --font-kop, lopend to
-     * bijschrift in --font-tekst. The label is uppercase and running text
-     * takes text-wrap: pretty — rules rather than values, so they arrive with
-     * the components.
+     * in the comments. Paginakop to getal-groot are set in --font-kop, lopend
+     * to bijschrift in --font-tekst. On a phone and in VO the values move
+     * underneath (below), so a component names the role and never the size.
      */
     --type-paginakop: 2.5rem; /* 40px */
     --type-paginakop-lh: 2.75rem; /* 44px */
@@ -417,247 +220,211 @@
     --type-getal-groot-weight: 700;
     --type-lopend: 1rem; /* 16px, running text */
     --type-lopend-lh: 1.625rem; /* 26px */
-    --type-lopend-weight: 400;
-    --type-knop: 1.0625rem; /* 17px */
+    --type-knop: 1.0625rem; /* 17px, a button's words */
     --type-knop-lh: 1.5rem; /* 24px */
-    --type-knop-weight: 600;
-    --type-vlaklabel: 0.8125rem; /* 13px, the label above an area */
+    --type-vlaklabel: 0.8125rem; /* 13px, the label above an area, uppercase */
     --type-vlaklabel-lh: 1rem; /* 16px */
     --type-vlaklabel-ls: 0.08em;
     --type-vlaklabel-weight: 600;
     --type-bijschrift: 0.875rem; /* 14px */
     --type-bijschrift-lh: 1.25rem; /* 20px */
-    --type-bijschrift-weight: 400;
 
-    /* ---- Radius ---------------------------------------------------------- */
-    --radius-chip: 6px;
+    /* ---- Radius ------------------------------------------------------------ */
+    --radius-chip: 6px; /* a chip, an option, a plate */
     --radius-chip-groot: 8px;
     --radius-kaart-vo: 10px;
-    --radius-kaart: 12px;
+    --radius-kaart: 12px; /* a card, a button, a field */
     --radius-kaart-telefoon: 14px;
     --radius-rondevlak: 16px; /* an area in a round */
-    --radius-notitieblok: 20px; /* the handoff's note pad; see MIGRATIE-STATUS.md */
+    --radius-pil: 999px; /* a pill and the dot: round whatever their size */
 
-    /* ---- Space ------------------------------------------------------------
-     * 20 and 10 fall outside the spacing scale in tailwind.config.ts, so these
-     * are read through var() and get no spacing class, like --card-padding.
-     * Borders are --stroke-hair and --stroke-active above, which already are
-     * the README's 1px and 2px.
+    /* ---- Lines --------------------------------------------------------------
+     * 1px on light, 2px for emphasis or a chosen state. The two thicker ones
+     * belong to the map, where a boundary and an answer state are drawings
+     * rather than edges of a box.
      */
+    --stroke-hair: 1px;
+    --stroke-active: 2px;
+    --stroke-region: 1.5px; /* the boundary between two areas on the map */
+    --stroke-answer: 3px; /* an answer state on the map */
+
+    /* ---- Space ------------------------------------------------------------- */
     --padding-paneel: 32px;
     --padding-kaart: 24px; /* PO */
     --padding-kaart-telefoon: 20px;
     --padding-kaart-vo: 16px;
-    --padding-scherm: 32px; /* 16px on a phone, below */
+    --padding-scherm: 32px; /* 16 on a phone, below */
     --gap-sectie: 64px;
     --gap-kaart-ruim: 16px; /* inside a card: 16, 12 or 10 */
     --gap-kaart: 12px;
     --gap-kaart-krap: 10px;
 
     /* The one shadow: on a reward image, and nowhere else. The arguments of a
-     * drop-shadow() filter rather than a box-shadow. */
+     * drop-shadow() filter rather than a box-shadow, so it follows the
+     * drawing and not its box. */
     --schaduw-beloning: 0 10px 18px rgb(26 32 27 / 22%);
 
-    /* ---- Hit targets ------------------------------------------------------
-     * The pointer and the thumb are the numbers --touch-min and --touch
-     * already carry; the names say where each one applies.
+    /* ---- Hit targets ---------------------------------------------------------
+     * brand.minTouchTargetPx carries the floor of 44 (ADR-032).
      */
     --touch-wijzer: 44px; /* pointer, desktop */
     --touch-tablet: 48px;
     --touch-duim: 56px; /* thumb, phone */
     --touch-ronde: 56px; /* during a round, always */
     --touch-vo: 44px; /* a VO button: the floor, never less */
+
+    /* ---- Roles that follow the screen, the guise and the round ------------
+     * What components read. The values move underneath: a phone, a tablet, VO
+     * and a round each redefine some of these, and nothing else.
+     */
+    --knop-hoogte: var(--touch-duim); /* a button: 56 in PO */
+    --raak: var(--touch-wijzer); /* the smallest a control may be */
+    --kaart-radius: var(--radius-kaart);
+    --kaart-padding: var(--padding-kaart);
   }
 
-  /* PO on a phone, 393-412. The heading shrinks; the reading text never does,
-   * which is the whole point of the PO scale. */
+  /* A tablet: a finger, on a screen wider than a phone. */
+  @media (pointer: coarse) and (min-width: 768px) {
+    :root {
+      --raak: var(--touch-tablet);
+    }
+  }
+
+  /* A phone, 393-412: the thumb, the phone's card, and the headings a step
+   * down, as the 393 screens set them. The reading text never shrinks, which
+   * is the whole point of the PO scale. */
   @media (max-width: 767px) {
     :root {
-      --type-score: 2.75rem; /* 44px */
-      --type-score-lh: 2.75rem; /* 44px */
-      --type-h1: 1.875rem; /* 30px */
-      --type-h1-lh: 2.375rem; /* 38px */
-      --type-h2: 1.5rem; /* 24px */
-      --type-h2-lh: 1.875rem; /* 30px */
-
-      /* The handoff's screen padding at 393, alongside. */
+      --raak: var(--touch-duim);
+      --kaart-radius: var(--radius-kaart-telefoon);
+      --kaart-padding: var(--padding-kaart-telefoon);
       --padding-scherm: 16px;
+      --type-paginakop: 1.5rem; /* 24px */
+      --type-paginakop-lh: 1.875rem; /* 30px */
+      --type-paginakop-ls: -0.01em;
+      --type-sectiekop: 1.25rem; /* 20px */
+      --type-sectiekop-lh: 1.625rem; /* 26px */
+      --type-vraag: 1.5rem; /* 24px */
+      --type-vraag-lh: 1.875rem; /* 30px */
+      --type-vraag-ls: -0.01em;
+      --type-getal-groot: 2.75rem; /* 44px */
+      --type-getal-groot-lh: 2.75rem; /* 44px */
     }
   }
 
   /* VO 12-16. Tokens only: nothing sets data-guise yet, because there is no
-   * age field to set it from. Written now so that adding one is a data change
-   * (§0.3 E, and the scope note in the build brief). */
+   * age field to set it from (stap 11 leaves the switch open). What changes is
+   * stap 11's list and nothing more: the type scale, the density and the
+   * button height. */
   [data-guise='vo'] {
-    --control-height: var(--touch-min);
-    --card-radius: var(--radius-control);
-    --card-padding: 16px;
-    --row-gap: 16px;
-    --type-score: 2.75rem; /* 44px */
-    --type-score-lh: 2.75rem; /* 44px */
-    --type-h1: 1.875rem; /* 30px */
-    --type-h1-lh: 2.375rem; /* 38px */
-    --type-h2: 1.375rem; /* 22px */
-    --type-h2-lh: 1.75rem; /* 28px */
-    --type-h3: 1.125rem; /* 18px */
-    --type-h3-lh: 1.5rem; /* 24px */
-    --type-body: 1rem; /* 16px */
-    --type-body-lh: 1.5rem; /* 24px */
-    --type-label: 0.9375rem; /* 15px */
-    --type-label-lh: 1.25rem; /* 20px */
-    --type-small: 0.8125rem; /* 13px */
-    --type-small-lh: 1.125rem; /* 18px */
+    --knop-hoogte: var(--touch-vo);
+    --raak: var(--touch-vo);
+    --kaart-radius: var(--radius-kaart-vo);
+    --kaart-padding: var(--padding-kaart-vo);
+    --type-paginakop: 1.75rem; /* 28px */
+    --type-paginakop-lh: 2rem; /* 32px */
+    --type-kaartkop: 1.0625rem; /* 17px */
+    --type-kaartkop-lh: 1.5rem; /* 24px */
+    --type-getal: 1.5rem; /* 24px */
+    --type-getal-lh: 1.75rem; /* 28px */
+    --type-getal-groot: 1.5rem; /* 24px */
+    --type-getal-groot-lh: 1.75rem; /* 28px */
+    --type-lopend: 0.9375rem; /* 15px */
+    --type-lopend-lh: 1.375rem; /* 22px */
+    --type-knop: 0.9375rem; /* 15px */
+    --type-knop-lh: 1.375rem; /* 22px */
   }
 
-  @media (max-width: 767px) {
-    [data-guise='vo'] {
-      --type-score: 2.125rem; /* 34px */
-      --type-score-lh: 2.125rem; /* 34px */
-      --type-h1: 1.5rem; /* 24px */
-      --type-h1-lh: 1.875rem; /* 30px */
-    }
-  }
-
-  /* ---- A module asks for its accent as a set, never as loose variables ----
-   * Order is the rail order from ADR-029. Adding an eighth module means one
-   * block here and one entry in the content, and touches no component.
+  /* ---- A module names its colour as a set, for its plate -----------------
+   * Order is the rail order from ADR-029. An eighth module is one block here
+   * and one entry in the content, and touches no component.
    */
   [data-module='topo'] {
-    --accent: var(--topo);
-    --accent-text: var(--topo-text);
-    --accent-tint: var(--topo-tint);
-    --accent-soft: var(--topo-soft);
+    --module: var(--topo);
+    --module-tekst: var(--topo-text);
+    --module-tint: var(--topo-tint);
   }
   [data-module='tafels'] {
-    --accent: var(--tafels);
-    --accent-text: var(--tafels-text);
-    --accent-tint: var(--tafels-tint);
-    --accent-soft: var(--tafels-soft);
+    --module: var(--tafels);
+    --module-tekst: var(--tafels-text);
+    --module-tint: var(--tafels-tint);
   }
   [data-module='klok'] {
-    --accent: var(--klok);
-    --accent-text: var(--klok-text);
-    --accent-tint: var(--klok-tint);
-    --accent-soft: var(--klok-soft);
+    --module: var(--klok);
+    --module-tekst: var(--klok-text);
+    --module-tint: var(--klok-tint);
   }
   [data-module='woorden'] {
-    --accent: var(--woorden);
-    --accent-text: var(--woorden-text);
-    --accent-tint: var(--woorden-tint);
-    --accent-soft: var(--woorden-soft);
+    --module: var(--woorden);
+    --module-tekst: var(--woorden-text);
+    --module-tint: var(--woorden-tint);
   }
   [data-module='spelling'] {
-    --accent: var(--spelling);
-    --accent-text: var(--spelling-text);
-    --accent-tint: var(--spelling-tint);
-    --accent-soft: var(--spelling-soft);
+    --module: var(--spelling);
+    --module-tekst: var(--spelling-text);
+    --module-tint: var(--spelling-tint);
   }
   [data-module='tijdvakken'] {
-    --accent: var(--tijdvakken);
-    --accent-text: var(--tijdvakken-text);
-    --accent-tint: var(--tijdvakken-tint);
-    --accent-soft: var(--tijdvakken-soft);
+    --module: var(--tijdvakken);
+    --module-tekst: var(--tijdvakken-text);
+    --module-tint: var(--tijdvakken-tint);
   }
   [data-module='vlaggen'] {
-    --accent: var(--vlaggen);
-    --accent-text: var(--vlaggen-text);
-    --accent-tint: var(--vlaggen-tint);
-    --accent-soft: var(--vlaggen-soft);
+    --module: var(--vlaggen);
+    --module-tekst: var(--vlaggen-text);
+    --module-tint: var(--vlaggen-tint);
   }
 
-  /* ---- Dark theme, styleguide §B ----------------------------------------
-   * Not an inversion. The surfaces get lighter rather than darker, the line
-   * values are pulled up, and the semantic colours are chosen again at a
-   * higher lightness because saturated red and green are unreadable on ink.
+  /* ---- A round is dark (ADR-106) -------------------------------------------
+   * The handoff's second table, switched on by data-thema="ronde" on the root
+   * of every round screen. Not the system's dark mode — that is gone: the
+   * product is light, except while a child is answering, where the dark ground
+   * makes the map and the question the brightest things on the screen.
    *
-   * Tokens only, and no switch: the app follows the system. The design has
-   * not drawn the dark screens yet, so there is nothing here that decides a
-   * layout — redefining the same names is exactly what keeps it that way.
+   * The roles are redefined rather than new names introduced, so a component
+   * says bg-kaart or var(--inkt) and is right in both. The hit targets go to
+   * 56 here whatever the screen or the guise. No nested braces in this block:
+   * contrast.test.ts reads it up to its first closing brace.
    */
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --paper: #0f130f; /* greener than neutral black, not #000 */
-      --surface: #1b201a; /* lighter than paper, never darker */
-      --sunken: #282d27;
-      /* Paper, not the sunken tone: in the dark the sunken tone is lighter
-       * than paper, and cards darker than the ground they stand on would read
-       * as holes rather than as things. */
-      --grond: var(--paper);
-      --line: #373c36; /* 1.66:1, carries no text */
-      --line-strong: #525751; /* 2.54:1 */
-
-      --ink: #f3f4ef; /* 16.96:1 — not pure white: less halo on OLED */
-      --ink-2: #b6b8b1; /* 9.35:1 */
-      --ink-3: #91938c; /* 6.03:1 — reaches AA at 15px here, unlike in light */
-
-      /* One value per semantic in dark: each already reads as text on paper,
-       * so the text variant is the same colour rather than a second one. */
-      --good: #73c385; /* 8.81:1 */
-      --good-text: #73c385;
-      --bad: #f07f77; /* 7.15:1 */
-      --attention: #e6b55d; /* 9.94:1 — unlike in light, this one may be text */
-      --attention-text: #e6b55d;
-      --neutral: #91a3b5; /* 7.24:1 (styleguide §B says 7.66; see ADR-028) */
-
-      /* The accents keep their names and change their values, so the mapping
-       * blocks above are written once. The styleguide gives one dark value
-       * per accent and no dark tint, so the tint falls back to the dark
-       * surface: neutral rather than invented. Flagged for the designer. */
-      --topo: #70b0f1;
-      --topo-text: #70b0f1;
-      --topo-tint: var(--surface);
-
-      --tafels: #55c29d;
-      --tafels-text: #55c29d;
-      --tafels-tint: var(--surface);
-
-      --klok: #e49564; /* ADR-028, 7.84:1 on dark paper */
-      --klok-text: #e49564;
-      --klok-tint: var(--surface);
-
-      --woorden: #a79fef;
-      --woorden-text: #a79fef;
-      --woorden-tint: var(--surface);
-
-      --spelling: #d091d2;
-      --spelling-text: #d091d2;
-      --spelling-tint: var(--surface);
-
-      --tijdvakken: #b2b054;
-      --tijdvakken-text: #b2b054;
-      --tijdvakken-tint: var(--surface);
-
-      --vlaggen: #33c0c7;
-      --vlaggen-text: #33c0c7;
-      --vlaggen-tint: var(--surface);
-
-      /* The soft step has no dark value in the handoff either, and it falls
-       * back where the tint does: to the dark surface, neutral rather than
-       * invented. */
-      --topo-soft: var(--surface);
-      --tafels-soft: var(--surface);
-      --klok-soft: var(--surface);
-      --woorden-soft: var(--surface);
-      --spelling-soft: var(--surface);
-      --tijdvakken-soft: var(--surface);
-      --vlaggen-soft: var(--surface);
-
-      /* Shadow weakens in dark and a lighter surface takes over the job of
-       * height: level 1 is --surface with a line, level 2 keeps its shadow
-       * and gains one. */
-      --shadow-1: 0 2px 6px rgb(0 0 0 / 24%);
-      --shadow-2: 0 12px 32px rgb(0 0 0 / 40%);
-      --scrim: rgb(0 0 0 / 45%);
-      --shadow-menu: 0 10px 24px rgb(0 0 0 / 40%);
-      --shadow-held: 0 2px 4px rgb(0 0 0 / 40%);
-    }
+  [data-thema='ronde'] {
+    color-scheme: dark;
+    --papier: var(--donker-grond);
+    --kaart: var(--donker-vlak);
+    --inkt: var(--donker-tekst);
+    --tekst-secundair: var(--donker-tekst-secundair);
+    --tekst-tertiair: var(--donker-tekst-tertiair);
+    --rand-licht: var(--donker-rand);
+    --rand-sterk: var(--donker-rand);
+    --rand-bediening: var(--donker-grenslijn);
+    --vlak-hover: var(--donker-land-hover);
+    --balk-leeg: var(--donker-rail);
+    --nadruk: var(--donker-nadruk);
+    --nadruk-vlak: var(--donker-land);
+    --nadruk-tekst: var(--donker-nadruk);
+    --fout: var(--donker-fout-rand);
+    --fout-tekst: var(--donker-fout-tekst);
+    --fout-arcering-grond: var(--donker-fout-arcering);
+    --fout-arcering-streep: var(--donker-fout-rand);
+    --fout-kaart-rand: var(--donker-fout-rand-kaart);
+    --fout-kaart-grond: var(--donker-fout-arcering-kaart);
+    --fout-kaart-streep: var(--donker-fout-rand-kaart);
+    --map-land: var(--donker-land);
+    --map-grens: var(--donker-grenslijn);
+    --accent: var(--donker-nadruk);
+    --accent-text: var(--donker-nadruk);
+    --accent-tint: var(--donker-land);
+    --scrim: rgb(0 0 0 / 55%);
+    --knop-hoogte: var(--touch-ronde);
+    --raak: var(--touch-ronde);
+    background: var(--papier);
+    color: var(--inkt);
   }
 
   /*
-   * The type scale is in rem rather than the px the styleguide writes,
-   * which renders identically at the default root size and is the only way
-   * the reader’s own text-size setting reaches it. ADR-025 dropped the
-   * reading mode and left following the system setting up to 200% as the one
+   * The type scale is in rem rather than the px the handoff writes, which
+   * renders identically at the default root size and is the only way the
+   * reader's own text-size setting reaches it. ADR-025 dropped the reading
+   * mode and left following the system setting up to 200% as the one
    * typographic accessibility affordance in the product; in px that promise
    * would be silently false in every desktop browser. Spacing, hit targets,
    * radii and stroke widths stay absolute: 44px is a measure of a fingertip.
@@ -671,11 +438,11 @@
 
   body {
     margin: 0;
-    background: var(--paper);
-    color: var(--ink);
-    font-family: 'Source Sans 3', system-ui, sans-serif;
-    font-size: var(--type-body);
-    line-height: var(--type-body-lh);
+    background: var(--papier);
+    color: var(--inkt);
+    font-family: var(--font-tekst);
+    font-size: var(--type-lopend);
+    line-height: var(--type-lopend-lh);
     -webkit-font-smoothing: antialiased;
     /* At 200% text a single long word can be wider than the column it is in,
      * and the page then scrolls sideways — which is the one failure mode that
@@ -686,21 +453,34 @@
     overflow-wrap: break-word;
   }
 
+  /* Headings in Archivo: 700 for a page and a section, 600 for a card. The
+   * size and the tracking come with the role's class (text-paginakop and so
+   * on), which is where the handoff defines them. */
   h1,
   h2,
   h3 {
     margin: 0;
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: var(--font-kop);
+    color: var(--inkt);
+  }
+  h1,
+  h2 {
+    font-weight: 700;
+  }
+  h3 {
     font-weight: 600;
-    letter-spacing: -0.02em;
-    color: var(--ink);
+  }
+
+  /* Every running paragraph breaks its last line with some care. */
+  p {
+    text-wrap: pretty;
   }
 
   /* One focus style everywhere. On a map region an outline follows the bounding
    * box rather than the shape, which draws a rectangle in the sea — so map
    * shapes thicken their own stroke instead (see .tk-shape). */
   :focus-visible {
-    outline: var(--stroke-active) solid var(--ink);
+    outline: var(--stroke-active) solid var(--inkt);
     outline-offset: 2px;
   }
 
@@ -720,18 +500,19 @@
 
 @layer components {
   .tk-display {
-    font-family: 'Space Grotesk', system-ui, sans-serif;
-    letter-spacing: -0.02em;
+    font-family: var(--font-kop);
   }
 
-  /* The small uppercase label above a question. Mono and tracked-out so it
-   * reads as a category and never competes with the question itself. */
+  /* The label above an area: Public Sans 600 at 13/16, tracked out and in
+   * capitals, so it reads as a category and never competes with the question. */
   .tk-label {
-    font-family: 'IBM Plex Mono', ui-monospace, monospace;
-    font-size: 11px; /* the eyebrow, not the §C label — see fontSize.eyebrow */
-    letter-spacing: 0.08em;
+    font-family: var(--font-tekst);
+    font-size: var(--type-vlaklabel);
+    line-height: var(--type-vlaklabel-lh);
+    letter-spacing: var(--type-vlaklabel-ls);
+    font-weight: var(--type-vlaklabel-weight);
     text-transform: uppercase;
-    color: var(--ink-2);
+    color: var(--tekst-secundair);
     white-space: nowrap;
   }
 
@@ -743,15 +524,15 @@
   /* Paper on the ground, edged with the hairline: the fill says "a card", so
    * the edge can be the quiet one. */
   .tk-card {
-    background: var(--paper);
-    border: var(--stroke-hair) solid var(--line);
-    border-radius: var(--card-radius);
-    padding: var(--card-padding);
+    background: var(--kaart);
+    border: var(--stroke-hair) solid var(--rand-licht);
+    border-radius: var(--kaart-radius);
+    padding: var(--kaart-padding);
   }
   /* The one block on a screen that is the reason the child is there — the test
    * date on K1. A surface fill and a border, where everything else has neither. */
   .tk-card-accented {
-    background: var(--surface);
+    background: var(--papier);
   }
 
   /* ---- Buttons ---------------------------------------------------------
@@ -767,53 +548,53 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    min-height: var(--control-height);
+    min-height: var(--knop-hoogte);
     padding: 0 24px;
     border: var(--stroke-hair) solid transparent;
-    border-radius: var(--radius-control);
-    background: var(--ink);
-    color: var(--paper);
-    font-family: 'Source Sans 3', system-ui, sans-serif;
-    font-size: var(--type-label);
-    line-height: var(--type-label-lh);
+    border-radius: var(--radius-kaart);
+    background: var(--inkt);
+    color: var(--kaart);
+    font-family: var(--font-tekst);
+    font-size: var(--type-knop);
+    line-height: var(--type-knop-lh);
     font-weight: 600;
     text-align: center;
     cursor: pointer;
   }
   .tk-button:hover {
-    background: var(--ink-2);
+    background: var(--tekst-secundair);
   }
   .tk-button:active {
-    background: var(--ink-2);
+    background: var(--tekst-secundair);
     /* Pressed reads as movement, not as another colour. */
     transform: translateY(1px);
   }
 
   .tk-button-secondary {
-    background: var(--paper);
-    color: var(--ink);
-    border-color: var(--line-strong);
+    background: var(--kaart);
+    color: var(--inkt);
+    border-color: var(--rand-bediening);
   }
   .tk-button-secondary:hover {
-    background: var(--surface);
+    background: var(--vlak-hover);
   }
   .tk-button-secondary:active {
-    background: var(--sunken);
+    background: var(--balk-leeg);
   }
 
   .tk-button-tertiary {
     background: transparent;
-    color: var(--ink);
+    color: var(--inkt);
     border-color: transparent;
     padding: 0 8px;
     text-decoration: underline;
     text-underline-offset: 2px;
   }
   .tk-button-tertiary:hover {
-    background: var(--surface);
+    background: var(--vlak-hover);
   }
   .tk-button-tertiary:active {
-    background: var(--sunken);
+    background: var(--balk-leeg);
   }
 
   /* Disabled says "not now", never "you got this wrong", so it recedes rather
@@ -821,8 +602,8 @@
    * button that shrinks when it switches off moves everything under it. */
   .tk-button:disabled,
   .tk-button[aria-disabled='true'] {
-    background: var(--sunken);
-    color: var(--ink-3);
+    background: var(--balk-leeg);
+    color: var(--tekst-tertiair);
     border-color: transparent;
     cursor: not-allowed;
     transform: none;
@@ -832,8 +613,8 @@
   .tk-button-tertiary:disabled,
   .tk-button-tertiary[aria-disabled='true'] {
     background: transparent;
-    color: var(--ink-3);
-    border-color: var(--line);
+    color: var(--tekst-tertiair);
+    border-color: var(--rand-licht);
   }
 
   /* Busy. The label stays put and the button keeps its width, because a
@@ -865,14 +646,15 @@
     padding: 20px 20px 20px 24px;
     border: var(--stroke-hair) solid var(--accent);
     border-left-width: 8px;
-    border-radius: var(--radius-balk);
-    background: var(--accent-soft);
+    border-radius: var(--radius-kaart);
+    background: var(--accent-tint);
   }
   .tk-startbalk-label {
-    font-family: 'IBM Plex Mono', ui-monospace, monospace;
-    font-size: 11px;
-    line-height: 16px;
-    letter-spacing: 0.08em;
+    font-family: var(--font-tekst);
+    font-size: var(--type-vlaklabel);
+    line-height: var(--type-vlaklabel-lh);
+    letter-spacing: var(--type-vlaklabel-ls);
+    font-weight: var(--type-vlaklabel-weight);
     text-transform: uppercase;
     color: var(--accent-text);
   }
@@ -892,31 +674,30 @@
     align-items: baseline;
     gap: 8px;
     padding: 8px 12px;
-    border-radius: var(--radius-klein);
-    background: var(--paper);
-    box-shadow: inset 0 0 0 var(--stroke-hair) var(--line);
-    font-size: var(--type-label);
-    line-height: var(--type-label-lh);
+    border-radius: var(--radius-chip-groot);
+    background: var(--kaart);
+    border: var(--stroke-hair) solid var(--rand-licht);
+    font-size: var(--type-knop);
+    line-height: var(--type-knop-lh);
     font-weight: 600;
   }
   .tk-startchip-label {
-    font-family: 'IBM Plex Mono', ui-monospace, monospace;
-    font-size: 11px;
-    letter-spacing: 0.08em;
+    font-family: var(--font-tekst);
+    font-size: var(--type-vlaklabel);
+    line-height: var(--type-vlaklabel-lh);
+    letter-spacing: var(--type-vlaklabel-ls);
     text-transform: uppercase;
-    font-weight: 400;
-    color: var(--ink-2);
+    font-weight: var(--type-vlaklabel-weight);
+    color: var(--tekst-secundair);
   }
 
-  /* The one control on a page of controls that is the way on. Taller and wider
-   * than the standard button, because the page above it is a grid of things
-   * that are also pressable and a start that matched them is one more option. */
+  /* The one control on a page of controls that is the way on: the primary
+   * button, wider than the standard one, because the page above it is a grid of
+   * things that are also pressable and a start that matched them is one more
+   * option. */
   .tk-button-go {
-    min-height: var(--touch-board);
+    min-height: var(--knop-hoogte);
     padding: 0 32px;
-    font-family: 'Space Grotesk', system-ui, sans-serif;
-    font-size: var(--type-h3);
-    line-height: var(--type-h3-lh);
   }
   /* The word and the mark are both inside the button's own label span, so the
    * gap belongs there rather than on the button, which has one child. */
@@ -946,18 +727,18 @@
     gap: 12px;
     margin: 0 -16px -16px;
     padding: 12px 16px;
-    border-top: var(--stroke-hair) solid var(--line);
-    background: var(--paper);
+    border-top: var(--stroke-hair) solid var(--rand-licht);
+    background: var(--kaart);
   }
   .tk-startbalk-zin {
     flex: 1;
     min-width: 0;
-    font-size: var(--type-label);
-    line-height: var(--type-label-lh);
+    font-size: var(--type-knop);
+    line-height: var(--type-knop-lh);
   }
   .tk-startbalk-mobiel .tk-button-go {
     flex: none;
-    min-height: var(--touch);
+    min-height: var(--knop-hoogte);
     padding: 0 24px;
   }
 
@@ -978,17 +759,17 @@
     display: flex;
     align-items: flex-start;
     gap: 12px;
-    padding: var(--card-padding);
-    border: var(--stroke-hair) solid var(--line);
-    border-radius: var(--card-radius);
-    color: var(--ink-2);
+    padding: var(--kaart-padding);
+    border: var(--stroke-hair) solid var(--rand-licht);
+    border-radius: var(--kaart-radius);
+    color: var(--tekst-secundair);
   }
   .tk-stamp[data-gehaald] {
-    border-color: var(--ink);
+    border-color: var(--inkt);
     border-width: var(--stroke-active);
-    padding: calc(var(--card-padding) - 1px);
-    background: var(--surface);
-    color: var(--ink);
+    padding: calc(var(--kaart-padding) - 1px);
+    background: var(--papier);
+    color: var(--inkt);
   }
   .tk-stamp:not([data-gehaald]) svg {
     opacity: 0.4;
@@ -1011,34 +792,34 @@
     align-items: center;
     justify-content: center;
     gap: 2px;
-    min-width: var(--touch-min);
-    min-height: var(--touch);
+    min-width: var(--raak);
+    min-height: var(--knop-hoogte);
     padding: 4px 8px;
-    border: var(--stroke-hair) solid var(--line);
-    border-radius: var(--radius-field);
-    background: var(--paper);
+    border: var(--stroke-hair) solid var(--rand-licht);
+    border-radius: var(--radius-chip);
+    background: var(--kaart);
     /* Secondary ink and not ink-3: this is text on a control a child can
      * press, so it clears 4.5:1 like every other line in the product. What
      * says "not yet" is the hairline rule and the empty rosette, not a
      * lightness a reader cannot make out. */
-    color: var(--ink-2);
-    font-size: var(--type-label);
-    line-height: var(--type-label-lh);
+    color: var(--tekst-secundair);
+    font-size: var(--type-knop);
+    line-height: var(--type-knop-lh);
     font-weight: 600;
     font-variant-numeric: tabular-nums;
     cursor: pointer;
   }
   .tk-diploma:hover {
-    background: var(--surface);
+    background: var(--vlak-hover);
   }
   /* Passed. Ink and a heavier rule — the difference is lightness and weight,
    * not a colour, so it survives grey and every kind of colour blindness. */
   .tk-diploma[data-gehaald] {
-    border-color: var(--ink);
+    border-color: var(--inkt);
     border-width: var(--stroke-active);
     padding: 3px 7px;
-    background: var(--surface);
-    color: var(--ink);
+    background: var(--papier);
+    color: var(--inkt);
   }
 
   /* ---- The twelve heroes, on the collection page (ADR-096) ---------------
@@ -1059,28 +840,28 @@
     align-items: center;
     justify-content: center;
     gap: 6px;
-    min-height: var(--touch-board);
+    min-height: var(--knop-hoogte);
     padding: 12px 8px;
-    border: var(--stroke-hair) solid var(--line);
-    border-radius: var(--radius-card);
-    background: var(--paper);
-    color: var(--ink-2);
+    border: var(--stroke-hair) solid var(--rand-licht);
+    border-radius: var(--radius-kaart);
+    background: var(--kaart);
+    color: var(--tekst-secundair);
     text-align: center;
   }
   button.tk-held-cel {
-    color: var(--ink);
+    color: var(--inkt);
     cursor: pointer;
   }
   button.tk-held-cel:not([aria-pressed='true']):hover {
-    background: var(--surface);
-    border-color: var(--ink-3);
+    background: var(--vlak-hover);
+    border-color: var(--tekst-tertiair);
   }
   /* The one worn: ink at double weight over the surface — a lightness and a
    * weight, not a hue, because every cell around it already wears one. */
   .tk-held-cel[aria-pressed='true'] {
     padding: 11px 7px;
-    border: var(--stroke-active) solid var(--ink);
-    background: var(--surface);
+    border: var(--stroke-active) solid var(--inkt);
+    background: var(--papier);
   }
   .tk-held-pakje {
     display: inline-flex;
@@ -1088,13 +869,13 @@
     justify-content: center;
     width: 48px;
     height: 48px;
-    border-radius: 30%;
-    background: var(--surface);
-    color: var(--ink-3);
+    border-radius: var(--radius-chip-groot);
+    background: var(--papier);
+    color: var(--tekst-tertiair);
   }
   .tk-held-naam {
-    font-size: var(--type-label);
-    line-height: var(--type-label-lh);
+    font-size: var(--type-knop);
+    line-height: var(--type-knop-lh);
     font-weight: 600;
   }
   /* The rules, written out in full. A chance a child cannot read about is a
@@ -1106,7 +887,7 @@
     margin: 0;
     padding-left: 1.25rem;
     list-style: disc;
-    color: var(--ink-2);
+    color: var(--tekst-secundair);
   }
 
   /* Stars towards the next chest: five, in gold because they are a reward, the
@@ -1145,7 +926,7 @@
     font-weight: 700;
     letter-spacing: -0.02em;
     font-variant-numeric: tabular-nums;
-    color: var(--ink);
+    color: var(--inkt);
   }
 
   /* ---- The clock, and the stage it stands on ----------------------------
@@ -1168,21 +949,21 @@
     margin-inline: auto;
   }
   .tk-klok-rand {
-    fill: var(--paper);
-    stroke: var(--ink);
+    fill: var(--kaart);
+    stroke: var(--inkt);
     stroke-width: 2.5;
   }
   /* The twelve marks. Secondary ink, because they are the ruler and the hands
    * are the reading — and they are what lets the numerals come off the small
    * faces without the hand pointing at nothing. */
   .tk-klok-streep {
-    stroke: var(--ink-2);
+    stroke: var(--tekst-secundair);
     stroke-width: 2;
     stroke-linecap: round;
   }
   .tk-klok-cijfer {
-    fill: var(--ink);
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    fill: var(--inkt);
+    font-family: var(--font-kop);
     font-size: 11px;
     font-weight: 600;
   }
@@ -1190,17 +971,17 @@
    * tells the two hands apart — and the mistake the distractors are built
    * from when they cannot (`klokDistractors`). */
   .tk-klok-uurwijzer {
-    stroke: var(--ink);
+    stroke: var(--inkt);
     stroke-width: 5;
     stroke-linecap: round;
   }
   .tk-klok-minuutwijzer {
-    stroke: var(--ink);
+    stroke: var(--inkt);
     stroke-width: 3;
     stroke-linecap: round;
   }
   .tk-klok-as {
-    fill: var(--ink);
+    fill: var(--inkt);
   }
 
   /* Four faces to choose between, on the mode that asks the other way round.
@@ -1217,14 +998,14 @@
   .tk-klok-optie {
     display: block;
     padding: 8px;
-    border: var(--stroke-hair) solid var(--line-strong);
-    border-radius: var(--radius-card);
-    background: var(--paper);
+    border: var(--stroke-hair) solid var(--rand-bediening);
+    border-radius: var(--radius-kaart);
+    background: var(--kaart);
     cursor: pointer;
   }
   .tk-klok-optie:hover {
-    background: var(--surface);
-    border-color: var(--ink-3);
+    background: var(--vlak-hover);
+    border-color: var(--tekst-tertiair);
   }
   .tk-klok-optie .tk-klok {
     max-width: 8rem;
@@ -1242,10 +1023,10 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    min-height: var(--touch);
+    min-height: var(--knop-hoogte);
     padding: 8px 12px;
-    border: var(--stroke-hair) solid var(--line-strong);
-    border-radius: var(--radius-field);
+    border: var(--stroke-hair) solid var(--rand-licht);
+    border-radius: var(--radius-chip);
     font-weight: 600;
   }
   .tk-klok-gemist .tk-klok {
@@ -1270,7 +1051,7 @@
   .tk-vlag img {
     display: block;
     height: auto;
-    filter: drop-shadow(0 0 1px var(--ink-3));
+    filter: drop-shadow(0 0 1px var(--tekst-tertiair));
   }
   .tk-vlag-podium {
     width: 100%;
@@ -1306,16 +1087,16 @@
   }
   .tk-vlag-optie {
     display: block;
-    min-height: var(--touch);
+    min-height: var(--knop-hoogte);
     padding: 12px;
-    border: var(--stroke-hair) solid var(--line-strong);
-    border-radius: var(--radius-card);
-    background: var(--paper);
+    border: var(--stroke-hair) solid var(--rand-bediening);
+    border-radius: var(--radius-kaart);
+    background: var(--kaart);
     cursor: pointer;
   }
   .tk-vlag-optie:hover {
-    background: var(--surface);
-    border-color: var(--ink-3);
+    background: var(--vlak-hover);
+    border-color: var(--tekst-tertiair);
   }
 
   /* The flags still to practise, shown as well as named. */
@@ -1328,10 +1109,10 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    min-height: var(--touch);
+    min-height: var(--knop-hoogte);
     padding: 8px 12px;
-    border: var(--stroke-hair) solid var(--line-strong);
-    border-radius: var(--radius-field);
+    border: var(--stroke-hair) solid var(--rand-licht);
+    border-radius: var(--radius-chip);
     font-weight: 600;
   }
   .tk-vlag-gemist .tk-vlag {
@@ -1372,21 +1153,21 @@
   .tk-option {
     display: flex;
     align-items: center;
-    min-height: var(--touch);
+    min-height: var(--knop-hoogte);
     padding: 12px 20px;
-    border: var(--stroke-hair) solid var(--line-strong);
-    border-radius: var(--radius-field);
-    background: var(--paper);
-    color: var(--ink);
-    font-size: var(--type-body);
-    line-height: var(--type-body-lh);
+    border: var(--stroke-hair) solid var(--rand-bediening);
+    border-radius: var(--radius-chip);
+    background: var(--kaart);
+    color: var(--inkt);
+    font-size: var(--type-knop);
+    line-height: var(--type-knop-lh);
     font-weight: 600;
     text-align: left;
     cursor: pointer;
   }
   .tk-option:hover {
-    background: var(--surface);
-    border-color: var(--ink-3);
+    background: var(--vlak-hover);
+    border-color: var(--tekst-tertiair);
   }
 
   /* ---- Chip and pill ---------------------------------------------------
@@ -1400,32 +1181,32 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    min-height: var(--touch-min);
+    min-height: var(--raak);
     padding: 0 16px;
-    border-radius: var(--radius-full);
-    border: var(--stroke-hair) solid var(--line-strong);
-    background: var(--paper);
-    font-size: var(--type-label);
-    line-height: var(--type-label-lh);
+    border-radius: var(--radius-pil);
+    border: var(--stroke-hair) solid var(--rand-bediening);
+    background: var(--kaart);
+    font-size: var(--type-knop);
+    line-height: var(--type-knop-lh);
     font-weight: 600;
-    color: var(--ink);
+    color: var(--inkt);
     cursor: pointer;
   }
   .tk-chip:hover,
   .tk-pill:hover {
-    background: var(--surface);
+    background: var(--vlak-hover);
   }
   .tk-chip[aria-pressed='true'],
   .tk-pill[aria-pressed='true'] {
-    background: var(--ink);
-    color: var(--paper);
-    border-color: var(--ink);
+    background: var(--inkt);
+    color: var(--kaart);
+    border-color: var(--inkt);
   }
   .tk-chip:disabled,
   .tk-pill:disabled {
     background: transparent;
-    color: var(--ink-3);
-    border-color: var(--line);
+    color: var(--tekst-tertiair);
+    border-color: var(--rand-licht);
     cursor: not-allowed;
   }
 
@@ -1441,17 +1222,17 @@
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    font-size: var(--type-small);
-    line-height: var(--type-small-lh);
+    font-size: var(--type-bijschrift);
+    line-height: var(--type-bijschrift-lh);
     font-weight: 600;
-    color: var(--ink-2);
+    color: var(--tekst-secundair);
     white-space: nowrap;
   }
   /* "Onthoud je" is not the same as "goed". Green is an answer state and may
    * never mean a status, so a remembered item reads in ink and is told apart
    * by its dot and its word. */
   .tk-status-remembered {
-    color: var(--ink);
+    color: var(--inkt);
   }
 
   /* ---- Input -----------------------------------------------------------
@@ -1460,30 +1241,30 @@
    * not turn green because you are typing in it.
    */
   .tk-input {
-    min-height: var(--control-height);
+    min-height: var(--knop-hoogte);
     width: 100%;
     padding: 12px 16px;
-    border: var(--stroke-hair) solid var(--line-strong);
-    border-radius: var(--radius-field);
-    background: var(--paper);
-    color: var(--ink);
+    border: var(--stroke-hair) solid var(--rand-bediening);
+    border-radius: var(--radius-kaart);
+    background: var(--kaart);
+    color: var(--inkt);
     font: inherit;
-    font-size: var(--type-body);
-    line-height: var(--type-body-lh);
+    font-size: var(--type-lopend);
+    line-height: var(--type-lopend-lh);
   }
   .tk-input:hover {
-    border-color: var(--ink-3);
+    border-color: var(--tekst-tertiair);
   }
   .tk-input:disabled {
-    background: var(--sunken);
-    color: var(--ink-3);
-    border-color: var(--line);
+    background: var(--balk-leeg);
+    color: var(--tekst-tertiair);
+    border-color: var(--rand-licht);
     cursor: not-allowed;
   }
   /* aria-invalid rather than a class: the thing that makes a field wrong for a
    * screen reader is the same thing that makes it wrong to look at. */
   .tk-input[aria-invalid='true'] {
-    border-color: var(--bad);
+    border-color: var(--fout);
     border-width: var(--stroke-active);
   }
 
@@ -1495,21 +1276,21 @@
   .tk-table {
     width: 100%;
     border-collapse: collapse;
-    border-radius: var(--radius-flat);
+    border-radius: 0;
   }
   .tk-table th {
     padding: 12px 16px;
-    background: var(--surface);
-    border-bottom: var(--stroke-hair) solid var(--line-strong);
-    font-size: var(--type-small);
-    line-height: var(--type-small-lh);
+    background: var(--papier);
+    border-bottom: var(--stroke-hair) solid var(--rand-sterk);
+    font-size: var(--type-bijschrift);
+    line-height: var(--type-bijschrift-lh);
     font-weight: 600;
-    color: var(--ink-2);
+    color: var(--tekst-secundair);
     text-align: left;
   }
   .tk-table td {
     padding: 12px 16px;
-    border-bottom: var(--stroke-hair) solid var(--line);
+    border-bottom: var(--stroke-hair) solid var(--rand-licht);
   }
   .tk-table th.tk-num,
   .tk-table td.tk-num {
@@ -1531,8 +1312,8 @@
     display: block;
     flex: 1;
     height: 8px;
-    border-radius: var(--radius-full);
-    background: var(--sunken);
+    border-radius: var(--radius-pil);
+    background: var(--balk-leeg);
     overflow: hidden;
   }
   /* Displayed, and said out loud. Both of these are spans so that the bar is
@@ -1542,7 +1323,7 @@
   .tk-progress-fill {
     display: block;
     height: 100%;
-    border-radius: var(--radius-full);
+    border-radius: var(--radius-pil);
     background: var(--accent);
   }
 
@@ -1561,26 +1342,26 @@
   .tk-home {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: 20px;
+    gap: 24px;
     width: 100%;
     /* The design's own measure: a monitor wider than the design is capped, and
      * nothing narrower notices. */
     max-width: 1400px;
     margin: 0 auto;
-    padding: 16px;
+    padding: var(--padding-scherm);
   }
   .tk-page-main,
   .tk-home-main {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 32px;
     min-width: 0;
   }
   /* What `main` stands on: the ground, under the cards and the column. The
    * app bar, the rail, the menu and the tab bar keep paper — they are the
    * frame, and the frame is not part of the page. */
   .tk-grond {
-    background: var(--grond);
+    background: var(--papier);
   }
   .tk-home-aside {
     display: flex;
@@ -1592,11 +1373,10 @@
     .tk-page,
     .tk-home {
       gap: 24px;
-      padding: 28px 24px;
     }
     .tk-page-main,
     .tk-home-main {
-      gap: 32px;
+      gap: 48px;
     }
   }
   @media (min-width: 1200px) {
@@ -1607,32 +1387,20 @@
       grid-template-columns: minmax(0, 1fr) 344px;
       align-items: start;
       gap: 48px;
-      padding: 48px;
     }
     .tk-page-main,
     .tk-home-main {
-      gap: 40px;
+      gap: var(--gap-sectie);
     }
   }
 
-  /* The heading a page opens with, at the handoff's three sizes: 26 on a
-   * phone, 32 on a tablet, and §C's h1 from 1200. In rem, so a reader's own
-   * text size still reaches it (ADR-033). */
+  /* The heading a page opens with: the handoff's paginakop, which steps down on
+   * a phone by itself (the tokens). In rem, so a reader's own text size still
+   * reaches it (ADR-033). */
   .tk-titel {
-    font-size: 1.625rem;
-    line-height: 2.125rem;
-  }
-  @media (min-width: 768px) {
-    .tk-titel {
-      font-size: 2rem;
-      line-height: 2.5rem;
-    }
-  }
-  @media (min-width: 1200px) {
-    .tk-titel {
-      font-size: var(--type-h1);
-      line-height: var(--type-h1-lh);
-    }
+    font-size: var(--type-paginakop);
+    line-height: var(--type-paginakop-lh);
+    letter-spacing: var(--type-paginakop-ls);
   }
 
   .tk-home-kop {
@@ -1668,30 +1436,22 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    border: var(--stroke-hair) solid var(--line);
-    border-radius: var(--radius-card);
-    background: var(--paper);
+    border: var(--stroke-hair) solid var(--rand-licht);
+    border-radius: var(--kaart-radius);
+    background: var(--kaart);
   }
   .tk-blok-kop {
-    padding: 10px 14px;
-    background: var(--surface);
-    border-bottom: var(--stroke-hair) solid var(--line);
-    font-weight: 500;
+    padding: 12px var(--kaart-padding);
+    background: var(--papier);
+    border-bottom: var(--stroke-hair) solid var(--rand-licht);
+    font-weight: 600;
   }
   .tk-blok-body {
     display: flex;
     flex: 1;
     flex-direction: column;
     gap: 12px;
-    padding: 14px;
-  }
-  @media (min-width: 1200px) {
-    .tk-blok-kop {
-      padding: 12px 20px;
-    }
-    .tk-blok-body {
-      padding: 20px;
-    }
+    padding: var(--kaart-padding);
   }
   /* A block still reading what goes in it: its card at roughly the height of
    * what arrives, so the page under it does not move when it does. */
@@ -1705,26 +1465,26 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    min-height: var(--touch-min);
+    min-height: var(--raak);
     padding: 0 16px;
-    border: var(--stroke-hair) solid var(--line-strong);
-    border-radius: var(--radius-control);
-    background: var(--paper);
-    color: var(--ink);
-    font-size: 0.9375rem; /* 15px */
-    line-height: 1.25rem;
+    border: var(--stroke-hair) solid var(--rand-bediening);
+    border-radius: var(--radius-kaart);
+    background: var(--kaart);
+    color: var(--inkt);
+    font-size: var(--type-knop);
+    line-height: var(--type-knop-lh);
     font-weight: 600;
     text-align: left;
     cursor: pointer;
   }
   .tk-blok-knop:hover {
-    background: var(--surface);
+    background: var(--vlak-hover);
   }
-  /* A line that helps, at the handoff's 15: under a bar, beside a plate. */
+  /* A line that helps, as a caption: under a bar, beside a plate. */
   .tk-hulp {
-    font-size: 0.9375rem;
-    line-height: 1.25rem;
-    color: var(--ink-2);
+    font-size: var(--type-bijschrift);
+    line-height: var(--type-bijschrift-lh);
+    color: var(--tekst-secundair);
   }
 
   /* ---- The plate ---------------------------------------------------------
@@ -1740,9 +1500,9 @@
     flex: none;
     width: 40px;
     height: 40px;
-    border-radius: var(--radius-plaat);
-    background: var(--accent-tint);
-    color: var(--accent-text);
+    border-radius: var(--radius-chip);
+    background: var(--module-tint);
+    color: var(--module-tekst);
   }
   .tk-plaat-groot {
     width: 44px;
@@ -1755,12 +1515,12 @@
   .tk-plaat-klein {
     width: 36px;
     height: 36px;
-    border-radius: var(--radius-klein);
+    border-radius: var(--radius-chip-groot);
   }
   /* A plate that is about no module: "kies een vak", a test with no subject. */
   .tk-plaat-neutraal {
-    background: var(--surface);
-    color: var(--ink-2);
+    background: var(--papier);
+    color: var(--tekst-secundair);
   }
 
   /* ---- A row on the front door (ADR-094) ---------------------------------
@@ -1779,9 +1539,9 @@
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    min-height: var(--touch-min);
+    min-height: var(--raak);
     padding-bottom: 10px;
-    border-bottom: var(--stroke-hair) solid var(--line);
+    border-bottom: var(--stroke-hair) solid var(--rand-licht);
   }
   .tk-rij-knoppen {
     display: none;
@@ -1799,22 +1559,21 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: var(--touch-min);
-    height: var(--touch-min);
-    border: 0;
-    border-radius: var(--radius-full);
-    box-shadow: inset 0 0 0 var(--stroke-hair) var(--line-strong);
-    background: var(--paper);
-    color: var(--ink);
+    width: var(--raak);
+    height: var(--raak);
+    border-radius: var(--radius-pil);
+    border: var(--stroke-hair) solid var(--rand-bediening);
+    background: var(--kaart);
+    color: var(--inkt);
     cursor: pointer;
   }
   .tk-rij-knop:hover:not(:disabled) {
-    background: var(--surface);
+    background: var(--vlak-hover);
   }
   /* Off at the end of the row: it recedes rather than disappearing, so the
    * pair stays a pair and the heading does not change width. */
   .tk-rij-knop:disabled {
-    color: var(--ink-3);
+    color: var(--tekst-tertiair);
     cursor: default;
   }
   /* Positioned, so it is the containing block of everything absolute inside
@@ -1859,11 +1618,11 @@
     align-items: flex-start;
     gap: 12px;
     width: 264px;
-    padding: 20px;
-    border: var(--stroke-hair) solid var(--line);
-    border-radius: var(--radius-card);
-    background: var(--paper);
-    color: var(--ink);
+    padding: var(--kaart-padding);
+    border: var(--stroke-hair) solid var(--rand-licht);
+    border-radius: var(--kaart-radius);
+    background: var(--kaart);
+    color: var(--inkt);
     text-align: left;
     scroll-snap-align: start;
     cursor: pointer;
@@ -1876,34 +1635,33 @@
   /* Hover in ink, not in the module's colour. The card is a door into one
    * exercise, and the plate already says which module it is behind. */
   .tk-kaart:hover {
-    border-color: var(--ink-3);
+    border-color: var(--tekst-tertiair);
   }
   .tk-kaart-titel {
-    font-family: 'Space Grotesk', system-ui, sans-serif;
-    font-size: var(--type-h3);
-    line-height: var(--type-h3-lh);
-    letter-spacing: -0.02em;
+    font-family: var(--font-kop);
+    font-size: var(--type-kaartkop);
+    line-height: var(--type-kaartkop-lh);
     font-weight: 600;
   }
   /* Room for two lines whether or not the name needs them, so a row of
    * cards has its rules at one height. */
   .tk-kaart-titel-twee {
-    min-height: calc(2 * var(--type-h3-lh));
+    min-height: calc(2 * var(--type-kaartkop-lh));
   }
   .tk-kaart-regel {
-    font-size: var(--type-label);
-    line-height: var(--type-label-lh);
-    color: var(--ink-2);
+    font-size: var(--type-lopend);
+    line-height: var(--type-lopend-lh);
+    color: var(--tekst-secundair);
   }
   .tk-kaart-voet {
     align-self: stretch;
     margin-top: auto;
     padding-top: 10px;
-    border-top: var(--stroke-hair) solid var(--line);
-    font-size: var(--type-label);
-    line-height: var(--type-label-lh);
+    border-top: var(--stroke-hair) solid var(--rand-licht);
+    font-size: var(--type-bijschrift);
+    line-height: var(--type-bijschrift-lh);
     font-variant-numeric: tabular-nums;
-    color: var(--ink-2);
+    color: var(--tekst-secundair);
   }
   /* "Verder oefenen": a module with its bar, narrower than the exercise cards
    * above it because it says less. The bar's track is the module's tint. */
@@ -1924,11 +1682,11 @@
    * legible to a child who cannot tell two greys apart. */
   .tk-kaart[data-soon] {
     border-style: dashed;
-    border-color: var(--line-strong);
+    border-color: var(--rand-sterk);
   }
   .tk-kaart[data-soon] .tk-plaat {
-    background: var(--surface);
-    color: var(--ink-2);
+    background: var(--papier);
+    color: var(--tekst-secundair);
   }
 
   /* ---- The tests ----------------------------------------------------------
@@ -1951,28 +1709,28 @@
     padding: 8px 0;
   }
   .tk-toets + .tk-toets {
-    border-top: var(--stroke-hair) solid var(--line);
+    border-top: var(--stroke-hair) solid var(--rand-licht);
   }
   .tk-toets-wanneer {
-    font-size: var(--type-label);
-    line-height: var(--type-label-lh);
+    font-size: var(--type-knop);
+    line-height: var(--type-knop-lh);
     font-weight: 600;
   }
   .tk-toets-weg {
-    min-height: var(--touch-min);
+    min-height: var(--raak);
     margin-left: auto;
     padding: 0 4px;
     border: 0;
     background: transparent;
-    color: var(--ink-2);
-    font-size: 0.9375rem;
-    line-height: 1.25rem;
+    color: var(--tekst-secundair);
+    font-size: var(--type-bijschrift);
+    line-height: var(--type-bijschrift-lh);
     text-decoration: underline;
     text-underline-offset: 3px;
     cursor: pointer;
   }
   .tk-toets-weg:hover {
-    color: var(--ink);
+    color: var(--inkt);
   }
   /* Which subject, as the module's mark and name in its tint. */
   .tk-vakbadge {
@@ -1980,11 +1738,11 @@
     align-items: center;
     gap: 6px;
     padding: 4px 10px;
-    border-radius: var(--radius-full);
-    background: var(--accent-tint);
-    color: var(--accent-text);
-    font-size: 0.9375rem;
-    line-height: 1.25rem;
+    border-radius: var(--radius-pil);
+    background: var(--module-tint);
+    color: var(--module-tekst);
+    font-size: var(--type-bijschrift);
+    line-height: var(--type-bijschrift-lh);
     font-weight: 600;
   }
   /* The block closed, below 1200: only the dates, and the whole of it one
@@ -1995,11 +1753,11 @@
     align-items: center;
     gap: 12px 20px;
     width: 100%;
-    min-height: var(--touch-min);
+    min-height: var(--raak);
     padding: 0;
     border: 0;
     background: transparent;
-    color: var(--ink);
+    color: var(--inkt);
     text-align: left;
     cursor: pointer;
   }
@@ -2007,8 +1765,8 @@
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    font-size: var(--type-label);
-    line-height: var(--type-label-lh);
+    font-size: var(--type-knop);
+    line-height: var(--type-knop-lh);
     font-weight: 600;
   }
 
@@ -2018,32 +1776,26 @@
    * way to the collection.
    */
   .tk-niveau {
-    font-family: 'Space Grotesk', system-ui, sans-serif;
-    font-size: 1.75rem; /* 28px */
-    line-height: 2.25rem;
-    letter-spacing: -0.02em;
+    font-family: var(--font-kop);
+    font-size: var(--type-sectiekop);
+    line-height: var(--type-sectiekop-lh);
+    letter-spacing: var(--type-sectiekop-ls);
     font-weight: 700;
   }
   .tk-niveau-klein {
-    font-size: 1.25rem; /* 20px */
-    line-height: 1.75rem;
+    font-size: var(--type-kaartkop);
+    line-height: var(--type-kaartkop-lh);
   }
-  /* The reeks, in its deep tone — which is text, and measured as text: every
-   * deep tone clears 5.7:1 on paper (contrast.test.ts). Not in the dark theme,
-   * where a deep tone on the dark paper would not, so there it is the
-   * secondary ink. */
+  /* The reeks, in its deep tone — which is text, and measured as text on a
+   * card (contrast.test.ts). */
   .tk-reeksnaam {
-    font-family: 'IBM Plex Mono', ui-monospace, monospace;
-    font-size: 11px;
-    letter-spacing: 0.08em;
+    font-family: var(--font-tekst);
+    font-size: var(--type-vlaklabel);
+    line-height: var(--type-vlaklabel-lh);
+    letter-spacing: var(--type-vlaklabel-ls);
     text-transform: uppercase;
-    font-weight: 500;
+    font-weight: var(--type-vlaklabel-weight);
     color: var(--held-diep);
-  }
-  @media (prefers-color-scheme: dark) {
-    .tk-reeksnaam {
-      color: var(--ink-2);
-    }
   }
   .tk-reeksbalk .tk-progress-rail {
     background: var(--held-zacht);
@@ -2059,11 +1811,11 @@
     align-items: center;
     gap: 14px;
     width: 100%;
-    min-height: var(--touch-min);
+    min-height: var(--raak);
     padding: 0;
     border: 0;
     background: transparent;
-    color: var(--ink);
+    color: var(--inkt);
     text-align: left;
     cursor: pointer;
   }
@@ -2079,22 +1831,21 @@
     place-items: center;
     width: 64px;
     height: 64px;
-    border-radius: var(--radius-full);
-    background: conic-gradient(var(--ink) 0 var(--vul, 0%), var(--sunken) var(--vul, 0%));
+    border-radius: var(--radius-pil);
+    background: conic-gradient(var(--inkt) 0 var(--vul, 0%), var(--balk-leeg) var(--vul, 0%));
   }
   .tk-donut::after {
     content: '';
     width: 44px;
     height: 44px;
-    border-radius: var(--radius-full);
-    background: var(--paper);
+    border-radius: var(--radius-pil);
+    background: var(--kaart);
   }
   .tk-procent {
-    font-family: 'Space Grotesk', system-ui, sans-serif;
-    font-size: 2.5rem;
-    line-height: 3rem;
-    letter-spacing: -0.02em;
-    font-weight: 600;
+    font-family: var(--font-kop);
+    font-size: var(--type-getal);
+    line-height: var(--type-getal-lh);
+    font-weight: var(--type-getal-weight);
     font-variant-numeric: tabular-nums;
   }
 
@@ -2115,17 +1866,17 @@
     align-items: center;
     gap: 12px;
     width: 100%;
-    min-height: var(--touch-min);
+    min-height: var(--raak);
     padding: 8px;
     border: 0;
-    border-radius: var(--radius-klein);
+    border-radius: var(--radius-chip-groot);
     background: transparent;
-    color: var(--ink);
+    color: var(--inkt);
     text-align: left;
     cursor: pointer;
   }
   .tk-favoriet:hover {
-    background: var(--surface);
+    background: var(--vlak-hover);
   }
 
   /* ---- A hero on its plate ----------------------------------------------
@@ -2195,11 +1946,16 @@
   .tk-held-ringen[data-reeks='ultra'] .tk-held-beeld {
     clip-path: circle(44%);
   }
+  /* A hero with its rings is a reward, and the one thing in the product with a
+   * shadow: the handoff's, on the wrapper so it follows the clipped drawing. */
+  .tk-held-ringen {
+    filter: drop-shadow(var(--schaduw-beloning));
+  }
   /* The plate alone, enlarged until it fills the frame: 118 of the drawing's
    * radius of 160, inside the plate's own edge, so no ring and no paper. */
   .tk-held-klein {
     overflow: hidden;
-    border-radius: var(--radius-full);
+    border-radius: var(--radius-pil);
   }
   .tk-held-klein .tk-held-beeld {
     transform: scale(1.36);
@@ -2210,12 +1966,12 @@
   .tk-held-kist {
     position: absolute;
     inset: 11%;
-    border-radius: var(--radius-full);
+    border-radius: var(--radius-pil);
     background:
-      linear-gradient(var(--sunken), var(--sunken)) center / 16% 100% no-repeat,
-      linear-gradient(var(--sunken), var(--sunken)) center / 100% 16% no-repeat,
-      var(--surface);
-    box-shadow: inset 0 0 0 var(--stroke-hair) var(--line);
+      linear-gradient(var(--balk-leeg), var(--balk-leeg)) center / 16% 100% no-repeat,
+      linear-gradient(var(--balk-leeg), var(--balk-leeg)) center / 100% 16% no-repeat,
+      var(--papier);
+    border: var(--stroke-hair) solid var(--rand-licht);
   }
   .tk-held-klein .tk-held-kist {
     inset: 0;
@@ -2228,29 +1984,27 @@
    * the gold of the stars.
    */
   .tk-vg-naam {
-    font-family: 'Space Grotesk', system-ui, sans-serif;
-    font-size: 1.25rem; /* 20px */
-    line-height: 1.75rem;
-    letter-spacing: -0.01em;
+    font-family: var(--font-kop);
+    font-size: var(--type-kaartkop);
+    line-height: var(--type-kaartkop-lh);
     font-weight: 600;
   }
   .tk-vg-naam-groot {
-    font-size: 1.5rem; /* 24px */
-    line-height: 2rem;
+    font-size: var(--type-sectiekop);
+    line-height: var(--type-sectiekop-lh);
   }
   .tk-vg-kist {
     display: flex;
     flex-direction: column;
     gap: 8px;
     padding: 12px 16px;
-    border-radius: var(--radius-klein);
-    background: var(--surface);
+    border-radius: var(--radius-chip-groot);
+    background: var(--papier);
   }
   .tk-vg-kistzin {
-    font-family: 'Space Grotesk', system-ui, sans-serif;
-    font-size: 1.25rem; /* 20px */
-    line-height: 1.75rem;
-    letter-spacing: -0.01em;
+    font-family: var(--font-kop);
+    font-size: var(--type-kaartkop);
+    line-height: var(--type-kaartkop-lh);
     font-weight: 600;
   }
   .tk-vg-niveau {
@@ -2315,22 +2069,22 @@
     gap: 16px;
     min-width: 0;
     padding: 16px;
-    border: var(--stroke-hair) solid var(--line);
-    border-radius: var(--radius-card);
-    background: var(--paper);
-    color: var(--ink);
+    border: var(--stroke-hair) solid var(--rand-licht);
+    border-radius: var(--radius-kaart);
+    background: var(--kaart);
+    color: var(--inkt);
     text-align: left;
   }
   button.tk-heldkaart {
     cursor: pointer;
   }
   button.tk-heldkaart:not([aria-pressed='true']):hover {
-    background: var(--surface);
-    border-color: var(--ink-3);
+    background: var(--vlak-hover);
+    border-color: var(--tekst-tertiair);
   }
   .tk-heldkaart[aria-pressed='true'] {
-    border-color: var(--ink);
-    background: var(--surface);
+    border-color: var(--inkt);
+    background: var(--papier);
   }
   .tk-heldkaart-tekst {
     display: flex;
@@ -2340,49 +2094,49 @@
     min-width: 0;
   }
   .tk-heldkaart-naam {
-    font-family: 'Space Grotesk', system-ui, sans-serif;
-    font-size: 1.25rem; /* 20px */
-    line-height: 1.75rem;
-    letter-spacing: -0.01em;
+    font-family: var(--font-kop);
+    font-size: var(--type-kaartkop);
+    line-height: var(--type-kaartkop-lh);
     font-weight: 600;
   }
   .tk-heldkaart-meta {
-    font-size: 0.875rem; /* 14px */
-    line-height: 1.25rem;
-    color: var(--ink-2);
+    font-size: var(--type-bijschrift);
+    line-height: var(--type-bijschrift-lh);
+    color: var(--tekst-secundair);
     font-variant-numeric: tabular-nums;
   }
   .tk-heldkaart-pil {
     margin-top: 4px;
     padding: 4px 8px;
-    border: var(--stroke-hair) solid var(--line-strong);
-    border-radius: var(--radius-full);
-    font-family: 'IBM Plex Mono', ui-monospace, monospace;
-    font-size: 10px;
-    line-height: 12px;
-    letter-spacing: 0.08em;
+    border: var(--stroke-hair) solid var(--rand-sterk);
+    border-radius: var(--radius-pil);
+    font-family: var(--font-tekst);
+    font-size: var(--type-vlaklabel);
+    line-height: var(--type-vlaklabel-lh);
+    letter-spacing: var(--type-vlaklabel-ls);
+    font-weight: var(--type-vlaklabel-weight);
     text-transform: uppercase;
-    color: var(--ink-2);
+    color: var(--tekst-secundair);
   }
   .tk-heldkaart[aria-pressed='true'] .tk-heldkaart-pil {
-    border-color: var(--ink);
-    background: var(--ink);
-    color: var(--paper);
+    border-color: var(--inkt);
+    background: var(--inkt);
+    color: var(--kaart);
   }
   .tk-heldkaart-kist .tk-heldkaart-naam {
-    font-size: 1.0625rem; /* 17px */
-    line-height: 1.5rem;
-    color: var(--ink-2);
+    font-size: var(--type-knop);
+    line-height: var(--type-knop-lh);
+    color: var(--tekst-secundair);
   }
   /* A card still reading: its parts drawn empty at their own heights. */
   .tk-leeg {
     display: block;
     flex: none;
-    border-radius: var(--radius-klein);
-    background: var(--surface);
+    border-radius: var(--radius-chip-groot);
+    background: var(--papier);
   }
   .tk-leeg-rond {
-    border-radius: var(--radius-full);
+    border-radius: var(--radius-pil);
   }
 
   /* ---- A module's own page (ADR-095) --------------------------------------
@@ -2400,13 +2154,14 @@
     align-self: flex-start;
     gap: 6px;
     padding: 6px 12px 6px 10px;
-    border-radius: var(--radius-full);
-    background: var(--accent-tint);
-    color: var(--accent-text);
-    font-family: 'IBM Plex Mono', ui-monospace, monospace;
-    font-size: 11px;
-    line-height: 16px;
-    letter-spacing: 0.08em;
+    border-radius: var(--radius-pil);
+    background: var(--module-tint);
+    color: var(--module-tekst);
+    font-family: var(--font-tekst);
+    font-size: var(--type-vlaklabel);
+    line-height: var(--type-vlaklabel-lh);
+    letter-spacing: var(--type-vlaklabel-ls);
+    font-weight: var(--type-vlaklabel-weight);
     text-transform: uppercase;
   }
 
@@ -2418,19 +2173,12 @@
   }
   .tk-stap {
     padding-bottom: 10px;
-    border-bottom: var(--stroke-hair) solid var(--line);
-    font-family: 'Space Grotesk', system-ui, sans-serif;
-    font-size: 1.25rem; /* 20px on a phone */
-    line-height: 1.75rem;
-    letter-spacing: -0.02em;
+    border-bottom: var(--stroke-hair) solid var(--rand-licht);
+    font-family: var(--font-kop);
+    font-size: var(--type-kaartkop);
+    line-height: var(--type-kaartkop-lh);
     font-weight: 600;
-    color: var(--ink);
-  }
-  @media (min-width: 768px) {
-    .tk-stap {
-      font-size: var(--type-h3);
-      line-height: var(--type-h3-lh);
-    }
+    color: var(--inkt);
   }
   /* The number in the module's text colour: the page's own order, told in the
    * module it belongs to. The question beside it stays ink. */
@@ -2453,14 +2201,14 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    min-height: var(--touch-min);
+    min-height: var(--raak);
     padding: 0 16px;
-    border: var(--stroke-hair) solid var(--line-strong);
-    border-radius: var(--radius-full);
-    background: var(--paper);
-    color: var(--ink);
-    font-size: var(--type-label);
-    line-height: var(--type-label-lh);
+    border: var(--stroke-hair) solid var(--rand-bediening);
+    border-radius: var(--radius-pil);
+    background: var(--kaart);
+    color: var(--inkt);
+    font-size: var(--type-knop);
+    line-height: var(--type-knop-lh);
     font-weight: 600;
     font-variant-numeric: tabular-nums;
     cursor: pointer;
@@ -2468,8 +2216,8 @@
   /* Hover is for the ones not chosen: a hover rule that outranked the chosen
    * one would let the pointer quietly un-say what the page is saying. */
   .tk-keuze:not(:disabled):not([aria-pressed='true']):hover {
-    background: var(--surface);
-    border-color: var(--ink-3);
+    background: var(--vlak-hover);
+    border-color: var(--tekst-tertiair);
   }
   .tk-keuze[aria-pressed='true'] {
     border-color: var(--accent-text);
@@ -2480,7 +2228,7 @@
    * what the front door draws for a module that is coming. */
   .tk-keuze[data-soon] {
     border-style: dashed;
-    color: var(--ink-2);
+    color: var(--tekst-secundair);
     cursor: not-allowed;
   }
   @media (max-width: 767px) {
@@ -2513,21 +2261,22 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    min-height: var(--touch);
+    min-height: var(--knop-hoogte);
     padding: 20px;
-    border: var(--stroke-hair) solid var(--line);
-    border-radius: var(--radius-card);
-    background: var(--paper);
-    color: var(--ink);
-    font-size: var(--type-body);
-    line-height: var(--type-body-lh);
+    border: var(--stroke-hair) solid var(--rand-licht);
+    border-radius: var(--radius-kaart);
+    background: var(--kaart);
+    color: var(--inkt);
+    font-family: var(--font-kop);
+    font-size: var(--type-knop);
+    line-height: var(--type-knop-lh);
     font-weight: 600;
     text-align: left;
     cursor: pointer;
   }
   .tk-tegel .tk-plaat {
-    background: var(--surface);
-    color: var(--ink);
+    background: var(--papier);
+    color: var(--inkt);
   }
   @media (min-width: 1200px) {
     .tk-tegel .tk-plaat {
@@ -2536,18 +2285,18 @@
     }
   }
   .tk-tegel:not([aria-pressed='true']):hover {
-    background: var(--surface);
-    border-color: var(--ink-3);
+    background: var(--vlak-hover);
+    border-color: var(--tekst-tertiair);
   }
   .tk-tegel:not([aria-pressed='true']):hover .tk-plaat {
-    background: var(--paper);
+    background: var(--kaart);
   }
   /* One pixel of padding goes back for the second pixel of rule, so nothing
    * beside a chosen tile moves. */
   .tk-tegel[aria-pressed='true'] {
     padding: 19px;
     border: var(--stroke-active) solid var(--accent);
-    background: var(--accent-soft);
+    background: var(--accent-tint);
   }
   .tk-tegel[aria-pressed='true'] .tk-plaat {
     background: var(--accent-tint);
@@ -2586,31 +2335,25 @@
     justify-content: center;
     gap: 6px;
     aspect-ratio: 1;
-    min-height: var(--touch-min);
-    border: var(--stroke-hair) solid var(--line);
-    border-radius: var(--radius-balk);
-    background: var(--paper);
-    color: var(--ink);
-    font-family: 'Space Grotesk', system-ui, sans-serif;
-    font-size: 1.5rem; /* 24px on a phone */
-    line-height: 1.75rem;
+    min-height: var(--raak);
+    border: var(--stroke-hair) solid var(--rand-licht);
+    border-radius: var(--radius-kaart);
+    background: var(--kaart);
+    color: var(--inkt);
+    font-family: var(--font-kop);
+    font-size: var(--type-sectiekop);
+    line-height: var(--type-sectiekop-lh);
     font-weight: 700;
     font-variant-numeric: tabular-nums;
     cursor: pointer;
   }
-  @media (min-width: 768px) {
-    .tk-tafel {
-      font-size: 2.125rem; /* 34px */
-      line-height: 2.375rem;
-    }
-  }
   .tk-tafel:not([aria-pressed='true']):hover {
-    background: var(--surface);
-    border-color: var(--ink-3);
+    background: var(--vlak-hover);
+    border-color: var(--tekst-tertiair);
   }
   .tk-tafel[aria-pressed='true'] {
     border: var(--stroke-active) solid var(--accent);
-    background: var(--accent-soft);
+    background: var(--accent-tint);
     color: var(--accent-text);
   }
   /* The cijfer, after a toetsstand and nowhere else. The number gets the score
@@ -2628,7 +2371,7 @@
     gap: 4px 12px;
   }
   .tk-cijfer-why {
-    color: var(--ink-2);
+    color: var(--tekst-secundair);
     flex-basis: 100%;
   }
 
@@ -2644,14 +2387,14 @@
     align-items: center;
     flex: none;
     padding: 4px 10px;
-    border-radius: var(--radius-flat);
-    font-size: var(--type-label);
-    line-height: var(--type-label-lh);
+    border-radius: var(--radius-chip);
+    font-size: var(--type-knop);
+    line-height: var(--type-knop-lh);
     font-weight: 600;
   }
   .tk-badge {
-    background: var(--ink);
-    color: var(--paper);
+    background: var(--inkt);
+    color: var(--kaart);
   }
   /* The quiet one: which subject the test is for. Ink on paper with a rule
    * round it, and not the module's accent — §B allows an accent on the
@@ -2660,9 +2403,9 @@
    * §E does let carry a module. */
   .tk-badge-outline {
     gap: 8px;
-    background: var(--paper);
-    color: var(--ink);
-    box-shadow: inset 0 0 0 var(--stroke-hair) var(--line-strong);
+    background: var(--kaart);
+    color: var(--inkt);
+    border: var(--stroke-hair) solid var(--rand-sterk);
   }
 
   /* ---- Module entrance -------------------------------------------------
@@ -2674,19 +2417,19 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    min-height: var(--control-height);
-    padding: var(--card-padding);
+    min-height: var(--knop-hoogte);
+    padding: var(--kaart-padding);
     border: var(--stroke-hair) solid var(--accent);
-    border-radius: var(--card-radius);
+    border-radius: var(--kaart-radius);
     background: var(--accent-tint);
-    color: var(--ink);
+    color: var(--inkt);
     cursor: pointer;
     text-align: left;
   }
   .tk-module-card:hover {
     border-width: var(--stroke-active);
     /* Compensate the border so nothing beside it moves. */
-    padding: calc(var(--card-padding) - 1px);
+    padding: calc(var(--kaart-padding) - 1px);
   }
   /* Which one is chosen. K2 had no answer to that at all: five cards in the
    * same tint with the same border, and the one the screen was going to start
@@ -2698,16 +2441,16 @@
    * a state on its own, and a chooser is exactly where breaking it costs most.
    */
   .tk-module-card[aria-pressed='true'] {
-    border-color: var(--ink);
+    border-color: var(--inkt);
     border-width: var(--stroke-active);
     border-left-width: 8px;
-    padding: calc(var(--card-padding) - 1px);
-    padding-left: calc(var(--card-padding) - 7px);
+    padding: calc(var(--kaart-padding) - 1px);
+    padding-left: calc(var(--kaart-padding) - 7px);
   }
   .tk-module-card:disabled {
-    background: var(--surface);
-    border-color: var(--line);
-    color: var(--ink-3);
+    background: var(--papier);
+    border-color: var(--rand-licht);
+    color: var(--tekst-tertiair);
     cursor: not-allowed;
   }
 
@@ -2721,11 +2464,10 @@
     background: var(--scrim);
   }
   .tk-dialog {
-    background: var(--paper);
-    border-radius: var(--radius-card);
-    padding: var(--card-padding);
-    box-shadow: var(--shadow-2);
-    border: var(--stroke-hair) solid var(--line);
+    background: var(--kaart);
+    border-radius: var(--radius-kaart);
+    padding: var(--kaart-padding);
+    border: var(--stroke-hair) solid var(--rand-licht);
   }
   /* Bottom sheet: the same weight as a dialog, anchored to the thumb. It is
    * for a choice the child asked for, never for feedback on an answer — K4 is
@@ -2734,10 +2476,10 @@
   .tk-sheet {
     position: absolute;
     inset: auto 0 0 0;
-    background: var(--paper);
-    border-radius: var(--radius-card) var(--radius-card) 0 0;
-    padding: var(--card-padding);
-    box-shadow: var(--shadow-2);
+    background: var(--kaart);
+    border-radius: var(--radius-kaart) var(--radius-kaart) 0 0;
+    padding: var(--kaart-padding);
+    border-top: var(--stroke-hair) solid var(--rand-licht);
   }
 
   /* ---- Frame -----------------------------------------------------------
@@ -2769,8 +2511,8 @@
     height: 56px;
     /* 16 on a phone, which is the margin §D gives that size. */
     padding: 0 16px;
-    background: var(--paper);
-    border-bottom: var(--stroke-hair) solid var(--line);
+    background: var(--kaart);
+    border-bottom: var(--stroke-hair) solid var(--rand-licht);
   }
   @media (min-width: 768px) {
     .tk-appbar {
@@ -2792,15 +2534,15 @@
     display: inline-flex;
     align-items: center;
     flex: none;
-    min-height: var(--touch-min);
+    min-height: var(--raak);
     padding: 0 4px;
     border: 0;
-    border-radius: var(--radius-control);
+    border-radius: var(--radius-kaart);
     background: transparent;
     cursor: pointer;
   }
   .tk-brand:hover {
-    background: var(--surface);
+    background: var(--vlak-hover);
   }
 
   /* The destinations, standing in the app bar from 1200. At a reader's 200%
@@ -2819,27 +2561,27 @@
   .tk-navbar-item {
     display: inline-flex;
     align-items: center;
-    min-height: var(--touch-min);
+    min-height: var(--raak);
     padding: 0 16px;
     border: 0;
-    border-radius: var(--radius-control);
+    border-radius: var(--radius-kaart);
     background: transparent;
-    color: var(--ink-2);
-    font-size: var(--type-label);
-    line-height: var(--type-label-lh);
+    color: var(--tekst-secundair);
+    font-size: var(--type-knop);
+    line-height: var(--type-knop-lh);
     font-weight: 600;
     white-space: nowrap;
     cursor: pointer;
   }
   .tk-navbar-item:hover {
-    background: var(--surface);
-    color: var(--ink);
+    background: var(--vlak-hover);
+    color: var(--inkt);
   }
   /* Where you are: a surface under the word and the word in ink at a heavier
    * weight. A lightness and a weight, so no hue carries it (§A). */
   .tk-navbar-item[aria-current='page'] {
-    background: var(--surface);
-    color: var(--ink);
+    background: var(--papier);
+    color: var(--inkt);
     font-weight: 700;
   }
 
@@ -2851,9 +2593,9 @@
     flex: none;
     gap: 8px;
     padding: 8px 14px;
-    border-radius: var(--radius-full);
-    background: var(--surface);
-    color: var(--ink-2);
+    border-radius: var(--radius-pil);
+    background: var(--papier);
+    color: var(--tekst-secundair);
   }
   @media (max-width: 767px) {
     .tk-streak {
@@ -2874,19 +2616,19 @@
     align-items: center;
     gap: 8px;
     min-width: 0;
-    min-height: var(--touch-min);
+    min-height: var(--raak);
     padding: 0 16px 0 6px;
-    border: var(--stroke-hair) solid var(--line-strong);
-    border-radius: var(--radius-full);
-    background: var(--paper);
-    color: var(--ink);
-    font-size: var(--type-label);
-    line-height: var(--type-label-lh);
+    border: var(--stroke-hair) solid var(--rand-bediening);
+    border-radius: var(--radius-pil);
+    background: var(--kaart);
+    color: var(--inkt);
+    font-size: var(--type-knop);
+    line-height: var(--type-knop-lh);
     font-weight: 600;
     cursor: pointer;
   }
   .tk-profiel:hover {
-    background: var(--surface);
+    background: var(--vlak-hover);
   }
   .tk-profiel .tk-held {
     width: 30px;
@@ -2901,7 +2643,7 @@
   @media (max-width: 767px) {
     .tk-profiel {
       justify-content: center;
-      min-width: var(--touch-min);
+      min-width: var(--raak);
       padding: 0;
       border: 0;
       background: transparent;
@@ -2930,8 +2672,8 @@
     gap: 6px;
     width: 96px;
     padding: 16px 8px;
-    background: var(--paper);
-    border-right: var(--stroke-hair) solid var(--line);
+    background: var(--kaart);
+    border-right: var(--stroke-hair) solid var(--rand-licht);
   }
   .tk-rail-item {
     display: flex;
@@ -2942,16 +2684,16 @@
     min-height: 72px;
     padding: 8px 4px;
     border: 0;
-    border-radius: var(--radius-card);
+    border-radius: var(--radius-kaart);
     background: transparent;
-    color: var(--ink-2);
-    font-size: 0.9375rem; /* 15px */
-    line-height: 1.25rem;
+    color: var(--tekst-secundair);
+    font-size: var(--type-bijschrift);
+    line-height: var(--type-bijschrift-lh);
     font-weight: 600;
     cursor: pointer;
   }
   .tk-rail-item:hover {
-    background: var(--surface);
+    background: var(--vlak-hover);
   }
   /* The module entrance is one of the things an accent may colour, and the
    * rail is where it does most of its work. The plate turns to paper on the
@@ -2961,7 +2703,7 @@
     color: var(--accent-text);
   }
   .tk-rail-item[aria-current='page'] .tk-plaat {
-    background: var(--paper);
+    background: var(--kaart);
   }
 
   /* ---- The menu the rail becomes below 1200 (ADR-093) --------------------
@@ -2975,41 +2717,40 @@
     align-items: center;
     gap: 12px;
     padding: 12px 16px;
-    border-bottom: var(--stroke-hair) solid var(--line);
+    border-bottom: var(--stroke-hair) solid var(--rand-licht);
   }
   .tk-vakmenu-knop {
     display: inline-flex;
     align-items: center;
     gap: 10px;
     min-width: 0;
-    min-height: 48px;
+    min-height: var(--raak);
     padding: 0 14px 0 8px;
-    border: 0;
-    border-radius: var(--radius-full);
-    box-shadow: inset 0 0 0 var(--stroke-hair) var(--line-strong);
-    background: var(--paper);
-    color: var(--ink);
-    font-size: var(--type-label);
-    line-height: var(--type-label-lh);
+    border-radius: var(--radius-pil);
+    border: var(--stroke-hair) solid var(--rand-bediening);
+    background: var(--kaart);
+    color: var(--inkt);
+    font-size: var(--type-knop);
+    line-height: var(--type-knop-lh);
     font-weight: 600;
     cursor: pointer;
   }
   .tk-vakmenu-knop:hover {
-    background: var(--surface);
+    background: var(--vlak-hover);
   }
   /* Open: the rule turns to ink, and the chevron turns over. */
   .tk-vakmenu-knop[aria-expanded='true'] {
-    box-shadow: inset 0 0 0 var(--stroke-hair) var(--ink);
+    border-color: var(--inkt);
   }
   .tk-vakmenu-knop .tk-plaat {
     width: 28px;
     height: 28px;
-    border-radius: var(--radius-klein);
+    border-radius: var(--radius-chip-groot);
   }
   .tk-vakmenu-paneel {
     padding: 10px 16px 14px;
-    background: var(--surface);
-    border-bottom: var(--stroke-hair) solid var(--line);
+    background: var(--papier);
+    border-bottom: var(--stroke-hair) solid var(--rand-licht);
   }
   @media (min-width: 768px) {
     .tk-vakmenu-rij {
@@ -3024,32 +2765,31 @@
     padding: 0;
     overflow: hidden;
     list-style: none;
-    border: var(--stroke-hair) solid var(--line-strong);
-    border-radius: var(--radius-card);
-    background: var(--paper);
-    box-shadow: var(--shadow-menu);
+    border: var(--stroke-hair) solid var(--rand-licht);
+    border-radius: var(--radius-kaart);
+    background: var(--kaart);
   }
   .tk-vakmenu-lijst li + li {
-    border-top: var(--stroke-hair) solid var(--line);
+    border-top: var(--stroke-hair) solid var(--rand-licht);
   }
   .tk-vakmenu-optie {
     display: flex;
     align-items: center;
     gap: 12px;
     width: 100%;
-    min-height: var(--touch);
+    min-height: var(--knop-hoogte);
     padding: 0 14px;
     border: 0;
     background: transparent;
-    color: var(--ink);
-    font-size: var(--type-label);
-    line-height: var(--type-label-lh);
+    color: var(--inkt);
+    font-size: var(--type-knop);
+    line-height: var(--type-knop-lh);
     font-weight: 600;
     text-align: left;
     cursor: pointer;
   }
   .tk-vakmenu-optie:hover {
-    background: var(--surface);
+    background: var(--vlak-hover);
   }
   /* Inside the card's own edge, because the card clips what stands outside
    * it and a focus ring that is cut off is not a focus ring. */
@@ -3062,7 +2802,7 @@
     font-weight: 700;
   }
   .tk-vakmenu-optie[aria-current='page'] .tk-plaat {
-    background: var(--paper);
+    background: var(--kaart);
   }
 
   /* ---- The tab bar, below 1200 ------------------------------------------
@@ -3074,8 +2814,8 @@
   .tk-tabbar {
     display: flex;
     align-items: stretch;
-    background: var(--paper);
-    border-top: var(--stroke-hair) solid var(--line);
+    background: var(--kaart);
+    border-top: var(--stroke-hair) solid var(--rand-licht);
   }
   .tk-tabbar-item {
     display: flex;
@@ -3087,25 +2827,25 @@
     min-height: 64px;
     padding: 6px 4px 8px;
     border: 0;
-    border-top: var(--stroke-answer) solid transparent;
+    border-top: var(--stroke-active) solid transparent;
     background: transparent;
-    color: var(--ink-2);
-    font-size: 0.8125rem; /* 13px */
-    line-height: 1.125rem;
+    color: var(--tekst-secundair);
+    font-size: var(--type-vlaklabel);
+    line-height: var(--type-vlaklabel-lh);
     font-weight: 600;
     cursor: pointer;
   }
   @media (min-width: 768px) {
     .tk-tabbar-item {
       min-height: 68px;
-      font-size: 0.9375rem; /* 15px */
-      line-height: 1.25rem;
+      font-size: var(--type-bijschrift);
+      line-height: var(--type-bijschrift-lh);
     }
   }
   .tk-tabbar-item[aria-current='page'] {
-    border-top-color: var(--ink);
-    background: var(--surface);
-    color: var(--ink);
+    border-top-color: var(--inkt);
+    background: var(--papier);
+    color: var(--inkt);
     font-weight: 700;
   }
 
@@ -3129,7 +2869,7 @@
     gap: 12px;
     flex: none;
     padding: 12px 16px;
-    border-bottom: var(--stroke-hair) solid var(--line);
+    border-bottom: var(--stroke-hair) solid var(--rand-licht);
   }
   @media (min-width: 768px) {
     .tk-round-bar {
@@ -3148,16 +2888,16 @@
     flex: none;
     align-items: center;
     justify-content: center;
-    width: var(--touch-min);
-    height: var(--touch-min);
-    border: var(--stroke-hair) solid var(--line-strong);
-    border-radius: var(--radius-card);
+    width: var(--raak);
+    height: var(--raak);
+    border: var(--stroke-hair) solid var(--rand-bediening);
+    border-radius: var(--radius-kaart);
     background: transparent;
-    color: var(--ink);
+    color: var(--inkt);
     cursor: pointer;
   }
   .tk-stop:hover {
-    background: var(--surface);
+    background: var(--vlak-hover);
   }
 
   /* Ten dots, which are the progress bar of §B — one of the three things a
@@ -3184,8 +2924,8 @@
   .tk-round-dot {
     width: 14px;
     height: 14px;
-    border-radius: var(--radius-full);
-    background: var(--sunken);
+    border-radius: var(--radius-pil);
+    background: var(--balk-leeg);
   }
   @media (min-width: 768px) {
     .tk-round-dot {
@@ -3204,7 +2944,7 @@
   }
   .tk-round-dot-now {
     background: transparent;
-    border: var(--stroke-answer) solid var(--accent);
+    border: var(--stroke-active) solid var(--accent);
   }
 
   /* ---- The two things that share the screen ---------------------------- */
@@ -3253,9 +2993,9 @@
     grid-area: question;
     margin: 16px;
     padding: 16px;
-    background: var(--paper);
-    border: var(--stroke-region) solid var(--line-strong);
-    border-radius: var(--radius-card);
+    background: var(--kaart);
+    border: var(--stroke-hair) solid var(--rand-licht);
+    border-radius: var(--radius-rondevlak);
   }
 
   /* Tablet upright: the bar goes above the canvas and the map takes the full
@@ -3265,10 +3005,10 @@
     .tk-round-question {
       margin: 0;
       padding: 24px;
-      background: var(--surface);
+      background: var(--kaart);
       border: 0;
-      border-bottom: var(--stroke-region) solid var(--line-strong);
-      border-radius: var(--radius-flat);
+      border-bottom: var(--stroke-hair) solid var(--rand-licht);
+      border-radius: 0;
     }
     .tk-round-map {
       padding: 24px;
@@ -3311,16 +3051,23 @@
    * the whole reason there are four states here rather than three. */
   .tk-shape {
     fill: var(--map-land);
-    stroke: var(--ink);
+    stroke: var(--map-grens);
     stroke-width: var(--stroke-region);
     cursor: pointer;
   }
   .tk-shape:hover {
-    fill: var(--sunken);
+    fill: var(--vlak-hover);
   }
+  /* Hover and focus give the same fill, and focus adds the handoff's ring: a
+   * dotted rule of 3 in the ink of the ground it stands on. */
   .tk-shape:focus {
     outline: none;
-    stroke-width: 4;
+  }
+  .tk-shape:focus-visible {
+    fill: var(--vlak-hover);
+    stroke: var(--inkt);
+    stroke-width: 3;
+    stroke-dasharray: 6 4;
   }
   /* The shape being asked about while a child types its name. The module accent
    * rather than green or red: it is a question, not a verdict, and reusing the
@@ -3337,8 +3084,8 @@
    * border, and a tick at 4.96:1 on the fill. That ratio is paper on good, so
    * the tick is paper rather than ink; the border is what stays ink. */
   .tk-shape-correct {
-    fill: var(--good);
-    stroke: var(--ink);
+    fill: var(--nadruk);
+    stroke: var(--inkt);
     stroke-width: var(--stroke-active);
   }
 
@@ -3348,14 +3095,14 @@
    * half-filled dot, which is the same half-filled dot that means "practised,
    * not yet certain" on K9. */
   .tk-shape-near {
-    fill: var(--paper);
-    stroke: var(--ink);
+    fill: var(--kaart);
+    stroke: var(--inkt);
     stroke-width: var(--stroke-answer);
   }
 
   .tk-shape-wrong {
     fill: url(#tk-hatch);
-    stroke: var(--bad);
+    stroke: var(--fout-kaart-rand);
     stroke-width: var(--stroke-answer);
   }
 
@@ -3364,13 +3111,13 @@
    * has no double stroke, so it is two paths — the wide one underneath, the
    * narrow paper one on top, leaving two bands of ink. */
   .tk-shape-missed-outer {
-    fill: var(--paper);
-    stroke: var(--ink);
+    fill: var(--kaart);
+    stroke: var(--inkt);
     stroke-width: 6;
   }
   .tk-shape-missed-inner {
     fill: none;
-    stroke: var(--paper);
+    stroke: var(--kaart);
     stroke-width: 3;
   }
 
@@ -3379,7 +3126,7 @@
    * It takes whichever of ink or paper its own ground needs, and nothing else. */
   .tk-mark {
     fill: none;
-    stroke: var(--ink);
+    stroke: var(--inkt);
     stroke-width: var(--stroke-active);
     stroke-linecap: round;
     stroke-linejoin: round;
@@ -3388,17 +3135,46 @@
   /* On the one state with a solid fill. Paper on good is 4.96:1, which is the
    * figure §B quotes for the tick. */
   .tk-mark-on-fill {
-    stroke: var(--paper);
+    stroke: var(--kaart);
+  }
+
+  /* The same outcomes beside the feedback, in every round (UitkomstTeken): goed
+   * a solid square with a tick, fout the handoff's hatch — 45 degrees, a period
+   * of 8 — with a cross, bijna open with a rule and an arrow. */
+  .tk-teken {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-chip);
+  }
+  .tk-teken-goed {
+    background: var(--nadruk);
+    color: var(--kaart);
+  }
+  .tk-teken-fout {
+    border: var(--stroke-active) solid var(--fout);
+    background: repeating-linear-gradient(
+      45deg,
+      var(--fout-arcering-streep) 0 3px,
+      var(--fout-arcering-grond) 3px 8px
+    );
+    color: var(--fout-tekst);
+  }
+  .tk-teken-bijna {
+    border: var(--stroke-active) solid var(--inkt);
+    background: var(--kaart);
+    color: var(--inkt);
   }
   /* The dimmed provinces behind a capitals exercise. They recede, but they are
    * not decoration: they are how a child knows where on the map they are, and
    * WCAG asks 3:1 for a graphical object you need in order to understand the
-   * content. --line-strong reaches only 1.91:1 against paper; --ink-3 reaches
-   * 3.75:1, which is why the token that is too light for text is exactly right
-   * for a line. */
+   * content — which the map's own land and border clear (contrast.test.ts). */
   .tk-shape-dim {
-    fill: var(--paper);
-    stroke: var(--ink-3);
+    fill: var(--map-land);
+    stroke: var(--map-grens);
     stroke-width: 1;
     cursor: default;
   }
@@ -3418,7 +3194,7 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    color: var(--ink);
+    color: var(--inkt);
   }
   .tk-unwrap {
     position: relative;
@@ -3428,8 +3204,8 @@
     height: 72px;
     align-items: center;
     justify-content: center;
-    border-radius: var(--radius-full);
-    background: var(--surface);
+    border-radius: var(--radius-pil);
+    background: var(--papier);
   }
   .tk-unwrap-row[data-reeks='brons'] .tk-unwrap {
     color: var(--reeks-brons);

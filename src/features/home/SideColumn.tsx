@@ -255,7 +255,7 @@ export function GoedBlok() {
   return (
     <Blok titel={t('home.accuracyTitle')}>
       {accuracy.answered === 0 ? (
-        <p className="text-ink-2">{t('home.accuracyNone')}</p>
+        <p className="text-tekst-secundair">{t('home.accuracyNone')}</p>
       ) : (
         <div className="flex items-center gap-4">
           {/* Decorative: the figure beside it is the same number in words. */}
@@ -266,7 +266,7 @@ export function GoedBlok() {
           />
           <div className="min-w-0">
             <p className="tk-procent">{`${procent}%`}</p>
-            <p className="text-label text-ink-2">
+            <p className="text-knop text-tekst-secundair">
               {t('home.accuracyOf', { goed: accuracy.correct, totaal: accuracy.answered })}
             </p>
           </div>
@@ -276,10 +276,10 @@ export function GoedBlok() {
       {/* The other streak: correct answers in a row. Under the fraction, because
           it is the one number a single wrong answer takes away (ADR-072). */}
       {run !== null && run.beste > 0 ? (
-        <p className="flex flex-wrap items-baseline gap-x-3 border-t border-line pt-3">
+        <p className="flex flex-wrap items-baseline gap-x-3 border-t border-rand-licht pt-3">
           <span className="tk-label">{t('home.runLabel')}</span>
           <span className="tk-display font-bold tabular-nums">{run.nu}</span>
-          <span className="text-ink-2">{t('home.runBest', { aantal: run.beste })}</span>
+          <span className="text-tekst-secundair">{t('home.runBest', { aantal: run.beste })}</span>
         </p>
       ) : null}
     </Blok>
@@ -303,7 +303,7 @@ export function FavorietenBlok({
   return (
     <Blok titel={t('home.favouritesTitle')}>
       {lijst.length === 0 ? (
-        <p className="text-ink-2">{t('home.favouritesNone')}</p>
+        <p className="text-tekst-secundair">{t('home.favouritesNone')}</p>
       ) : (
         <ul className="tk-favorieten">
           {lijst.map((favoriet) => {
@@ -321,10 +321,10 @@ export function FavorietenBlok({
                     <ModuleIcon size={20} />
                   </span>
                   <span className="min-w-0">
-                    <span className="block truncate text-label font-semibold">
+                    <span className="block truncate text-knop font-semibold">
                       {naamVan(favoriet.deel)}
                     </span>
-                    <span className="block truncate text-label text-ink-2">
+                    <span className="block truncate text-knop text-tekst-secundair">
                       {t(`mode.${favoriet.mode}` as TranslationKey)}
                     </span>
                   </span>

@@ -48,8 +48,8 @@ export interface IconProps {
 }
 
 const TONE_COLOUR = {
-  ink: 'var(--ink)',
-  'ink-2': 'var(--ink-2)',
+  ink: 'var(--inkt)',
+  'ink-2': 'var(--tekst-secundair)',
   inherit: 'currentColor',
 } as const;
 

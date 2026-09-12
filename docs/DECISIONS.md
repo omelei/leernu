@@ -4802,6 +4802,60 @@ with.
 
 ---
 
+## ADR-106 — The handoff's house style, as tokens, across the whole app; a round is dark
+
+**Status:** accepted. **Date:** 2026-09-12.
+
+### Context
+
+Huisstijl v2 (#31) rebuilt the navigation, the page layouts and the learning
+core along with the look, and was reverted the same evening (#33) for moving
+too far from the artboards. What was asked for next is narrower and sharper:
+the handoff's token table (`design_handoff_leernu/README.md`, "Ontwerptokens")
+applied to every part of the app — palette, the dark set of a round, two
+typefaces, the type scale, radius, space, the one shadow, hit targets and the
+four shape rules — and holding for pages that do not exist yet.
+
+### Decision
+
+- **One vocabulary.** The handoff's Dutch role names in `src/index.css`
+  (`--papier`, `--kaart`, `--inkt`, `--nadruk` and the rest) replace the old
+  ones outright. No aliases, so an old name can be forbidden rather than
+  merely discouraged.
+- **Roles the table leaves open are read off the screens.** The edge of a
+  control is the tertiary ink (`--rand-bediening`), because the light rule does
+  not clear 3:1. Wrong in the light is the screens' `#b0554e` with stap 10's
+  hatch. Headings step down on a phone to the sizes the 393 artboards use.
+- **Layout, navigation and behaviour do not change.** This is the look, not a
+  rebuild.
+- **A round is dark.** `data-thema="ronde"` on the root of the six round screens
+  redefines the same roles with the dark set, and every hit target in it goes to
+  56. The system's dark mode is dropped: outside a round the product is light.
+- **The accent is the handoff's green.** A module keeps its own colour for its
+  plate and the two badges that name it; chosen, done and asked-about are green
+  in every module.
+- **Tailwind knows only the tokens.** Its colours, families, radii, shadows and
+  type sizes are replaced rather than extended, so an off-palette class renders
+  nothing, and `src/design/huisstijl.test.ts` fails on a literal colour in a
+  rule, a shadow, a third typeface, an old token name or such a class.
+- **The same outcome mark in every round.** After an answer all four modules
+  show `UitkomstTeken`: goed solid with a tick, fout hatched at 45° with a
+  period of 8 and a cross, bijna open with an arrow.
+
+### Consequences
+
+- Every screen changes colour, type and corners at once; the CI screenshots
+  are the review.
+- The counters in the round bar stay at the section size rather than the 44/48
+  of a large number, because the bar is 64 high and a round must not scroll at
+  1366×768.
+- The old fonts are gone from `public/fonts/`, and with them 8 requests' worth
+  of files.
+- `docs/HUISSTIJL.md` is the page to read before building a screen;
+  `MIGRATIE-STATUS.md` says where every old token went.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because

@@ -83,15 +83,15 @@ const TEGELMERKEN: readonly (readonly [string, ComponentType<Omit<IconProps, 'ch
 export function Gallery() {
   return (
     <main className="mx-auto flex max-w-2xl flex-col p-6">
-      <h1 className="tk-display text-h1 font-semibold">Componenten</h1>
-      <p className="mt-2 text-ink-2">Alleen in ontwikkeling. Elke component in elke toestand.</p>
+      <h1 className="tk-display text-paginakop">Componenten</h1>
+      <p className="mt-2 text-tekst-secundair">Alleen in ontwikkeling. Elke component in elke toestand.</p>
 
       <h2 className={HEADING}>Merk</h2>
       <div className={ROW}>
         <Wordmark size={40} clearSpace={false} />
         <Wordmark size={28} clearSpace={false} path="topo" />
       </div>
-      <div className="mt-4 flex items-center gap-4 bg-ink p-4">
+      <div className="mt-4 flex items-center gap-4 bg-inkt p-4">
         <Wordmark size={28} tone="paper" clearSpace={false} />
       </div>
 
@@ -261,17 +261,17 @@ export function Gallery() {
       <h2 className={HEADING}>Dialoog, dekvlak en onderpaneel</h2>
       {/* The scrim and the sheet fill whatever is positioned around them, so a
           demonstration is a box rather than a takeover of the page. */}
-      <div className="relative h-24 overflow-hidden border border-line">
-        <div className="p-4 text-ink-2">De pagina eronder.</div>
+      <div className="relative h-24 overflow-hidden border border-rand-licht">
+        <div className="p-4 text-tekst-secundair">De pagina eronder.</div>
         <div className="tk-scrim" />
         <div className="tk-sheet">
-          <p className="tk-display text-h3 font-semibold">Onderpaneel</p>
-          <p className="mt-2 text-ink-2">Schaduw 2, op een dekvlak van inkt op 45%.</p>
+          <p className="tk-display text-kaartkop font-semibold">Onderpaneel</p>
+          <p className="mt-2 text-tekst-secundair">Schaduw 2, op een dekvlak van inkt op 45%.</p>
         </div>
       </div>
       <div className="tk-dialog mt-3">
-        <p className="tk-display text-h3 font-semibold">Een dialoog</p>
-        <p className="mt-2 text-ink-2">Zelfde gewicht, midden op het scherm.</p>
+        <p className="tk-display text-kaartkop font-semibold">Een dialoog</p>
+        <p className="mt-2 text-tekst-secundair">Zelfde gewicht, midden op het scherm.</p>
       </div>
 
       <h2 className={HEADING}>Kopbalk, rail en tabbalk</h2>
@@ -285,7 +285,7 @@ export function Gallery() {
             Topo
           </button>
         </div>
-        <div className="flex-1 p-4 text-ink-2">Rail 88 breed.</div>
+        <div className="flex-1 p-4 text-tekst-secundair">Rail 88 breed.</div>
       </div>
       {/* On a tablet the rail lies down: a bar of 72 with 88x56 targets. */}
       <div className="tk-rail tk-rail-bar mt-3">

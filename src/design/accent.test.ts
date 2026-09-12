@@ -82,8 +82,12 @@ const ALLOWED_SELECTORS: ReadonlyMap<string, string> = new Map([
   ['.tk-stap-nummer', 'the module entrance, numbering its own page'],
 ]);
 
-/** Where an accent may be *defined* rather than used. */
-const DEFINITION_SELECTORS = /^(:root|\[data-module='[a-z]+'\])$/;
+/**
+ * Where an accent may be *defined* rather than used: the light theme and the
+ * round's (ADR-106). The accent is the handoff's green in both; a module no
+ * longer resolves one of its own, and keeps its colour for its plate only.
+ */
+const DEFINITION_SELECTORS = /^(:root|\[data-thema='ronde'\])$/;
 
 /** Lines in components that may name an accent, and why. */
 const ALLOWED_LINES: readonly { file: string; snippet: string; why: string }[] = [

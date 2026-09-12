@@ -54,8 +54,8 @@ export interface DotProps {
 }
 
 const TONE_COLOUR = {
-  ink: 'var(--ink)',
-  paper: 'var(--paper)',
+  ink: 'var(--inkt)',
+  paper: 'var(--kaart)',
   inherit: 'currentColor',
 } as const;
 

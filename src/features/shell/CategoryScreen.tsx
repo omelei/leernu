@@ -36,8 +36,8 @@ export function CategoryScreen({
     <div className="tk-page">
       <div className="tk-page-main">
         <div className="flex flex-col gap-2">
-          <h1 className="tk-display text-h1 font-semibold">{t(category.name)}</h1>
-          <p className="text-ink-2">{t('category.holds')}</p>
+          <h1 className="tk-display text-paginakop">{t(category.name)}</h1>
+          <p className="text-tekst-secundair">{t('category.holds')}</p>
         </div>
 
         <ul className="flex flex-col gap-3 p-0">
@@ -59,7 +59,7 @@ export function CategoryScreen({
                   <span className="min-w-0">
                     <span className="block font-semibold">{t(module.name)}</span>
                     {module.built ? null : (
-                      <span className="block text-ink-2">{t('soon.subtitle')}</span>
+                      <span className="block text-tekst-secundair">{t('soon.subtitle')}</span>
                     )}
                   </span>
                 </button>

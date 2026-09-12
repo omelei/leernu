@@ -90,11 +90,11 @@ describe('the four answer states', () => {
   it('never draws a mark in the colour of the state it marks', () => {
     // A green tick says "right" twice and leaves the shape doing none of the
     // work. A mark takes whichever of ink or paper its own ground needs.
-    expect(declaration('.tk-mark', 'stroke')).toBe('var(--ink)');
+    expect(declaration('.tk-mark', 'stroke')).toBe('var(--inkt)');
     // The tick sits on the one solid fill there is, so it goes the other way:
-    // paper on good, which is the 4.96:1 §B quotes for it.
-    expect(declaration('.tk-mark-on-fill', 'stroke')).toBe('var(--paper)');
-    expect(declaration(STATES.goed, 'stroke')).toBe('var(--ink)');
+    // the card's colour on green, 4.71:1 in light and 8:1 in a round.
+    expect(declaration('.tk-mark-on-fill', 'stroke')).toBe('var(--kaart)');
+    expect(declaration(STATES.goed, 'stroke')).toBe('var(--inkt)');
   });
 
   it('gives "bijna" no colour of its own', () => {
@@ -102,7 +102,19 @@ describe('the four answer states', () => {
     // What says "nearly" is the half-filled dot, which is a shape.
     const fill = declaration(STATES.bijna, 'fill');
     const stroke = declaration(STATES.bijna, 'stroke');
-    expect(fill).toBe('var(--paper)');
-    expect(stroke).toBe('var(--ink)');
+    expect(fill).toBe('var(--kaart)');
+    expect(stroke).toBe('var(--inkt)');
+  });
+
+  it('draws the same three outcomes after an answer in every module', () => {
+    // The mark beside the feedback in all four rounds (UitkomstTeken): goed a
+    // solid green square with a tick, fout the hatch with a cross, bijna open
+    // with a rule. The hatch is the handoff's: 45 degrees, a period of 8px.
+    expect(declaration('.tk-teken-goed', 'background')).toBe('var(--nadruk)');
+    // Whitespace out, because Prettier breaks a long gradient over lines.
+    const fout = (declaration('.tk-teken-fout', 'background') ?? '').replace(/\s+/g, '');
+    expect(fout).toContain('repeating-linear-gradient(45deg,');
+    expect(fout).toMatch(/3px8px\)$/);
+    expect(declaration('.tk-teken-bijna', 'background')).toBe('var(--kaart)');
   });
 });
