@@ -4465,6 +4465,55 @@ separately, so what the round is remains readable.
 
 ---
 
+## ADR-101 — The round's bookkeeping is shared, for the rounds that ask on a stage
+
+**Status:** accepted — 2026-09-12.
+
+### Context
+
+ADR-092 wrote the debt down when the clock arrived: the tables and the clock
+each carried the same hundred lines between composing a round and handing out
+its rewards — index, phase, counts, combo, lives, the clock, toetsstand, the
+session record — and it said the extraction was a change of its own rather than
+a passenger on the module that made the case for it. Flags are the fourth
+module. A fourth copy would have made the debt permanent, so it is paid first,
+in a change that adds nothing a child can see.
+
+### Decision
+
+**`useRoundCore` holds the bookkeeping; a module hook holds the question.** A
+module hands the core a composed round — the set, the set's own item ids and
+the questions — and, per answer, a verdict: right or wrong, what to quote back,
+what the attempt row stores, and whether it costs a life. The core does the
+rest, the same way for every module that uses it: the Leitner review and the
+write, the combo, the lives, the minute and its self-advance, toetsstand's
+skipped reveal, one mistake ending a diploma, the streak and the rewards.
+
+`useSumRound` and `useKlokRound` are rebuilt on it and keep their exported
+names, types and behaviour, so no screen changed. What stays in them is what is
+theirs: which sums or faces, in which order, with which four options, and how a
+typed answer is judged.
+
+**The map's round is not on it.** `useRound` answers on layers, judges near
+misses against a catalogue and draws a mix across sets, and those are threaded
+through its bookkeeping rather than beside it. Moving it would change the most
+used round in the product for no gain a child would see.
+
+### Consequences
+
+A new module that asks on a stage writes a composer and a judge, not a round.
+The core has tests of its own (`useRoundCore.test.tsx`) for what used to be
+tested only through the screens: that a second answer to the same question is
+ignored, that "ik weet het niet" costs no life, that a diploma stops on the
+first mistake and that toetsstand never rests on an answer.
+
+A wrong answer is kept for the result screen and not asked again in the same
+round. `reinsertAfterMistake` in `leitner.ts` has never been called by any
+round, and this change does not start calling it: that would change what the
+tables and the clock do.
+
+---
+
 ## Deferred with accounts and commerce (ADR-014)
 
 Recorded in full in the 2026-09-05 revision history; summarised here because
