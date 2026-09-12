@@ -129,12 +129,7 @@ export function useKlokRound(
   aantal: number | null = null,
   toetsstand = false,
 ) {
-  const { kern, settle, next, stop } = useRoundCore<
-    KlokSet,
-    KlokQuestion,
-    KlokItem,
-    KlokAntwoord
-  >({
+  const { kern, settle, next, stop } = useRoundCore<KlokSet, KlokQuestion, KlokItem, KlokAntwoord>({
     setId,
     mode,
     basisRegel: KLOK_ROUND_RULE[mode],
