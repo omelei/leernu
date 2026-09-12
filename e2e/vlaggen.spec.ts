@@ -13,7 +13,7 @@ import { expect, test, type Page } from '@playwright/test';
 async function signIn(page: Page, naam: string) {
   await page.goto('/');
   await page.getByPlaceholder('Je naam').fill(naam);
-  await page.getByRole('button', { name: 'Beginnen' }).click();
+  await page.getByRole('button', { name: 'Verder', exact: true }).click();
   await expect(page.getByRole('banner').getByRole('button', { name: naam })).toBeVisible();
 }
 

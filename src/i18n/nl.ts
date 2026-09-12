@@ -963,10 +963,13 @@ export const nl = {
   'stamp.overleven-vijftien': 'Vijftien levens lang',
   'stamp.overleven-vijftien.criterion': 'Vijftien goed met drie levens.',
   // Profile
-  'profile.title': 'Wie ben jij?',
-  'profile.help': 'Typ je naam. Je naam blijft op dit apparaat.',
+  // S1: een plek, dus een vraag als kop en één metaregel die zegt waar de
+  // naam blijft. Het label staat boven het veld, nooit alleen erin.
+  'profile.title': 'Hoe heet je?',
+  'profile.help': 'Je naam blijft op dit apparaat staan en gaat nergens heen.',
+  'profile.label': 'Je naam',
   'profile.placeholder': 'Je naam',
-  'profile.submit': 'Beginnen',
+  'profile.submit': 'Verder',
   'profile.nameTooShort': 'Typ eerst je naam.',
 
   // Accessible names for things that have no visible label of their own

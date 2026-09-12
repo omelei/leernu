@@ -38,7 +38,7 @@ test('never asks a third party for anything', async ({ page, baseURL }) => {
   // child answers a question is precisely the one worth catching.
   await page.goto('/');
   await page.getByPlaceholder('Je naam').fill('Sofie');
-  await page.getByRole('button', { name: 'Beginnen' }).click();
+  await page.getByRole('button', { name: 'Verder', exact: true }).click();
   await expect(page.getByRole('banner').getByRole('button', { name: 'Sofie' })).toBeVisible();
 
   await page.goto('/topografie');

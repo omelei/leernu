@@ -23,7 +23,7 @@ async function scan(page: Page) {
 async function signIn(page: Page, naam: string) {
   await page.goto('/');
   await page.getByPlaceholder('Je naam').fill(naam);
-  await page.getByRole('button', { name: 'Beginnen' }).click();
+  await page.getByRole('button', { name: 'Verder', exact: true }).click();
 
   // The name is in the app bar now, beside the streak — K1 puts the profile
   // switch top right, so that is where "you are signed in" is visible.
@@ -82,7 +82,7 @@ async function startRound(page: Page, set: Keuze, way: RegExp) {
 
 test('the name screen has no violations', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Wie ben jij?' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Hoe heet je?' })).toBeVisible();
 
   const results = await scan(page);
   expect(results.violations).toEqual([]);

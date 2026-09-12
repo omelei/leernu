@@ -1,6 +1,5 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { VandaagScreen } from '@/features/home/VandaagScreen';
-import { SideColumn } from '@/features/home/SideColumn';
 import { PracticeScreen } from '@/features/practice/PracticeScreen';
 import { ExploreScreen } from '@/features/explore/ExploreScreen';
 import { ProfileGate } from '@/features/player/ProfileGate';
@@ -295,15 +294,6 @@ export default function App() {
 
   const goVerzameling = () => go({ name: 'verzameling' });
 
-  /** The child's own column, which the pages not yet rebuilt still carry. */
-  const eigenKolom = (
-    <SideColumn
-      sticker={boot.profile.avatarConfig.sticker}
-      onReis={goVerzameling}
-      onBegin={beginRonde}
-    />
-  );
-
   if (route.name === 'oefenen') {
     return (
       <Shell bar={bar} current="oefenen" onNavigate={goTo}>
@@ -336,7 +326,6 @@ export default function App() {
         <CategoryScreen
           category={route.category}
           onOpen={(module) => go({ name: 'module', module, setId: null })}
-          aside={eigenKolom}
         />
       </Shell>
     );
@@ -372,7 +361,7 @@ export default function App() {
         onNavigate={goTo}
         kop={<ModuleKop module={route.module} onTerug={() => goTo('oefenen')} />}
       >
-        <ModuleSoon module={route.module} onOpen={goModule} aside={eigenKolom} />
+        <ModuleSoon module={route.module} onOpen={goModule} />
       </Shell>
     );
   }

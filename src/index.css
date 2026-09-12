@@ -3736,6 +3736,50 @@
     min-width: 0;
   }
 
+  /* De poort (S1): the first screen, straight on the ground — no kopbalk, no
+   * card. The logo with the slogan under it, then the display heading, one
+   * meta line, the field, and the way on. The column is S1's 360. */
+  .ln-poort {
+    display: flex;
+    flex-direction: column;
+    gap: var(--pagina-boven);
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: var(--pagina-boven) var(--margin-screen) 0;
+    background: var(--grond);
+    color: var(--ink);
+  }
+  .ln-poort-merk {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--gap-sm);
+  }
+  .ln-poort-formulier {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--blok-gap);
+    max-width: 360px;
+  }
+  /* A start bar with no tab bar under it: at the foot of the glass on a phone,
+   * and on a laptop just the button, left in the column. */
+  @media (max-width: 767px) {
+    .ln-poort-formulier {
+      max-width: none;
+    }
+    .ln-start-los {
+      bottom: 0;
+      margin-top: auto;
+    }
+  }
+  @media (min-width: 768px) {
+    .ln-start-los {
+      padding-top: 0;
+      border-top: 0;
+    }
+  }
+
   /* uitslag (S10): one card of three rows, and beside it on a laptop what the
    * round handed over — the mark, a diploma, the stars, the streak. The side
    * column is S10's 320. */

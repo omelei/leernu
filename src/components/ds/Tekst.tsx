@@ -96,7 +96,7 @@ export function Veld({
         aria-describedby={fout ? foutId : undefined}
       />
       {fout ? (
-        <p id={foutId} className="ln-veld-fout">
+        <p id={foutId} className="ln-veld-fout" role="alert">
           <KruisIcon size={16} />
           {fout}
         </p>

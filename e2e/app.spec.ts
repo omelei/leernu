@@ -74,7 +74,7 @@ async function start(page: Page) {
 async function signIn(page: Page, naam: string) {
   await page.goto('/');
   await page.getByPlaceholder('Je naam').fill(naam);
-  await page.getByRole('button', { name: 'Beginnen' }).click();
+  await page.getByRole('button', { name: 'Verder', exact: true }).click();
 
   // The name is in the app bar now, beside the streak — K1 puts the profile
   // switch top right, so that is where "you are signed in" is visible.
@@ -84,7 +84,7 @@ async function signIn(page: Page, naam: string) {
 test('asks for a name on the first visit and never for anything else', async ({ page }) => {
   await page.goto('/');
 
-  await expect(page.getByRole('heading', { name: 'Wie ben jij?' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Hoe heet je?' })).toBeVisible();
 
   // The two sentences that used to be asserted here — no adverts, no account
   // needed — are gone (ADR-046). The second stopped being true for the parent
@@ -99,7 +99,7 @@ test('asks for a name on the first visit and never for anything else', async ({ 
 
 test('refuses an empty name', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Beginnen' }).click();
+  await page.getByRole('button', { name: 'Verder', exact: true }).click();
   await expect(page.getByRole('alert')).toHaveText('Typ eerst je naam.');
 });
 
