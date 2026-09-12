@@ -120,7 +120,8 @@ test('typing a time takes every way a child writes one', async ({ page }) => {
   await expect(page.getByRole('status')).toContainText(':');
 
   await page.getByRole('button', { name: 'Volgende vraag' }).click();
-  await page.getByRole('button', { name: 'Ik weet het niet' }).click();
+  await page.getByPlaceholder('7:30').fill('1');
+  await page.getByRole('button', { name: 'Kijk na' }).click();
   await expect(page.getByRole('button', { name: 'Volgende vraag' })).toBeVisible();
 });
 

@@ -7,27 +7,32 @@ import { ruitStanden, tellerTekst } from './meten';
  * going — that is the dot's, and the dot is not in a round.
  */
 
-/** De ruiten: one per question, filled once it has been answered. */
+/**
+ * De ruiten: one per question, filled once it has been answered. A picture
+ * with its count as its name — or, where something around it already says the
+ * count (a progress bar), only a picture.
+ */
 export function Ruiten({
   beantwoord,
   totaal,
+  decoratief = false,
 }: {
   readonly beantwoord: number;
   readonly totaal: number;
+  readonly decoratief?: boolean | undefined;
 }) {
   const standen = ruitStanden(beantwoord, totaal);
   const gedaan = standen.filter((stand) => stand === 'gedaan').length;
+  const benoemd = decoratief
+    ? { 'aria-hidden': true }
+    : { role: 'img', 'aria-label': t('ds.ruiten', { gedaan, totaal: standen.length }) };
 
   return (
-    <ol
-      className="ln-ruiten"
-      role="img"
-      aria-label={t('ds.ruiten', { gedaan, totaal: standen.length })}
-    >
+    <span className="ln-ruiten" {...benoemd}>
       {standen.map((stand, index) => (
-        <li key={index} className="ln-ruit" data-stand={stand} />
+        <span key={index} className="ln-ruit" data-stand={stand} />
       ))}
-    </ol>
+    </span>
   );
 }
 

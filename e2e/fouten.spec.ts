@@ -28,17 +28,22 @@ async function kies(page: Page, pad: string, onderwerp: RegExp, hoe: RegExp) {
   await page.locator('.ln-start-knop').click();
 }
 
-/** Says "ik weet het niet" to every question, to the end of the round. */
+/**
+ * Answers every question with the first of the four, to the end of the round.
+ * Most of those are wrong, which is what this file needs: mistakes to practise.
+ * A round has no "ik weet het niet" any more (S5 draws no action during a
+ * question), so a wrong choice is how a mistake is made.
+ */
 async function weetHetNiet(page: Page) {
   const klaar = page.getByRole('button', { name: 'Terug naar start' });
-  const weetNiet = page.getByRole('button', { name: 'Ik weet het niet' });
+  const opties = page.getByRole('group', { name: /^Kies/ });
   const volgende = page.getByRole('button', { name: 'Volgende vraag' });
 
   for (let vraag = 0; vraag < 40; vraag++) {
-    await expect(klaar.or(volgende).or(weetNiet).first()).toBeVisible();
+    await expect(klaar.or(volgende).or(opties).first()).toBeVisible();
     if (await klaar.isVisible()) return;
     if (await volgende.isVisible()) await volgende.click();
-    else await weetNiet.click();
+    else await opties.getByRole('button').first().click();
   }
   throw new Error('De ronde hield niet op.');
 }

@@ -72,7 +72,7 @@ test('shows the question and the map together, at every size', async ({ page }) 
   expect(box?.width ?? 0, 'the question was squeezed').toBeGreaterThan(120);
 
   // And the map is on screen with it, which is the whole point of the layout.
-  await expect(page.locator('.tk-round-map svg').first()).toBeVisible();
+  await expect(page.locator('.ln-canvas svg').first()).toBeVisible();
 
   // The ten dots, and nothing that could be mistaken for navigation.
   await expect(page.getByRole('progressbar')).toBeVisible();
@@ -83,6 +83,7 @@ test('the frame comes back when the round ends', async ({ page }) => {
   await signIn(page, 'Noor');
   await startRound(page);
   await page.getByRole('button', { name: 'Stoppen' }).click();
+  await page.getByRole('button', { name: 'Afbreken' }).click();
   await page.getByRole('button', { name: 'Terug naar start' }).click();
 
   await expect(page.getByRole('banner').getByRole('button', { name: 'Noor' })).toBeVisible();

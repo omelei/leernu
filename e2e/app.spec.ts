@@ -213,6 +213,7 @@ test('the round just played is where Vandaag carries on', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'Volgende vraag' })).toBeVisible();
 
   await page.getByRole('button', { name: 'Stoppen' }).click();
+  await page.getByRole('button', { name: 'Afbreken' }).click();
   await page.getByRole('button', { name: 'Terug naar start' }).click();
 
   // First in the list now, practised today.
@@ -313,6 +314,7 @@ test('the oefentoets asks without answering, and marks at the end', async ({ pag
   await expect(page.getByRole('button', { name: 'Volgende vraag' })).toHaveCount(0);
 
   await page.getByRole('button', { name: 'Stoppen' }).click();
+  await page.getByRole('button', { name: 'Afbreken' }).click();
 
   // One answer, and it was wrong on purpose, so the mark is the lowest there
   // is. What is being checked is that there is one at all.
@@ -398,6 +400,7 @@ test('asks about every province, and lets a child stop early', async ({ page }) 
   await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuetext', 'vraag 1 van 12');
 
   await page.getByRole('button', { name: 'Stoppen' }).click();
+  await page.getByRole('button', { name: 'Afbreken' }).click();
   // K8: the heading is what changed, and the score is a line underneath it.
   await expect(page.getByRole('heading', { name: 'Wat er is veranderd' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Terug naar start' })).toBeVisible();
@@ -537,18 +540,3 @@ test('explore names a city, places it, and scores nothing', async ({ page }) => 
   await expect(steden).toHaveAccessibleName(/nog niet geoefend/);
 });
 
-/**
- * "Ik weet het niet", drawn on K3 at every size. It is the one control that
- * lets a child stop guessing, so what matters is that it shows the answer and
- * that pressing it is cheaper than a guess — see ADR-048 for why.
- */
-test('a child can say they do not know, and is shown the answer', async ({ page }) => {
-  await signIn(page, 'Pim');
-  await startRound(page, PROVINCIES, /Aanwijzen/);
-  await expect(page.getByRole('button', { name: 'Limburg' })).toBeVisible();
-
-  await page.getByRole('button', { name: 'Ik weet het niet' }).click();
-
-  await expect(page.getByRole('status')).toContainText('ligt hier.');
-  await expect(page.getByRole('button', { name: 'Volgende vraag' })).toBeVisible();
-});

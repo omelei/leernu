@@ -160,7 +160,8 @@ test('typing a table: right, wrong, and not knowing', async ({ page }) => {
   await expect(page.getByRole('status')).toContainText('999');
 
   await page.getByRole('button', { name: 'Volgende vraag' }).click();
-  await page.getByRole('button', { name: 'Ik weet het niet' }).click();
+  await page.getByPlaceholder('Antwoord').fill('999');
+  await page.getByRole('button', { name: 'Kijk na' }).click();
   await expect(page.getByRole('button', { name: 'Volgende vraag' })).toBeVisible();
 });
 

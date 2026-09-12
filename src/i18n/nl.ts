@@ -540,6 +540,14 @@ export const nl = {
     'Je schreef {gekozen}. Dat bestaat ook, maar het ligt ergens anders. Wij zochten {naam}.',
   'practice.next': 'Volgende vraag',
   'practice.stop': 'Stoppen',
+  // De onderbreking (S5): de enige dialoog in de hele oefenstroom. Wat al
+  // beantwoord is, telt; dat zegt de zin, want dat is wat een kind wil weten.
+  'ronde.afbreken': 'Ronde afbreken?',
+  'ronde.afbrekenKnop': 'Afbreken',
+  'ronde.verder': 'Verder oefenen',
+  'ronde.bewaard': 'Je {aantal} goede antwoorden blijven bewaard.',
+  'ronde.bewaardEen': 'Je goede antwoord blijft bewaard.',
+  'ronde.bewaardGeen': 'Wat je hebt beantwoord, blijft bewaard.',
   'practice.kindCity': 'Wijs de stad aan',
   'practice.kindIsland': 'Wijs het eiland aan',
   'practice.kindWater': 'Wijs het water aan',

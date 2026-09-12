@@ -3584,6 +3584,158 @@
     }
   }
 
+  /* ---- De ronde (S5–S9) -----------------------------------------------------
+   * No frame at all: no kopbalk, rail or tab bar (the screen is not wrapped in
+   * the Shell). On the ground of the round's dark theme, the question bar on
+   * top, the canvas under it filling what is left, and under the canvas
+   * whatever the child answers with — four answers, a field, the feedback.
+   * Never over the canvas. */
+  .ln-ronde {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+    height: 100vh;
+    height: 100dvh;
+    padding: var(--pad-card-phone-sm);
+    background: var(--grond);
+    color: var(--ink);
+  }
+  @media (min-width: 768px) {
+    .ln-ronde {
+      gap: var(--gap-lg);
+      padding: var(--space-screen);
+    }
+  }
+  .ln-ronde-laden {
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* vraagbalk (S5): stop, the question, counter and read aloud, the diamonds
+   * under the question. On a phone the bar turns round — stop, counter and read
+   * aloud on one line, the diamonds, then the question closest to the canvas. */
+  .ln-vraagbalk {
+    display: grid;
+    flex: none;
+    grid-template-areas:
+      'stop rechts'
+      'ruiten ruiten'
+      'vraag vraag';
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    column-gap: var(--gap-lg);
+    row-gap: var(--gap-md);
+  }
+  @media (min-width: 768px) {
+    .ln-vraagbalk {
+      grid-template-areas:
+        'stop vraag rechts'
+        'stop ruiten ruiten';
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      row-gap: var(--gap-sm);
+    }
+  }
+  .ln-vraagbalk-stop {
+    grid-area: stop;
+  }
+  /* Two lines high whatever it says, so a question that wraps moves nothing. */
+  .ln-vraag {
+    grid-area: vraag;
+    display: flex;
+    align-items: center;
+    min-height: calc(2 * var(--type-title-lh));
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--type-title);
+    line-height: var(--type-title-lh);
+    font-weight: 700;
+    text-wrap: pretty;
+  }
+  .ln-vraagbalk-rechts {
+    grid-area: rechts;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--gap-md);
+  }
+  @media (min-width: 768px) {
+    .ln-vraagbalk-rechts {
+      justify-content: flex-end;
+    }
+  }
+  .ln-vraagbalk-ruiten {
+    grid-area: ruiten;
+    min-width: 0;
+  }
+
+  /* oefencanvas (S5): paper on the ground, the round's own radius. */
+  .ln-canvas {
+    position: relative;
+    display: block;
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    padding: var(--pad-card-phone-sm);
+    border-radius: var(--radius-surface);
+    background: var(--paper);
+  }
+  .ln-canvas-midden {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Under the canvas: the four answers, the field, the feedback. */
+  .ln-ronde-paneel {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    gap: var(--gap-md);
+  }
+  .ln-ronde-paneel:empty {
+    display: none;
+  }
+
+  /* terugkoppeling (S6, S7): the right answer as its heading, one line to hold
+   * on to, the way on. A strip under the canvas, never a dialog. */
+  .ln-terugkoppeling {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-lg);
+    padding: var(--pad-card-phone);
+    border: var(--stroke-hair) solid var(--line);
+    border-radius: var(--card-radius);
+    background: var(--paper);
+  }
+  @media (min-width: 768px) {
+    .ln-terugkoppeling {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+  .ln-terugkoppeling-tekst {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--gap-md);
+  }
+
+  /* antwoordveld (S9): the label above the field, "Kijk na" beside it. */
+  .ln-antwoordveld {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-sm);
+  }
+  .ln-antwoordveld-regel {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-md);
+  }
+  .ln-antwoordveld-regel > .ln-veld {
+    flex: 1;
+    min-width: 0;
+  }
+
   /* laden (S2, S5): three dots in the shape of what is coming. No wheel, no
    * shimmer, nothing that fills. */
   .ln-laden {

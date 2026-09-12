@@ -115,6 +115,7 @@ test('the round: pointing, and the answer', async ({ page }, testInfo) => {
   await shoot(page, size, '06-antwoord');
 
   await page.getByRole('button', { name: 'Stoppen' }).click();
+  await page.getByRole('button', { name: 'Afbreken' }).click();
   await expect(page.getByRole('heading', { name: 'Wat er is veranderd' })).toBeVisible();
   await shoot(page, size, '07-resultaat');
 });
@@ -159,6 +160,7 @@ test('the round: Europe, and the world', async ({ page }, testInfo) => {
     await shoot(page, size, naam);
 
     await page.getByRole('button', { name: 'Stoppen' }).click();
+    await page.getByRole('button', { name: 'Afbreken' }).click();
     await expect(page.getByRole('heading', { name: 'Wat er is veranderd' })).toBeVisible();
   }
 });

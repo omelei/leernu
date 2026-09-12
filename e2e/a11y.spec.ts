@@ -187,6 +187,7 @@ test('the result screen has no violations', async ({ page }) => {
   await signIn(page, 'Yara');
   await startRound(page, PROVINCIES, /Aanwijzen/);
   await page.getByRole('button', { name: 'Stoppen' }).click();
+  await page.getByRole('button', { name: 'Afbreken' }).click();
   await expect(page.getByRole('button', { name: 'Terug naar start' })).toBeVisible();
 
   expect((await scan(page)).violations).toEqual([]);

@@ -44,6 +44,7 @@ async function answerOne(page: Page) {
   await expect(page.getByRole('button', { name: 'Volgende vraag' })).toBeVisible();
 
   await page.getByRole('button', { name: 'Stoppen' }).click();
+  await page.getByRole('button', { name: 'Afbreken' }).click();
   await expect(page.getByRole('heading', { name: 'Wat er is veranderd' })).toBeVisible();
 
   // The streak is written after the round ends and the result screen does not
