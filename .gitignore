@@ -21,3 +21,8 @@ content/geo/_source/
 
 # Prompts and notes handed to Claude Code. Working material, not the project.
 Claude outputs/
+
+# The business documents: a private repository of their own, cloned here so a
+# session in this one can read them. This repository is public; they are not.
+# CI fails if anything under this path is ever tracked.
+prive/

@@ -17,6 +17,13 @@ jobs:
           # Named rather than the detached SHA a push event checks out, so the
           # formatting step below has a branch to push back to.
           ref: ${{ github.head_ref || github.ref_name }}
+      # The business documents live in a private repository cloned into prive/,
+      # which .gitignore keeps out. This checks that the ignore held. A file
+      # under prive/ in this repository is public the moment it is pushed, and
+      # no later commit takes it back — so it fails first, before anything else
+      # has spent a minute on a commit that must not merge.
+      - name: No private documents in this repository
+        run: test -z "$(git ls-files prive)"
       - uses: actions/setup-node@v4
         with:
           node-version: 20
