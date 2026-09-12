@@ -1,6 +1,7 @@
 import { Resolver } from 'node:dns/promises';
 import { request as httpsRequest } from 'node:https';
 import { request as httpRequest } from 'node:http';
+import { connect } from 'node:net';
 
 /**
  * Asks the live site whether it is there, by name, over the network, from a
@@ -68,6 +69,16 @@ const APEX_AAAA = [
 const lines = [];
 let failures = 0;
 let warnings = 0;
+let skipped = 0;
+
+/**
+ * Something this machine could not ask, for a reason that lies with the
+ * machine. Neither a failure nor a warning: the site was not asked.
+ */
+function skip(text) {
+  skipped += 1;
+  lines.push(`skip  ${text}`);
+}
 
 function ok(text) {
   lines.push(`ok    ${text}`);
@@ -134,6 +145,38 @@ function fetchOverAddress({ address, host, path = '/', protocol = 'https' }) {
 
 function describeError(err) {
   return `${err.message}${err.code ? ` (${err.code})` : ''}`;
+}
+
+/** Errors that come from this machine's own network stack, before a packet leaves. */
+const GEEN_ROUTE = new Set(['ENETUNREACH', 'EHOSTUNREACH', 'EADDRNOTAVAIL', 'EAFNOSUPPORT']);
+
+/**
+ * Whether this machine can reach the internet over IPv6 at all, asked once
+ * with a bare connection to one of the site's own IPv6 addresses.
+ *
+ * GitHub's hosted runners cannot. Every IPv6 connection there ends in
+ * ENETUNREACH on the runner itself — the network is unreachable from the
+ * machine, not the site from the network — and treating that as the site
+ * being down kept this check red for a whole afternoon while every IPv4 edge
+ * answered with the right page. So: no route, and the IPv6 addresses are
+ * skipped with a line that says so. A route, and they are asked like any
+ * other; a connection that times out or is closed there is still a failure,
+ * because that is the site.
+ */
+function heeftIpv6(address) {
+  return new Promise((resolve) => {
+    const socket = connect({ host: address, port: 443, family: 6, timeout: TIMEOUT_MS });
+    const klaar = (antwoord) => {
+      socket.destroy();
+      resolve(antwoord);
+    };
+    socket.once('connect', () => klaar({ route: true }));
+    // A route exists; whether the site answers on it is checkPage's question.
+    socket.once('timeout', () => klaar({ route: true }));
+    socket.once('error', (err) =>
+      klaar(GEEN_ROUTE.has(err.code) ? { route: false, reden: err.code } : { route: true }),
+    );
+  });
 }
 
 function checkCertificate(label, cert) {
@@ -311,15 +354,25 @@ console.log(`Beschikbaarheid — ${new Date().toISOString()}\n`);
 const { siteA, siteAAAA, apexA, apexAAAA } = await checkDns();
 
 if (!dnsOnly) {
-  for (const address of [...siteA, ...siteAAAA]) await checkPage(address);
-  for (const address of [...apexA, ...apexAAAA]) await checkApex(address);
+  // IPv6 only where this machine has a route for it (see heeftIpv6).
+  const zesAdressen = [...siteAAAA, ...apexAAAA];
+  const zes = zesAdressen.length > 0 ? await heeftIpv6(zesAdressen[0]) : { route: false };
+  if (zesAdressen.length > 0 && !zes.route) {
+    skip(
+      `IPv6 not asked: this machine has no IPv6 route (${zes.reden}), so ${zesAdressen.length} addresses were skipped. That is the machine running the check, not the site — GitHub's hosted runners have no IPv6.`,
+    );
+  }
+  const alsZes = (adressen) => (zes.route ? adressen : []);
+
+  for (const address of [...siteA, ...alsZes(siteAAAA)]) await checkPage(address);
+  for (const address of [...apexA, ...alsZes(apexAAAA)]) await checkApex(address);
   // One address is enough for the redirect: it is a setting, not an edge.
   if (siteA.length > 0) await checkHttpRedirect(siteA[0]);
 }
 
 console.log(lines.join('\n'));
 console.log(
-  `\n${failures} failed, ${warnings} to look at, ${lines.length - failures - warnings} fine.`,
+  `\n${failures} failed, ${warnings} to look at, ${skipped} not asked, ${lines.length - failures - warnings - skipped} fine.`,
 );
 
 if (failures > 0) {
