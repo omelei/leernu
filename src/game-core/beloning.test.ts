@@ -42,7 +42,13 @@ function terug(apparaat: Apparaat): Apparaat {
 
 describe('the move off the old ladder', () => {
   it('keeps a copy of the old rewards before it writes the heroes', () => {
-    const plan = planMigratie({ helden: null, kopie: null, correct: 400, profiel: PROFIEL, nu: NU });
+    const plan = planMigratie({
+      helden: null,
+      kopie: null,
+      correct: 400,
+      profiel: PROFIEL,
+      nu: NU,
+    });
 
     expect(plan.kopie).not.toBeNull();
     expect(leesKopie(plan.kopie)).toEqual({
@@ -75,7 +81,11 @@ describe('the move off the old ladder', () => {
     const eerst = draai({ helden: null, kopie: null }, 400);
     // The heroes' row lost — a half write, a browser that dropped it — and the
     // move runs again, a day later and with more answers.
-    const opnieuw = draai({ helden: null, kopie: eerst.kopie }, 900, new Date('2026-09-13T10:00:00Z'));
+    const opnieuw = draai(
+      { helden: null, kopie: eerst.kopie },
+      900,
+      new Date('2026-09-13T10:00:00Z'),
+    );
 
     expect(opnieuw.kopie).toBe(eerst.kopie);
     expect(opnieuw.helden).toEqual(uitLadder(900));
