@@ -15,22 +15,22 @@ volledige CI (typecheck, lint, unittests, e2e op zes schermmaten, Lighthouse,
 schermafdrukken). Waar een fase in CI brak, volgt direct een herstelcommit
 met dezelfde fasenaam.
 
-| Fase | Wat                                           | Commits (eerste → herstel)          |
-| ---- | --------------------------------------------- | ----------------------------------- |
-| 0    | Inventarisatie en de twee definities          | c238344                             |
-| 1    | Tokens (`src/design/tokens.css`)              | c01bfb3                             |
-| 2    | Componentset (`src/components/ds/`)           | 415b212                             |
-| 3    | Leerkern, met tests                           | bf6d00e → 841c25d                   |
-| 5    | Rail en de vier bestemmingen                  | 1f5dc75                             |
-| 4    | Vandaag                                       | bcfe982 → 614ab57                   |
-| 4    | /topografie en de andere modulepagina's (S4)  | b290e53 → ee8f618                   |
-| 4    | De ronde (S5–S9), alle vier de modules        | b15b6b1 → 2e35ef1                   |
-| 4    | De uitslag (S10)                              | 0417fc6                             |
-| 4    | Startscherm (S1), "bestaat nog niet", categorie | b8198ad → 5943891                 |
-| 4    | Ontdekken, beloning, diplomamuren             | d234503                             |
-| 6    | De kaart op `provincie_2023`                  | d6b1343 → 41ff2ea                   |
-| 7    | Omzetting van de oude beloningen              | 5819882                             |
-| 8    | Controle, opruimen en dit verslag             | (deze commit)                       |
+| Fase | Wat                                             | Commits (eerste → herstel) |
+| ---- | ----------------------------------------------- | -------------------------- |
+| 0    | Inventarisatie en de twee definities            | c238344                    |
+| 1    | Tokens (`src/design/tokens.css`)                | c01bfb3                    |
+| 2    | Componentset (`src/components/ds/`)             | 415b212                    |
+| 3    | Leerkern, met tests                             | bf6d00e → 841c25d          |
+| 5    | Rail en de vier bestemmingen                    | 1f5dc75                    |
+| 4    | Vandaag                                         | bcfe982 → 614ab57          |
+| 4    | /topografie en de andere modulepagina's (S4)    | b290e53 → ee8f618          |
+| 4    | De ronde (S5–S9), alle vier de modules          | b15b6b1 → 2e35ef1          |
+| 4    | De uitslag (S10)                                | 0417fc6                    |
+| 4    | Startscherm (S1), "bestaat nog niet", categorie | b8198ad → 5943891          |
+| 4    | Ontdekken, beloning, diplomamuren               | d234503                    |
+| 6    | De kaart op `provincie_2023`                    | d6b1343 → 41ff2ea          |
+| 7    | Omzetting van de oude beloningen                | 5819882                    |
+| 8    | Controle, opruimen en dit verslag               | (deze commit)              |
 
 Fase 5 kwam vóór fase 4: rail en kopbalk omlijsten elke pagina, en eerst elke
 pagina in het oude frame omzetten om daarna het frame te vervangen, was elke
@@ -87,19 +87,19 @@ Verzameling, `/onthouden` naar Vandaag.
 
 ## Wat er veranderde, per pagina
 
-| Pagina | Scherm | Wat |
-| --- | --- | --- |
-| Startscherm | S1 | "Hoe heet je?" als displaykop direct op de grond, één metaregel, het veld met label erboven en fout eronder, Verder als primaire knop (op de telefoon vast onderaan). |
-| Vandaag | S2 | Toetskaart met horizon (nu, +7, +21 dagen) in punten, Verder oefenen, de startbalk met één primaire knop, Jouw helden, Jouw week met vriezer en vakantie. |
-| Oefenen | S3 | Alle modules als rijen; wat nog niet bestaat gedimd en toch een deur. |
-| /topografie, /rekenen, /klokkijken, /vlaggen | S4 | "Kies je ronde", één tintvlak achter de genummerde stappen, elke keuze een tegel, Start met de combinatie letterlijk in het label, de oefentoets als tertiaire knop. |
-| De ronde, vier modules | S5–S9 | Vraagbalk (stoppen en voorlezen als icoonknop van 56, de vraag, teller met voorloopnul, ruiten), donker thema, antwoordknoppen met hun toestand na het antwoord, antwoordveld met label, terugkoppeling met het goede antwoord als kop, "Ronde afbreken?" als enige dialoog, Escape opent hem. |
-| De kaart | S25–S28 | `provincie_2023`, trefzone uit het oppervlak, focusrand van 3 px gestippeld wit, één beweging van twee seconden na een fout antwoord. |
-| Uitslag | S10 | Kader terug, één kaart met drie rijen (nieuw onthouden, opgefrist, blijven wisselen), score in de metaregel, Nog een ronde als primaire knop. |
-| Verzameling | S11 | Twaalf helden, de kist als keuze, de materialen. |
-| Jij | S12 | De gedragen held met Wisselen, voorlezen en vakantiemodus als schakelaar, "Wissel naar een ander kind". |
-| Bestaat nog niet, categorie | — | In het paginakader, modules als rijen. |
-| Ontdekken (kaart en vlaggen) | — | Niet getekend in stap 2: de componentset op de bestaande indeling. |
+| Pagina                                       | Scherm  | Wat                                                                                                                                                                                                                                                                                            |
+| -------------------------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Startscherm                                  | S1      | "Hoe heet je?" als displaykop direct op de grond, één metaregel, het veld met label erboven en fout eronder, Verder als primaire knop (op de telefoon vast onderaan).                                                                                                                          |
+| Vandaag                                      | S2      | Toetskaart met horizon (nu, +7, +21 dagen) in punten, Verder oefenen, de startbalk met één primaire knop, Jouw helden, Jouw week met vriezer en vakantie.                                                                                                                                      |
+| Oefenen                                      | S3      | Alle modules als rijen; wat nog niet bestaat gedimd en toch een deur.                                                                                                                                                                                                                          |
+| /topografie, /rekenen, /klokkijken, /vlaggen | S4      | "Kies je ronde", één tintvlak achter de genummerde stappen, elke keuze een tegel, Start met de combinatie letterlijk in het label, de oefentoets als tertiaire knop.                                                                                                                           |
+| De ronde, vier modules                       | S5–S9   | Vraagbalk (stoppen en voorlezen als icoonknop van 56, de vraag, teller met voorloopnul, ruiten), donker thema, antwoordknoppen met hun toestand na het antwoord, antwoordveld met label, terugkoppeling met het goede antwoord als kop, "Ronde afbreken?" als enige dialoog, Escape opent hem. |
+| De kaart                                     | S25–S28 | `provincie_2023`, trefzone uit het oppervlak, focusrand van 3 px gestippeld wit, één beweging van twee seconden na een fout antwoord.                                                                                                                                                          |
+| Uitslag                                      | S10     | Kader terug, één kaart met drie rijen (nieuw onthouden, opgefrist, blijven wisselen), score in de metaregel, Nog een ronde als primaire knop.                                                                                                                                                  |
+| Verzameling                                  | S11     | Twaalf helden, de kist als keuze, de materialen.                                                                                                                                                                                                                                               |
+| Jij                                          | S12     | De gedragen held met Wisselen, voorlezen en vakantiemodus als schakelaar, "Wissel naar een ander kind".                                                                                                                                                                                        |
+| Bestaat nog niet, categorie                  | —       | In het paginakader, modules als rijen.                                                                                                                                                                                                                                                         |
+| Ontdekken (kaart en vlaggen)                 | —       | Niet getekend in stap 2: de componentset op de bestaande indeling.                                                                                                                                                                                                                             |
 
 ## De twee definities
 
@@ -203,17 +203,17 @@ Bij het bouwen erbij gekomen:
 
 ## Openstaande besluiten uit stap 7 die ik tegenkwam
 
-| Stap 7 | Wat | Wat ik deed |
-| --- | --- | --- |
-| 1 | Punt als retentiemeter, ruit als vraagteller | Gevolgd: punt alleen retentie, ruiten tellen vragen. |
-| 7 | Eén tabel 44 / 48 / 56 en de overlapregel | Knoppen 44 / 48 / 56 (ronde 56); kaart 44 met de kleinste bovenop. De tabel in het plan staat nog open. |
-| 8 | Arcering en tekens op goed, fout en gemist | Gebouwd in knop, kaart en terugkoppeling. |
-| 9 | VO-gedaante | Alleen de tokens (`[data-gedaante='vo']`); niets zet hem aan. |
-| 10 | Spelvormen met klok en levens | Buiten bereik; regels 3 en 4 van ADR-106 staan klaar, overleven is uit de keuzes. |
-| 11 | 60 dieren worden 12 helden | Fase 7: omzetting met kopie en weg terug. |
-| 12 | Tabs, namen, teller met voorloopnul | Gedaan: één rail, Vandaag / Oefenen / Verzameling / Jij, "07 / 12". |
-| 15 | Trefzone uit het oppervlak | Gedaan (fase 6); gemeten op 420 hoog: Flevoland 57, Utrecht 58. |
-| Vraag 6 | De kaart echt in het product | Gedaan: `provincie_2023` in de ronde, beide thema's. |
+| Stap 7  | Wat                                          | Wat ik deed                                                                                             |
+| ------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| 1       | Punt als retentiemeter, ruit als vraagteller | Gevolgd: punt alleen retentie, ruiten tellen vragen.                                                    |
+| 7       | Eén tabel 44 / 48 / 56 en de overlapregel    | Knoppen 44 / 48 / 56 (ronde 56); kaart 44 met de kleinste bovenop. De tabel in het plan staat nog open. |
+| 8       | Arcering en tekens op goed, fout en gemist   | Gebouwd in knop, kaart en terugkoppeling.                                                               |
+| 9       | VO-gedaante                                  | Alleen de tokens (`[data-gedaante='vo']`); niets zet hem aan.                                           |
+| 10      | Spelvormen met klok en levens                | Buiten bereik; regels 3 en 4 van ADR-106 staan klaar, overleven is uit de keuzes.                       |
+| 11      | 60 dieren worden 12 helden                   | Fase 7: omzetting met kopie en weg terug.                                                               |
+| 12      | Tabs, namen, teller met voorloopnul          | Gedaan: één rail, Vandaag / Oefenen / Verzameling / Jij, "07 / 12".                                     |
+| 15      | Trefzone uit het oppervlak                   | Gedaan (fase 6); gemeten op 420 hoog: Flevoland 57, Utrecht 58.                                         |
+| Vraag 6 | De kaart echt in het product                 | Gedaan: `provincie_2023` in de ronde, beide thema's.                                                    |
 
 Niet aangeraakt omdat ze buiten de opdracht vallen: 2 (klasoverzicht), 3 en 13
 (prijs en btw), 4 en 14 (prijspagina en gratis mix), 5 en 6 (kanalen en
@@ -272,26 +272,26 @@ de rest licht — het product kent donker alleen tijdens een ronde.
 
 ### Contrast (WCAG, gemeten uit `tokens.css`)
 
-| thema | tekst of rand | op | waarden | verhouding |
-| --- | --- | --- | --- | --- |
-| licht | `--ink` | `--paper` | #1a201b op #fbfaf6 | 15,88:1 |
-| licht | `--ink` | `--grond` | #1a201b op #efede4 | 14,14:1 |
-| licht | `--ink-2` | `--paper` | #525953 op #fbfaf6 | 6,90:1 |
-| licht | `--ink-3` | `--paper` | #666c67 op #fbfaf6 | 5,15:1 |
-| licht | `--ink-3` | `--grond` | #666c67 op #efede4 | 4,58:1 |
-| licht | `--accent-text` | `--accent-tint` | #2c5c3a op #eafbec | 7,23:1 |
-| licht | `--accent` | `--paper` | #327f48 op #fbfaf6 | 4,71:1 |
-| licht | `--on-good` | `--good` | #fbfaf6 op #327f48 | 4,71:1 |
-| licht | `--bad-text` | `--paper` | #b0554e op #fbfaf6 | 4,72:1 |
-| licht | `--control-line` | `--paper` | #666c67 op #fbfaf6 | 5,15:1 |
-| ronde | `--ink` | `--paper` | #fbfaf6 op #252c26 | 13,71:1 |
-| ronde | `--ink` | `--grond` | #fbfaf6 op #1a201b | 15,88:1 |
-| ronde | `--ink-2` | `--paper` | #b9beb9 op #252c26 | 7,59:1 |
-| ronde | `--ink-3` | `--paper` | #8c948c op #252c26 | 4,59:1 |
-| ronde | `--accent` | `--paper` | #7fd494 op #252c26 | 8,01:1 |
-| ronde | `--bad-text` | `--paper` | #f2b8b8 op #252c26 | 8,40:1 |
-| ronde | `--line-strong` | `--paper` | #7c867d op #252c26 | 3,79:1 |
-| ronde | `--map-border` | `--map-land` | #7c867d op #2f3831 | 3,21:1 |
+| thema | tekst of rand    | op              | waarden            | verhouding |
+| ----- | ---------------- | --------------- | ------------------ | ---------- |
+| licht | `--ink`          | `--paper`       | #1a201b op #fbfaf6 | 15,88:1    |
+| licht | `--ink`          | `--grond`       | #1a201b op #efede4 | 14,14:1    |
+| licht | `--ink-2`        | `--paper`       | #525953 op #fbfaf6 | 6,90:1     |
+| licht | `--ink-3`        | `--paper`       | #666c67 op #fbfaf6 | 5,15:1     |
+| licht | `--ink-3`        | `--grond`       | #666c67 op #efede4 | 4,58:1     |
+| licht | `--accent-text`  | `--accent-tint` | #2c5c3a op #eafbec | 7,23:1     |
+| licht | `--accent`       | `--paper`       | #327f48 op #fbfaf6 | 4,71:1     |
+| licht | `--on-good`      | `--good`        | #fbfaf6 op #327f48 | 4,71:1     |
+| licht | `--bad-text`     | `--paper`       | #b0554e op #fbfaf6 | 4,72:1     |
+| licht | `--control-line` | `--paper`       | #666c67 op #fbfaf6 | 5,15:1     |
+| ronde | `--ink`          | `--paper`       | #fbfaf6 op #252c26 | 13,71:1    |
+| ronde | `--ink`          | `--grond`       | #fbfaf6 op #1a201b | 15,88:1    |
+| ronde | `--ink-2`        | `--paper`       | #b9beb9 op #252c26 | 7,59:1     |
+| ronde | `--ink-3`        | `--paper`       | #8c948c op #252c26 | 4,59:1     |
+| ronde | `--accent`       | `--paper`       | #7fd494 op #252c26 | 8,01:1     |
+| ronde | `--bad-text`     | `--paper`       | #f2b8b8 op #252c26 | 8,40:1     |
+| ronde | `--line-strong`  | `--paper`       | #7c867d op #252c26 | 3,79:1     |
+| ronde | `--map-border`   | `--map-land`    | #7c867d op #2f3831 | 3,21:1     |
 
 Alle tekst haalt 4,5:1, alle randen van bedieningselementen en de kaartgrens
 3:1. `--line-strong` op papier in het lichte thema (1,78:1) is decoratie, geen
