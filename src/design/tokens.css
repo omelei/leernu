@@ -353,29 +353,7 @@
 :root {
   --surface: var(--grond);
   --sunken: var(--line);
-  --good-text: var(--accent-text);
   --accent-soft: var(--accent-tint);
-  --topo: var(--accent);
-  --topo-text: var(--accent-text);
-  --topo-tint: var(--tint-topo);
-  --tafels: var(--accent);
-  --tafels-text: var(--accent-text);
-  --tafels-tint: var(--tint-tafels);
-  --klok: var(--accent);
-  --klok-text: var(--accent-text);
-  --klok-tint: var(--tint-klok);
-  --woorden: var(--accent);
-  --woorden-text: var(--accent-text);
-  --woorden-tint: var(--tint-woorden);
-  --spelling: var(--accent);
-  --spelling-text: var(--accent-text);
-  --spelling-tint: var(--tint-spelling);
-  --tijdvakken: var(--accent);
-  --tijdvakken-text: var(--accent-text);
-  --tijdvakken-tint: var(--tint-tijdvakken);
-  --vlaggen: var(--accent);
-  --vlaggen-text: var(--accent-text);
-  --vlaggen-tint: var(--tint-vlaggen);
   --reeks-brons-diep: var(--ink);
   --reeks-brons-zacht: var(--grond);
   --reeks-zilver-diep: var(--ink);
@@ -386,5 +364,4 @@
   --reeks-platina-zacht: var(--grond);
   --reeks-ultra-diep: var(--ink);
   --reeks-ultra-zacht: var(--grond);
-  --reeks-licht: var(--paper);
 }

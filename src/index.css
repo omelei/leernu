@@ -3648,16 +3648,19 @@
   .ln-vraagbalk-stop {
     grid-area: stop;
   }
-  /* Two lines high whatever it says, so a question that wraps moves nothing. */
+  /* Two lines high whatever it says, so a question that wraps moves nothing.
+   * The README's size for a question in a round (32/36, the phone step on
+   * 393), where S5 to S9 draw the title size; see the inventory, §8. */
   .ln-vraag {
     grid-area: vraag;
     display: flex;
     align-items: center;
-    min-height: calc(2 * var(--type-title-lh));
+    min-height: calc(2 * var(--type-question-lh));
     margin: 0;
     font-family: var(--font-display);
-    font-size: var(--type-title);
-    line-height: var(--type-title-lh);
+    font-size: var(--type-question);
+    line-height: var(--type-question-lh);
+    letter-spacing: var(--type-question-ls);
     font-weight: 700;
     text-wrap: pretty;
   }

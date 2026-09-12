@@ -100,7 +100,7 @@ export function needsHelpTarget(
 export interface HelpTarget {
   readonly cx: number;
   readonly cy: number;
-  /** Radius in view-box units, so it stays 48px however the map is scaled. */
+  /** Radius in view-box units, so it stays 44px across however the map is scaled. */
   readonly r: number;
 }
 

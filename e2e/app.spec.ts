@@ -541,3 +541,23 @@ test('explore names a city, places it, and scores nothing', async ({ page }) => 
   // that is chosen here, so the label is where the fact lives.
   await expect(steden).toHaveAccessibleName(/nog niet geoefend/);
 });
+
+/**
+ * S5: the one dialog in practising. Escape asks before a round is lost, from
+ * anywhere in the round, and Escape inside the dialog keeps the round — the one
+ * thing a child pressing Escape does not want is to lose it.
+ */
+test('Escape asks whether to stop, and Escape again carries on', async ({ page }) => {
+  await signIn(page, 'Ada');
+  await startRound(page, PROVINCIES, /Aanwijzen/);
+  await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
+
+  await page.keyboard.press('Escape');
+  const dialoog = page.getByRole('dialog', { name: 'Ronde afbreken?' });
+  await expect(dialoog).toBeVisible();
+  await expect(dialoog.getByRole('button', { name: 'Afbreken' })).toBeFocused();
+
+  await page.keyboard.press('Escape');
+  await expect(dialoog).toHaveCount(0);
+  await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
+});

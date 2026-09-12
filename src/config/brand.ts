@@ -8,7 +8,7 @@
  * fixed lines below are data, and a component that needs one reads it here.
  *
  * The name is always lower case, including at the start of a sentence, and the
- * dot in the middle is the mark rather than punctuation — see Wordmark.tsx,
+ * dot in the middle is the mark rather than punctuation — see ds/Logo.tsx,
  * which sets it as the shape. This string is the name as *text*, for a document
  * title, a screen reader and anywhere the mark itself would be wrong.
  */
