@@ -43,11 +43,7 @@ import { voorlaad } from './vlagSrc';
  */
 
 export type VlagMode =
-  | 'vlag-zoeken'
-  | 'vlag-meerkeuze'
-  | 'vlag-gemengd'
-  | 'overleven'
-  | 'vlag-diploma';
+  'vlag-zoeken' | 'vlag-meerkeuze' | 'vlag-gemengd' | 'overleven' | 'vlag-diploma';
 
 /**
  * Ten questions, about two minutes, and three lives for overleven. The diploma
