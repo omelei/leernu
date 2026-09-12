@@ -41,9 +41,9 @@ test('a round has no navigation in the document at all', async ({ page }) => {
   // Not "hidden": absent. A round screen is not wrapped in the Shell, so there
   // is nothing to tab into and nothing to mis-tap with the map under a thumb.
   await expect(page.getByRole('navigation')).toHaveCount(0);
-  await expect(page.locator('.tk-rail')).toHaveCount(0);
-  await expect(page.locator('.tk-tabbar')).toHaveCount(0);
-  await expect(page.locator('.tk-appbar')).toHaveCount(0);
+  await expect(page.locator('.ln-rail')).toHaveCount(0);
+  await expect(page.locator('.ln-tabbar')).toHaveCount(0);
+  await expect(page.locator('.ln-kopbalk')).toHaveCount(0);
 
   // What is left is a way out and the progress.
   //
@@ -86,7 +86,7 @@ test('the frame comes back when the round ends', async ({ page }) => {
   await page.getByRole('button', { name: 'Terug naar start' }).click();
 
   await expect(page.getByRole('banner').getByRole('button', { name: 'Noor' })).toBeVisible();
-  await expect(page.locator('.tk-appbar')).toHaveCount(1);
+  await expect(page.locator('.ln-kopbalk')).toHaveCount(1);
 });
 
 test('never scrolls sideways, at any size', async ({ page }) => {
@@ -142,34 +142,37 @@ test('keeps the wordmark and the question legible at 200% text', async ({ page }
   );
 });
 
-test('below 1200 the modules are a menu under the app bar', async ({ page }, testInfo) => {
-  // ADR-093: the rail stands up at a desk and nowhere else. On both iPads and
-  // both phones the way to a module is this one control.
-  test.skip(['chromebook', 'desktop-1440'].includes(testInfo.project.name), 'the rail, at a desk');
-
+/**
+ * One navigation, four destinations, in one of two postures (stap 7, point
+ * 12): the rail from a tablet on its side up, the tab bar below it, and never
+ * both on screen. The iPad on its side (1080) gets the rail; standing up (810)
+ * it gets the tab bar, as the phones do.
+ */
+test('the four destinations are one rail or one tab bar, never both', async ({
+  page,
+}, testInfo) => {
   await signIn(page, 'Ilse');
 
-  const knop = page.getByRole('button', { name: /^vak / });
-  await expect(knop).toHaveAccessibleName('vak Kies een vak');
-  await expect(knop).toHaveAttribute('aria-expanded', 'false');
+  const rail = page.locator('.ln-rail');
+  const tabbar = page.locator('.ln-tabbar');
+  const breed = ['chromebook', 'desktop-1440', 'ipad-landscape'].includes(testInfo.project.name);
 
-  await knop.click();
-  await expect(knop).toHaveAttribute('aria-expanded', 'true');
-  await page
-    .getByRole('navigation', { name: 'Modules' })
-    .getByRole('button', { name: 'Klok', exact: true })
-    .click();
+  await expect(breed ? rail : tabbar).toBeVisible();
+  await expect(breed ? tabbar : rail).toBeHidden();
 
-  // Where it was asked to go, closed again, and saying so on its own face.
-  await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
-  await expect(knop).toHaveAccessibleName('vak Klok');
-  await expect(knop).toHaveAttribute('aria-expanded', 'false');
+  const zichtbaar = breed ? rail : tabbar;
+  for (const naam of ['Vandaag', 'Oefenen', 'Verzameling', 'Jij']) {
+    await expect(zichtbaar.getByRole('button', { name: naam })).toBeVisible();
+  }
 
-  // And it lets go on Escape, with focus back on the control that opened it.
-  await knop.click();
-  await page.keyboard.press('Escape');
-  await expect(knop).toHaveAttribute('aria-expanded', 'false');
-  await expect(knop).toBeFocused();
+  // And the modules are a page, not a second navigation.
+  await zichtbaar.getByRole('button', { name: 'Oefenen' }).click();
+  await expect(page.getByRole('heading', { name: 'Waar wil je in oefenen?' })).toBeVisible();
+  await expect(zichtbaar.getByRole('button', { name: 'Oefenen' })).toHaveAttribute(
+    'aria-current',
+    'page',
+  );
+  await expect(page.getByRole('navigation', { name: 'Modules' })).toHaveCount(0);
 });
 
 /**

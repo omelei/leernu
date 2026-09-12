@@ -91,6 +91,7 @@ const ALLOWED_SELECTORS: ReadonlyMap<string, string> = new Map([
   [".ln-tegel[aria-pressed='true']", 'chosen: a tile'],
   ['.ln-tegel-ruit', 'chosen: the diamond in a chosen tile’s plate'],
   ['.ln-chip-accent', 'right: a chest that is ready, on the light green'],
+  [".ln-rail-knop[aria-current='page'] .ln-rail-plaat", 'chosen: where you are, in the rail'],
 ]);
 
 /** Where an accent may be *defined* rather than used. */

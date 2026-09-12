@@ -64,7 +64,8 @@ test('the front door, the chooser and the profile', async ({ page }, testInfo) =
   // child looks at, so this waits for the filled one.
   const voortgang = page.getByRole('region', { name: 'Jouw voortgang' });
   await expect(voortgang).not.toHaveAttribute('aria-busy', 'true');
-  await expect(page.locator('.tk-streak')).toBeVisible();
+  // The stars in the kopbalk are read from IndexedDB as well.
+  await expect(page.locator('.ln-kopbalk .ln-getal')).toBeVisible();
   await shoot(page, size, '02-thuis');
 
   await page.goto('/topografie');
@@ -75,12 +76,16 @@ test('the front door, the chooser and the profile', async ({ page }, testInfo) =
   await expect(page.getByRole('heading', { name: 'Jij', exact: true })).toBeVisible();
   await shoot(page, size, '04-jij');
 
-  // The collection, which is the longest page in the product and the one that
-  // has to survive being mostly empty: a new child has three of twelve heroes,
-  // no stars, no diplomas and no stamps (ADR-076, ADR-098).
-  await page.goto('/voortgang');
-  await expect(page.getByRole('heading', { name: 'Jouw voortgang', level: 1 })).toBeVisible();
-  await shoot(page, size, '12-voortgang');
+  // The collection, which has to survive being mostly empty: a new child has
+  // three of twelve heroes and nine empty places (S11).
+  await page.goto('/verzameling');
+  await expect(page.getByRole('heading', { name: 'Verzameling', level: 1 })).toBeVisible();
+  await shoot(page, size, '12-verzameling');
+
+  // Oefenen, the list of modules (S3).
+  await page.goto('/oefenen');
+  await expect(page.getByRole('heading', { name: 'Waar wil je in oefenen?' })).toBeVisible();
+  await shoot(page, size, '15-oefenen');
 });
 
 /**

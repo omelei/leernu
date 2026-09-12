@@ -3726,6 +3726,264 @@
     white-space: nowrap;
     border-width: 0;
   }
+  /* ==== The frame: kopbalk, rail, tab bar, page (stap 2; stap 3) =============
+   * One navigation in two postures: the rail of 88 from a tablet on its side
+   * up (1024), the tab bar of 72 below it, never both. The kopbalk is 56 at
+   * every size. The page is one column of at most 1120, on the ground, 64 below
+   * the kopbalk and 48 between blocks — 48 and 32 on a tablet on its side,
+   * where the height stays 768 and a row is added (stap 3, delta S2).
+   */
+  .ln-app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: var(--grond);
+  }
+  .ln-kopbalk {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--gap-lg);
+    height: 56px;
+    padding: 0 var(--margin-screen);
+    border-bottom: var(--stroke-hair) solid var(--line);
+    background: var(--paper);
+  }
+  .ln-kopbalk-merk {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--touch-target);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  /* 20 high in a bar, 18 on a phone (S2). */
+  @media (max-width: 767px) {
+    .ln-kopbalk-logo svg {
+      height: 18px;
+      width: 72px;
+    }
+  }
+  .ln-kopbalk-rechts {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-lg);
+    min-width: 0;
+  }
+  @media (max-width: 767px) {
+    .ln-kopbalk-rechts {
+      gap: 8px;
+    }
+    .ln-kopbalk-woord {
+      display: none;
+    }
+  }
+  .ln-profiel {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gap-lg);
+    min-width: 0;
+    min-height: var(--touch-target);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: var(--type-body);
+    line-height: var(--type-body-lh);
+    cursor: pointer;
+  }
+  .ln-profiel-naam {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  /* On a phone the child is their hero alone; the name stays the button's
+   * accessible name. */
+  @media (max-width: 767px) {
+    .ln-profiel-naam {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+    }
+  }
+
+  /* A module's own page puts the module where the logo was (S4): its plate at
+   * 32 and its name, and on a phone a way back before them. */
+  .ln-modulekop {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-md);
+    min-width: 0;
+  }
+  .ln-terug {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: var(--touch-target);
+    height: var(--touch-target);
+    margin-left: calc(-1 * var(--gap-md));
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  @media (max-width: 1023px) {
+    .ln-terug {
+      display: inline-flex;
+    }
+  }
+
+  .ln-app-midden {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+  }
+  .ln-main {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .ln-rail {
+    display: none;
+  }
+  @media (min-width: 1024px) {
+    .ln-rail {
+      display: flex;
+      flex: none;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--gap-md);
+      width: var(--rail-width);
+      padding: var(--gap-lg) 0;
+      border-right: var(--stroke-hair) solid var(--line);
+      background: var(--paper);
+    }
+  }
+  .ln-rail-knop {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    width: calc(var(--rail-width) - 2 * 8px);
+    min-height: var(--touch-target);
+    padding: 4px 0;
+    border: 0;
+    border-radius: var(--radius-chip-lg);
+    background: transparent;
+    color: var(--ink-2);
+    font-family: var(--font-body);
+    font-size: var(--type-label);
+    line-height: var(--type-label-lh);
+    cursor: pointer;
+  }
+  .ln-rail-plaat {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-chip);
+    background: var(--inset);
+    color: var(--ink);
+  }
+  .ln-rail-knop:hover .ln-rail-plaat {
+    background: var(--line);
+  }
+  .ln-rail-knop[aria-current='page'] {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .ln-rail-knop[aria-current='page'] .ln-rail-plaat {
+    background: var(--accent-tint);
+  }
+
+  .ln-tabbar {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: space-around;
+    height: var(--tabbar-height);
+    border-top: var(--stroke-hair) solid var(--line);
+    background: var(--paper);
+  }
+  @media (min-width: 1024px) {
+    .ln-tabbar {
+      display: none;
+    }
+  }
+  .ln-tabbar-knop {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-width: var(--touch);
+    min-height: var(--touch);
+    padding: 0 var(--gap-sm);
+    border: 0;
+    background: transparent;
+    color: var(--ink-3);
+    cursor: pointer;
+  }
+  .ln-tabbar-label {
+    font-family: var(--font-body);
+    font-size: var(--type-label);
+    line-height: var(--type-label-lh);
+    color: var(--ink-2);
+  }
+  .ln-tabbar-knop[aria-current='page'] {
+    color: var(--ink);
+  }
+  .ln-tabbar-knop[aria-current='page'] .ln-tabbar-label {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .ln-pagina {
+    display: flex;
+    flex-direction: column;
+    gap: var(--blok-gap);
+    width: 100%;
+    max-width: calc(var(--content-max) + 2 * var(--margin-screen));
+    padding: var(--pagina-boven) var(--margin-screen) var(--space-section);
+  }
+
+  /* Jij (S12): the hero card is one row, the tertiary way to another child
+   * under a rule at the foot. */
+  .ln-jij-held {
+    display: flex;
+    align-items: center;
+    gap: var(--pad-card-phone);
+  }
+  .ln-jij-voet {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--gap-lg);
+    padding-top: var(--pad-card-phone);
+    border-top: var(--stroke-hair) solid var(--line);
+  }
+
+  /* The phone's start bar (ADR-095) sticks above the tab bar, which sticks
+   * to the foot of the glass below a tablet on its side. */
+  @media (max-width: 1023px) {
+    .tk-startbalk-mobiel {
+      bottom: var(--tabbar-height);
+    }
+  }
 }
 
 /* ---- The parcel, opened -------------------------------------------------

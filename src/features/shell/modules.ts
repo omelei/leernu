@@ -1,55 +1,91 @@
 import type { TranslationKey } from '@/i18n';
 
 /**
- * The modules, in the order of ADR-029, and the destinations of the tab bar.
+ * The modules, in the order of ADR-029, and the four destinations of the rail.
  *
- * Both are data. The rail renders whatever is in this array and an eighth
- * module is a row here plus a block of CSS for its accent — no component
- * changes, which is the whole reason `--accent` is resolved from `data-module`
- * rather than named at a call site.
+ * Both are data. The page Oefenen lists whatever is in the module array, and an
+ * eighth module is a row here plus a tint in tokens.css — no component changes,
+ * which is the whole reason a tint is resolved from `data-module` rather than
+ * named at a call site.
  *
  * `built` is not a feature flag. A flag hides finished work; this says the work
- * does not exist. It still decides what a module's address does — an unbuilt
- * one answers with "binnenkort" rather than a round.
- *
- * What it no longer decides is the rail. ADR-051 reverses that half of
- * ADR-037: the rail is the map of the product, and a child who can see that
- * clocks and flags are coming reads a plan rather than a promise. It was the
- * right call at one module and the wrong one at five, because a rail with two
- * entries hides the shape of the thing.
+ * does not exist. It decides what a module's address does — an unbuilt one
+ * answers with "nog niet gebouwd" rather than a round.
  */
 
 export interface Module {
-  /** Matches a [data-module] block in index.css, which resolves its accent. */
+  /** Matches a [data-module] block in tokens.css, which resolves its tint. */
   readonly id: 'topo' | 'tafels' | 'klok' | 'woorden' | 'spelling' | 'tijdvakken' | 'vlaggen';
+  /** The short word, where a module is one of many on a line. */
   readonly name: TranslationKey;
+  /** The whole name, as S3 and a module's own page write it. */
+  readonly naam: TranslationKey;
+  /** What is in it, in one line under its name on Oefenen (S3). */
+  readonly sub: TranslationKey;
   readonly built: boolean;
 }
 
 /**
- * Business plan v6 §5.5, and not the design's order: clock reading is third,
- * where the plan puts it, rather than appended after the modules that already
- * existed. The order is a statement about what the product is for, and the
- * newest module does not belong where a child stops looking.
+ * Business plan v6 §5.5, which is also the order S3 draws: topography,
+ * tables, the clock, then the four under taal and the flags.
  */
 export const MODULES: readonly Module[] = [
-  { id: 'topo', name: 'module.topo', built: true },
-  { id: 'tafels', name: 'module.tafels', built: true },
-  { id: 'klok', name: 'module.klok', built: true },
-  { id: 'woorden', name: 'module.woorden', built: false },
-  { id: 'spelling', name: 'module.spelling', built: false },
-  { id: 'tijdvakken', name: 'module.tijdvakken', built: false },
-  { id: 'vlaggen', name: 'module.vlaggen', built: true },
+  {
+    id: 'topo',
+    name: 'module.topo',
+    naam: 'oefenen.naam.topo',
+    sub: 'oefenen.sub.topo',
+    built: true,
+  },
+  {
+    id: 'tafels',
+    name: 'module.tafels',
+    naam: 'oefenen.naam.tafels',
+    sub: 'oefenen.sub.tafels',
+    built: true,
+  },
+  {
+    id: 'klok',
+    name: 'module.klok',
+    naam: 'oefenen.naam.klok',
+    sub: 'oefenen.sub.klok',
+    built: true,
+  },
+  {
+    id: 'woorden',
+    name: 'module.woorden',
+    naam: 'oefenen.naam.woorden',
+    sub: 'oefenen.nietGebouwd',
+    built: false,
+  },
+  {
+    id: 'spelling',
+    name: 'module.spelling',
+    naam: 'oefenen.naam.spelling',
+    sub: 'oefenen.nietGebouwd',
+    built: false,
+  },
+  {
+    id: 'tijdvakken',
+    name: 'module.tijdvakken',
+    naam: 'oefenen.naam.tijdvakken',
+    sub: 'oefenen.nietGebouwd',
+    built: false,
+  },
+  {
+    id: 'vlaggen',
+    name: 'module.vlaggen',
+    naam: 'oefenen.naam.vlaggen',
+    sub: 'oefenen.sub.vlaggen',
+    built: true,
+  },
 ];
 
 export const BUILT_MODULES = MODULES.filter((module) => module.built);
 
 /**
- * What the rail offers: the five entrances the product is planned around.
- *
- * Not every module in `MODULES` — spelling and tijdvakken sit under taal and
- * are not their own doors — and not only the built ones, per ADR-051. Order is
- * business plan v6 §5.5.
+ * The five entrances the front door lists under "Verder oefenen": the ones the
+ * product is planned around. Spelling and tijdvakken sit under taal.
  */
 export const RAIL_MODULES = MODULES.filter((module) =>
   (['topo', 'tafels', 'woorden', 'klok', 'vlaggen'] as const).some((id) => id === module.id),
@@ -60,12 +96,7 @@ export const RAIL_MODULES = MODULES.filter((module) =>
  *
  * There is one, and its shape is the point: **tafels belongs under rekenen,
  * klokkijken does not.** Telling the time is not arithmetic — it is reading an
- * instrument — and business plan v6 already split them into two modules with
- * two entrances and two accents (ADR-028). This keeps that split and adds the
- * word an adult actually types.
- *
- * Categories are for addresses, not for the rail. The rail lists modules,
- * because a module is what a child practises; nobody practises "rekenen".
+ * instrument. Categories are for addresses, not for navigation.
  */
 export interface Category {
   readonly id: 'rekenen';
@@ -78,31 +109,23 @@ export const CATEGORIES: readonly Category[] = [
 ];
 
 /**
- * The four places the tab bar goes on a phone.
+ * The four places the rail goes (README; stap 7, point 12): Vandaag, Oefenen,
+ * Verzameling, Jij. The same four at every width — the rail from a tablet on
+ * its side up, the tab bar below it — and never both at once.
  *
- * Same rule as the rail: a destination that does not exist is not offered. Two
- * of these need the friend layer and a backend (ADR-015), and one is step 6.
+ * Which screen each one is, from stap 2: Vandaag is S2, the front door;
+ * Oefenen is S3, the list of modules ("Waar wil je in oefenen?"); Verzameling
+ * is S11; Jij is S12. The VO guise will put "Duels" in the third place
+ * (stap 11); that is out of scope.
  */
 export interface Destination {
-  readonly id: 'vandaag' | 'onthouden' | 'vrienden' | 'jij';
+  readonly id: 'vandaag' | 'oefenen' | 'verzameling' | 'jij';
   readonly name: TranslationKey;
-  readonly built: boolean;
 }
 
 export const DESTINATIONS: readonly Destination[] = [
-  { id: 'vandaag', name: 'nav.vandaag', built: true },
-  { id: 'onthouden', name: 'nav.onthouden', built: true },
-  { id: 'vrienden', name: 'nav.vrienden', built: false },
-  { id: 'jij', name: 'nav.jij', built: true },
+  { id: 'vandaag', name: 'nav.vandaag' },
+  { id: 'oefenen', name: 'nav.oefenen' },
+  { id: 'verzameling', name: 'nav.verzameling' },
+  { id: 'jij', name: 'nav.jij' },
 ];
-
-export const BUILT_DESTINATIONS = DESTINATIONS.filter((destination) => destination.built);
-
-/**
- * Navigation with one destination is not navigation.
- *
- * It is a label that cannot be pressed, taking 56px off the bottom of every
- * screen on the smallest device in the range. So the bar appears when there is
- * somewhere to go, and until then the screen is the screen.
- */
-export const NAVIGATION_MINIMUM = 2;

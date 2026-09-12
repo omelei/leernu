@@ -63,8 +63,9 @@ test('six vlaggendiploma’s, and one press chooses a whole werelddeel to sit', 
   await expect(page.getByText(/^Vlaggendiploma gehaald|^Nog geen diploma/)).toBeVisible();
   await expect(page.getByText('cijfer', { exact: true })).toBeVisible();
 
-  // And on the collection page, as pictures rather than buttons.
-  await page.goto('/voortgang');
-  const verzameling = page.getByRole('region', { name: 'Jouw vlaggendiploma’s' });
-  await expect(verzameling.getByRole('img')).toHaveCount(6);
+  // And back on the flags page, where the six are kept: the collection (S11) is
+  // heroes and materials only.
+  await page.goto('/vlaggen');
+  const muurNa = page.getByRole('region', { name: 'Jouw vlaggendiploma’s' });
+  await expect(muurNa.getByRole('button')).toHaveCount(6);
 });

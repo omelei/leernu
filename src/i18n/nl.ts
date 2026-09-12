@@ -124,6 +124,52 @@ export const nl = {
   'nav.onthouden': 'Onthouden',
   'nav.vrienden': 'Vrienden',
   'nav.jij': 'Jij',
+  // De vier bestemmingen van huisstijl v2: Vandaag, Oefenen, Verzameling, Jij.
+  'nav.oefenen': 'Oefenen',
+  'nav.verzameling': 'Verzameling',
+  'nav.terugNaarOefenen': 'Terug naar Oefenen',
+  // De kopbalk: de sterren en het kind (S2). Op een telefoon valt het woord weg;
+  // een schermlezer hoort het altijd.
+  'kop.sterren': 'sterren',
+  'kop.sterrenLabel': '{aantal} sterren',
+
+  // Oefenen (S3). De namen zoals de pagina ze schrijft, voluit.
+  'oefenen.titel': 'Waar wil je in oefenen?',
+  'oefenen.naam.topo': 'Topografie',
+  'oefenen.naam.tafels': 'Tafels',
+  'oefenen.naam.klok': 'Klokkijken',
+  'oefenen.naam.woorden': 'Woordjes',
+  'oefenen.naam.spelling': 'Spelling',
+  'oefenen.naam.tijdvakken': 'Tijdvakken',
+  'oefenen.naam.vlaggen': 'Vlaggen',
+  'oefenen.sub.topo': 'Vijf sets in Nederland, zes werelddelen en de wereld',
+  'oefenen.sub.tafels': 'Tafels, delen, plus en min',
+  'oefenen.sub.klok': 'Hele uren, halve uren, kwartieren en vijf minuten',
+  'oefenen.sub.vlaggen': 'De vlaggen van zes werelddelen',
+  'oefenen.nietGebouwd': 'Nog niet gebouwd',
+  'oefenen.standLabel': '{goed} van de {totaal} onthouden',
+  'oefenen.diploma': '1 diploma',
+  'oefenen.diplomas': '{aantal} diploma’s',
+
+  // Verzameling (S11).
+  'verzameling.titel': 'Verzameling',
+  'verzameling.meta':
+    '{aantal} van de {totaal} helden · nog {nog} goede antwoorden tot de volgende kist',
+  'verzameling.metaEen':
+    '{aantal} van de {totaal} helden · nog één goed antwoord tot de volgende kist',
+  'verzameling.helden': 'Jouw helden',
+  'verzameling.materialen': 'Vijf materialen',
+  'verzameling.uitleg':
+    'Drie dubbele helden brengen een held een reeks hoger. Tien goede antwoorden zijn een ster, vijf sterren een kist. Niets anders beweegt het: geen geld, geen kans, geen dag van de week.',
+  'verzameling.kiesTitel': 'Welke wil je?',
+
+  // Jij (S12).
+  'jij.held': 'De held die je draagt',
+  'jij.heldNaam': '{held} · {materiaal}',
+  'jij.wisselen': 'Wisselen',
+  'jij.vakantie': 'Vakantie',
+  'jij.vakantieWhy': 'Je dagen op rij lopen door zolang je weg bent.',
+  'jij.anderKind': 'Wissel naar een ander kind',
   // De rail draagt korte woorden, zoals K1 ze tekent: "topo", niet
   // "Topografie". Een rail van 88 breed leest als een lijst en niet als proza.
   'module.topo': 'Topo',

@@ -232,23 +232,22 @@ test('a survival round of tables runs on lives, not on ten questions', async ({ 
   await expect(levens).toContainText('2');
 });
 
-test('the lightning round is offered only once the clock is on', async ({ page }) => {
+/**
+ * No clock in the learning core (house style v2): time and speed belong to the
+ * game forms with a clock, which are not built. So the lightning round is not
+ * offered, and Jij has no switch that would bring it back.
+ */
+test('the lightning round is not offered, and nothing switches it on', async ({ page }) => {
   await signIn(page, 'Timo');
 
-  const bliksem = page
-    .getByRole('region', { name: /Hoe wil je/ })
-    .getByRole('button', { name: /^Bliksemronde\b/ });
-
   await page.goto('/rekenen');
-  await expect(bliksem).toHaveCount(0);
+  await expect(
+    page.getByRole('region', { name: /Hoe wil je/ }).getByRole('button', { name: /^Bliksemronde\b/ }),
+  ).toHaveCount(0);
 
-  const clock = page.getByRole('button', { name: /Klok bij het oefenen/ });
   await page.goto('/jij');
-  await clock.click();
-  await expect(clock).toHaveAttribute('aria-pressed', 'true');
-
-  await page.goto('/rekenen');
-  await expect(bliksem).toBeVisible();
+  await expect(page.getByRole('switch', { name: /Vragen voorlezen/ })).toBeVisible();
+  await expect(page.getByRole('switch', { name: /tijd|klok/i })).toHaveCount(0);
 });
 
 /**

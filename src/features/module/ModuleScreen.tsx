@@ -6,7 +6,6 @@ import { t } from '@/i18n';
 import { loadItemStates } from '@/store/progress';
 import { MODULE_ICON } from '@/features/shell/moduleIcons';
 import type { Module } from '@/features/shell/modules';
-import { usePreferences } from '@/features/player/settings';
 import { useTestPlan } from '@/features/home/testPlan';
 import { Tafeldiplomas } from './Tafeldiplomas';
 import { VlagDiplomas } from '@/features/vlaggen/VlagDiplomas';
@@ -99,7 +98,6 @@ export function ModuleScreen({
   const [aantal, setAantal] = useState<number | null>(null);
   /** Whether the round should keep its answers until the end (ADR-085). */
   const [toetsstand, setToetsstand] = useState(false);
-  const prefs = usePreferences();
   const plan = useTestPlan();
   const kleinScherm = useSmallScreen();
 
@@ -151,7 +149,7 @@ export function ModuleScreen({
   // the way in becomes multiple choice (ADR-087). Pointing is still on the
   // page, at the end of the row.
   const krap = teDrukOmAanTeWijzen(chosen?.setId ?? null, chosen?.items.length ?? 0, kleinScherm);
-  const forms = offeredForms(formsFor(module.id), prefs.timer, chosen?.setId ?? null, krap);
+  const forms = offeredForms(formsFor(module.id), false, chosen?.setId ?? null, krap);
   // The ways that are tiles. A way only the oefentoets asks in is reached by
   // pressing the oefentoets, and never offered beside it (ADR-102).
   const tegels = forms.filter((candidate) => !candidate.alleenToets);

@@ -180,6 +180,8 @@
   --pad-card-phone: 20px; /* kaart telefoon */
   --pad-card-phone-sm: 16px;
   --margin-screen: 32px; /* 32 at 1366, 24 at a tablet, 16 at 393 */
+  --pagina-boven: 64px; /* from the kopbalk to the first heading (S1, S2) */
+  --blok-gap: 48px; /* between the blocks of a page (S2) */
   --content-max: 1120px; /* the content column of S2 */
   --measure: 640px; /* the reading measure (stap 3) */
   --rail-width: 88px;
@@ -235,6 +237,14 @@
 @media (min-width: 768px) and (max-width: 1365px) {
   :root {
     --margin-screen: 24px;
+  }
+}
+/* A tablet on its side keeps 768 of height and gains a row, so the page
+ * closes up: 64 to 48 above the heading, 48 to 32 between blocks (stap 3). */
+@media (min-width: 1024px) and (max-width: 1365px) {
+  :root {
+    --pagina-boven: 48px;
+    --blok-gap: 32px;
   }
 }
 @media (max-width: 1279px) {

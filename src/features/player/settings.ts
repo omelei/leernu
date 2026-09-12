@@ -2,35 +2,28 @@ import { useEffect, useState } from 'react';
 import { getSetting, setSetting } from '@/store/profile';
 
 /**
- * The two switches on K10, and both of them do something.
+ * The one preference on Jij that is a preference: reading the questions aloud.
  *
- * A switch that changes nothing is a promise the screen does not keep, and on a
- * settings page that is the whole content — so these are wired to the two
- * places they claim to affect rather than stored and admired.
- *
- * K10 had a third, for the reading mode. ADR-025 dropped it and it is not here
- * behind a flag either: a switched-off flag is code nobody runs.
+ * S12 draws two switches. The second was "tijd meten in een ronde", and it is
+ * gone: time and speed belong to the game forms with a clock, which are out of
+ * scope, and a switch for a clock that no round has is a promise the screen
+ * does not keep. The second switch on Jij is now the holiday mode of the
+ * streak, which is not a preference but a fact about the child, and lives with
+ * the streak (`streakStore.setVakantie`).
  */
 
 export interface Preferences {
   /**
    * On by default. For group 4 reading aloud is not an aid, it is the only way
-   * to know what the question says (styleguide §C), so this starts on and a
-   * child turns it off rather than having to find it.
+   * to know what the question says, so this starts on and a child turns it off
+   * rather than having to find it.
    */
   readonly readAloud: boolean;
-  /**
-   * Off by default, and the reason is on the screen beside it: haste does not
-   * help you remember. Off, the timed round is not offered at all — a switch
-   * that only hid the clock while still counting would be a worse lie than no
-   * switch.
-   */
-  readonly timer: boolean;
 }
 
-export const DEFAULT_PREFERENCES: Preferences = { readAloud: true, timer: false };
+export const DEFAULT_PREFERENCES: Preferences = { readAloud: true };
 
-const KEY = { readAloud: 'voorlezen', timer: 'timer' } as const;
+const KEY = { readAloud: 'voorlezen' } as const;
 
 /** Stored as strings because that is what the settings store holds. */
 function read(value: string | undefined, fallback: boolean): boolean {
@@ -39,24 +32,14 @@ function read(value: string | undefined, fallback: boolean): boolean {
 }
 
 export async function loadPreferences(): Promise<Preferences> {
-  const [readAloud, timer] = await Promise.all([getSetting(KEY.readAloud), getSetting(KEY.timer)]);
-
-  return {
-    readAloud: read(readAloud, DEFAULT_PREFERENCES.readAloud),
-    timer: read(timer, DEFAULT_PREFERENCES.timer),
-  };
+  return { readAloud: read(await getSetting(KEY.readAloud), DEFAULT_PREFERENCES.readAloud) };
 }
 
 export async function savePreference(name: keyof Preferences, on: boolean): Promise<void> {
   await setSetting(KEY[name], on ? 'aan' : 'uit');
 }
 
-/**
- * The preferences as React state, for the two screens that obey them.
- *
- * Deliberately not a context: two consumers, one read each, and a provider
- * around the whole app would be more machinery than the thing it carries.
- */
+/** The preferences as React state, for the screens that obey them. */
 export function usePreferences(): Preferences {
   const [prefs, setPrefs] = useState<Preferences>(DEFAULT_PREFERENCES);
 

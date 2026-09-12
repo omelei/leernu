@@ -72,28 +72,6 @@ async function start(page: Page) {
 }
 
 /**
- * The lightning round is only offered when the clock is switched on, and it is
- * off by default (K10). Turning it on is part of getting there, so this tests
- * the setting as well as the round.
- *
- * The switch moves only once the write has landed, so waiting for it to read as
- * on is waiting for IndexedDB. The reload then proves the value survives the
- * page rather than the render.
- */
-async function turnTheClockOn(page: Page) {
-  const clock = page.getByRole('button', { name: /Klok bij het oefenen/ });
-
-  await page.goto('/jij');
-  await expect(clock).toHaveAttribute('aria-pressed', 'false');
-
-  await clock.click();
-  await expect(clock).toHaveAttribute('aria-pressed', 'true');
-
-  await page.reload();
-  await expect(clock).toHaveAttribute('aria-pressed', 'true');
-}
-
-/**
  * A round with a clock or with lives on it.
  *
  * These were chips that started a round the moment they were pressed. They are
@@ -371,33 +349,27 @@ test('the oefentoets asks without answering, and marks at the end', async ({ pag
 /**
  * The hero a child wears is theirs, so it has to stick — and it has to show
  * somewhere other than the card it was chosen on, or it does not look saved.
- *
- * Heroes since ADR-096: a new child has the first three, in bronze — Valerie
- * Vos, Daan Das and Olaf Otter (ADR-098) — and the other nine arrive in
- * chests. This checks both halves: that a hero a child has can be worn, and
- * that one they have not found cannot.
+ * A new child has the first three (ADR-098); the other nine are empty places
+ * on the collection (S11), which are not buttons and do not say who is coming.
  */
 test('the hero a child picks is theirs, and follows them', async ({ page }) => {
   await signIn(page, 'Puk');
-  await page.goto('/voortgang');
+  await page.goto('/verzameling');
 
-  const helden = page.getByRole('region', { name: 'Helden' });
-  await helden.getByRole('button', { name: /^Olaf Otter,/ }).click();
-  await expect(helden.getByRole('button', { name: /^Olaf Otter,/ })).toHaveAttribute(
+  const helden = page.getByRole('region', { name: 'Jouw helden' });
+  await helden.getByRole('button', { name: /^Olaf Otter/ }).click();
+  await expect(helden.getByRole('button', { name: /^Olaf Otter/ })).toHaveAttribute(
     'aria-pressed',
     'true',
   );
 
-  // Not found yet: a chest in its place, which says so and what it costs, and
-  // does not say what is in it (ADR-081). It is not a button either — a control
-  // a child cannot use is a question they have to ask somebody about.
   await expect(helden.getByRole('button', { name: /^Ben Buizerd/ })).toHaveCount(0);
-  await expect(helden.getByLabel('Nog niet gevonden').first()).toBeVisible();
+  await expect(helden.getByText('nog te vinden').first()).toBeVisible();
 
   // It belongs to the child, not to the page: it survives a reload.
   await page.reload();
   await expect(
-    page.getByRole('region', { name: 'Helden' }).getByRole('button', { name: /^Olaf Otter,/ }),
+    page.getByRole('region', { name: 'Jouw helden' }).getByRole('button', { name: /^Olaf Otter/ }),
   ).toHaveAttribute('aria-pressed', 'true');
 });
 
@@ -597,27 +569,6 @@ async function answerWrongly(page: Page) {
   const fout = vraag?.includes('Limburg') ? 'Groningen' : 'Limburg';
   await page.locator('svg').getByRole('button', { name: fout, exact: true }).click();
 }
-
-/**
- * The bliksemronde adds a clock and takes away the Volgende button. Both matter:
- * a timed round where a child pays for a button press with their own seconds is
- * a timed round that measures the wrong thing.
- */
-test('bliksemronde runs a clock and moves on by itself', async ({ page }) => {
-  await signIn(page, 'Sem');
-  await turnTheClockOn(page);
-  await startChallenge(page, 'Bliksemronde');
-
-  await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
-  // Sixty seconds reads as 1:00, so the first tick a test can see is not 0:xx.
-  await expect(page.getByText(/^[01]:[0-5]\d$/)).toBeVisible();
-
-  await answerWrongly(page);
-  await expect(page.getByRole('button', { name: 'Volgende vraag' })).toHaveCount(0);
-
-  // No click of ours: the round advances on its own after showing the answer.
-  await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible({ timeout: 5000 });
-});
 
 /**
  * "Ik weet het niet", drawn on K3 at every size. It is the one control that
