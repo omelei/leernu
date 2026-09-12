@@ -29,7 +29,7 @@ export function ProfileGate({ onReady }: { readonly onReady: (profile: ProfileRe
   return (
     <main className="mx-auto flex min-h-screen max-w-xl flex-col justify-center gap-8 p-6">
       <div>
-        <Wordmark size={28} clearSpace={false} />
+        <Wordmark height={28} clearSpace={false} />
         <p className="mt-1 text-ink-2">{brand.slogan}</p>
       </div>
 

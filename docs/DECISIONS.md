@@ -1219,7 +1219,8 @@ Nothing here decides what the rail does at seven modules — six visible plus
 
 ## ADR-038 — The mark is one component, and the delivered SVGs are not used in the app
 
-**Status:** accepted — 2026-09-07.
+**Status:** accepted — 2026-09-07. **The logo half is superseded by ADR-108**,
+which gives the logo a shape of its own; the half about `Dot` stands.
 
 ### Context
 
@@ -2265,7 +2266,8 @@ end and the one thing `e2e/shell.spec.ts` measures at every size.
 
 ## ADR-056 — The logo is the way home, and the merkteken heads the rail
 
-**Status:** accepted — 2026-09-08.
+**Status:** accepted — 2026-09-08. `Brandmark` is no longer `Dot` since ADR-108;
+the rest stands.
 
 ### Context
 
@@ -4799,6 +4801,65 @@ It does not make the site more reliable. It makes the next report a line in a
 file instead of a guess, and if the closed connections turn out to be GitHub's
 edge rather than one household's router, this is the evidence to leave Pages
 with.
+
+## ADR-108 — The logo is the vat, and the dot goes back to measuring
+
+**Status:** accepted. **Date:** 2026-09-12. ADR-106 and ADR-107 are taken on
+the `huisstijl-v2` branch, which #33 rolled back and which is kept for a
+smaller redo; this number leaves them free.
+
+### Context
+
+Until now the logo was the dot. The wordmark set "leer" and "nu" in Space
+Grotesk around a `Dot` at 62%, the merkteken was that `Dot` on its own, and the
+favicon was the dot on an ink tile. The designer has delivered a revised logo
+in `docs/logo`: the name cut into outlines of its own, and a new merkteken — a
+diamond-shaped vat with a thin wall, softened points and a level at the half.
+Its README is explicit about what the logo is not for: progress is shown with
+`Dot`, never with the logo.
+
+### Decision
+
+**The wordmark and the merkteken are drawn inline from the designer's paths**
+(`src/design/logo.ts`), not fetched as images, for the reasons `Brandmark`
+already gave: every delivered SVG carries a C2PA manifest larger than its
+drawing, an image is one more request, and a blocked request on a school
+network is a broken box where the name should be. `logo.test.ts` reads
+`docs/logo/svg` and fails if a coordinate has drifted. The one liberty: the
+level in the vat is the lower half of the inner diamond as a path of its own,
+split exactly at the side points, instead of a whole diamond behind a
+clip-path — the same pixels, and no id that has to stay unique when the mark is
+on the page three times.
+
+**`Wordmark` takes a height, not a font size**: the height is set and the width
+follows, never below 26px, with half the vat's width as clear space. The
+merkteken goes solid below 24px, as the designer's small variant does. Neither
+ever takes a module accent.
+
+**The static set comes from the same delivery**, under `public/logo`: the
+favicon (which switches with the system theme), a 32px PNG for browsers that
+take no SVG, the apple-touch icon, a web manifest with a regular and a maskable
+icon, and the social card for a shared link. The manifest's icon paths are
+relative, so a build under another base still finds them; `og:image` is
+absolute, because a scraper resolves nothing. The manifest sets no display
+mode: an icon on the home screen opens the site in the browser, as a bookmark
+does today.
+
+**The dot stays exactly as it was.** Its numbers keep their test. Only the
+claim that it is the logo is gone, and with it `WORDMARK_FILL` and
+`WORDMARK_DOT_RATIO`. `docs/Logo`, the first set, is removed; `docs/logo` is the
+source from now on, left unformatted and unlinted as the designer's own files.
+
+### Consequences
+
+The static files carry the logo's own ink and paper (`#1A201B`, `#FBFAF6`); the
+components draw in `--ink` and `--paper`, which are a shade apart. On a tab or
+a home screen nobody holds the two side by side, so the files stay as
+delivered.
+
+The drawn wordmark is the same on every machine, but it is also no longer text
+that grows with a reader's own font size. It never did in practice — it was set
+in pixels — and the accessible name is still the word, read once.
 
 ---
 

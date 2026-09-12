@@ -105,7 +105,7 @@ export function Shell({
           onClick={() => onNavigate?.('vandaag')}
         >
           <span className="hidden desk:inline-flex">
-            <Wordmark size={30} clearSpace={false} />
+            <Wordmark height={28} clearSpace={false} />
           </span>
           <Brandmark size={32} className="hidden md:inline-flex desk:hidden" />
           <Brandmark size={28} className="inline-flex md:hidden" />

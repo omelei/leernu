@@ -1,9 +1,10 @@
 /**
  * The dot. One shape, and very nearly the whole product.
  *
- * It is the logo, the app icon, the highlight on the map, the progress bar, the
- * retention indicator and the item status — and the half-filled dot is also the
- * shape of the "Bijna" answer state. That last overlap is not a coincidence to
+ * It is the highlight on the map, the progress bar, the retention indicator and
+ * the item status — and the half-filled dot is also the shape of the "Bijna"
+ * answer state. It was the logo too, until ADR-108 gave the logo a shape of its
+ * own; that is what freed it to mean only "how far along". That last overlap is not a coincidence to
  * be tidied away: a dot half full means "practised, not yet certain" in the
  * table on K9 and "nearly right" after an answer, and those are the same idea.
  * Which is why there is one component and not two that look alike.
@@ -40,14 +41,14 @@ export interface DotProps {
    * Ink on paper, or paper on ink. Anything else — including a module accent —
    * is wrong, which is why this is two values and not a colour.
    *
-   * `inherit` takes the surrounding text colour, which is what the wordmark
-   * wants: the dot is a letter in the name and follows it wherever it goes.
+   * `inherit` takes the surrounding text colour, for a dot that stands in a
+   * line of text and should follow it wherever it goes.
    */
   readonly tone?: 'ink' | 'paper' | 'inherit';
   /**
    * What a screen reader should say. Left out, the dot is decorative and hidden
-   * — which is right inside the wordmark, where the name is already read out,
-   * and wrong for a retention indicator, where the dot _is_ the information.
+   * — which is right beside text that already says what it shows, and wrong
+   * for a retention indicator, where the dot _is_ the information.
    */
   readonly label?: string;
   readonly className?: string;
@@ -73,7 +74,7 @@ export function Dot({ fill = 1, size = 24, tone = 'ink', label, className }: Dot
   const colour = TONE_COLOUR[tone];
 
   // The arithmetic lives in src/design/dotGeometry.ts, where it is pinned
-  // against every SVG the designer delivered. Paper on ink is the negative
+  // against the numbers the designer delivered. Paper on ink is the negative
   // case, where the ring is 10% heavier against reading optically thinner.
   const { ring, radius, innerRadius, fillTop, fillHeight } = dotGeometry(
     size,

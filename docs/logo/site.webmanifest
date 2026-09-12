@@ -1,0 +1,11 @@
+{
+  "name": "leer.nu",
+  "short_name": "leer.nu",
+  "background_color": "#FBFAF6",
+  "theme_color": "#1A201B",
+  "icons": [
+    { "src": "/logo/png/app-icoon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/logo/png/app-icoon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/logo/png/app-icoon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
