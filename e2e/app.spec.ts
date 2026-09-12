@@ -552,4 +552,3 @@ test('a child can say they do not know, and is shown the answer', async ({ page 
   await expect(page.getByRole('status')).toContainText('ligt hier.');
   await expect(page.getByRole('button', { name: 'Volgende vraag' })).toBeVisible();
 });
-

@@ -198,8 +198,7 @@ test('on a phone the start button stays in reach', async ({ page }, testInfo) =>
   const box = await start.boundingBox();
   if (box === null) throw new Error('the start button has no box');
   const geraakt = await page.evaluate(
-    ({ x, y }) =>
-      (document.elementFromPoint(x, y)?.closest('.ln-start-knop') ?? null) !== null,
+    ({ x, y }) => (document.elementFromPoint(x, y)?.closest('.ln-start-knop') ?? null) !== null,
     { x: box.x + box.width / 2, y: box.y + box.height / 2 },
   );
   expect(geraakt, 'a press on the start button does not land on it').toBe(true);
