@@ -35,10 +35,11 @@ describe('topography', () => {
     expect(vak?.naam).toBe('onderwerp.fouten');
     expect(vak?.sets[0]?.items).toHaveLength(5);
     // After the mix, which is still what "the way the test asks" means.
-    expect(per('nederland', known).map((kandidaat) => kandidaat.id).slice(-2)).toEqual([
-      'nl-mix',
-      'nl-fouten',
-    ]);
+    expect(
+      per('nederland', known)
+        .map((kandidaat) => kandidaat.id)
+        .slice(-2),
+    ).toEqual(['nl-mix', 'nl-fouten']);
     expect(per('europa', known).map((kandidaat) => kandidaat.id)).toEqual(['europa-landen']);
   });
 
