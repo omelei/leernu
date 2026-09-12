@@ -2687,8 +2687,11 @@
   .tk-shape:hover {
     fill: var(--sunken);
   }
-  .tk-shape:focus {
+  /* The region's group is the button (MapCanvas, AnswerShape). */
+  .tk-doel:focus {
     outline: none;
+  }
+  .tk-doel:focus .tk-shape {
     stroke-width: 4;
   }
   /* The shape being asked about while a child types its name. The module accent
@@ -3983,6 +3986,216 @@
     .tk-startbalk-mobiel {
       bottom: var(--tabbar-height);
     }
+  }
+  /* ==== Vandaag (S2) ========================================================== */
+
+  /* The test card: one target. The words, the three dots of the horizon, and
+   * the count, in a row from a tablet up and stacked on a phone. */
+  .ln-toetskaart {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--gap-md);
+    width: 100%;
+    color: var(--ink);
+    text-align: left;
+    cursor: pointer;
+  }
+  .ln-toetskaart:hover {
+    border-color: var(--control-line);
+  }
+  @media (min-width: 768px) {
+    .ln-toetskaart {
+      flex-direction: row;
+      align-items: center;
+      gap: var(--pad-panel);
+    }
+  }
+  .ln-toetskaart-tekst {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+  .ln-horizon {
+    display: flex;
+    flex: none;
+    align-items: flex-end;
+    gap: var(--pad-card-phone);
+  }
+  .ln-horizon-stap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .ln-toetskaart-telling {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    text-align: right;
+  }
+  /* The empty card: dashed, as a place is that has nothing in it yet (S2). */
+  .ln-toetskaart-leeg {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--gap-sm);
+    border-style: dashed;
+    border-color: var(--line-strong);
+  }
+  .ln-toetskaart-cirkel {
+    width: 40px;
+    height: 40px;
+    border-color: var(--control-line);
+  }
+
+  /* Verder oefenen: rows of 72 in one card on a phone, cards in a grid from a
+   * tablet up — two, then three on a tablet on its side, four on a laptop. */
+  .ln-verder {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    list-style: none;
+    border: var(--stroke-hair) solid var(--line);
+    border-radius: var(--card-radius);
+    background: var(--paper);
+  }
+  .ln-verder > li + li {
+    border-top: var(--stroke-hair) solid var(--line);
+  }
+  .ln-verder-kaart {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-md);
+    width: 100%;
+    min-height: var(--tabbar-height);
+    padding: var(--gap-md) var(--gap-lg);
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    text-align: left;
+    cursor: pointer;
+  }
+  .ln-verder-kaart:hover {
+    background: var(--grond);
+  }
+  .ln-verder-kaart:focus-visible {
+    outline-offset: calc(-1 * var(--stroke-focus) - 2px);
+  }
+  .ln-verder-lang {
+    display: none;
+  }
+  @media (min-width: 768px) {
+    .ln-verder {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--gap-md);
+      overflow: visible;
+      border: 0;
+      background: transparent;
+    }
+    .ln-verder > li + li {
+      border-top: 0;
+    }
+    .ln-verder-kaart {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--gap-sm);
+      height: 100%;
+      padding: var(--pad-card-phone-sm);
+      border: var(--stroke-hair) solid var(--line);
+      border-radius: var(--card-radius);
+      background: var(--paper);
+    }
+    .ln-verder-kaart:hover {
+      border-color: var(--control-line);
+      background: var(--paper);
+    }
+    .ln-verder-kaart:focus-visible {
+      outline-offset: var(--focus-offset);
+    }
+    .ln-verder-lang {
+      display: inline;
+    }
+    .ln-verder-getal {
+      display: none;
+    }
+  }
+  @media (min-width: 1024px) {
+    .ln-verder {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1366px) {
+    .ln-verder {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  /* The start bar: under a rule, the one primary button and what it starts.
+   * On a phone it is fixed to the foot of the glass above the tab bar, the
+   * button full width and the line under it (S2). */
+  .ln-start {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-lg);
+    padding-top: var(--pad-card-phone);
+    border-top: var(--stroke-hair) solid var(--line);
+  }
+  @media (max-width: 767px) {
+    .ln-start {
+      position: sticky;
+      bottom: var(--tabbar-height);
+      z-index: 5;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 4px;
+      margin: 0 calc(-1 * var(--margin-screen));
+      padding: var(--gap-md) var(--margin-screen);
+      background: var(--paper);
+    }
+    .ln-start > .ln-knop {
+      width: 100%;
+    }
+    .ln-start-regel {
+      font-size: var(--type-caption);
+      line-height: var(--type-caption-lh);
+      color: var(--ink-3);
+      text-align: center;
+    }
+  }
+
+  /* Jouw week: seven days, a tick on the ones practised. */
+  .ln-week {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: var(--gap-sm);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .ln-week-dag {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .ln-week-dag[aria-current='date'] .ln-sub {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .ln-week-teken {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: var(--stroke-hair) solid var(--line);
+    border-radius: var(--radius-chip);
+    color: var(--ink);
   }
 }
 

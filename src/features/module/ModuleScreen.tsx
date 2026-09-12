@@ -1,7 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Button } from '@/components/Button';
 import { CorrectIcon, GoIcon, PaperIcon } from '@/components/Icon';
-import { countMastered, type ItemState, type ModeId } from '@/game-core';
+import { aantalOnthouden, isAangeraakt, type ItemState, type ModeId } from '@/game-core';
 import { t } from '@/i18n';
 import { loadItemStates } from '@/store/progress';
 import { MODULE_ICON } from '@/features/shell/moduleIcons';
@@ -573,16 +573,16 @@ function isKeypad(onderwerp: Onderwerp): boolean {
  */
 function vorderingVan(vak: Onderwerp, known: ReadonlyMap<string, ItemState>, now: Date): string {
   const ids = itemsVan(vak);
-  const mastered = countMastered(known, ids);
   // Never over a mix on its own: a mix holds every item there is, so it is due
   // more often than anything else by definition.
   const due = vak.sets
     .filter((deel) => !deel.mix || vak.sets.length === 1)
     .reduce((most, deel) => Math.max(most, opDeRol(deel, known, now)), 0);
-  const stand =
-    mastered === 0 && due === 0
-      ? t('home.setNew')
-      : t('home.setMastered', { goed: mastered, totaal: ids.length });
+  // "Nog niet geoefend" means no answer at all (ADR-107): an item answered
+  // today is not due today any more (ADR-106), so "nothing due" says nothing.
+  const stand = isAangeraakt(known, ids)
+    ? t('home.setMastered', { goed: aantalOnthouden(known, ids, now), totaal: ids.length })
+    : t('home.setNew');
 
   return due > 0 ? `${stand} · ${t('choose.dueToday', { aantal: due })}` : stand;
 }

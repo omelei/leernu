@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { HomeScreen } from '@/features/home/HomeScreen';
+import { VandaagScreen } from '@/features/home/VandaagScreen';
 import { SideColumn } from '@/features/home/SideColumn';
 import { PracticeScreen } from '@/features/practice/PracticeScreen';
 import { ExploreScreen } from '@/features/explore/ExploreScreen';
@@ -367,14 +367,20 @@ export default function App() {
     );
   }
 
+  /** A card on Vandaag: its module's page, with that set chosen. */
+  const goSet = (deel: Onderdeel) => {
+    const module = MODULES.find((candidate) => candidate.id === deel.moduleId);
+    if (module) go({ name: 'module', module, setId: deel.setId });
+  };
+
   return (
     <Shell bar={bar} current="vandaag" onNavigate={goTo}>
-      <HomeScreen
-        naam={boot.profile.naam}
+      <VandaagScreen
         sticker={boot.profile.avatarConfig.sticker}
-        onReis={goVerzameling}
         onBegin={beginRonde}
-        onModule={goModule}
+        onSet={goSet}
+        onOefenen={() => goTo('oefenen')}
+        onVerzameling={goVerzameling}
       />
     </Shell>
   );

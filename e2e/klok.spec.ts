@@ -124,19 +124,14 @@ test('typing a time takes every way a child writes one', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'Volgende vraag' })).toBeVisible();
 });
 
-test('the clock is a door in the rail like the other two', async ({ page }, testInfo) => {
-  // Below 1200 the same door is in the menu (ADR-093); shell.spec.ts opens it.
-  test.skip(!['chromebook', 'desktop-1440'].includes(testInfo.project.name), 'no rail below 1200');
-
+test('the clock is a row on Oefenen like the other modules', async ({ page }) => {
   await signIn(page, 'Timo');
 
-  const rail = page.getByRole('navigation', { name: 'Modules' });
-  await rail.getByRole('button', { name: 'Klok', exact: true }).click();
+  // The rail holds the four places now; the modules are the rows of Oefenen.
+  await page.goto('/oefenen');
+  await page.getByRole('button', { name: /^Klokkijken/ }).click();
 
   // A door that is open opens onto the chooser, not onto "binnenkort".
   await expect(page.getByRole('heading', { name: /^Wat wil je oefenen,/ })).toBeVisible();
-  await expect(rail.getByRole('button', { name: 'Klok', exact: true })).toHaveAttribute(
-    'aria-current',
-    'page',
-  );
+  await expect(page).toHaveURL(/\/klok$/);
 });

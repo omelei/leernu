@@ -451,10 +451,25 @@ function AnswerShape({
   // a comfortable target, and a finger disagrees. Anything too narrow to land on
   // gets a circle it can actually be hit with — decided over the whole map, so
   // two rings never reach each other (`rings` in MapCanvas).
-  const pathIsTheTarget = clickable && help === null;
+  //
+  // The group is the button, not the path or the ring. The ring can arrive
+  // after the first paint — the drawing is measured again when the panel
+  // settles — and a target that changed element halfway through a tap would
+  // lose it to its own ring. As one group, what a child presses is the same
+  // thing whether the ring is there or not.
+  const target = clickable
+    ? {
+        className: 'tk-doel',
+        tabIndex: 0,
+        role: 'button',
+        'aria-label': name,
+        onClick: onPick,
+        onKeyDown,
+      }
+    : { 'aria-hidden': true };
 
   return (
-    <g>
+    <g {...target}>
       {/* The double rule of "gemist". SVG has no double stroke, so the path is
           drawn twice: the wide ink one below, a narrow paper one on top, which
           leaves two bands of ink with a gap between them. */}
@@ -464,9 +479,7 @@ function AnswerShape({
       <path
         d={shape.d}
         className={shapeClass(state, dimmedWhenOpen)}
-        {...(pathIsTheTarget
-          ? { tabIndex: 0, role: 'button', 'aria-label': name, onClick: onPick, onKeyDown }
-          : { 'aria-hidden': true, pointerEvents: 'none' as const })}
+        {...(clickable && help === null ? {} : { pointerEvents: 'none' as const })}
       />
       {help !== null && (
         <>
@@ -490,11 +503,6 @@ function AnswerShape({
             r={help.r}
             fill="transparent"
             className="cursor-pointer"
-            tabIndex={0}
-            role="button"
-            aria-label={name}
-            onClick={onPick}
-            onKeyDown={onKeyDown}
           />
         </>
       )}

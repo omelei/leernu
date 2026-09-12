@@ -46,31 +46,23 @@ async function start(page: Page) {
   await page.locator('.tk-choose-start button').click();
 }
 
-test('the rail is the map of the product, not a list of what is finished', async ({
-  page,
-}, testInfo) => {
-  // Only at a desk: below 1200 the modules are the menu under the app bar
-  // instead (ADR-093), which e2e/shell.spec.ts walks. The test below covers
-  // the front door's own list, at every size.
-  test.skip(!['chromebook', 'desktop-1440'].includes(testInfo.project.name), 'no rail below 1200');
-
+test('Oefenen is the map of the product, not a list of what is finished', async ({ page }) => {
   await signIn(page, 'Sam');
+  await page.goto('/oefenen');
 
-  // ADR-051. Five doors, of which three are not open yet — a rail with only
-  // the two built ones does not read as a short list, it reads as the whole
-  // product, and a child could not tell what leer.nu is for.
-  const rail = page.getByRole('navigation', { name: 'Modules' });
-  await expect(rail.getByRole('button')).toHaveCount(5);
-
-  for (const naam of ['Topo', 'Rekenen', 'Klok', 'Taal', 'Vlaggen']) {
-    await expect(rail.getByRole('button', { name: naam, exact: true })).toBeVisible();
+  // ADR-051, on S3 now rather than in the rail: every module is a row, the
+  // ones not open yet as well — a list with only the built ones would read as
+  // the whole product, and a child could not tell what leer.nu is for.
+  const lijst = page.getByRole('list', { name: 'Waar wil je in oefenen?' });
+  const namen = ['Topografie', 'Tafels', 'Klokkijken', 'Woordjes', 'Spelling', 'Tijdvakken'];
+  for (const naam of [...namen, 'Vlaggen']) {
+    await expect(lijst.getByRole('button', { name: new RegExp(`^${naam}`) })).toBeVisible();
   }
 
   // And a door that is not open says so rather than opening onto nothing,
-  // which is the half of ADR-037 that survives. Klokkijken used to be the
-  // example here and is open now, so this asks the next one along.
-  await rail.getByRole('button', { name: 'Taal', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'Taal' })).toBeVisible();
+  // which is the half of ADR-037 that survives.
+  await lijst.getByRole('button', { name: /^Woordjes/ }).click();
+  await expect(page.getByText('Deze module bestaat nog niet. We zijn hem aan het maken.')).toBeVisible();
 });
 
 test('the front door lists every module, at every size', async ({ page }) => {

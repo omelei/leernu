@@ -124,13 +124,14 @@ test('keeps the profile across a reload, with no sign-in', async ({ page }) => {
 });
 
 /**
- * K1 greets the child by the name they typed, and the front door is the first
- * place that name is worth anything: a profile that is not an account still has
- * to be visibly theirs.
+ * The front door is Vandaag (S2): a place, with the date and the days in a row
+ * under it. The child's name is not a greeting any more; it is in the kopbalk,
+ * on the button that is theirs.
  */
-test('greets the child by name on the front door', async ({ page }) => {
+test('the front door is Vandaag, and the child is in the kopbalk', async ({ page }) => {
   await signIn(page, 'Bo');
-  await expect(page.getByRole('heading', { name: 'Welkom Bo!' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Vandaag', level: 1 })).toBeVisible();
+  await expect(page.getByRole('banner').getByRole('button', { name: 'Bo' })).toBeVisible();
 });
 
 /**
@@ -180,55 +181,43 @@ test('the soonest test decides what the block on the front door is about', async
 });
 
 /**
- * Below 1200 the block is only its dates once it has any, and pressing them
- * opens it into the whole thing a laptop shows straight away (ADR-094). At a
- * desk, and with no tests, it is already whole and this does nothing.
+ * The test card is one target (S2): pressing it opens the list of tests under
+ * it. With no test yet it is an empty card whose button is "Datum kiezen".
+ * Either way, what is wanted here is the list open with its form, and pressing
+ * an opener twice would close it again — so only what is not yet showing is
+ * pressed.
  */
 async function openToetsen(page: Page) {
-  const datums = page.getByRole('button', { name: /Toetsen wijzigen$/ });
-  if (await datums.isVisible()) await datums.click();
+  const toevoegen = page.getByRole('button', { name: 'Toets toevoegen' });
+  if (await toevoegen.isVisible()) return;
+  const kies = page.getByRole('button', { name: 'Datum kiezen' });
+  if (await kies.isVisible()) {
+    await kies.click();
+    return;
+  }
+  await page.getByRole('button', { name: /Toetsen wijzigen$/ }).click();
 }
 
-/** One test, through the block that is now a list with a form under it. */
+/** One test, through the list under the card. */
 async function addTest(page: Page, date: string, subject: string) {
   await openToetsen(page);
-  await page.getByRole('button', { name: 'Toets toevoegen' }).click();
-  await page.getByLabel('Wanneer is de toets?').fill(date);
+  const wanneer = page.getByLabel('Wanneer is de toets?');
+  if (!(await wanneer.isVisible())) await page.getByRole('button', { name: 'Toets toevoegen' }).click();
+  await wanneer.fill(date);
   await page.getByLabel('Voor welk vak?').selectOption(subject);
   await page.getByRole('button', { name: 'Toevoegen', exact: true }).click();
 }
 
 /**
- * The rows on the front door hide their scrollbar (ADR-094), and hiding it must
- * not take scrolling away from anyone who does not swipe. The row is a stop in
- * the tab order and the arrow keys move it — checked at every size, because a
- * row that fits its screen would pass this by not moving at all, and five
- * cards fit none of them.
+ * Verder oefenen (S2): the sets in the middle of being practised, newest first,
+ * and one start button that starts the last one again in the same way. Before
+ * any round it offers the sets to start with, each still "nog niet geoefend".
  */
-test('a row on the front door scrolls from the keyboard', async ({ page }) => {
-  await signIn(page, 'Rik');
-
-  const rij = page.getByRole('group', { name: 'Meest geoefend' });
-  await rij.focus();
-  await page.keyboard.press('ArrowRight');
-
-  await expect.poll(() => rij.evaluate((el) => el.scrollLeft)).toBeGreaterThan(0);
-});
-
-test('logs the round that was just played, with its mark', async ({ page }) => {
+test('the round just played is where Vandaag carries on', async ({ page }) => {
   await signIn(page, 'Jamie');
 
-  const recent = page.getByRole('region', { name: 'Recent geoefend' });
-  const favourites = page.getByRole('region', { name: 'Jouw favorieten' });
-
-  // Before the first round both are empty, and both say so rather than
-  // standing there as headings over nothing.
-  await expect(
-    recent.getByText('Nog niets geoefend. Na je eerste ronde staat het hier.'),
-  ).toBeVisible();
-  await expect(
-    favourites.getByText('Nog geen favorieten. Wat je vaak oefent, komt hier te staan.'),
-  ).toBeVisible();
+  const verder = page.getByRole('region', { name: 'Verder oefenen' });
+  await expect(verder.getByText('Nog niet geoefend').first()).toBeVisible();
 
   await startRound(page, PROVINCIES, /Aanwijzen/);
   await page.getByRole('button', { name: 'Limburg' }).click();
@@ -237,17 +226,13 @@ test('logs the round that was just played, with its mark', async ({ page }) => {
   await page.getByRole('button', { name: 'Stoppen' }).click();
   await page.getByRole('button', { name: 'Terug naar start' }).click();
 
-  // One answer, so the mark is a 10,0 or a 1,0 and never anything between —
-  // which is exactly what "over what was answered" means.
-  const tegel = recent.getByRole('button', { name: /Provincies van Nederland/ });
-  await expect(tegel).toContainText(/Cijfer (10,0|1,0)/);
-  await expect(tegel).toContainText('Aanwijzen');
+  // First in the list now, practised today.
+  const kaart = verder.getByRole('button', { name: /^Provincies van Nederland/ });
+  await expect(kaart).toContainText('Vandaag geoefend');
 
-  // And it went into the column on the right as a way straight back in.
-  await expect(favourites.getByRole('button', { name: /Provincies van Nederland/ })).toBeVisible();
-
-  // The tile is the shortcut it looks like: same set, same way, no chooser.
-  await tegel.click();
+  // And the start bar says it starts that set again, the same way.
+  await expect(page.getByText(/^Provincies van Nederland · aanwijzen/)).toBeVisible();
+  await page.getByRole('button', { name: 'Start de ronde' }).click();
   await expect(page.getByRole('heading', { name: /Waar ligt / })).toBeVisible();
 });
 

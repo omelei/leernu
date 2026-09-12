@@ -62,8 +62,8 @@ test('the front door, the chooser and the profile', async ({ page }, testInfo) =
   // moment the name appears. The page draws the cards at once and fills them
   // when it knows (ADR-094); a picture of the empty cards is not the page a
   // child looks at, so this waits for the filled one.
-  const voortgang = page.getByRole('region', { name: 'Jouw voortgang' });
-  await expect(voortgang).not.toHaveAttribute('aria-busy', 'true');
+  await expect(page.getByRole('heading', { name: 'Verder oefenen' })).toBeVisible();
+  await expect(page.locator('.ln-verder')).not.toHaveAttribute('aria-busy', 'true');
   // The stars in the kopbalk are read from IndexedDB as well.
   await expect(page.locator('.ln-kopbalk .ln-getal')).toBeVisible();
   await shoot(page, size, '02-thuis');

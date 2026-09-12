@@ -60,10 +60,10 @@ async function speel(page: Page) {
   throw new Error('De ronde hield niet op.');
 }
 
-/** Back to the front door, and the round is in the child's history. */
+/** Back to Vandaag, and the round is where it carries on. */
 async function inGeschiedenis(page: Page, set: string) {
   await page.getByRole('button', { name: 'Terug naar start' }).click();
-  const recent = page.getByRole('region', { name: 'Recent geoefend' });
+  const recent = page.getByRole('region', { name: 'Verder oefenen' });
   await expect(recent.getByRole('button', { name: new RegExp(set) }).first()).toBeVisible();
 }
 
