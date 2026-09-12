@@ -75,14 +75,7 @@ export interface HomeScreenProps {
   readonly onModule?: ((id: Module['id']) => void) | undefined;
 }
 
-export function HomeScreen({
-  naam,
-  sticker,
-  onReis,
-  onReeks,
-  onBegin,
-  onModule,
-}: HomeScreenProps) {
+export function HomeScreen({ naam, sticker, onReis, onReeks, onBegin, onModule }: HomeScreenProps) {
   const [states, setStates] = useState<Map<string, ItemState> | null>(null);
   const [played, setPlayed] = useState<readonly PlayedRound[]>([]);
   const desk = useDesk();

@@ -1,11 +1,5 @@
 import type { ReactNode } from 'react';
-import {
-  dagenInMaand,
-  dayKey,
-  kalenderWeken,
-  laatsteZevenDagen,
-  type Oefendag,
-} from '@/game-core';
+import { dagenInMaand, dayKey, kalenderWeken, laatsteZevenDagen, type Oefendag } from '@/game-core';
 import { t, type TranslationKey } from '@/i18n';
 import { dagKort, dagLang, ReeksGetal, WeekRij } from './WeekRij';
 import { useReeks } from './useReeks';

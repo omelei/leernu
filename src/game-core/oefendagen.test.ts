@@ -12,7 +12,11 @@ const rond = (key: string, uur = 15) => op(key, uur).toISOString();
 
 describe('dagenGeoefend', () => {
   it('counts a day once, however many rounds were in it', () => {
-    const dagen = dagenGeoefend([rond('2026-09-08', 9), rond('2026-09-08', 16), rond('2026-09-10')]);
+    const dagen = dagenGeoefend([
+      rond('2026-09-08', 9),
+      rond('2026-09-08', 16),
+      rond('2026-09-10'),
+    ]);
     expect([...dagen].sort()).toEqual(['2026-09-08', '2026-09-10']);
   });
 
