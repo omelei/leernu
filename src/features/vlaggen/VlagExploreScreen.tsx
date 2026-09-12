@@ -42,13 +42,11 @@ export function VlagExploreScreen({
       : `${chosen.naam}. ${t('vlag.explore.hoofdstad')}: ${chosen.hoofdstad}. ${chosen.weetje}`;
 
   return (
-    <div className="flex h-screen flex-col bg-paper" data-module="vlaggen">
-      <header className="flex flex-none items-center gap-6 border-b border-line px-6 py-4">
+    <div className="flex h-screen flex-col bg-papier" data-module="vlaggen" data-thema="ronde">
+      <header className="flex flex-none items-center gap-6 border-b border-rand-licht px-6 py-4">
         <div className="min-w-0">
           <p className="tk-label">{t('vlag.explore.kind')}</p>
-          <h1 className="tk-display truncate text-h1 font-semibold">
-            {set ? vlagSetNaam(set) : ''}
-          </h1>
+          <h1 className="tk-display truncate text-paginakop">{set ? vlagSetNaam(set) : ''}</h1>
         </div>
 
         {chosen !== null && <SpeakButton text={spoken} />}
@@ -65,9 +63,9 @@ export function VlagExploreScreen({
       <div className="flex min-h-0 flex-1 flex-col-reverse md:flex-row">
         <nav
           aria-label={t('explore.listLabel')}
-          className="flex min-h-0 flex-1 flex-col border-t border-line md:w-[320px] md:flex-none md:border-r md:border-t-0"
+          className="flex min-h-0 flex-1 flex-col border-t border-rand-licht md:w-[320px] md:flex-none md:border-r md:border-t-0"
         >
-          <p className="flex-none px-6 py-3 text-ink-2">{t('vlag.explore.hint')}</p>
+          <p className="flex-none px-6 py-3 text-tekst-secundair">{t('vlag.explore.hint')}</p>
 
           <ul className="min-h-0 flex-1 overflow-y-auto px-3 pb-3">
             {items.map((vlag) => {
@@ -79,8 +77,8 @@ export function VlagExploreScreen({
                     aria-current={picked ? 'true' : undefined}
                     className={
                       picked
-                        ? 'w-full rounded-control border-2 border-ink bg-surface px-4 py-3 text-left font-semibold'
-                        : 'w-full rounded-control border-2 border-transparent px-4 py-3 text-left'
+                        ? 'w-full rounded-chip border-2 border-inkt px-4 py-3 text-left font-semibold'
+                        : 'w-full rounded-chip border-2 border-transparent px-4 py-3 text-left'
                     }
                     onClick={() => setChosenId(picked ? null : vlag.id)}
                   >
@@ -99,7 +97,7 @@ export function VlagExploreScreen({
               for "Klaar". */}
           <div className="flex min-h-0 flex-1 items-center justify-center overflow-hidden p-6">
             {chosen === null ? (
-              <p className="text-ink-2">{t('vlag.explore.nothingChosen')}</p>
+              <p className="text-tekst-secundair">{t('vlag.explore.nothingChosen')}</p>
             ) : (
               <div className="tk-vlag-podium tk-vlag-podium-hoog">
                 <Vlag vlag={chosen} alt={t('vlag.alt', { naam: chosen.naam })} lazy={false} />
@@ -109,10 +107,10 @@ export function VlagExploreScreen({
 
           {/* Reserved rather than appearing, so choosing a flag does not shove
               the picture upward. */}
-          <div className="min-h-[9rem] flex-none border-t border-line px-6 py-4">
+          <div className="min-h-[9rem] flex-none border-t border-rand-licht px-6 py-4">
             {chosen === null ? null : (
               <>
-                <h2 className="tk-display text-h2 font-semibold">{chosen.naam}</h2>
+                <h2 className="tk-display text-sectiekop">{chosen.naam}</h2>
                 <dl className="tk-vlag-feiten">
                   <div>
                     <dt className="tk-label">

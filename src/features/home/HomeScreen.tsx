@@ -94,8 +94,8 @@ export function HomeScreen({ naam, sticker, onReis, onBegin, onModule }: HomeScr
 
   const kop = (
     <div className="tk-home-kop">
-      <h1 className="tk-display tk-titel font-semibold">{t('home.welcome', { naam })}</h1>
-      <p className="text-body text-ink-2">{t('home.todayOpen')}</p>
+      <h1 className="tk-display tk-titel">{t('home.welcome', { naam })}</h1>
+      <p className="text-lopend text-tekst-secundair">{t('home.todayOpen')}</p>
     </div>
   );
 
@@ -196,7 +196,7 @@ function Populairst({
   return (
     <ScrollRij
       titel={t('home.popularTitle')}
-      onder={leeg ? <p className="text-ink-2">{t('home.popularNew')}</p> : null}
+      onder={leeg ? <p className="text-tekst-secundair">{t('home.popularNew')}</p> : null}
     >
       {lijst.map(({ deel, mode, keer }) => (
         <GeoefendKaart

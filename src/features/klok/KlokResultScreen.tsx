@@ -36,19 +36,19 @@ export function KlokResultScreen({
     <main className="mx-auto flex w-full max-w-2xl flex-col gap-8 p-6" data-module="klok">
       <div>
         <p className="tk-label">{t('result.title')}</p>
-        <h1 className="tk-display text-h1 font-semibold">{t('result.changed')}</h1>
-        <p className="mt-2 text-body">
+        <h1 className="tk-display text-paginakop">{t('result.changed')}</h1>
+        <p className="mt-2 text-lopend">
           {state.gained === 0
             ? t('result.gainedNone')
             : state.gained === 1
               ? t('result.gainedOne')
               : t('result.gainedMany', { aantal: state.gained })}
         </p>
-        <p className="mt-4 text-ink-2">
+        <p className="mt-4 text-tekst-secundair">
           {t('result.score', { goed: state.correctCount, totaal: state.answeredCount })}
         </p>
         {stoppedEarly ? (
-          <p className="text-ink-2">
+          <p className="text-tekst-secundair">
             {t('result.stoppedEarly', { gedaan: state.answeredCount, totaal: state.total })}
           </p>
         ) : null}
@@ -79,11 +79,11 @@ export function KlokResultScreen({
           </ul>
         </section>
       ) : (
-        <p className="text-body">{t('result.allCorrect')}</p>
+        <p className="text-lopend">{t('result.allCorrect')}</p>
       )}
 
       {state.streak ? (
-        <p className="text-ink-2">
+        <p className="text-tekst-secundair">
           {state.streak.state.huidigeStreak <= 1
             ? t('result.streakGrewOne')
             : t('result.streakGrew', { aantal: state.streak.state.huidigeStreak })}

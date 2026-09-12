@@ -85,7 +85,7 @@ export function ToetsenBlok({ now = new Date() }: { readonly now?: Date }) {
       ) : (
         <>
           {plan.toetsen.length === 0 ? (
-            <p className="text-ink-2">{t('home.testNone')}</p>
+            <p className="text-tekst-secundair">{t('home.testNone')}</p>
           ) : (
             <ul className="tk-toets-lijst">
               {plan.toetsen.map((toets) => (
@@ -180,7 +180,7 @@ function ToetsRegel({
           {t(subject.name)}
         </span>
       ) : (
-        <span className="text-ink-2">{t('home.testSubjectNone')}</span>
+        <span className="text-tekst-secundair">{t('home.testSubjectNone')}</span>
       )}
 
       <span className="tk-toets-wanneer">{wanneerKort(toets, now)}</span>
@@ -242,7 +242,7 @@ function ToetsToevoegen({
   return (
     <form className="flex flex-col gap-3" onSubmit={submit}>
       <label className="flex min-w-0 flex-col gap-2">
-        <span className="text-ink-2">{t('home.testPick')}</span>
+        <span className="text-tekst-secundair">{t('home.testPick')}</span>
         <input
           type="date"
           className="tk-input"
@@ -252,7 +252,7 @@ function ToetsToevoegen({
       </label>
 
       <label className="flex min-w-0 flex-col gap-2">
-        <span className="text-ink-2">{t('home.testSubjectPick')}</span>
+        <span className="text-tekst-secundair">{t('home.testSubjectPick')}</span>
         <select
           className="tk-input"
           value={subject}

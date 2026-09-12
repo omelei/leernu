@@ -238,14 +238,14 @@ export function ModuleScreen({
               handoff drops the name on a phone; a chooser that asks "wat wil
               je oefenen?" of nobody in particular is a form, and asked of Fem
               it is a question (ADR-095). */}
-          <h1 className="tk-display tk-titel font-semibold">{t('choose.title', { naam })}</h1>
+          <h1 className="tk-display tk-titel">{t('choose.title', { naam })}</h1>
 
           {/* The reason this week has a reason, but only on the page it is
               about. */}
           {plan.subject === module.id ? (
             <p className="flex flex-wrap items-center gap-3">
               <span className="tk-badge">{t('home.testLabel')}</span>
-              <span className="text-ink-2">{t('choose.testSubject')}</span>
+              <span className="text-tekst-secundair">{t('choose.testSubject')}</span>
               {/* One press that answers this page the way the test will ask it:
                   everything the subject holds, and no answers until the end.
                   It chooses rather than starts (ADR-085). */}
@@ -647,7 +647,7 @@ function Rol({
   const naam = naamVan(drukste.deel);
 
   return (
-    <p className="flex flex-wrap items-center gap-3 text-ink-2">
+    <p className="flex flex-wrap items-center gap-3 text-tekst-secundair">
       {t('choose.dueBody', { aantal: drukste.due, set: naam })}
       <Button variant="tertiary" onClick={() => onSet(drukste.deel.setId)}>
         {t('choose.dueAction', { set: naam })}

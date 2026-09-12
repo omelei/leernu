@@ -7,6 +7,7 @@ import { RoundProgress } from '@/features/practice/RoundProgress';
 import { SterTeller } from '@/features/reis/SterTeller';
 import { StopButton } from '@/features/practice/StopButton';
 import { Counter } from '@/features/round/Teller';
+import { UitkomstTeken } from '@/features/round/UitkomstTeken';
 import { KlokFace } from './KlokFace';
 import { klokVoluit, klokWoorden } from './klokTaal';
 import { useKlokRound, typesTheKlok, wijstDeKlokAan, type KlokMode } from './useKlokRound';
@@ -74,7 +75,7 @@ export function KlokScreen({
   if (state.error !== null) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-6">
-        <p className="tk-display text-h2">{t('practice.mapFailed')}</p>
+        <p className="tk-display text-sectiekop">{t('practice.mapFailed')}</p>
         <button type="button" className="tk-button" onClick={onHome}>
           {t('result.home')}
         </button>
@@ -88,7 +89,7 @@ export function KlokScreen({
   if (state.phase === 'loading' || !state.question) {
     return (
       <main className="flex min-h-screen items-center justify-center p-6" aria-busy="true">
-        <p className="text-ink-2">{t('practice.loading')}</p>
+        <p className="text-tekst-secundair">{t('practice.loading')}</p>
       </main>
     );
   }
@@ -113,7 +114,7 @@ export function KlokScreen({
   const gegeven = state.given === null ? state.getypt : klokVoluit(state.given);
 
   return (
-    <div className="flex h-screen flex-col bg-paper" data-module="klok">
+    <div className="flex h-screen flex-col bg-papier" data-module="klok" data-thema="ronde">
       <header className="tk-round-bar">
         <StopButton onStop={stop} />
         {/* The dots, except in the endless rounds, which have no ten to count
@@ -167,18 +168,23 @@ export function KlokScreen({
         <div className="tk-round-question">
           {revealed ? (
             <>
-              <p className="tk-display text-h2 font-semibold">
-                {state.lastCorrect
-                  ? t('klok.correct', { tijd: klokVoluit(tijd) })
-                  : t('klok.wrong', { tijd: klokVoluit(tijd) })}
-              </p>
-              <p className="text-body text-ink-2">
-                {state.lastCorrect
-                  ? ''
-                  : gegeven === null || gegeven === ''
-                    ? t('klok.dontKnowSub')
-                    : t('klok.wrongSub', { gegeven })}
-              </p>
+              <div className="flex items-start gap-4">
+                <UitkomstTeken uitkomst={state.lastCorrect ? 'goed' : 'fout'} />
+                <div className="min-w-0">
+                  <p className="tk-display text-sectiekop">
+                    {state.lastCorrect
+                      ? t('klok.correct', { tijd: klokVoluit(tijd) })
+                      : t('klok.wrong', { tijd: klokVoluit(tijd) })}
+                  </p>
+                  <p className="text-lopend text-tekst-secundair">
+                    {state.lastCorrect
+                      ? ''
+                      : gegeven === null || gegeven === ''
+                        ? t('klok.dontKnowSub')
+                        : t('klok.wrongSub', { gegeven })}
+                  </p>
+                </div>
+              </div>
               {/* A timed round moves on by itself, so there is nothing to
                   press and nothing to charge a child for pressing. */}
               {state.rule.kind !== 'tijd' && (
@@ -195,7 +201,7 @@ export function KlokScreen({
                   On the mode that asks the other way round, the heading *is*
                   the question: the time, in words, and nothing on the stage
                   but the four faces to choose between. */}
-              <h1 className="tk-display mt-1 text-h1 font-semibold">
+              <h1 className="tk-display mt-1 text-vraag">
                 {andersom ? woorden : t('klok.prompt')}
               </h1>
               {typing ? <KlokField key={state.index} onSubmit={submit} /> : null}

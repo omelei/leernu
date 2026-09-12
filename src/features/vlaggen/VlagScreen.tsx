@@ -7,6 +7,7 @@ import { RoundProgress } from '@/features/practice/RoundProgress';
 import { StopButton } from '@/features/practice/StopButton';
 import { SterTeller } from '@/features/reis/SterTeller';
 import { Counter } from '@/features/round/Teller';
+import { UitkomstTeken } from '@/features/round/UitkomstTeken';
 import { Vlag } from './Vlag';
 import { VlagResultScreen } from './VlagResultScreen';
 import { useVlagRound, type VlagMode } from './useVlagRound';
@@ -60,7 +61,7 @@ export function VlagScreen({
   if (state.error !== null) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-6">
-        <p className="tk-display text-h2">{t('vlag.failed')}</p>
+        <p className="tk-display text-sectiekop">{t('vlag.failed')}</p>
         <button type="button" className="tk-button" onClick={onHome}>
           {t('result.home')}
         </button>
@@ -75,7 +76,7 @@ export function VlagScreen({
   if (state.phase === 'loading' || !state.question) {
     return (
       <main className="flex min-h-screen items-center justify-center p-6" aria-busy="true">
-        <p className="text-ink-2">{t('vlag.loading')}</p>
+        <p className="text-tekst-secundair">{t('vlag.loading')}</p>
       </main>
     );
   }
@@ -95,7 +96,7 @@ export function VlagScreen({
   const spoken = zoeken ? `${vlag.naam}. ${instruction}` : instruction;
 
   return (
-    <div className="flex h-screen flex-col bg-paper" data-module="vlaggen">
+    <div className="flex h-screen flex-col bg-papier" data-module="vlaggen" data-thema="ronde">
       <header className="tk-round-bar">
         <StopButton onStop={stop} />
         {state.rule.kind === 'fixed' ? (
@@ -136,14 +137,19 @@ export function VlagScreen({
         <div className="tk-round-question">
           {revealed ? (
             <>
-              <p className="tk-display text-h2 font-semibold">
-                {state.lastCorrect
-                  ? t('vlag.correct', { naam: vlag.naam })
-                  : t('vlag.wrong', { naam: vlag.naam })}
-              </p>
-              <p className="text-body text-ink-2">
-                {feedbackSub(state.lastCorrect, state.given, zoeken)}
-              </p>
+              <div className="flex items-start gap-4">
+                <UitkomstTeken uitkomst={state.lastCorrect ? 'goed' : 'fout'} />
+                <div className="min-w-0">
+                  <p className="tk-display text-sectiekop">
+                    {state.lastCorrect
+                      ? t('vlag.correct', { naam: vlag.naam })
+                      : t('vlag.wrong', { naam: vlag.naam })}
+                  </p>
+                  <p className="text-lopend text-tekst-secundair">
+                    {feedbackSub(state.lastCorrect, state.given, zoeken)}
+                  </p>
+                </div>
+              </div>
               <button ref={nextButton} type="button" className="tk-button mt-4" onClick={next}>
                 {t('practice.next')}
               </button>
@@ -153,7 +159,7 @@ export function VlagScreen({
               <p className="tk-label">{instruction}</p>
               {/* The heading is the question when a name is asked for a flag:
                   the name itself, and flags on the stage to choose from. */}
-              <h1 className="tk-display mt-1 text-h1 font-semibold">
+              <h1 className="tk-display mt-1 text-vraag">
                 {zoeken ? vlag.naam : t('vlag.prompt')}
               </h1>
               {zoeken ? null : (

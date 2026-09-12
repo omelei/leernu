@@ -93,7 +93,7 @@ export function Shell({
   }));
 
   return (
-    <div className="flex min-h-screen flex-col bg-paper">
+    <div className="flex min-h-screen flex-col bg-kaart">
       <header className="tk-appbar flex-none">
         {/* The logo, and the way back to the front door. The wordmark where
             there is room for it; the mark alone below 1200, where the bar is

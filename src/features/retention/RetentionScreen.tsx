@@ -47,7 +47,7 @@ export function RetentionScreen({ aside }: { readonly aside: ReactNode }) {
   if (states === null) {
     return (
       <div className="p-6" aria-busy="true">
-        <p className="text-ink-2">{t('practice.loading')}</p>
+        <p className="text-tekst-secundair">{t('practice.loading')}</p>
       </div>
     );
   }
@@ -57,7 +57,7 @@ export function RetentionScreen({ aside }: { readonly aside: ReactNode }) {
   return (
     <div className="tk-page">
       <div className="tk-page-main">
-        <h1 className="tk-display text-h1 font-semibold">{t('retention.title')}</h1>
+        <h1 className="tk-display text-paginakop">{t('retention.title')}</h1>
 
         {/* Which set. Pills rather than a select: five options, all worth
             seeing, and a select on a touch screen is a menu that covers the
