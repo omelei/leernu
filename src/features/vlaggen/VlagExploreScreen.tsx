@@ -44,11 +44,7 @@ export function VlagExploreScreen({
   return (
     <div className="ln-ontdek" data-module="vlaggen">
       <div className="ln-ontdek-kop">
-        <PaginaKop
-          titel={set ? vlagSetNaam(set) : ''}
-          meta={t('vlag.explore.kind')}
-          soort="ding"
-        />
+        <PaginaKop titel={set ? vlagSetNaam(set) : ''} meta={t('vlag.explore.kind')} soort="ding" />
         <span className="ln-ontdek-acties">
           {chosen !== null && <SpeakButton text={spoken} />}
           <Button variant="secondary" onClick={onHome}>
