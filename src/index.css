@@ -504,7 +504,10 @@
   }
 
   /* The label above an area: Public Sans 600 at 13/16, tracked out and in
-   * capitals, so it reads as a category and never competes with the question. */
+   * capitals, so it reads as a category and never competes with the question.
+   * It grows with the reader's own text size, like everything on the scale, so
+   * it wraps: at 200% it is 26 high, and a label that cannot break pushes the
+   * page sideways (e2e/shell.spec.ts). */
   .tk-label {
     font-family: var(--font-tekst);
     font-size: var(--type-vlaklabel);
@@ -513,7 +516,6 @@
     font-weight: var(--type-vlaklabel-weight);
     text-transform: uppercase;
     color: var(--tekst-secundair);
-    white-space: nowrap;
   }
 
   /* ---- Surfaces --------------------------------------------------------
@@ -2589,11 +2591,14 @@
   }
 
   /* The streak, as a pill at every size. Secondary ink on the surface, 5.6:1,
-   * because it is context for the work and not a headline beside it. */
+   * because it is context for the work and not a headline beside it. It is the
+   * one thing in the app bar that may give way, so the profile switch stays on
+   * the screen when a reader's text is large. */
   .tk-streak {
     display: inline-flex;
     align-items: center;
-    flex: none;
+    flex: 0 1 auto;
+    min-width: 0;
     gap: 8px;
     padding: 8px 14px;
     border-radius: var(--radius-pil);

@@ -133,13 +133,38 @@ test('keeps the wordmark and the question legible at 200% text', async ({ page }
   const size = await heading.evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
   expect(size).toBeGreaterThan(40);
 
-  // And nothing has been pushed off the side by the growth.
+  // And nothing has been pushed off the side by the growth. When something
+  // has, the failure names it: a number of pixels says there is a problem, the
+  // element says where. Anything inside a box that scrolls or clips on its own
+  // (the rows of cards) is left out, because that box keeps it off the page.
   const overflow = await page.evaluate(
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
   );
-  expect(overflow, 'doubling the text size must not cause sideways scrolling').toBeLessThanOrEqual(
-    0,
-  );
+  const tooWide = await page.evaluate(() => {
+    const edge = document.documentElement.clientWidth + 1;
+    const heldBack = (el: Element) => {
+      for (let box = el.parentElement; box; box = box.parentElement) {
+        if (getComputedStyle(box).overflowX !== 'visible') {
+          return box.getBoundingClientRect().right <= edge;
+        }
+      }
+      return false;
+    };
+    // The parts of a drawing are named by the drawing, not one by one.
+    const drawn = (el: Element) => el.tagName.toLowerCase() !== 'svg' && el.closest('svg') !== null;
+    return [...document.querySelectorAll('body *')]
+      .filter((el) => el.getBoundingClientRect().right > edge && !heldBack(el) && !drawn(el))
+      .slice(0, 12)
+      .map((el) => {
+        const name = [el.tagName.toLowerCase(), ...el.classList].join('.');
+        const right = Math.round(el.getBoundingClientRect().right);
+        return `${name} to ${right}: ${(el.textContent ?? '').trim().slice(0, 40)}`;
+      });
+  });
+  expect(
+    overflow,
+    `doubling the text size must not cause sideways scrolling:\n${tooWide.join('\n')}`,
+  ).toBeLessThanOrEqual(0);
 });
 
 test('below 1200 the modules are a menu under the app bar', async ({ page }, testInfo) => {
