@@ -73,6 +73,9 @@ test('a new child finds a table to start with on Vandaag, at every size', async 
   // Before any round, Verder oefenen holds the starters (S2): one set per
   // module, the tables among them.
   const lijst = page.getByRole('region', { name: 'Verder oefenen' });
+  // The list is read from IndexedDB and fills in after the first paint; a
+  // press before that can land on a card that is about to move.
+  await expect(page.locator('.ln-verder')).not.toHaveAttribute('aria-busy', 'true');
   await lijst.getByRole('button', { name: /Tafel van 2/ }).click();
 
   await expect(page.getByRole('heading', { name: 'Kies je ronde' })).toBeVisible();

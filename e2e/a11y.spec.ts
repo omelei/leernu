@@ -123,8 +123,9 @@ test('the module pages have no violations, in each of their four shapes', async 
   await expect(page.getByRole('button', { name: /^Halve uren/ })).toBeVisible();
   expect((await scan(page)).violations).toEqual([]);
 
+  // Named as Oefenen names it, the row a child pressed to get here.
   await page.goto('/woordjes');
-  await expect(page.getByRole('heading', { name: 'Taal' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Woordjes', level: 1 })).toBeVisible();
   expect((await scan(page)).violations).toEqual([]);
 });
 
