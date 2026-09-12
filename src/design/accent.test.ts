@@ -180,9 +180,9 @@ describe('a module accent colours three things and nothing else', () => {
   });
 
   it('keeps the mark out of it entirely', () => {
-    // The dot is the one thing that is identical in every module. If it ever
+    // The logo and the dot are identical in every module. If either ever
     // learns about accents, the brand has seven versions of itself.
-    for (const name of ['Dot.tsx', 'Wordmark.tsx']) {
+    for (const name of ['Dot.tsx', 'Wordmark.tsx', 'Brandmark.tsx']) {
       const source = readFileSync(join(ROOT, 'src', 'components', name), 'utf8');
       const code = source
         .split('\n')

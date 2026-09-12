@@ -83,8 +83,8 @@ describe('every component renders every state it claims to have', () => {
 
   it('names the mark once, for a screen reader, however often it is drawn', () => {
     render(<Gallery />);
-    // The dot inside the wordmark is a letter, not information, so the mark has
-    // one accessible name and the shape is hidden.
+    // The wordmark is a drawing of a name, not information, so the mark has one
+    // accessible name and the drawing is hidden.
     expect(screen.getAllByText('leer.nu').length).toBeGreaterThan(0);
     expect(screen.getByText('leer.nu/topo')).toBeInTheDocument();
   });

@@ -1,0 +1,21 @@
+/* leer.nu — logo, huisstijl v2
+   Losse bestanden in logo/svg en logo/png. Kleuren volgen --ink / --paper
+   uit src/design/tokens.css; de wisseling licht/ronde gaat via [data-thema]. */
+
+.logo{display:inline-block;line-height:0}
+.logo img,.logo svg{display:block;height:auto}
+
+/* lockup: hoogte zetten, breedte volgt (verhouding 1 : 0,169) */
+.logo--lockup img{height:32px;width:auto}
+.logo--lockup-groot img{height:48px;width:auto}
+
+/* merkteken: altijd vierkant */
+.logo--merkteken img{width:40px;height:40px}
+
+/* vrije ruimte rond het logo: minimaal een halve ruitbreedte */
+.logo{padding:calc(var(--logo-hoogte,32px) * 0.38)}
+
+/* themawissel: laat de papier-variant zien in het ronde (donkere) thema */
+.logo [data-variant="papier"]{display:none}
+[data-thema='ronde'] .logo [data-variant="inkt"]{display:none}
+[data-thema='ronde'] .logo [data-variant="papier"]{display:block}

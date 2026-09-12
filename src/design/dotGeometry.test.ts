@@ -1,30 +1,26 @@
 import { describe, expect, it } from 'vitest';
-import { dotGeometry, WORDMARK_DOT_RATIO, WORDMARK_FILL } from './dotGeometry';
+import { dotGeometry } from './dotGeometry';
+
+/** The fill the first logo stood at, and the one the numbers below were read at. */
+const FILL = 0.62;
 
 /**
- * The dot, checked against the files the designer delivered.
+ * The dot, pinned.
  *
- * Every number below was read out of docs/Logo/*.svg, not derived from the
- * formula being tested — which is the only way this test says anything. If the
- * component and the artefacts ever disagree, the logo has quietly changed, and
- * that is the sort of change nobody notices in a diff and everybody notices on
- * a home screen.
+ * Every number in the first block was read out of the first logo's SVGs — the
+ * logo was this dot until ADR-108 — not derived from the formula being tested,
+ * which is the only way this test says anything. The logo has a shape of its
+ * own now. The dot kept its geometry as the product's measure of progress, and
+ * these numbers are what keep it from changing without anyone noticing.
  *
- * Two things the artefacts settled that the prose got wrong, both worth keeping
- * a record of here because the prose is what someone will read next:
- *
- *   §A says the dot is 41% of the x-height. Every drawing puts it at 41% of the
- *   font size — 36 at 88, 26 at 64, 41 at 100.
- *
- *   §A says the negative ring is 10% heavier, without saying where. The negative
- *   wordmark and the paper merkteken both do it, to four decimals. The three app
- *   icons, also paper on ink, do not — which is a fault in those three files and
- *   not a rule, since the logo documentation states the correction for the paper
- *   merkteken outright.
+ * One thing the artefacts settled that the prose got wrong, worth a record here
+ * because the prose is what someone will read next: §A says the negative ring
+ * is 10% heavier, without saying where. The negative wordmark and the paper
+ * merkteken both did it, to four decimals.
  */
-describe('the dot reproduces the delivered logo files', () => {
-  it('leer-nu-merkteken-inkt.svg — 96px, ink', () => {
-    const g = dotGeometry(96, WORDMARK_FILL);
+describe('the dot keeps the geometry it was drawn with', () => {
+  it('96px, ink', () => {
+    const g = dotGeometry(96, FILL);
     expect(g.ring).toBeCloseTo(8, 3);
     expect(g.radius).toBeCloseTo(44, 3);
     expect(g.innerRadius).toBeCloseTo(40, 3);
@@ -32,16 +28,16 @@ describe('the dot reproduces the delivered logo files', () => {
     expect(g.fillHeight).toBeCloseTo(49.6, 3);
   });
 
-  it('leer-nu-woordbeeld-positief.svg — 41px dot in a 100px font', () => {
-    const g = dotGeometry(41, WORDMARK_FILL);
+  it('41px, ink', () => {
+    const g = dotGeometry(41, FILL);
     expect(g.ring).toBeCloseTo(3.417, 3);
     expect(g.radius).toBeCloseTo(18.792, 3);
     expect(g.innerRadius).toBeCloseTo(17.083, 3);
     expect(g.fillHeight).toBeCloseTo(21.183, 3);
   });
 
-  it('leer-nu-merkteken-papier.svg — 96px, paper on ink', () => {
-    const g = dotGeometry(96, WORDMARK_FILL, true);
+  it('96px, paper on ink', () => {
+    const g = dotGeometry(96, FILL, true);
     expect(g.ring).toBeCloseTo(8.8, 3);
     expect(g.radius).toBeCloseTo(43.6, 3);
     expect(g.innerRadius).toBeCloseTo(39.2, 3);
@@ -49,8 +45,8 @@ describe('the dot reproduces the delivered logo files', () => {
     expect(g.fillHeight).toBeCloseTo(48.608, 3);
   });
 
-  it('leer-nu-woordbeeld-negatief.svg — the same dot, 10% heavier ring', () => {
-    const g = dotGeometry(41, WORDMARK_FILL, true);
+  it('41px, paper on ink — the same dot, 10% heavier ring', () => {
+    const g = dotGeometry(41, FILL, true);
     expect(g.ring).toBeCloseTo(3.758, 3);
     expect(g.radius).toBeCloseTo(18.621, 3);
     expect(g.innerRadius).toBeCloseTo(16.742, 3);
@@ -58,33 +54,30 @@ describe('the dot reproduces the delivered logo files', () => {
   });
 
   it('keeps the outer diameter when the ring gets heavier', () => {
-    const positive = dotGeometry(41, WORDMARK_FILL);
-    const negative = dotGeometry(41, WORDMARK_FILL, true);
+    const positive = dotGeometry(41, FILL);
+    const negative = dotGeometry(41, FILL, true);
     expect(2 * positive.radius + positive.ring).toBeCloseTo(41, 6);
     expect(2 * negative.radius + negative.ring).toBeCloseTo(41, 6);
   });
 
-  it('leer-nu-app-ios-1024.svg — a 512px mark, and no negative correction', () => {
-    const g = dotGeometry(512, WORDMARK_FILL);
+  it('512px', () => {
+    const g = dotGeometry(512, FILL);
     expect(g.ring).toBeCloseTo(42.667, 3);
     expect(g.radius).toBeCloseTo(234.667, 3);
     expect(g.innerRadius).toBeCloseTo(213.333, 3);
     expect(g.fillHeight).toBeCloseTo(264.533, 3);
   });
 
-  it('leer-nu-app-android-voorgrond.svg — 442px, inside the 66/108 safe zone', () => {
-    const g = dotGeometry(442, WORDMARK_FILL);
+  it('442px', () => {
+    const g = dotGeometry(442, FILL);
     expect(g.ring).toBeCloseTo(36.833, 3);
     expect(g.radius).toBeCloseTo(202.583, 3);
     expect(g.innerRadius).toBeCloseTo(184.167, 3);
     expect(g.fillHeight).toBeCloseTo(228.367, 3);
-
-    // The mark's full width against the Android safe zone, 66 of 108.
-    expect(2 * g.radius + g.ring).toBeLessThanOrEqual((66 / 108) * 1024);
   });
 
-  it('leer-nu-favicon-32.svg — a 17px mark on the tile', () => {
-    const g = dotGeometry(17, WORDMARK_FILL);
+  it('17px', () => {
+    const g = dotGeometry(17, FILL);
     expect(g.ring).toBeCloseTo(1.417, 3);
     expect(g.radius).toBeCloseTo(7.792, 3);
     expect(g.innerRadius).toBeCloseTo(7.083, 3);
@@ -117,12 +110,5 @@ describe('the rules that are not about one file', () => {
     for (const g of [empty, half, full]) {
       expect(g.fillTop + g.fillHeight).toBeCloseTo(48 + g.innerRadius, 6);
     }
-  });
-
-  it('puts the wordmark dot at 41% of the font size', () => {
-    // 36 at 88, 26 at 64 and 41 at 100, all drawn in §A or its own header.
-    expect(Math.round(88 * WORDMARK_DOT_RATIO)).toBe(36);
-    expect(Math.round(64 * WORDMARK_DOT_RATIO)).toBe(26);
-    expect(Math.round(100 * WORDMARK_DOT_RATIO)).toBe(41);
   });
 });

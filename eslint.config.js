@@ -6,6 +6,9 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 
 export default tseslint.config(
   { ignores: ['dist', 'node_modules', 'playwright-report', 'test-results', 'public'] },
+  // The script that drew the logo is the designer's, kept beside the files it
+  // wrote (ADR-108). It is a record, not part of the build.
+  { ignores: ['docs/logo'] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
 
