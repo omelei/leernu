@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { SectieKop } from '@/components/ds';
 import { DiplomaIcon } from '@/components/Icon';
 import { t } from '@/i18n';
 import { loadDiplomas } from '@/store/rewardStore';
@@ -40,8 +41,8 @@ export function Tafeldiplomas({ onKies }: { readonly onKies: (setId: string) => 
 
   return (
     <section className="flex flex-col gap-3" aria-label={t('rekenen.diplomasTitle')}>
-      <h2 className="tk-label">{t('rekenen.diplomasTitle')}</h2>
-      <p className="text-ink-2">
+      <SectieKop titel={t('rekenen.diplomasTitle')} />
+      <p className="ln-sub">
         {t('rekenen.diplomasCount', { aantal: behaald.size, totaal: TAFELS.length })}
       </p>
 

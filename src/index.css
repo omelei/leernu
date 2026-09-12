@@ -3736,6 +3736,132 @@
     min-width: 0;
   }
 
+  /* Ontdekken: not a round and not drawn in stap 2 — the component set on the
+   * layout it had. The list beside the canvas from a tablet up, under it on a
+   * phone; the column is the 320 the list always had. */
+  .ln-ontdek {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+    height: 100vh;
+    height: 100dvh;
+    padding: var(--pad-card-phone-sm);
+    background: var(--grond);
+    color: var(--ink);
+  }
+  @media (min-width: 768px) {
+    .ln-ontdek {
+      gap: var(--gap-lg);
+      padding: var(--space-screen);
+    }
+  }
+  .ln-ontdek-kop {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--gap-lg);
+  }
+  .ln-ontdek-acties {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: var(--gap-md);
+  }
+  .ln-ontdek-lijf {
+    display: flex;
+    flex: 1;
+    flex-direction: column-reverse;
+    gap: var(--gap-md);
+    min-height: 0;
+  }
+  @media (min-width: 768px) {
+    .ln-ontdek-lijf {
+      flex-direction: row;
+      gap: var(--gap-lg);
+    }
+  }
+  .ln-ontdek-lijst {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--gap-sm);
+    min-height: 0;
+    padding: var(--gap-md);
+    border: var(--stroke-hair) solid var(--line);
+    border-radius: var(--card-radius);
+    background: var(--paper);
+  }
+  @media (min-width: 768px) {
+    .ln-ontdek-lijst {
+      flex: none;
+      width: 320px;
+    }
+  }
+  .ln-ontdek-lijst > ul {
+    flex: 1;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    list-style: none;
+  }
+  .ln-ontdek-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: var(--touch-target);
+    padding: 0 var(--gap-md);
+    border: var(--stroke-active) solid transparent;
+    border-radius: var(--radius-chip);
+    background: transparent;
+    color: var(--ink);
+    text-align: left;
+    cursor: pointer;
+  }
+  .ln-ontdek-item:hover {
+    background: var(--inset);
+  }
+  /* Chosen: a rule and a weight, in ink — not the accent, which is for right,
+   * chosen-in-a-module and progress. */
+  .ln-ontdek-item[aria-current='true'] {
+    border-color: var(--ink);
+    background: var(--inset);
+    font-weight: 600;
+  }
+  .ln-ontdek-hoofd {
+    display: flex;
+    flex: none;
+    flex-basis: 50%;
+    flex-direction: column;
+    gap: var(--gap-md);
+    min-height: 0;
+  }
+  @media (min-width: 768px) {
+    .ln-ontdek-hoofd {
+      flex: 1;
+      flex-basis: auto;
+    }
+  }
+  /* Reserved rather than appearing, so choosing moves nothing above it. */
+  .ln-ontdek-uitleg {
+    flex: none;
+    min-height: 7rem;
+    padding: var(--pad-card-phone-sm);
+    border: var(--stroke-hair) solid var(--line);
+    border-radius: var(--card-radius);
+    background: var(--paper);
+  }
+  .ln-feiten {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-lg);
+    margin: var(--gap-sm) 0 0;
+  }
+  .ln-feiten dd {
+    margin: 0;
+  }
+
   /* De poort (S1): the first screen, straight on the ground — no kopbalk, no
    * card. The logo with the slogan under it, then the display heading, one
    * meta line, the field, and the way on. The column is S1's 360. */

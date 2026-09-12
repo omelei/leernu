@@ -1,3 +1,4 @@
+import { Kaart } from '@/components/ds';
 import { Sterren } from '@/components/Sterren';
 import { t } from '@/i18n';
 import type { RoundOutcome } from '@/store/rewardStore';
@@ -32,8 +33,8 @@ export function Beloning({ reward }: { readonly reward: RoundOutcome | null }) {
           : t('result.sterVeel', { aantal: sterren.erbij });
 
   return (
-    <section className="tk-card flex flex-col gap-4" aria-label={t('result.beloningTitle')}>
-      <h2 className="tk-display text-title font-bold">{kop}</h2>
+    <Kaart as="section" className="flex flex-col gap-4" aria-label={t('result.beloningTitle')}>
+      <h2 className="ln-titel">{kop}</h2>
 
       {/* The chest reads the row itself rather than being handed what came out
           of it: a chest is now a choice, and a choice cannot be settled before
@@ -41,6 +42,6 @@ export function Beloning({ reward }: { readonly reward: RoundOutcome | null }) {
       {kistenTeGoed > 0 ? <Kistkeuze /> : null}
 
       <Sterren inKist={sterren.inKist} />
-    </section>
+    </Kaart>
   );
 }
