@@ -240,6 +240,34 @@ export function metFouten<T extends Schedulable>(
 }
 
 /**
+ * Exactly these items, once each, in the order asked — from whichever of the
+ * lists holds them.
+ *
+ * What "Herhaal je fouten" asks after a round (ADR-111): the misses of that
+ * round and nothing else. More than one list because a round that ran on a
+ * clock or on lives reached past its own set, and its misses came with it. An
+ * id no list holds any more is dropped rather than asked as nothing.
+ */
+export function alleenDeze<T extends Schedulable>(
+  ids: readonly string[],
+  ...lijsten: readonly (readonly T[])[]
+): T[] {
+  const perId = new Map<string, T>();
+  for (const lijst of lijsten) {
+    for (const item of lijst) {
+      if (!perId.has(item.id)) perId.set(item.id, item);
+    }
+  }
+  const gezien = new Set<string>();
+  return ids.flatMap((id) => {
+    const item = perId.get(id);
+    if (!item || gezien.has(id)) return [];
+    gezien.add(id);
+    return [item];
+  });
+}
+
+/**
  * Puts a missed item back into the queue, `gap` questions further on.
  *
  * Spec section 4.2 asks for three questions in between. If the round is nearly

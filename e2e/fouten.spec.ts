@@ -63,6 +63,19 @@ test('the clock offers the faces you did not know', async ({ page }) => {
   await expect(page.getByRole('group', { name: 'Kies hoe laat het is' })).toBeVisible();
 });
 
+/**
+ * "Herhaal je fouten" on the result screen: a round with a miss in it offers
+ * those items again, straight away, in the same way of practising.
+ */
+test('the result screen repeats the round’s mistakes', async ({ page }) => {
+  await signIn(page, 'Mats');
+  await kies(page, '/klokkijken', /^Hele uren/, /^Meerkeuze/);
+  await weetHetNiet(page);
+
+  await page.getByRole('button', { name: 'Herhaal je fouten' }).click();
+  await expect(page.getByRole('group', { name: 'Kies hoe laat het is' })).toBeVisible();
+});
+
 test('topography offers the places you did not know, on their own map', async ({ page }) => {
   await signIn(page, 'Isa');
   await kies(page, '/topografie', /^Provincies/, /^Meerkeuze/);

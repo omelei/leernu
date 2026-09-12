@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import {
+  alleenDeze,
   composeRound,
   judgeKlok,
   klokDigitaal,
@@ -123,12 +124,16 @@ function optiesVoor(tijd: KlokItem, rng: () => number): KlokItem[] {
  *
  * Toetsstand: a round that keeps its answers to itself until the end, the same
  * switch the other two modules carry and the same argument (ADR-085).
+ *
+ * @param alleen "Herhaal je fouten": the ids of the faces the last round got
+ *   wrong, which are then the whole round (ADR-111). Null for a normal round.
  */
 export function useKlokRound(
   setId: string,
   mode: KlokMode,
   aantal: number | null = null,
   toetsstand = false,
+  alleen: readonly string[] | null = null,
 ) {
   const { kern, settle, next, stop } = useRoundCore<KlokSet, KlokQuestion, KlokItem, KlokAntwoord>({
     setId,
@@ -145,10 +150,13 @@ export function useKlokRound(
       // lives draws from the whole face, because twelve whole hours would run
       // out long before the minute does — and a child who reaches for the
       // stopwatch is one who can already read the thing.
-      const alles = rule.kind === 'fixed' ? loaded.items : klokPool(setId);
+      const eigen = rule.kind === 'fixed' ? loaded.items : klokPool(setId);
+      // "Herhaal je fouten": the last round's misses and nothing else, from
+      // the whole face if the round reached that far (ADR-111).
+      const alles = alleen ? alleenDeze(alleen, loaded.items, klokPool(setId)) : eigen;
       // "Oefen je fouten": only the faces with a mistake against them, read
       // from the boxes as the round starts (ADR-103).
-      const pool = setId === KLOK_FOUTEN_ID ? metFouten(alles, states) : alles;
+      const pool = setId === KLOK_FOUTEN_ID && !alleen ? metFouten(alles, states) : alles;
 
       const picked = composeRound({
         items: pool,

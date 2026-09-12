@@ -95,9 +95,9 @@ function samengesteld(): VlagSet[] {
   const set = (regio: VlagRegio, onderwerp: VlagOnderwerp, items: readonly VlagItem[]) =>
     sets.push({ id: vlagSetId(regio, onderwerp), regio, onderwerp, items });
 
-  // Home first, then the row's own order. The first set is the one the page
-  // opens on when the address names none, and it opens where topography does:
-  // where a Dutch child starts (`eersteRegio`).
+  // Home first, then the row's own order. The page no longer opens on a set
+  // when the address names none, and it opens on the world rather than on
+  // home (`eersteRegio`, ADR-111); this order is only the order of the list.
   const thuisEerst = ['nederland', ...VLAG_REGIOS.filter((regio) => regio !== 'nederland')];
 
   for (const regio of thuisEerst as VlagRegio[]) {

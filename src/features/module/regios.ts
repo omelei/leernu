@@ -74,10 +74,15 @@ export function regiosVan(moduleId: Module['id']): readonly Regio[] {
 /**
  * Where the page opens when nothing else has decided.
  *
- * Nederland rather than the first row. The row is ordered widest first, the way
- * an atlas is; the page opens where a Dutch child starts, which is home.
+ * Topography opens on Nederland rather than the first row. The row is ordered
+ * widest first, the way an atlas is; the page opens where a Dutch child starts,
+ * which is home.
+ *
+ * Flags open on the world (ADR-111). Nederland on the flags page is the twelve
+ * provincievlaggen, and a child who comes for flags comes for the countries'.
  */
-export function eersteRegio(regios: readonly Regio[]): Regio['id'] | null {
-  const thuis = regios.find((regio) => regio.id === 'nederland' && regio.built);
-  return (thuis ?? regios.find((regio) => regio.built))?.id ?? null;
+export function eersteRegio(moduleId: Module['id'], regios: readonly Regio[]): Regio['id'] | null {
+  const standaard: Regio['id'] = moduleId === 'vlaggen' ? 'wereld' : 'nederland';
+  const eerst = regios.find((regio) => regio.id === standaard && regio.built);
+  return (eerst ?? regios.find((regio) => regio.built))?.id ?? null;
 }

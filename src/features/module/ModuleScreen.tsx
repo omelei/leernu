@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useId, useState, type ReactNode } from 'react';
 import { Button } from '@/components/Button';
 import { CorrectIcon, GoIcon, PaperIcon } from '@/components/Icon';
 import { countMastered, type ItemState, type ModeId } from '@/game-core';
@@ -32,6 +32,8 @@ import {
   toetsVormVan,
   type PracticeForm,
 } from './forms';
+import { isPremiumOnderwerp, isPremiumVorm, metPremium } from './premium';
+import { PremiumLabel } from './PremiumLabel';
 import { useSmallScreen } from '@/features/shell/useSmallScreen';
 
 /**
@@ -59,11 +61,20 @@ import { useSmallScreen } from '@/features/shell/useSmallScreen';
  * second question is the keypad. Klokkijken has no where and one set per
  * subject, so it asks two things. The steps are numbered by the page.
  *
+ * **Nothing is answered for the child** (ADR-111). The page used to open with
+ * the first subject, its first set and the first way already pressed, so the
+ * start bar was full before a question had been answered. Now only the map has
+ * a default — Nederland, or the world on the flags page — and an address that
+ * names a set answers the questions it names. Everything else waits for a
+ * press.
+ *
  * **The start bar is the answers, together.** Each choice as a small chip —
  * the map, the subject, which one, the way, how long — and the Start button at
- * the end of the line. What a screen reader hears from the button is still the
- * whole sentence (ADR-066). On a phone it is a bar stuck to the foot of the
- * screen, the last thing in the page, which ADR-052 put off and ADR-095 builds.
+ * the end of the line. Until every numbered step has an answer the bar is there
+ * but empty: it says which steps still wait, and Start is off. What a screen
+ * reader hears from the button is still the whole sentence (ADR-066). On a
+ * phone it is a bar stuck to the foot of the screen, the last thing in the
+ * page, which ADR-052 put off and ADR-095 builds.
  *
  * **A set has an address.** leer.nu/topografie/provincies opens on it — on the
  * tile and on the region above it.
@@ -81,7 +92,8 @@ export function ModuleScreen({
   readonly naam: string;
   /** Which set the address names, or null for the module's own way in. */
   readonly setId: string | null;
-  readonly onSet: (setId: string) => void;
+  /** Puts a set in the address, or takes it out with null. */
+  readonly onSet: (setId: string | null) => void;
   readonly onStart: (
     deel: Onderdeel,
     mode: ModeId,
@@ -95,6 +107,11 @@ export function ModuleScreen({
   const [formId, setFormId] = useState<ModeId | null>(null);
   /** Where on the map, for the module that has a where. Null follows the set. */
   const [regio, setRegio] = useState<string | null>(null);
+  /**
+   * A subject pressed whose set is a second question still to answer — the
+   * tables before the table. Every set that has been chosen is in the address.
+   */
+  const [vakId, setVakId] = useState<string | null>(null);
   /** How long the child wants the round, or null for the round's own length. */
   const [aantal, setAantal] = useState<number | null>(null);
   /** Whether the round should keep its answers until the end (ADR-085). */
@@ -102,6 +119,7 @@ export function ModuleScreen({
   const prefs = usePreferences();
   const plan = useTestPlan();
   const kleinScherm = useSmallScreen();
+  const nogId = useId();
 
   useEffect(() => {
     void loadItemStates().then(setStates);
@@ -113,22 +131,31 @@ export function ModuleScreen({
   const alleOnderwerpen = onderwerpenVan(module.id, known);
   const alleSets = alleOnderwerpen.flatMap((vak) => vak.sets);
 
-  // An address that names a set nobody has heard of opens the module rather
-  // than an error: the child asked for topography and got topography.
-  const chosen = alleSets.find((deel) => deel.setId === setId) ?? alleSets[0] ?? null;
-  const onderwerp = chosen ? onderwerpVan(alleOnderwerpen, chosen.setId) : null;
+  // Only the address chooses a set. One that names a set nobody has heard of
+  // opens the module rather than an error, with nothing chosen: the child asked
+  // for topography and got topography.
+  const adresSet = setId === null ? null : (alleSets.find((deel) => deel.setId === setId) ?? null);
+  const adresVak = adresSet ? onderwerpVan(alleOnderwerpen, adresSet.setId) : null;
 
-  // The region follows the open set unless the child has said otherwise, so
+  // The region follows the address unless the child has said otherwise, so
   // leer.nu/topografie/provincies opens on Nederland without the address
-  // having to carry the word.
+  // having to carry the word. With neither, the module's own (`eersteRegio`).
   const regios = regiosVan(module.id);
-  const hier = regio ?? onderwerp?.regio ?? eersteRegio(regios);
+  const hier = regio ?? adresVak?.regio ?? eersteRegio(module.id, regios);
   const onderwerpen =
     regios.length === 0 ? alleOnderwerpen : alleOnderwerpen.filter((vak) => vak.regio === hier);
 
+  // The subject is the address's, or the one pressed while its set is still to
+  // choose — and only while it is on the map the page shows. A set in Europe is
+  // not chosen on a page that has moved to Afrika.
+  const gekozenVak =
+    adresVak ?? alleOnderwerpen.find((vak) => vak.id === vakId && vraagtWelke(vak)) ?? null;
+  const onderwerp = gekozenVak !== null && onderwerpen.includes(gekozenVak) ? gekozenVak : null;
+  const chosen = onderwerp !== null ? adresSet : null;
+
   /** How many steps this page has, so the numbers are the page's own. */
   const heeftRegio = regios.length >= 2;
-  const heeftKeuze = onderwerp?.keuze != null && onderwerp.sets.length > 1;
+  const heeftKeuze = onderwerp !== null && vraagtWelke(onderwerp);
   const regioStap = heeftRegio ? 1 : 0;
   const watStap = regioStap + 1;
   const keuzeStap = heeftKeuze ? watStap + 1 : 0;
@@ -151,11 +178,16 @@ export function ModuleScreen({
   // the way in becomes multiple choice (ADR-087). Pointing is still on the
   // page, at the end of the row.
   const krap = teDrukOmAanTeWijzen(chosen?.setId ?? null, chosen?.items.length ?? 0, kleinScherm);
-  const forms = offeredForms(formsFor(module.id), prefs.timer, chosen?.setId ?? null, krap);
+  const aangeboden = offeredForms(formsFor(module.id), prefs.timer, chosen?.setId ?? null, krap);
+  // Before there is a set, a way that is only offered for some sets is not
+  // offered yet: a tafeldiploma drawn before the table is a tile that can
+  // vanish from under a finger the moment the child picks the Keersommen.
+  const forms = chosen ? aangeboden : aangeboden.filter((kandidaat) => !kandidaat.geldtVoor);
   // The ways that are tiles. A way only the oefentoets asks in is reached by
   // pressing the oefentoets, and never offered beside it (ADR-102).
   const tegels = forms.filter((candidate) => !candidate.alleenToets);
-  const gekozenManier = tegels.find((candidate) => candidate.id === formId) ?? tegels[0] ?? null;
+  // No way until one is pressed (ADR-111).
+  const gekozenManier = tegels.find((candidate) => candidate.id === formId) ?? null;
   // The oefentoets is a way of its own (ADR-100). It answers the way a test
   // asks, by typing, and hears back only at the end — so pressing it chooses
   // the way as well, and pressing any other way leaves it.
@@ -182,6 +214,16 @@ export function ModuleScreen({
         ? t('choose.startTest', { wat: startLabel(form, naamVan(chosen), setSize, gekozen) })
         : startLabel(form, naamVan(chosen), setSize, gekozen);
 
+  // The numbered steps still without an answer, in the page's own numbers.
+  // "Hoeveel vragen?" is never among them: it opens on the round's own length,
+  // pressed, which is an answer.
+  const wachtend = [
+    ...(onderwerp === null ? [stap.wat] : []),
+    ...(heeftKeuze && chosen === null ? [stap.keuze] : []),
+    ...(form === null ? [stap.hoe] : []),
+  ];
+  const klaar = chosen !== null && form !== null;
+
   // What the start bar lists: one chip per question the page asked, in the
   // order it asked them, and how long the round will be.
   const regioNaam = heeftRegio ? regios.find((kandidaat) => kandidaat.id === hier) : undefined;
@@ -204,17 +246,30 @@ export function ModuleScreen({
     ...(alsToets ? [{ label: t('start.stand'), waarde: t('choose.testMode') }] : []),
   ];
 
-  const startKnop =
-    chosen && form ? (
-      <Button
-        className="tk-button-go"
-        aria-label={t('choose.goLabel', { wat: zin })}
-        onClick={() => onStart(chosen, form.id, gekozen, alsToets)}
-      >
-        {t('choose.go')}
-        <GoIcon size={24} />
-      </Button>
-    ) : null;
+  /** A set chosen from outside its own subject's row: the map follows the set. */
+  const kiesElders = (id: string) => {
+    setRegio(null);
+    setVakId(null);
+    onSet(id);
+  };
+
+  // Off, not absent, until every step has an answer: a button that appeared
+  // only at the end would be a button a child had to go looking for. What is
+  // still missing is said beside it, and a screen reader hears that too.
+  const startKnop = (
+    <Button
+      className="tk-button-go"
+      disabled={!klaar}
+      aria-label={klaar ? t('choose.goLabel', { wat: zin }) : undefined}
+      aria-describedby={klaar ? undefined : nogId}
+      onClick={() => {
+        if (chosen && form) onStart(chosen, form.id, gekozen, alsToets);
+      }}
+    >
+      {t('choose.go')}
+      <GoIcon size={24} />
+    </Button>
+  );
 
   const vink = (
     <span className="tk-tegel-vink">
@@ -253,7 +308,7 @@ export function ModuleScreen({
                 <Button
                   variant="tertiary"
                   onClick={() => {
-                    onSet(mix);
+                    kiesElders(mix);
                     setToetsstand(true);
                   }}
                 >
@@ -263,7 +318,13 @@ export function ModuleScreen({
             </p>
           ) : null}
 
-          <Rol onderwerpen={onderwerpen} chosen={chosen} known={known} now={now} onSet={onSet} />
+          <Rol
+            onderwerpen={onderwerpen}
+            chosen={chosen}
+            known={known}
+            now={now}
+            onSet={kiesElders}
+          />
         </div>
 
         {/* Where on the map, and only where there is more than one answer. */}
@@ -283,7 +344,12 @@ export function ModuleScreen({
                     aria-pressed={kandidaat.built ? kandidaat.id === hier : undefined}
                     disabled={!kandidaat.built}
                     data-soon={kandidaat.built ? undefined : 'ja'}
-                    onClick={() => setRegio(kandidaat.id)}
+                    onClick={() => {
+                      setRegio(kandidaat.id);
+                      // A set on another map is not chosen on this one, and
+                      // the address should stop saying it is.
+                      if (adresVak && adresVak.regio !== kandidaat.id) onSet(null);
+                    }}
                   >
                     <RegioIcon size={20} />
                     {t(kandidaat.naam)}
@@ -306,6 +372,7 @@ export function ModuleScreen({
             {onderwerpen.map((vak) => {
               const open = vak.id === onderwerp?.id;
               const VakIcon = onderwerpIcon(vak.id);
+              const premium = isPremiumOnderwerp(vak.id);
 
               return (
                 <button
@@ -314,13 +381,26 @@ export function ModuleScreen({
                   className={onderwerpAlsChips ? 'tk-keuze' : 'tk-tegel'}
                   // How the subject is going is not on the face of it; it is in
                   // its name, and in the child's own column (ADR-089).
-                  aria-label={`${t(vak.naam)}. ${vorderingVan(vak, known, now)}`}
+                  aria-label={metPremium(
+                    `${t(vak.naam)}. ${vorderingVan(vak, known, now)}`,
+                    premium,
+                  )}
                   aria-pressed={open}
-                  // The subject's first set, and only when the subject is not
-                  // already open: a child who has chosen the table of seven and
-                  // presses "Tafels" again should not be sent back to one.
+                  // A subject with one set chooses it. One whose sets are a
+                  // second question opens that question and chooses nothing
+                  // yet: the table of one is not what a child who pressed
+                  // "Tafels" asked for (ADR-111). Pressed again while open it
+                  // does nothing, so a chosen table of seven stays chosen.
                   onClick={() => {
-                    if (!open) onSet(vak.sets[0]?.setId ?? '');
+                    if (open) return;
+                    setRegio(hier);
+                    if (vraagtWelke(vak)) {
+                      setVakId(vak.id);
+                      if (setId !== null) onSet(null);
+                    } else {
+                      setVakId(null);
+                      onSet(vak.sets[0]?.setId ?? '');
+                    }
                   }}
                 >
                   {onderwerpAlsChips ? (
@@ -331,6 +411,7 @@ export function ModuleScreen({
                     </span>
                   )}
                   <span className="min-w-0">{t(vak.naam)}</span>
+                  {premium ? <PremiumLabel /> : null}
                   {!onderwerpAlsChips && open ? vink : null}
                 </button>
               );
@@ -343,7 +424,7 @@ export function ModuleScreen({
             round contains. The tables and the divisions are a keypad of twelve;
             a range, a level or which cities are chips. The keypad has no mix
             square: the Rekenmix is one step up already (ADR-100). */}
-        {onderwerp && onderwerp.keuze && onderwerp.sets.length > 1 ? (
+        {onderwerp && heeftKeuze && onderwerp.keuze ? (
           <section className="tk-kies" aria-label={t(onderwerp.keuze)}>
             <Stap nummer={stap.keuze} label={t(onderwerp.keuze)} />
 
@@ -393,13 +474,14 @@ export function ModuleScreen({
             {tegels.map((candidate) => {
               const FormIcon = candidate.icon;
               const gekozenVorm = !alsToets && candidate.id === form?.id;
+              const premium = isPremiumVorm(candidate.id);
 
               return (
                 <button
                   key={candidate.id}
                   type="button"
                   className="tk-tegel"
-                  aria-label={`${t(candidate.name)}. ${t(candidate.reason)}`}
+                  aria-label={metPremium(`${t(candidate.name)}. ${t(candidate.reason)}`, premium)}
                   aria-pressed={gekozenVorm}
                   onClick={() => {
                     setFormId(candidate.id);
@@ -410,6 +492,7 @@ export function ModuleScreen({
                     <FormIcon size={24} />
                   </span>
                   <span className="min-w-0">{t(candidate.name)}</span>
+                  {premium ? <PremiumLabel /> : null}
                   {gekozenVorm ? vink : null}
                 </button>
               );
@@ -420,13 +503,16 @@ export function ModuleScreen({
                 It used to be a switch on whichever way was chosen (ADR-085),
                 which asked a child to pick a way a test never asks for
                 (ADR-100). */}
-            {chosen && toetsVorm ? (
+            {toetsVorm ? (
               <button
                 type="button"
                 className="tk-tegel"
                 // "Je typt zonder hulp" is what the toets is everywhere a test
                 // types; where it asks in a way of its own, that way says it.
-                aria-label={`${t('choose.testMode')}. ${t(toetsVorm.alleenToets ? toetsVorm.reason : 'choose.testModeWhy')}`}
+                aria-label={metPremium(
+                  `${t('choose.testMode')}. ${t(toetsVorm.alleenToets ? toetsVorm.reason : 'choose.testModeWhy')}`,
+                  true,
+                )}
                 aria-pressed={alsToets}
                 onClick={() => setToetsstand(true)}
               >
@@ -434,6 +520,7 @@ export function ModuleScreen({
                   <PaperIcon size={24} />
                 </span>
                 <span className="min-w-0">{t('choose.testMode')}</span>
+                <PremiumLabel />
                 {alsToets ? vink : null}
               </button>
             ) : null}
@@ -474,30 +561,36 @@ export function ModuleScreen({
 
         {/* From a tablet up, the answers together and the way on, closing the
             chooser. On a phone the same bar is at the foot of the page — see
-            below. */}
-        {chosen && form && !kleinScherm ? (
+            below. Always drawn; filled once every step has an answer. */}
+        {kleinScherm ? null : (
           <div className="tk-startbalk tk-choose-start">
             <div className="min-w-0">
-              <p className="tk-startbalk-label">{t('start.klaar')}</p>
-              <ul className="tk-startbalk-keuzes">
-                {gekozenLijst.map(({ label, waarde }) => (
-                  <li key={label} className="tk-startchip">
-                    <span className="tk-startchip-label">{label}</span>
-                    {waarde}
-                  </li>
-                ))}
-              </ul>
+              <p className="tk-startbalk-label">{t(klaar ? 'start.klaar' : 'start.nogKiezen')}</p>
+              {klaar ? (
+                <ul className="tk-startbalk-keuzes">
+                  {gekozenLijst.map(({ label, waarde }) => (
+                    <li key={label} className="tk-startchip">
+                      <span className="tk-startchip-label">{label}</span>
+                      {waarde}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p id={nogId} className="tk-startbalk-nog">
+                  {nogTeKiezen(wachtend)}
+                </p>
+              )}
             </div>
             {startKnop}
           </div>
-        ) : null}
+        )}
 
         {/* Twelve diplomas, under the tables and nowhere else (ADR-075). Pressing
             a gap answers both steps at once: that table, and the diploma. */}
         {onderwerp?.id === 'tafels' ? (
           <Tafeldiplomas
             onKies={(tafel) => {
-              onSet(tafel);
+              kiesElders(tafel);
               setFormId('tafeldiploma');
               setToetsstand(false);
             }}
@@ -509,8 +602,7 @@ export function ModuleScreen({
         {module.id === 'vlaggen' ? (
           <VlagDiplomas
             onKies={(deel) => {
-              setRegio(deel);
-              onSet(`vlag-${deel}-alle`);
+              kiesElders(`vlag-${deel}-alle`);
               setFormId('vlag-diploma');
               setToetsstand(false);
             }}
@@ -524,13 +616,23 @@ export function ModuleScreen({
           screen. After the child's own column, as the last thing in the page, so
           it is in reach the whole way down and never lies over its own button.
           See .tk-startbalk-mobiel for what ADR-052 taught about building it. */}
-      {chosen && form && kleinScherm ? (
+      {kleinScherm ? (
         <div className="tk-startbalk-mobiel tk-choose-start">
           <p className="tk-startbalk-zin">
-            <span className="block font-semibold">{zin}</span>
-            {minuten === null ? null : (
-              <span className="tk-hulp block">
-                {minuten === 1 ? t('choose.minuteOne') : t('choose.minutes', { aantal: minuten })}
+            {klaar ? (
+              <>
+                <span className="block font-semibold">{zin}</span>
+                {minuten === null ? null : (
+                  <span className="tk-hulp block">
+                    {minuten === 1
+                      ? t('choose.minuteOne')
+                      : t('choose.minutes', { aantal: minuten })}
+                  </span>
+                )}
+              </>
+            ) : (
+              <span id={nogId} className="tk-hulp block">
+                {nogTeKiezen(wachtend)}
               </span>
             )}
           </p>
@@ -539,6 +641,19 @@ export function ModuleScreen({
       ) : null}
     </div>
   );
+}
+
+/** A subject whose sets are a second question: the tables before the table. */
+function vraagtWelke(vak: Onderwerp): boolean {
+  return vak.keuze !== null && vak.sets.length > 1;
+}
+
+/** "Kies nog bij stap 2 en 3": what the start bar says while it waits. */
+function nogTeKiezen(stappen: readonly number[]): string {
+  const laatste = stappen.at(-1);
+  if (laatste === undefined) return '';
+  if (stappen.length === 1) return t('start.kiesNogStap', { stap: laatste });
+  return t('start.kiesNogStappen', { stappen: stappen.slice(0, -1).join(', '), laatste });
 }
 
 /**

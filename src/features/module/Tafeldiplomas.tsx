@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { DiplomaIcon } from '@/components/Icon';
 import { t } from '@/i18n';
 import { loadDiplomas } from '@/store/rewardStore';
+import { PremiumLabel } from './PremiumLabel';
 
 /** One to twelve, which is every table the product has. */
 const TAFELS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
@@ -40,7 +41,10 @@ export function Tafeldiplomas({ onKies }: { readonly onKies: (setId: string) => 
 
   return (
     <section className="flex flex-col gap-3" aria-label={t('rekenen.diplomasTitle')}>
-      <h2 className="tk-label">{t('rekenen.diplomasTitle')}</h2>
+      <div className="flex flex-wrap items-center gap-2">
+        <h2 className="tk-label">{t('rekenen.diplomasTitle')}</h2>
+        <PremiumLabel hoorbaar />
+      </div>
       <p className="text-tekst-secundair">
         {t('rekenen.diplomasCount', { aantal: behaald.size, totaal: TAFELS.length })}
       </p>

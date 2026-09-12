@@ -37,6 +37,8 @@ export function VlagScreen({
   toetsstand = false,
   onHome,
   onAgain,
+  alleen = null,
+  onHerhaal,
 }: {
   readonly setId: string;
   readonly mode: VlagMode;
@@ -49,8 +51,17 @@ export function VlagScreen({
   readonly toetsstand?: boolean;
   readonly onHome: () => void;
   readonly onAgain: () => void;
+  /** "Herhaal je fouten": the ids this round asks and nothing else (ADR-111). */
+  readonly alleen?: readonly string[] | null;
+  readonly onHerhaal: (ids: readonly string[]) => void;
 }) {
-  const { state, choose, giveUp, next, stop } = useVlagRound(setId, mode, aantal, toetsstand);
+  const { state, choose, giveUp, next, stop } = useVlagRound(
+    setId,
+    mode,
+    aantal,
+    toetsstand,
+    alleen,
+  );
   const prefs = usePreferences();
   const nextButton = useRef<HTMLButtonElement>(null);
 
@@ -70,7 +81,9 @@ export function VlagScreen({
   }
 
   if (state.phase === 'finished') {
-    return <VlagResultScreen state={state} onHome={onHome} onAgain={onAgain} />;
+    return (
+      <VlagResultScreen state={state} onHome={onHome} onAgain={onAgain} onHerhaal={onHerhaal} />
+    );
   }
 
   if (state.phase === 'loading' || !state.question) {

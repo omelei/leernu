@@ -660,6 +660,12 @@
     text-transform: uppercase;
     color: var(--accent-text);
   }
+  /* Not yet: which numbered steps still wait, where the chips will be, and the
+   * Start button beside it switched off (ADR-111). */
+  .tk-startbalk-nog {
+    margin: 12px 0 0;
+    color: var(--tekst-secundair);
+  }
   .tk-startbalk-keuzes {
     display: flex;
     flex-wrap: wrap;
@@ -2435,6 +2441,33 @@
     flex: none;
     margin-left: auto;
     color: var(--accent-text);
+  }
+
+  /* Premium (ADR-111): what will need an account, said on the tile before there
+   * is one. The quiet badge's look — ink on paper, a rule round it — at a
+   * label's size, so it reads as a fact about the tile and not as one more
+   * thing on it to press. At the end of a tile, with the tick after it. */
+  .tk-premium {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    padding: 2px 8px;
+    border: var(--stroke-hair) solid var(--rand-sterk);
+    border-radius: var(--radius-chip);
+    background: var(--kaart);
+    color: var(--inkt);
+    font-family: var(--font-tekst);
+    font-size: var(--type-vlaklabel);
+    line-height: var(--type-vlaklabel-lh);
+    letter-spacing: var(--type-vlaklabel-ls);
+    font-weight: var(--type-vlaklabel-weight);
+    text-transform: uppercase;
+  }
+  .tk-tegel .tk-premium {
+    margin-left: auto;
+  }
+  .tk-tegel .tk-premium + .tk-tegel-vink {
+    margin-left: 0;
   }
 
   /* ---- Squares: which table, which division ------------------------------

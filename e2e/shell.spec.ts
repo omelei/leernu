@@ -232,7 +232,19 @@ test('on a phone the start button stays in reach', async ({ page }, testInfo) =>
   );
   expect(overflow).toBeLessThanOrEqual(0);
 
-  // Still there at the foot of the page, and it still starts the round.
+  // Nothing is chosen yet, so the bar is there but cannot start anything.
+  await expect(start).toBeDisabled();
+  await page
+    .getByRole('region', { name: /Kies een onderwerp/ })
+    .getByRole('button', { name: /^Provincies/ })
+    .click();
+  await page
+    .getByRole('region', { name: /Hoe wil je/ })
+    .getByRole('button', { name: /Aanwijzen/ })
+    .click();
+  await expect(start).toBeEnabled();
+
+  // Still there at the foot of the page, and it starts the round.
   await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
   await expect(start).toBeInViewport();
   await start.click();
