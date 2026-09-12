@@ -243,7 +243,7 @@ export default function App() {
         toetsstand={screen.toetsstand}
         onHome={goHome}
         onAgain={() => setVisit(visit + 1)}
-      />
+      />,
     );
   }
 
@@ -257,7 +257,7 @@ export default function App() {
         toetsstand={screen.toetsstand}
         onHome={goHome}
         onAgain={() => setVisit(visit + 1)}
-      />
+      />,
     );
   }
 
@@ -275,7 +275,7 @@ export default function App() {
         toetsstand={screen.toetsstand}
         onHome={goHome}
         onAgain={() => setVisit(visit + 1)}
-      />
+      />,
     );
   }
 
@@ -289,7 +289,7 @@ export default function App() {
         toetsstand={screen.toetsstand}
         onHome={goHome}
         onAgain={() => setVisit(visit + 1)}
-      />
+      />,
     );
   }
 

@@ -119,9 +119,7 @@ export function Uitslag({
             : t('uitslag.wisselenVeel', { namen: namen(uitslag.wisselen, naamVan) })
         }
         sub={
-          uitslag.wisselen.length === 1
-            ? t('uitslag.wisselenSubEen')
-            : t('uitslag.wisselenSubVeel')
+          uitslag.wisselen.length === 1 ? t('uitslag.wisselenSubEen') : t('uitslag.wisselenSubVeel')
         }
         einde={<span className="ln-getal">{uitslag.wisselen.length}</span>}
       />
